@@ -2,295 +2,186 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Grounding Spinner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grounding Spinner - Bedtime Edition</title>
   <style>
     body {
-      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #e0f7fa, #ffe0f0);
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 20px;
-      overflow-x: hidden;
+      background: linear-gradient(135deg, #2c3e50, #4ca1af);
+      color: white;
+      text-align: center;
+      padding: 2em;
+      margin: 0;
     }
 
     h1 {
-      color: #5d5c9e;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .intro {
-      max-width: 600px;
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px 25px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-      margin-bottom: 25px;
-      color: #444;
-      font-size: 16px;
-      line-height: 1.5;
-    }
-
-    .example {
-      margin-top: 15px;
-      background: #f3e5f5;
-      border-left: 6px solid #ba68c8;
-      padding: 12px 15px;
-      font-style: italic;
-      color: #6a1b9a;
-      border-radius: 6px;
-    }
-
-    .spinner-container {
-      position: relative;
-      width: 320px;
-      height: 320px;
-      user-select: none;
-    }
-
-    .arrow {
-      width: 0;
-      height: 0;
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
-      border-bottom: 30px solid #ff80ab;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -150%);
-      z-index: 10;
-    }
-
-    .wheel {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      border: 10px solid #f8bbd0;
-      position: relative;
-      overflow: hidden;
-      transform: rotate(0deg);
-      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
-      background: #fff;
-    }
-
-    .wheel div {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      transform-origin: 100% 100%;
-      clip-path: polygon(0 0, 100% 0, 100% 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 11px;
-      text-align: center;
-      font-weight: bold;
-      padding: 8px;
-      color: #333;
-      user-select: none;
-      pointer-events: none;
+      font-size: 2em;
+      margin-bottom: 1em;
     }
 
     button {
-      margin-top: 20px;
-      padding: 12px 24px;
-      background-color: #ba68c8;
-      color: white;
+      background: #ff6ec4;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
+      padding: 1em 2em;
+      font-size: 1.2em;
+      color: white;
+      border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: background-color 0.3s ease;
-      user-select: none;
+      transition: background 0.3s;
     }
 
     button:hover {
-      background-color: #9c4dcc;
+      background: #ff1493;
     }
 
-    .popup, .overlay {
+    #popupCard {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 100;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .hidden {
       display: none;
     }
 
-    .overlay {
-      background: rgba(0,0,0,0.5);
-      width: 100%;
-      height: 100%;
-    }
-
-    .popup {
+    .card-content {
       background: #fff;
-      padding: 25px;
-      border-radius: 12px;
+      color: #333;
+      border-radius: 15px;
+      padding: 2em;
       max-width: 90%;
       width: 350px;
-      text-align: center;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
-      user-select: none;
+      text-align: left;
+      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+      position: relative;
     }
 
-    .popup h2 {
-      margin-top: 0;
-      color: #6a1b9a;
-    }
-
-    .close {
-      background: #f48fb1;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      margin-top: 15px;
-      color: white;
+    #closePopup {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
       cursor: pointer;
-      user-select: none;
-      transition: background-color 0.3s ease;
+      color: #444;
     }
 
-    .close:hover {
-      background: #ec407a;
-    }
-
-    @media (max-width: 400px) {
-      .spinner-container {
-        width: 90vw;
-        height: 90vw;
-      }
+    #techniqueImage {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin: 1em 0;
     }
   </style>
 </head>
 <body>
-  <h1>🎯 Grounding Spinner</h1>
+  <h1>🌙 Grounding Technique Spinner</h1>
+  <button id="spinButton">🎡 Spin the Wheel</button>
 
-  <div class="intro" role="region" aria-label="Introduction to the Grounding Spinner">
-    <p>
-      The Grounding Spinner is a simple and fun tool designed to help you calm your mind and body when feeling anxious, stressed, or overwhelmed. 
-      Just click the <strong>Spin</strong> button and watch the spinner land on a grounding technique that you can try right away.
-    </p>
-    <p>
-      Grounding techniques help bring your attention back to the present moment by using your senses or body awareness. This can reduce feelings of panic and help you feel more centered.
-    </p>
-    <p><strong>Example:</strong></p>
-    <div class="example">
-      🌬️ <strong>Deep Breaths:</strong> Inhale slowly through your nose for 4 seconds, hold your breath for 4 seconds, then exhale gently for 6 seconds. Repeat a few times until you feel calmer.
+  <div id="popupCard" class="hidden">
+    <div class="card-content">
+      <span id="closePopup">&times;</span>
+      <h2 id="techniqueTitle"></h2>
+      <img id="techniqueImage" alt="Technique image" />
+      <p id="techniqueExplanation"></p>
     </div>
   </div>
 
-  <div class="spinner-container" aria-label="Grounding technique spinner" role="application">
-    <div class="arrow" aria-hidden="true"></div>
-    <div class="wheel" id="wheel" aria-live="polite" aria-atomic="true"></div>
-  </div>
-
-  <button onclick="spin()" aria-label="Spin the grounding spinner" id="spinButton">Spin</button>
-
-  <div class="overlay" id="overlay" tabindex="-1" aria-hidden="true"></div>
-  <div class="popup" id="popup" role="dialog" aria-modal="true" aria-labelledby="techniqueTitle" aria-describedby="techniqueDesc" tabindex="0">
-    <h2 id="techniqueTitle"></h2>
-    <p id="techniqueDesc"></p>
-    <button class="close" onclick="closePopup()" aria-label="Close technique details">Close</button>
-  </div>
-
-  <audio id="spinSound" src="https://www.soundjay.com/mechanical/sounds/gear-spin-1.mp3" preload="auto"></audio>
-  <audio id="landSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
-
   <script>
     const techniques = [
-      { title: "👀 5-4-3-2-1", desc: "5 things you see, 4 things you feel, 3 things you hear, 2 things you smell, 1 thing you taste." },
-      { title: "🌬️ Deep Breaths", desc: "Inhale 4 seconds, hold 4 seconds, exhale 6 seconds. Repeat." },
-      { title: "🧍‍♂️ Body Check", desc: "Focus from head to toe—relax each part." },
-      { title: "🎧 Sound Hunt", desc: "List 5 quiet or distant sounds." },
-      { title: "🖐️ Texture Touch", desc: "Touch 3 different textures. Notice each one." },
-      { title: "🚰 Cold Splash", desc: "Wash your hands or face with cold water." },
-      { title: "🧸 Object Focus", desc: "Hold something and notice its weight, shape, texture." },
-      { title: "🖊️ Doodle Calm", desc: "Draw lines, shapes, or patterns freely." },
-      { title: "🔢 Count Backwards", desc: "Count down by 7 from 100 or say the alphabet backwards." },
-      { title: "👃 Smell Focus", desc: "Notice nearby scents or smell something comforting." },
-      { title: "👣 Grounded Feet", desc: "Press your feet into the ground. Feel the pressure." },
-      { title: "🧮 Number Match", desc: "Pick a number and find objects that count to it." },
-      { title: "🖼️ Picture a Safe Place", desc: "Imagine somewhere calm and peaceful." },
-      { title: "📦 Name Categories", desc: "Name 5 animals, foods, movies, etc." },
-      { title: "📱 Affirmations", desc: "Repeat calming phrases like 'I am safe.'" }
+      {
+        title: "5-4-3-2-1 Technique",
+        explanation: "List 5 things you see, 4 you feel, 3 you hear, 2 you smell, and 1 you taste. Grounding via senses.",
+        image: "https://i.imgur.com/LZfI2dE.jpg"
+      },
+      {
+        title: "Box Breathing",
+        explanation: "Inhale for 4, hold for 4, exhale for 4, hold again for 4. Helps calm the nervous system.",
+        image: "https://i.imgur.com/OdL0XPt.png"
+      },
+      {
+        title: "Gratitude Trio",
+        explanation: "Say 3 things you're thankful for today. It shifts your mindset to the present.",
+        image: "https://i.imgur.com/2T6tGo3.jpg"
+      },
+      {
+        title: "Texture Touch",
+        explanation: "Touch 3 different textures and describe how each feels. It grounds through tactile senses.",
+        image: "https://i.imgur.com/VomGcqv.jpg"
+      },
+      {
+        title: "Imaginary Vacation",
+        explanation: "Visualize a calm place in detail—what do you see, smell, and hear?",
+        image: "https://i.imgur.com/KGH8zNZ.jpg"
+      },
+      {
+        title: "Color Hunt",
+        explanation: "Pick a color and find 5 objects nearby that match. Keeps you mentally present.",
+        image: "https://i.imgur.com/EUnIZDk.jpg"
+      },
+      {
+        title: "Belly Breaths",
+        explanation: "Place your hand on your belly. Breathe deeply so your hand rises and falls slowly.",
+        image: "https://i.imgur.com/g1OyY4T.jpg"
+      },
+      {
+        title: "Stretch & Squeeze",
+        explanation: "Tense and release muscles from head to toe, one group at a time.",
+        image: "https://i.imgur.com/RAIq0lK.jpg"
+      },
+      {
+        title: "Object Focus",
+        explanation: "Pick a nearby item. Study it closely—its shape, color, weight, and texture.",
+        image: "https://i.imgur.com/z5Eb6Rt.jpg"
+      },
+      {
+        title: "Mindful Drawing",
+        explanation: "Draw lines or shapes without thinking. Let your hand move freely.",
+        image: "https://i.imgur.com/fHaBNWx.jpg"
+      },
+      {
+        title: "Cold Water Reset",
+        explanation: "Splash cool water on your face or hold a cold object to your skin.",
+        image: "https://i.imgur.com/8Po2FPF.jpg"
+      },
+      {
+        title: "Finger Tapping",
+        explanation: "Tap thumb to each finger while breathing slowly. Great for focus and rhythm.",
+        image: "https://i.imgur.com/EzNhjWu.jpg"
+      },
+      {
+        title: "Bedtime Body Scan",
+        explanation: "Close your eyes and mentally scan your body from toes to head.",
+        image: "https://i.imgur.com/qyKvyaF.jpg"
+      },
+      {
+        title: "Scented Calm",
+        explanation: "Smell lavender, mint, or a favorite scent. Focus on the sensation.",
+        image: "https://i.imgur.com/wjF9IqA.jpg"
+      },
+      {
+        title: "Name the Sounds",
+        explanation: "List all the sounds you hear in your room or outside your window.",
+        image: "https://i.imgur.com/t4V9xFz.jpg"
+      }
     ];
 
-    const wheel = document.getElementById("wheel");
-    const spinSound = document.getElementById("spinSound");
-    const landSound = document.getElementById("landSound");
-    const overlay = document.getElementById("overlay");
-    const popup = document.getElementById("popup");
-    const spinButton = document.getElementById("spinButton");
-    const segments = techniques.length;
-    const angle = 360 / segments;
-    let currentRotation = 0;
-    let spinning = false;
-
-    // Create wheel segments
-    techniques.forEach((tech, i) => {
-      const segment = document.createElement("div");
-      segment.style.transform = `rotate(${i * angle}deg) skewY(-${90 - angle}deg)`;
-      segment.style.backgroundColor = i % 2 === 0 ? "#e1bee7" : "#fce4ec";
-      segment.innerText = tech.title;
-      wheel.appendChild(segment);
+    document.getElementById("spinButton").addEventListener("click", () => {
+      const random = techniques[Math.floor(Math.random() * techniques.length)];
+      document.getElementById("techniqueTitle").textContent = random.title;
+      document.getElementById("techniqueExplanation").textContent = random.explanation;
+      document.getElementById("techniqueImage").src = random.image;
+      document.getElementById("popupCard").classList.remove("hidden");
     });
 
-    function spin() {
-      if (spinning) return; // prevent multiple spins at once
-      spinning = true;
-      spinButton.disabled = true;
-      if (navigator.vibrate) navigator.vibrate(50);
-      spinSound.currentTime = 0;
-      spinSound.play();
-
-      const randomIndex = Math.floor(Math.random() * segments);
-      const spinAmount = 360 * 5 + (360 - randomIndex * angle - angle / 2);
-      currentRotation += spinAmount;
-      wheel.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
-      wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-      setTimeout(() => {
-        showPopup(randomIndex);
-        landSound.currentTime = 0;
-        landSound.play();
-        if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
-        spinning = false;
-        spinButton.disabled = false;
-      }, 4200);
-    }
-
-    function showPopup(index) {
-      document.getElementById("techniqueTitle").innerText = techniques[index].title;
-      document.getElementById("techniqueDesc").innerText = techniques[index].desc;
-      overlay.style.display = "block";
-      overlay.setAttribute('aria-hidden', 'false');
-      popup.style.display = "block";
-      popup.setAttribute('aria-hidden', 'false');
-      popup.focus();
-    }
-
-    function closePopup() {
-      overlay.style.display = "none";
-      overlay.setAttribute('aria-hidden', 'true');
-      popup.style.display = "none";
-      popup.setAttribute('aria-hidden', 'true');
-      spinButton.focus();
-    }
-
-    // Close popup when clicking outside or pressing Escape
-    overlay.addEventListener('click', closePopup);
-    document.addEventListener('keydown', (e) => {
-      if (e.key === "Escape" && popup.style.display === "block") {
-        closePopup();
-      }
+    document.getElementById("closePopup").addEventListener("click", () => {
+      document.getElementById("popupCard").classList.add("hidden");
     });
   </script>
 </body>
