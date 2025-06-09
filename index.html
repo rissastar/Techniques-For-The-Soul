@@ -1,364 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sleep Spinner</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to bottom, #dce9f9, #e6d8f7);
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    h1 {
-      color: #6b4fa0;
-      margin-bottom: 20px;
-      user-select: none;
-    }
-
-    .spinner-container {
-      position: relative;
-      width: 320px;
-      height: 320px;
-    }
-
-    .wheel {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      border: 10px solid #c8b6e2;
-      position: relative;
-      overflow: hidden;
-      transform: rotate(0deg);
-      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
-      user-select: none;
-    }
-
-    .wheel div {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      background: #fff;
-      transform-origin: 100% 100%;
-      clip-path: polygon(0 0, 100% 0, 100% 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 12px;
-      font-weight: bold;
-      padding: 8px;
-      text-align: center;
-      color: #5e4b8b;
-      user-select: none;
-    }
-
-    .arrow {
-      width: 0; 
-      height: 0; 
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
-      border-bottom: 30px solid #f7c948;
-      position: absolute;
-      top: -40px;
-      left: 50%;
-      transform: translateX(-50%);
-      user-select: none;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 12px 24px;
-      background-color: #a88ce1;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      user-select: none;
-    }
-
-    button:hover {
-      background-color: #8c6ad8;
-    }
-
-    .popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      color: #333;
-      padding: 30px 30px 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0px 5px 25px rgba(0,0,0,0.3);
-      display: none;
-      z-index: 10;
-      max-width: 90%;
-      width: 420px;
-      font-size: 15px;
-      line-height: 1.5;
-      user-select: text;
-    }
-
-    .popup h2 {
-      margin-top: 0;
-      margin-bottom: 12px;
-      color: #6b4fa0;
-      font-weight: 700;
-      user-select: text;
-    }
-
-    .overlay {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0; left: 0;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      z-index: 9;
-      user-select: none;
-    }
-
-    .close {
-      background: #f7c948;
-      border: none;
-      padding: 10px 16px;
-      margin-top: 20px;
-      cursor: pointer;
-      border-radius: 6px;
-      font-weight: 600;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .close:hover {
-      background: #e2b733;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sleep Game Spinner - 30 Sections with Center Arrow</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #282c34;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  #spinner-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+  }
+  #spinner {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    position: relative;
+    overflow: visible;
+    cursor: pointer;
+    user-select: none;
+  }
+  canvas {
+    border-radius: 50%;
+  }
+  /* Center arrow pointer inside spinner */
+  #center-arrow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    margin-left: -12px;
+    margin-top: -140px; /* Push arrow outward from center */
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 24px solid #ffcc00;
+    filter: drop-shadow(0 0 3px #ffd700);
+    pointer-events: none; /* So it doesn't block clicks */
+    z-index: 10;
+    transform-origin: 50% 100%;
+  }
+  button#spinBtn {
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    background: #ffcc00;
+    color: #282c34;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 0 8px #ffd700;
+    transition: background 0.3s ease;
+  }
+  button#spinBtn:disabled {
+    background: #bbb;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  /* Popup styles */
+  #overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    z-index: 1000;
+  }
+  #popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 320px;
+    max-width: 90vw;
+    background: #1e1e1e;
+    border-radius: 12px;
+    padding: 20px;
+    color: #eee;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 20px #ffcc00;
+    display: none;
+    z-index: 1001;
+  }
+  #popup img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  #popup h2 {
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    text-align: center;
+  }
+  #popup p {
+    font-size: 16px;
+    white-space: pre-line;
+  }
+</style>
 </head>
 <body>
-  <h1>🎡 Sleepy Spinner</h1>
-  <div class="spinner-container">
-    <div class="arrow" aria-hidden="true"></div>
-    <div class="wheel" id="wheel" aria-live="polite" aria-atomic="true"></div>
-  </div>
-  <button onclick="spin()" aria-label="Spin the sleep game spinner">Spin</button>
 
-  <div class="overlay" id="overlay" tabindex="-1" aria-hidden="true"></div>
-  <div class="popup" id="popup" role="dialog" aria-modal="true" aria-labelledby="gameTitle" aria-describedby="gameDesc">
-    <h2 id="gameTitle"></h2>
-    <p id="gameDesc"></p>
-    <button class="close" onclick="closePopup()" aria-label="Close instructions">Close</button>
-  </div>
+<div id="spinner-container">
+  <div id="spinner" aria-label="Sleep Game Spinner" role="listbox" tabindex="0"></div>
+  <div id="center-arrow" aria-hidden="true"></div>
+</div>
 
-  <script>
-    const games = [
-      { 
-        title: "🌙 4-7-8 Breathing", 
-        desc: "Calm your mind with this relaxing breath pattern:\n\n• Inhale quietly through your nose for 4 seconds.\n• Hold your breath gently for 7 seconds.\n• Exhale slowly and fully through your mouth for 8 seconds.\n\nRepeat this cycle 4 times. Feel your body getting lighter and more relaxed with each breath." 
-      },
-      { 
-        title: "🧸 Imaginary Room", 
-        desc: "Create a peaceful room in your mind:\n\n• Imagine a cozy room filled with your favorite things.\n• Picture soft pillows, warm lighting, and calming colors.\n• Explore the room slowly, noticing small details.\n\nStay in this safe space and let your body relax." 
-      },
-      { 
-        title: "🎨 Air Drawing", 
-        desc: "Draw shapes in the air with your finger:\n\n• Slowly trace circles, stars, or waves with your finger.\n• Focus on the smooth, gentle movement.\n• Imagine the shapes glowing softly as you draw.\n\nThis helps calm your thoughts and ease tension." 
-      },
-      { 
-        title: "🛁 Cocoa Body Scan", 
-        desc: "Imagine warm, flowing cocoa relaxing you:\n\n• Picture warm, melted cocoa pouring over your head.\n• Feel it slowly moving down your neck, arms, torso, legs, and feet.\n• As the cocoa flows, your muscles relax deeply.\n\nVisualize this soothing warmth washing away stress." 
-      },
-      { 
-        title: "💭 5-4-3-2-1 Grounding", 
-        desc: "Use your senses to ground yourself:\n\n• Name 5 things you can see around you.\n• Name 4 things you can touch.\n• Name 3 things you can hear.\n• Name 2 things you can smell.\n• Name 1 thing you can taste.\n\nFocus on the present moment and feel calm." 
-      },
-      { 
-        title: "🪐 Dream Elevator", 
-        desc: "Imagine an elevator to magical places:\n\n• Step into a quiet elevator.\n• Press a button for a dreamy, peaceful floor.\n• With each floor, see beautiful, calming worlds unfold.\n\nLet your mind wander softly to these places." 
-      },
-      { 
-        title: "🎧 Sound Tracker", 
-        desc: "Notice sounds without reacting:\n\n• Listen carefully to soft sounds nearby.\n• Count each sound quietly in your mind.\n• Don’t judge or respond—just notice.\n\nThis gentle awareness helps slow your mind." 
-      },
-      { 
-        title: "🌌 Star Collector", 
-        desc: "Catch calm stars floating in your mind:\n\n• Imagine tiny stars drifting slowly around you.\n• Reach out and catch each one gently.\n• Feel calmness fill you with each star caught.\n\nKeep collecting stars until you feel sleepy." 
-      },
-      { 
-        title: "🐚 Ocean Breath", 
-        desc: "Breathe like gentle ocean waves:\n\n• Inhale slowly as the wave comes in.\n• Exhale gently as the wave goes out.\n• Feel the rhythm soothe your whole body.\n\nRepeat until your breathing feels smooth and calm." 
-      },
-      { 
-        title: "🎁 Gratitude Glow", 
-        desc: "Think of three things you’re thankful for:\n\n• They can be big or small.\n• Feel a warm glow spreading in your chest.\n• Let this glow relax and comfort you.\n\nThis warms your heart and quiets your mind." 
-      },
-      { 
-        title: "🌈 Rainbow Path", 
-        desc: "Walk a colorful rainbow trail in your mind:\n\n• Imagine stepping onto a soft, glowing rainbow.\n• Feel the colors under your feet, bright and gentle.\n• Walk slowly, noticing each color’s warmth.\n\nThis peaceful walk helps your mind rest." 
-      },
-      { 
-        title: "🛌 Cloud Bed", 
-        desc: "Lie down on a soft, fluffy cloud:\n\n• Imagine a big cloud gently cradling your body.\n• Feel it molding softly to you.\n• Let your body sink deeper with every breath.\n\nFeel safe and comfortable as you relax." 
-      },
-      { 
-        title: "🦄 Magical Creature", 
-        desc: "Cuddle a soft imaginary friend:\n\n• Picture a gentle creature with soft fur.\n• Feel its warmth and calm as you hug it.\n• Let its peaceful energy soothe you.\n\nThis loving connection helps you relax." 
-      },
-      { 
-        title: "🪞 Calm Mirror", 
-        desc: "See your calm self in a mirror:\n\n• Imagine a mirror reflecting your peaceful face.\n• Watch calmness grow in your eyes and smile.\n• Step into the reflection, becoming that calm self.\n\nFeel your body and mind soften." 
-      },
-      { 
-        title: "🕊️ Falling Feathers", 
-        desc: "Count feathers drifting down slowly:\n\n• Picture light feathers floating gently in the air.\n• Watch them fall one by one.\n• Count quietly, feeling relaxed with each feather.\n\nLet this peaceful rhythm slow your mind." 
-      },
-      { 
-        title: "🌺 Flower Breath", 
-        desc: "Smell a blooming flower and blow petals:\n\n• Imagine holding a beautiful flower.\n• Take a deep breath in, smelling its scent.\n• Blow softly to scatter its petals.\n\nRepeat this slow, gentle breath to relax." 
-      },
-      { 
-        title: "📚 Storytime", 
-        desc: "Create a cozy bedtime story:\n\n• Think of a calm setting, like a forest or beach.\n• Imagine gentle characters and peaceful events.\n• Tell the story softly in your mind.\n\nLet the story carry you toward sleep." 
-      },
-      { 
-        title: "🎈 Balloon Breaths", 
-        desc: "Breathe like inflating and deflating a balloon:\n\n• Inhale slowly, filling your belly like a balloon.\n• Exhale gently, letting the balloon deflate.\n• Repeat this smooth breath rhythm.\n\nFeel tension float away with each breath." 
-      },
-      { 
-        title: "🎠 Carousel Dreams", 
-        desc: "Ride a gentle carousel in a dream:\n\n• Imagine sitting on a soft, glowing carousel horse.\n• Feel it move slowly and smoothly.\n• Watch calming lights and colors spin around.\n\nLet the rhythm lull you closer to sleep." 
-      },
-      { 
-        title: "🎶 Lullaby Loop", 
-        desc: "Hum a soft tune in your head:\n\n• Choose a simple, calming melody.\n• Hum slowly and gently.\n• Let the music soothe your thoughts.\n\nThis quiet song helps your mind relax." 
-      },
-      { 
-        title: "🐾 Footsteps", 
-        desc: "Imagine soft footsteps in warm sand:\n\n• Picture walking slowly along a beach.\n• Feel the soft sand under your feet.\n• Hear your footsteps quiet and steady.\n\nThis peaceful walk helps you unwind." 
-      },
-      { 
-        title: "🫧 Bubble Float", 
-        desc: "Float inside a big, gentle bubble:\n\n• Imagine yourself in a clear, shiny bubble.\n• Feel it drifting slowly through the air.\n• Notice the calm and quiet inside.\n\nRelax deeply as you float peacefully." 
-      },
-      { 
-        title: "🏕️ Campfire Crackle", 
-        desc: "Picture a warm campfire crackling softly:\n\n• See glowing embers flicker gently.\n• Hear soft pops and crackles.\n• Feel cozy warmth spreading inside.\n\nLet this peaceful fire calm you." 
-      },
-      { 
-        title: "🐛 Cocoon Wrap", 
-        desc: "Wrap yourself in a soft cocoon of light:\n\n• Imagine a warm, glowing light cocoon.\n• Feel it wrapping you snug and safe.\n• Let the light soothe and relax your whole body.\n\nRest deeply wrapped in calmness." 
-      },
-      { 
-        title: "💡 Dream Light", 
-        desc: "Dim an imaginary light with your breath:\n\n• Picture a gentle light shining softly.\n• Inhale slowly and imagine dimming the light.\n• Exhale fully and see it glow even softer.\n\nRepeat until the light fades peacefully." 
-      },
-      { 
-        title: "🎂 Candle Game", 
-        desc: "Blow out candles one by one with breath:\n\n• Imagine a row of glowing candles.\n• Take a deep breath and blow out the first candle.\n• Repeat until all candles gently fade.\n\nFeel relaxed as darkness grows softly." 
-      },
-      { 
-        title: "🚪 Door to Dreams", 
-        desc: "Open a glowing door to your dream world:\n\n• Imagine a shining door in front of you.\n• Reach out and open it slowly.\n• Step through into a calm, magical place.\n\nExplore gently and feel safe and relaxed." 
-      },
-      { 
-        title: "🧦 Warm Socks", 
-        desc: "Feel cozy socks warming your feet:\n\n• Imagine sliding on soft, warm socks.\n• Feel the comforting warmth spreading up your legs.\n• Let this cozy feeling calm your body.\n\nStay warm and peaceful as you relax." 
-      },
-      { 
-        title: "🧭 Star Compass", 
-        desc: "Follow your dream compass in the sky:\n\n• Picture a glowing compass pointing to calm places.\n• Follow its gentle pull through starry skies.\n• Let the journey bring peace and quiet.\n\nFeel guided and soothed by this calm path." 
-      },
-      { 
-        title: "🌠 Wish Whispers", 
-        desc: "Send quiet wishes to the stars above:\n\n• Think of a kind wish or hope.\n• Whisper it softly to the night sky.\n• Watch stars twinkle as they carry your wish.\n\nLet hope and calmness fill your heart." 
-      }
-    ];
+<button id="spinBtn" aria-live="polite">Spin the Wheel</button>
 
-    const wheel = document.getElementById("wheel");
-    const segments = games.length;
-    const angle = 360 / segments;
+<div id="overlay" tabindex="-1"></div>
+<div id="popup" role="dialog" aria-modal="true" aria-labelledby="gameTitle" aria-describedby="gameDesc" tabindex="0">
+  <h2 id="gameTitle"></h2>
+  <img id="gameImage" src="" alt="" />
+  <p id="gameDesc"></p>
+</div>
 
-    // Build spinner segments
-    games.forEach((game, i) => {
-      const segment = document.createElement("div");
-      segment.style.transform = `rotate(${i * angle}deg) skewY(-${90 - angle}deg)`;
-      segment.style.backgroundColor = i % 2 === 0 ? "#d5c6f0" : "#f3f1f8";
-      segment.innerText = game.title;
-      segment.setAttribute("aria-label", `Sleep game: ${game.title}`);
-      wheel.appendChild(segment);
-    });
+<script>
+  const games = [
+    {title: "🛌 5-4-3-2-1", desc: "Name 5 things you see, 4 you hear, 3 you feel, 2 you smell, 1 you taste to relax.", image: "https://cdn-icons-png.flaticon.com/512/616/616541.png", alt: "Counting senses"},
+    {title: "🌙 Breath Focus", desc: "Breathe deeply and slowly, count to 4 on inhale, hold 4, exhale 6. Repeat.", image: "https://cdn-icons-png.flaticon.com/512/616/616494.png", alt: "Deep breath"},
+    {title: "🌌 Star Gazing", desc: "Imagine a peaceful night sky full of stars, feel calm and cozy.", image: "https://cdn-icons-png.flaticon.com/512/616/616510.png", alt: "Starry night"},
+    {title: "📖 Storytime", desc: "Think of a favorite calming story or make one up in your mind.", image: "https://cdn-icons-png.flaticon.com/512/616/616409.png", alt: "Open book"},
+    {title: "🖌️ Doodle Draw", desc: "Draw simple shapes or patterns to relax your mind.", image: "https://cdn-icons-png.flaticon.com/512/616/616422.png", alt: "Pencil and doodles"},
+    {title: "🌿 Nature Sounds", desc: "Imagine gentle nature sounds like rain or wind chimes.", image: "https://cdn-icons-png.flaticon.com/512/616/616519.png", alt: "Wind chimes"},
+    {title: "🌟 Glow Fireflies", desc: "Picture soft glowing fireflies flickering gently.", image: "https://cdn-icons-png.flaticon.com/512/616/616456.png", alt: "Fireflies glowing"},
+    {title: "🛋️ Cozy Corner", desc: "Visualize a cozy reading corner with soft cushions and blanket.", image: "https://cdn-icons-png.flaticon.com/512/3181/3181957.png", alt: "Cozy chair"},
+    {title: "🍵 Tea Time", desc: "Imagine sipping warm herbal tea, feeling warmth inside.", image: "https://cdn-icons-png.flaticon.com/512/3017/3017893.png", alt: "Cup of tea"},
+    {title: "🌄 Sunrise Calm", desc: "Picture a peaceful sunrise bringing gentle peace.", image: "https://cdn-icons-png.flaticon.com/512/869/869869.png", alt: "Sunrise"},
+    {title: "🐾 Soft Steps", desc: "Imagine soft footsteps on a forest path calming your mind.", image: "https://cdn-icons-png.flaticon.com/512/616/616449.png", alt: "Footsteps"},
+    {title: "🎶 Gentle Music", desc: "Imagine soft, slow music playing in the background.", image: "https://cdn-icons-png.flaticon.com/512/616/616561.png", alt: "Music notes"},
+    {title: "🕯️ Candle Glow", desc: "Visualize a softly glowing candle flame.", image: "https://cdn-icons-png.flaticon.com/512/616/616479.png", alt: "Candle flame"},
+    {title: "🌊 Ocean Waves", desc: "Imagine gentle waves rolling onto the shore.", image: "https://cdn-icons-png.flaticon.com/512/616/616470.png", alt: "Ocean waves"},
+    {title: "🌸 Flower Bloom", desc: "Picture a flower slowly blooming with soft colors.", image: "https://cdn-icons-png.flaticon.com/512/616/616462.png", alt: "Flower blooming"},
+    {title: "🧘 Meditation", desc: "Focus on your breath and body sensations calmly.", image: "https://cdn-icons-png.flaticon.com/512/616/616549.png", alt: "Meditation pose"},
+    {title: "🐦 Bird Song", desc: "Imagine soft bird songs in a quiet forest.", image: "https://cdn-icons-png.flaticon.com/512/616/616504.png", alt: "Bird singing"},
+    {title: "🌈 Color Splash", desc: "Think of your favorite calming colors flowing gently.", image: "https://cdn-icons-png.flaticon.com/512/616/616537.png", alt: "Colors splash"},
+    {title: "💤 Sleepy Clouds", desc: "Picture soft fluffy clouds drifting slowly.", image: "https://cdn-icons-png.flaticon.com/512/616/616460.png", alt: "Fluffy clouds"},
+    {title: "🐠 Fish Swim", desc: "Imagine colorful fish swimming calmly underwater.", image: "https://cdn-icons-png.flaticon.com/512/616/616487.png", alt: "Fish swimming"},
+    {title: "🍂 Autumn Leaves", desc: "Picture leaves gently falling on a quiet path.", image: "https://cdn-icons-png.flaticon.com/512/616/616464.png", alt: "Falling leaves"},
+    {title: "🏞️ Quiet Lake", desc: "Imagine a still lake reflecting the sky perfectly.", image: "https://cdn-icons-png.flaticon.com/512/616/616513.png", alt: "Quiet lake"},
+    {title: "🌬️ Gentle Breeze", desc: "Feel a soft breeze brushing your face lightly.", image: "https://cdn-icons-png.flaticon.com/512/616/616520.png", alt: "Gentle breeze"},
+    {title: "🍫 Chocolate Treat", desc: "Imagine enjoying a small piece of smooth chocolate.", image: "https://cdn-icons-png.flaticon.com/512/616/616545.png", alt: "Chocolate"},
+    {title: "🌜 Moonlight", desc: "Picture gentle moonlight bathing a calm night.", image: "https://cdn-icons-png.flaticon.com/512/616/616477.png", alt: "Moonlight"},
+    {title: "🍯 Honey Spoons", desc: "Imagine sweet honey dripping slowly on your tongue.", image: "https://cdn-icons-png.flaticon.com/512/616/616533.png", alt: "Honey spoon"},
+    {title: "🛏️ Soft Pillows", desc: "Visualize sinking into soft, fluffy pillows.", image: "https://cdn-icons-png.flaticon.com/512/616/616523.png", alt: "Soft pillows"},
+    {title: "🎈 Balloon Rise", desc: "Imagine colorful balloons floating gently upward.", image: "https://cdn-icons-png.flaticon.com/512/616/616548.png", alt: "Balloons rising"},
+    {title: "🐝 Buzzing Bee", desc: "Picture a calm bee gently buzzing nearby.", image: "https://cdn-icons-png.flaticon.com/512/616/616535.png", alt: "Bee buzzing"},
+    {title: "🕊️ Peace Dove", desc: "Imagine a white dove soaring peacefully.", image: "https://cdn-icons-png.flaticon.com/512/616/616506.png", alt: "Peace dove"}
+  ];
 
-    let currentRotation = 0;
+  const spinner = document.getElementById("spinner");
+  const spinBtn = document.getElementById("spinBtn");
+  const popup = document.getElementById("popup");
+  const overlay = document.getElementById("overlay");
+  const gameTitle = document.getElementById("gameTitle");
+  const gameDesc = document.getElementById("gameDesc");
+  const gameImage = document.getElementById("gameImage");
+  const centerArrow = document.getElementById("center-arrow");
 
-    function spin() {
-      const randomIndex = Math.floor(Math.random() * segments);
-      const spinAmount = 360 * 6 + (360 - randomIndex * angle - angle / 2);
-      currentRotation += spinAmount;
-      wheel.style.transform = `rotate(${currentRotation}deg)`;
+  let spinning = false;
+  let currentRotation = 0;
+  const slices = games.length;
+  const degreesPerSlice = 360 / slices;
 
-      // Disable spin button while spinning
-      const spinBtn = document.querySelector("button");
-      spinBtn.disabled = true;
-      spinBtn.style.cursor = "not-allowed";
+  // Draw spinner segments on canvas
+  function drawSpinner() {
+    const canvas = document.createElement("canvas");
+    canvas.width = 320;
+    canvas.height = 320;
+    canvas.setAttribute("aria-hidden", "true");
+    spinner.appendChild(canvas);
 
-      setTimeout(() => {
-        showPopup(randomIndex);
+    const ctx = canvas.getContext("2d");
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 150;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < slices; i++) {
+      const startAngle = (i * 2 * Math.PI) / slices - Math.PI / 2;
+      const endAngle = ((i + 1) * 2 * Math.PI) / slices - Math.PI / 2;
+
+      // Alternate colors for slices
+      ctx.fillStyle = i % 2 === 0 ? "#444" : "#666";
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fill();
+
+      // Draw slice text (title)
+      ctx.save();
+      ctx.fillStyle = "#ffd700";
+      ctx.translate(centerX, centerY);
+      const angle = startAngle + (endAngle - startAngle) / 2;
+      ctx.rotate(angle);
+      ctx.textAlign = "right";
+      ctx.font = "14px 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+      ctx.fillText(games[i].title, radius - 10, 5);
+      ctx.restore();
+    }
+
+    // Draw center circle to cover slice edges
+    ctx.beginPath();
+    ctx.fillStyle = "#282c34";
+    ctx.arc(centerX, centerY, 40, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+
+  drawSpinner();
+
+  // Spin logic
+  function spinWheel() {
+    if (spinning) return;
+
+    spinning = true;
+    spinBtn.disabled = true;
+
+    // Calculate random spin: at least 5 full rotations + random slice
+    const randomSlice = Math.floor(Math.random() * slices);
+    const extraDegrees = Math.random() * degreesPerSlice;
+    const totalDegrees = 360 * 5 + (360 - (randomSlice * degreesPerSlice + extraDegrees));
+
+    const duration = 5000; // spin duration in ms
+    const start = performance.now();
+
+    function animate(now) {
+      const elapsed = now - start;
+      if (elapsed < duration) {
+        const easeOut = 1 - Math.pow(1 - elapsed / duration, 3);
+        currentRotation = easeOut * totalDegrees;
+        spinner.style.transform = `rotate(${currentRotation}deg)`;
+        requestAnimationFrame(animate);
+      } else {
+        // Finish at exact rotation
+        currentRotation = totalDegrees;
+        spinner.style.transform = `rotate(${currentRotation}deg)`;
+        spinning = false;
         spinBtn.disabled = false;
-        spinBtn.style.cursor = "pointer";
-      }, 4200);
-    }
 
-    function showPopup(index) {
-      const popup = document.getElementById("popup");
-      const overlay = document.getElementById("overlay");
-      const gameTitle = document.getElementById("gameTitle");
-      const gameDesc = document.getElementById("gameDesc");
-
-      gameTitle.innerText = games[index].title;
-      // Replace \n with line breaks for formatting
-      gameDesc.innerHTML = games[index].desc.replace(/\n/g, "<br><br>");
-
-      overlay.style.display = "block";
-      popup.style.display = "block";
-      popup.focus();
-
-      // Accessibility: set aria-hidden false
-      overlay.setAttribute("aria-hidden", "false");
-    }
-
-    function closePopup() {
-      const popup = document.getElementById("popup");
-      const overlay = document.getElementById("overlay");
-      overlay.style.display = "none";
-      popup.style.display = "none";
-
-      // Accessibility: set aria-hidden true
-      overlay.setAttribute("aria-hidden", "true");
-      // Return focus to spin button
-      document.querySelector("button").focus();
-    }
-
-    // Close popup on ESC key
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        const popup = document.getElementById("popup");
-        if (popup.style.display === "block") {
-          closePopup();
-        }
+        // Calculate winning index
+        let normalizedRotation = currentRotation % 360;
+        // The arrow points up (at -90deg), so adjust accordingly
+        let winningIndex = Math.floor(((360 - (normalizedRotation + 90)) % 360) / degreesPerSlice);
+        showPopup(winningIndex);
       }
-    });
+    }
 
-    // Close popup when clicking outside it
-    document.getElementById("overlay").addEventListener("click", closePopup);
-  </script>
+    requestAnimationFrame(animate);
+  }
+
+  function showPopup(index) {
+    const game = games[index];
+    gameTitle.textContent = game.title;
+    gameDesc.textContent = game.desc;
+    gameImage.src = game.image;
+    gameImage.alt = game.alt;
+    overlay.style.display = "block";
+    popup.style.display = "block";
+    popup.focus();
+  }
+
+  function closePopup() {
+    overlay.style.display = "none";
+    popup.style.display = "none";
+  }
+
+  spinBtn.addEventListener("click", spinWheel);
+  overlay.addEventListener("click", closePopup);
+  popup.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closePopup();
+      spinBtn.focus();
+    }
+  });
+
+  // Accessibility: allow keyboard spin
+  spinner.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      spinWheel();
+    }
+  });
+</script>
 </body>
 </html>
