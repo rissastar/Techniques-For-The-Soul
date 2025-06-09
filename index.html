@@ -1,192 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Pixel Art Lobster Catcher</title>
-<style>
-  body {
-    margin: 0; background: #0b3d91; /* deep blue sea */
-    font-family: 'Press Start 2P', cursive; /* pixel font */
-    color: white;
-    overflow: hidden;
-  }
+  <meta charset="UTF-8">
+  <title>Grounding Wheel</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #222831, #393e46);
+      color: #eeeeee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-  #game-container {
-    position: relative;
-    width: 100vw; height: 100vh;
-    overflow: hidden;
-    background: linear-gradient(to bottom, #0b3d91, #05306d);
-  }
+    h1 {
+      margin-bottom: 20px;
+      color: #00adb5;
+    }
 
-  .target {
-    position: absolute;
-    width: 48px;
-    height: 48px;
-    background-image: url('https://i.imgur.com/K4GOGpA.png'); /* pixel lobster sprite sheet */
-    background-size: 192px 48px; /* 4 frames in width */
-    animation: lobster-wiggle 0.8s steps(4) infinite;
-    cursor: pointer;
-  }
+    #spinner {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 8px solid #00adb5;
+      overflow: hidden;
+      margin-bottom: 30px;
+      transition: transform 5s cubic-bezier(0.33, 1, 0.68, 1);
+    }
 
-  @keyframes lobster-wiggle {
-    from { background-position-x: 0; }
-    to { background-position-x: -192px; }
-  }
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
 
-  #score-board, #high-score-board {
-    position: fixed;
-    top: 10px; left: 10px;
-    font-size: 16px;
-    text-shadow: 0 0 5px #000;
-  }
-  #high-score-board {
-    top: 40px;
-  }
+    .arrow {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #ffcc00;
+      z-index: 10;
+    }
 
-  #message {
-    position: fixed;
-    top: 80px; left: 10px;
-    font-size: 16px;
-    text-shadow: 0 0 5px #000;
-  }
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      background: #00adb5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
 
-  #start-btn {
-    position: fixed;
-    bottom: 20px; left: 50%;
-    transform: translateX(-50%);
-    background: #e60000;
-    border: none;
-    padding: 10px 20px;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 16px;
-    color: white;
-    cursor: pointer;
-    border-radius: 6px;
-    box-shadow: 0 0 10px #e60000;
-  }
-  #start-btn:hover {
-    background: #ff1a1a;
-  }
-</style>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #393e46;
+      color: #eeeeee;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      z-index: 20;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 15;
+    }
+  </style>
 </head>
 <body>
 
-<div id="game-container"></div>
-<div id="score-board">Score: 0</div>
-<div id="high-score-board">High Score: 0</div>
-<div id="message"></div>
-<button id="start-btn">Start Game</button>
+<h1>Spin the Grounding Wheel</h1>
+
+<div class="arrow"></div>
+<div id="spinner">
+  <canvas id="wheelCanvas" width="300" height="300"></canvas>
+</div>
+<button id="spinBtn">Spin</button>
+
+<div class="overlay" id="overlay"></div>
+<div class="popup" id="popup">
+  <h2 id="techniqueTitle"></h2>
+  <p id="techniqueDesc"></p>
+</div>
 
 <script>
-  const gameContainer = document.getElementById('game-container');
-  const scoreBoard = document.getElementById('score-board');
-  const highScoreBoard = document.getElementById('high-score-board');
-  const message = document.getElementById('message');
-  const startBtn = document.getElementById('start-btn');
+  const techniques = [
+    { title: "5-4-3-2-1 Method", desc: "Name 5 things you see, 4 things you feel, 3 things you hear, 2 things you smell, and 1 thing you taste." },
+    { title: "Deep Breathing", desc: "Inhale for 4 seconds, hold for 7, and exhale for 8. Repeat slowly." },
+    { title: "Hold an Ice Cube", desc: "Feel its coldness and focus entirely on the sensation." },
+    { title: "Stretch", desc: "Do a gentle full-body stretch to ground yourself physically." },
+    { title: "Name 5 Colors", desc: "Look around and name 5 colors you can see." },
+    { title: "Touch an Object", desc: "Pick up something near you and describe its texture in detail." },
+    { title: "Listen Closely", desc: "Close your eyes and try to identify 3 distant sounds." },
+    { title: "Drink Water Slowly", desc: "Take a sip and focus fully on how it feels." },
+  ];
 
-  let score = 0;
-  let highScore = 0;
-  let gameActive = false;
-  let maxTargets = 3;
-  let currentSpeed = 2000; // ms before lobster moves or disappears
-  const minSpeed = 700;
-  let targetTimeouts = [];
+  const canvas = document.getElementById("wheelCanvas");
+  const ctx = canvas.getContext("2d");
+  const spinner = document.getElementById("spinner");
+  const spinBtn = document.getElementById("spinBtn");
+  const popup = document.getElementById("popup");
+  const overlay = document.getElementById("overlay");
+  const title = document.getElementById("techniqueTitle");
+  const desc = document.getElementById("techniqueDesc");
 
-  // Load high score from localStorage
-  if (localStorage.getItem('lobsterHighScore')) {
-    highScore = parseInt(localStorage.getItem('lobsterHighScore'));
-    highScoreBoard.textContent = 'High Score: ' + highScore;
-  }
+  const total = techniques.length;
+  const sliceAngle = (2 * Math.PI) / total;
+  let currentRotation = 0;
+  let spinning = false;
 
-  function saveHighScore() {
-    localStorage.setItem('lobsterHighScore', highScore);
-  }
+  function drawWheel() {
+    const colors = ["#00adb5", "#007880"];
+    for (let i = 0; i < total; i++) {
+      const start = i * sliceAngle;
+      const end = start + sliceAngle;
 
-  function randomPosition(size) {
-    const x = Math.random() * (window.innerWidth - size);
-    const y = Math.random() * (window.innerHeight - size);
-    return { x, y };
-  }
+      ctx.beginPath();
+      ctx.moveTo(150, 150);
+      ctx.arc(150, 150, 140, start, end);
+      ctx.closePath();
+      ctx.fillStyle = colors[i % 2];
+      ctx.fill();
 
-  function spawnTarget() {
-    if (!gameActive) return;
-
-    const target = document.createElement('div');
-    target.classList.add('target');
-    const size = 48;
-    const pos = randomPosition(size);
-    target.style.left = pos.x + 'px';
-    target.style.top = pos.y + 'px';
-
-    // Set a timeout for how long the lobster stays visible
-    const timeout = setTimeout(() => {
-      if (gameActive && target.parentElement) {
-        target.remove();
-        endGame('Missed a lobster!');
-      }
-    }, currentSpeed);
-
-    targetTimeouts.push(timeout);
-
-    target.addEventListener('click', () => {
-      if (!gameActive) return;
-
-      score++;
-      scoreBoard.textContent = 'Score: ' + score;
-
-      clearTimeout(timeout);
-      target.remove();
-
-      currentSpeed = Math.max(minSpeed, currentSpeed - 50);
-
-      if (score % 5 === 0 && maxTargets < 6) {
-        maxTargets++;
-      }
-
-      if (gameContainer.querySelectorAll('.target').length < maxTargets) {
-        spawnTarget();
-      }
-    });
-
-    gameContainer.appendChild(target);
-  }
-
-  function startGame() {
-    score = 0;
-    currentSpeed = 2000;
-    maxTargets = 3;
-    scoreBoard.textContent = 'Score: 0';
-    message.textContent = '';
-    gameContainer.innerHTML = '';
-    gameActive = true;
-    startBtn.disabled = true;
-
-    targetTimeouts.forEach(t => clearTimeout(t));
-    targetTimeouts = [];
-
-    for (let i = 0; i < maxTargets; i++) {
-      spawnTarget();
+      ctx.save();
+      ctx.translate(150, 150);
+      ctx.rotate(start + sliceAngle / 2);
+      ctx.fillStyle = "#eeeeee";
+      ctx.font = "bold 12px sans-serif";
+      ctx.textAlign = "right";
+      ctx.fillText(techniques[i].title, 130, 5);
+      ctx.restore();
     }
+
+    // Draw center circle
+    ctx.beginPath();
+    ctx.arc(150, 150, 30, 0, 2 * Math.PI);
+    ctx.fillStyle = "#393e46";
+    ctx.fill();
   }
 
-  function endGame(reason) {
-    gameActive = false;
-    message.textContent = reason + ' Game Over!';
-    startBtn.disabled = false;
-    targetTimeouts.forEach(t => clearTimeout(t));
-    targetTimeouts = [];
-    gameContainer.innerHTML = '';
+  drawWheel();
 
-    if (score > highScore) {
-      highScore = score;
-      highScoreBoard.textContent = 'High Score: ' + highScore + ' 🎉';
-      saveHighScore();
+  function spinWheel() {
+    if (spinning) return;
+    spinning = true;
+    spinBtn.disabled = true;
+
+    const randIndex = Math.floor(Math.random() * total);
+    const randOffset = Math.random() * sliceAngle;
+    const totalSpin = 360 * 5 + ((2 * Math.PI * randIndex + randOffset) * 180 / Math.PI);
+    const duration = 5000;
+    const start = performance.now();
+
+    function animate(now) {
+      const elapsed = now - start;
+      const ease = 1 - Math.pow(1 - elapsed / duration, 3);
+      currentRotation = ease * totalSpin;
+      spinner.style.transform = `rotate(${currentRotation}deg)`;
+
+      if (elapsed < duration) {
+        requestAnimationFrame(animate);
+      } else {
+        spinning = false;
+        spinBtn.disabled = false;
+        showPopup(randIndex);
+      }
     }
+
+    requestAnimationFrame(animate);
   }
 
-  startBtn.addEventListener('click', startGame);
+  function showPopup(index) {
+    title.textContent = techniques[index].title;
+    desc.textContent = techniques[index].desc;
+    popup.style.display = "block";
+    overlay.style.display = "block";
+  }
+
+  function closePopup() {
+    popup.style.display = "none";
+    overlay.style.display = "none";
+  }
+
+  spinBtn.addEventListener("click", spinWheel);
+  overlay.addEventListener("click", closePopup);
 </script>
 
 </body>
