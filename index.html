@@ -10,7 +10,7 @@
   }
   body, html {
     margin: 0; padding: 0; height: 100%;
-    background: #1e1e2f;
+    background: linear-gradient(135deg, #4a61a3, #2e3360);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow: hidden;
     display: flex;
@@ -68,11 +68,17 @@
     position: absolute;
     cursor: pointer;
     user-select: none;
-    box-shadow: 0 0 12px rgba(255, 99, 71, 0.8);
-    transition: transform 0.15s ease;
-    touch-action: manipulation;
     background: url('https://cdn.pixabay.com/photo/2012/04/11/14/26/lobster-28646_960_720.png') no-repeat center center;
     background-size: contain;
+    box-shadow: 0 0 12px rgba(255, 99, 71, 0.8);
+    touch-action: manipulation;
+    animation: wiggle 1.5s ease-in-out infinite, bounce 2s ease-in-out infinite;
+    transition: box-shadow 0.3s ease, transform 0.15s ease;
+  }
+  .target:hover, .target:focus {
+    box-shadow: 0 0 25px 8px rgba(255, 99, 71, 0.9);
+    transform: scale(1.1);
+    outline: none;
   }
   .target:active {
     transform: scale(0.85);
@@ -88,8 +94,18 @@
   #footer {
     margin-top: 8px;
     font-size: 0.9rem;
-    color: #888;
+    color: #bbb;
     user-select: none;
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    50% { transform: rotate(-5deg); }
+    75% { transform: rotate(4deg); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
   @media (hover: none) {
     #startBtn, #musicToggleBtn {
@@ -131,10 +147,11 @@
   let highScore = 0;
   let gameActive = false;
   let targetTimeouts = [];
-  let currentSpeed = 1500; // milliseconds targets stay visible initially
+  let moveIntervals = [];
+  let currentSpeed = 1400; // how long targets stay visible in ms
   let minSpeed = 600;
   let maxTargets = 3;
-  let targetSize = 80; // pixels, will shrink over time
+  let targetSize = 80; // px
   let musicPlaying = false;
 
   // Load high score from localStorage
@@ -151,17 +168,62 @@
     localStorage.setItem('catchTargetsHighScore', highScore);
   }
 
+  // Make target slowly move randomly inside container
+  function animateMovement(target) {
+    const moveSpeed = 2000 + Math.random() * 2000; // move interval in ms
+    let directionX = Math.random() > 0.5 ? 1 : -1;
+    let directionY = Math.random() > 0.5 ? 1 : -1;
+
+    let posX = parseFloat(target.style.left);
+    let posY = parseFloat(target.style.top);
+
+    const maxX = gameContainer.clientWidth - target.offsetWidth;
+    const maxY = gameContainer.clientHeight - target.offsetHeight;
+
+    const interval = setInterval(() => {
+      if (!gameActive || !gameContainer.contains(target)) {
+        clearInterval(interval);
+        return;
+      }
+
+      // Move a few pixels per tick
+      posX += directionX * 1.5;
+      posY += directionY * 1.2;
+
+      // Bounce from edges
+      if (posX <= 0) {
+        posX = 0;
+        directionX = 1;
+      } else if (posX >= maxX) {
+        posX = maxX;
+        directionX = -1;
+      }
+
+      if (posY <= 0) {
+        posY = 0;
+        directionY = 1;
+      } else if (posY >= maxY) {
+        posY = maxY;
+        directionY = -1;
+      }
+
+      target.style.left = posX + 'px';
+      target.style.top = posY + 'px';
+    }, 30);
+
+    moveIntervals.push(interval);
+  }
+
   function spawnTarget() {
     if (!gameActive) return;
 
-    // Create a new target element
     const target = document.createElement('div');
     target.classList.add('target');
     const size = targetSize;
     target.style.width = size + 'px';
     target.style.height = size + 'px';
 
-    // Position randomly inside game container
+    // Random position
     const maxX = gameContainer.clientWidth - size;
     const maxY = gameContainer.clientHeight - size;
     const x = Math.random() * maxX;
@@ -170,74 +232,69 @@
     target.style.left = x + 'px';
     target.style.top = y + 'px';
 
-    // Set timeout to remove target if not clicked
+    // Remove if not clicked in time
     const timeout = setTimeout(() => {
       if (gameActive && gameContainer.contains(target)) {
-        // Missed target - game over
         endGame('Missed a lobster!');
       }
     }, currentSpeed);
 
     targetTimeouts.push(timeout);
 
-    // When target clicked or touched
-    function hitTarget(e) {
-      e.preventDefault();
+    // Animate movement
+    animateMovement(target);
+
+    // Click or tap event
+    target.addEventListener('click', () => {
       if (!gameActive) return;
-
-      // Play click sound
-      if(musicPlaying) clickSound.currentTime = 0; clickSound.play();
-
-      // Remove target and clear timeout
-      clearTimeout(timeout);
-      targetTimeouts = targetTimeouts.filter(t => t !== timeout);
-      if (gameContainer.contains(target)) {
-        gameContainer.removeChild(target);
-      }
-
       score++;
       scoreBoard.textContent = 'Score: ' + score;
-      message.textContent = 'Nice catch!';
+      clickSound.currentTime = 0;
+      clickSound.play();
 
-      // Speed up and shrink targets gradually
-      if (currentSpeed > minSpeed) {
-        currentSpeed *= 0.95;
-        currentSpeed = Math.max(currentSpeed, minSpeed);
-      }
-      if (targetSize > 40) {
-        targetSize -= 1.5;
-      }
-      if (score % 5 === 0 && maxTargets < 7) {
+      // Remove this target and clear its timeout
+      clearTimeout(timeout);
+      target.remove();
+
+      // Speed up game gradually (min limit)
+      currentSpeed = Math.max(minSpeed, currentSpeed - 25);
+
+      // Increase max targets every 7 points (max 6)
+      if (score % 7 === 0 && maxTargets < 6) {
         maxTargets++;
       }
 
-      // Spawn a new target quickly to keep game flowing
-      setTimeout(spawnTarget, Math.random() * 700 + 200);
-    }
+      // Spawn more targets if under maxTargets
+      if (gameContainer.querySelectorAll('.target').length < maxTargets) {
+        spawnTarget();
+      }
+    });
 
-    target.addEventListener('click', hitTarget);
-    target.addEventListener('touchstart', hitTarget, {passive:false});
-
-    // Maintain max number of targets on screen
-    if (gameContainer.querySelectorAll('.target').length < maxTargets) {
-      // Schedule next spawn quickly to fill targets
-      setTimeout(spawnTarget, Math.random() * 700 + 200);
-    }
+    gameContainer.appendChild(target);
   }
 
   function startGame() {
     score = 0;
-    currentSpeed = 1500;
-    targetSize = 80;
+    currentSpeed = 1400;
     maxTargets = 3;
-    gameActive = true;
     scoreBoard.textContent = 'Score: 0';
     message.textContent = '';
-    startBtn.disabled = true;
     gameContainer.innerHTML = '';
+    gameActive = true;
+    startBtn.disabled = true;
 
-    // Start spawning targets
-    spawnTarget();
+    // Clear any existing intervals/timeouts
+    targetTimeouts.forEach(t => clearTimeout(t));
+    moveIntervals.forEach(i => clearInterval(i));
+    targetTimeouts = [];
+    moveIntervals = [];
+
+    // Spawn initial targets
+    for (let i = 0; i < maxTargets; i++) {
+      spawnTarget();
+    }
+
+    if (musicPlaying) bgMusic.play();
   }
 
   function endGame(reason) {
@@ -245,15 +302,18 @@
     message.textContent = reason + ' Game Over!';
     startBtn.disabled = false;
 
-    // Clear all timeouts and remove targets
+    // Clear all timeouts and intervals
     targetTimeouts.forEach(t => clearTimeout(t));
     targetTimeouts = [];
+    moveIntervals.forEach(i => clearInterval(i));
+    moveIntervals = [];
     gameContainer.innerHTML = '';
 
     // Play game over sound
     if(musicPlaying) {
       gameOverSound.currentTime = 0;
       gameOverSound.play();
+      bgMusic.pause();
     }
 
     // Save high score if beaten
@@ -264,9 +324,7 @@
     }
   }
 
-  startBtn.addEventListener('click', () => {
-    startGame();
-  });
+  startBtn.addEventListener('click', startGame);
 
   musicToggleBtn.addEventListener('click', () => {
     if (musicPlaying) {
@@ -284,10 +342,7 @@
   loadHighScore();
 
   // Prevent scrolling on mobile when touching the game container
-  gameContainer.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-  }, { passive: false });
-
+  gameContainer.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
 </script>
 
 </body>
