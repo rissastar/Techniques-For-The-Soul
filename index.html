@@ -3,643 +3,168 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>On ’Em - Mi’kmaq Lobster Fisher Platformer</title>
+<title>Quick Color Match</title>
 <style>
-  * { margin:0; padding:0; box-sizing: border-box; }
-  body, html { height: 100%; overflow: hidden; background: #87ceeb; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
-  #gameCanvas {
-    background: linear-gradient(to top, #0c3c62 0%, #7ec8e3 70%);
-    display: block; margin: 0 auto; border: 3px solid #004466; border-radius: 8px;
+  body {
+    background: #121212;
+    color: #eee;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
   }
-  #musicToggle {
-    position: absolute; top: 10px; right: 10px; z-index: 10;
-    font-size: 24px; background: none; border: none; cursor: pointer;
-    color: white; text-shadow: 0 0 6px #004466;
+  h1 {
+    margin-bottom: 0.2em;
+    user-select: none;
   }
-  #instructions {
-    position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-    background: rgba(0,0,0,0.6); color: white; padding: 6px 12px; border-radius: 8px;
-    font-size: 14px; max-width: 600px; text-align: center;
+  #colorWord {
+    font-size: 6rem;
+    font-weight: bold;
+    margin: 0.2em 0 0.6em 0;
+    user-select: none;
+  }
+  #buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5em;
+  }
+  button {
+    padding: 1rem 1.5rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: transform 0.1s ease;
+  }
+  button:active {
+    transform: scale(0.9);
+  }
+  #score {
+    font-size: 1.4rem;
+    margin-bottom: 0.5em;
+    user-select: none;
+  }
+  #message {
+    font-size: 1.2rem;
+    color: #0f0;
+    height: 1.5em;
+    user-select: none;
+  }
+  #startBtn {
+    margin-top: 1rem;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    background: #0a74da;
+    color: white;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 4px 8px rgba(10,116,218,0.6);
+    transition: background 0.3s ease;
+  }
+  #startBtn:hover {
+    background: #095bb5;
   }
 </style>
 </head>
 <body>
-<button id="musicToggle" title="Toggle Music">🔇</button>
-<canvas id="gameCanvas" width="800" height="450"></canvas>
-<div id="instructions">
-Use ← → to move, SPACE to jump (double jump enabled), X to throw lobsters.  
-Reach the right side to advance. Collect lobsters, avoid enemies.  
-On Level 2, hop on the boat!  
+
+<h1>Quick Color Match</h1>
+<div id="score">Score: 0</div>
+<div id="colorWord">READY</div>
+<div id="buttons">
+  <button style="background:#e74c3c;" data-color="red">RED</button>
+  <button style="background:#3498db;" data-color="blue">BLUE</button>
+  <button style="background:#2ecc71;" data-color="green">GREEN</button>
+  <button style="background:#f1c40f;" data-color="yellow">YELLOW</button>
 </div>
+<div id="message"></div>
+<button id="startBtn">Start Game</button>
 
 <script>
-// Canvas setup
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const W = canvas.width, H = canvas.height;
-const groundY = H - 60;
+  const colorWord = document.getElementById('colorWord');
+  const buttons = document.querySelectorAll('#buttons button');
+  const scoreDisplay = document.getElementById('score');
+  const message = document.getElementById('message');
+  const startBtn = document.getElementById('startBtn');
 
-// Assets (simple colors & shapes as placeholders)
-const assets = {
-  // Sounds as simple Audio objects with dummy src, replace with real mp3 if you want
-  jump: new Audio('https://actions.google.com/sounds/v1/cartoon/pop.ogg'),
-  throw: new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg'),
-  hit: new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg'),
-  boss_hit: new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg'),
-  bgMusic: new Audio('https://actions.google.com/sounds/v1/ambiences/underwater_ambient.ogg'),
-  land: new Audio('https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg'),
-};
-assets.bgMusic.loop = true;
-assets.bgMusic.volume = 0.15;
+  const colors = ['red', 'blue', 'green', 'yellow'];
+  const colorHex = {
+    red: '#e74c3c',
+    blue: '#3498db',
+    green: '#2ecc71',
+    yellow: '#f1c40f'
+  };
 
-// Input state
-const keys = {};
-document.addEventListener('keydown', e => keys[e.code] = true);
-document.addEventListener('keyup', e => keys[e.code] = false);
+  let score = 0;
+  let currentColor = '';
+  let intervalId;
+  let speed = 2000; // initial time to answer in ms
 
-// Player character sprite parts
-// Simple colored rectangles with details to resemble specs
-function drawPlayer(x,y,w,h, facingRight, onBoat=false) {
-  ctx.save();
-  ctx.translate(x + w/2, y + h/2);
-  if (!facingRight) ctx.scale(-1,1);
-
-  // Body (Mi'kmaq T-shirt)
-  ctx.fillStyle = '#005530';
-  ctx.fillRect(-w/2, -h/2, w, h);
-
-  // Shirt design: simple white oval with red lines (abstract Mi'kmaq pattern)
-  ctx.fillStyle = 'white';
-  ctx.beginPath();
-  ctx.ellipse(0, 0, w/3, h/3.5, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = 'red';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(-w/3,0);
-  ctx.lineTo(w/3,0);
-  ctx.moveTo(0,-h/3.5);
-  ctx.lineTo(0,h/3.5);
-  ctx.stroke();
-
-  // Head (skin tone)
-  ctx.fillStyle = '#d2a679';
-  ctx.beginPath();
-  ctx.ellipse(0, -h/1.4, w/2.5, h/3, 0, 0, Math.PI*2);
-  ctx.fill();
-
-  // Hair with "wings" style (dark brown, wing shapes on sides)
-  ctx.fillStyle = '#3b2212';
-  // Main hair top
-  ctx.beginPath();
-  ctx.ellipse(0, -h/1.9, w/2, h/3, 0, 0, Math.PI);
-  ctx.fill();
-  // Wings (left)
-  ctx.beginPath();
-  ctx.moveTo(-w/2.2, -h/1.6);
-  ctx.lineTo(-w/1.5, -h/2.5);
-  ctx.lineTo(-w/3, -h/3.4);
-  ctx.closePath();
-  ctx.fill();
-  // Wings (right)
-  ctx.beginPath();
-  ctx.moveTo(w/2.2, -h/1.6);
-  ctx.lineTo(w/1.5, -h/2.5);
-  ctx.lineTo(w/3, -h/3.4);
-  ctx.closePath();
-  ctx.fill();
-
-  // Eyes simple
-  ctx.fillStyle = 'black';
-  ctx.beginPath();
-  ctx.ellipse(-w/8, -h/1.4, w/15, h/20, 0, 0, Math.PI*2);
-  ctx.ellipse(w/8, -h/1.4, w/15, h/20, 0, 0, Math.PI*2);
-  ctx.fill();
-
-  // Hip waders - dark grey on legs
-  ctx.fillStyle = '#222222';
-  ctx.fillRect(-w/2, 0, w/2, h/2);
-  ctx.fillRect(0, 0, w/2, h/2);
-
-  // Boots
-  ctx.fillStyle = '#111111';
-  ctx.fillRect(-w/2, h/2 - 10, w/2, 10);
-  ctx.fillRect(0, h/2 - 10, w/2, 10);
-
-  // If on boat, add a subtle shadow below
-  if(onBoat) {
-    ctx.fillStyle = 'rgba(0,0,0,0.15)';
-    ctx.beginPath();
-    ctx.ellipse(0, h/2 + 4, w/1.2, h/6, 0, 0, Math.PI * 2);
-    ctx.fill();
+  function pickNewColor() {
+    // Pick a random color word and a different color for the text
+    const word = colors[Math.floor(Math.random() * colors.length)];
+    let color;
+    do {
+      color = colors[Math.floor(Math.random() * colors.length)];
+    } while (color === word);
+    currentColor = color;
+    colorWord.textContent = word.toUpperCase();
+    colorWord.style.color = colorHex[color];
   }
 
-  ctx.restore();
-}
+  function startGame() {
+    score = 0;
+    speed = 2000;
+    scoreDisplay.textContent = 'Score: 0';
+    message.textContent = '';
+    startBtn.disabled = true;
+    pickNewColor();
+    intervalId = setTimeout(gameOver, speed);
 
-// Globals
-let level = 1;
-let score = 0;
-let health = 5;
-let bossHealth = 0;
-let inBoss = false;
-let fadeAlpha = 0;
-let fading = false;
-let nextLevel = null;
-
-// Player state
-const player = {
-  x: 50,
-  y: groundY - 80,
-  w: 40,
-  h: 80,
-  vx: 0,
-  vy: 0,
-  speed: 4,
-  jumpPower: -15,
-  onGround: false,
-  jumpCount: 0,
-  maxJumps: 2,
-  facingRight: true,
-  throwCooldown: 0,
-  onBoat: false,
-  jumpPressed: false,
-};
-
-// Projectiles (lobsters thrown)
-const projectiles = [];
-
-// Level data function returns levels data (enemies, items, boat)
-function getLevelData(l) {
-  if(l === 1) {
-    return {
-      bgColor: '#87ceeb',
-      enemies: [{x:400,y:groundY-50,w:40,h:50,type:'crab'}],
-      items: [{x:600,y:groundY-30,got:false}],
-      boat: null,
-      boss: null,
-      waterBg: false,
-    };
-  }
-  if(l === 2) {
-    return {
-      bgColor: '#1f4f8b',
-      enemies: [{x:650,y:groundY-120,w:40,h:40,type:'jelly'}],
-      items: [{x:300,y:groundY-120,got:false},{x:500,y:groundY-120,got:false}],
-      boat: {x:200,y:groundY-40,w:120,h:40,vx:2},
-      boss: null,
-      waterBg: true,
-    };
-  }
-  if(l === 3) {
-    return {
-      bgColor: '#003b5c',
-      enemies: [],
-      items: [],
-      boat: null,
-      boss: {x:600,y:groundY-100,w:80,h:100,health:10},
-      waterBg: true,
-    };
-  }
-  // Loop back to level 1 after 3
-  return getLevelData(1);
-}
-
-let levelData = getLevelData(level);
-
-// --- Input helpers ---
-function isKeyDown(code) {
-  return !!keys[code];
-}
-
-// --- Game Loop Functions ---
-function update() {
-  if(fading) {
-    updateFade();
-    return;
-  }
-  // Horizontal movement with acceleration/deceleration
-  if(isKeyDown('ArrowRight') || isKeyDown('KeyD')) {
-    player.vx += 0.5;
-    player.facingRight = true;
-  } else if(isKeyDown('ArrowLeft') || isKeyDown('KeyA')) {
-    player.vx -= 0.5;
-    player.facingRight = false;
-  } else {
-    player.vx *= 0.7; // friction
-  }
-  // Clamp vx
-  if(player.vx > player.speed) player.vx = player.speed;
-  if(player.vx < -player.speed) player.vx = -player.speed;
-
-  // Gravity
-  player.vy += 0.8;
-  if(player.vy > 20) player.vy = 20;
-
-  // Jumping logic
-  if((isKeyDown('Space') || isKeyDown('KeyW') || isKeyDown('ArrowUp')) && !player.jumpPressed) {
-    if(player.jumpCount < player.maxJumps) {
-      player.vy = player.jumpPower;
-      player.jumpCount++;
-      player.onGround = false;
-      assets.jump.currentTime = 0;
-      assets.jump.play();
-    }
-    player.jumpPressed = true;
-  }
-  if(!(isKeyDown('Space') || isKeyDown('KeyW') || isKeyDown('ArrowUp'))) {
-    player.jumpPressed = false;
+    // Show instructions briefly
+    colorWord.style.fontSize = '6rem';
   }
 
-  // Position update
-  player.x += player.vx;
-  player.y += player.vy;
-
-  // Floor collision
-  if(player.y + player.h >= groundY) {
-    if(!player.onGround && player.vy > 5) {
-      assets.land.currentTime = 0;
-      assets.land.play();
-    }
-    player.y = groundY - player.h;
-    player.vy = 0;
-    player.onGround = true;
-    player.jumpCount = 0;
-  } else {
-    player.onGround = false;
+  function gameOver() {
+    clearTimeout(intervalId);
+    message.textContent = 'Game Over! Final Score: ' + score;
+    colorWord.textContent = 'GAME OVER';
+    colorWord.style.color = '#aaa';
+    startBtn.disabled = false;
   }
 
-  // Level boundaries left/right
-  if(player.x < 0) player.x = 0;
-  if(player.x + player.w > W) player.x = W - player.w;
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      if (startBtn.disabled === false) return; // game not running
+      const chosenColor = button.getAttribute('data-color');
+      if (chosenColor === currentColor) {
+        score++;
+        scoreDisplay.textContent = 'Score: ' + score;
+        message.textContent = 'Correct! +1';
+        // Increase speed, but cap at 600ms
+        speed = Math.max(600, speed * 0.9);
 
-  // Throw cooldown decrement
-  if(player.throwCooldown > 0) player.throwCooldown--;
-
-  // Throw lobsters (projectile)
-  if(isKeyDown('KeyX') && player.throwCooldown === 0) {
-    projectiles.push({
-      x: player.x + player.w,
-      y: player.y + player.h/2 - 8,
-      w: 16,
-      h: 16,
-      vx: player.facingRight ? 10 : -10,
-      vy: 0,
-      life: 100,
+        clearTimeout(intervalId);
+        pickNewColor();
+        intervalId = setTimeout(gameOver, speed);
+      } else {
+        message.textContent = 'Wrong! Try again!';
+      }
     });
-    assets.throw.currentTime = 0;
-    assets.throw.play();
-    player.throwCooldown = 20; // cooldown frames
-  }
+  });
 
-  // Update projectiles
-  for(let i = projectiles.length -1; i >=0; i--) {
-    let p = projectiles[i];
-    p.x += p.vx;
-    p.y += p.vy;
-    p.life--;
-    if(p.life <= 0 || p.x < 0 || p.x > W) {
-      projectiles.splice(i,1);
-    }
-  }
-
-  // Enemies & collisions
-  for(let i = levelData.enemies.length -1; i >=0; i--) {
-    let e = levelData.enemies[i];
-    // Simple AI: move side to side for jelly
-    if(e.type === 'jelly') {
-      e.x += (e.vx || 2);
-      if(!e.vx) e.vx = 2;
-      if(e.x > W-50 || e.x < 400) e.vx *= -1;
-    }
-    // Player hit check
-    if(rectIntersect(player, e)) {
-      damagePlayer();
-    }
-    // Projectile hit enemy
-    for(let j = projectiles.length-1; j >= 0; j--) {
-      if(rectIntersect(projectiles[j], e)) {
-        levelData.enemies.splice(i,1);
-        projectiles.splice(j,1);
-        score += 10;
-        assets.hit.currentTime = 0;
-        assets.hit.play();
-        break;
-      }
-    }
-  }
-
-  // Boss fight logic
-  if(levelData.boss) {
-    let b = levelData.boss;
-    if(!inBoss) {
-      inBoss = true;
-      bossHealth = b.health;
-    }
-    // Boss simple AI: move left and right
-    b.x += (b.vx || -3);
-    if(!b.vx) b.vx = -3;
-    if(b.x < 500) b.vx = 3;
-    if(b.x > W-100) b.vx = -3;
-
-    // Player hit boss check
-    if(rectIntersect(player, b)) {
-      damagePlayer();
-    }
-    // Projectile hit boss
-    for(let j = projectiles.length-1; j >= 0; j--) {
-      if(rectIntersect(projectiles[j], b)) {
-        bossHealth--;
-        projectiles.splice(j,1);
-        assets.boss_hit.currentTime = 0;
-        assets.boss_hit.play();
-        if(bossHealth <= 0) {
-          score += 100;
-          inBoss = false;
-          fadeToNextLevel();
-        }
-        break;
-      }
-    }
-  } else {
-    inBoss = false;
-  }
-
-  // Collect items (lobsters)
-  for(let item of levelData.items) {
-    if(!item.got && rectIntersect(player, {x:item.x,y:item.y,w:20,h:20})) {
-      item.got = true;
-      score += 5;
-      assets.hit.currentTime = 0;
-      assets.hit.play();
-    }
-  }
-
-  // Boat mechanic (level 2)
-  if(levelData.boat) {
-    let boat = levelData.boat;
-    boat.x += boat.vx;
-    if(boat.x > W-boat.w || boat.x < 0) boat.vx *= -1;
-    // Player on boat detection
-    if(rectIntersect(player, {x:boat.x,y:boat.y-10,w:boat.w,h:boat.h+10})) {
-      player.onBoat = true;
-      player.y = boat.y - player.h;
-      player.vy = 0;
-      player.onGround = true;
-      player.jumpCount = 0;
-      player.x += boat.vx;
-    } else {
-      if(player.onBoat) {
-        player.onBoat = false;
-      }
-    }
-  } else {
-    player.onBoat = false;
-  }
-
-  // Advance level if player reaches right side
-  if(player.x + player.w >= W - 10 && !fading) {
-    fadeToNextLevel();
-  }
-
-  // Health cap
-  if(health > 5) health = 5;
-
-  // Game over check
-  if(health <= 0) {
-    resetGame();
-  }
-}
-
-function fadeToNextLevel() {
-  fading = true;
-  fadeAlpha = 0;
-  nextLevel = level + 1;
-}
-
-function updateFade() {
-  fadeAlpha += 0.03;
-  if(fadeAlpha >= 1) {
-    level = nextLevel;
-    if(level > 3) level = 1;
-    levelData = getLevelData(level);
-    player.x = 50;
-    player.y = groundY - player.h;
-    player.vx = 0;
-    player.vy = 0;
-    projectiles.length = 0;
-    health = 5;
-    fading = false;
-    fadeAlpha = 0;
-  }
-}
-
-// Damage player helper
-function damagePlayer() {
-  if(!player.invincible) {
-    health--;
-    player.invincible = 60;
-  }
-}
-
-// Rect intersection helper
-function rectIntersect(a,b) {
-  return a.x < b.x + b.w &&
-         a.x + a.w > b.x &&
-         a.y < b.y + b.h &&
-         a.y + a.h > b.y;
-}
-
-// Draw Helpers
-function drawBackground() {
-  if(levelData.waterBg) {
-    // Water gradient
-    let grad = ctx.createLinearGradient(0, groundY - 200, 0, groundY + 100);
-    grad.addColorStop(0, '#4488cc');
-    grad.addColorStop(1, '#0a2a4d');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
-
-    // Simple water ripple lines
-    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-    ctx.lineWidth = 2;
-    for(let i = 0; i < W; i += 30) {
-      ctx.beginPath();
-      ctx.moveTo(i, groundY - 20 + Math.sin(i/15 + Date.now()/500) * 5);
-      ctx.lineTo(i + 20, groundY - 20 + Math.cos(i/10 + Date.now()/700)*5);
-      ctx.stroke();
-    }
-  } else {
-    ctx.fillStyle = levelData.bgColor;
-    ctx.fillRect(0,0,W,H);
-  }
-
-  // Ground
-  ctx.fillStyle = '#553311';
-  ctx.fillRect(0, groundY, W, H - groundY);
-
-  // Simple grass on ground
-  for(let i = 0; i < W; i += 20) {
-    ctx.fillStyle = i % 40 === 0 ? '#336622' : '#2b541a';
-    ctx.fillRect(i, groundY - 10, 5, 10);
-  }
-}
-
-// Draw enemies
-function drawEnemies() {
-  for(let e of levelData.enemies) {
-    ctx.fillStyle = e.type === 'crab' ? '#d04010' : '#f0f';
-    ctx.fillRect(e.x, e.y, e.w, e.h);
-    // simple eyes
-    ctx.fillStyle = 'white';
-    ctx.fillRect(e.x + 8, e.y + 8, 6, 6);
-    ctx.fillRect(e.x + e.w - 14, e.y + 8, 6, 6);
-  }
-}
-
-// Draw boss
-function drawBoss() {
-  if(levelData.boss) {
-    let b = levelData.boss;
-    ctx.fillStyle = '#551111';
-    ctx.fillRect(b.x, b.y, b.w, b.h);
-    // Face eyes
-    ctx.fillStyle = 'yellow';
-    ctx.fillRect(b.x + 15, b.y + 20, 15, 15);
-    ctx.fillRect(b.x + b.w - 35, b.y + 20, 15, 15);
-    // Boss health bar
-    ctx.fillStyle = 'black';
-    ctx.fillRect(10, 10, 200, 20);
-    ctx.fillStyle = 'red';
-    ctx.fillRect(10, 10, 200 * (bossHealth / b.health), 20);
-    ctx.strokeStyle = 'white';
-    ctx.strokeRect(10, 10, 200, 20);
-  }
-}
-
-// Draw items
-function drawItems() {
-  for(let item of levelData.items) {
-    if(!item.got) {
-      ctx.fillStyle = '#ff9933'; // Lobster orange
-      ctx.beginPath();
-      ctx.ellipse(item.x+10, item.y+10, 10, 6, 0, 0, Math.PI*2);
-      ctx.fill();
-      // Lobster claws
-      ctx.strokeStyle = '#cc6600';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(item.x + 5, item.y + 8);
-      ctx.lineTo(item.x + 2, item.y + 5);
-      ctx.moveTo(item.x + 15, item.y + 8);
-      ctx.lineTo(item.x + 18, item.y + 5);
-      ctx.stroke();
-    }
-  }
-}
-
-// Draw projectiles (lobsters)
-function drawProjectiles() {
-  ctx.fillStyle = '#ff6600';
-  for(let p of projectiles) {
-    ctx.beginPath();
-    ctx.ellipse(p.x + p.w/2, p.y + p.h/2, p.w/2, p.h/3, 0, 0, Math.PI*2);
-    ctx.fill();
-  }
-}
-
-// Draw boat
-function drawBoat() {
-  if(levelData.boat) {
-    let b = levelData.boat;
-    ctx.fillStyle = '#654321';
-    ctx.fillRect(b.x, b.y, b.w, b.h);
-    ctx.fillStyle = '#222';
-    ctx.fillRect(b.x + b.w/3, b.y - 30, b.w/3, 30);
-  }
-}
-
-// Draw UI: health & score
-function drawUI() {
-  // Health hearts
-  for(let i=0; i < 5; i++) {
-    ctx.fillStyle = i < health ? '#ff4444' : '#661111';
-    ctx.beginPath();
-    const x = 20 + i*30;
-    const y = 50;
-    ctx.moveTo(x, y);
-    ctx.bezierCurveTo(x, y-10, x-15, y-10, x-15, y+5);
-    ctx.bezierCurveTo(x-15, y+20, x, y+25, x, y+40);
-    ctx.bezierCurveTo(x, y+25, x+15, y+20, x+15, y+5);
-    ctx.bezierCurveTo(x+15, y-10, x, y-10, x, y);
-    ctx.fill();
-  }
-  // Score text
-  ctx.fillStyle = 'white';
-  ctx.font = '20px Segoe UI';
-  ctx.fillText(`Score: ${score}`, W - 140, 40);
-}
-
-// Draw fade overlay
-function drawFade() {
-  if(fading) {
-    ctx.fillStyle = `rgba(0,0,0,${fadeAlpha})`;
-    ctx.fillRect(0,0,W,H);
-  }
-}
-
-// Draw everything
-function draw() {
-  drawBackground();
-  drawBoat();
-  drawItems();
-  drawEnemies();
-  drawBoss();
-  drawProjectiles();
-  drawPlayer(player.x, player.y, player.w, player.h, player.facingRight, player.onBoat);
-  drawUI();
-  drawFade();
-}
-
-// Main loop
-function loop() {
-  update();
-  draw();
-  requestAnimationFrame(loop);
-}
-
-// Reset game on game over
-function resetGame() {
-  health = 5;
-  score = 0;
-  level = 1;
-  player.x = 50;
-  player.y = groundY - player.h;
-  player.vx = 0;
-  player.vy = 0;
-  projectiles.length = 0;
-  levelData = getLevelData(level);
-  inBoss = false;
-  fading = false;
-  fadeAlpha = 0;
-}
-
-// Music toggle
-const musicToggle = document.getElementById('musicToggle');
-let musicOn = false;
-musicToggle.addEventListener('click', () => {
-  musicOn = !musicOn;
-  if(musicOn) {
-    assets.bgMusic.play();
-    musicToggle.textContent = '🔊';
-  } else {
-    assets.bgMusic.pause();
-    musicToggle.textContent = '🔇';
-  }
-});
-
-// Start game loop
-loop();
+  startBtn.addEventListener('click', () => {
+    startGame();
+  });
 </script>
+
 </body>
 </html>
