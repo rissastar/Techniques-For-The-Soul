@@ -2,168 +2,292 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Quick Color Match</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<title>Catch the Lobsters!</title>
 <style>
-  body {
-    background: #121212;
-    color: #eee;
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    background: #1e1e2f;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    margin: 0;
+    user-select: none;
+    color: #eee;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
-  h1 {
-    margin-bottom: 0.2em;
+  #gameContainer {
+    position: relative;
+    width: 90vw;
+    max-width: 600px;
+    height: 80vh;
+    background: linear-gradient(135deg, #3b3b6d, #2a2a43);
+    border-radius: 20px;
+    box-shadow: 0 0 30px #4a4a8faa inset;
+    overflow: hidden;
+  }
+  #scoreBoard, #highScoreBoard {
+    font-size: 1.8rem;
+    padding: 10px 0 5px 0;
+    text-align: center;
     user-select: none;
   }
-  #colorWord {
-    font-size: 6rem;
-    font-weight: bold;
-    margin: 0.2em 0 0.6em 0;
-    user-select: none;
+  #highScoreBoard {
+    color: #f0a500;
+    font-size: 1.1rem;
   }
-  #buttons {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5em;
-  }
-  button {
-    padding: 1rem 1.5rem;
-    font-size: 1.4rem;
-    font-weight: bold;
-    border-radius: 8px;
+  #startBtn, #musicToggleBtn {
+    margin: 15px 8px 10px 8px;
+    padding: 12px 24px;
+    font-size: 1.3rem;
+    border-radius: 10px;
     border: none;
+    background: #5e9cff;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 5px 10px #2d66b1;
+    transition: background 0.3s ease;
+    user-select: none;
+  }
+  #startBtn:hover:not(:disabled),
+  #musicToggleBtn:hover {
+    background: #3d82ff;
+  }
+  #startBtn:disabled {
+    background: #777;
+    cursor: default;
+    box-shadow: none;
+  }
+  .target {
+    position: absolute;
     cursor: pointer;
     user-select: none;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    transition: transform 0.1s ease;
+    box-shadow: 0 0 12px rgba(255, 99, 71, 0.8);
+    transition: transform 0.15s ease;
+    touch-action: manipulation;
+    background: url('https://cdn.pixabay.com/photo/2012/04/11/14/26/lobster-28646_960_720.png') no-repeat center center;
+    background-size: contain;
   }
-  button:active {
-    transform: scale(0.9);
-  }
-  #score {
-    font-size: 1.4rem;
-    margin-bottom: 0.5em;
-    user-select: none;
+  .target:active {
+    transform: scale(0.85);
   }
   #message {
-    font-size: 1.2rem;
-    color: #0f0;
     height: 1.5em;
-    user-select: none;
-  }
-  #startBtn {
-    margin-top: 1rem;
-    padding: 0.8rem 2rem;
+    margin-top: 8px;
     font-size: 1.2rem;
-    border-radius: 10px;
-    background: #0a74da;
-    color: white;
-    border: none;
-    cursor: pointer;
+    text-align: center;
+    color: #90ee90;
     user-select: none;
-    box-shadow: 0 4px 8px rgba(10,116,218,0.6);
-    transition: background 0.3s ease;
   }
-  #startBtn:hover {
-    background: #095bb5;
+  #footer {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #888;
+    user-select: none;
+  }
+  @media (hover: none) {
+    #startBtn, #musicToggleBtn {
+      font-size: 1.6rem;
+      padding: 16px 30px;
+    }
   }
 </style>
 </head>
 <body>
 
-<h1>Quick Color Match</h1>
-<div id="score">Score: 0</div>
-<div id="colorWord">READY</div>
-<div id="buttons">
-  <button style="background:#e74c3c;" data-color="red">RED</button>
-  <button style="background:#3498db;" data-color="blue">BLUE</button>
-  <button style="background:#2ecc71;" data-color="green">GREEN</button>
-  <button style="background:#f1c40f;" data-color="yellow">YELLOW</button>
+<div id="scoreBoard">Score: 0</div>
+<div id="highScoreBoard">High Score: 0</div>
+<div id="gameContainer" role="main" aria-label="Catch the lobsters game area"></div>
+<div>
+  <button id="startBtn" aria-label="Start game">Start Game</button>
+  <button id="musicToggleBtn" aria-label="Toggle background music">🔈 Music On</button>
 </div>
-<div id="message"></div>
-<button id="startBtn">Start Game</button>
+<div id="message" aria-live="polite"></div>
+<div id="footer">Try to click all the lobsters before they disappear! Missing one ends the game.</div>
+
+<audio id="bgMusic" loop preload="auto" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_2a8e6d0904.mp3?filename=summer-ambience-ambient-11457.mp3" crossorigin="anonymous"></audio>
+<audio id="clickSound" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_4e8e01ae4a.mp3?filename=pop-1-6376.mp3" crossorigin="anonymous"></audio>
+<audio id="gameOverSound" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_850b028dba.mp3?filename=error-124467.mp3" crossorigin="anonymous"></audio>
 
 <script>
-  const colorWord = document.getElementById('colorWord');
-  const buttons = document.querySelectorAll('#buttons button');
-  const scoreDisplay = document.getElementById('score');
-  const message = document.getElementById('message');
+  const gameContainer = document.getElementById('gameContainer');
+  const scoreBoard = document.getElementById('scoreBoard');
+  const highScoreBoard = document.getElementById('highScoreBoard');
   const startBtn = document.getElementById('startBtn');
+  const musicToggleBtn = document.getElementById('musicToggleBtn');
+  const message = document.getElementById('message');
 
-  const colors = ['red', 'blue', 'green', 'yellow'];
-  const colorHex = {
-    red: '#e74c3c',
-    blue: '#3498db',
-    green: '#2ecc71',
-    yellow: '#f1c40f'
-  };
+  const bgMusic = document.getElementById('bgMusic');
+  const clickSound = document.getElementById('clickSound');
+  const gameOverSound = document.getElementById('gameOverSound');
 
   let score = 0;
-  let currentColor = '';
-  let intervalId;
-  let speed = 2000; // initial time to answer in ms
+  let highScore = 0;
+  let gameActive = false;
+  let targetTimeouts = [];
+  let currentSpeed = 1500; // milliseconds targets stay visible initially
+  let minSpeed = 600;
+  let maxTargets = 3;
+  let targetSize = 80; // pixels, will shrink over time
+  let musicPlaying = false;
 
-  function pickNewColor() {
-    // Pick a random color word and a different color for the text
-    const word = colors[Math.floor(Math.random() * colors.length)];
-    let color;
-    do {
-      color = colors[Math.floor(Math.random() * colors.length)];
-    } while (color === word);
-    currentColor = color;
-    colorWord.textContent = word.toUpperCase();
-    colorWord.style.color = colorHex[color];
+  // Load high score from localStorage
+  function loadHighScore() {
+    const saved = localStorage.getItem('catchTargetsHighScore');
+    if (saved !== null) {
+      highScore = parseInt(saved);
+      highScoreBoard.textContent = 'High Score: ' + highScore;
+    }
+  }
+
+  // Save high score to localStorage
+  function saveHighScore() {
+    localStorage.setItem('catchTargetsHighScore', highScore);
+  }
+
+  function spawnTarget() {
+    if (!gameActive) return;
+
+    // Create a new target element
+    const target = document.createElement('div');
+    target.classList.add('target');
+    const size = targetSize;
+    target.style.width = size + 'px';
+    target.style.height = size + 'px';
+
+    // Position randomly inside game container
+    const maxX = gameContainer.clientWidth - size;
+    const maxY = gameContainer.clientHeight - size;
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    target.style.left = x + 'px';
+    target.style.top = y + 'px';
+
+    // Set timeout to remove target if not clicked
+    const timeout = setTimeout(() => {
+      if (gameActive && gameContainer.contains(target)) {
+        // Missed target - game over
+        endGame('Missed a lobster!');
+      }
+    }, currentSpeed);
+
+    targetTimeouts.push(timeout);
+
+    // When target clicked or touched
+    function hitTarget(e) {
+      e.preventDefault();
+      if (!gameActive) return;
+
+      // Play click sound
+      if(musicPlaying) clickSound.currentTime = 0; clickSound.play();
+
+      // Remove target and clear timeout
+      clearTimeout(timeout);
+      targetTimeouts = targetTimeouts.filter(t => t !== timeout);
+      if (gameContainer.contains(target)) {
+        gameContainer.removeChild(target);
+      }
+
+      score++;
+      scoreBoard.textContent = 'Score: ' + score;
+      message.textContent = 'Nice catch!';
+
+      // Speed up and shrink targets gradually
+      if (currentSpeed > minSpeed) {
+        currentSpeed *= 0.95;
+        currentSpeed = Math.max(currentSpeed, minSpeed);
+      }
+      if (targetSize > 40) {
+        targetSize -= 1.5;
+      }
+      if (score % 5 === 0 && maxTargets < 7) {
+        maxTargets++;
+      }
+
+      // Spawn a new target quickly to keep game flowing
+      setTimeout(spawnTarget, Math.random() * 700 + 200);
+    }
+
+    target.addEventListener('click', hitTarget);
+    target.addEventListener('touchstart', hitTarget, {passive:false});
+
+    // Maintain max number of targets on screen
+    if (gameContainer.querySelectorAll('.target').length < maxTargets) {
+      // Schedule next spawn quickly to fill targets
+      setTimeout(spawnTarget, Math.random() * 700 + 200);
+    }
   }
 
   function startGame() {
     score = 0;
-    speed = 2000;
-    scoreDisplay.textContent = 'Score: 0';
+    currentSpeed = 1500;
+    targetSize = 80;
+    maxTargets = 3;
+    gameActive = true;
+    scoreBoard.textContent = 'Score: 0';
     message.textContent = '';
     startBtn.disabled = true;
-    pickNewColor();
-    intervalId = setTimeout(gameOver, speed);
+    gameContainer.innerHTML = '';
 
-    // Show instructions briefly
-    colorWord.style.fontSize = '6rem';
+    // Start spawning targets
+    spawnTarget();
   }
 
-  function gameOver() {
-    clearTimeout(intervalId);
-    message.textContent = 'Game Over! Final Score: ' + score;
-    colorWord.textContent = 'GAME OVER';
-    colorWord.style.color = '#aaa';
+  function endGame(reason) {
+    gameActive = false;
+    message.textContent = reason + ' Game Over!';
     startBtn.disabled = false;
+
+    // Clear all timeouts and remove targets
+    targetTimeouts.forEach(t => clearTimeout(t));
+    targetTimeouts = [];
+    gameContainer.innerHTML = '';
+
+    // Play game over sound
+    if(musicPlaying) {
+      gameOverSound.currentTime = 0;
+      gameOverSound.play();
+    }
+
+    // Save high score if beaten
+    if (score > highScore) {
+      highScore = score;
+      highScoreBoard.textContent = 'High Score: ' + highScore + ' 🎉';
+      saveHighScore();
+    }
   }
-
-  buttons.forEach(button => {
-    button.addEventListener('click', () => {
-      if (startBtn.disabled === false) return; // game not running
-      const chosenColor = button.getAttribute('data-color');
-      if (chosenColor === currentColor) {
-        score++;
-        scoreDisplay.textContent = 'Score: ' + score;
-        message.textContent = 'Correct! +1';
-        // Increase speed, but cap at 600ms
-        speed = Math.max(600, speed * 0.9);
-
-        clearTimeout(intervalId);
-        pickNewColor();
-        intervalId = setTimeout(gameOver, speed);
-      } else {
-        message.textContent = 'Wrong! Try again!';
-      }
-    });
-  });
 
   startBtn.addEventListener('click', () => {
     startGame();
   });
+
+  musicToggleBtn.addEventListener('click', () => {
+    if (musicPlaying) {
+      bgMusic.pause();
+      musicToggleBtn.textContent = '🔈 Music Off';
+      musicPlaying = false;
+    } else {
+      bgMusic.play();
+      musicToggleBtn.textContent = '🔊 Music On';
+      musicPlaying = true;
+    }
+  });
+
+  // Load high score on page load
+  loadHighScore();
+
+  // Prevent scrolling on mobile when touching the game container
+  gameContainer.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+  }, { passive: false });
+
 </script>
 
 </body>
