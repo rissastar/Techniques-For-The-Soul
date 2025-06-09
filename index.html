@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sleep Game Spinner</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #1e1f29;
+    color: #f0f0f5;
+    text-align: center;
+    margin: 0; padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+  #wheel {
+    margin: 20px auto;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 8px solid #f39c12;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 20px #f39c12aa;
+  }
+  #spinBtn {
+    margin-top: 20px;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    background: #f39c12;
+    color: #1e1f29;
+    cursor: pointer;
+    box-shadow: 0 0 10px #f39c12bb;
+    transition: background 0.3s ease;
+  }
+  #spinBtn:hover:not(:disabled) {
+    background: #e67e22;
+  }
+  #spinBtn:disabled {
+    background: #b07b1a;
+    cursor: default;
+  }
+  /* The pointer */
+  #pointer {
+    width: 0; 
+    height: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 40px solid #f39c12;
+    position: absolute;
+    top: -40px;
+    left: calc(50% - 25px);
+    filter: drop-shadow(0 0 4px #f39c12bb);
+  }
+  /* Modal styles */
+  #modalOverlay {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(4px);
+  }
+  #modalContent {
+    background: #2c2e3e;
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #f39c12aa;
+    text-align: left;
+    color: #f0f0f5;
+  }
+  #modalContent h2 {
+    margin-top: 0;
+    color: #f39c12;
+  }
+  #modalContent pre {
+    white-space: pre-wrap;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 15px 0;
+  }
+  #closeModal {
+    background: #f39c12;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    float: right;
+    margin-top: -10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Sleep Game Spinner</h1>
+
+<div id="wheel">
+  <canvas id="wheelCanvas" width="400" height="400"></canvas>
+  <div id="pointer"></div>
+</div>
+
+<button id="spinBtn">Spin the Wheel</button>
+
+<!-- Modal -->
+<div id="modalOverlay">
+  <div id="modalContent">
+    <button id="closeModal">Close ✖</button>
+    <h2 id="gameTitle"></h2>
+    <p><strong>Instructions:</strong></p>
+    <p id="gameInstructions"></p>
+    <p><strong>Examples:</strong></p>
+    <pre id="gameExamples"></pre>
+  </div>
+</div>
+
+<script>
+  const games = [
+    {
+      title: "Imaginary Shelf",
+      instructions: "Build an imaginary shelf in your mind. Fill it with comforting things, one by one.",
+      examples: "A warm cup of cocoa\nYour favorite book\nA small candle, a photo, or stuffed animal\nRearrange and decorate gently."
+    },
+    {
+      title: "Name 3 Slow Think Game",
+      instructions: "Name 3 of something slowly in your mind, picturing each item for a few seconds.",
+      examples: "3 soft things you love\n3 gentle songs\n3 places you’ve felt calm"
+    },
+    {
+      title: "Cloud Collector",
+      instructions: "Imagine watching clouds float by and naming shapes you see in them.",
+      examples: "A cat\nA crescent moon\nA warm mug\nWatch each cloud drift and fade slowly."
+    },
+    {
+      title: "Opposite Land",
+      instructions: "Flip your current feelings into their opposites to gently relax.",
+      examples: "If you feel tight → imagine loosening\nIf loud → picture silence\nIf stuck → visualize floating"
+    },
+    {
+      title: "Dream Market",
+      instructions: "Picture a magical nighttime market just for dreams. Browse the stalls and their goods.",
+      examples: "Jars of moonlight\nCozy blankets and fireflies\nDreams you can “buy” for a smile"
+    },
+    {
+      title: "Sleepy Spelling Bee",
+      instructions: "Mentally spell soft, cozy words slowly, picturing each letter floating away.",
+      examples: "C…A…L…M\nB…R…E…A…T…H\nD…R…E…A…M"
+    },
+    {
+      title: "Invisible Ink Writing",
+      instructions: "Imagine writing a soothing sentence in invisible ink on the air above your bed.",
+      examples: "“You are safe now.”\n“Let go, little one.”\n“Sleep is coming.”"
+    },
+    {
+      title: "Magical Recipe Builder",
+      instructions: "Pretend you're making a sleep potion or tea. Add soothing ingredients mentally, one by one.",
+      examples: "1 scoop of quiet\nA spoonful of moon dust\nA curl of steam\nStir three times clockwise"
+    },
+    {
+      title: "Color Flow Game",
+      instructions: "Pick a calming color and picture it flowing through your body as you breathe.",
+      examples: "Inhale: the color flows in\nExhale: it softens and expands\nWrap yourself in this color."
+    },
+    {
+      title: "Word Nesting",
+      instructions: "Start with a cozy word and add smaller, calmer words inside it, like nesting dolls.",
+      examples: "Cozy\nInside: warm\nInside: soft\nInside: hush"
+    },
+    {
+      title: "Counting Backwards",
+      instructions: "Slowly count backwards from 50 (or 100 if you like) by ones or twos, picturing each number fading.",
+      examples: "50… 49… 48… 47… Let the numbers slowly disappear."
+    },
+    {
+      title: "Safe Place Builder",
+      instructions: "Imagine a peaceful place where you feel safe and calm. Add details one by one.",
+      examples: "Soft grass under your feet\nGentle breeze\nWarm sunlight or cool shade"
+    },
+    {
+      title: "Gentle Movement Visualization",
+      instructions: "Picture your body moving slowly like a feather or a leaf on water.",
+      examples: "Your arms float up gently, then drift down. Your breath sways like a slow ocean wave."
+    },
+    {
+      title: "Soft Sound Story",
+      instructions: "Create a story in your head using soft sounds only. Imagine each sound gently blending into the next.",
+      examples: "Whispering leaves\nA crackling fire\nQuiet raindrops"
+    },
+    {
+      title: "Bubble Thoughts",
+      instructions: "Imagine your thoughts are bubbles floating upwards. Watch each bubble rise and pop softly, letting worries fade.",
+      examples: "(No examples needed)"
+    }
+  ];
+
+  const canvas = document.getElementById("wheelCanvas");
+  const ctx = canvas.getContext("2d");
+  const spinBtn = document.getElementById("spinBtn");
+  const modal = document.getElementById("modalOverlay");
+  const closeModalBtn = document.getElementById("closeModal");
+  const gameTitle = document.getElementById("gameTitle");
+  const gameInstructions = document.getElementById("gameInstructions");
+  const gameExamples = document.getElementById("gameExamples");
+
+  const colors = [
+    "#f39c12", "#d35400", "#f1c40f", "#e67e22",
+    "#f39c12", "#d35400", "#f1c40f", "#e67e22",
+    "#f39c12", "#d35400", "#f1c40f", "#e67e22",
+    "#f39c12", "#d35400", "#f1c40f"
+  ];
+
+  const size = games.length;
+  const arc = (2 * Math.PI) / size;
+  let startAngle = 0;
+  let isSpinning = false;
+  let spinTimeout = null;
+  let spinAngleStart = 0;
+  let spinTime = 0;
+  let spinTimeTotal = 0;
+
+  function drawWheel() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 2;
+    ctx.font = 'bold 14px Arial';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    for (let i = 0; i < size; i++) {
+      const angle = startAngle + i * arc;
+      ctx.fillStyle = colors[i % colors.length];
+
+      ctx.beginPath();
+      ctx.moveTo(canvas.width/2, canvas.height/2);
+      ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2 - 10, angle, angle + arc, false);
+      ctx.lineTo(canvas.width/2, canvas.height/2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.save();
+      ctx.translate(canvas.width/2, canvas.height/2);
+      ctx.rotate(angle + arc / 2);
+      ctx.fillStyle = "#1e1f29";
+      ctx.fillText(games[i].title, canvas.width/4, 0);
+      ctx.restore();
+    }
+  }
+
+  function spin() {
+    if (isSpinning) return;
+    isSpinning = true;
+    spinAngleStart = Math.random() * 10 + 10; // initial spin velocity
+    spinTime = 0;
+    spinTimeTotal = Math.random() * 3 + 4 * 1000; // spin duration 4-7 seconds
+    rotateWheel();
+    spinBtn.disabled = true;
+  }
+
+  function rotateWheel() {
+    spinTime += 30;
+    if(spinTime >= spinTimeTotal) {
+      stopRotateWheel();
+      return;
+    }
+    const spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+    startAngle += (spinAngle * Math.PI / 180);
+    drawWheel();
+    spinTimeout = setTimeout(rotateWheel, 30);
+  }
+
+  function stopRotateWheel() {
+    clearTimeout(spinTimeout);
+    isSpinning = false;
+    spinBtn.disabled = false;
+    // Calculate the selected index
+    const degrees = startAngle * 180 / Math.PI + 90; // +90 to offset pointer at top
+    const arcd = arc * 180 / Math.PI;
+    let index = Math.floor((360 - (degrees % 360)) / arcd);
+    if (index < 0) index += size;
+    showGame(index);
+  }
+
+  function easeOut(t, b, c, d) {
+    const ts = (t/=d)*t;
+    const tc = ts*t;
+    return b+c*(tc + -3*ts + 3*t);
+  }
+
+  function showGame(index) {
+    const game = games[index];
+    gameTitle.textContent = game.title;
+    gameInstructions.textContent = game.instructions;
+    gameExamples.textContent = game.examples;
+    modal.style.display = "block";
+  }
+
+  closeModalBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  spinBtn.addEventListener("click", spin);
+
+  drawWheel();
+
+</script>
+
+</body>
+</html>
