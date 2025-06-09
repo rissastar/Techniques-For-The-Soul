@@ -1,208 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Grounding Wheel</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grounding Spinner</title>
   <style>
     body {
+      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #222831, #393e46);
-      color: #eeeeee;
+      background: linear-gradient(to bottom, #e0f7fa, #ffe0f0);
+      color: #333;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
+      overflow: hidden;
     }
 
     h1 {
-      margin-bottom: 20px;
-      color: #00adb5;
+      color: #5d5c9e;
+      margin-bottom: 10px;
+      text-align: center;
     }
 
-    #spinner {
+    .spinner-container {
       position: relative;
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      border: 8px solid #00adb5;
-      overflow: hidden;
-      margin-bottom: 30px;
-      transition: transform 5s cubic-bezier(0.33, 1, 0.68, 1);
-    }
-
-    canvas {
-      width: 100%;
-      height: 100%;
+      width: 320px;
+      height: 320px;
     }
 
     .arrow {
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
       width: 0;
       height: 0;
       border-left: 20px solid transparent;
       border-right: 20px solid transparent;
-      border-bottom: 30px solid #ffcc00;
+      border-bottom: 30px solid #ff80ab;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -150%);
       z-index: 10;
     }
 
-    button {
-      padding: 12px 24px;
-      font-size: 18px;
-      background: #00adb5;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+    .wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 10px solid #f8bbd0;
+      position: relative;
+      overflow: hidden;
+      transform: rotate(0deg);
+      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
     }
 
-    .popup {
-      display: none;
+    .wheel div {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      transform-origin: 100% 100%;
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 11px;
+      text-align: center;
+      font-weight: bold;
+      padding: 8px;
+      color: #333;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #ba68c8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .popup, .overlay {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #393e46;
-      color: #eeeeee;
-      padding: 25px 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      z-index: 20;
+      z-index: 100;
+      display: none;
     }
 
     .overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
+      background: rgba(0,0,0,0.5);
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.6);
-      z-index: 15;
+    }
+
+    .popup {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 90%;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    }
+
+    .popup h2 {
+      margin-top: 0;
+    }
+
+    .close {
+      background: #f48fb1;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      margin-top: 15px;
+      color: white;
+      cursor: pointer;
+    }
+
+    @media (max-width: 400px) {
+      .spinner-container {
+        width: 90vw;
+        height: 90vw;
+      }
     }
   </style>
 </head>
 <body>
+  <h1>🎯 Grounding Spinner</h1>
+  <div class="spinner-container">
+    <div class="arrow"></div>
+    <div class="wheel" id="wheel"></div>
+  </div>
+  <button onclick="spin()">Spin</button>
 
-<h1>Spin the Grounding Wheel</h1>
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <h2 id="techniqueTitle"></h2>
+    <p id="techniqueDesc"></p>
+    <button class="close" onclick="closePopup()">Close</button>
+  </div>
 
-<div class="arrow"></div>
-<div id="spinner">
-  <canvas id="wheelCanvas" width="300" height="300"></canvas>
-</div>
-<button id="spinBtn">Spin</button>
+  <audio id="spinSound" src="https://www.soundjay.com/mechanical/sounds/gear-spin-1.mp3" preload="auto"></audio>
+  <audio id="landSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
 
-<div class="overlay" id="overlay"></div>
-<div class="popup" id="popup">
-  <h2 id="techniqueTitle"></h2>
-  <p id="techniqueDesc"></p>
-</div>
+  <script>
+    const techniques = [
+      { title: "👀 5-4-3-2-1", desc: "5 things you see, 4 feel, 3 hear, 2 smell, 1 taste." },
+      { title: "🌬️ Deep Breaths", desc: "Inhale 4, hold 4, exhale 6. Repeat." },
+      { title: "🧍‍♂️ Body Check", desc: "Focus from head to toe—relax each part." },
+      { title: "🎧 Sound Hunt", desc: "List 5 quiet or distant sounds." },
+      { title: "🖐️ Texture Touch", desc: "Touch 3 different textures. Notice each one." },
+      { title: "🚰 Cold Splash", desc: "Wash your hands or face with cold water." },
+      { title: "🧸 Object Focus", desc: "Hold something and notice its weight, shape, texture." },
+      { title: "🖊️ Doodle Calm", desc: "Draw lines, shapes, or patterns freely." },
+      { title: "🔢 Count Backwards", desc: "Count down by 7 from 100 or name alphabet backwards." },
+      { title: "👃 Smell Focus", desc: "Notice nearby scents or smell something comforting." },
+      { title: "👣 Grounded Feet", desc: "Press your feet into the ground. Feel the pressure." },
+      { title: "🧮 Number Match", desc: "Pick a number and find objects that count to it." },
+      { title: "🖼️ Picture a Safe Place", desc: "Imagine somewhere calm and peaceful." },
+      { title: "📦 Name Categories", desc: "Name 5 animals, foods, movies, etc." },
+      { title: "📱 Affirmations", desc: "Repeat calming phrases like 'I am safe.'" }
+    ];
 
-<script>
-  const techniques = [
-    { title: "5-4-3-2-1 Method", desc: "Name 5 things you see, 4 things you feel, 3 things you hear, 2 things you smell, and 1 thing you taste." },
-    { title: "Deep Breathing", desc: "Inhale for 4 seconds, hold for 7, and exhale for 8. Repeat slowly." },
-    { title: "Hold an Ice Cube", desc: "Feel its coldness and focus entirely on the sensation." },
-    { title: "Stretch", desc: "Do a gentle full-body stretch to ground yourself physically." },
-    { title: "Name 5 Colors", desc: "Look around and name 5 colors you can see." },
-    { title: "Touch an Object", desc: "Pick up something near you and describe its texture in detail." },
-    { title: "Listen Closely", desc: "Close your eyes and try to identify 3 distant sounds." },
-    { title: "Drink Water Slowly", desc: "Take a sip and focus fully on how it feels." },
-  ];
+    const wheel = document.getElementById("wheel");
+    const spinSound = document.getElementById("spinSound");
+    const landSound = document.getElementById("landSound");
+    const segments = techniques.length;
+    const angle = 360 / segments;
+    let currentRotation = 0;
 
-  const canvas = document.getElementById("wheelCanvas");
-  const ctx = canvas.getContext("2d");
-  const spinner = document.getElementById("spinner");
-  const spinBtn = document.getElementById("spinBtn");
-  const popup = document.getElementById("popup");
-  const overlay = document.getElementById("overlay");
-  const title = document.getElementById("techniqueTitle");
-  const desc = document.getElementById("techniqueDesc");
+    techniques.forEach((tech, i) => {
+      const segment = document.createElement("div");
+      segment.style.transform = `rotate(${i * angle}deg) skewY(-${90 - angle}deg)`;
+      segment.style.backgroundColor = i % 2 === 0 ? "#e1bee7" : "#fce4ec";
+      segment.innerText = tech.title;
+      wheel.appendChild(segment);
+    });
 
-  const total = techniques.length;
-  const sliceAngle = (2 * Math.PI) / total;
-  let currentRotation = 0;
-  let spinning = false;
+    function spin() {
+      if (navigator.vibrate) navigator.vibrate(50);
+      spinSound.play();
 
-  function drawWheel() {
-    const colors = ["#00adb5", "#007880"];
-    for (let i = 0; i < total; i++) {
-      const start = i * sliceAngle;
-      const end = start + sliceAngle;
+      const randomIndex = Math.floor(Math.random() * segments);
+      const spinAmount = 360 * 5 + (360 - randomIndex * angle - angle / 2);
+      currentRotation += spinAmount;
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-      ctx.beginPath();
-      ctx.moveTo(150, 150);
-      ctx.arc(150, 150, 140, start, end);
-      ctx.closePath();
-      ctx.fillStyle = colors[i % 2];
-      ctx.fill();
-
-      ctx.save();
-      ctx.translate(150, 150);
-      ctx.rotate(start + sliceAngle / 2);
-      ctx.fillStyle = "#eeeeee";
-      ctx.font = "bold 12px sans-serif";
-      ctx.textAlign = "right";
-      ctx.fillText(techniques[i].title, 130, 5);
-      ctx.restore();
+      setTimeout(() => {
+        showPopup(randomIndex);
+        landSound.play();
+        if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+      }, 4200);
     }
 
-    // Draw center circle
-    ctx.beginPath();
-    ctx.arc(150, 150, 30, 0, 2 * Math.PI);
-    ctx.fillStyle = "#393e46";
-    ctx.fill();
-  }
-
-  drawWheel();
-
-  function spinWheel() {
-    if (spinning) return;
-    spinning = true;
-    spinBtn.disabled = true;
-
-    const randIndex = Math.floor(Math.random() * total);
-    const randOffset = Math.random() * sliceAngle;
-    const totalSpin = 360 * 5 + ((2 * Math.PI * randIndex + randOffset) * 180 / Math.PI);
-    const duration = 5000;
-    const start = performance.now();
-
-    function animate(now) {
-      const elapsed = now - start;
-      const ease = 1 - Math.pow(1 - elapsed / duration, 3);
-      currentRotation = ease * totalSpin;
-      spinner.style.transform = `rotate(${currentRotation}deg)`;
-
-      if (elapsed < duration) {
-        requestAnimationFrame(animate);
-      } else {
-        spinning = false;
-        spinBtn.disabled = false;
-        showPopup(randIndex);
-      }
+    function showPopup(index) {
+      document.getElementById("techniqueTitle").innerText = techniques[index].title;
+      document.getElementById("techniqueDesc").innerText = techniques[index].desc;
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("popup").style.display = "block";
     }
 
-    requestAnimationFrame(animate);
-  }
-
-  function showPopup(index) {
-    title.textContent = techniques[index].title;
-    desc.textContent = techniques[index].desc;
-    popup.style.display = "block";
-    overlay.style.display = "block";
-  }
-
-  function closePopup() {
-    popup.style.display = "none";
-    overlay.style.display = "none";
-  }
-
-  spinBtn.addEventListener("click", spinWheel);
-  overlay.addEventListener("click", closePopup);
-</script>
-
+    function closePopup() {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("popup").style.display = "none";
+    }
+  </script>
 </body>
 </html>
