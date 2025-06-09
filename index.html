@@ -1,317 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>On 'Em - Lobster Fishing Game</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
-
-  body {
-    margin: 0;
-    background: #a2d9ff; /* sky blue */
-    font-family: 'Montserrat', sans-serif;
-    overflow-x: hidden;
-  }
-
-  header {
-    background-color: #004d40;
-    color: #fff;
-    padding: 1rem;
-    text-align: center;
-    font-size: 2rem;
-    letter-spacing: 3px;
-    user-select: none;
-  }
-
-  #game-container {
-    position: relative;
-    max-width: 600px;
-    margin: 20px auto;
-    border: 4px solid #004d40;
-    border-radius: 10px;
-    background: url('https://i.imgur.com/4ZTkJYm.jpg') no-repeat bottom center; 
-    /* Background: Weymouth fishing wharf photo substitute */
-    background-size: cover;
-    height: 500px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.3);
-  }
-
-  #water {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 180px;
-    background: linear-gradient(to top, #01579b 0%, #4fc3f7 100%);
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    box-shadow: inset 0 6px 8px rgba(255,255,255,0.3);
-  }
-
-  #trap {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background: url('https://i.imgur.com/2syUebd.png') no-repeat center/contain;
-    bottom: 180px;
-    left: 260px;
-    cursor: pointer;
-    transition: bottom 1s ease;
-    user-select: none;
-  }
-
-  #trap.cast {
-    animation: castTrap 1s forwards;
-  }
-
-  @keyframes castTrap {
-    0% { bottom: 180px; }
-    50% { bottom: 40px; }
-    100% { bottom: 180px; }
-  }
-
-  #catch {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    bottom: 200px;
-    left: 270px;
-    pointer-events: none;
-  }
-
-  #catch img {
-    width: 100%;
-    height: 100%;
-    user-select: none;
-  }
-
-  #info-box {
-    max-width: 600px;
-    margin: 10px auto;
-    padding: 12px;
-    background: #e0f2f1;
-    border: 2px solid #004d40;
-    border-radius: 10px;
-    color: #004d40;
-    font-weight: 600;
-    min-height: 3.5rem;
-    text-align: center;
-    user-select: none;
-  }
-
-  #score-timer {
-    max-width: 600px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    font-weight: 700;
-    font-size: 1.2rem;
-    padding: 0 10px;
-    color: #004d40;
-    user-select: none;
-  }
-
-  button#cast-btn {
-    display: block;
-    margin: 15px auto 30px auto;
-    padding: 12px 28px;
-    font-size: 1.3rem;
-    background-color: #004d40;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 700;
-    transition: background-color 0.3s ease;
-    user-select: none;
-  }
-
-  button#cast-btn:hover:enabled {
-    background-color: #00796b;
-  }
-
-  button#cast-btn:disabled {
-    background-color: #9e9e9e;
-    cursor: not-allowed;
-  }
-
-  /* Popup fact */
-  #fact-popup {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #004d40;
-    color: #e0f2f1;
-    padding: 15px 20px;
-    border-radius: 12px;
-    max-width: 320px;
-    box-shadow: 0 0 12px rgba(0,77,64,0.6);
-    font-size: 0.9rem;
-    user-select: none;
-    display: none;
-    z-index: 1000;
-  }
-
-  #fact-popup button {
-    background: transparent;
-    border: none;
-    color: #4fc3f7;
-    font-weight: 700;
-    margin-left: 12px;
-    cursor: pointer;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>On 'Em – Lobster Fishing Game</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://i.imgur.com/yH1CTBr.jpg') no-repeat center center;
+      background-size: cover;
+      overflow: hidden;
+    }
+    #game-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #trap {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      width: 80px;
+      height: 60px;
+      background: url('https://i.imgur.com/XyZnpBl.png') no-repeat center;
+      background-size: contain;
+      transform: translateX(-50%);
+      cursor: grab;
+    }
+    #catch {
+      position: absolute;
+      bottom: 180px;
+      width: 60px;
+      height: 60px;
+    }
+    #ui {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: white;
+      background: rgba(0,0,0,0.5);
+      padding: 12px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+    }
+    #leaderboard {
+      margin-top: 10px;
+      background: rgba(255,255,255,0.1);
+      padding: 5px;
+      border-radius: 8px;
+    }
+    #cast-btn, #restart-btn, #mute-btn {
+      margin-top: 10px;
+      padding: 8px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #1e90ff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #restart-btn {
+      background: #ff6347;
+    }
+    @media (max-width: 600px) {
+      #trap { width: 60px; height: 45px; }
+      #catch { width: 50px; height: 50px; }
+      #cast-btn, #restart-btn, #mute-btn { font-size: 14px; padding: 6px 16px; }
+    }
+  </style>
 </head>
 <body>
+  <div id="game-container">
+    <div id="trap" tabindex="0"></div>
+    <div id="catch"></div>
+    <div id="ui">
+      <h2>🎣 On 'Em – Weymouth Wharf</h2>
+      <p id="info">Cast the trap to catch lobsters!</p>
+      <p>Score: <span id="score">0</span> | Time Left: <span id="timer">60</span>s</p>
+      <button id="cast-btn">🎯 Cast Trap</button>
+      <button id="restart-btn" style="display:none;">🔁 Restart</button>
+      <button id="mute-btn">🔇 Mute</button>
+      <div id="leaderboard">
+        <h4>🏆 Leaderboard</h4>
+        <ol id="scores"></ol>
+      </div>
+    </div>
+  </div>
 
-<header>On 'Em — Lobster Fishing</header>
+  <audio id="cast-sound" src="https://www.soundjay.com/button/beep-07.mp3"></audio>
+  <audio id="catch-sound" src="https://www.soundjay.com/button/button-3.mp3"></audio>
+  <audio id="bg-sound" src="https://www.fesliyanstudios.com/play-mp3/387" loop></audio>
 
-<div id="game-container" aria-label="Fishing wharf game area" role="main">
-  <div id="water"></div>
-  <div id="trap" tabindex="0" aria-label="Fishing trap, click or press enter to cast"></div>
-  <div id="catch"></div>
-</div>
+  <script>
+    const trap = document.getElementById('trap');
+    const catchDiv = document.getElementById('catch');
+    const info = document.getElementById('info');
+    const scoreSpan = document.getElementById('score');
+    const timerSpan = document.getElementById('timer');
+    const castBtn = document.getElementById('cast-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const scoresList = document.getElementById('scores');
+    const muteBtn = document.getElementById('mute-btn');
 
-<div id="score-timer" aria-live="polite" aria-atomic="true">
-  <div>Score: <span id="score">0</span></div>
-  <div>Time Left: <span id="timer">60</span>s</div>
-</div>
+    const castSound = document.getElementById('cast-sound');
+    const catchSound = document.getElementById('catch-sound');
+    const bgSound = document.getElementById('bg-sound');
 
-<button id="cast-btn" aria-pressed="false">Cast Trap</button>
+    let score = 0;
+    let timeLeft = 60;
+    let gameActive = true;
+    let muted = false;
 
-<div id="info-box" role="status" aria-live="polite" aria-atomic="true">Click "Cast Trap" to catch lobsters!</div>
+    const creatures = [
+      { name: 'Lobster', points: 10, img: 'https://i.imgur.com/3l8HzF2.png' },
+      { name: 'Crab', points: 5, img: 'https://i.imgur.com/L7rj1M3.png' },
+      { name: 'Boot', points: 0, img: 'https://i.imgur.com/1Gc8xDb.png' },
+    ];
 
-<div id="fact-popup" role="alert" aria-live="assertive">
-  <span id="fact-text"></span>
-  <button aria-label="Close fact popup" id="close-fact-btn">✕</button>
-</div>
-
-<script>
-  // Game variables
-  const trap = document.getElementById('trap');
-  const catchDiv = document.getElementById('catch');
-  const castBtn = document.getElementById('cast-btn');
-  const scoreSpan = document.getElementById('score');
-  const timerSpan = document.getElementById('timer');
-  const infoBox = document.getElementById('info-box');
-  const factPopup = document.getElementById('fact-popup');
-  const factText = document.getElementById('fact-text');
-  const closeFactBtn = document.getElementById('close-fact-btn');
-
-  let score = 0;
-  let timeLeft = 60;
-  let gameActive = true;
-  let waitingForCatch = false;
-
-  // Possible creatures to catch with probabilities and images
-  const creatures = [
-    { name: 'Lobster', chance: 0.5, img: 'https://i.imgur.com/UZxpVjp.png', points: 5 },
-    { name: 'Crab', chance: 0.3, img: 'https://i.imgur.com/gwBPPgD.png', points: 3 },
-    { name: 'Eel', chance: 0.15, img: 'https://i.imgur.com/CHvmMVT.png', points: 4 },
-    { name: 'Seaweed (No catch)', chance: 0.05, img: 'https://i.imgur.com/7GmZTF0.png', points: 0 }
-  ];
-
-  // Educational facts about Mi'kmaq treaty rights and fishing dispute
-  const facts = [
-    "The Mi'kmaq have treaty rights to fish for a moderate livelihood as affirmed by the 1999 Supreme Court Marshall decision.",
-    "In 2020, the Sipekne'katik First Nation began a self-regulated lobster fishery outside the federally regulated season.",
-    "Tensions between Mi'kmaq fishers and others led to significant disputes in Weymouth, Nova Scotia.",
-    "Respecting Indigenous treaty rights is essential to reconciliation and justice in Canada.",
-    "The lobster fishery dispute raised national awareness of Indigenous sovereignty and treaty enforcement."
-  ];
-
-  // Utility: choose catch based on chance weights
-  function getCatch() {
-    const rand = Math.random();
-    let cumulative = 0;
-    for (let creature of creatures) {
-      cumulative += creature.chance;
-      if (rand < cumulative) return creature;
+    function updateLeaderboard() {
+      const board = JSON.parse(localStorage.getItem('onem-leaderboard') || '[]');
+      scoresList.innerHTML = '';
+      board.slice(0, 5).forEach(({ name, score }) => {
+        const li = document.createElement('li');
+        li.textContent = `${name}: ${score}`;
+        scoresList.appendChild(li);
+      });
     }
-    return creatures[creatures.length - 1]; // fallback
-  }
 
-  // Show fact popup randomly after some catches
-  function showRandomFact() {
-    const fact = facts[Math.floor(Math.random() * facts.length)];
-    factText.textContent = fact;
-    factPopup.style.display = 'block';
-  }
+    function saveScore() {
+      const name = prompt("Enter your name for the leaderboard:") || "Anonymous";
+      const board = JSON.parse(localStorage.getItem('onem-leaderboard') || '[]');
+      board.push({ name, score });
+      board.sort((a, b) => b.score - a.score);
+      localStorage.setItem('onem-leaderboard', JSON.stringify(board.slice(0, 5)));
+      updateLeaderboard();
+    }
 
-  closeFactBtn.addEventListener('click', () => {
-    factPopup.style.display = 'none';
-  });
+    function getCatch() {
+      const r = Math.random();
+      if (r < 0.5) return creatures[0];
+      if (r < 0.8) return creatures[1];
+      return creatures[2];
+    }
 
-  // Timer countdown
-  function startTimer() {
-    const interval = setInterval(() => {
-      if (timeLeft <= 0) {
-        clearInterval(interval);
-        endGame();
-      } else {
-        timeLeft--;
-        timerSpan.textContent = timeLeft;
-      }
-    }, 1000);
-  }
-
-  // End game
-  function endGame() {
-    gameActive = false;
-    castBtn.disabled = true;
-    infoBox.textContent = `Time's up! Your final score: ${score}. Thanks for supporting Mi'kmaq treaty rights!`;
-  }
-
-  // Cast trap action
-  function castTrapAction() {
-    if (!gameActive || waitingForCatch) return;
-
-    waitingForCatch = true;
-    castBtn.disabled = true;
-    infoBox.textContent = 'Casting trap...';
-
-    trap.classList.add('cast');
-
-    setTimeout(() => {
-      trap.classList.remove('cast');
-
-      // Determine catch
-      const caught = getCatch();
-
-      if (caught.points > 0) {
-        catchDiv.innerHTML = `<img src="${caught.img}" alt="${caught.name} caught" />`;
-        infoBox.textContent = `You caught a ${caught.name}! +${caught.points} points.`;
+    function castTrap() {
+      if (!gameActive) return;
+      info.textContent = "Casting trap...";
+      castSound.play();
+      catchDiv.innerHTML = '';
+      setTimeout(() => {
+        const caught = getCatch();
         score += caught.points;
         scoreSpan.textContent = score;
-      } else {
-        catchDiv.innerHTML = `<img src="${caught.img}" alt="No catch" />`;
-        infoBox.textContent = `No catch this time. Try again!`;
-      }
-
-      // Occasionally show a fact
-      if (Math.random() < 0.3) {
-        showRandomFact();
-      }
-
-      waitingForCatch = false;
-      castBtn.disabled = false;
-
-    }, 1100);
-  }
-
-  castBtn.addEventListener('click', castTrapAction);
-  trap.addEventListener('click', castTrapAction);
-  trap.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      castTrapAction();
+        info.textContent = caught.points > 0
+          ? `Caught a ${caught.name}! +${caught.points}`
+          : `You caught a ${caught.name}... no points.`;
+        catchDiv.innerHTML = `<img src="${caught.img}" width="60"/>`;
+        catchSound.play();
+      }, 800);
     }
-  });
 
-  // Initialize
-  infoBox.textContent = 'Click "Cast Trap" to catch lobsters!';
-  startTimer();
-</script>
+    function startGame() {
+      score = 0;
+      timeLeft = 60;
+      gameActive = true;
+      scoreSpan.textContent = score;
+      timerSpan.textContent = timeLeft;
+      info.textContent = "Cast the trap to catch lobsters!";
+      restartBtn.style.display = 'none';
+      bgSound.play();
+      const timer = setInterval(() => {
+        if (!gameActive) return clearInterval(timer);
+        timeLeft--;
+        timerSpan.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          gameActive = false;
+          info.textContent = `Game Over! Final Score: ${score}`;
+          castBtn.disabled = true;
+          restartBtn.style.display = 'inline-block';
+          bgSound.pause();
+          saveScore();
+        }
+      }, 1000);
+    }
 
+    // Event bindings
+    castBtn.onclick = castTrap;
+    restartBtn.onclick = () => {
+      castBtn.disabled = false;
+      startGame();
+    };
+    muteBtn.onclick = () => {
+      muted = !muted;
+      [castSound, catchSound, bgSound].forEach(s => s.muted = muted);
+      muteBtn.textContent = muted ? "🔊 Unmute" : "🔇 Mute";
+    };
+
+    // Drag logic
+    let dragging = false, offsetX = 0;
+    trap.addEventListener('mousedown', e => {
+      dragging = true;
+      offsetX = e.offsetX;
+    });
+    window.addEventListener('mouseup', () => dragging = false);
+    window.addEventListener('mousemove', e => {
+      if (!dragging || !gameActive) return;
+      let x = e.clientX - offsetX;
+      const containerWidth = document.getElementById('game-container').offsetWidth;
+      const trapWidth = trap.offsetWidth;
+      x = Math.max(0, Math.min(containerWidth - trapWidth, x));
+      trap.style.left = x + 'px';
+      catchDiv.style.left = (x + 10) + 'px';
+    });
+
+    // Arrow key controls
+    trap.addEventListener('keydown', e => {
+      const move = 15;
+      let left = trap.offsetLeft;
+      if (e.key === "ArrowLeft") left -= move;
+      if (e.key === "ArrowRight") left += move;
+      left = Math.max(0, Math.min(window.innerWidth - trap.offsetWidth, left));
+      trap.style.left = left + 'px';
+      catchDiv.style.left = (left + 10) + 'px';
+      if (e.key === "Enter" || e.key === " ") castTrap();
+    });
+
+    updateLeaderboard();
+    startGame();
+  </script>
 </body>
 </html>
