@@ -3,297 +3,315 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sleep Game Spinner - 30 Sections with Center Arrow</title>
+<title>On 'Em - Lobster Fishing Game</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #282c34;
-    color: #eee;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
     margin: 0;
+    background: #a2d9ff; /* sky blue */
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
   }
-  #spinner-container {
-    position: relative;
-    width: 320px;
-    height: 320px;
-  }
-  #spinner {
-    width: 320px;
-    height: 320px;
-    border-radius: 50%;
-    position: relative;
-    overflow: visible;
-    cursor: pointer;
+
+  header {
+    background-color: #004d40;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+    font-size: 2rem;
+    letter-spacing: 3px;
     user-select: none;
   }
-  canvas {
-    border-radius: 50%;
+
+  #game-container {
+    position: relative;
+    max-width: 600px;
+    margin: 20px auto;
+    border: 4px solid #004d40;
+    border-radius: 10px;
+    background: url('https://i.imgur.com/4ZTkJYm.jpg') no-repeat bottom center; 
+    /* Background: Weymouth fishing wharf photo substitute */
+    background-size: cover;
+    height: 500px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
   }
-  /* Center arrow pointer inside spinner */
-  #center-arrow {
+
+  #water {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    margin-left: -12px;
-    margin-top: -140px; /* Push arrow outward from center */
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-bottom: 24px solid #ffcc00;
-    filter: drop-shadow(0 0 3px #ffd700);
-    pointer-events: none; /* So it doesn't block clicks */
-    z-index: 10;
-    transform-origin: 50% 100%;
+    bottom: 0;
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(to top, #01579b 0%, #4fc3f7 100%);
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: inset 0 6px 8px rgba(255,255,255,0.3);
   }
-  button#spinBtn {
-    margin-top: 20px;
-    padding: 12px 24px;
-    font-size: 18px;
+
+  #trap {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: url('https://i.imgur.com/2syUebd.png') no-repeat center/contain;
+    bottom: 180px;
+    left: 260px;
+    cursor: pointer;
+    transition: bottom 1s ease;
+    user-select: none;
+  }
+
+  #trap.cast {
+    animation: castTrap 1s forwards;
+  }
+
+  @keyframes castTrap {
+    0% { bottom: 180px; }
+    50% { bottom: 40px; }
+    100% { bottom: 180px; }
+  }
+
+  #catch {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    bottom: 200px;
+    left: 270px;
+    pointer-events: none;
+  }
+
+  #catch img {
+    width: 100%;
+    height: 100%;
+    user-select: none;
+  }
+
+  #info-box {
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 12px;
+    background: #e0f2f1;
+    border: 2px solid #004d40;
+    border-radius: 10px;
+    color: #004d40;
+    font-weight: 600;
+    min-height: 3.5rem;
+    text-align: center;
+    user-select: none;
+  }
+
+  #score-timer {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 0 10px;
+    color: #004d40;
+    user-select: none;
+  }
+
+  button#cast-btn {
+    display: block;
+    margin: 15px auto 30px auto;
+    padding: 12px 28px;
+    font-size: 1.3rem;
+    background-color: #004d40;
+    color: white;
     border: none;
     border-radius: 8px;
-    background: #ffcc00;
-    color: #282c34;
-    font-weight: bold;
     cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
     user-select: none;
-    box-shadow: 0 0 8px #ffd700;
-    transition: background 0.3s ease;
   }
-  button#spinBtn:disabled {
-    background: #bbb;
+
+  button#cast-btn:hover:enabled {
+    background-color: #00796b;
+  }
+
+  button#cast-btn:disabled {
+    background-color: #9e9e9e;
     cursor: not-allowed;
-    box-shadow: none;
   }
-  /* Popup styles */
-  #overlay {
+
+  /* Popup fact */
+  #fact-popup {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.7);
+    bottom: 20px;
+    right: 20px;
+    background: #004d40;
+    color: #e0f2f1;
+    padding: 15px 20px;
+    border-radius: 12px;
+    max-width: 320px;
+    box-shadow: 0 0 12px rgba(0,77,64,0.6);
+    font-size: 0.9rem;
+    user-select: none;
     display: none;
     z-index: 1000;
   }
-  #popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 320px;
-    max-width: 90vw;
-    background: #1e1e1e;
-    border-radius: 12px;
-    padding: 20px;
-    color: #eee;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 20px #ffcc00;
-    display: none;
-    z-index: 1001;
-  }
-  #popup img {
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 12px;
-  }
-  #popup h2 {
-    margin: 0 0 12px 0;
-    font-size: 24px;
-    text-align: center;
-  }
-  #popup p {
-    font-size: 16px;
-    white-space: pre-line;
+
+  #fact-popup button {
+    background: transparent;
+    border: none;
+    color: #4fc3f7;
+    font-weight: 700;
+    margin-left: 12px;
+    cursor: pointer;
   }
 </style>
 </head>
 <body>
 
-<div id="spinner-container">
-  <div id="spinner" aria-label="Sleep Game Spinner" role="listbox" tabindex="0"></div>
-  <div id="center-arrow" aria-hidden="true"></div>
+<header>On 'Em — Lobster Fishing</header>
+
+<div id="game-container" aria-label="Fishing wharf game area" role="main">
+  <div id="water"></div>
+  <div id="trap" tabindex="0" aria-label="Fishing trap, click or press enter to cast"></div>
+  <div id="catch"></div>
 </div>
 
-<button id="spinBtn" aria-live="polite">Spin the Wheel</button>
+<div id="score-timer" aria-live="polite" aria-atomic="true">
+  <div>Score: <span id="score">0</span></div>
+  <div>Time Left: <span id="timer">60</span>s</div>
+</div>
 
-<div id="overlay" tabindex="-1"></div>
-<div id="popup" role="dialog" aria-modal="true" aria-labelledby="gameTitle" aria-describedby="gameDesc" tabindex="0">
-  <h2 id="gameTitle"></h2>
-  <img id="gameImage" src="" alt="" />
-  <p id="gameDesc"></p>
+<button id="cast-btn" aria-pressed="false">Cast Trap</button>
+
+<div id="info-box" role="status" aria-live="polite" aria-atomic="true">Click "Cast Trap" to catch lobsters!</div>
+
+<div id="fact-popup" role="alert" aria-live="assertive">
+  <span id="fact-text"></span>
+  <button aria-label="Close fact popup" id="close-fact-btn">✕</button>
 </div>
 
 <script>
-  const games = [
-    {title: "🛌 5-4-3-2-1", desc: "Name 5 things you see, 4 you hear, 3 you feel, 2 you smell, 1 you taste to relax.", image: "https://cdn-icons-png.flaticon.com/512/616/616541.png", alt: "Counting senses"},
-    {title: "🌙 Breath Focus", desc: "Breathe deeply and slowly, count to 4 on inhale, hold 4, exhale 6. Repeat.", image: "https://cdn-icons-png.flaticon.com/512/616/616494.png", alt: "Deep breath"},
-    {title: "🌌 Star Gazing", desc: "Imagine a peaceful night sky full of stars, feel calm and cozy.", image: "https://cdn-icons-png.flaticon.com/512/616/616510.png", alt: "Starry night"},
-    {title: "📖 Storytime", desc: "Think of a favorite calming story or make one up in your mind.", image: "https://cdn-icons-png.flaticon.com/512/616/616409.png", alt: "Open book"},
-    {title: "🖌️ Doodle Draw", desc: "Draw simple shapes or patterns to relax your mind.", image: "https://cdn-icons-png.flaticon.com/512/616/616422.png", alt: "Pencil and doodles"},
-    {title: "🌿 Nature Sounds", desc: "Imagine gentle nature sounds like rain or wind chimes.", image: "https://cdn-icons-png.flaticon.com/512/616/616519.png", alt: "Wind chimes"},
-    {title: "🌟 Glow Fireflies", desc: "Picture soft glowing fireflies flickering gently.", image: "https://cdn-icons-png.flaticon.com/512/616/616456.png", alt: "Fireflies glowing"},
-    {title: "🛋️ Cozy Corner", desc: "Visualize a cozy reading corner with soft cushions and blanket.", image: "https://cdn-icons-png.flaticon.com/512/3181/3181957.png", alt: "Cozy chair"},
-    {title: "🍵 Tea Time", desc: "Imagine sipping warm herbal tea, feeling warmth inside.", image: "https://cdn-icons-png.flaticon.com/512/3017/3017893.png", alt: "Cup of tea"},
-    {title: "🌄 Sunrise Calm", desc: "Picture a peaceful sunrise bringing gentle peace.", image: "https://cdn-icons-png.flaticon.com/512/869/869869.png", alt: "Sunrise"},
-    {title: "🐾 Soft Steps", desc: "Imagine soft footsteps on a forest path calming your mind.", image: "https://cdn-icons-png.flaticon.com/512/616/616449.png", alt: "Footsteps"},
-    {title: "🎶 Gentle Music", desc: "Imagine soft, slow music playing in the background.", image: "https://cdn-icons-png.flaticon.com/512/616/616561.png", alt: "Music notes"},
-    {title: "🕯️ Candle Glow", desc: "Visualize a softly glowing candle flame.", image: "https://cdn-icons-png.flaticon.com/512/616/616479.png", alt: "Candle flame"},
-    {title: "🌊 Ocean Waves", desc: "Imagine gentle waves rolling onto the shore.", image: "https://cdn-icons-png.flaticon.com/512/616/616470.png", alt: "Ocean waves"},
-    {title: "🌸 Flower Bloom", desc: "Picture a flower slowly blooming with soft colors.", image: "https://cdn-icons-png.flaticon.com/512/616/616462.png", alt: "Flower blooming"},
-    {title: "🧘 Meditation", desc: "Focus on your breath and body sensations calmly.", image: "https://cdn-icons-png.flaticon.com/512/616/616549.png", alt: "Meditation pose"},
-    {title: "🐦 Bird Song", desc: "Imagine soft bird songs in a quiet forest.", image: "https://cdn-icons-png.flaticon.com/512/616/616504.png", alt: "Bird singing"},
-    {title: "🌈 Color Splash", desc: "Think of your favorite calming colors flowing gently.", image: "https://cdn-icons-png.flaticon.com/512/616/616537.png", alt: "Colors splash"},
-    {title: "💤 Sleepy Clouds", desc: "Picture soft fluffy clouds drifting slowly.", image: "https://cdn-icons-png.flaticon.com/512/616/616460.png", alt: "Fluffy clouds"},
-    {title: "🐠 Fish Swim", desc: "Imagine colorful fish swimming calmly underwater.", image: "https://cdn-icons-png.flaticon.com/512/616/616487.png", alt: "Fish swimming"},
-    {title: "🍂 Autumn Leaves", desc: "Picture leaves gently falling on a quiet path.", image: "https://cdn-icons-png.flaticon.com/512/616/616464.png", alt: "Falling leaves"},
-    {title: "🏞️ Quiet Lake", desc: "Imagine a still lake reflecting the sky perfectly.", image: "https://cdn-icons-png.flaticon.com/512/616/616513.png", alt: "Quiet lake"},
-    {title: "🌬️ Gentle Breeze", desc: "Feel a soft breeze brushing your face lightly.", image: "https://cdn-icons-png.flaticon.com/512/616/616520.png", alt: "Gentle breeze"},
-    {title: "🍫 Chocolate Treat", desc: "Imagine enjoying a small piece of smooth chocolate.", image: "https://cdn-icons-png.flaticon.com/512/616/616545.png", alt: "Chocolate"},
-    {title: "🌜 Moonlight", desc: "Picture gentle moonlight bathing a calm night.", image: "https://cdn-icons-png.flaticon.com/512/616/616477.png", alt: "Moonlight"},
-    {title: "🍯 Honey Spoons", desc: "Imagine sweet honey dripping slowly on your tongue.", image: "https://cdn-icons-png.flaticon.com/512/616/616533.png", alt: "Honey spoon"},
-    {title: "🛏️ Soft Pillows", desc: "Visualize sinking into soft, fluffy pillows.", image: "https://cdn-icons-png.flaticon.com/512/616/616523.png", alt: "Soft pillows"},
-    {title: "🎈 Balloon Rise", desc: "Imagine colorful balloons floating gently upward.", image: "https://cdn-icons-png.flaticon.com/512/616/616548.png", alt: "Balloons rising"},
-    {title: "🐝 Buzzing Bee", desc: "Picture a calm bee gently buzzing nearby.", image: "https://cdn-icons-png.flaticon.com/512/616/616535.png", alt: "Bee buzzing"},
-    {title: "🕊️ Peace Dove", desc: "Imagine a white dove soaring peacefully.", image: "https://cdn-icons-png.flaticon.com/512/616/616506.png", alt: "Peace dove"}
+  // Game variables
+  const trap = document.getElementById('trap');
+  const catchDiv = document.getElementById('catch');
+  const castBtn = document.getElementById('cast-btn');
+  const scoreSpan = document.getElementById('score');
+  const timerSpan = document.getElementById('timer');
+  const infoBox = document.getElementById('info-box');
+  const factPopup = document.getElementById('fact-popup');
+  const factText = document.getElementById('fact-text');
+  const closeFactBtn = document.getElementById('close-fact-btn');
+
+  let score = 0;
+  let timeLeft = 60;
+  let gameActive = true;
+  let waitingForCatch = false;
+
+  // Possible creatures to catch with probabilities and images
+  const creatures = [
+    { name: 'Lobster', chance: 0.5, img: 'https://i.imgur.com/UZxpVjp.png', points: 5 },
+    { name: 'Crab', chance: 0.3, img: 'https://i.imgur.com/gwBPPgD.png', points: 3 },
+    { name: 'Eel', chance: 0.15, img: 'https://i.imgur.com/CHvmMVT.png', points: 4 },
+    { name: 'Seaweed (No catch)', chance: 0.05, img: 'https://i.imgur.com/7GmZTF0.png', points: 0 }
   ];
 
-  const spinner = document.getElementById("spinner");
-  const spinBtn = document.getElementById("spinBtn");
-  const popup = document.getElementById("popup");
-  const overlay = document.getElementById("overlay");
-  const gameTitle = document.getElementById("gameTitle");
-  const gameDesc = document.getElementById("gameDesc");
-  const gameImage = document.getElementById("gameImage");
-  const centerArrow = document.getElementById("center-arrow");
+  // Educational facts about Mi'kmaq treaty rights and fishing dispute
+  const facts = [
+    "The Mi'kmaq have treaty rights to fish for a moderate livelihood as affirmed by the 1999 Supreme Court Marshall decision.",
+    "In 2020, the Sipekne'katik First Nation began a self-regulated lobster fishery outside the federally regulated season.",
+    "Tensions between Mi'kmaq fishers and others led to significant disputes in Weymouth, Nova Scotia.",
+    "Respecting Indigenous treaty rights is essential to reconciliation and justice in Canada.",
+    "The lobster fishery dispute raised national awareness of Indigenous sovereignty and treaty enforcement."
+  ];
 
-  let spinning = false;
-  let currentRotation = 0;
-  const slices = games.length;
-  const degreesPerSlice = 360 / slices;
-
-  // Draw spinner segments on canvas
-  function drawSpinner() {
-    const canvas = document.createElement("canvas");
-    canvas.width = 320;
-    canvas.height = 320;
-    canvas.setAttribute("aria-hidden", "true");
-    spinner.appendChild(canvas);
-
-    const ctx = canvas.getContext("2d");
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = 150;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    for (let i = 0; i < slices; i++) {
-      const startAngle = (i * 2 * Math.PI) / slices - Math.PI / 2;
-      const endAngle = ((i + 1) * 2 * Math.PI) / slices - Math.PI / 2;
-
-      // Alternate colors for slices
-      ctx.fillStyle = i % 2 === 0 ? "#444" : "#666";
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-      ctx.closePath();
-      ctx.fill();
-
-      // Draw slice text (title)
-      ctx.save();
-      ctx.fillStyle = "#ffd700";
-      ctx.translate(centerX, centerY);
-      const angle = startAngle + (endAngle - startAngle) / 2;
-      ctx.rotate(angle);
-      ctx.textAlign = "right";
-      ctx.font = "14px 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-      ctx.fillText(games[i].title, radius - 10, 5);
-      ctx.restore();
+  // Utility: choose catch based on chance weights
+  function getCatch() {
+    const rand = Math.random();
+    let cumulative = 0;
+    for (let creature of creatures) {
+      cumulative += creature.chance;
+      if (rand < cumulative) return creature;
     }
-
-    // Draw center circle to cover slice edges
-    ctx.beginPath();
-    ctx.fillStyle = "#282c34";
-    ctx.arc(centerX, centerY, 40, 0, 2 * Math.PI);
-    ctx.fill();
+    return creatures[creatures.length - 1]; // fallback
   }
 
-  drawSpinner();
+  // Show fact popup randomly after some catches
+  function showRandomFact() {
+    const fact = facts[Math.floor(Math.random() * facts.length)];
+    factText.textContent = fact;
+    factPopup.style.display = 'block';
+  }
 
-  // Spin logic
-  function spinWheel() {
-    if (spinning) return;
+  closeFactBtn.addEventListener('click', () => {
+    factPopup.style.display = 'none';
+  });
 
-    spinning = true;
-    spinBtn.disabled = true;
-
-    // Calculate random spin: at least 5 full rotations + random slice
-    const randomSlice = Math.floor(Math.random() * slices);
-    const extraDegrees = Math.random() * degreesPerSlice;
-    const totalDegrees = 360 * 5 + (360 - (randomSlice * degreesPerSlice + extraDegrees));
-
-    const duration = 5000; // spin duration in ms
-    const start = performance.now();
-
-    function animate(now) {
-      const elapsed = now - start;
-      if (elapsed < duration) {
-        const easeOut = 1 - Math.pow(1 - elapsed / duration, 3);
-        currentRotation = easeOut * totalDegrees;
-        spinner.style.transform = `rotate(${currentRotation}deg)`;
-        requestAnimationFrame(animate);
+  // Timer countdown
+  function startTimer() {
+    const interval = setInterval(() => {
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        endGame();
       } else {
-        // Finish at exact rotation
-        currentRotation = totalDegrees;
-        spinner.style.transform = `rotate(${currentRotation}deg)`;
-        spinning = false;
-        spinBtn.disabled = false;
-
-        // Calculate winning index
-        let normalizedRotation = currentRotation % 360;
-        // The arrow points up (at -90deg), so adjust accordingly
-        let winningIndex = Math.floor(((360 - (normalizedRotation + 90)) % 360) / degreesPerSlice);
-        showPopup(winningIndex);
+        timeLeft--;
+        timerSpan.textContent = timeLeft;
       }
-    }
-
-    requestAnimationFrame(animate);
+    }, 1000);
   }
 
-  function showPopup(index) {
-    const game = games[index];
-    gameTitle.textContent = game.title;
-    gameDesc.textContent = game.desc;
-    gameImage.src = game.image;
-    gameImage.alt = game.alt;
-    overlay.style.display = "block";
-    popup.style.display = "block";
-    popup.focus();
+  // End game
+  function endGame() {
+    gameActive = false;
+    castBtn.disabled = true;
+    infoBox.textContent = `Time's up! Your final score: ${score}. Thanks for supporting Mi'kmaq treaty rights!`;
   }
 
-  function closePopup() {
-    overlay.style.display = "none";
-    popup.style.display = "none";
+  // Cast trap action
+  function castTrapAction() {
+    if (!gameActive || waitingForCatch) return;
+
+    waitingForCatch = true;
+    castBtn.disabled = true;
+    infoBox.textContent = 'Casting trap...';
+
+    trap.classList.add('cast');
+
+    setTimeout(() => {
+      trap.classList.remove('cast');
+
+      // Determine catch
+      const caught = getCatch();
+
+      if (caught.points > 0) {
+        catchDiv.innerHTML = `<img src="${caught.img}" alt="${caught.name} caught" />`;
+        infoBox.textContent = `You caught a ${caught.name}! +${caught.points} points.`;
+        score += caught.points;
+        scoreSpan.textContent = score;
+      } else {
+        catchDiv.innerHTML = `<img src="${caught.img}" alt="No catch" />`;
+        infoBox.textContent = `No catch this time. Try again!`;
+      }
+
+      // Occasionally show a fact
+      if (Math.random() < 0.3) {
+        showRandomFact();
+      }
+
+      waitingForCatch = false;
+      castBtn.disabled = false;
+
+    }, 1100);
   }
 
-  spinBtn.addEventListener("click", spinWheel);
-  overlay.addEventListener("click", closePopup);
-  popup.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      closePopup();
-      spinBtn.focus();
+  castBtn.addEventListener('click', castTrapAction);
+  trap.addEventListener('click', castTrapAction);
+  trap.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      castTrapAction();
     }
   });
 
-  // Accessibility: allow keyboard spin
-  spinner.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      spinWheel();
-    }
-  });
+  // Initialize
+  infoBox.textContent = 'Click "Cast Trap" to catch lobsters!';
+  startTimer();
 </script>
+
 </body>
 </html>
