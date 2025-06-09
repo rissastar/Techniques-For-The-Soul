@@ -2,237 +2,196 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>On 'Em – Lobster Fishing Game</title>
+  <title>On 'Em – Multi-Level & Boss</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://i.imgur.com/yH1CTBr.jpg') no-repeat center center;
-      background-size: cover;
-      overflow: hidden;
-    }
-    #game-container {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-    }
-    #trap {
-      position: absolute;
-      bottom: 100px;
-      left: 50%;
-      width: 80px;
-      height: 60px;
-      background: url('https://i.imgur.com/XyZnpBl.png') no-repeat center;
-      background-size: contain;
-      transform: translateX(-50%);
-      cursor: grab;
-    }
-    #catch {
-      position: absolute;
-      bottom: 180px;
-      width: 60px;
-      height: 60px;
-    }
-    #ui {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      color: white;
-      background: rgba(0,0,0,0.5);
-      padding: 12px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 500px;
-    }
-    #leaderboard {
-      margin-top: 10px;
-      background: rgba(255,255,255,0.1);
-      padding: 5px;
-      border-radius: 8px;
-    }
-    #cast-btn, #restart-btn, #mute-btn {
-      margin-top: 10px;
-      padding: 8px 20px;
-      border: none;
-      border-radius: 8px;
-      background: #1e90ff;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #restart-btn {
-      background: #ff6347;
-    }
-    @media (max-width: 600px) {
-      #trap { width: 60px; height: 45px; }
-      #catch { width: 50px; height: 50px; }
-      #cast-btn, #restart-btn, #mute-btn { font-size: 14px; padding: 6px 16px; }
-    }
+    body { margin: 0; overflow: hidden; }
+    #gameCanvas { background: url('level1-wharf.png') repeat-x; display: block; }
+    #touchControls { position: absolute; bottom: 20px; width: 100%; text-align: center; display: none; }
+    .button { font-size: 2rem; padding: 10px; margin: 0 20px; opacity: 0.5; }
   </style>
 </head>
 <body>
-  <div id="game-container">
-    <div id="trap" tabindex="0"></div>
-    <div id="catch"></div>
-    <div id="ui">
-      <h2>🎣 On 'Em – Weymouth Wharf</h2>
-      <p id="info">Cast the trap to catch lobsters!</p>
-      <p>Score: <span id="score">0</span> | Time Left: <span id="timer">60</span>s</p>
-      <button id="cast-btn">🎯 Cast Trap</button>
-      <button id="restart-btn" style="display:none;">🔁 Restart</button>
-      <button id="mute-btn">🔇 Mute</button>
-      <div id="leaderboard">
-        <h4>🏆 Leaderboard</h4>
-        <ol id="scores"></ol>
-      </div>
-    </div>
-  </div>
+<canvas id="gameCanvas" width="800" height="400"></canvas>
+<div id="touchControls">
+  <button id="leftBtn" class="button">◀️</button>
+  <button id="jumpBtn" class="button">🦘</button>
+  <button id="rightBtn" class="button">▶️</button>
+</div>
 
-  <audio id="cast-sound" src="https://www.soundjay.com/button/beep-07.mp3"></audio>
-  <audio id="catch-sound" src="https://www.soundjay.com/button/button-3.mp3"></audio>
-  <audio id="bg-sound" src="https://www.fesliyanstudios.com/play-mp3/387" loop></audio>
+<script>
+// ——— Asset Loader ———
+const assets = {};
+const files = [
+  'fisher_walk1.png','fisher_walk2.png','fisher_jump.png',
+  'lobster.png','boat1.png','level1-wharf.png',
+  'level2-water.png','level3-storm.png','boss.png',
+  'jump.wav','collect.wav','hit.wav','boss_hit.wav','victory.wav'
+];
+files.forEach(src => {
+  if (src.endsWith('.png')) {
+    const img = new Image(); img.src = src; assets[src] = img;
+  } else {
+    assets[src] = new Audio(src);
+  }
+});
 
-  <script>
-    const trap = document.getElementById('trap');
-    const catchDiv = document.getElementById('catch');
-    const info = document.getElementById('info');
-    const scoreSpan = document.getElementById('score');
-    const timerSpan = document.getElementById('timer');
-    const castBtn = document.getElementById('cast-btn');
-    const restartBtn = document.getElementById('restart-btn');
-    const scoresList = document.getElementById('scores');
-    const muteBtn = document.getElementById('mute-btn');
+// ——— Canvas Setup ———
+const c = document.getElementById('gameCanvas'), ctx = c.getContext('2d');
+const W = c.width, H = c.height, groundY = 360;
 
-    const castSound = document.getElementById('cast-sound');
-    const catchSound = document.getElementById('catch-sound');
-    const bgSound = document.getElementById('bg-sound');
+// ——— Game State ———
+let level = 1, score = 0, health = 3, bossHealth = 5, inBoss = false;
+const player = { x: 50,y: groundY-64,w:48,h:64,vx:0,vy:0,gravity:1,jumpPower:-15,onGround:true,frame:0,frameTick:0,speed:5 };
+const keys = {};
+document.addEventListener('keydown',e=>keys[e.code]=true);
+document.addEventListener('keyup',e=>keys[e.code]=false);
 
-    let score = 0;
-    let timeLeft = 60;
-    let gameActive = true;
-    let muted = false;
+// Mobile touch
+if ('ontouchstart' in window) {
+  document.getElementById('touchControls').style.display = 'block';
+  let left=false,right=false,jump=false;
+  ['leftBtn','rightBtn','jumpBtn'].forEach(id => {
+    document.getElementById(id).addEventListener('touchstart',()=>{ if(id==='leftBtn') left=true; if(id==='rightBtn') right=true; if(id==='jumpBtn') jump=true; });
+    document.getElementById(id).addEventListener('touchend',()=>{ if(id==='leftBtn') left=false; if(id==='rightBtn') right=false; if(id==='jumpBtn') jump=false; });
+  });
+  keys.TouchLeft = () => left;
+  keys.TouchRight = () => right;
+  keys.TouchJump = () => jump;
+}
 
-    const creatures = [
-      { name: 'Lobster', points: 10, img: 'https://i.imgur.com/3l8HzF2.png' },
-      { name: 'Crab', points: 5, img: 'https://i.imgur.com/L7rj1M3.png' },
-      { name: 'Boot', points: 0, img: 'https://i.imgur.com/1Gc8xDb.png' },
-    ];
+// ——— Level Setup Function ———
+function getLevelData(l) {
+  if (l === 1) {
+    return { bg:'level1-wharf.png', enemies: [{x:900,y:280,w:80,h:50,type:'boat'}], items:[{x:350,y:320,got:false},{x:600,y:320,got:false}] };
+  } else if (l === 2) {
+    return { bg:'level2-water.png', enemies: [{x:600,y:330,w:40,h:40,type:'jelly'}], items:[{x:300,y:300,got:false},{x:500,y:300,got:false}] };
+  } else {
+    inBoss = true;
+    return { bg:'level3-storm.png', boss:{x:600,y:200,w:200,h:120}, items:[] };
+  }
+}
+let levelData = getLevelData(1);
 
-    function updateLeaderboard() {
-      const board = JSON.parse(localStorage.getItem('onem-leaderboard') || '[]');
-      scoresList.innerHTML = '';
-      board.slice(0, 5).forEach(({ name, score }) => {
-        const li = document.createElement('li');
-        li.textContent = `${name}: ${score}`;
-        scoresList.appendChild(li);
-      });
+// ——— Game Loop ———
+function update() {
+  // Movement
+  const left = keys.ArrowLeft || keys.TouchLeft?.();
+  const right = keys.ArrowRight || keys.TouchRight?.();
+  player.vx = left ? -player.speed : right ? player.speed : 0;
+
+  // Jump
+  if ((keys.Space || keys.TouchJump?.()) && player.onGround) {
+    player.vy = player.jumpPower; player.onGround = false; assets['jump.wav'].play();
+  }
+  // Physics
+  player.x += player.vx;
+  player.vy += player.gravity;
+  player.y += player.vy;
+  if (player.y + player.h >= groundY) { player.y = groundY - player.h; player.vy = 0; player.onGround = true; }
+
+  // Animation
+  player.frameTick++;
+  if (player.frameTick % 10 === 0) player.frame = (player.frame + 1) % 2;
+
+  // Collectibles
+  levelData.items.forEach(item => {
+    if (!item.got && player.x < item.x+20 && player.x+player.w > item.x &&
+        player.y < item.y+20 && player.y+player.h > item.y) {
+      item.got = true; score++; assets['collect.wav'].play();
     }
+  });
 
-    function saveScore() {
-      const name = prompt("Enter your name for the leaderboard:") || "Anonymous";
-      const board = JSON.parse(localStorage.getItem('onem-leaderboard') || '[]');
-      board.push({ name, score });
-      board.sort((a, b) => b.score - a.score);
-      localStorage.setItem('onem-leaderboard', JSON.stringify(board.slice(0, 5)));
-      updateLeaderboard();
-    }
-
-    function getCatch() {
-      const r = Math.random();
-      if (r < 0.5) return creatures[0];
-      if (r < 0.8) return creatures[1];
-      return creatures[2];
-    }
-
-    function castTrap() {
-      if (!gameActive) return;
-      info.textContent = "Casting trap...";
-      castSound.play();
-      catchDiv.innerHTML = '';
-      setTimeout(() => {
-        const caught = getCatch();
-        score += caught.points;
-        scoreSpan.textContent = score;
-        info.textContent = caught.points > 0
-          ? `Caught a ${caught.name}! +${caught.points}`
-          : `You caught a ${caught.name}... no points.`;
-        catchDiv.innerHTML = `<img src="${caught.img}" width="60"/>`;
-        catchSound.play();
-      }, 800);
-    }
-
-    function startGame() {
-      score = 0;
-      timeLeft = 60;
-      gameActive = true;
-      scoreSpan.textContent = score;
-      timerSpan.textContent = timeLeft;
-      info.textContent = "Cast the trap to catch lobsters!";
-      restartBtn.style.display = 'none';
-      bgSound.play();
-      const timer = setInterval(() => {
-        if (!gameActive) return clearInterval(timer);
-        timeLeft--;
-        timerSpan.textContent = timeLeft;
-        if (timeLeft <= 0) {
-          gameActive = false;
-          info.textContent = `Game Over! Final Score: ${score}`;
-          castBtn.disabled = true;
-          restartBtn.style.display = 'inline-block';
-          bgSound.pause();
-          saveScore();
-        }
-      }, 1000);
-    }
-
-    // Event bindings
-    castBtn.onclick = castTrap;
-    restartBtn.onclick = () => {
-      castBtn.disabled = false;
-      startGame();
-    };
-    muteBtn.onclick = () => {
-      muted = !muted;
-      [castSound, catchSound, bgSound].forEach(s => s.muted = muted);
-      muteBtn.textContent = muted ? "🔊 Unmute" : "🔇 Mute";
-    };
-
-    // Drag logic
-    let dragging = false, offsetX = 0;
-    trap.addEventListener('mousedown', e => {
-      dragging = true;
-      offsetX = e.offsetX;
+  // Enemy or Boss Collisions
+  if (!inBoss) {
+    levelData.enemies.forEach(e => {
+      if (player.x+player.w > e.x && player.x < e.x+e.w && player.y+player.h > e.y && player.y < e.y+e.h) {
+        health--; player.x = 50; assets['hit.wav'].play();
+      }
+      // Move enemy
+      e.x -= (e.type==='boat'?2:1);
+      if(e.x < -e.w) e.x = W + Math.random()*200;
     });
-    window.addEventListener('mouseup', () => dragging = false);
-    window.addEventListener('mousemove', e => {
-      if (!dragging || !gameActive) return;
-      let x = e.clientX - offsetX;
-      const containerWidth = document.getElementById('game-container').offsetWidth;
-      const trapWidth = trap.offsetWidth;
-      x = Math.max(0, Math.min(containerWidth - trapWidth, x));
-      trap.style.left = x + 'px';
-      catchDiv.style.left = (x + 10) + 'px';
-    });
+  } else {
+    // Boss battle
+    const b = levelData.boss;
+    if (player.x+player.w > b.x && player.x < b.x+b.w && player.y+player.h > b.y && player.y < b.y+b.h) {
+      health--; player.x = 50; assets['hit.wav'].play();
+    }
+  }
 
-    // Arrow key controls
-    trap.addEventListener('keydown', e => {
-      const move = 15;
-      let left = trap.offsetLeft;
-      if (e.key === "ArrowLeft") left -= move;
-      if (e.key === "ArrowRight") left += move;
-      left = Math.max(0, Math.min(window.innerWidth - trap.offsetWidth, left));
-      trap.style.left = left + 'px';
-      catchDiv.style.left = (left + 10) + 'px';
-      if (e.key === "Enter" || e.key === " ") castTrap();
-    });
+  // Level progress
+  if (!inBoss && player.x > W - player.w) {
+    level++;
+    levelData = getLevelData(level);
+    player.x = 50;
+  }
 
-    updateLeaderboard();
-    startGame();
-  </script>
+  // Boss fight shooting logic
+  if (inBoss && keys.KeyC) {
+    const b = levelData.boss;
+    const dist = (player.x + player.w/2) - (b.x + b.w/2);
+    if (Math.abs(dist) < 150) {
+      bossHealth--; assets['boss_hit.wav'].play();
+    }
+    if (bossHealth === 0) {
+      assets['victory.wav'].play();
+      inBoss = false; level = 4;
+    }
+  }
+}
+
+function draw() {
+  ctx.clearRect(0,0,W,H);
+  ctx.drawImage(assets[levelData.bg], 0, 0, W, H);
+
+  // Items
+  levelData.items.forEach(item => {
+    if (!item.got) ctx.drawImage(assets['lobster.png'], item.x, item.y, 32, 32);
+  });
+
+  // Enemies or boss
+  if (!inBoss) {
+    levelData.enemies.forEach(e => ctx.drawImage(assets[e.type==='boat'?'boat1.png':'boat1.png'], e.x, e.y, e.w, e.h));
+  } else {
+    const b = levelData.boss;
+    ctx.drawImage(assets['boss.png'], b.x, b.y, b.w, b.h);
+    ctx.fillStyle = 'red';
+    ctx.fillRect(b.x, b.y-10, (bossHealth/5)*b.w, 5);
+  }
+
+  // Draw player
+  const spr = player.onGround ? assets['fisher_walk'+(player.frame+1)+'.png'] : assets['fisher_jump.png'];
+  ctx.drawImage(spr, player.x, player.y, player.w, player.h);
+
+  // HUD
+  ctx.fillStyle = 'white';
+  ctx.font = '20px Arial';
+  ctx.fillText(`Level: ${inBoss ? 'Boss' : level}`, 10, 30);
+  ctx.fillText(`Lobsters: ${score}`, 10, 60);
+  ctx.fillText(`Health: ${health}`, 10, 90);
+}
+
+function loop() {
+  if (health <= 0) {
+    ctx.fillStyle='rgba(0,0,0,0.7)';
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='white'; ctx.font='40px Arial';
+    ctx.fillText('Game Over', W/2-100, H/2);
+    return;
+  }
+  if (level === 4) {
+    ctx.fillStyle='rgba(0,0,0,0.7)';
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='white'; ctx.font='30px Arial';
+    ctx.fillText('Victory for Treaty Rights! 🇲🇦⚓', W/2-200, H/2);
+    return;
+  }
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+loop();
+</script>
 </body>
 </html>
