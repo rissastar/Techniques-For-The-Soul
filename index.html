@@ -2,212 +2,586 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Grounding Spinner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grounding Spinner with Guided Practice</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #e0f7fa, #ffe0f0);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #a3d5d3, #f0f9f9);
       color: #333;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
-
     h1 {
-      color: #5d5c9e;
-      margin-bottom: 10px;
-      text-align: center;
+      color: #256d7b;
+      margin-bottom: 16px;
+      user-select: none;
     }
-
     .spinner-container {
       position: relative;
       width: 320px;
       height: 320px;
+      touch-action: manipulation;
     }
-
-    .arrow {
-      width: 0;
-      height: 0;
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
-      border-bottom: 30px solid #ff80ab;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -150%);
-      z-index: 10;
-    }
-
     .wheel {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      border: 10px solid #f8bbd0;
+      border: 10px solid #4ba3a3;
       position: relative;
       overflow: hidden;
       transform: rotate(0deg);
-      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+      transition: transform 5s cubic-bezier(0.33, 1, 0.68, 1);
+      user-select: none;
     }
-
     .wheel div {
       position: absolute;
       width: 50%;
       height: 50%;
+      background: #d6f0f0;
       transform-origin: 100% 100%;
       clip-path: polygon(0 0, 100% 0, 100% 100%);
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 11px;
+      font-weight: 600;
+      padding: 6px 4px;
       text-align: center;
-      font-weight: bold;
-      padding: 8px;
-      color: #333;
+      color: #16494d;
+      user-select: none;
+      box-sizing: border-box;
+      border-right: 1px solid #83b1b1;
     }
-
+    /* Alternate segment shading */
+    .wheel div:nth-child(even) {
+      background: #b6e0df;
+    }
+    /* Arrow in the middle of the wheel */
+    .arrow {
+      width: 0; 
+      height: 0; 
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 40px solid #ffbc42;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -95%);
+      pointer-events: none;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+      user-select: none;
+      z-index: 20;
+    }
     button {
-      margin-top: 20px;
-      padding: 12px 24px;
-      background-color: #ba68c8;
+      margin-top: 22px;
+      padding: 12px 28px;
+      background-color: #16817a;
       color: white;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 17px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      user-select: none;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
+      touch-action: manipulation;
     }
-
-    .popup, .overlay {
+    button:hover {
+      background-color: #1ca8a3;
+    }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 30;
+      touch-action: none;
+    }
+    .popup {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 100;
-      display: none;
-    }
-
-    .overlay {
-      background: rgba(0,0,0,0.5);
-      width: 100%;
-      height: 100%;
-    }
-
-    .popup {
-      background: #fff;
-      padding: 25px;
+      background: white;
       border-radius: 12px;
-      max-width: 90%;
-      width: 350px;
-      text-align: center;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      width: 90%;
+      max-width: 440px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 20px 25px 30px 25px;
+      display: none;
+      z-index: 35;
+      user-select: text;
     }
-
     .popup h2 {
       margin-top: 0;
+      color: #145a56;
+      font-weight: 700;
+      user-select: text;
     }
-
-    .close {
-      background: #f48fb1;
+    .popup .image-container {
+      width: 100%;
+      height: 180px;
+      background-position: center;
+      background-size: cover;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      user-select: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .popup p {
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+      margin-bottom: 20px;
+      user-select: text;
+    }
+    .popup .try-now-btn, .popup .close-btn {
+      background-color: #16817a;
       border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      margin-top: 15px;
+      border-radius: 8px;
+      padding: 10px 18px;
       color: white;
+      font-weight: 600;
       cursor: pointer;
+      margin-right: 12px;
+      user-select: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
     }
-
-    @media (max-width: 400px) {
-      .spinner-container {
-        width: 90vw;
-        height: 90vw;
+    .popup .try-now-btn:hover {
+      background-color: #1ca8a3;
+    }
+    .popup .close-btn {
+      background-color: #ff6f61;
+    }
+    .popup .close-btn:hover {
+      background-color: #ff3b2d;
+    }
+    .guided-practice {
+      margin-top: 15px;
+      font-weight: 600;
+      font-size: 16px;
+      text-align: center;
+      color: #145a56;
+      user-select: none;
+    }
+    .timer {
+      font-size: 48px;
+      font-weight: 700;
+      color: #ff9f00;
+      margin: 15px 0 5px;
+      user-select: none;
+    }
+    .instruction-text {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    @media (max-width: 480px) {
+      .wheel {
+        width: 280px;
+        height: 280px;
+        border-width: 8px;
+      }
+      .arrow {
+        border-left: 16px solid transparent;
+        border-right: 16px solid transparent;
+        border-bottom: 32px solid #ffbc42;
+        top: 50%;
+        transform: translate(-50%, -92%);
+      }
+      button {
+        font-size: 15px;
+        padding: 10px 22px;
+      }
+      .popup {
+        width: 95%;
+      }
+      .popup .image-container {
+        height: 140px;
+      }
+      .timer {
+        font-size: 38px;
       }
     }
   </style>
 </head>
 <body>
-  <h1>🎯 Grounding Spinner</h1>
+  <h1>🌿 Grounding Spinner</h1>
   <div class="spinner-container">
     <div class="arrow"></div>
     <div class="wheel" id="wheel"></div>
   </div>
-  <button onclick="spin()">Spin</button>
+  <button id="spinBtn">Spin</button>
 
   <div class="overlay" id="overlay"></div>
   <div class="popup" id="popup">
-    <h2 id="techniqueTitle"></h2>
-    <p id="techniqueDesc"></p>
-    <button class="close" onclick="closePopup()">Close</button>
+    <h2 id="techTitle"></h2>
+    <div class="image-container" id="techImage"></div>
+    <p id="techDesc"></p>
+    <div id="practiceArea" style="display:none;">
+      <div class="guided-practice">Guided Practice</div>
+      <div class="timer" id="timer">00:00</div>
+      <div class="instruction-text" id="instructionText"></div>
+    </div>
+    <button class="try-now-btn" id="tryNowBtn">Try This Now</button>
+    <button class="close-btn" id="closeBtn">Close</button>
   </div>
 
-  <audio id="spinSound" src="https://www.soundjay.com/mechanical/sounds/gear-spin-1.mp3" preload="auto"></audio>
-  <audio id="landSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+  <audio id="spinSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
+  <audio id="landSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
+  <audio id="practiceSound" src="https://actions.google.com/sounds/v1/water/drip_loop.ogg" preload="auto" loop></audio>
 
   <script>
     const techniques = [
-      { title: "👀 5-4-3-2-1", desc: "5 things you see, 4 feel, 3 hear, 2 smell, 1 taste." },
-      { title: "🌬️ Deep Breaths", desc: "Inhale 4, hold 4, exhale 6. Repeat." },
-      { title: "🧍‍♂️ Body Check", desc: "Focus from head to toe—relax each part." },
-      { title: "🎧 Sound Hunt", desc: "List 5 quiet or distant sounds." },
-      { title: "🖐️ Texture Touch", desc: "Touch 3 different textures. Notice each one." },
-      { title: "🚰 Cold Splash", desc: "Wash your hands or face with cold water." },
-      { title: "🧸 Object Focus", desc: "Hold something and notice its weight, shape, texture." },
-      { title: "🖊️ Doodle Calm", desc: "Draw lines, shapes, or patterns freely." },
-      { title: "🔢 Count Backwards", desc: "Count down by 7 from 100 or name alphabet backwards." },
-      { title: "👃 Smell Focus", desc: "Notice nearby scents or smell something comforting." },
-      { title: "👣 Grounded Feet", desc: "Press your feet into the ground. Feel the pressure." },
-      { title: "🧮 Number Match", desc: "Pick a number and find objects that count to it." },
-      { title: "🖼️ Picture a Safe Place", desc: "Imagine somewhere calm and peaceful." },
-      { title: "📦 Name Categories", desc: "Name 5 animals, foods, movies, etc." },
-      { title: "📱 Affirmations", desc: "Repeat calming phrases like 'I am safe.'" }
+      {
+        title: "5-4-3-2-1 Grounding",
+        desc: "Use your senses to connect to the present: Name 5 things you see, 4 things you feel, 3 things you hear, 2 things you smell, and 1 thing you taste.",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Look around and name 5 things you can see.",
+          "Touch and name 4 things you can feel.",
+          "Listen and identify 3 sounds.",
+          "Smell and notice 2 scents.",
+          "Taste something or imagine a taste."
+        ],
+        practiceDuration: 30
+      },
+      {
+        title: "Deep Breathing",
+        desc: "Take slow, deep breaths to calm your nervous system. Breathe in through your nose for 4 seconds, hold for 4 seconds, and breathe out slowly for 6 seconds.",
+        image: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Breathe in slowly through your nose... (4 seconds)",
+          "Hold your breath gently... (4 seconds)",
+          "Breathe out slowly through your mouth... (6 seconds)",
+          "Repeat slowly and mindfully."
+        ],
+        practiceDuration: 40
+      },
+      {
+        title: "Body Scan",
+        desc: "Bring attention to different parts of your body. Notice sensations without judgment, from your toes to your head.",
+        image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Close your eyes and focus on your toes.",
+          "Slowly move your attention up your legs.",
+          "Notice your abdomen, chest, and shoulders.",
+          "Feel your arms, hands, neck, and head.",
+          "Simply observe sensations without changing them."
+        ],
+        practiceDuration: 45
+      },
+      {
+        title: "Grounding with Nature",
+        desc: "Focus on natural elements around you: feel the texture of leaves, listen to birds, or watch clouds move.",
+        image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Find a natural object near you.",
+          "Touch it gently and feel its texture.",
+          "Listen carefully to natural sounds around you.",
+          "Watch the movement of clouds or trees.",
+          "Breathe deeply and relax."
+        ],
+        practiceDuration: 30
+      },
+      {
+        title: "Positive Affirmations",
+        desc: "Repeat positive, encouraging statements to yourself. Examples: 'I am safe,' 'I am enough,' or 'This feeling will pass.'",
+        image: "https://images.unsplash.com/photo-1486308510493-cb47b5215a96?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Find a quiet place.",
+          "Take a deep breath.",
+          "Repeat your chosen affirmation slowly and clearly.",
+          "Feel the meaning behind the words.",
+          "Repeat for several breaths."
+        ],
+        practiceDuration: 25
+      },
+      {
+        title: "Engage Your Senses",
+        desc: "Hold or look at a small object (a stone, a piece of fabric). Notice its color, texture, weight, and temperature.",
+        image: "https://images.unsplash.com/photo-1517511620798-cec17d428bc0?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Pick up a small object nearby.",
+          "Look at its color and shape.",
+          "Feel its texture with your fingers.",
+          "Notice its weight in your hand.",
+          "Observe its temperature."
+        ],
+        practiceDuration: 30
+      },
+      {
+        title: "Mindful Walking",
+        desc: "Focus on the sensation of your feet touching the ground as you walk slowly and deliberately.",
+        image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Find a safe place to walk slowly.",
+          "Feel each foot lifting and touching the ground.",
+          "Notice the rhythm of your steps.",
+          "Breathe deeply and evenly.",
+          "Keep your attention on the movement."
+        ],
+        practiceDuration: 40
+      },
+      {
+        title: "Counting Backwards",
+        desc: "Slowly count backward from 30 to 1 to focus your mind away from distressing thoughts.",
+        image: "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Take a deep breath.",
+          "Start counting backward slowly from 30.",
+          "Focus on each number clearly.",
+          "If distracted, gently return to counting.",
+          "Finish at 1 and breathe out slowly."
+        ],
+        practiceDuration: 30
+      },
+      {
+        title: "Visualization",
+        desc: "Imagine a safe, peaceful place in detail — the sights, sounds, and smells — to calm your mind.",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Close your eyes and breathe deeply.",
+          "Imagine your safe place vividly.",
+          "Notice colors, sounds, smells, and feelings.",
+          "Stay there for several breaths.",
+          "Open your eyes slowly."
+        ],
+        practiceDuration: 40
+      },
+      {
+        title: "Stretching",
+        desc: "Gentle stretching can relieve tension. Move slowly and focus on how your body feels.",
+        image: "https://images.unsplash.com/photo-1526401485004-11f82f17c63d?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Raise your arms slowly overhead.",
+          "Reach gently to one side, then the other.",
+          "Roll your shoulders back and forth.",
+          "Stretch your neck gently from side to side.",
+          "Breathe deeply throughout."
+        ],
+        practiceDuration: 35
+      },
+      {
+        title: "Hold Ice or Cold Water",
+        desc: "Hold something cold like an ice cube or splash cold water on your face to bring your focus to physical sensations.",
+        image: "https://images.unsplash.com/photo-1506801310323-534be5e7e212?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Find ice or cold water.",
+          "Hold the ice in your hand or splash your face.",
+          "Notice the cold sensation carefully.",
+          "Breathe deeply and slowly.",
+          "Repeat if needed."
+        ],
+        practiceDuration: 20
+      },
+      {
+        title: "Listen to Music",
+        desc: "Play calming music and focus fully on the melody, rhythm, and instruments.",
+        image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Choose a calming song or sound.",
+          "Close your eyes or soften your gaze.",
+          "Listen carefully to the sounds.",
+          "Notice any feelings or thoughts.",
+          "Breathe gently and relax."
+        ],
+        practiceDuration: 45
+      },
+      {
+        title: "Write It Down",
+        desc: "Write your feelings or thoughts on paper to get them out of your head and onto the page.",
+        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Grab a notebook or paper.",
+          "Write whatever you feel without editing.",
+          "Focus on expressing, not perfection.",
+          "Read it if you want, then close the page.",
+          "Take a deep calming breath."
+        ],
+        practiceDuration: 30
+      },
+      {
+        title: "Progressive Muscle Relaxation",
+        desc: "Tense and then relax muscle groups slowly, from toes to head, to reduce tension.",
+        image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
+        practiceSteps: [
+          "Tense your toes tightly for 5 seconds, then release.",
+          "Move up your legs, tense and release.",
+          "Tense your abdomen and chest, then relax.",
+          "Tense your arms and hands, then release.",
+          "Finish with neck and face muscles."
+        ],
+        practiceDuration: 45
+      }
     ];
 
     const wheel = document.getElementById("wheel");
+    const spinBtn = document.getElementById("spinBtn");
+    const overlay = document.getElementById("overlay");
+    const popup = document.getElementById("popup");
+    const techTitle = document.getElementById("techTitle");
+    const techDesc = document.getElementById("techDesc");
+    const techImage = document.getElementById("techImage");
+    const tryNowBtn = document.getElementById("tryNowBtn");
+    const closeBtn = document.getElementById("closeBtn");
+    const practiceArea = document.getElementById("practiceArea");
+    const timerEl = document.getElementById("timer");
+    const instructionText = document.getElementById("instructionText");
     const spinSound = document.getElementById("spinSound");
     const landSound = document.getElementById("landSound");
-    const segments = techniques.length;
-    const angle = 360 / segments;
+    const practiceSound = document.getElementById("practiceSound");
+
+    const segmentCount = techniques.length; // 15
     let currentRotation = 0;
+    let spinning = false;
+    let practiceInterval = null;
+    let practiceTimeout = null;
+    let practiceStepIndex = 0;
+    let practiceSecondsLeft = 0;
 
-    techniques.forEach((tech, i) => {
-      const segment = document.createElement("div");
-      segment.style.transform = `rotate(${i * angle}deg) skewY(-${90 - angle}deg)`;
-      segment.style.backgroundColor = i % 2 === 0 ? "#e1bee7" : "#fce4ec";
-      segment.innerText = tech.title;
-      wheel.appendChild(segment);
-    });
+    // Build wheel segments
+    function createSegments() {
+      const segmentAngle = 360 / segmentCount;
+      for(let i = 0; i < segmentCount; i++) {
+        const segment = document.createElement("div");
+        segment.style.transform = `rotate(${segmentAngle * i}deg) skewY(${90 - segmentAngle}deg)`;
+        segment.textContent = techniques[i].title;
+        wheel.appendChild(segment);
+      }
+    }
+    createSegments();
 
-    function spin() {
-      if (navigator.vibrate) navigator.vibrate(50);
-      spinSound.play();
+    // Vibrate helper for mobile
+    function vibrate(pattern = 100) {
+      if (navigator.vibrate) navigator.vibrate(pattern);
+    }
 
-      const randomIndex = Math.floor(Math.random() * segments);
-      const spinAmount = 360 * 5 + (360 - randomIndex * angle - angle / 2);
-      currentRotation += spinAmount;
-      wheel.style.transform = `rotate(${currentRotation}deg)`;
+    // Format time mm:ss
+    function formatTime(s) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return `${m.toString().padStart(2,"0")}:${sec.toString().padStart(2,"0")}`;
+    }
+
+    // Show popup with technique info
+    function showPopup(index) {
+      const tech = techniques[index];
+      techTitle.textContent = tech.title;
+      techDesc.textContent = tech.desc;
+      techImage.style.backgroundImage = `url(${tech.image})`;
+      practiceArea.style.display = "none";
+      tryNowBtn.style.display = "inline-block";
+      timerEl.textContent = "00:00";
+      instructionText.textContent = "";
+      popup.style.display = "block";
+      overlay.style.display = "block";
+      tryNowBtn.disabled = false;
+      tryNowBtn.textContent = "Try This Now";
+    }
+
+    // Close popup
+    function closePopup() {
+      popup.style.display = "none";
+      overlay.style.display = "none";
+      stopPractice();
+    }
+
+    // Start guided practice
+    function startPractice(index) {
+      const tech = techniques[index];
+      const steps = tech.practiceSteps;
+      const totalDuration = tech.practiceDuration;
+      practiceStepIndex = 0;
+      practiceSecondsLeft = totalDuration;
+      tryNowBtn.disabled = true;
+      tryNowBtn.textContent = "Practicing...";
+      practiceArea.style.display = "block";
+      practiceSound.play().catch(() => {});
+
+      // Update practice step & timer every second
+      instructionText.textContent = steps[practiceStepIndex] || "";
+      timerEl.textContent = formatTime(practiceSecondsLeft);
+
+      practiceInterval = setInterval(() => {
+        practiceSecondsLeft--;
+        timerEl.textContent = formatTime(practiceSecondsLeft);
+
+        // Calculate step changes roughly equally distributed
+        const stepDurations = Math.floor(totalDuration / steps.length);
+        const newStepIndex = Math.floor((totalDuration - practiceSecondsLeft - 1) / stepDurations);
+        if (newStepIndex !== practiceStepIndex && newStepIndex < steps.length) {
+          practiceStepIndex = newStepIndex;
+          instructionText.textContent = steps[practiceStepIndex];
+        }
+
+        if (practiceSecondsLeft <= 0) {
+          stopPractice();
+          tryNowBtn.disabled = false;
+          tryNowBtn.textContent = "Try This Now";
+          instructionText.textContent = "Practice complete! Take a deep breath and return to your day.";
+          timerEl.textContent = "00:00";
+        }
+      }, 1000);
+    }
+
+    function stopPractice() {
+      if (practiceInterval) clearInterval(practiceInterval);
+      practiceSound.pause();
+      practiceSound.currentTime = 0;
+      practiceInterval = null;
+    }
+
+    // Spin wheel and select random technique
+    spinBtn.addEventListener("click", () => {
+      if (spinning) return;
+      spinning = true;
+
+      vibrate(200);
+      spinSound.play().catch(() => {});
+
+      // Full rotations + random segment
+      const randomIndex = Math.floor(Math.random() * segmentCount);
+      const segmentAngle = 360 / segmentCount;
+      const randomDegree = randomIndex * segmentAngle + segmentAngle / 2;
+      const extraSpins = 5;
+      const targetRotation = (360 * extraSpins) + (360 - randomDegree);
+
+      wheel.style.transition = "transform 5s cubic-bezier(0.33, 1, 0.68, 1)";
+      wheel.style.transform = `rotate(${targetRotation}deg)`;
+      currentRotation = targetRotation % 360;
 
       setTimeout(() => {
+        landSound.play().catch(() => {});
+        vibrate([100, 50, 100]);
         showPopup(randomIndex);
-        landSound.play();
-        if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
-      }, 4200);
-    }
+        spinning = false;
+      }, 5200);
+    });
 
-    function showPopup(index) {
-      document.getElementById("techniqueTitle").innerText = techniques[index].title;
-      document.getElementById("techniqueDesc").innerText = techniques[index].desc;
-      document.getElementById("overlay").style.display = "block";
-      document.getElementById("popup").style.display = "block";
-    }
+    tryNowBtn.addEventListener("click", () => {
+      // Start guided practice of current popup technique
+      const currentTechIndex = techniques.findIndex(t => t.title === techTitle.textContent);
+      if (currentTechIndex !== -1) {
+        startPractice(currentTechIndex);
+      }
+    });
 
-    function closePopup() {
-      document.getElementById("overlay").style.display = "none";
-      document.getElementById("popup").style.display = "none";
-    }
+    closeBtn.addEventListener("click", closePopup);
+    overlay.addEventListener("click", closePopup);
+
   </script>
 </body>
 </html>
