@@ -94,6 +94,7 @@
       padding: 8px;
       color: #333;
       user-select: none;
+      pointer-events: none;
     }
 
     button {
@@ -188,13 +189,13 @@
 
   <div class="spinner-container" aria-label="Grounding technique spinner" role="application">
     <div class="arrow" aria-hidden="true"></div>
-    <div class="wheel" id="wheel"></div>
+    <div class="wheel" id="wheel" aria-live="polite" aria-atomic="true"></div>
   </div>
 
-  <button onclick="spin()" aria-label="Spin the grounding spinner">Spin</button>
+  <button onclick="spin()" aria-label="Spin the grounding spinner" id="spinButton">Spin</button>
 
-  <div class="overlay" id="overlay" tabindex="-1"></div>
-  <div class="popup" id="popup" role="dialog" aria-modal="true" aria-labelledby="techniqueTitle" aria-describedby="techniqueDesc">
+  <div class="overlay" id="overlay" tabindex="-1" aria-hidden="true"></div>
+  <div class="popup" id="popup" role="dialog" aria-modal="true" aria-labelledby="techniqueTitle" aria-describedby="techniqueDesc" tabindex="0">
     <h2 id="techniqueTitle"></h2>
     <p id="techniqueDesc"></p>
     <button class="close" onclick="closePopup()" aria-label="Close technique details">Close</button>
@@ -225,10 +226,15 @@
     const wheel = document.getElementById("wheel");
     const spinSound = document.getElementById("spinSound");
     const landSound = document.getElementById("landSound");
+    const overlay = document.getElementById("overlay");
+    const popup = document.getElementById("popup");
+    const spinButton = document.getElementById("spinButton");
     const segments = techniques.length;
     const angle = 360 / segments;
     let currentRotation = 0;
+    let spinning = false;
 
+    // Create wheel segments
     techniques.forEach((tech, i) => {
       const segment = document.createElement("div");
       segment.style.transform = `rotate(${i * angle}deg) skewY(-${90 - angle}deg)`;
@@ -238,33 +244,54 @@
     });
 
     function spin() {
+      if (spinning) return; // prevent multiple spins at once
+      spinning = true;
+      spinButton.disabled = true;
       if (navigator.vibrate) navigator.vibrate(50);
+      spinSound.currentTime = 0;
       spinSound.play();
 
       const randomIndex = Math.floor(Math.random() * segments);
       const spinAmount = 360 * 5 + (360 - randomIndex * angle - angle / 2);
       currentRotation += spinAmount;
+      wheel.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
       wheel.style.transform = `rotate(${currentRotation}deg)`;
 
       setTimeout(() => {
         showPopup(randomIndex);
+        landSound.currentTime = 0;
         landSound.play();
         if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+        spinning = false;
+        spinButton.disabled = false;
       }, 4200);
     }
 
     function showPopup(index) {
       document.getElementById("techniqueTitle").innerText = techniques[index].title;
       document.getElementById("techniqueDesc").innerText = techniques[index].desc;
-      document.getElementById("overlay").style.display = "block";
-      document.getElementById("popup").style.display = "block";
-      document.getElementById("popup").focus();
+      overlay.style.display = "block";
+      overlay.setAttribute('aria-hidden', 'false');
+      popup.style.display = "block";
+      popup.setAttribute('aria-hidden', 'false');
+      popup.focus();
     }
 
     function closePopup() {
-      document.getElementById("overlay").style.display = "none";
-      document.getElementById("popup").style.display = "none";
+      overlay.style.display = "none";
+      overlay.setAttribute('aria-hidden', 'true');
+      popup.style.display = "none";
+      popup.setAttribute('aria-hidden', 'true');
+      spinButton.focus();
     }
+
+    // Close popup when clicking outside or pressing Escape
+    overlay.addEventListener('click', closePopup);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape" && popup.style.display === "block") {
+        closePopup();
+      }
+    });
   </script>
 </body>
 </html>
