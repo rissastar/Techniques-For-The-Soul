@@ -2,216 +2,112 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-<title>Catch the Lobsters!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pixel Art Lobster Catcher</title>
 <style>
-  * {
-    box-sizing: border-box;
-  }
-  body, html {
-    margin: 0; padding: 0; height: 100%;
-    background: linear-gradient(135deg, #4a61a3, #2e3360);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-    color: #eee;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-  #gameContainer {
-    position: relative;
-    width: 90vw;
-    max-width: 600px;
-    height: 80vh;
-    background: linear-gradient(135deg, #3b3b6d, #2a2a43);
-    border-radius: 20px;
-    box-shadow: 0 0 30px #4a4a8faa inset;
-    overflow: hidden;
-  }
-  #scoreBoard, #highScoreBoard {
-    font-size: 1.8rem;
-    padding: 10px 0 5px 0;
-    text-align: center;
-    user-select: none;
-  }
-  #highScoreBoard {
-    color: #f0a500;
-    font-size: 1.1rem;
-  }
-  #startBtn, #musicToggleBtn {
-    margin: 15px 8px 10px 8px;
-    padding: 12px 24px;
-    font-size: 1.3rem;
-    border-radius: 10px;
-    border: none;
-    background: #5e9cff;
+  body {
+    margin: 0; background: #0b3d91; /* deep blue sea */
+    font-family: 'Press Start 2P', cursive; /* pixel font */
     color: white;
-    cursor: pointer;
-    box-shadow: 0 5px 10px #2d66b1;
-    transition: background 0.3s ease;
-    user-select: none;
+    overflow: hidden;
   }
-  #startBtn:hover:not(:disabled),
-  #musicToggleBtn:hover {
-    background: #3d82ff;
+
+  #game-container {
+    position: relative;
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #0b3d91, #05306d);
   }
-  #startBtn:disabled {
-    background: #777;
-    cursor: default;
-    box-shadow: none;
-  }
+
   .target {
     position: absolute;
+    width: 48px;
+    height: 48px;
+    background-image: url('https://i.imgur.com/K4GOGpA.png'); /* pixel lobster sprite sheet */
+    background-size: 192px 48px; /* 4 frames in width */
+    animation: lobster-wiggle 0.8s steps(4) infinite;
     cursor: pointer;
-    user-select: none;
-    background: url('https://cdn.pixabay.com/photo/2012/04/11/14/26/lobster-28646_960_720.png') no-repeat center center;
-    background-size: contain;
-    box-shadow: 0 0 12px rgba(255, 99, 71, 0.8);
-    touch-action: manipulation;
-    animation: wiggle 1.5s ease-in-out infinite, bounce 2s ease-in-out infinite;
-    transition: box-shadow 0.3s ease, transform 0.15s ease;
   }
-  .target:hover, .target:focus {
-    box-shadow: 0 0 25px 8px rgba(255, 99, 71, 0.9);
-    transform: scale(1.1);
-    outline: none;
+
+  @keyframes lobster-wiggle {
+    from { background-position-x: 0; }
+    to { background-position-x: -192px; }
   }
-  .target:active {
-    transform: scale(0.85);
+
+  #score-board, #high-score-board {
+    position: fixed;
+    top: 10px; left: 10px;
+    font-size: 16px;
+    text-shadow: 0 0 5px #000;
   }
+  #high-score-board {
+    top: 40px;
+  }
+
   #message {
-    height: 1.5em;
-    margin-top: 8px;
-    font-size: 1.2rem;
-    text-align: center;
-    color: #90ee90;
-    user-select: none;
+    position: fixed;
+    top: 80px; left: 10px;
+    font-size: 16px;
+    text-shadow: 0 0 5px #000;
   }
-  #footer {
-    margin-top: 8px;
-    font-size: 0.9rem;
-    color: #bbb;
-    user-select: none;
+
+  #start-btn {
+    position: fixed;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    background: #e60000;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 0 0 10px #e60000;
   }
-  @keyframes wiggle {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(5deg); }
-    50% { transform: rotate(-5deg); }
-    75% { transform: rotate(4deg); }
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  @media (hover: none) {
-    #startBtn, #musicToggleBtn {
-      font-size: 1.6rem;
-      padding: 16px 30px;
-    }
+  #start-btn:hover {
+    background: #ff1a1a;
   }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-<div id="scoreBoard">Score: 0</div>
-<div id="highScoreBoard">High Score: 0</div>
-<div id="gameContainer" role="main" aria-label="Catch the lobsters game area"></div>
-<div>
-  <button id="startBtn" aria-label="Start game">Start Game</button>
-  <button id="musicToggleBtn" aria-label="Toggle background music">🔈 Music On</button>
-</div>
-<div id="message" aria-live="polite"></div>
-<div id="footer">Try to click all the lobsters before they disappear! Missing one ends the game.</div>
-
-<audio id="bgMusic" loop preload="auto" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_2a8e6d0904.mp3?filename=summer-ambience-ambient-11457.mp3" crossorigin="anonymous"></audio>
-<audio id="clickSound" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_4e8e01ae4a.mp3?filename=pop-1-6376.mp3" crossorigin="anonymous"></audio>
-<audio id="gameOverSound" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_850b028dba.mp3?filename=error-124467.mp3" crossorigin="anonymous"></audio>
+<div id="game-container"></div>
+<div id="score-board">Score: 0</div>
+<div id="high-score-board">High Score: 0</div>
+<div id="message"></div>
+<button id="start-btn">Start Game</button>
 
 <script>
-  const gameContainer = document.getElementById('gameContainer');
-  const scoreBoard = document.getElementById('scoreBoard');
-  const highScoreBoard = document.getElementById('highScoreBoard');
-  const startBtn = document.getElementById('startBtn');
-  const musicToggleBtn = document.getElementById('musicToggleBtn');
+  const gameContainer = document.getElementById('game-container');
+  const scoreBoard = document.getElementById('score-board');
+  const highScoreBoard = document.getElementById('high-score-board');
   const message = document.getElementById('message');
-
-  const bgMusic = document.getElementById('bgMusic');
-  const clickSound = document.getElementById('clickSound');
-  const gameOverSound = document.getElementById('gameOverSound');
+  const startBtn = document.getElementById('start-btn');
 
   let score = 0;
   let highScore = 0;
   let gameActive = false;
-  let targetTimeouts = [];
-  let moveIntervals = [];
-  let currentSpeed = 1400; // how long targets stay visible in ms
-  let minSpeed = 600;
   let maxTargets = 3;
-  let targetSize = 80; // px
-  let musicPlaying = false;
+  let currentSpeed = 2000; // ms before lobster moves or disappears
+  const minSpeed = 700;
+  let targetTimeouts = [];
 
   // Load high score from localStorage
-  function loadHighScore() {
-    const saved = localStorage.getItem('catchTargetsHighScore');
-    if (saved !== null) {
-      highScore = parseInt(saved);
-      highScoreBoard.textContent = 'High Score: ' + highScore;
-    }
+  if (localStorage.getItem('lobsterHighScore')) {
+    highScore = parseInt(localStorage.getItem('lobsterHighScore'));
+    highScoreBoard.textContent = 'High Score: ' + highScore;
   }
 
-  // Save high score to localStorage
   function saveHighScore() {
-    localStorage.setItem('catchTargetsHighScore', highScore);
+    localStorage.setItem('lobsterHighScore', highScore);
   }
 
-  // Make target slowly move randomly inside container
-  function animateMovement(target) {
-    const moveSpeed = 2000 + Math.random() * 2000; // move interval in ms
-    let directionX = Math.random() > 0.5 ? 1 : -1;
-    let directionY = Math.random() > 0.5 ? 1 : -1;
-
-    let posX = parseFloat(target.style.left);
-    let posY = parseFloat(target.style.top);
-
-    const maxX = gameContainer.clientWidth - target.offsetWidth;
-    const maxY = gameContainer.clientHeight - target.offsetHeight;
-
-    const interval = setInterval(() => {
-      if (!gameActive || !gameContainer.contains(target)) {
-        clearInterval(interval);
-        return;
-      }
-
-      // Move a few pixels per tick
-      posX += directionX * 1.5;
-      posY += directionY * 1.2;
-
-      // Bounce from edges
-      if (posX <= 0) {
-        posX = 0;
-        directionX = 1;
-      } else if (posX >= maxX) {
-        posX = maxX;
-        directionX = -1;
-      }
-
-      if (posY <= 0) {
-        posY = 0;
-        directionY = 1;
-      } else if (posY >= maxY) {
-        posY = maxY;
-        directionY = -1;
-      }
-
-      target.style.left = posX + 'px';
-      target.style.top = posY + 'px';
-    }, 30);
-
-    moveIntervals.push(interval);
+  function randomPosition(size) {
+    const x = Math.random() * (window.innerWidth - size);
+    const y = Math.random() * (window.innerHeight - size);
+    return { x, y };
   }
 
   function spawnTarget() {
@@ -219,52 +115,36 @@
 
     const target = document.createElement('div');
     target.classList.add('target');
-    const size = targetSize;
-    target.style.width = size + 'px';
-    target.style.height = size + 'px';
+    const size = 48;
+    const pos = randomPosition(size);
+    target.style.left = pos.x + 'px';
+    target.style.top = pos.y + 'px';
 
-    // Random position
-    const maxX = gameContainer.clientWidth - size;
-    const maxY = gameContainer.clientHeight - size;
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    target.style.left = x + 'px';
-    target.style.top = y + 'px';
-
-    // Remove if not clicked in time
+    // Set a timeout for how long the lobster stays visible
     const timeout = setTimeout(() => {
-      if (gameActive && gameContainer.contains(target)) {
+      if (gameActive && target.parentElement) {
+        target.remove();
         endGame('Missed a lobster!');
       }
     }, currentSpeed);
 
     targetTimeouts.push(timeout);
 
-    // Animate movement
-    animateMovement(target);
-
-    // Click or tap event
     target.addEventListener('click', () => {
       if (!gameActive) return;
+
       score++;
       scoreBoard.textContent = 'Score: ' + score;
-      clickSound.currentTime = 0;
-      clickSound.play();
 
-      // Remove this target and clear its timeout
       clearTimeout(timeout);
       target.remove();
 
-      // Speed up game gradually (min limit)
-      currentSpeed = Math.max(minSpeed, currentSpeed - 25);
+      currentSpeed = Math.max(minSpeed, currentSpeed - 50);
 
-      // Increase max targets every 7 points (max 6)
-      if (score % 7 === 0 && maxTargets < 6) {
+      if (score % 5 === 0 && maxTargets < 6) {
         maxTargets++;
       }
 
-      // Spawn more targets if under maxTargets
       if (gameContainer.querySelectorAll('.target').length < maxTargets) {
         spawnTarget();
       }
@@ -275,7 +155,7 @@
 
   function startGame() {
     score = 0;
-    currentSpeed = 1400;
+    currentSpeed = 2000;
     maxTargets = 3;
     scoreBoard.textContent = 'Score: 0';
     message.textContent = '';
@@ -283,40 +163,22 @@
     gameActive = true;
     startBtn.disabled = true;
 
-    // Clear any existing intervals/timeouts
     targetTimeouts.forEach(t => clearTimeout(t));
-    moveIntervals.forEach(i => clearInterval(i));
     targetTimeouts = [];
-    moveIntervals = [];
 
-    // Spawn initial targets
     for (let i = 0; i < maxTargets; i++) {
       spawnTarget();
     }
-
-    if (musicPlaying) bgMusic.play();
   }
 
   function endGame(reason) {
     gameActive = false;
     message.textContent = reason + ' Game Over!';
     startBtn.disabled = false;
-
-    // Clear all timeouts and intervals
     targetTimeouts.forEach(t => clearTimeout(t));
     targetTimeouts = [];
-    moveIntervals.forEach(i => clearInterval(i));
-    moveIntervals = [];
     gameContainer.innerHTML = '';
 
-    // Play game over sound
-    if(musicPlaying) {
-      gameOverSound.currentTime = 0;
-      gameOverSound.play();
-      bgMusic.pause();
-    }
-
-    // Save high score if beaten
     if (score > highScore) {
       highScore = score;
       highScoreBoard.textContent = 'High Score: ' + highScore + ' 🎉';
@@ -325,24 +187,6 @@
   }
 
   startBtn.addEventListener('click', startGame);
-
-  musicToggleBtn.addEventListener('click', () => {
-    if (musicPlaying) {
-      bgMusic.pause();
-      musicToggleBtn.textContent = '🔈 Music Off';
-      musicPlaying = false;
-    } else {
-      bgMusic.play();
-      musicToggleBtn.textContent = '🔊 Music On';
-      musicPlaying = true;
-    }
-  });
-
-  // Load high score on page load
-  loadHighScore();
-
-  // Prevent scrolling on mobile when touching the game container
-  gameContainer.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
 </script>
 
 </body>
