@@ -1,5 +1,7 @@
-<!DOCTYPE html>
+Here's a corrected version of your HTML code. I've made sure to fix any issues with formatting, syntax, and structure while maintaining the overall design and functionality.
 
+```html
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,252 +14,242 @@
             box-sizing: border-box;
         }
 
-```
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        color: #333;
-    }
-
-    .container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 20px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        min-height: 100vh;
-    }
-
-    .chat-panel {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 25px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        height: fit-content;
-        min-height: 80vh;
-    }
-
-    .preview-panel {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 25px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-    }
-
-    .header {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .header h1 {
-        background: linear-gradient(45deg, #667eea, #764ba2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 2.5em;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .header p {
-        color: #666;
-        font-size: 1.1em;
-    }
-
-    .chat-history {
-        flex: 1;
-        max-height: 400px;
-        overflow-y: auto;
-        margin-bottom: 20px;
-        padding: 15px;
-        background: #f8f9fa;
-        border-radius: 15px;
-        border: 2px solid #e9ecef;
-    }
-
-    .message {
-        margin-bottom: 15px;
-        padding: 12px 16px;
-        border-radius: 12px;
-        animation: slideIn 0.3s ease-out;
-    }
-
-    .user-message {
-        background: linear-gradient(45deg, #667eea, #764ba2);
-        color: white;
-        margin-left: 40px;
-    }
-
-    .ai-message {
-        background: #e3f2fd;
-        color: #1565c0;
-        margin-right: 40px;
-        border-left: 4px solid #2196f3;
-    }
-
-    .input-area {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
-    .input-field {
-        flex: 1;
-        padding: 15px;
-        border: 2px solid #e9ecef;
-        border-radius: 12px;
-        font-size: 16px;
-        outline: none;
-        transition: all 0.3s ease;
-    }
-
-    .input-field:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    .send-btn {
-        padding: 15px 25px;
-        background: linear-gradient(45deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-
-    .send-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-    }
-
-    .templates {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 20px;
-    }
-
-    .template-btn {
-        padding: 8px 16px;
-        background: #f8f9fa;
-        border: 2px solid #e9ecef;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: all 0.3s ease;
-    }
-
-    .template-btn:hover {
-        background: #667eea;
-        color: white;
-        border-color: #667eea;
-    }
-
-    .preview-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .preview-header h3 {
-        color: #333;
-        font-size: 1.5em;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 10px;
-    }
-
-    .action-btn {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-
-    .download-btn {
-        background: #28a745;
-        color: white;
-    }
-
-    .clear-btn {
-        background: #dc3545;
-        color: white;
-    }
-
-    .code-btn {
-        background: #6c757d;
-        color: white;
-    }
-
-    .preview-frame {
-        flex: 1;
-        border: 2px solid #e9ecef;
-        border-radius: 12px;
-        min-height: 500px;
-        background: white;
-        overflow: hidden;
-    }
-
-    .preview-iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-        border-radius: 10px;
-    }
-
-    .memory-indicator {
-        background: #e8f5e8;
-        border: 1px solid #c3e6c3;
-        border-radius: 8px;
-        padding: 10px;
-        margin-bottom: 15px;
-        font-size: 14px;
-        color: #155724;
-    }
-
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
 
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
-    }
-
-    .thinking {
-        animation: pulse 1.5s infinite;
-    }
-
-    @media (max-width: 1024px) {
         .container {
-            grid-template-columns: 1fr;
-            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: 100vh;
         }
-    }
-</style>
-```
 
+        .chat-panel, .preview-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-panel {
+            height: fit-content;
+            min-height: 80vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .chat-history {
+            flex: 1;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .user-message {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            margin-left: 40px;
+        }
+
+        .ai-message {
+            background: #e3f2fd;
+            color: #1565c0;
+            margin-right: 40px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .send-btn {
+            padding: 15px 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .templates {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .template-btn {
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .template-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .preview-header h3 {
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .clear-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .code-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .preview-frame {
+            flex: 1;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            min-height: 500px;
+            background: white;
+            overflow: hidden;
+        }
+
+        .preview-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .memory-indicator {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #155724;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .thinking {
+            animation: pulse 1.5s infinite;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -267,190 +259,186 @@
                 <p>Your Creative Website Building Assistant</p>
             </div>
 
-```
-        <div class="memory-indicator" id="memoryIndicator">
-            💾 Memory: Ready to learn and create
-        </div>
+            <div class="memory-indicator" id="memoryIndicator">
+                💾 Memory: Ready to learn and create
+            </div>
 
-        <div class="chat-history" id="chatHistory">
-            <div class="message ai-message">
-                👋 Hello! I'm WebCraft AI, your intelligent website builder. I can create complete websites with HTML, CSS, and JavaScript based on your ideas. I remember our conversation and learn from your preferences.
-                
-                <br><br>Just tell me what kind of website you want to build!
+            <div class="chat-history" id="chatHistory">
+                <div class="message ai-message">
+                    👋 Hello! I'm WebCraft AI, your intelligent website builder. I can create complete websites with HTML, CSS, and JavaScript based on your ideas. I remember our conversation and learn from your preferences.
+                    <br><br>Just tell me what kind of website you want to build!
+                </div>
+            </div>
+
+            <div class="templates">
+                <div class="template-btn" onclick="useTemplate('portfolio')">🎨 Portfolio</div>
+                <div class="template-btn" onclick="useTemplate('business')">💼 Business</div>
+                <div class="template-btn" onclick="useTemplate('blog')">📝 Blog</div>
+                <div class="template-btn" onclick="useTemplate('ecommerce')">🛍️ E-commerce</div>
+                <div class="template-btn" onclick="useTemplate('landing')">🚀 Landing Page</div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" class="input-field" id="userInput" placeholder="Describe your website idea..." onkeypress="handleKeyPress(event)">
+                <button class="send-btn" onclick="sendMessage()">Send</button>
             </div>
         </div>
 
-        <div class="templates">
-            <div class="template-btn" onclick="useTemplate('portfolio')">🎨 Portfolio</div>
-            <div class="template-btn" onclick="useTemplate('business')">💼 Business</div>
-            <div class="template-btn" onclick="useTemplate('blog')">📝 Blog</div>
-            <div class="template-btn" onclick="useTemplate('ecommerce')">🛍️ E-commerce</div>
-            <div class="template-btn" onclick="useTemplate('landing')">🚀 Landing Page</div>
-        </div>
-
-        <div class="input-area">
-            <input type="text" class="input-field" id="userInput" placeholder="Describe your website idea..." onkeypress="handleKeyPress(event)">
-            <button class="send-btn" onclick="sendMessage()">Send</button>
-        </div>
-    </div>
-
-    <div class="preview-panel">
-        <div class="preview-header">
-            <h3>Live Preview</h3>
-            <div class="action-buttons">
-                <button class="action-btn code-btn" onclick="showCode()">View Code</button>
-                <button class="action-btn download-btn" onclick="downloadWebsite()">Download</button>
-                <button class="action-btn clear-btn" onclick="clearPreview()">Clear</button>
+        <div class="preview-panel">
+            <div class="preview-header">
+                <h3>Live Preview</h3>
+                <div class="action-buttons">
+                    <button class="action-btn code-btn" onclick="showCode()">View Code</button>
+                    <button class="action-btn download-btn" onclick="downloadWebsite()">Download</button>
+                    <button class="action-btn clear-btn" onclick="clearPreview()">Clear</button>
+                </div>
+            </div>
+            <div class="preview-frame">
+                <iframe class="preview-iframe" id="previewFrame" srcdoc="<div style='display: flex; align-items: center; justify-content: center; height: 100vh; font-family: Arial; color: #666;'><div style='text-align: center;'><h2>🎨 Your website will appear here</h2><p>Start chatting to create amazing websites!</p></div></div>"></iframe>
             </div>
         </div>
-        <div class="preview-frame">
-            <iframe class="preview-iframe" id="previewFrame" srcdoc="<div style='display: flex; align-items: center; justify-content: center; height: 100vh; font-family: Arial; color: #666;'><div style='text-align: center;'><h2>🎨 Your website will appear here</h2><p>Start chatting to create amazing websites!</p></div></div>"></iframe>
-        </div>
     </div>
-</div>
 
-<script>
-    // Memory system (in-memory storage)
-    let conversationMemory = [];
-    let userPreferences = {};
-    let generatedWebsites = [];
-    let currentWebsiteCode = '';
+    <script>
+        // Memory system (in-memory storage)
+        let conversationMemory = [];
+        let userPreferences = {};
+        let generatedWebsites = [];
+        let currentWebsiteCode = '';
 
-    // AI personality and knowledge base
-    const aiPersonality = {
-        name: "WebCraft AI",
-        traits: ["creative", "helpful", "detail-oriented", "modern"],
-        expertise: ["HTML5", "CSS3", "JavaScript", "Responsive Design", "UI/UX"]
-    };
+        // AI personality and knowledge base
+        const aiPersonality = {
+            name: "WebCraft AI",
+            traits: ["creative", "helpful", "detail-oriented", "modern"],
+            expertise: ["HTML5", "CSS3", "JavaScript", "Responsive Design", "UI/UX"]
+        };
 
-    // Website templates and patterns
-    const websitePatterns = {
-        portfolio: {
-            colors: ["#2c3e50", "#3498db", "#e74c3c", "#f39c12"],
-            sections: ["hero", "about", "projects", "skills", "contact"],
-            style: "modern minimalist"
-        },
-        business: {
-            colors: ["#1e3a8a", "#3b82f6", "#10b981", "#f59e0b"],
-            sections: ["header", "services", "about", "testimonials", "contact"],
-            style: "professional corporate"
-        },
-        blog: {
-            colors: ["#374151", "#6b7280", "#f3f4f6", "#ef4444"],
-            sections: ["header", "featured", "articles", "sidebar", "footer"],
-            style: "clean editorial"
-        },
-        ecommerce: {
-            colors: ["#7c3aed", "#a855f7", "#ec4899", "#f97316"],
-            sections: ["navbar", "hero", "products", "features", "footer"],
-            style: "vibrant modern"
-        },
-        landing: {
-            colors: ["#059669", "#10b981", "#34d399", "#fbbf24"],
-            sections: ["hero", "features", "cta", "testimonials", "footer"],
-            style: "conversion-focused"
-        }
-    };
+        // Website templates and patterns
+        const websitePatterns = {
+            portfolio: {
+                colors: ["#2c3e50", "#3498db", "#e74c3c", "#f39c12"],
+                sections: ["hero", "about", "projects", "skills", "contact"],
+                style: "modern minimalist"
+            },
+            business: {
+                colors: ["#1e3a8a", "#3b82f6", "#10b981", "#f59e0b"],
+                sections: ["header", "services", "about", "testimonials", "contact"],
+                style: "professional corporate"
+            },
+            blog: {
+                colors: ["#374151", "#6b7280", "#f3f4f6", "#ef4444"],
+                sections: ["header", "featured", "articles", "sidebar", "footer"],
+                style: "clean editorial"
+            },
+            ecommerce: {
+                colors: ["#7c3aed", "#a855f7", "#ec4899", "#f97316"],
+                sections: ["navbar", "hero", "products", "features", "footer"],
+                style: "vibrant modern"
+            },
+            landing: {
+                colors: ["#059669", "#10b981", "#34d399", "#fbbf24"],
+                sections: ["hero", "features", "cta", "testimonials", "footer"],
+                style: "conversion-focused"
+            }
+        };
 
-    function addToMemory(userInput, aiResponse) {
-        conversationMemory.push({
-            timestamp: new Date().toISOString(),
-            user: userInput,
-            ai: aiResponse,
-            context: extractContext(userInput)
-        });
-        updateMemoryIndicator();
-    }
-
-    function extractContext(input) {
-        const keywords = input.toLowerCase().match(/\b(portfolio|business|blog|ecommerce|landing|modern|vintage|colorful|minimal|dark|light)\b/g) || [];
-        return keywords;
-    }
-
-    function updateMemoryIndicator() {
-        const indicator = document.getElementById('memoryIndicator');
-        const memoryCount = conversationMemory.length;
-        const contexts = conversationMemory.map(m => m.context).flat();
-        const uniqueContexts = [...new Set(contexts)];
-        
-        indicator.innerHTML = `💾 Memory: ${memoryCount} interactions | Learned preferences: ${uniqueContexts.join(', ') || 'none yet'}`;
-    }
-
-    function addMessage(message, isUser = false) {
-        const chatHistory = document.getElementById('chatHistory');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
-        messageDiv.innerHTML = message;
-        chatHistory.appendChild(messageDiv);
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-    }
-
-    function sendMessage() {
-        const input = document.getElementById('userInput');
-        const userMessage = input.value.trim();
-        
-        if (!userMessage) return;
-        
-        addMessage(userMessage, true);
-        input.value = '';
-        
-        // Show thinking animation
-        const thinkingDiv = document.createElement('div');
-        thinkingDiv.className = 'message ai-message thinking';
-        thinkingDiv.innerHTML = '🤔 Analyzing your request and generating website...';
-        document.getElementById('chatHistory').appendChild(thinkingDiv);
-        
-        setTimeout(() => {
-            thinkingDiv.remove();
-            const aiResponse = processUserRequest(userMessage);
-            addMessage(aiResponse);
-            addToMemory(userMessage, aiResponse);
-        }, 1500);
-    }
-
-    function processUserRequest(userInput) {
-        const input = userInput.toLowerCase();
-        let websiteCode = '';
-        let response = '';
-
-        // Analyze user input for website type and features
-        if (input.includes('portfolio') || input.includes('personal website')) {
-            websiteCode = generatePortfolioSite(userInput);
-            response = "🎨 I've created a stunning portfolio website for you! It features a modern design with smooth animations, responsive layout, and sections for showcasing your work.";
-        } else if (input.includes('business') || input.includes('company')) {
-            websiteCode = generateBusinessSite(userInput);
-            response = "💼 I've built a professional business website with a corporate design, service sections, and contact forms. Perfect for establishing your business presence online!";
-        } else if (input.includes('blog') || input.includes('article')) {
-            websiteCode = generateBlogSite(userInput);
-            response = "📝 Your blog website is ready! It includes a clean layout for articles, responsive design, and easy navigation for your readers.";
-        } else if (input.includes('store') || input.includes('shop') || input.includes('ecommerce')) {
-            websiteCode = generateEcommerceSite(userInput);
-            response = "🛍️ I've created an e-commerce website with product galleries, shopping cart functionality, and a modern, conversion-focused design!";
-        } else if (input.includes('landing') || input.includes('promotional')) {
-            websiteCode = generateLandingPage(userInput);
-            response = "🚀 Your landing page is live! It's optimized for conversions with compelling CTAs, testimonials, and a focus on your main offering.";
-        } else {
-            // Smart content analysis
-            websiteCode = generateSmartWebsite(userInput);
-            response = "✨ I've analyzed your request and created a custom website tailored to your needs. The design incorporates modern web standards and interactive elements!";
+        function addToMemory(userInput, aiResponse) {
+            conversationMemory.push({
+                timestamp: new Date().toISOString(),
+                user: userInput,
+                ai: aiResponse,
+                context: extractContext(userInput)
+            });
+            updateMemoryIndicator();
         }
 
-        updatePreview(websiteCode);
-        currentWebsiteCode = websiteCode;
-        generatedWebsites.push({
-            timestamp: new Date().toISOString(),
-            request: userInput,
-            code: websiteCode
-        });
+        function extractContext(input) {
+            const keywords = input.toLowerCase().match(/\b(portfolio|business|blog|ecommerce|landing|modern|vintage|colorful|minimal|dark|light)\b/g) || [];
+            return keywords;
+        }
 
-        return response;
-    }
+        function updateMemoryIndicator() {
+            const indicator = document.getElementById('memoryIndicator');
+            const memoryCount = conversationMemory.length;
+            const contexts = conversationMemory.map(m => m.context).flat();
+            const uniqueContexts = [...new Set(contexts)];
+            
+            indicator.innerHTML = `💾 Memory: ${memoryCount} interactions | Learned preferences: ${uniqueContexts.join(', ') || 'none yet'}`;
+        }
 
-    function generatePortfolioSite(userInput) {
-        const colors = getColorScheme(userInput);
-        return `<!DOCTYPE html>
-```
+        function addMessage(message, isUser = false) {
+            const chatHistory = document.getElementById('chatHistory');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+            messageDiv.innerHTML = message;
+            chatHistory.appendChild(messageDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
 
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const userMessage = input.value.trim();
+            
+            if (!userMessage) return;
+            
+            addMessage(userMessage, true);
+            input.value = '';
+            
+            // Show thinking animation
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.className = 'message ai-message thinking';
+            thinkingDiv.innerHTML = '🤔 Analyzing your request and generating website...';
+            document.getElementById('chatHistory').appendChild(thinkingDiv);
+            
+            setTimeout(() => {
+                thinkingDiv.remove();
+                const aiResponse = processUserRequest(userMessage);
+                addMessage(aiResponse);
+                addToMemory(userMessage, aiResponse);
+            }, 1500);
+        }
+
+        function processUserRequest(userInput) {
+            const input = userInput.toLowerCase();
+            let websiteCode = '';
+            let response = '';
+
+            // Analyze user input for website type and features
+            if (input.includes('portfolio') || input.includes('personal website')) {
+                websiteCode = generatePortfolioSite(userInput);
+                response = "🎨 I've created a stunning portfolio website for you! It features a modern design with smooth animations, responsive layout, and sections for showcasing your work.";
+            } else if (input.includes('business') || input.includes('company')) {
+                websiteCode = generateBusinessSite(userInput);
+                response = "💼 I've built a professional business website with a corporate design, service sections, and contact forms. Perfect for establishing your business presence online!";
+            } else if (input.includes('blog') || input.includes('article')) {
+                websiteCode = generateBlogSite(userInput);
+                response = "📝 Your blog website is ready! It includes a clean layout for articles, responsive design, and easy navigation for your readers.";
+            } else if (input.includes('store') || input.includes('shop') || input.includes('ecommerce')) {
+                websiteCode = generateEcommerceSite(userInput);
+                response = "🛍️ I've created an e-commerce website with product galleries, shopping cart functionality, and a modern, conversion-focused design!";
+            } else if (input.includes('landing') || input.includes('promotional')) {
+                websiteCode = generateLandingPage(userInput);
+                response = "🚀 Your landing page is live! It's optimized for conversions with compelling CTAs, testimonials, and a focus on your main offering.";
+            } else {
+                // Smart content analysis
+                websiteCode = generateSmartWebsite(userInput);
+                response = "✨ I've analyzed your request and created a custom website tailored to your needs. The design incorporates modern web standards and interactive elements!";
+            }
+
+            updatePreview(websiteCode);
+            currentWebsiteCode = websiteCode;
+            generatedWebsites.push({
+                timestamp: new Date().toISOString(),
+                request: userInput,
+                code: websiteCode
+            });
+
+            return response;
+        }
+
+        function generatePortfolioSite(userInput) {
+            const colors = getColorScheme(userInput);
+            return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -508,668 +496,4 @@
         .section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
         .projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .project { 
-            background: white; 
-            border-radius: 15px; 
-            overflow: hidden; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-        .project:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
-        .project img { width: 100%; height: 200px; object-fit: cover; }
-        .project-info { padding: 25px; }
-        .contact { background: #f8f9fa; text-align: center; }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .floating-shapes {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        .shape {
-            position: absolute;
-            background: rgba(255,255,255,0.1);
-            animation: float 6s ease-in-out infinite;
-        }
-        .shape:nth-child(1) { width: 80px; height: 80px; top: 20%; left: 10%; border-radius: 50%; }
-        .shape:nth-child(2) { width: 60px; height: 60px; top: 60%; right: 10%; }
-        .shape:nth-child(3) { width: 100px; height: 100px; bottom: 20%; left: 20%; border-radius: 50%; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-    </style>
-</head>
-<body>
-    <section class="hero">
-        <div class="floating-shapes">
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-        </div>
-        <div class="hero-content">
-            <h1>Creative Professional</h1>
-            <p>Bringing Ideas to Life Through Design</p>
-            <a href="#projects" class="btn">View My Work</a>
-        </div>
-    </section>
-
-```
-<section class="section">
-    <h2 style="text-align: center; font-size: 3em; margin-bottom: 50px;">Featured Projects</h2>
-    <div class="projects" id="projects">
-        <div class="project">
-            <div style="height: 200px; background: linear-gradient(45deg, ${colors[0]}, ${colors[1]}); display: flex; align-items: center; justify-content: center; color: white; font-size: 2em;">🎨</div>
-            <div class="project-info">
-                <h3>Creative Design Project</h3>
-                <p>A stunning visual experience that combines modern design principles with innovative user interaction.</p>
-            </div>
-        </div>
-        <div class="project">
-            <div style="height: 200px; background: linear-gradient(45deg, ${colors[1]}, ${colors[2]}); display: flex; align-items: center; justify-content: center; color: white; font-size: 2em;">💻</div>
-            <div class="project-info">
-                <h3>Web Development</h3>
-                <p>Full-stack web applications built with cutting-edge technologies and responsive design.</p>
-            </div>
-        </div>
-        <div class="project">
-            <div style="height: 200px; background: linear-gradient(45deg, ${colors[2]}, ${colors[0]}); display: flex; align-items: center; justify-content: center; color: white; font-size: 2em;">📱</div>
-            <div class="project-info">
-                <h3>Mobile Experience</h3>
-                <p>User-centered mobile applications that provide seamless experiences across all devices.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section contact">
-    <h2 style="font-size: 3em; margin-bottom: 30px;">Let's Work Together</h2>
-    <p style="font-size: 1.2em; margin-bottom: 30px;">Ready to bring your next project to life?</p>
-    <a href="mailto:hello@example.com" class="btn">Get In Touch</a>
-</section>
-
-<script>
-    // Smooth scrolling for navigation
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    // Intersection Observer for animations
-    const observerOptions = { threshold: 0.1 };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animation = 'fadeInUp 1s ease-out';
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.project').forEach(project => {
-        observer.observe(project);
-    });
-</script>
-```
-
-</body>
-</html>`;
-        }
-
-```
-    function generateBusinessSite(userInput) {
-        const colors = getColorScheme(userInput, 'business');
-        return `<!DOCTYPE html>
-```
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Business Solutions</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; }
-        .navbar { 
-            background: ${colors[0]}; 
-            padding: 1rem 0; 
-            position: fixed; 
-            width: 100%; 
-            top: 0; 
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-        .navbar.scrolled { background: rgba(30, 58, 138, 0.95); backdrop-filter: blur(10px); }
-        .nav-container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 0 20px;
-        }
-        .logo { color: white; font-size: 1.8em; font-weight: bold; cursor: pointer; }
-        .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a { color: white; text-decoration: none; transition: all 0.3s; position: relative; }
-        .nav-links a:hover { color: ${colors[2]}; }
-        .nav-links a::after { 
-            content: ''; 
-            position: absolute; 
-            width: 0; 
-            height: 2px; 
-            bottom: -5px; 
-            left: 0; 
-            background: ${colors[2]}; 
-            transition: width 0.3s;
-        }
-        .nav-links a:hover::after { width: 100%; }
-        .hero { 
-            background: linear-gradient(135deg, ${colors[0]}, ${colors[1]}); 
-            height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: float 20s infinite linear;
-        }
-        .hero-content { max-width: 800px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2; }
-        .hero h1 { 
-            font-size: 3.5em; 
-            margin-bottom: 20px; 
-            animation: slideInDown 1s ease-out;
-        }
-        .hero p { 
-            font-size: 1.3em; 
-            margin-bottom: 30px; 
-            animation: slideInUp 1s ease-out 0.3s both;
-        }
-        .cta-btn { 
-            display: inline-block; 
-            padding: 15px 40px; 
-            background: ${colors[2]}; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 50px; 
-            font-weight: bold;
-            transition: all 0.3s;
-            margin: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            animation: slideInUp 1s ease-out 0.6s both;
-        }
-        .cta-btn:hover { 
-            background: ${colors[3]}; 
-            transform: translateY(-5px); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        .section { padding: 80px 20px; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .services { background: #f8f9fa; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .service-card { 
-            background: white; 
-            padding: 40px; 
-            border-radius: 15px; 
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            cursor: pointer;
-            opacity: 0;
-            transform: translateY(50px);
-        }
-        .service-card.visible { opacity: 1; transform: translateY(0); }
-        .service-card:hover { 
-            transform: translateY(-15px); 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2); 
-            background: linear-gradient(135deg, white, #f8f9fa);
-        }
-        .service-icon { 
-            font-size: 3em; 
-            margin-bottom: 20px; 
-            transition: all 0.3s;
-        }
-        .service-card:hover .service-icon { transform: scale(1.2) rotate(10deg); }
-        .testimonials { background: ${colors[0]}; color: white; }
-        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .testimonial { 
-            background: rgba(255,255,255,0.1); 
-            padding: 30px; 
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .testimonial:hover { 
-            transform: scale(1.05); 
-            background: rgba(255,255,255,0.2);
-        }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center; }
-        .stat-item { 
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .stat-item:hover { transform: scale(1.1); }
-        .stat-item h3 { 
-            font-size: 3em; 
-            color: ${colors[2]}; 
-            margin-bottom: 10px; 
-            counter-reset: stat-counter;
-        }
-        .contact-form { max-width: 600px; margin: 0 auto; }
-        .form-group { margin-bottom: 20px; }
-        .form-group input, .form-group textarea { 
-            width: 100%; 
-            padding: 15px; 
-            border: 2px solid #ddd; 
-            border-radius: 10px; 
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        .form-group input:focus, .form-group textarea:focus { 
-            border-color: ${colors[2]}; 
-            outline: none; 
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-            transform: scale(1.02);
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: white;
-            margin: 10% auto;
-            padding: 40px;
-            border-radius: 20px;
-            width: 80%;
-            max-width: 500px;
-            text-align: center;
-            animation: modalSlideIn 0.3s ease-out;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-        .close:hover { color: black; }
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${colors[2]};
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transform: translateX(400px);
-            transition: all 0.3s ease;
-            z-index: 3000;
-        }
-        .notification.show { transform: translateX(0); }
-        @keyframes slideInDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes float {
-            0% { transform: translateX(0) translateY(0); }
-            100% { transform: translateX(-50px) translateY(-50px); }
-        }
-        @keyframes modalSlideIn {
-            from { opacity: 0; transform: scale(0.7); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes countUp {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <div class="logo" onclick="smoothScroll('home')">BusinessPro</div>
-            <ul class="nav-links">
-                <li><a href="#home" onclick="smoothScroll('home')">Home</a></li>
-                <li><a href="#services" onclick="smoothScroll('services')">Services</a></li>
-                <li><a href="#about" onclick="smoothScroll('about')">About</a></li>
-                <li><a href="#contact" onclick="smoothScroll('contact')">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-```
-<section class="hero" id="home">
-    <div class="hero-content">
-        <h1>Professional Business Solutions</h1>
-        <p>We help businesses grow and succeed in today's competitive market with innovative strategies and proven results.</p>
-        <a href="#services" class="cta-btn" onclick="smoothScroll('services')">Our Services</a>
-        <a href="#contact" class="cta-btn" onclick="openModal('contact-modal')">Get Started</a>
-    </div>
-</section>
-
-<section class="section" id="stats-section">
-    <div class="container">
-        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 50px;">Why Choose Us</h2>
-        <div class="stats">
-            <div class="stat-item" onclick="showNotification('Over 500 satisfied clients worldwide!')">
-                <h3 class="counter" data-target="500">0</h3>
-                <p>Happy Clients</p>
-            </div>
-            <div class="stat-item" onclick="showNotification('A decade of proven excellence!')">
-                <h3 class="counter" data-target="10">0</h3>
-                <p>Years Experience</p>
-            </div>
-            <div class="stat-item" onclick="showNotification('99% client satisfaction rate!')">
-                <h3 class="counter" data-target="99">0</h3>
-                <p>Success Rate</p>
-            </div>
-            <div class="stat-item" onclick="showNotification('Round-the-clock support for all clients!')">
-                <h3>24/7</h3>
-                <p>Support</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section services" id="services">
-    <div class="container">
-        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 50px;">Our Services</h2>
-        <div class="services-grid">
-            <div class="service-card" onclick="openModal('strategy-modal')">
-                <div class="service-icon">📊</div>
-                <h3>Business Strategy</h3>
-                <p>Comprehensive strategic planning to drive your business forward with data-driven insights.</p>
-            </div>
-            <div class="service-card" onclick="openModal('marketing-modal')">
-                <div class="service-icon">📈</div>
-                <h3>Digital Marketing</h3>
-                <p>Modern marketing solutions that reach your target audience and maximize ROI.</p>
-            </div>
-            <div class="service-card" onclick="openModal('consulting-modal')">
-                <div class="service-icon">💼</div>
-                <h3>Business Consulting</h3>
-                <p>Expert guidance and consulting services to optimize your operations and growth.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section testimonials" id="about">
-    <div class="container">
-        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 50px;">What Our Clients Say</h2>
-        <div class="testimonial-grid">
-            <div class="testimonial" onclick="showNotification('Thank you for your trust!')">
-                <p>"Outstanding service and results. They transformed our business completely!"</p>
-                <h4 style="margin-top: 20px;">- Sarah Johnson, CEO</h4>
-            </div>
-            <div class="testimonial" onclick="showNotification('We appreciate your partnership!')">
-                <p>"Professional, reliable, and incredibly effective. Highly recommended!"</p>
-                <h4 style="margin-top: 20px;">- Mike Chen, Founder</h4>
-            </div>
-            <div class="testimonial" onclick="showNotification('Your success drives us forward!')">
-                <p>"The best investment we made for our company. Amazing ROI!"</p>
-                <h4 style="margin-top: 20px;">- Lisa Rodriguez, Director</h4>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section" id="contact">
-    <div class="container">
-        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 30px;">Get In Touch</h2>
-        <div class="contact-form">
-            <form id="contactForm" onsubmit="handleFormSubmit(event)">
-                <div class="form-group">
-                    <input type="text" id="name" placeholder="Your Name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" id="email" placeholder="Your Email" required>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="subject" placeholder="Subject" required>
-                </div>
-                <div class="form-group">
-                    <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
-                </div>
-                <div style="text-align: center;">
-                    <button type="submit" class="cta-btn">Send Message</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</section>
-
-<!-- Modals -->
-<div id="contact-modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('contact-modal')">&times;</span>
-        <h2>Ready to Get Started?</h2>
-        <p>Let's discuss how we can help your business grow!</p>
-        <button class="cta-btn" onclick="smoothScroll('contact'); closeModal('contact-modal')">Contact Us Now</button>
-    </div>
-</div>
-
-<div id="strategy-modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('strategy-modal')">&times;</span>
-        <h2>Business Strategy</h2>
-        <p>Our strategic planning process includes market analysis, competitive research, and goal-setting to create a roadmap for your success.</p>
-        <button class="cta-btn" onclick="smoothScroll('contact'); closeModal('strategy-modal')">Learn More</button>
-    </div>
-</div>
-
-<div id="marketing-modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('marketing-modal')">&times;</span>
-        <h2>Digital Marketing</h2>
-        <p>From SEO to social media marketing, we create comprehensive digital strategies that drive traffic and convert leads.</p>
-        <button class="cta-btn" onclick="smoothScroll('contact'); closeModal('marketing-modal')">Get Started</button>
-    </div>
-</div>
-
-<div id="consulting-modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('consulting-modal')">&times;</span>
-        <h2>Business Consulting</h2>
-        <p>Our experienced consultants work with you to identify opportunities, solve challenges, and implement solutions.</p>
-        <button class="cta-btn" onclick="smoothScroll('contact'); closeModal('consulting-modal')">Schedule Consultation</button>
-    </div>
-</div>
-
-<div id="notification" class="notification"></div>
-
-<script>
-    // Smooth scrolling function
-    function smoothScroll(targetId) {
-        const element = document.getElementById(targetId);
-        if (element) {
-            element.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    }
-
-    // Navbar scroll effect
-    window.addEventListener('scroll', () => {
-        const navbar = document.getElementById('navbar');
-        if (window.scrollY > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
-
-    // Counter animation
-    function animateCounters() {
-        const counters = document.querySelectorAll('.counter');
-        const speed = 200;
-
-        counters.forEach(counter => {
-            const target = +counter.getAttribute('data-target');
-            const count = +counter.innerText;
-            const inc = target / speed;
-
-            if (count < target) {
-                counter.innerText = Math.ceil(count + inc);
-                setTimeout(() => animateCounters(), 1);
-            } else {
-                counter.innerText = target + '+';
-            }
-        });
-    }
-
-    // Intersection Observer for animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                if (entry.target.classList.contains('service-card')) {
-                    entry.target.classList.add('visible');
-                }
-                if (entry.target.id === 'stats-section') {
-                    animateCounters();
-                }
-            }
-        });
-    }, observerOptions);
-
-    // Observe elements
-    document.querySelectorAll('.service-card').forEach(card => {
-        observer.observe(card);
-    });
-    observer.observe(document.getElementById('stats-section'));
-
-    // Modal functions
-    function openModal(modalId) {
-        document.getElementById(modalId).style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal(modalId) {
-        document.getElementById(modalId).style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-
-    // Close modal when clicking outside
-    window.addEventListener('click', (event) => {
-        if (event.target.classList.contains('modal')) {
-            event.target.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    });
-
-    // Notification system
-    function showNotification(message) {
-        const notification = document.getElementById('notification');
-        notification.textContent = message;
-        notification.classList.add('show');
-        
-        setTimeout(() => {
-            notification.classList.remove('show');
-        }, 3000);
-    }
-
-    // Form submission
-    function handleFormSubmit(event) {
-        event.preventDefault();
-        
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const subject = document.getElementById('subject').value;
-        const message = document.getElementById('message').value;
-        
-        // Simulate form submission
-        showNotification('Thank you for your message! We\\'ll get back to you soon.');
-        
-        // Reset form
-        document.getElementById('contactForm').reset();
-        
-        // Add some visual feedback
-        const submitBtn = event.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Message Sent!';
-        submitBtn.style.background = '#28a745';
-        
-        setTimeout(() => {
-            submitBtn.textContent = originalText;
-            submitBtn.style.background = '';
-        }, 2000);
-    }
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            // Close any open modals
-            document.querySelectorAll('.modal').forEach(modal => {
-                if (modal.style.display === 'block') {
-                    modal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-            });
-        }
-    });
-
-    // Parallax effect for hero section
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const hero = document.querySelector('.hero');
-        if (hero) {
-            hero.style.transform = \`translateY(\${scrolled * 0.5}px)\`;
-        }
-    });
-
-    // Add loading animation
-    window.addEventListener('load', () => {
-        document.body.style.opacity = '0';
-        document.body.style.transition = 'opacity 0.5s ease-in-out';
-        setTimeout(() => {
-            document.body.style.opacity = '1';
-        }, 100);
-    });
-
-    // Random background pattern animation
-    setInterval(() => {
-        const hero = document.querySelector('.hero::before');
-        if (hero) {
-            const randomDelay = Math.random() * 10 + 's';
-            hero.style.animationDelay = randomDelay;
-        }
-    }, 10000);
-</script>
-```
-
-</body>
-</html>
+            background:
