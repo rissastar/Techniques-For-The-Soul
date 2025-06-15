@@ -643,7 +643,9 @@
             top: 0; 
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
+        .navbar.scrolled { background: rgba(30, 58, 138, 0.95); backdrop-filter: blur(10px); }
         .nav-container { 
             max-width: 1200px; 
             margin: 0 auto; 
@@ -652,10 +654,21 @@
             align-items: center; 
             padding: 0 20px;
         }
-        .logo { color: white; font-size: 1.8em; font-weight: bold; }
+        .logo { color: white; font-size: 1.8em; font-weight: bold; cursor: pointer; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a { color: white; text-decoration: none; transition: all 0.3s; }
+        .nav-links a { color: white; text-decoration: none; transition: all 0.3s; position: relative; }
         .nav-links a:hover { color: ${colors[2]}; }
+        .nav-links a::after { 
+            content: ''; 
+            position: absolute; 
+            width: 0; 
+            height: 2px; 
+            bottom: -5px; 
+            left: 0; 
+            background: ${colors[2]}; 
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
         .hero { 
             background: linear-gradient(135deg, ${colors[0]}, ${colors[1]}); 
             height: 100vh; 
@@ -663,22 +676,47 @@
             align-items: center; 
             color: white;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .hero-content { max-width: 800px; margin: 0 auto; padding: 0 20px; }
-        .hero h1 { font-size: 3.5em; margin-bottom: 20px; }
-        .hero p { font-size: 1.3em; margin-bottom: 30px; }
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: float 20s infinite linear;
+        }
+        .hero-content { max-width: 800px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2; }
+        .hero h1 { 
+            font-size: 3.5em; 
+            margin-bottom: 20px; 
+            animation: slideInDown 1s ease-out;
+        }
+        .hero p { 
+            font-size: 1.3em; 
+            margin-bottom: 30px; 
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
         .cta-btn { 
             display: inline-block; 
             padding: 15px 40px; 
             background: ${colors[2]}; 
             color: white; 
             text-decoration: none; 
-            border-radius: 5px; 
+            border-radius: 50px; 
             font-weight: bold;
             transition: all 0.3s;
             margin: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: slideInUp 1s ease-out 0.6s both;
         }
-        .cta-btn:hover { background: ${colors[3]}; transform: translateY(-2px); }
+        .cta-btn:hover { 
+            background: ${colors[3]}; 
+            transform: translateY(-5px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
         .section { padding: 80px 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
         .services { background: #f8f9fa; }
@@ -686,47 +724,143 @@
         .service-card { 
             background: white; 
             padding: 40px; 
-            border-radius: 10px; 
+            border-radius: 15px; 
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: all 0.3s;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(50px);
         }
-        .service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
-        .service-icon { font-size: 3em; margin-bottom: 20px; }
+        .service-card.visible { opacity: 1; transform: translateY(0); }
+        .service-card:hover { 
+            transform: translateY(-15px); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2); 
+            background: linear-gradient(135deg, white, #f8f9fa);
+        }
+        .service-icon { 
+            font-size: 3em; 
+            margin-bottom: 20px; 
+            transition: all 0.3s;
+        }
+        .service-card:hover .service-icon { transform: scale(1.2) rotate(10deg); }
         .testimonials { background: ${colors[0]}; color: white; }
         .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .testimonial { 
             background: rgba(255,255,255,0.1); 
             padding: 30px; 
-            border-radius: 10px;
+            border-radius: 15px;
             backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .testimonial:hover { 
+            transform: scale(1.05); 
+            background: rgba(255,255,255,0.2);
         }
         .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center; }
-        .stat-item h3 { font-size: 3em; color: ${colors[2]}; margin-bottom: 10px; }
+        .stat-item { 
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .stat-item:hover { transform: scale(1.1); }
+        .stat-item h3 { 
+            font-size: 3em; 
+            color: ${colors[2]}; 
+            margin-bottom: 10px; 
+            counter-reset: stat-counter;
+        }
         .contact-form { max-width: 600px; margin: 0 auto; }
         .form-group { margin-bottom: 20px; }
         .form-group input, .form-group textarea { 
             width: 100%; 
             padding: 15px; 
             border: 2px solid #ddd; 
-            border-radius: 5px; 
+            border-radius: 10px; 
             font-size: 16px;
+            transition: all 0.3s;
         }
         .form-group input:focus, .form-group textarea:focus { 
             border-color: ${colors[2]}; 
             outline: none; 
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: scale(1.02);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .close:hover { color: black; }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${colors[2]};
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+            z-index: 3000;
+        }
+        .notification.show { transform: translateX(0); }
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-50px) translateY(-50px); }
+        }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes countUp {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <div class="logo">BusinessPro</div>
+            <div class="logo" onclick="smoothScroll('home')">BusinessPro</div>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#home" onclick="smoothScroll('home')">Home</a></li>
+                <li><a href="#services" onclick="smoothScroll('services')">Services</a></li>
+                <li><a href="#about" onclick="smoothScroll('about')">About</a></li>
+                <li><a href="#contact" onclick="smoothScroll('contact')">Contact</a></li>
             </ul>
         </div>
     </nav>
@@ -736,28 +870,28 @@
     <div class="hero-content">
         <h1>Professional Business Solutions</h1>
         <p>We help businesses grow and succeed in today's competitive market with innovative strategies and proven results.</p>
-        <a href="#services" class="cta-btn">Our Services</a>
-        <a href="#contact" class="cta-btn">Get Started</a>
+        <a href="#services" class="cta-btn" onclick="smoothScroll('services')">Our Services</a>
+        <a href="#contact" class="cta-btn" onclick="openModal('contact-modal')">Get Started</a>
     </div>
 </section>
 
-<section class="section">
+<section class="section" id="stats-section">
     <div class="container">
-        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 20px;">Why Choose Us</h2>
+        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 50px;">Why Choose Us</h2>
         <div class="stats">
-            <div class="stat-item">
-                <h3>500+</h3>
+            <div class="stat-item" onclick="showNotification('Over 500 satisfied clients worldwide!')">
+                <h3 class="counter" data-target="500">0</h3>
                 <p>Happy Clients</p>
             </div>
-            <div class="stat-item">
-                <h3>10+</h3>
+            <div class="stat-item" onclick="showNotification('A decade of proven excellence!')">
+                <h3 class="counter" data-target="10">0</h3>
                 <p>Years Experience</p>
             </div>
-            <div class="stat-item">
-                <h3>99%</h3>
+            <div class="stat-item" onclick="showNotification('99% client satisfaction rate!')">
+                <h3 class="counter" data-target="99">0</h3>
                 <p>Success Rate</p>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" onclick="showNotification('Round-the-clock support for all clients!')">
                 <h3>24/7</h3>
                 <p>Support</p>
             </div>
@@ -767,5 +901,275 @@
 
 <section class="section services" id="services">
     <div class="container">
-        <h2 style="text-align: center;
+        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 50px;">Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card" onclick="openModal('strategy-modal')">
+                <div class="service-icon">📊</div>
+                <h3>Business Strategy</h3>
+                <p>Comprehensive strategic planning to drive your business forward with data-driven insights.</p>
+            </div>
+            <div class="service-card" onclick="openModal('marketing-modal')">
+                <div class="service-icon">📈</div>
+                <h3>Digital Marketing</h3>
+                <p>Modern marketing solutions that reach your target audience and maximize ROI.</p>
+            </div>
+            <div class="service-card" onclick="openModal('consulting-modal')">
+                <div class="service-icon">💼</div>
+                <h3>Business Consulting</h3>
+                <p>Expert guidance and consulting services to optimize your operations and growth.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section testimonials" id="about">
+    <div class="container">
+        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 50px;">What Our Clients Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial" onclick="showNotification('Thank you for your trust!')">
+                <p>"Outstanding service and results. They transformed our business completely!"</p>
+                <h4 style="margin-top: 20px;">- Sarah Johnson, CEO</h4>
+            </div>
+            <div class="testimonial" onclick="showNotification('We appreciate your partnership!')">
+                <p>"Professional, reliable, and incredibly effective. Highly recommended!"</p>
+                <h4 style="margin-top: 20px;">- Mike Chen, Founder</h4>
+            </div>
+            <div class="testimonial" onclick="showNotification('Your success drives us forward!')">
+                <p>"The best investment we made for our company. Amazing ROI!"</p>
+                <h4 style="margin-top: 20px;">- Lisa Rodriguez, Director</h4>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="contact">
+    <div class="container">
+        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 30px;">Get In Touch</h2>
+        <div class="contact-form">
+            <form id="contactForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-group">
+                    <input type="text" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="subject" placeholder="Subject" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+                </div>
+                <div style="text-align: center;">
+                    <button type="submit" class="cta-btn">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Modals -->
+<div id="contact-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('contact-modal')">&times;</span>
+        <h2>Ready to Get Started?</h2>
+        <p>Let's discuss how we can help your business grow!</p>
+        <button class="cta-btn" onclick="smoothScroll('contact'); closeModal('contact-modal')">Contact Us Now</button>
+    </div>
+</div>
+
+<div id="strategy-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('strategy-modal')">&times;</span>
+        <h2>Business Strategy</h2>
+        <p>Our strategic planning process includes market analysis, competitive research, and goal-setting to create a roadmap for your success.</p>
+        <button class="cta-btn" onclick="smoothScroll('contact'); closeModal('strategy-modal')">Learn More</button>
+    </div>
+</div>
+
+<div id="marketing-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('marketing-modal')">&times;</span>
+        <h2>Digital Marketing</h2>
+        <p>From SEO to social media marketing, we create comprehensive digital strategies that drive traffic and convert leads.</p>
+        <button class="cta-btn" onclick="smoothScroll('contact'); closeModal('marketing-modal')">Get Started</button>
+    </div>
+</div>
+
+<div id="consulting-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('consulting-modal')">&times;</span>
+        <h2>Business Consulting</h2>
+        <p>Our experienced consultants work with you to identify opportunities, solve challenges, and implement solutions.</p>
+        <button class="cta-btn" onclick="smoothScroll('contact'); closeModal('consulting-modal')">Schedule Consultation</button>
+    </div>
+</div>
+
+<div id="notification" class="notification"></div>
+
+<script>
+    // Smooth scrolling function
+    function smoothScroll(targetId) {
+        const element = document.getElementById(targetId);
+        if (element) {
+            element.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Counter animation
+    function animateCounters() {
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+            const inc = target / speed;
+
+            if (count < target) {
+                counter.innerText = Math.ceil(count + inc);
+                setTimeout(() => animateCounters(), 1);
+            } else {
+                counter.innerText = target + '+';
+            }
+        });
+    }
+
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target.classList.contains('service-card')) {
+                    entry.target.classList.add('visible');
+                }
+                if (entry.target.id === 'stats-section') {
+                    animateCounters();
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements
+    document.querySelectorAll('.service-card').forEach(card => {
+        observer.observe(card);
+    });
+    observer.observe(document.getElementById('stats-section'));
+
+    // Modal functions
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (event) => {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Notification system
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+    // Form submission
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+        
+        // Simulate form submission
+        showNotification('Thank you for your message! We\\'ll get back to you soon.');
+        
+        // Reset form
+        document.getElementById('contactForm').reset();
+        
+        // Add some visual feedback
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Message Sent!';
+        submitBtn.style.background = '#28a745';
+        
+        setTimeout(() => {
+            submitBtn.textContent = originalText;
+            submitBtn.style.background = '';
+        }, 2000);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            // Close any open modals
+            document.querySelectorAll('.modal').forEach(modal => {
+                if (modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+    });
+
+    // Parallax effect for hero section
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            hero.style.transform = \`translateY(\${scrolled * 0.5}px)\`;
+        }
+    });
+
+    // Add loading animation
+    window.addEventListener('load', () => {
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s ease-in-out';
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 100);
+    });
+
+    // Random background pattern animation
+    setInterval(() => {
+        const hero = document.querySelector('.hero::before');
+        if (hero) {
+            const randomDelay = Math.random() * 10 + 's';
+            hero.style.animationDelay = randomDelay;
+        }
+    }, 10000);
+</script>
 ```
+
+</body>
+</html>
