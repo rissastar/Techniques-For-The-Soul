@@ -1,12 +1,10 @@
-Here's a corrected version of your HTML code. I've made sure to fix any issues with formatting, syntax, and structure while maintaining the overall design and functionality.
-
-```html
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebCraft AI - Intelligent Website Builder</title>
+    <title>AI Website Builder - Creative Web Development Assistant</title>
     <style>
         * {
             margin: 0;
@@ -14,486 +12,708 @@ Here's a corrected version of your HTML code. I've made sure to fix any issues w
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
+```
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            min-height: 100vh;
-        }
+    .header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-        .chat-panel, .preview-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            display: flex;
+    .logo {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .nav-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+    }
+
+    .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .main-container {
+        flex: 1;
+        display: flex;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 2rem;
+        gap: 2rem;
+    }
+
+    .chat-container {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .chat-header {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .chat-messages {
+        flex: 1;
+        padding: 1rem;
+        overflow-y: auto;
+        max-height: 400px;
+        scroll-behavior: smooth;
+    }
+
+    .message {
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 15px;
+        max-width: 80%;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .user-message {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        margin-left: auto;
+        text-align: right;
+    }
+
+    .ai-message {
+        background: #f0f2f5;
+        color: #333;
+        border-left: 4px solid #4facfe;
+    }
+
+    .chat-input-container {
+        padding: 1rem;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .chat-input {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 25px;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .chat-input:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+    }
+
+    .send-btn {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .send-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+    }
+
+    .preview-container {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .preview-header {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .preview-controls {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .control-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        padding: 0.5rem;
+        border-radius: 50%;
+        cursor: pointer;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .preview-frame {
+        flex: 1;
+        border: none;
+        background: white;
+    }
+
+    .loading {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+    }
+
+    .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #4facfe;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .welcome-message {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .feature-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .code-block {
+        background: #2d3748;
+        color: #e2e8f0;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        .main-container {
             flex-direction: column;
+            padding: 1rem;
+            gap: 1rem;
         }
-
-        .chat-panel {
-            height: fit-content;
-            min-height: 80vh;
-        }
-
+        
         .header {
-            text-align: center;
-            margin-bottom: 30px;
+            padding: 1rem;
         }
-
-        .header h1 {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .chat-history {
-            flex: 1;
-            max-height: 400px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            border: 2px solid #e9ecef;
-        }
-
-        .message {
-            margin-bottom: 15px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .user-message {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            margin-left: 40px;
-        }
-
-        .ai-message {
-            background: #e3f2fd;
-            color: #1565c0;
-            margin-right: 40px;
-            border-left: 4px solid #2196f3;
-        }
-
-        .input-area {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .input-field {
-            flex: 1;
-            padding: 15px;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .input-field:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .send-btn {
-            padding: 15px 25px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .templates {
-            display: flex;
-            gap: 10px;
+        
+        .nav-buttons {
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            gap: 0.5rem;
         }
+    }
+</style>
+```
 
-        .template-btn {
-            padding: 8px 16px;
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .template-btn:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .preview-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .preview-header h3 {
-            color: #333;
-            font-size: 1.5em;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .action-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .download-btn {
-            background: #28a745;
-            color: white;
-        }
-
-        .clear-btn {
-            background: #dc3545;
-            color: white;
-        }
-
-        .code-btn {
-            background: #6c757d;
-            color: white;
-        }
-
-        .preview-frame {
-            flex: 1;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            min-height: 500px;
-            background: white;
-            overflow: hidden;
-        }
-
-        .preview-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 10px;
-        }
-
-        .memory-indicator {
-            background: #e8f5e8;
-            border: 1px solid #c3e6c3;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            color: #155724;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .thinking {
-            animation: pulse 1.5s infinite;
-        }
-
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="chat-panel">
-            <div class="header">
-                <h1>🤖 WebCraft AI</h1>
-                <p>Your Creative Website Building Assistant</p>
-            </div>
+    <header class="header">
+        <div class="logo">🚀 AI Website Builder</div>
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="clearChat()">Clear Chat</button>
+            <button class="nav-btn" onclick="downloadCode()">Download</button>
+            <button class="nav-btn" onclick="showHelp()">Help</button>
+        </div>
+    </header>
 
-            <div class="memory-indicator" id="memoryIndicator">
-                💾 Memory: Ready to learn and create
-            </div>
-
-            <div class="chat-history" id="chatHistory">
-                <div class="message ai-message">
-                    👋 Hello! I'm WebCraft AI, your intelligent website builder. I can create complete websites with HTML, CSS, and JavaScript based on your ideas. I remember our conversation and learn from your preferences.
-                    <br><br>Just tell me what kind of website you want to build!
+```
+<div class="main-container">
+    <div class="chat-container">
+        <div class="chat-header">
+            💬 AI Assistant - Tell me what website you want to create!
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message">
+                <h3>Welcome to AI Website Builder! 🎨</h3>
+                <p>I'm your creative AI assistant that can build complete websites for you. Just tell me what you want to create!</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card" onclick="sendPrompt('Create a modern portfolio website with dark theme')">
+                        📱 Portfolio Site
+                    </div>
+                    <div class="feature-card" onclick="sendPrompt('Build a restaurant website with menu and contact form')">
+                        🍕 Restaurant Site
+                    </div>
+                    <div class="feature-card" onclick="sendPrompt('Create a landing page for a tech startup')">
+                        💼 Business Landing
+                    </div>
+                    <div class="feature-card" onclick="sendPrompt('Build a blog website with article layout')">
+                        📝 Blog Site
+                    </div>
                 </div>
-            </div>
-
-            <div class="templates">
-                <div class="template-btn" onclick="useTemplate('portfolio')">🎨 Portfolio</div>
-                <div class="template-btn" onclick="useTemplate('business')">💼 Business</div>
-                <div class="template-btn" onclick="useTemplate('blog')">📝 Blog</div>
-                <div class="template-btn" onclick="useTemplate('ecommerce')">🛍️ E-commerce</div>
-                <div class="template-btn" onclick="useTemplate('landing')">🚀 Landing Page</div>
-            </div>
-
-            <div class="input-area">
-                <input type="text" class="input-field" id="userInput" placeholder="Describe your website idea..." onkeypress="handleKeyPress(event)">
-                <button class="send-btn" onclick="sendMessage()">Send</button>
             </div>
         </div>
-
-        <div class="preview-panel">
-            <div class="preview-header">
-                <h3>Live Preview</h3>
-                <div class="action-buttons">
-                    <button class="action-btn code-btn" onclick="showCode()">View Code</button>
-                    <button class="action-btn download-btn" onclick="downloadWebsite()">Download</button>
-                    <button class="action-btn clear-btn" onclick="clearPreview()">Clear</button>
-                </div>
-            </div>
-            <div class="preview-frame">
-                <iframe class="preview-iframe" id="previewFrame" srcdoc="<div style='display: flex; align-items: center; justify-content: center; height: 100vh; font-family: Arial; color: #666;'><div style='text-align: center;'><h2>🎨 Your website will appear here</h2><p>Start chatting to create amazing websites!</p></div></div>"></iframe>
-            </div>
+        <div class="chat-input-container">
+            <input 
+                type="text" 
+                class="chat-input" 
+                id="chatInput" 
+                placeholder="Describe the website you want me to create..."
+                onkeypress="handleKeyPress(event)"
+            >
+            <button class="send-btn" onclick="sendMessage()">Send 🚀</button>
         </div>
     </div>
 
-    <script>
-        // Memory system (in-memory storage)
-        let conversationMemory = [];
-        let userPreferences = {};
-        let generatedWebsites = [];
-        let currentWebsiteCode = '';
+    <div class="preview-container">
+        <div class="preview-header">
+            <span>🖥️ Live Preview</span>
+            <div class="preview-controls">
+                <button class="control-btn" onclick="refreshPreview()" title="Refresh">↻</button>
+                <button class="control-btn" onclick="fullscreenPreview()" title="Fullscreen">⛶</button>
+            </div>
+        </div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generating your website...</p>
+        </div>
+        <iframe class="preview-frame" id="previewFrame" src="about:blank"></iframe>
+    </div>
+</div>
 
-        // AI personality and knowledge base
-        const aiPersonality = {
-            name: "WebCraft AI",
-            traits: ["creative", "helpful", "detail-oriented", "modern"],
-            expertise: ["HTML5", "CSS3", "JavaScript", "Responsive Design", "UI/UX"]
-        };
+<script>
+    let conversationHistory = [];
+    let currentWebsiteCode = '';
 
-        // Website templates and patterns
-        const websitePatterns = {
-            portfolio: {
-                colors: ["#2c3e50", "#3498db", "#e74c3c", "#f39c12"],
-                sections: ["hero", "about", "projects", "skills", "contact"],
-                style: "modern minimalist"
-            },
-            business: {
-                colors: ["#1e3a8a", "#3b82f6", "#10b981", "#f59e0b"],
-                sections: ["header", "services", "about", "testimonials", "contact"],
-                style: "professional corporate"
-            },
-            blog: {
-                colors: ["#374151", "#6b7280", "#f3f4f6", "#ef4444"],
-                sections: ["header", "featured", "articles", "sidebar", "footer"],
-                style: "clean editorial"
-            },
-            ecommerce: {
-                colors: ["#7c3aed", "#a855f7", "#ec4899", "#f97316"],
-                sections: ["navbar", "hero", "products", "features", "footer"],
-                style: "vibrant modern"
-            },
-            landing: {
-                colors: ["#059669", "#10b981", "#34d399", "#fbbf24"],
-                sections: ["hero", "features", "cta", "testimonials", "footer"],
-                style: "conversion-focused"
-            }
-        };
+    // Load conversation history from localStorage
+    function loadConversationHistory() {
+        const saved = localStorage.getItem('aiWebBuilderHistory');
+        if (saved) {
+            conversationHistory = JSON.parse(saved);
+            displayConversationHistory();
+        }
+    }
 
-        function addToMemory(userInput, aiResponse) {
-            conversationMemory.push({
-                timestamp: new Date().toISOString(),
-                user: userInput,
-                ai: aiResponse,
-                context: extractContext(userInput)
-            });
-            updateMemoryIndicator();
+    // Save conversation to localStorage
+    function saveConversationHistory() {
+        localStorage.setItem('aiWebBuilderHistory', JSON.stringify(conversationHistory));
+    }
+
+    // Display conversation history
+    function displayConversationHistory() {
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.innerHTML = '';
+        
+        if (conversationHistory.length === 0) {
+            chatMessages.innerHTML = `
+                <div class="welcome-message">
+                    <h3>Welcome to AI Website Builder! 🎨</h3>
+                    <p>I'm your creative AI assistant that can build complete websites for you. Just tell me what you want to create!</p>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card" onclick="sendPrompt('Create a modern portfolio website with dark theme')">
+                            📱 Portfolio Site
+                        </div>
+                        <div class="feature-card" onclick="sendPrompt('Build a restaurant website with menu and contact form')">
+                            🍕 Restaurant Site
+                        </div>
+                        <div class="feature-card" onclick="sendPrompt('Create a landing page for a tech startup')">
+                            💼 Business Landing
+                        </div>
+                        <div class="feature-card" onclick="sendPrompt('Build a blog website with article layout')">
+                            📝 Blog Site
+                        </div>
+                    </div>
+                </div>
+            `;
+            return;
         }
 
-        function extractContext(input) {
-            const keywords = input.toLowerCase().match(/\b(portfolio|business|blog|ecommerce|landing|modern|vintage|colorful|minimal|dark|light)\b/g) || [];
-            return keywords;
+        conversationHistory.forEach(message => {
+            addMessageToChat(message.content, message.type, false);
+        });
+    }
+
+    // Add message to chat
+    function addMessageToChat(content, type, save = true) {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}-message`;
+        
+        if (type === 'ai' && content.includes('```html')) {
+            // Format code in AI messages
+            content = content.replace(/```html\n([\s\S]*?)```/g, '<div class="code-block">$1</div>');
+        }
+        
+        messageDiv.innerHTML = content;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        if (save) {
+            conversationHistory.push({ content, type, timestamp: Date.now() });
+            saveConversationHistory();
+        }
+    }
+
+    // Send message
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        
+        if (!message) return;
+
+        addMessageToChat(message, 'user');
+        input.value = '';
+
+        // Show loading
+        document.getElementById('loading').style.display = 'block';
+
+        // Simulate AI response
+        setTimeout(() => {
+            generateAIResponse(message);
+        }, 1000);
+    }
+
+    // Generate AI response
+    function generateAIResponse(userMessage) {
+        let response = '';
+        let websiteCode = '';
+
+        // Analyze user request and generate appropriate response
+        if (userMessage.toLowerCase().includes('portfolio')) {
+            response = "I'll create a modern portfolio website for you! This will include a hero section, about me, projects showcase, and contact form.";
+            websiteCode = generatePortfolioWebsite();
+        } else if (userMessage.toLowerCase().includes('restaurant')) {
+            response = "Creating a beautiful restaurant website with menu display, reservation system, and contact information!";
+            websiteCode = generateRestaurantWebsite();
+        } else if (userMessage.toLowerCase().includes('landing')) {
+            response = "Building a high-converting landing page for your business with modern design and call-to-action buttons!";
+            websiteCode = generateLandingPage();
+        } else if (userMessage.toLowerCase().includes('blog')) {
+            response = "Generating a clean blog website with article layout, sidebar, and responsive design!";
+            websiteCode = generateBlogWebsite();
+        } else if (userMessage.toLowerCase().includes('ecommerce') || userMessage.toLowerCase().includes('shop')) {
+            response = "Creating an e-commerce website with product grid, shopping cart, and checkout process!";
+            websiteCode = generateEcommerceWebsite();
+        } else {
+            response = "I'll create a custom website based on your requirements! Let me build something amazing for you.";
+            websiteCode = generateCustomWebsite(userMessage);
         }
 
-        function updateMemoryIndicator() {
-            const indicator = document.getElementById('memoryIndicator');
-            const memoryCount = conversationMemory.length;
-            const contexts = conversationMemory.map(m => m.context).flat();
-            const uniqueContexts = [...new Set(contexts)];
-            
-            indicator.innerHTML = `💾 Memory: ${memoryCount} interactions | Learned preferences: ${uniqueContexts.join(', ') || 'none yet'}`;
-        }
+        // Hide loading
+        document.getElementById('loading').style.display = 'none';
 
-        function addMessage(message, isUser = false) {
-            const chatHistory = document.getElementById('chatHistory');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
-            messageDiv.innerHTML = message;
-            chatHistory.appendChild(messageDiv);
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-        }
+        // Add AI response
+        addMessageToChat(response + `<div class="code-block">Generated complete HTML, CSS, and JavaScript code for your website!</div>`, 'ai');
 
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const userMessage = input.value.trim();
-            
-            if (!userMessage) return;
-            
-            addMessage(userMessage, true);
-            input.value = '';
-            
-            // Show thinking animation
-            const thinkingDiv = document.createElement('div');
-            thinkingDiv.className = 'message ai-message thinking';
-            thinkingDiv.innerHTML = '🤔 Analyzing your request and generating website...';
-            document.getElementById('chatHistory').appendChild(thinkingDiv);
-            
-            setTimeout(() => {
-                thinkingDiv.remove();
-                const aiResponse = processUserRequest(userMessage);
-                addMessage(aiResponse);
-                addToMemory(userMessage, aiResponse);
-            }, 1500);
-        }
+        // Update preview
+        currentWebsiteCode = websiteCode;
+        updatePreview(websiteCode);
+    }
 
-        function processUserRequest(userInput) {
-            const input = userInput.toLowerCase();
-            let websiteCode = '';
-            let response = '';
+    // Generate different types of websites
+    function generatePortfolioWebsite() {
+        return `<!DOCTYPE html>
+```
 
-            // Analyze user input for website type and features
-            if (input.includes('portfolio') || input.includes('personal website')) {
-                websiteCode = generatePortfolioSite(userInput);
-                response = "🎨 I've created a stunning portfolio website for you! It features a modern design with smooth animations, responsive layout, and sections for showcasing your work.";
-            } else if (input.includes('business') || input.includes('company')) {
-                websiteCode = generateBusinessSite(userInput);
-                response = "💼 I've built a professional business website with a corporate design, service sections, and contact forms. Perfect for establishing your business presence online!";
-            } else if (input.includes('blog') || input.includes('article')) {
-                websiteCode = generateBlogSite(userInput);
-                response = "📝 Your blog website is ready! It includes a clean layout for articles, responsive design, and easy navigation for your readers.";
-            } else if (input.includes('store') || input.includes('shop') || input.includes('ecommerce')) {
-                websiteCode = generateEcommerceSite(userInput);
-                response = "🛍️ I've created an e-commerce website with product galleries, shopping cart functionality, and a modern, conversion-focused design!";
-            } else if (input.includes('landing') || input.includes('promotional')) {
-                websiteCode = generateLandingPage(userInput);
-                response = "🚀 Your landing page is live! It's optimized for conversions with compelling CTAs, testimonials, and a focus on your main offering.";
-            } else {
-                // Smart content analysis
-                websiteCode = generateSmartWebsite(userInput);
-                response = "✨ I've analyzed your request and created a custom website tailored to your needs. The design incorporates modern web standards and interactive elements!";
-            }
-
-            updatePreview(websiteCode);
-            currentWebsiteCode = websiteCode;
-            generatedWebsites.push({
-                timestamp: new Date().toISOString(),
-                request: userInput,
-                code: websiteCode
-            });
-
-            return response;
-        }
-
-        function generatePortfolioSite(userInput) {
-            const colors = getColorScheme(userInput);
-            return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Portfolio</title>
+    <title>John Doe - Portfolio</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Arial', sans-serif; 
-            line-height: 1.6; 
-            background: linear-gradient(135deg, ${colors[0]}, ${colors[1]});
-            color: #333;
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; }
+        .hero { height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; text-align: center; color: white; }
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
+        .btn { display: inline-block; padding: 12px 30px; background: #ff6b6b; color: white; text-decoration: none; border-radius: 25px; transition: transform 0.3s; }
+        .btn:hover { transform: translateY(-3px); }
+        .section { padding: 80px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .project { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .project:hover { transform: translateY(-10px); }
+        .contact { background: #f8f9fa; }
+        .contact form { max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; }
+        h2 { text-align: center; margin-bottom: 3rem; font-size: 2.5rem; }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div>
+            <h1>John Doe</h1>
+            <p>Full Stack Developer & UI/UX Designer</p>
+            <a href="#projects" class="btn">View My Work</a>
+        </div>
+    </section>
+
+```
+<section id="projects" class="section">
+    <div class="container">
+        <h2>My Projects</h2>
+        <div class="projects">
+            <div class="project">
+                <h3>E-Commerce Platform</h3>
+                <p>Modern e-commerce solution built with React and Node.js</p>
+            </div>
+            <div class="project">
+                <h3>Task Management App</h3>
+                <p>Productivity app with real-time collaboration features</p>
+            </div>
+            <div class="project">
+                <h3>Weather Dashboard</h3>
+                <p>Beautiful weather app with data visualization</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="contact section">
+    <div class="container">
+        <h2>Get In Touch</h2>
+        <form>
+            <div class="form-group">
+                <input type="text" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+                <textarea rows="5" placeholder="Your Message" required></textarea>
+            </div>
+            <button type="submit" class="btn">Send Message</button>
+        </form>
+    </div>
+</section>
+
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+```
+
+</body>
+</html>`;
         }
-        .hero { 
-            height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-            color: white;
-            position: relative;
-            overflow: hidden;
+
+```
+    function generateRestaurantWebsite() {
+        return `<!DOCTYPE html>
+```
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicious Restaurant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', serif; line-height: 1.6; color: #333; }
+        .header { background: #2c3e50; color: white; padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { color: white; text-decoration: none; transition: color 0.3s; }
+        .nav-links a:hover { color: #e74c3c; }
+        .hero { height: 100vh; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23e74c3c" width="1200" height="800"/><text x="600" y="400" text-anchor="middle" fill="white" font-size="48">🍽️</text></svg>'); background-size: cover; display: flex; align-items: center; justify-content: center; text-align: center; color: white; margin-top: 60px; }
+        .hero-content h1 { font-size: 4rem; margin-bottom: 1rem; }
+        .hero-content p { font-size: 1.3rem; margin-bottom: 2rem; }
+        .btn { display: inline-block; padding: 15px 40px; background: #e74c3c; color: white; text-decoration: none; border-radius: 30px; transition: all 0.3s; }
+        .btn:hover { background: #c0392b; transform: translateY(-3px); }
+        .section { padding: 80px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .menu-item { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; }
+        .menu-item h3 { color: #e74c3c; margin-bottom: 1rem; }
+        .price { font-size: 1.5rem; font-weight: bold; color: #27ae60; }
+        h2 { text-align: center; margin-bottom: 3rem; font-size: 2.5rem; color: #2c3e50; }
+        .menu { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">🍽️ Delicious</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+```
+<section id="home" class="hero">
+    <div class="hero-content">
+        <h1>Welcome to Delicious</h1>
+        <p>Experience the finest dining with our exquisite cuisine</p>
+        <a href="#menu" class="btn">View Menu</a>
+    </div>
+</section>
+
+<section id="menu" class="section menu">
+    <div class="container">
+        <h2>Our Menu</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <h3>🥗 Caesar Salad</h3>
+                <p>Fresh romaine lettuce with our signature dressing</p>
+                <div class="price">$12.99</div>
+            </div>
+            <div class="menu-item">
+                <h3>🍝 Pasta Carbonara</h3>
+                <p>Creamy pasta with bacon and parmesan cheese</p>
+                <div class="price">$18.99</div>
+            </div>
+            <div class="menu-item">
+                <h3>🥩 Grilled Steak</h3>
+                <p>Premium beef steak grilled to perfection</p>
+                <div class="price">$24.99</div>
+            </div>
+            <div class="menu-item">
+                <h3>🍰 Chocolate Cake</h3>
+                <p>Rich chocolate cake with vanilla ice cream</p>
+                <div class="price">$8.99</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+    
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('.header');
+        if (window.scrollY > 100) {
+            header.style.background = 'rgba(44, 62, 80, 0.95)';
+        } else {
+            header.style.background = '#2c3e50';
         }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.3);
+    });
+</script>
+```
+
+</body>
+</html>`;
         }
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            animation: fadeInUp 1s ease-out;
-        }
-        .hero h1 { 
-            font-size: 4em; 
-            margin-bottom: 20px; 
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .hero p { font-size: 1.5em; margin-bottom: 30px; }
-        .btn { 
-            display: inline-block; 
-            padding: 15px 30px; 
-            background: ${colors[2]}; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 50px; 
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        .btn:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
-        .section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
-        .projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .project { 
-            background:
+
+```
+    function generateLandingPage() {
+        return `<!DOCTYPE html>
+```
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFlow - Revolutionary Business Solution</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; overflow-x: hidden; }
+        .hero { height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; text-align: center; color: white; position: relative; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>') repeat; }
+        .hero-content { position: relative; z-index: 1; max-width: 800px; padding: 0 20px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; animation: fadeInUp 1s ease; }
+        .hero p { font-size: 1.3rem; margin-bottom: 2rem; animation: fadeInUp 1s ease 0.3s both; }
+        .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fadeInUp 1s ease 0.6s both; }
+        .btn { display: inline-block; padding: 15px 30px; text-decoration: none; border-radius: 50px; font-weight: bold; transition: all 0.3s; }
+        .btn-primary { background: #ff6b6b; color: white; }
+        .btn-secondary { background: transparent; color: white; border: 2px solid white; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .features { padding: 100px 0; background: #f8f9fa; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 3rem; }
+        .feature { text-align: center; padding: 2rem; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .feature:hover { transform: translateY(-10px); }
+        .feature-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .feature h3 { margin-bottom: 1rem; color: #333; }
+        .stats { padding: 80px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text
