@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>WebAI Designer</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>🌟 WebAI Designer</h1>
-  <textarea id="input" placeholder="Describe your website (e.g. color: blue; title: Portfolio; features: contact form)..."></textarea>
-  <button id="generateBtn">Generate</button>
-  <button id="clearBtn">Clear Memory</button>
+  <h1>🎨 WebAI Designer</h1>
+  <textarea id="input" placeholder="Describe your website..."></textarea>
+  <div>
+    <input type="file" id="fileInput" multiple>
+    <button id="generate">Generate Site</button>
+    <button id="clear">Clear Memory</button>
+  </div>
 
-  <h2>Preview</h2>
-  <iframe id="preview"></iframe>
+  <div class="tabs">
+    <button onclick="switchTab('preview')">Preview</button>
+    <button onclick="switchTab('html')">HTML</button>
+    <button onclick="switchTab('css')">CSS</button>
+    <button onclick="switchTab('js')">JS</button>
+  </div>
 
-  <script src="script.js"></script>
+  <div id="content">
+    <iframe id="previewTab"></iframe>
+    <pre id="htmlTab" class="hidden"></pre>
+    <pre id="cssTab" class="hidden"></pre>
+    <pre id="jsTab" class="hidden"></pre>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
