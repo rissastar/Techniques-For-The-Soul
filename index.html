@@ -1,109 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Grounding Technique Spinner</title>
+  <meta charset="UTF-8">
+  <title>AI Website Designer</title>
   <style>
-    /* --- Styles --- */
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #2c3e50, #4ca1af);
-      color: white;
-      text-align: center;
-      padding: 2em;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
       margin: 0;
+      padding: 20px;
     }
-    h1 { font-size: 2em; margin-bottom: 1em; }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    textarea, pre {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-family: monospace;
+    }
     button {
-      background: #ff6ec4; border: none;
-      padding: 1em 2em; font-size: 1.2em;
-      color: white; border-radius: 10px;
-      cursor: pointer; transition: background 0.3s;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
-    button:hover { background: #ff1493; }
-    #popupCard {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: flex; align-items: center;
-      justify-content: center; z-index: 1000;
+    button:hover {
+      background: #0056b3;
     }
-    .hidden { display: none; }
-    .card-content {
-      background: #fff; color: #333;
-      border-radius: 15px; padding: 2em;
-      max-width: 90%; width: 350px; text-align: left;
-      box-shadow: 0 0 25px rgba(0,0,0,0.6);
-      position: relative;
-    }
-    #closePopup {
-      position: absolute; top: 10px; right: 15px;
-      font-size: 24px; cursor: pointer; color: #444;
-    }
-    #techniqueImage {
-      width: 100%; height: auto;
-      border-radius: 10px; margin: 1em 0;
+    .outputs {
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>🌙 Grounding Technique Spinner</h1>
-  <button id="spinButton">🎡 Spin the Wheel</button>
+  <div class="container">
+    <h1>🧠 AI Website Designer</h1>
+    <p>Describe the website you want:</p>
+    <textarea id="prompt" rows="4" placeholder="Example: A portfolio site with a dark theme and contact form"></textarea>
+    <br>
+    <button onclick="generateSite()">Generate Website</button>
 
-  <div id="popupCard" class="hidden">
-    <div class="card-content">
-      <span id="closePopup">&times;</span>
-      <h2 id="techniqueTitle"></h2>
-      <img id="techniqueImage" alt="Technique Image" />
-      <p id="techniqueExplanation"></p>
+    <div class="outputs">
+      <h3>Generated HTML</h3>
+      <pre id="htmlCode"></pre>
+
+      <h3>Generated CSS</h3>
+      <pre id="cssCode"></pre>
+
+      <h3>Generated JavaScript</h3>
+      <pre id="jsCode"></pre>
     </div>
   </div>
 
   <script>
-    /* --- Data --- */
-    const techniques = [
-      { title: "5-4-3-2-1 Technique", explanation: "List 5 things you see, 4 you feel, 3 you hear, 2 you smell, and 1 you taste. Grounding via senses.", image: "https://i.imgur.com/LZfI2dE.jpg" },
-      { title: "Box Breathing", explanation: "Inhale 4s, hold 4s, exhale 4s, hold 4s. Calms the nervous system.", image: "https://i.imgur.com/OdL0XPt.png" },
-      { title: "Gratitude Trio", explanation: "Name 3 things you're thankful for today. A mindset shift to the present.", image: "https://i.imgur.com/2T6tGo3.jpg" },
-      { title: "Texture Touch", explanation: "Touch 3 different textures and describe how each feels to your body.", image: "https://i.imgur.com/VomGcqv.jpg" },
-      { title: "Imaginary Vacation", explanation: "Visualize a peaceful place. Engage all senses for a mental getaway.", image: "https://i.imgur.com/KGH8zNZ.jpg" },
-      { title: "Color Hunt", explanation: "Pick a color and find 5 objects that match. Brings focus to here-and-now.", image: "https://i.imgur.com/EUnIZDk.jpg" },
-      { title: "Belly Breaths", explanation: "Hand on belly, breathe deeply so it rises slowly—repeat until calm.", image: "https://i.imgur.com/g1OyY4T.jpg" },
-      { title: "Stretch & Squeeze", explanation: "Tense then release muscle groups from head to toe to release energy.", image: "https://i.imgur.com/RAIq0lK.jpg" },
-      { title: "Object Focus", explanation: "Grab something nearby. Study its details—shape, texture, weight.", image: "https://i.imgur.com/z5Eb6Rt.jpg" },
-      { title: "Mindful Drawing", explanation: "Draw free-form lines or shapes. Focus on the motion of your hand.", image: "https://i.imgur.com/fHaBNWx.jpg" },
-      { title: "Cold Water Reset", explanation: "Splash cold water on your face or hold a cool item; feel the physical shift.", image: "https://i.imgur.com/8Po2FPF.jpg" },
-      { title: "Finger Tapping", explanation: "Tap thumb to each finger in rhythm while breathing slowly.", image: "https://i.imgur.com/EzNhjWu.jpg" },
-      { title: "Bedtime Body Scan", explanation: "Scan your body from toes to head, relaxing each part.", image: "https://i.imgur.com/qyKvyaF.jpg" },
-      { title: "Scented Calm", explanation: "Smell a soothing scent (lavender, mint...). Inhale slowly & mindfully.", image: "https://i.imgur.com/wjF9IqA.jpg" },
-      { title: "Name the Sounds", explanation: "List all the sounds you hear around you—tiny and distant.", image: "https://i.imgur.com/t4V9xFz.jpg" },
-    ];
+    function generateSite() {
+      const prompt = document.getElementById('prompt').value.toLowerCase();
 
-    /* --- Logic --- */
-    const spinButton = document.getElementById("spinButton");
-    const popup = document.getElementById("popupCard");
-    const closeBtn = document.getElementById("closePopup");
-    const imgEl = document.getElementById("techniqueImage");
-    const titleEl = document.getElementById("techniqueTitle");
-    const expEl = document.getElementById("techniqueExplanation");
+      let html = '', css = '', js = '';
 
-    // Spin action
-    spinButton.addEventListener("click", () => {
-      const rand = techniques[Math.floor(Math.random() * techniques.length)];
-      titleEl.textContent = rand.title;
-      expEl.textContent = rand.explanation;
-      imgEl.src = rand.image;
-      popup.classList.remove("hidden");
-    });
+      // Simulated AI logic 🤖
+      if (prompt.includes('portfolio')) {
+        html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Welcome to My Portfolio</h1>
+  </header>
+  <section>
+    <p>This is a simple portfolio site.</p>
+    <button onclick="sayHi()">Click Me</button>
+  </section>
+  <script src="script.js"></script>
+</body>
+</html>`;
 
-    // Close popup
-    closeBtn.addEventListener("click", () => popup.classList.add("hidden"));
+        css = `
+body {
+  background-color: #111;
+  color: #eee;
+  font-family: sans-serif;
+}
+header {
+  text-align: center;
+  padding: 50px;
+  background-color: #222;
+}
+button {
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}`;
 
-    // Optional: close by clicking outside card
-    popup.addEventListener("click", e => {
-      if (e.target === popup) popup.classList.add("hidden");
-    });
+        js = `
+function sayHi() {
+  alert("Hi from your portfolio site!");
+}`;
+      } else {
+        html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Site</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Hello World!</h1>
+  <script src="script.js"></script>
+</body>
+</html>`;
+
+        css = `
+body {
+  background: white;
+  color: black;
+  font-family: Arial;
+}
+h1 {
+  text-align: center;
+  margin-top: 100px;
+}`;
+
+        js = `console.log("Simple site loaded");`;
+      }
+
+      document.getElementById('htmlCode').textContent = html.trim();
+      document.getElementById('cssCode').textContent = css.trim();
+      document.getElementById('jsCode').textContent = js.trim();
+    }
   </script>
 </body>
 </html>
