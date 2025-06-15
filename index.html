@@ -2,32 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>WebAI Designer</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Website Designer</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>🎨 WebAI Designer</h1>
-  <textarea id="input" placeholder="Describe your website..."></textarea>
-  <div>
-    <input type="file" id="fileInput" multiple>
-    <button id="generate">Generate Site</button>
-    <button id="clear">Clear Memory</button>
-  </div>
-
-  <div class="tabs">
-    <button onclick="switchTab('preview')">Preview</button>
-    <button onclick="switchTab('html')">HTML</button>
-    <button onclick="switchTab('css')">CSS</button>
-    <button onclick="switchTab('js')">JS</button>
-  </div>
-
-  <div id="content">
-    <iframe id="previewTab"></iframe>
-    <pre id="htmlTab" class="hidden"></pre>
-    <pre id="cssTab" class="hidden"></pre>
-    <pre id="jsTab" class="hidden"></pre>
-  </div>
-
-  <script src="app.js"></script>
+  <header>
+    <h1>AI Website Designer</h1>
+    <p>Create full websites with AI power – for free</p>
+  </header>
+  <main>
+    <section class="prompt-section">
+      <textarea id="promptInput" placeholder="Describe the website you want to build..."></textarea>
+      <button id="generateBtn">Generate Website</button>
+    </section>
+    <section class="output-section">
+      <div class="tabs">
+        <button class="tab" onclick="showTab('html')">HTML</button>
+        <button class="tab" onclick="showTab('css')">CSS</button>
+        <button class="tab" onclick="showTab('js')">JS</button>
+        <button class="tab" onclick="showTab('preview')">Live Preview</button>
+      </div>
+      <div id="htmlOutput" class="code-box" contenteditable="true"></div>
+      <div id="cssOutput" class="code-box hidden" contenteditable="true"></div>
+      <div id="jsOutput" class="code-box hidden" contenteditable="true"></div>
+      <iframe id="livePreview" class="code-box hidden"></iframe>
+    </section>
+  </main>
+  <footer>
+    <p>AI-powered by your imagination. Local storage keeps your work safe.</p>
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>
