@@ -1,151 +1,1012 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AI Website Designer</title>
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Website Designer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
     }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
+
     .container {
-      max-width: 1000px;
-      margin: auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 1200px;
+        overflow: hidden;
+        animation: fadeIn 0.8s ease-out;
     }
-    textarea, pre {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      font-family: monospace;
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
     }
-    button {
-      padding: 10px 20px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+
+    .header {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
     }
-    button:hover {
-      background: #0056b3;
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: rotate 20s infinite linear;
     }
-    .outputs {
-      margin-top: 20px;
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
     }
-  </style>
+
+    .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+    }
+
+    .main-content {
+        display: flex;
+        min-height: 600px;
+    }
+
+    .sidebar {
+        background: #f8f9fa;
+        width: 300px;
+        padding: 30px 20px;
+        border-right: 1px solid #e9ecef;
+    }
+
+    .design-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #495057;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 12px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .generate-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .generate-btn:active {
+        transform: translateY(0);
+    }
+
+    .generate-btn.loading {
+        pointer-events: none;
+    }
+
+    .generate-btn.loading::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid transparent;
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s infinite linear;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .preview-area {
+        flex: 1;
+        padding: 30px;
+        background: white;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .preview-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .preview-title {
+        font-size: 1.5em;
+        color: #495057;
+        font-weight: 600;
+    }
+
+    .code-toggle {
+        display: flex;
+        gap: 10px;
+    }
+
+    .toggle-btn {
+        padding: 8px 16px;
+        border: 2px solid #667eea;
+        border-radius: 20px;
+        background: white;
+        color: #667eea;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    .toggle-btn.active {
+        background: #667eea;
+        color: white;
+    }
+
+    .preview-container {
+        flex: 1;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        background: white;
+    }
+
+    .preview-frame {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: white;
+    }
+
+    .code-editor {
+        display: none;
+        height: 100%;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        padding: 20px;
+        background: #2d3748;
+        color: #e2e8f0;
+        border: none;
+        resize: none;
+        outline: none;
+    }
+
+    .code-editor.active {
+        display: block;
+    }
+
+    .ai-thinking {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: #6c757d;
+        display: none;
+    }
+
+    .ai-thinking.active {
+        display: block;
+    }
+
+    .thinking-animation {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto 20px;
+        border: 3px solid #e9ecef;
+        border-top: 3px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s infinite linear;
+    }
+
+    .export-btn {
+        background: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .export-btn:hover {
+        background: #218838;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .main-content {
+            flex-direction: column;
+        }
+        
+        .sidebar {
+            width: 100%;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+        }
+    }
+</style>
+```
+
 </head>
 <body>
-  <div class="container">
-    <h1>🧠 AI Website Designer</h1>
-    <p>Describe the website you want:</p>
-    <textarea id="prompt" rows="4" placeholder="Example: A portfolio site with a dark theme and contact form"></textarea>
-    <br>
-    <button onclick="generateSite()">Generate Website</button>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Website Designer</h1>
+            <p>Describe your vision, and I'll create a stunning website for you!</p>
+        </div>
 
-    <div class="outputs">
-      <h3>Generated HTML</h3>
-      <pre id="htmlCode"></pre>
-
-      <h3>Generated CSS</h3>
-      <pre id="cssCode"></pre>
-
-      <h3>Generated JavaScript</h3>
-      <pre id="jsCode"></pre>
+```
+    <div class="main-content">
+        <div class="sidebar">
+            <form class="design-form" id="designForm">
+                <div class="form-group">
+                    <label for="websiteType">Website Type</label>
+                    <select id="websiteType" required>
+                        <option value="">Select type...</option>
+                        <option value="business">Business/Corporate</option>
+                        <option value="portfolio">Portfolio</option>
+                        <option value="blog">Blog</option>
+                        <option value="ecommerce">E-commerce</option>
+                        <option value="landing">Landing Page</option>
+                        <option value="restaurant">Restaurant</option>
+                        <option value="creative">Creative/Artistic</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="colorScheme">Color Scheme</label>
+                    <select id="colorScheme" required>
+                        <option value="">Choose colors...</option>
+                        <option value="blue">Blue & White</option>
+                        <option value="dark">Dark & Modern</option>
+                        <option value="green">Green & Fresh</option>
+                        <option value="purple">Purple & Elegant</option>
+                        <option value="orange">Orange & Energetic</option>
+                        <option value="minimal">Minimal & Clean</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="layout">Layout Style</label>
+                    <select id="layout" required>
+                        <option value="">Select layout...</option>
+                        <option value="modern">Modern & Sleek</option>
+                        <option value="classic">Classic & Traditional</option>
+                        <option value="creative">Creative & Unique</option>
+                        <option value="minimal">Minimal & Simple</option>
+                        <option value="magazine">Magazine Style</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="companyName">Company/Site Name</label>
+                    <input type="text" id="companyName" placeholder="Enter your company name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" rows="3" placeholder="Describe what your website is about..." required></textarea>
+                </div>
+                
+                <button type="submit" class="generate-btn" id="generateBtn">
+                    ✨ Generate Website
+                </button>
+            </form>
+        </div>
+        
+        <div class="preview-area">
+            <div class="preview-header">
+                <div class="preview-title">Preview</div>
+                <div class="code-toggle">
+                    <button type="button" class="toggle-btn active" data-view="preview">Preview</button>
+                    <button type="button" class="toggle-btn" data-view="html">HTML</button>
+                    <button type="button" class="toggle-btn" data-view="css">CSS</button>
+                    <button type="button" class="toggle-btn" data-view="js">JavaScript</button>
+                    <button type="button" class="export-btn" id="exportBtn">Export</button>
+                </div>
+            </div>
+            
+            <div class="preview-container">
+                <iframe class="preview-frame" id="previewFrame" src="about:blank"></iframe>
+                <textarea class="code-editor" id="htmlEditor" placeholder="HTML code will appear here..."></textarea>
+                <textarea class="code-editor" id="cssEditor" placeholder="CSS code will appear here..."></textarea>
+                <textarea class="code-editor" id="jsEditor" placeholder="JavaScript code will appear here..."></textarea>
+                
+                <div class="ai-thinking" id="aiThinking">
+                    <div class="thinking-animation"></div>
+                    <p>AI is designing your website...</p>
+                    <p><small>Analyzing requirements and generating code</small></p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
 
-  <script>
-    function generateSite() {
-      const prompt = document.getElementById('prompt').value.toLowerCase();
+<script>
+    class WebsiteAI {
+        constructor() {
+            this.initEventListeners();
+            this.templates = this.initTemplates();
+            this.currentCode = { html: '', css: '', js: '' };
+        }
 
-      let html = '', css = '', js = '';
+        initEventListeners() {
+            document.getElementById('designForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.generateWebsite();
+            });
 
-      // Simulated AI logic 🤖
-      if (prompt.includes('portfolio')) {
-        html = `
-<!DOCTYPE html>
-<html>
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    this.switchView(e.target.dataset.view);
+                });
+            });
+
+            document.getElementById('exportBtn').addEventListener('click', () => {
+                this.exportCode();
+            });
+
+            // Live code editing
+            ['htmlEditor', 'cssEditor', 'jsEditor'].forEach(id => {
+                document.getElementById(id).addEventListener('input', () => {
+                    this.updatePreview();
+                });
+            });
+        }
+
+        initTemplates() {
+            return {
+                business: {
+                    blue: {
+                        html: `<!DOCTYPE html>
+```
+
+<html lang="en">
 <head>
-  <title>My Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{companyName}}</title>
+    <style>{{css}}</style>
 </head>
 <body>
-  <header>
-    <h1>Welcome to My Portfolio</h1>
-  </header>
-  <section>
-    <p>This is a simple portfolio site.</p>
-    <button onclick="sayHi()">Click Me</button>
-  </section>
-  <script src="script.js"></script>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">{{companyName}}</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+```
+<main>
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Welcome to {{companyName}}</h1>
+            <p>{{description}}</p>
+            <button class="cta-btn">Get Started</button>
+        </div>
+    </section>
+    
+    <section class="about" id="about">
+        <div class="container">
+            <h2>About Us</h2>
+            <p>We are dedicated to providing exceptional services and solutions for our clients.</p>
+        </div>
+    </section>
+    
+    <section class="services" id="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="service-grid">
+                <div class="service-card">
+                    <h3>Service 1</h3>
+                    <p>Professional service description</p>
+                </div>
+                <div class="service-card">
+                    <h3>Service 2</h3>
+                    <p>Quality solutions for your needs</p>
+                </div>
+                <div class="service-card">
+                    <h3>Service 3</h3>
+                    <p>Innovative approaches to success</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2025 {{companyName}}. All rights reserved.</p>
+    </div>
+</footer>
+<script>{{js}}</script>
+```
+
 </body>
-</html>`;
+</html>`,
+                            css: `* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        css = `
 body {
-  background-color: #111;
-  color: #eee;
-  font-family: sans-serif;
+font-family: ‘Arial’, sans-serif;
+line-height: 1.6;
+color: #333;
 }
-header {
-  text-align: center;
-  padding: 50px;
-  background-color: #222;
-}
-button {
-  padding: 10px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-}`;
 
-        js = `
-function sayHi() {
-  alert("Hi from your portfolio site!");
-}`;
-      } else {
-        html = `
-<!DOCTYPE html>
-<html>
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 20px;
+}
+
+.header {
+background: #2c3e50;
+color: white;
+padding: 1rem 0;
+position: fixed;
+width: 100%;
+top: 0;
+z-index: 1000;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav {
+display: flex;
+justify-content: space-between;
+align-items: center;
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 20px;
+}
+
+.logo {
+font-size: 1.5rem;
+font-weight: bold;
+}
+
+.nav-links {
+display: flex;
+list-style: none;
+gap: 2rem;
+}
+
+.nav-links a {
+color: white;
+text-decoration: none;
+transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+color: #3498db;
+}
+
+.hero {
+background: linear-gradient(135deg, #3498db, #2c3e50);
+color: white;
+padding: 150px 0 100px;
+text-align: center;
+}
+
+.hero-content h1 {
+font-size: 3rem;
+margin-bottom: 1rem;
+animation: fadeInUp 1s ease;
+}
+
+.hero-content p {
+font-size: 1.2rem;
+margin-bottom: 2rem;
+animation: fadeInUp 1s ease 0.2s both;
+}
+
+.cta-btn {
+background: #e74c3c;
+color: white;
+padding: 15px 30px;
+border: none;
+border-radius: 50px;
+font-size: 1.1rem;
+cursor: pointer;
+transition: all 0.3s ease;
+animation: fadeInUp 1s ease 0.4s both;
+}
+
+.cta-btn:hover {
+background: #c0392b;
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+}
+
+.about, .services {
+padding: 80px 0;
+}
+
+.about {
+background: #f8f9fa;
+}
+
+.about h2, .services h2 {
+text-align: center;
+margin-bottom: 3rem;
+font-size: 2.5rem;
+color: #2c3e50;
+}
+
+.service-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 2rem;
+margin-top: 3rem;
+}
+
+.service-card {
+background: white;
+padding: 2rem;
+border-radius: 10px;
+box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+transform: translateY(-5px);
+}
+
+.service-card h3 {
+color: #3498db;
+margin-bottom: 1rem;
+}
+
+.footer {
+background: #2c3e50;
+color: white;
+text-align: center;
+padding: 2rem 0;
+}
+
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(30px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+@media (max-width: 768px) {
+.nav {
+flex-direction: column;
+gap: 1rem;
+}
+
+```
+.nav-links {
+    gap: 1rem;
+}
+
+.hero-content h1 {
+    font-size: 2rem;
+}
+
+.service-grid {
+    grid-template-columns: 1fr;
+}
+```
+
+}`, js: `// Smooth scrolling for navigation links
+document.querySelectorAll(‘a[href^=”#”]’).forEach(anchor => {
+anchor.addEventListener(‘click’, function (e) {
+e.preventDefault();
+const target = document.querySelector(this.getAttribute(‘href’));
+if (target) {
+target.scrollIntoView({
+behavior: ‘smooth’,
+block: ‘start’
+});
+}
+});
+});
+
+// Header background change on scroll
+window.addEventListener(‘scroll’, () => {
+const header = document.querySelector(’.header’);
+if (window.scrollY > 100) {
+header.style.background = ‘rgba(44, 62, 80, 0.95)’;
+header.style.backdropFilter = ‘blur(10px)’;
+} else {
+header.style.background = ‘#2c3e50’;
+header.style.backdropFilter = ‘none’;
+}
+});
+
+// Animate elements on scroll
+const observerOptions = {
+threshold: 0.1,
+rootMargin: ‘0px 0px -50px 0px’
+};
+
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.style.animation = ‘fadeInUp 0.8s ease forwards’;
+}
+});
+}, observerOptions);
+
+document.querySelectorAll(’.service-card’).forEach(card => {
+observer.observe(card);
+});
+
+// CTA Button click event
+document.querySelector(’.cta-btn’).addEventListener(‘click’, () => {
+alert(‘Welcome! Ready to get started?’);
+});`} }, portfolio: { dark: { html:`<!DOCTYPE html>
+
+<html lang="en">
 <head>
-  <title>Simple Site</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{companyName}} - Portfolio</title>
+    <style>{{css}}</style>
 </head>
 <body>
-  <h1>Hello World!</h1>
-  <script src="script.js"></script>
-</body>
-</html>`;
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">{{companyName}}</div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
 
-        css = `
-body {
-  background: white;
-  color: black;
-  font-family: Arial;
+```
+<section class="hero" id="home">
+    <div class="hero-content">
+        <h1>{{companyName}}</h1>
+        <p>{{description}}</p>
+        <div class="hero-buttons">
+            <button class="btn-primary">View Work</button>
+            <button class="btn-secondary">Get in Touch</button>
+        </div>
+    </div>
+    <div class="hero-image">
+        <div class="floating-card">
+            <div class="card-content">
+                <h3>Creative Design</h3>
+                <p>Bringing ideas to life</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about" id="about">
+    <div class="container">
+        <h2>About Me</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>I'm a passionate creative professional dedicated to crafting exceptional digital experiences. With years of experience in design and development, I bring unique perspectives to every project.</p>
+                <div class="skills">
+                    <span class="skill-tag">Design</span>
+                    <span class="skill-tag">Development</span>
+                    <span class="skill-tag">Branding</span>
+                    <span class="skill-tag">Strategy</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="portfolio" id="portfolio">
+    <div class="container">
+        <h2>My Work</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item">
+                <div class="portfolio-image"></div>
+                <div class="portfolio-overlay">
+                    <h3>Project One</h3>
+                    <p>Creative Design</p>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-image"></div>
+                <div class="portfolio-overlay">
+                    <h3>Project Two</h3>
+                    <p>Web Development</p>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-image"></div>
+                <div class="portfolio-overlay">
+                    <h3>Project Three</h3>
+                    <p>Branding</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer" id="contact">
+    <div class="container">
+        <h2>Let's Work Together</h2>
+        <p>Ready to start your next project?</p>
+        <button class="btn-primary">Contact Me</button>
+    </div>
+</footer>
+
+<script>{{js}}</script>
+```
+
+</body>
+</html>`,
+                            css: `* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-h1 {
-  text-align: center;
-  margin-top: 100px;
-}`;
 
-        js = `console.log("Simple site loaded");`;
-      }
+body {
+font-family: ‘Arial’, sans-serif;
+background: #0a0a0a;
+color: #ffffff;
+line-height: 1.6;
+overflow-x: hidden;
+}
 
-      document.getElementById('htmlCode').textContent = html.trim();
-      document.getElementById('cssCode').textContent = css.trim();
-      document.getElementById('jsCode').textContent = js.trim();
-    }
-  </script>
-</body>
-</html>
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 20px;
+}
+
+.navbar {
+position: fixed;
+top: 0;
+width: 100%;
+background: rgba(10, 10, 10, 0.95);
+backdrop-filter: blur(10px);
+z-index: 1000;
+padding: 1rem 0;
+}
+
+.nav-container {
+max-width: 1200px;
+margin: 0 auto;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 0 20px;
+}
+
+.nav-logo {
+font-size: 1.5rem;
+font-weight: bold;
+color: #ff6b6b;
+}
+
+.nav-menu {
+display: flex;
+list-style: none;
+gap: 2rem;
+}
+
+.nav-menu a {
+color: #ffffff;
+text-decoration: none;
+transition: color 0.3s ease;
+position: relative;
+}
+
+.nav-menu a:hover {
+color: #ff6b6b;
+}
+
+.nav-menu a::after {
+content: ‘’;
+position: absolute;
+bottom: -5px;
+left: 0;
+width: 0;
+height: 2px;
+background: #ff6b6b;
+transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after {
+width: 100%;
+}
+
+.hero {
+min-height: 100vh;
+display: flex;
+align-items: center;
+padding: 100px 0;
+background: radial-gradient(circle at 20% 80%, #ff6b6b 0%, transparent 50%),
+radial-gradient(circle at 80% 20%, #4ecdc4 0%, transparent 50%),
+radial-gradient(circle at 40% 40%, #45b7d1 0%, transparent 50%);
+}
+
+.hero-content {
+flex: 1;
+padding: 0 50px;
+}
+
+.hero-content h1 {
+font-size: 4rem;
+margin-bottom: 1rem;
+background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+animation: slideInLeft 1s ease;
+}
+
+.hero-content p {
+font-size: 1.2rem;
+margin-bottom: 2rem;
+opacity: 0.8;
+animation: slideInLeft 1s ease 0.2s both;
+}
+
+.hero-buttons {
+display: flex;
+gap: 1rem;
+animation: slideInLeft 1s ease 0.4s both;
+}
+
+.btn-primary, .btn-secondary {
+padding: 15px 30px;
+border: none;
+border-radius: 50px;
+font-size: 1rem;
+cursor: pointer;
+transition: all 0.3s ease;
+font-weight: 600;
+}
+
+.btn-primary {
+background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+color: white;
+}
+
+.btn-secondary {
+background: transparent;
+color: #ffffff;
+border: 2px solid #ffffff;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+}
+
+.hero-image {
+flex: 1;
+display: flex;
+justify-content: center;
+align-items: center;
+position: relative;
+}
+
+.floating-card {
+background: rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(10px);
+border-radius: 20px;
+padding: 2rem;
+border: 1px solid rgba(255, 255, 255, 0.2);
+animation: float 6s ease-in-out infinite;
+}
+
+.card-content h3 {
+color: #ff6b6b;
+margin-bottom: 0.5rem;
+}
+
+.about {
+padding: 100px 0;
+background: #111111;
+}
+
+.about h2 {
+text-align: center;
+font-size: 3rem;
+margin-bottom: 3rem;
+color: #ff6b6b;
+}
+
+.about-content {
+display: flex;
+justify-content: center;
+}
+
+.about-text {
+max-width: 600px;
+text-align: center;
+}
+
+.about-text p {
