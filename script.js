@@ -1,62 +1,45 @@
-const inputEl = document.getElementById('input');
-const preview = document.getElementById('preview');
-const genBtn = document.getElementById('generateBtn');
-const clearBtn = document.getElementById('clearBtn');
-const MEMORY_KEY = 'webai_prompts';
-
-genBtn.addEventListener('click', generateSite);
-clearBtn.addEventListener('click', clearMemory);
-
-async function generateSite() {
-  const prompt = inputEl.value.trim();
-  if (!prompt) return alert("Please describe your website!");
-
-  savePrompt(prompt);
-  const memory = getMemory();
-
-  // Compose messages
-  const messages = [
-    { role: 'system', content: 'Generate a complete HTML/CSS/JS website based on user instructions. Make it well-styled, functional, and self-contained.' },
-    { role: 'user', content: prompt },
-    { role: 'assistant', content: `Here are past user prompts:\n${memory.join('\n')}` }
-  ];
-
-  try {
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        temperature: 0.8,
-        messages
-      })
-    });
-
-    const { choices } = await resp.json();
-    const htmlCode = choices[0].message.content;
-    preview.srcdoc = htmlCode;
-
-  } catch (err) {
-    console.error(err);
-    alert('Error generating site. Check console.');
+function showTab(tab) {
+  document.getElementById('htmlOutput').classList.add('hidden');
+  document.getElementById('cssOutput').classList.add('hidden');
+  document.getElementById('jsOutput').classList.add('hidden');
+  document.getElementById('livePreview').classList.add('hidden');
+  if (tab === 'html') document.getElementById('htmlOutput').classList.remove('hidden');
+  if (tab === 'css') document.getElementById('cssOutput').classList.remove('hidden');
+  if (tab === 'js') document.getElementById('jsOutput').classList.remove('hidden');
+  if (tab === 'preview') {
+    const html = document.getElementById('htmlOutput').innerText;
+    const css = document.getElementById('cssOutput').innerText;
+    const js = document.getElementById('jsOutput').innerText;
+    const previewFrame = document.getElementById('livePreview');
+    const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+    doc.open();
+    doc.write(`
+      <html><head><style>${css}</style></head>
+      <body>${html}<script>${js}<\/script></body></html>
+    `);
+    doc.close();
+    previewFrame.classList.remove('hidden');
   }
 }
 
-function savePrompt(p) {
-  const arr = getMemory();
-  arr.push(p);
-  localStorage.setItem(MEMORY_KEY, JSON.stringify(arr));
-}
+document.getElementById('generateBtn').addEventListener('click', () => {
+  const prompt = document.getElementById('promptInput').value;
+  // Fake AI generation logic (placeholder)
+  const html = "<h1>Welcome</h1><p>This is your AI-built website.</p>";
+  const css = "body { font-family: Arial; background: #f0f0f0; color: #333; }";
+  const js = "console.log('Website loaded');";
 
-function getMemory() {
-  return JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
-}
+  document.getElementById('htmlOutput').innerText = html;
+  document.getElementById('cssOutput').innerText = css;
+  document.getElementById('jsOutput').innerText = js;
 
-function clearMemory() {
-  localStorage.removeItem(MEMORY_KEY);
-  preview.srcdoc = '';
-  alert('Memory cleared!');
-}
+  localStorage.setItem('htmlOutput', html);
+  localStorage.setItem('cssOutput', css);
+  localStorage.setItem('jsOutput', js);
+});
+
+window.onload = () => {
+  document.getElementById('htmlOutput').innerText = localStorage.getItem('htmlOutput') || "";
+  document.getElementById('cssOutput').innerText = localStorage.getItem('cssOutput') || "";
+  document.getElementById('jsOutput').innerText = localStorage.getItem('jsOutput') || "";
+};
