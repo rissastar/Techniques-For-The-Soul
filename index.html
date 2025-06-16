@@ -1,19 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dante’s Fun Hub 🎉</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dante’s Ultimate Fun Hub 🎉</title>
+
+  <style>
+  /* ===== Global & Layout ===== */
+  body {
+    margin: 0; padding: 0;
+    background: #0c0c1b;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    overflow-x: hidden;
+  }
+  header {
+    background: linear-gradient(135deg, #ff00c8, #00ffd5);
+    padding: 1rem;
+    animation: headerPulse 5s infinite;
+  }
+  header h1 { margin: 0; font-size: 2rem; color: #000; text-shadow: 1px 1px #fff; }
+  header p { margin: 0.5rem 0 0; font-size: 1rem; color: #111; }
+
+  #game-area {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+    gap: 1rem; padding: 1rem;
+  }
+  #game-area button {
+    background: #00ffc3; color: #000;
+    border: none; border-radius: 12px;
+    padding: 1rem; font-size: 1rem; font-weight: bold;
+    box-shadow: 0 0 15px #00ffc3; cursor: pointer;
+    transition: transform .2s ease, background .3s ease;
+    position: relative;
+  }
+  /* Magnetic hover */
+  #game-area button:hover {
+    transform: scale(1.08) translateY(-4px);
+    background: #ff00e6; box-shadow: 0 0 20px #ff00e6;
+    color: #fff;
+  }
+
+  /* ===== Particle Canvas ===== */
+  #particle-canvas {
+    position: fixed; top:0; left:0;
+    width:100vw; height:100vh;
+    pointer-events:none; z-index:1000;
+  }
+
+  /* ===== Popup Overlay ===== */
+  .popup {
+    position: fixed; top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.9);
+    display:flex; align-items:center; justify-content:center;
+    z-index:1001; padding:1rem;
+  }
+  .popup-content {
+    position: relative;
+    background: #111; color: #fff;
+    padding: 1.5rem; border-radius: 12px;
+    max-width: 400px; width:100%;
+    box-shadow: 0 0 25px #00ffc3;
+    animation: fadeIn .3s ease, gradientBG 6s linear infinite;
+    background-size: 400% 400%;
+    background: linear-gradient(45deg,
+      #1a1a2e, #2e1a1a, #1a2e2a, #1a1f2e);
+  }
+  .close-btn {
+    position: absolute; top:8px; right:12px;
+    background:none; border:none; color:#fff; font-size:1.2rem;
+    cursor:pointer;
+  }
+
+  /* ===== Glow Buttons ===== */
+  .glow-btn {
+    background: #ff00e6; color:#fff;
+    border:none; border-radius:8px; padding:.7rem 1.2rem;
+    font-weight:700; box-shadow:0 0 15px #ff00e6;
+    cursor:pointer; transition:transform .1s ease;
+  }
+  .glow-btn:hover { transform:scale(1.05); }
+
+  /* ===== Animations ===== */
+  @keyframes headerPulse {
+    0% { box-shadow: 0 0 10px #ff00c8; }
+    50% { box-shadow: 0 0 30px #00ffd5; }
+    100% { box-shadow: 0 0 10px #ff00c8; }
+  }
+  @keyframes fadeIn {
+    from { opacity:0; transform:scale(.9); }
+    to { opacity:1; transform:scale(1); }
+  }
+  @keyframes gradientBG {
+    0% { background-position:0% 50%; }
+    50% { background-position:100% 50%; }
+    100% { background-position:0% 50%; }
+  }
+
+  </style>
 </head>
 <body>
 
-  <!-- Canvas for particle effects -->
+  <!-- Particle overlay -->
   <canvas id="particle-canvas"></canvas>
 
   <header>
     <h1>💖 Hey Dante 💖</h1>
-    <p>From Larissa: “I made this just for you — your own little dopamine rave.”</p>
+    <p>From Larissa: “Your own ultimate dopamine rave, all in one place.”</p>
   </header>
 
   <div id="game-area">
@@ -29,6 +125,226 @@
     <button onclick="showZeusCorner()">🐶 Zeus’s Corner</button>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded",()=>{
+
+    /* ===== Particles ===== */
+    const canvas=document.getElementById("particle-canvas"),
+          ctx=canvas.getContext("2d");
+    let parts=[];
+    function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+    window.addEventListener("resize",resize); resize();
+
+    class P{constructor(x,y){
+      this.x=x;this.y=y;
+      this.s=4+Math.random()*4;
+      this.vx=(Math.random()-0.5)*4;
+      this.vy=(Math.random()-1.5)*4;
+      this.col=\`hsl(\${Math.random()*360},100%,70%)\`;
+      this.l=60;
+    }
+    upd(){this.x+=this.vx;this.y+=this.vy;this.l--;}
+    draw(){ctx.fillStyle=this.col;ctx.beginPath();
+      ctx.arc(this.x,this.y,this.s,0,2*Math.PI);ctx.fill();}
+    }
+
+    function anim(){ctx.clearRect(0,0,canvas.width,canvas.height);
+      parts=parts.filter(p=>p.l>0);
+      parts.forEach(p=>{p.upd();p.draw();});
+      requestAnimationFrame(anim);
+    }
+    anim();
+
+    function spawn(x,y){for(let i=0;i<20;i++)parts.push(new P(x,y));}
+    document.body.addEventListener("click",e=>{
+      if(e.target.tagName==="BUTTON"){
+        const r=e.target.getBoundingClientRect(),
+              x=r.left+r.width/2,y=r.top+r.height/2;
+        spawn(x,y);
+      }
+    });
+
+    /* ===== Popup Helper ===== */
+    function showPopup(html){
+      const pop=document.createElement("div");
+      pop.className="popup";
+      pop.innerHTML=\`
+        <div class="popup-content">
+          <button class="close-btn">❌</button>\${html}
+        </div>\`;
+      document.body.appendChild(pop);
+      pop.querySelector(".close-btn").onclick=()=>pop.remove();
+    }
+
+    /* ===== 1) Focus Timer ===== */
+    window.showFocusTimer=()=>{
+      showPopup(\`
+        <h2>⏱ Focus Timer</h2>
+        <input id="ti" type="number" placeholder="Minutes (1–60)" style="width:80%;padding:.5rem;">
+        <br><br><button id="st" class="glow-btn">Start</button>
+        <p id="td" style="font-size:1.5rem;margin-top:1rem;"></p>
+      \`);
+      const inp=document.getElementById("ti"), disp=document.getElementById("td");
+      let tl,tid;
+      document.getElementById("st").onclick=()=>{
+        const m=parseInt(inp.value);
+        if(!m||m<1||m>60)return alert("1–60 only");
+        clearInterval(tid); tl=m*60; upd();
+        tid=setInterval(()=>{tl--;upd();if(tl<=0){clearInterval(tid);disp.textContent="⏰ Done!";navigator.vibrate?.([300,150,300]);}},1000);
+      };
+      function upd(){
+        const mm=String(Math.floor(tl/60)).padStart(2,'0'),
+              ss=String(tl%60).padStart(2,'0');
+        disp.textContent=\`\${mm}:\${ss}\`;
+      }
+    };
+
+    /* ===== 2) Rave Rhythm ===== */
+    window.showRaveRhythm=()=>{
+      let sc=0;
+      showPopup(\`
+        <h2>🎵 Rave Rhythm</h2>
+        <p>Tap the beat!</p>
+        <button id="bt" class="glow-btn">🎶 TAP 🎶</button>
+        <p id="bs" style="font-size:1.5rem;margin-top:1rem;">Score: 0</p>
+      \`);
+      const btn=document.getElementById("bt"), bs=document.getElementById("bs");
+      btn.onclick=()=>{sc++;bs.textContent=\`Score: \${sc}\`;btn.classList.add("pulse");setTimeout(()=>btn.classList.remove("pulse"),100);};
+    };
+
+    /* ===== 3) Dark Jokes ===== */
+    window.showDarkJokes=()=>{
+      const j=[
+        "Why don’t graveyards ever get overcrowded? People are dying to get in.",
+        "What’s the last thing that goes through a bug’s mind when it hits a windshield? Its butt.",
+        "Parallel lines have so much in common. It’s a shame they’ll never meet.",
+        "I used to play piano by ear, but now I use my hands.",
+        "My dark humour is like a broken pencil. Pointless."
+      ];
+      showPopup(\`
+        <h2>🃏 Dark Jokes</h2>
+        <button id="jk" class="glow-btn">Tell Me</button>
+        <p id="jt" style="margin-top:1rem;"></p>
+      \`);
+      document.getElementById("jk").onclick=()=>{document.getElementById("jt").textContent=j[Math.floor(Math.random()*j.length)];};
+    };
+
+    /* ===== 4) Car Repair ===== */
+    window.showCarRepair=()=>{
+      let c=0;
+      showPopup(\`
+        <h2>🔧 Fix It Fast</h2>
+        <button id="fx" class="glow-btn">Fix 🔧</button>
+        <p id="fc" style="margin-top:1rem;">Fixed: 0</p>
+      \`);
+      const btn=document.getElementById("fx"), fc=document.getElementById("fc");
+      btn.onclick=()=>{c++;fc.textContent=\`Fixed: \${c}\`;btn.textContent=c%5===0?"You're a machine!":"Fix 🔧";};
+    };
+
+    /* ===== 5) Memory Match (placeholder) ===== */
+    window.showMemoryMatch=()=>{showPopup(\`<h2>🧠 Memory Match</h2><p>In development!</p>\`);};
+
+    /* ===== 6) Lobster Maze (placeholder) ===== */
+    window.showLobsterMaze=()=>{showPopup(\`<h2>🦞 Lobster Escape</h2><p>Coming soon!</p>\`);};
+
+    /* ===== 7) Funny Facts ===== */
+    window.showFunnyFacts=()=>{
+      const f=[
+        "Octopuses have three hearts!",
+        "Bananas are berries, but strawberries aren't.",
+        "Lobsters pee out of their faces to communicate!",
+        "You can hear a blue whale’s heartbeat from 2 miles away.",
+        "Wombat poop is cube-shaped.",
+        "Sharks existed before trees.",
+        "A group of flamingos is called a 'flamboyance'.",
+        "Some turtles can breathe through their butts."
+      ];
+      showPopup(\`
+        <div style="background:#1a1a2e;border:3px solid #9fef00;
+            box-shadow:0 0 20px #9fef00;padding:1em;border-radius:12px;">
+          <h2 style="color:#9fef00">🧠 Funny Facts</h2>
+          <button id="fb" class="glow-btn">Hit Me With a Fact</button>
+          <p id="ft" style="margin-top:10px;"></p>
+        </div>
+      \`);
+      document.getElementById("fb").onclick=()=>{document.getElementById("ft").textContent=f[Math.floor(Math.random()*f.length)];};
+    };
+
+    /* ===== 8) Snack Ideas ===== */
+    window.showSnackIdeas=()=>{
+      const s=[
+        "🍫 Chocolate-dipped bacon",
+        "🍟 Fries with gravy and hot sauce",
+        "🍓 Frozen grapes with lemon juice",
+        "🧀 Cheese quesadilla + ranch dip",
+        "🥒 Pickles and peanut butter (don't knock it!)",
+        "🍗 Hot wings dipped in maple syrup",
+        "🥞 Mini pancake tacos with Nutella",
+        "🍕 Leftover pizza rolled into a burrito"
+      ];
+      showPopup(\`
+        <div style="background:#2e1a1a;border:3px solid #ff9900;
+            box-shadow:0 0 20px #ff9900;padding:1em;border-radius:12px;">
+          <h2 style="color:#ff9900">🍿 Snack Ideas</h2>
+          <button id="sn" class="glow-btn">Feed Me Ideas</button>
+          <p id="st" style="margin-top:10px;"></p>
+        </div>
+      \`);
+      document.getElementById("sn").onclick=()=>{document.getElementById("st").textContent=s[Math.floor(Math.random()*s.length)];};
+    };
+
+    /* ===== 9) DanteBot ===== */
+    window.showDanteBot=()=>{
+      showPopup(\`
+        <div style="background:#1a2e2a;border:3px solid #00ffee;
+            box-shadow:0 0 20px #00ffee;padding:1em;border-radius:12px;">
+          <h2 style="color:#00ffee">🤖 DanteBot</h2>
+          <input id="dbi" type="text" placeholder="Ask me..." style="width:100%;padding:6px;border-radius:6px;">
+          <button id="dbb" class="glow-btn" style="margin-top:8px;">Ask</button>
+          <p id="dbr" style="margin-top:10px;"></p>
+        </div>
+      \`);
+      const inp=document.getElementById("dbi"), res=document.getElementById("dbr");
+      document.getElementById("dbb").onclick=()=>{
+        const q=inp.value.toLowerCase();
+        let a="Hmm... I'm thinking.";
+        if(q.includes("car")) a="You’d invent a rave engine.";
+        else if(q.includes("lobster")) a="🦞 Lobster king, for sure.";
+        else if(q.includes("love")) a="Love you to the moon!";
+        else if(q.includes("joke")) a="Claw-ver move, bro.";
+        else if(q.includes("fix")) a="Duct tape solves most.";
+        else if(q.includes("dog")) a="Zeus plots snack raids.";
+        res.textContent=a;
+      };
+    };
+
+    /* ===== 10) Zeus’s Corner ===== */
+    window.showZeusCorner=()=>{
+      const z=[
+        "🐾 Zeus: I only chew expensive shoes.",
+        "🐶 If it fits, I sits—even your face.",
+        "🐾 Dogs can smell your feelings.",
+        "🐶 Why sit in shade? To avoid hot dog!",
+        "🐾 I chase dreams and squirrels.",
+        "🐶 Tip: Lick first, then decide.",
+        "🐾 Reminder: I'm your support creature.",
+        "🐶 Philosophy: If not eat/play—pee on it."
+      ];
+      showPopup(\`
+        <div style="background:#1a1f2e;border:3px solid #66d9ff;
+            box-shadow:0 0 20px #66d9ff;padding:1em;border-radius:12px;">
+          <h2 style="color:#66d9ff">🐶 Zeus’s Corner</h2>
+          <button id="zb" class="glow-btn">Woof!</button>
+          <p id="zt" style="margin-top:10px;"></p>
+        </div>
+      \`);
+      document.getElementById("zb").onclick=()=>{
+        document.getElementById("zt").textContent=z[Math.floor(Math.random()*z.length)];
+      };
+    };
+
+  });
+  </script>
+
 </body>
 </html>
