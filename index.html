@@ -2,944 +2,340 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dante’s Dopamine Dive 🌈🦞🎉</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dante’s Dopamine Dive 🎣</title>
   <style>
-    /* Reset and base */
-    * {
-      box-sizing: border-box;
-    }
     body {
-      margin: 0; padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
-      color: #e0e0e0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
       overflow-x: hidden;
     }
-    h1 {
-      font-size: 2.8rem;
-      font-weight: 900;
-      text-align: center;
-      margin: 1rem 0 0.5rem;
-      text-shadow:
-        0 0 8px #00ffea,
-        0 0 15px #00ffe9,
-        0 0 20px #00e0ff;
-      letter-spacing: 2px;
+    h1, h2 {
+      color: #0ff;
+      text-shadow: 2px 2px #f0f;
     }
-    h2 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin: 1rem 0 0.5rem;
-      color: #00ffe9;
-      text-shadow: 0 0 4px #00b3b3;
-    }
-
-    /* Container and layout */
-    .container {
-      max-width: 900px;
-      margin: 0 auto 3rem;
-      padding: 0 1rem 2rem;
-      flex: 1 0 auto;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      background: #0f3460;
-      padding: 0.5rem;
-      border-bottom: 3px solid #00ffe9;
-      user-select: none;
-    }
-    nav button {
-      background: #16213e;
-      color: #00ffe9;
+    button {
+      margin: 15px;
+      padding: 15px 25px;
       border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 0.65rem 1.3rem;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 10px;
+      background: #ff00ff;
+      color: #fff;
+      box-shadow: 0 0 10px #00f0ff;
       cursor: pointer;
-      box-shadow:
-        0 0 6px #00ffe9,
-        inset 0 0 5px #00b3b3;
-      transition:
-        background 0.3s ease,
-        box-shadow 0.3s ease,
-        transform 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      transition: 0.3s ease;
     }
-    nav button:hover, nav button.active {
-      background: #00ffe9;
-      color: #16213e;
-      box-shadow:
-        0 0 15px #00ffe9,
-        inset 0 0 12px #00b3b3;
-      transform: scale(1.05);
+    button:hover {
+      background: #00ffff;
+      box-shadow: 0 0 15px #ff00ff;
+      color: #000;
     }
-
-    /* Emoji icons in buttons */
-    nav button .icon {
-      font-size: 1.4rem;
-      line-height: 1;
+    #message {
+      font-size: 1.1em;
+      margin-bottom: 30px;
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ff0;
     }
-
-    /* Sections */
-    section {
-      display: none;
-      animation: fadeIn 0.8s ease forwards;
-    }
-    section.active {
-      display: block;
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(15px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    /* LOBSTER GAME STYLES */
-    #lobsterGame {
-      background: #0f3460;
-      border-radius: 18px;
-      padding: 1rem;
-      box-shadow: 0 0 25px #00ffe9 inset;
-      position: relative;
-      user-select: none;
-    }
-    #gameCanvas {
-      background: #08122b;
-      border-radius: 14px;
-      width: 100%;
-      max-width: 600px;
-      height: 300px;
-      display: block;
-      margin: 0 auto;
-      box-shadow:
-        0 0 12px #00ffe9;
-      cursor: grab;
-    }
-    #gameCanvas:active {
-      cursor: grabbing;
-    }
-    #scoreboard {
-      margin-top: 1rem;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #00ffe9;
-      text-align: center;
-      user-select: none;
-      text-shadow: 0 0 6px #00b3b3;
-    }
-    #gameControls {
-      text-align: center;
-      margin-top: 0.8rem;
-    }
-    #gameControls button {
-      background: #00ffe9;
-      color: #16213e;
-      font-weight: 800;
-      font-size: 1rem;
-      border: none;
-      border-radius: 12px;
-      padding: 0.6rem 1.2rem;
-      cursor: pointer;
-      box-shadow: 0 0 15px #00ffe9;
-      transition: background 0.25s ease, transform 0.2s ease;
-      margin: 0 0.3rem;
-    }
-    #gameControls button:hover {
-      background: #00b3b3;
-      transform: scale(1.1);
-    }
-    #instructionsPopup {
-      background: #08122bdd;
-      position: fixed;
-      top: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 320px;
-      padding: 1.4rem 1.6rem;
+    .section {
+      margin-top: 30px;
+      padding: 20px;
+      background: #111;
       border-radius: 20px;
-      color: #00ffe9;
-      font-weight: 700;
-      font-size: 1.1rem;
-      box-shadow: 0 0 20px #00ffe9;
-      user-select: none;
+      box-shadow: 0 0 20px #0ff;
+    }
+    .output {
+      margin-top: 20px;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #0f0;
+    }
+    #danteBox {
+      animation: none;
+    }
+    @keyframes shake {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(3deg); }
+      50% { transform: rotate(-3deg); }
+      75% { transform: rotate(3deg); }
+      100% { transform: rotate(0deg); }
+    }
+    #confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
       z-index: 999;
-      line-height: 1.3;
-      display: none;
     }
-    #instructionsPopup.show {
-      display: block;
-    }
-    #instructionsPopup button {
-      margin-top: 1rem;
-      background: #00ffe9;
-      color: #16213e;
+    textarea {
+      width: 90%;
+      height: 100px;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 10px;
       border: none;
-      border-radius: 12px;
-      padding: 0.6rem 1.1rem;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 0 15px #00ffe9;
-      transition: background 0.25s ease;
-    }
-    #instructionsPopup button:hover {
-      background: #00b3b3;
-    }
-
-    /* LOBSTER sprite styling */
-    .lobster-glow {
-      filter: drop-shadow(0 0 6px #00ffe9);
-      transition: filter 0.2s ease;
-    }
-
-    /* MEME VIEWER STYLES */
-    #memeViewer {
-      text-align: center;
-      padding-top: 1rem;
-    }
-    #memeImage {
-      max-width: 90vw;
-      max-height: 320px;
-      border-radius: 18px;
-      box-shadow: 0 0 25px #00ffe9 inset;
-      margin-bottom: 1rem;
-      user-select: none;
-    }
-    #memeControls {
-      display: flex;
-      justify-content: center;
-      gap: 0.7rem;
-      flex-wrap: wrap;
-      user-select: none;
-    }
-    #memeControls button {
-      background: #00ffe9;
-      color: #16213e;
-      font-weight: 800;
-      font-size: 1rem;
-      border: none;
-      border-radius: 14px;
-      padding: 0.65rem 1.2rem;
-      cursor: pointer;
-      box-shadow: 0 0 18px #00ffe9;
-      transition: background 0.3s ease, transform 0.15s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-    #memeControls button:hover {
-      background: #00b3b3;
-      transform: scale(1.1);
-    }
-
-    /* DANTEBOT CHAT STYLES */
-    #danteBotChat {
-      display: flex;
-      flex-direction: column;
-      max-width: 600px;
-      margin: 1rem auto;
-      background: #0f3460;
-      border-radius: 18px;
-      box-shadow: 0 0 25px #00ffe9 inset;
-      height: 420px;
-    }
-    #chatWindow {
-      flex: 1 1 auto;
-      overflow-y: auto;
-      padding: 1rem;
-      font-size: 1.1rem;
-      line-height: 1.4;
-      color: #d0f0f0;
-      user-select: text;
-      background: #08122b;
-      border-radius: 18px 18px 0 0;
-    }
-    .chat-msg {
-      margin-bottom: 0.9rem;
-      max-width: 85%;
-      word-wrap: break-word;
-      padding: 0.5rem 0.8rem;
-      border-radius: 12px;
-      box-shadow: 0 0 8px #00b3b3aa;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-    .chat-msg.user {
-      background: #00ffe9;
-      color: #16213e;
-      margin-left: auto;
-      text-align: right;
-      box-shadow: 0 0 14px #00ffe9;
-    }
-    .chat-msg.bot {
-      background: #004d4d;
-      color: #b3ffff;
-      margin-right: auto;
-      text-align: left;
-      box-shadow: 0 0 14px #008080;
-    }
-    #chatForm {
-      display: flex;
-      padding: 0.8rem 1rem;
-      background: #08122b;
-      border-radius: 0 0 18px 18px;
-      box-shadow: inset 0 0 20px #00ffe9aa;
-    }
-    #chatInput {
-      flex: 1 1 auto;
-      font-size: 1.1rem;
-      padding: 0.6rem 1rem;
-      border-radius: 14px;
-      border: none;
-      outline: none;
-      font-weight: 600;
-      color: #16213e;
-      background: #00ffe9;
-      box-shadow: inset 0 0 12px #00b3b3;
-      transition: box-shadow 0.3s ease;
-    }
-    #chatInput:focus {
-      box-shadow: 0 0 20px #00ffe9;
-    }
-    #chatForm button {
-      background: #00b3b3;
-      color: #16213e;
-      border: none;
-      margin-left: 0.7rem;
-      padding: 0.6rem 1.2rem;
-      font-weight: 700;
-      border-radius: 14px;
-      cursor: pointer;
-      box-shadow: 0 0 20px #00b3b3;
-      transition: background 0.3s ease;
-    }
-    #chatForm button:hover {
-      background: #007575;
-    }
-
-    /* REELS GENERATOR STYLES */
-    #reelsGenerator {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto;
-      background: #0f3460;
-      border-radius: 18px;
-      padding: 1rem 1.5rem 2rem;
-      box-shadow: 0 0 25px #00ffe9 inset;
-      user-select: none;
-    }
-    #reelsOutput {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #00ffe9;
-      margin: 1.3rem 0 2rem;
-      text-shadow: 0 0 10px #00b3b3;
-      min-height: 70px;
-      line-height: 1.3;
-    }
-    #reelsControls {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    #reelsControls button, #reelsControls select {
-      background: #00ffe9;
-      color: #16213e;
-      font-weight: 800;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 14px;
-      padding: 0.65rem 1.4rem;
-      cursor: pointer;
-      box-shadow: 0 0 18px #00ffe9;
-      transition: background 0.3s ease, transform 0.15s ease;
-    }
-    #reelsControls button:hover {
-      background: #00b3b3;
-      transform: scale(1.1);
-    }
-    #reelsControls select {
-      cursor: pointer;
-    }
-
-    /* FOOTER */
-    footer {
-      background: #16213e;
-      text-align: center;
-      padding: 0.8rem 1rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #00ffe9cc;
-      user-select: none;
-      box-shadow: inset 0 2px 12px #00b3b3;
-      flex-shrink: 0;
-    }
-
-    /* Scrollbar styling for chat */
-    #chatWindow::-webkit-scrollbar {
-      width: 9px;
-    }
-    #chatWindow::-webkit-scrollbar-track {
-      background: #08122b;
-    }
-    #chatWindow::-webkit-scrollbar-thumb {
-      background: #00ffe9;
-      border-radius: 6px;
-      box-shadow: 0 0 6px #00b3b3;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2.2rem;
-      }
-      nav button {
-        font-size: 1rem;
-        padding: 0.5rem 1rem;
-      }
-      #chatWindow {
-        font-size: 1rem;
-      }
-      #reelsOutput {
-        font-size: 1.2rem;
-      }
+      resize: none;
     }
   </style>
 </head>
 <body>
-
-  <h1>Dante’s Dopamine Dive 🌈🦞🎉</h1>
-
-  <nav aria-label="Main navigation">
-    <button class="active" id="tabGame" aria-selected="true" aria-controls="lobsterGame" role="tab">
-      <span class="icon">🦞</span> Lobster Game
-    </button>
-    <button id="tabMemes" aria-selected="false" aria-controls="memeViewer" role="tab">
-      <span class="icon">🤣</span> Memes
-    </button>
-    <button id="tabChat" aria-selected="false" aria-controls="danteBotChat" role="tab">
-      <span class="icon">🤖</span> DanteBot Chat
-    </button>
-    <button id="tabReels" aria-selected="false" aria-controls="reelsGenerator" role="tab">
-      <span class="icon">🎬</span> Reels Generator
-    </button>
-  </nav>
-
-  <div class="container">
-    <!-- Lobster Game Section -->
-    <section id="lobsterGame" class="active" role="tabpanel" aria-labelledby="tabGame">
-      <h2>🦞 Catch the Lobster!</h2>
-      <canvas id="gameCanvas" width="600" height="300" aria-label="Lobster game canvas"></canvas>
-      <div id="scoreboard" aria-live="polite">Score: 0 | Time left: 60s</div>
-      <div id="gameControls">
-        <button id="startGameBtn" aria-label="Start lobster game">Start Game</button>
-        <button id="instructionsBtn" aria-label="Show game instructions">Instructions</button>
-        <button id="muteBtn" aria-pressed="false" aria-label="Mute/unmute sounds">🔊</button>
-      </div>
-      <div id="instructionsPopup" role="dialog" aria-modal="true" aria-labelledby="instructionsTitle">
-        <h3 id="instructionsTitle">How to Play</h3>
-        <p>Use your arrow keys (or swipe on mobile) to move the glowing lobster around the tank.</p>
-        <p>Catch bonus lobsters 🦞✨ to score extra points!</p>
-        <p>The game lasts 60 seconds — try to catch as many as you can!</p>
-        <button id="closeInstructionsBtn">Got it!</button>
-      </div>
-    </section>
-
-    <!-- Meme Viewer Section -->
-    <section id="memeViewer" role="tabpanel" aria-labelledby="tabMemes">
-      <h2>🤣 Meme Viewer</h2>
-      <img id="memeImage" src="" alt="Meme image" />
-      <div id="memeControls">
-        <button id="prevMemeBtn" aria-label="Previous meme">⬅️ Prev</button>
-        <button id="nextMemeBtn" aria-label="Next meme">Next ➡️</button>
-        <button id="randomMemeBtn" aria-label="Random meme">🎲 Random</button>
-        <button id="saveMemeBtn" aria-label="Save meme image">💾 Save</button>
-      </div>
-    </section>
-
-    <!-- DanteBot Chat Section -->
-    <section id="danteBotChat" role="tabpanel" aria-labelledby="tabChat">
-      <h2>🤖 Chat with DanteBot</h2>
-      <div id="chatWindow" aria-live="polite" aria-relevant="additions" aria-label="Chat messages"></div>
-      <form id="chatForm" aria-label="DanteBot chat input">
-        <input id="chatInput" type="text" placeholder="Say something to Dante..." autocomplete="off" required aria-required="true" aria-describedby="chatHelp" />
-        <button type="submit" aria-label="Send message">Send</button>
-      </form>
-      <p id="chatHelp" style="font-size:0.85rem; color:#00ffe9cc; margin-top:0.5rem;">Try asking for a dark joke or a rap battle! 🎤</p>
-    </section>
-
-    <!-- Reels Generator Section -->
-    <section id="reelsGenerator" role="tabpanel" aria-labelledby="tabReels">
-      <h2>🎬 Sh*t That Reels Me In — Dante’s Edition</h2>
-      <div>
-        <label for="reelCategory" style="font-weight:700; font-size:1rem; color:#00ffe9;">Choose a category:</label>
-        <select id="reelCategory" aria-label="Select reels category">
-          <option value="all">🌈 All</option>
-          <option value="lobster">🦞 Lobster & Fishing</option>
-          <option value="rave">🎉 Raves & Festivals</option>
-          <option value="darkhumor">🖤 Dark Humor</option>
-          <option value="engineering">🔧 Engineering & Tech</option>
-        </select>
-      </div>
-      <div id="reelsOutput" aria-live="polite" aria-atomic="true"></div>
-      <div id="reelsControls">
-        <button id="generateReelBtn" aria-label="Generate one reel">Generate Reel 🎲</button>
-        <button id="generateMultipleBtn" aria-label="Generate three reels">Generate 3 Reels 🎰</button>
-        <button id="copyReelsBtn" aria-label="Copy reels text to clipboard">📋 Copy Text</button>
-      </div>
-    </section>
+  <h1>🎉 Dante's Dopamine Dive 🎉</h1>
+  <div id="message">
+    Hey Dante 😎 — I made this just for you 🫶 <br>
+    When you’re bored, hyped, stuck, or need to laugh… this is your chaotic little love app. <br>
+    Love always, <strong>Larissa 💜</strong>
   </div>
 
-  <footer>
-    Made with 💖 for Dante by Larissa • 2025
-  </footer>
+  <div class="section">
+    <h2>🎣 Lobster Fishing</h2>
+    <button onclick="generateFishing()">Drop A Line</button>
+    <div class="output" id="fishingOutput"></div>
+  </div>
+
+  <div class="section">
+    <h2>🎵 Rap Bars</h2>
+    <button onclick="generateLyric()">Spin A Bar</button>
+    <div class="output" id="rapOutput"></div>
+  </div>
+
+  <div class="section">
+    <h2>🎬 Funny Story Time</h2>
+    <button onclick="generateStory()">Tell Me Something Dumb</button>
+    <div class="output" id="storyOutput"></div>
+  </div>
+
+  <div class="section">
+    <h2>🚗 Car & Rave Combo</h2>
+    <button onclick="generateCar()">Rev It Up</button>
+    <div class="output" id="carOutput"></div>
+  </div>
+
+  <div class="section">
+    <h2>😈 Dark Jokes</h2>
+    <button onclick="generateJoke()">Send It</button>
+    <div class="output" id="jokeOutput"></div>
+  </div>
+
+  <div class="section">
+    <h2>🪩 Rave Facts</h2>
+    <button onclick="generateRaveFact()">Drop Some Glow Knowledge</button>
+    <div class="output" id="raveOutput"></div>
+  </div>
+
+  <div class="section">
+    <h2>🤣 Memes</h2>
+    <button onclick="generateMeme()">Make Me Wheeze</button>
+    <div class="output" id="memeOutput"></div>
+  </div>
+
+  <div class="section" id="danteBox">
+    <h2>🎁 DanteBox</h2>
+    <button onclick="openDanteBox()">Open The DanteBox</button>
+    <div class="output" id="danteBoxOutput"></div>
+  </div>
+
+  <div class="section">
+    <h2>🤖 DanteBot</h2>
+    <textarea placeholder="Type a random thought, question, or joke for DanteBot..." id="botInput"></textarea><br>
+    <button onclick="talkToBot()">Ask DanteBot</button>
+    <div class="output" id="botReply"></div>
+  </div>
+
+  <div class="section">
+    <h2>🕺 Secret Rave Room</h2>
+    <button onclick="startSecretRave()">ENTER THE RAVE</button>
+    <div class="output" id="raveRoomOutput"></div>
+  </div>
+
+  <canvas id="confetti"></canvas>
 
   <script>
-    // TAB NAVIGATION
-    const tabs = document.querySelectorAll('nav button');
-    const sections = document.querySelectorAll('section');
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => {
-          t.classList.remove('active');
-          t.setAttribute('aria-selected', 'false');
-        });
-        tab.classList.add('active');
-        tab.setAttribute('aria-selected', 'true');
-        const targetId = tab.getAttribute('aria-controls');
-        sections.forEach(s => {
-          s.classList.toggle('active', s.id === targetId);
-        });
-      });
-    });
-
-    // ---------------------------------------
-    // LOBSTER GAME IMPLEMENTATION
-    // ---------------------------------------
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const scoreDisplay = document.getElementById('scoreboard');
-    const startBtn = document.getElementById('startGameBtn');
-    const instructionsBtn = document.getElementById('instructionsBtn');
-    const instructionsPopup = document.getElementById('instructionsPopup');
-    const closeInstructionsBtn = document.getElementById('closeInstructionsBtn');
-    const muteBtn = document.getElementById('muteBtn');
-
-    let gameInterval, lobster, bonusLobster;
-    let score = 0;
-    let timeLeft = 60;
-    let keys = {};
-    let gameRunning = false;
-    let muted = false;
-
-    const lobsterSize = 40;
-
-    // Lobster object
-    class Lobster {
-      constructor(x, y, isBonus = false) {
-        this.x = x;
-        this.y = y;
-        this.isBonus = isBonus;
-        this.size = lobsterSize;
-        this.color = isBonus ? '#ffd700' : '#00ffe9';
-        this.glow = isBonus ? 'yellow' : '#00ffe9';
-      }
-      draw(ctx) {
-        ctx.save();
-        ctx.fillStyle = this.color;
-        ctx.shadowColor = this.glow;
-        ctx.shadowBlur = 12;
-        ctx.beginPath();
-        // Simple lobster shape (circle + claws)
-        ctx.ellipse(this.x, this.y, this.size / 2, this.size / 3, 0, 0, 2 * Math.PI);
-        ctx.fill();
-        // Claws
-        ctx.beginPath();
-        ctx.moveTo(this.x - this.size / 2, this.y);
-        ctx.lineTo(this.x - this.size * 0.8, this.y - this.size * 0.3);
-        ctx.lineTo(this.x - this.size * 0.6, this.y + this.size * 0.2);
-        ctx.closePath();
-        ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(this.x + this.size / 2, this.y);
-        ctx.lineTo(this.x + this.size * 0.8, this.y - this.size * 0.3);
-        ctx.lineTo(this.x + this.size * 0.6, this.y + this.size * 0.2);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
-    // Player lobster controlled by keys
-    let player = new Lobster(canvas.width / 2, canvas.height / 2);
-
-    function resetGame() {
-      score = 0;
-      timeLeft = 60;
-      player.x = canvas.width / 2;
-      player.y = canvas.height / 2;
-      lobster = spawnLobster();
-      bonusLobster = null;
-      gameRunning = false;
-      updateScoreboard();
-      clearCanvas();
-    }
-
-    function spawnLobster() {
-      return new Lobster(
-        Math.random() * (canvas.width - lobsterSize) + lobsterSize / 2,
-        Math.random() * (canvas.height - lobsterSize) + lobsterSize / 2
-      );
-    }
-
-    function spawnBonusLobster() {
-      return new Lobster(
-        Math.random() * (canvas.width - lobsterSize) + lobsterSize / 2,
-        Math.random() * (canvas.height - lobsterSize) + lobsterSize / 2,
-        true
-      );
-    }
-
-    function clearCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function updateScoreboard() {
-      scoreDisplay.textContent = `Score: ${score} | Time left: ${timeLeft}s`;
-    }
-
-    function draw() {
-      clearCanvas();
-
-      // Draw player lobster with glow
-      ctx.save();
-      ctx.shadowColor = '#00ffe9';
-      ctx.shadowBlur = 20;
-      ctx.fillStyle = '#00ffe9';
-      ctx.beginPath();
-      ctx.ellipse(player.x, player.y, lobsterSize / 2, lobsterSize / 3, 0, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.restore();
-
-      // Draw normal lobster
-      if (lobster) lobster.draw(ctx);
-      if (bonusLobster) bonusLobster.draw(ctx);
-    }
-
-    function update() {
-      if (!gameRunning) return;
-
-      // Move player by keys pressed
-      const speed = 6;
-      if (keys['ArrowUp'] || keys['w']) player.y -= speed;
-      if (keys['ArrowDown'] || keys['s']) player.y += speed;
-      if (keys['ArrowLeft'] || keys['a']) player.x -= speed;
-      if (keys['ArrowRight'] || keys['d']) player.x += speed;
-
-      // Keep player inside canvas
-      player.x = Math.min(Math.max(player.x, lobsterSize / 2), canvas.width - lobsterSize / 2);
-      player.y = Math.min(Math.max(player.y, lobsterSize / 2), canvas.height - lobsterSize / 2);
-
-      // Check collisions
-      if (lobster && isColliding(player, lobster)) {
-        score += 1;
-        if (!muted) playSound('catch');
-        lobster = spawnLobster();
-
-        // 30% chance to spawn bonus lobster for 5s
-        if (!bonusLobster && Math.random() < 0.3) {
-          bonusLobster = spawnBonusLobster();
-          setTimeout(() => { bonusLobster = null; }, 5000);
-        }
-      }
-      if (bonusLobster && isColliding(player, bonusLobster)) {
-        score += 5;
-        if (!muted) playSound('bonus');
-        bonusLobster = null;
-      }
-
-      draw();
-      updateScoreboard();
-    }
-
-    function isColliding(obj1, obj2) {
-      const dx = obj1.x - obj2.x;
-      const dy = obj1.y - obj2.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      return distance < lobsterSize * 0.7;
-    }
-
-    // Timer countdown
-    function timerTick() {
-      if (!gameRunning) return;
-      timeLeft--;
-      updateScoreboard();
-      if (timeLeft <= 0) {
-        gameRunning = false;
-        clearInterval(gameInterval);
-        alert(`Time's up! You scored ${score} points! 🦞🎉`);
-      }
-    }
-
-    // Keyboard event listeners
-    window.addEventListener('keydown', e => {
-      keys[e.key] = true;
-    });
-    window.addEventListener('keyup', e => {
-      keys[e.key] = false;
-    });
-
-    startBtn.addEventListener('click', () => {
-      if (gameRunning) return;
-      resetGame();
-      gameRunning = true;
-      gameInterval = setInterval(() => {
-        update();
-      }, 50);
-      // Timer interval
-      setInterval(timerTick, 1000);
-    });
-
-    instructionsBtn.addEventListener('click', () => {
-      instructionsPopup.classList.add('show');
-    });
-
-    closeInstructionsBtn.addEventListener('click', () => {
-      instructionsPopup.classList.remove('show');
-    });
-
-    muteBtn.addEventListener('click', () => {
-      muted = !muted;
-      muteBtn.textContent = muted ? '🔇' : '🔊';
-      muteBtn.setAttribute('aria-pressed', muted.toString());
-    });
-
-    // Sounds
-    function playSound(type) {
-      if (muted) return;
-      let audio;
-      switch (type) {
-        case 'catch':
-          audio = new Audio('https://actions.google.com/sounds/v1/animals/crab_snap.ogg');
-          break;
-        case 'bonus':
-          audio = new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg');
-          break;
-      }
-      if (audio) {
-        audio.volume = 0.4;
-        audio.play();
-      }
-    }
-
-    resetGame();
-
-    // ---------------------------------------
-    // MEME VIEWER IMPLEMENTATION
-    // ---------------------------------------
-    const memes = [
-      { src: 'https://i.imgur.com/WBzO4yB.jpeg', alt: 'Trailer Park Boys Dark Humor Meme' },
-      { src: 'https://i.imgur.com/KJQo3bc.jpeg', alt: 'Rave Festival Fun Meme' },
-      { src: 'https://i.imgur.com/pXq6dQ0.jpeg', alt: 'Lobster Fishing Funny Meme' },
-      { src: 'https://i.imgur.com/BG6Jc2W.jpeg', alt: 'Engineering Jokes Meme' },
-      { src: 'https://i.imgur.com/uz4E6r3.jpeg', alt: 'Sassy the Sasquatch Meme' },
-      { src: 'https://i.imgur.com/vTi4iJK.jpeg', alt: 'Dark Humor Meme' },
-      { src: 'https://i.imgur.com/m6dyMzM.jpeg', alt: 'Festival Party Meme' },
-      { src: 'https://i.imgur.com/r7wskhV.jpeg', alt: 'Funny Car Meme' },
-      { src: 'https://i.imgur.com/3VlY6XY.jpeg', alt: 'Lobster Catch Meme' },
-      { src: 'https://i.imgur.com/RErLGhT.jpeg', alt: 'Funny Rap Music Meme' },
-      { src: 'https://i.imgur.com/wMJ6qzi.jpeg', alt: 'Trailer Park Boys Dark Humor 2' },
-      { src: 'https://i.imgur.com/ogcwPh8.jpeg', alt: 'Native Culture Meme' },
-      { src: 'https://i.imgur.com/qPY9DKM.jpeg', alt: 'Fishing Fun Meme' },
-      { src: 'https://i.imgur.com/RCa6Q8R.jpeg', alt: 'Funny Engineering Meme' },
-      { src: 'https://i.imgur.com/vI5HvT0.jpeg', alt: 'Funny Festival Meme' },
-      { src: 'https://i.imgur.com/fu4FHfs.jpeg', alt: 'Dark Humor Meme 3' },
-      { src: 'https://i.imgur.com/ZXWvcO1.jpeg', alt: 'Funny Rave Meme' },
-      { src: 'https://i.imgur.com/jDvGZSk.jpeg', alt: 'Funny Movie Meme' },
-      { src: 'https://i.imgur.com/7Sb5q53.jpeg', alt: 'Lobster Meme 2' },
-      { src: 'https://i.imgur.com/0xv3Iay.jpeg', alt: 'Engineering Joke 2' },
+    const fishingThings = [
+      "🎣 You caught a legendary bluntfish.",
+      "🦞 You wrestled a rave lobster under the wharf.",
+      "🐠 You reeled in a bass spitting bars.",
+      "🌊 You caught a stoned mermaid arguing about drag torque.",
+      "🧠 ADHD got you tangled in your own line — again."
     ];
-    let memeIndex = 0;
 
-    const memeImage = document.getElementById('memeImage');
-    const prevMemeBtn = document.getElementById('prevMemeBtn');
-    const nextMemeBtn = document.getElementById('nextMemeBtn');
-    const randomMemeBtn = document.getElementById('randomMemeBtn');
-    const saveMemeBtn = document.getElementById('saveMemeBtn');
+    const rapLines = [
+      "“Started from the wharf now we here.”",
+      "“My rods are clean, but my past ain't.”",
+      "“Engine roaring like my thoughts at 3AM.”",
+      "“Fishin’ through my feelings like I'm deep sea diving.”",
+      "“Glowsticks and heartbreaks, that's my weekend plan.”"
+    ];
 
-    function showMeme(index) {
-      memeIndex = (index + memes.length) % memes.length;
-      memeImage.src = memes[memeIndex].src;
-      memeImage.alt = memes[memeIndex].alt;
-    }
+    const stories = [
+      "You once raced a lobster boat with a stolen bike. And won.",
+      "Built a hotbox with duct tape and deep fryer coils.",
+      "Ate 3 poutines then hit the Gravitron. Regret? Zero.",
+      "Trained a seagull to fetch fries. Named it Ricky.",
+      "Built a rave strobe bong out of a headlight and hope."
+    ];
 
-    prevMemeBtn.addEventListener('click', () => showMeme(memeIndex - 1));
-    nextMemeBtn.addEventListener('click', () => showMeme(memeIndex + 1));
-    randomMemeBtn.addEventListener('click', () => showMeme(Math.floor(Math.random() * memes.length)));
+    const cars = [
+      "🚗 Your car just got underglow that pulses to trap beats.",
+      "🎧 Installed subs so loud they summoned a rave fairy.",
+      "🛠 Weed-powered turbocharger. Patent pending.",
+      "🏁 Rave race on the Rez track tonight. You’re winning.",
+      "🌀 Glow-in-the-dark war paint. Respect."
+    ];
 
-    saveMemeBtn.addEventListener('click', () => {
-      // Create invisible link to download meme
-      const link = document.createElement('a');
-      link.href = memeImage.src;
-      link.download = 'dante-meme.jpg';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+    const darkJokes = [
+      "What’s red and smells like a wharf? …A bad idea.",
+      "Why did the lobster dump the crab? Too shellfish.",
+      "ADHD driving: fast, distracted, vibin’.",
+      "Saved the last nugget? That’s real love.",
+      "My attention span lasted longer than that last job. Barely."
+    ];
 
-    showMeme(memeIndex);
+    const raveFacts = [
+      "Ravers blink 73% less during a beat drop. Science probably.",
+      "EDM = Everyone’s Dancing Manically.",
+      "Raves are human glowstick farms. 🌈",
+      "Bass you can feel in your spleen is the sweet spot.",
+      "Glowsticks were made for military. Now: potty navigation."
+    ];
 
-    // ---------------------------------------
-    // DANTEBOT CHAT IMPLEMENTATION
-    // ---------------------------------------
-    const chatWindow = document.getElementById('chatWindow');
-    const chatForm = document.getElementById('chatForm');
-    const chatInput = document.getElementById('chatInput');
+    const memes = [
+      "Me: I’ll go to bed early. Brain: What if lobsters had jobs?",
+      "ADHD be like: opens Dante’s app, forgets to blink.",
+      "Rave Tip: If it glows, bite it. (Don't.)",
+      "Engineers at 3AM: I can fix it with gum.",
+      "Stoner logic: duct tape fixes emotions too."
+    ];
 
-    // Some playful DanteBot canned replies & features
-    const danteBotReplies = {
-      greetings: [
-        "Yo, Dante here! Ready to vibe? 🎧",
-        "Sup dude? Let’s catch some dopamine waves 🌊",
-        "Hey! What's good? 🦞",
-      ],
-      darkJokes: [
-        "Why don’t skeletons fight each other? They don’t have the guts. 💀😆",
-        "I told my therapist about my addiction to fishing. He said, 'Sounds like you're hooked.' 🎣😂",
-        "What's a rave DJ’s favorite seafood? Lobster beats dropping hard! 🦞🎶",
-      ],
-      rapBattles: [
-        "Yo Dante, you fishin' for lobsters or rhymes? 'Cause I spit fire every time! 🔥🎤",
-        "Raves and caves, cars and waves, Dante’s got the dopest waves! 🌊🚗🎵",
-        "Engineering the beats, lobster claws on fleek, this chat’s lit, can’t be beat! 🎧🦞⚙️",
-      ],
-      default: [
-        "Hmm... tell me more! 🤔",
-        "That sounds lit 🔥, keep going!",
-        "Haha 😂, you got me chuckling here!",
-        "Whoa, interesting! Care to elaborate? 🤖",
-      ],
-    };
+    const danteBox = [
+      "💜 You are wildly loved. Even on your messiest days.",
+      "🔥 Random burst of hype: YOU ARE A RAVE LEGEND.",
+      "🧠 Your brain is chaotic magic. Never dull, always brilliant.",
+      "😂 You just unlocked… a spicy seagull with opinions.",
+      "💀 Your past is wild, but your glow-up is legendary.",
+      "🍟 There are fries in your future. Possibly cheese covered.",
+      "🪶 Your ancestors are proud. Your vibe is sacred.",
+      "🛠️ You could build a spaceship out of duct tape and vibes.",
+      "🌊 ADHD may rock your boat, but you *ride the waves.*"
+    ];
 
-    function addChatMessage(text, sender = 'bot') {
-      const msgDiv = document.createElement('div');
-      msgDiv.classList.add('chat-msg', sender);
-      msgDiv.textContent = text;
-      chatWindow.appendChild(msgDiv);
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
+    const botReplies = [
+      "Yo, that thought is wild. I vibe with it.",
+      "Let’s engineer a rave-powered lobster trap.",
+      "That made my brain wiggle. Respect.",
+      "This question smells like fish and genius.",
+      "You’re a chaotic good and I love it here.",
+      "I would respond but I got distracted by my own headlights."
+    ];
 
-    function getDanteBotResponse(userMsg) {
-      const msg = userMsg.toLowerCase();
-      if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
-        return randomFromArray(danteBotReplies.greetings);
-      } else if (msg.includes('dark joke') || msg.includes('dark humor')) {
-        return randomFromArray(danteBotReplies.darkJokes);
-      } else if (msg.includes('rap battle')) {
-        return randomFromArray(danteBotReplies.rapBattles);
-      } else if (msg.includes('lobster')) {
-        return "Lobsters are the real rave kings 🦞🎉!";
-      } else if (msg.includes('engineering')) {
-        return "Engineering all the way! Keep those gears turning 🔧⚙️!";
-      } else {
-        return randomFromArray(danteBotReplies.default);
-      }
-    }
-
-    function randomFromArray(arr) {
+    function randomFrom(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
     }
 
-    chatForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const userText = chatInput.value.trim();
-      if (!userText) return;
-      addChatMessage(userText, 'user');
-      chatInput.value = '';
-      setTimeout(() => {
-        addChatMessage(getDanteBotResponse(userText), 'bot');
-      }, 700);
-    });
-
-    // ---------------------------------------
-    // REELS GENERATOR IMPLEMENTATION
-    // ---------------------------------------
-    const reelsData = {
-      all: [
-        "Caught a huge lobster today, feeling like a king of the sea! 🦞👑",
-        "Festival vibes and lobster dives, that’s the way to thrive! 🎉🦞",
-        "Dark humor is my cardio 😂🖤",
-        "Engineering hacks for the perfect lobster trap 🔧🦞",
-        "Raves till dawn, lobsters till gone! 🌅🦞",
-      ],
-      lobster: [
-        "Lobster claws ready to party! 🦞🎉",
-        "Fishing lines tight, lobsters in sight! 🎣🦞",
-        "Nothing beats a lobster feast with friends! 🍽️🦞",
-      ],
-      rave: [
-        "Glow sticks and lobster kicks! 🎆🦞",
-        "Raving in the lobster den! 🎶🦞",
-        "Bass drops harder than a lobster shell! 🔊🦞",
-      ],
-      darkhumor: [
-        "Why did the lobster refuse to share? Because it was shellfish! 🦞🖤",
-        "Some people fish for compliments, I fish for lobsters and dark jokes. 🎣🖤",
-        "Life’s too short to be serious, just like a lobster at a rave! 🦞😂",
-      ],
-      engineering: [
-        "Calculated the perfect trap angle for max lobster catch! 📐🦞",
-        "Building lobster traps with precision and style! 🔧🦞",
-        "Engineering is just fishing for solutions! 🧰🦞",
-      ],
-    };
-
-    const reelsOutput = document.getElementById('reelsOutput');
-    const generateReelBtn = document.getElementById('generateReelBtn');
-    const generateMultipleBtn = document.getElementById('generateMultipleBtn');
-    const copyReelsBtn = document.getElementById('copyReelsBtn');
-    const reelCategory = document.getElementById('reelCategory');
-
-    function generateReels(num = 1) {
-      const category = reelCategory.value;
-      let pool = [];
-      if (category === 'all') {
-        pool = reelsData.all;
-      } else {
-        pool = reelsData[category] || [];
-      }
-      let results = [];
-      for (let i = 0; i < num; i++) {
-        results.push(pool[Math.floor(Math.random() * pool.length)]);
-      }
-      return results.join('\n\n');
+    function generateFishing() {
+      document.getElementById("fishingOutput").innerText = randomFrom(fishingThings);
     }
 
-    generateReelBtn.addEventListener('click', () => {
-      reelsOutput.textContent = generateReels(1);
-    });
-    generateMultipleBtn.addEventListener('click', () => {
-      reelsOutput.textContent = generateReels(3);
-    });
-    copyReelsBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(reelsOutput.textContent).then(() => {
-        alert('Reels text copied to clipboard! 📋');
-      });
-    });
+    function generateLyric() {
+      document.getElementById("rapOutput").innerText = randomFrom(rapLines);
+    }
 
-    // Initialize first tab as active on load
-    tabs[0].click();
+    function generateStory() {
+      document.getElementById("storyOutput").innerText = randomFrom(stories);
+    }
+
+    function generateCar() {
+      document.getElementById("carOutput").innerText = randomFrom(cars);
+    }
+
+    function generateJoke() {
+      document.getElementById("jokeOutput").innerText = randomFrom(darkJokes);
+    }
+
+    function generateRaveFact() {
+      document.getElementById("raveOutput").innerHTML = randomFrom(raveFacts);
+    }
+
+    function generateMeme() {
+      document.getElementById("memeOutput").innerHTML = randomFrom(memes);
+    }
+
+    function openDanteBox() {
+      const box = document.getElementById("danteBox");
+      const output = document.getElementById("danteBoxOutput");
+      box.style.animation = "shake 0.5s";
+      setTimeout(() => {
+        box.style.animation = "";
+        output.innerText = randomFrom(danteBox);
+        triggerConfetti();
+      }, 600);
+    }
+
+    function talkToBot() {
+      const reply = document.getElementById("botReply");
+      reply.innerText = randomFrom(botReplies);
+    }
+
+    function startSecretRave() {
+      const raveRoomOutput = document.getElementById("raveRoomOutput");
+      raveRoomOutput.innerHTML = "🕺🎶 Welcome to the Secret Rave. No rules, just vibes. 🔊💃";
+      triggerConfetti();
+    }
+
+    function triggerConfetti() {
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const confettis = Array.from({ length: 100 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 20 + 10,
+        color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+        tilt: Math.random() * 10 - 10,
+        tiltAngle: 0,
+        tiltAngleIncremental: Math.random() * 0.07 + 0.05
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettis.forEach(c => {
+          ctx.beginPath();
+          ctx.lineWidth = c.r;
+          ctx.strokeStyle = c.color;
+          ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+          ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 2);
+          ctx.stroke();
+        });
+        update();
+      }
+
+      function update() {
+        confettis.forEach(c => {
+          c.y += Math.cos(c.d / 10);
+          c.tiltAngle += c.tiltAngleIncremental;
+          c.tilt = Math.sin(c.tiltAngle - Math.PI / 4) * 15;
+          if (c.y > canvas.height) {
+            c.y = -10;
+            c.x = Math.random() * canvas.width;
+          }
+        });
+      }
+
+      const interval = setInterval(draw, 30);
+      setTimeout(() => clearInterval(interval), 3000);
+    }
   </script>
 </body>
 </html>
