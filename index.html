@@ -3,269 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Personal Fun Zone</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-            color: #fff;
-            font-family: 'Arial', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes glow {
-            from { text-shadow: 0 0 10px #00ff41; }
-            to { text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41; }
-        }
-        
-        .hub-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .hub-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .hub-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 255, 65, 0.3);
-            border-color: #00ff41;
-        }
-        
-        .hub-card h3 {
-            color: #00ff41;
-            margin-bottom: 15px;
-            font-size: 1.4em;
-        }
-        
-        .button {
-            background: linear-gradient(45deg, #00ff41, #00cc33);
-            border: none;
-            color: #000;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            margin: 5px;
-            font-size: 14px;
-        }
-        
-        .button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.4);
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-        }
-        
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 90%;
-            max-height: 80%;
-            overflow-y: auto;
-            border: 2px solid #00ff41;
-        }
-        
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        
-        .game-area {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .story-text {
-            line-height: 1.6;
-            margin: 15px 0;
-            font-size: 16px;
-        }
-        
-        .choice-btn {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-            padding: 15px;
-            background: rgba(0, 255, 65, 0.2);
-            border: 1px solid #00ff41;
-            color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .choice-btn:hover {
-            background: rgba(0, 255, 65, 0.4);
-            transform: translateX(10px);
-        }
-        
-        .mini-game {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 15px 0;
-            border: 1px solid rgba(0, 255, 65, 0.3);
-        }
-        
-        .score {
-            font-size: 18px;
-            color: #00ff41;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        
-        .fishing-game {
-            position: relative;
-            height: 200px;
-            background: linear-gradient(to bottom, #4a90e2, #2c5aa0);
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: crosshair;
-        }
-        
-        .fish {
-            position: absolute;
-            width: 40px;
-            height: 30px;
-            background: #ff6b35;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .lobster {
-            background: #d2001c !important;
-            border-radius: 20px;
-        }
-        
-        .fish:hover {
-            transform: scale(1.2);
-        }
-        
-        .rap-lyrics {
-            background: rgba(0, 0, 0, 0.3);
-            border-left: 4px solid #00ff41;
-            padding: 15px;
-            margin: 15px 0;
-            font-style: italic;
-            line-height: 1.4;
-        }
-        
-        .engineering-puzzle {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-width: 300px;
-            margin: 20px auto;
-        }
-        
-        .puzzle-piece {
-            aspect-ratio: 1;
-            background: rgba(0, 255, 65, 0.2);
-            border: 1px solid #00ff41;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            transition: all 0.3s ease;
-        }
-        
-        .puzzle-piece:hover {
-            background: rgba(0, 255, 65, 0.4);
-            transform: scale(1.1);
-        }
-        
-        .food-roulette {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .roulette-wheel {
-            width: 200px;
-            height: 200px;
-            border: 4px solid #00ff41;
-            border-radius: 50%;
-            margin: 20px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            background: conic-gradient(#ff6b35, #4a90e2, #00ff41, #d2001c, #ff6b35);
-            animation: spin 0s linear;
-            cursor: pointer;
-        }
-        
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        .festival-vibe {
-            background: linear-gradient(45deg, #ff6b35, #4a90e2, #00ff41, #d2001c);
-            background-size: 400% 400%;
-            animation: rave 3s ease-in-out infinite;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 15px 0;
-        }
-        
-        @keyframes rave {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-    </style>
+    <title>Dantes Personal Fun Zone</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -309,6 +48,18 @@
                 <h3>🎪 Festival Vibes</h3>
                 <p>Rave games, fair challenges, and festival fun. Bring the party wherever you are!</p>
                 <button class="button">Party Time</button>
+            </div>
+            
+            <div class="hub-card" onclick="openModal('retro-modal')">
+                <h3>🕹️ Retro Arcade</h3>
+                <p>Classic games with a modern twist! Snake, memory games, and nostalgic fun.</p>
+                <button class="button">Game On</button>
+            </div>
+            
+            <div class="hub-card" onclick="openModal('trivia-modal')">
+                <h3>🧠 Random Trivia</h3>
+                <p>Test your knowledge with weird facts, engineering questions, and pop culture!</p>
+                <button class="button">Quiz Me</button>
             </div>
         </div>
     </div>
@@ -437,276 +188,43 @@
             </div>
         </div>
     </div>
+    
+    <!-- Retro Arcade Modal -->
+    <div id="retro-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('retro-modal')">&times;</button>
+            <h2>🕹️ Retro Arcade</h2>
+            <div class="mini-game">
+                <h3>Snake Game</h3>
+                <p>Use WASD or arrow keys to move!</p>
+                <div class="snake-game" id="snake-game"></div>
+                <button class="button" onclick="startSnake()">Start Game</button>
+                <div class="score">Score: <span id="snake-score">0</span></div>
+            </div>
+            <div class="mini-game">
+                <h3>Memory Match</h3>
+                <p>Find matching pairs!</p>
+                <div class="memory-grid" id="memory-grid"></div>
+                <button class="button" onclick="startMemory()">New Game</button>
+                <div class="score">Pairs Found: <span id="memory-score">0</span></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Trivia Modal -->
+    <div id="trivia-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('trivia-modal')">&times;</button>
+            <h2>🧠 Random Trivia</h2>
+            <div class="trivia-question" id="trivia-container">
+                <h3 id="trivia-question">Ready for some brain bending questions?</h3>
+                <div id="trivia-options"></div>
+            </div>
+            <button class="button" onclick="newTriviaQuestion()">New Question</button>
+            <div class="score">Correct Answers: <span id="trivia-score">0</span></div>
+        </div>
+    </div>
 
-    <script>
-        // Global game variables
-        let fishingScore = 0;
-        let circuitLevel = 1;
-        let mathStreak = 0;
-        let raveScore = 0;
-        let fairTickets = 0;
-        let currentMathAnswer = 0;
-        
-        // Food options for the roulette
-        const foodOptions = [
-            "🦞 Fresh Lobster Roll", "🍕 Late Night Pizza", "🌮 Street Tacos", "🍔 Loaded Burger",
-            "🍜 Ramen Bowl", "🥓 Bacon & Eggs", "🌯 Breakfast Burrito", "🍗 Fried Chicken",
-            "🥪 Deli Sandwich", "🍝 Pasta Night", "🥘 Seafood Boil", "🌭 Fair Hot Dog"
-        ];
-        
-        // Modal functions
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        
-        // Fishing Game
-        function startFishing() {
-            const gameArea = document.getElementById('fishing-game');
-            gameArea.innerHTML = '';
-            
-            // Create fish and lobsters
-            for (let i = 0; i < 8; i++) {
-                const fish = document.createElement('div');
-                fish.className = 'fish';
-                if (Math.random() < 0.3) fish.className += ' lobster';
-                
-                fish.style.left = Math.random() * 85 + '%';
-                fish.style.top = Math.random() * 85 + '%';
-                fish.style.animationDelay = Math.random() * 2 + 's';
-                
-                fish.onclick = function() {
-                    const points = this.classList.contains('lobster') ? 20 : 10;
-                    fishingScore += points;
-                    document.getElementById('fishing-score').textContent = fishingScore;
-                    this.remove();
-                    
-                    // Splash effect
-                    this.style.transform = 'scale(0)';
-                    setTimeout(() => this.remove(), 300);
-                };
-                
-                gameArea.appendChild(fish);
-            }
-        }
-        
-        // Story System
-        const stories = {
-            1: "You follow the seaweed trail and find your traps behind a rundown fish shack. The owner comes out wielding a spatula like a weapon. 'Those traps were blocking my secret exit!' he shouts. Turns out he's been running an underground lobster roll competition. He offers you a deal: keep quiet and get free lobster rolls for life.",
-            2: "You spot the Camaro at a drive-thru. The driver is eating lobster rolls made from YOUR catch! You pull up next to them and roll down your window. 'Nice lobster,' you say. They panic and speed off, but drop a business card: 'Maritime Mischief - We steal your catch, you pay our bail.' What kind of operation is this?",
-            3: "Your crew sets up the most elaborate stakeout in trailer park history. Folding chairs, energy drinks, and walkie-talkies. After 6 hours, you discover the 'thieves' are actually a family of raccoons who learned to open traps. They've been hosting their own seafood buffet. The dad raccoon gives you a tiny salute before waddling away."
-        };
-        
-        function nextStory(choice) {
-            document.getElementById('story-content').innerHTML = `<p>${stories[choice]}</p><p><em>The end... or is it?</em></p>`;
-        }
-        
-        function randomStory() {
-            const randomStories = [
-                "Your car breaks down outside a mysterious music festival where everyone speaks only in rap lyrics. The mechanic freestyles your repair estimate.",
-                "You discover your engineering degree qualifies you to be a 'Structural Integrity Consultant' for a traveling fair. Your first job: making sure the Ferris wheel doesn't become a Ferris rectangle.",
-                "A talking lobster offers to teach you the ancient art of underwater basket weaving in exchange for your best dad jokes."
-            ];
-            const randomStory = randomStories[Math.floor(Math.random() * randomStories.length)];
-            document.getElementById('story-content').innerHTML = `<p>${randomStory}</p><p>What happens next? Use your imagination!</p>`;
-        }
-        
-        // Circuit Game
-        function startCircuitGame() {
-            const puzzle = document.getElementById('circuit-puzzle');
-            puzzle.innerHTML = '';
-            
-            const components = ['⚡', '🔌', '💡', '🔋', '⚙️', '🔧', '📡', '🖥️', '⚡'];
-            const sequence = [];
-            
-            for (let i = 0; i < 9; i++) {
-                const piece = document.createElement('div');
-                piece.className = 'puzzle-piece';
-                piece.textContent = components[i];
-                piece.onclick = () => checkCircuitClick(i);
-                puzzle.appendChild(piece);
-            }
-            
-            // Generate and show sequence
-            for (let i = 0; i < circuitLevel + 2; i++) {
-                sequence.push(Math.floor(Math.random() * 9));
-            }
-            
-            showSequence(sequence);
-        }
-        
-        function showSequence(sequence) {
-            const pieces = document.querySelectorAll('.puzzle-piece');
-            sequence.forEach((index, i) => {
-                setTimeout(() => {
-                    pieces[index].style.background = 'rgba(0, 255, 65, 0.8)';
-                    setTimeout(() => {
-                        pieces[index].style.background = 'rgba(0, 255, 65, 0.2)';
-                    }, 500);
-                }, i * 600);
-            });
-        }
-        
-        function checkCircuitClick(index) {
-            // Simplified for demo - just advance level
-            circuitLevel++;
-            document.getElementById('circuit-level').textContent = circuitLevel;
-        }
-        
-        // Math Challenges
-        function newMathProblem() {
-            const operations = ['+', '-', '*'];
-            const op = operations[Math.floor(Math.random() * operations.length)];
-            const a = Math.floor(Math.random() * 50) + 1;
-            const b = Math.floor(Math.random() * 20) + 1;
-            
-            let problem, answer;
-            switch(op) {
-                case '+': problem = `${a} + ${b}`; answer = a + b; break;
-                case '-': problem = `${a} - ${b}`; answer = a - b; break;
-                case '*': problem = `${a} × ${b}`; answer = a * b; break;
-            }
-            
-            document.getElementById('math-problem').textContent = `${problem} = ?`;
-            currentMathAnswer = answer;
-        }
-        
-        function checkMath() {
-            const userAnswer = parseInt(document.getElementById('math-answer').value);
-            if (userAnswer === currentMathAnswer) {
-                mathStreak++;
-                document.getElementById('math-streak').textContent = mathStreak;
-                document.getElementById('math-answer').value = '';
-                newMathProblem();
-            } else {
-                mathStreak = 0;
-                document.getElementById('math-streak').textContent = mathStreak;
-                alert('Not quite! Try again or get a new problem.');
-            }
-        }
-        
-        // Rap Challenges
-        const rapChallenges = [
-            { line: "Life's got me spinning like a festival ride,<br>Engineering beats with my crew by my side,<br>Lobster traps set when the morning tide's high,<br>Success tastes sweet like that ____", answer: "apple pie" },
-            { line: "Rolling through town in my modified whip,<br>Bass so loud that the windows might rip,<br>Rave lights flashing as we make this trip,<br>Living life real, never fake or ____", answer: "scripted" },
-            { line: "From the wharf to the stage, I'm making my way,<br>Dark humor flowing like the words that I say,<br>Engineering mind but I party all day,<br>Living my truth in my own special ____", answer: "way" }
-        ];
-        
-        function newRapChallenge() {
-            const challenge = rapChallenges[Math.floor(Math.random() * rapChallenges.length)];
-            document.getElementById('rap-challenge').innerHTML = challenge.line;
-            document.getElementById('rap-answer').value = '';
-        }
-        
-        function checkRap() {
-            const answer = document.getElementById('rap-answer').value.toLowerCase().trim();
-            if (answer.length > 0) {
-                alert(`Nice bars! "${answer}" - that flows pretty well!`);
-                newRapChallenge();
-            }
-        }
-        
-        // Beat Creator (simplified - just visual feedback)
-        function playBeat(type) {
-            const button = event.target;
-            button.style.transform = 'scale(1.2)';
-            button.style.background = '#00ff41';
-            setTimeout(() => {
-                button.style.transform = 'scale(1.05)';
-                button.style.background = 'linear-gradient(45deg, #00ff41, #00cc33)';
-            }, 200);
-        }
-        
-        // Food Roulette
-        function spinWheel() {
-            const wheel = document.getElementById('food-wheel');
-            const result = document.getElementById('wheel-result');
-            
-            wheel.style.animation = 'spin 2s ease-out';
-            result.textContent = '🎲';
-            
-            setTimeout(() => {
-                const food = foodOptions[Math.floor(Math.random() * foodOptions.length)];
-                result.innerHTML = food;
-                wheel.style.animation = '';
-            }, 2000);
-        }
-        
-        function addCustomFood() {
-            const newFood = prompt("What's your go-to munchie food?");
-            if (newFood) {
-                foodOptions.push(`🍴 ${newFood}`);
-                alert(`Added "${newFood}" to the wheel! Spin again to try it.`);
-            }
-        }
-        
-        // Rave Game
-        function startRaveGame() {
-            const target = document.getElementById('rave-target');
-            const symbols = ['🎯', '💥', '⚡', '🔥', '💫'];
-            let currentSymbol = 0;
-            
-            const interval = setInterval(() => {
-                target.textContent = symbols[currentSymbol];
-                currentSymbol = (currentSymbol + 1) % symbols.length;
-            }, 800);
-            
-            target.onclick = () => {
-                raveScore++;
-                document.getElementById('rave-score').textContent = raveScore;
-                target.style.transform = 'scale(1.5)';
-                setTimeout(() => target.style.transform = 'scale(1)', 200);
-            };
-            
-            setTimeout(() => {
-                clearInterval(interval);
-                target.onclick = null;
-                target.textContent = '🎉';
-            }, 10000);
-        }
-        
-        // Fair Games
-        function playRingToss() {
-            const success = Math.random() < 0.4;
-            if (success) {
-                fairTickets += 5;
-                alert("🎯 Perfect throw! You won 5 tickets!");
-            } else {
-                alert("So close! The ring bounced off. Try again!");
-            }
-            document.getElementById('fair-tickets').textContent = fairTickets;
-        }
-        
-        function playDuckPond() {
-            const prizes = ["Small Prize", "Medium Prize", "Large Prize", "JACKPOT!"];
-            const prize = prizes[Math.floor(Math.random() * prizes.length)];
-            const tickets = prize === "JACKPOT!" ? 50 : Math.floor(Math.random() * 15) + 5;
-            
-            fairTickets += tickets;
-            alert(`🦆 You picked a duck and won: ${prize} (${tickets} tickets)!`);
-            document.getElementById('fair-tickets').textContent = fairTickets;
-        }
-        
-        function playBalloonDart() {
-            const hits = Math.floor(Math.random() * 4);
-            const tickets = hits * 3;
-            fairTickets += tickets;
-            
-            if (hits === 0) {
-                alert("🎈 No pops this time! Better luck next throw!");
-            } else {
-                alert(`🎯 You popped ${hits} balloons! Won ${tickets} tickets!`);
-            }
-            document.getElementById('fair-tickets').textContent = fairTickets;
-        }
-        
-        // Initialize some games on load
-        window.onload = function() {
-            newMathProblem();
-            newRapChallenge();
-        };
-        
-        // Close modals when
+    <script src="script.js"></script>
+</body>
+</html>
