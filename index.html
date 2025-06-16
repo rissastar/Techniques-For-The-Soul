@@ -1,55 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="neon">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover" />
-  <title>Dante’s Fun Hub 🎉</title>
-
-  <!-- iOS Web App Meta -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Dante’s Fun Hub" />
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-
-  <!-- Android & modern browsers manifest -->
-  <link rel="manifest" href="manifest.json" />
-
-  <!-- Neon fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
-
-  <!-- Main styles -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dante’s Fun Hub</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- Particle background canvas -->
-  <canvas id="particle-canvas"></canvas>
-
   <header>
-    <h1>💖 Hey Dante 💖</h1>
-    <p>From Larissa: “Your sleek neon rave hub—add me to Home Screen!”</p>
+    <h1>Dante’s Fun Hub 🎉</h1>
+    <p class="subtitle">For my boy, Dante — Stay lit, stay focused 🔥</p>
   </header>
 
-  <div id="game-area">
-    <button onclick="showFocusTimer()">⏱ Focus Timer</button>
-    <button onclick="showRaveRhythm()">🎵 Rave Rhythm</button>
-    <button onclick="showDarkJokes()">🃏 Dark Jokes</button>
-    <button onclick="showCarRepair()">🔧 Fix It Fast</button>
-    <button onclick="showMemoryMatch()">🧠 Memory Match</button>
-    <button onclick="showLobsterMaze()">🦞 Lobster Escape</button>
-    <button onclick="showFunnyFacts()">🧠 Funny Facts</button>
-    <button onclick="showSnackIdeas()">🍿 Snack Ideas</button>
-    <button onclick="showDanteBot()">🤖 DanteBot</button>
-    <button onclick="showZeusCorner()">🐶 Zeus’s Corner</button>
+  <nav>
+    <button data-popup="minigames" aria-label="Mini Games">🎮 Mini Games</button>
+    <button data-popup="dailychallenge" aria-label="Daily Challenge">📅 Daily Challenge</button>
+    <button data-popup="zeuscorner" aria-label="Zeus’s Corner">🐾 Zeus’s Corner</button>
+    <button data-popup="dantebot" aria-label="DanteBot">🤖 DanteBot</button>
+    <button data-popup="settings" aria-label="Settings">⚙️ Settings</button>
+  </nav>
+
+  <main>
+    <section id="welcome-msg">
+      <h2>Welcome, Dante!</h2>
+      <p>Here’s a space made just for you — filled with fun, laughs, and good vibes. <br/>
+      Your dog Zeus says hi too! 🐕‍🦺</p>
+      <p class="from-larissa">💖 Message from Larissa: "Keep shining, babe. Proud of your strength."</p>
+    </section>
+  </main>
+
+  <!-- Popups -->
+
+  <!-- Mini Games Popup -->
+  <div class="popup" id="popup-minigames" role="dialog" aria-modal="true" aria-labelledby="popup-minigames-title" hidden>
+    <div class="popup-content">
+      <button class="close-btn" aria-label="Close Mini Games popup">&times;</button>
+      <h3 id="popup-minigames-title">🎮 Mini Games</h3>
+      <div class="game-list">
+        <button id="reaction-game-btn" class="game-btn">⚡ Quick Reaction</button>
+        <button id="trivia-game-btn" class="game-btn">❓ Trivia Quiz</button>
+        <button id="wordpuzzle-game-btn" class="game-btn">🔤 Word Puzzle</button>
+        <button id="fixcode-game-btn" class="game-btn">🔧 Fix the Code</button>
+      </div>
+      <div id="game-container"></div>
+    </div>
   </div>
 
-  <!-- Main script -->
+  <!-- Daily Challenge Popup -->
+  <div class="popup neon-orange" id="popup-dailychallenge" role="dialog" aria-modal="true" aria-labelledby="popup-dailychallenge-title" hidden>
+    <div class="popup-content">
+      <button class="close-btn" aria-label="Close Daily Challenge popup">&times;</button>
+      <h3 id="popup-dailychallenge-title">📅 Daily Challenge</h3>
+      <div id="dailychallenge-content"></div>
+    </div>
+  </div>
+
+  <!-- Zeus's Corner Popup -->
+  <div class="popup neon-pink" id="popup-zeuscorner" role="dialog" aria-modal="true" aria-labelledby="popup-zeuscorner-title" hidden>
+    <div class="popup-content">
+      <button class="close-btn" aria-label="Close Zeus’s Corner popup">&times;</button>
+      <h3 id="popup-zeuscorner-title">🐾 Zeus’s Corner</h3>
+      <div id="zeus-content"></div>
+    </div>
+  </div>
+
+  <!-- DanteBot Popup -->
+  <div class="popup neon-blue" id="popup-dantebot" role="dialog" aria-modal="true" aria-labelledby="popup-dantebot-title" hidden>
+    <div class="popup-content">
+      <button class="close-btn" aria-label="Close DanteBot popup">&times;</button>
+      <h3 id="popup-dantebot-title">🤖 DanteBot</h3>
+      <div id="dantebot-chat">
+        <div id="chat-log"></div>
+        <input type="text" id="chat-input" placeholder="Ask DanteBot something..." autocomplete="off" />
+        <button id="chat-send-btn" aria-label="Send message to DanteBot">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Popup -->
+  <div class="popup neon-green" id="popup-settings" role="dialog" aria-modal="true" aria-labelledby="popup-settings-title" hidden>
+    <div class="popup-content">
+      <button class="close-btn" aria-label="Close Settings popup">&times;</button>
+      <h3 id="popup-settings-title">⚙️ Settings</h3>
+      <div class="settings-section">
+        <label for="font-size-range">Font Size: <span id="font-size-display">16</span>px</label>
+        <input type="range" id="font-size-range" min="12" max="28" value="16" />
+      </div>
+      <div class="settings-section">
+        <label for="color-theme-select">Color Theme:</label>
+        <select id="color-theme-select" aria-label="Select color theme">
+          <option value="neon">Neon (Default)</option>
+          <option value="sunset">Sunset</option>
+          <option value="darkrave">Dark Rave</option>
+          <option value="daylight">Daylight</option>
+        </select>
+      </div>
+      <div class="settings-section">
+        <label><input type="checkbox" id="toggle-sound" checked /> Enable Sound Effects</label>
+      </div>
+      <div class="settings-section">
+        <label><input type="checkbox" id="simple-mode-toggle" /> Simple Mode (Less Visuals)</label>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Larissa’s Love for Dante ❤️</p>
+  </footer>
+
   <script src="script.js"></script>
-  <!-- Register service worker for offline support -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(console.error);
-    }
-  </script>
 </body>
 </html>
