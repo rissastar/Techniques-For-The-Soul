@@ -1,120 +1,128 @@
 @import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap');
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { width:100%; height:100%; }
-
-body {
-  font-family: 'Bungee Spice', cursive;
-  background: linear-gradient(270deg, #0f0f1f, #1f001f, #001f1f);
-  background-size: 600% 600%;
-  animation: bgGradient 12s ease infinite;
-  color: #fff;
-  overflow-x: hidden;
-  padding: 0 10px;
+:root {
+  --bg-neon: linear-gradient(270deg,#0f0f1f,#1f001f,#001f1f);
+  --bg-soft: #f8f8f8;
+  --text-neon: #fff;
+  --text-soft: #111;
+  --accent1: #ff0077;
+  --accent2: #00ffff;
 }
 
+/* Theme vars */
+html[data-theme="neon"] {
+  --bg: var(--bg-neon);
+  --text: var(--text-neon);
+  --mod-bg: rgba(255,255,255,0.05);
+  --btn-bg: var(--accent1);
+  --btn-text: #fff;
+}
+html[data-theme="soft"] {
+  --bg: var(--bg-soft);
+  --text: var(--text-soft);
+  --mod-bg: #fff;
+  --btn-bg: #ddd;
+  --btn-text: #111;
+}
+
+* { box-sizing: border-box; margin:0; padding:0; }
+html,body { width:100%; height:100%; }
+
+body {
+  font-family:'Bungee Spice',cursive;
+  background: var(--bg);
+  background-size:600% 600%;
+  animation:bgGradient 12s ease infinite alternate;
+  color: var(--text);
+  overflow-x:hidden;
+  padding:0 10px;
+}
 @keyframes bgGradient {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  from{background-position:0% 50%} to{background-position:100% 50%}
 }
 
 #confettiCanvas {
-  position: fixed; top:0; left:0;
+  position:fixed; top:0; left:0;
   width:100%; height:100%;
   pointer-events:none; z-index:9999;
 }
 
 .container {
-  max-width:600px; margin:auto; padding:10px 0;
-  text-align:center;
+  max-width:600px; margin:auto; padding:10px 0; text-align:center;
 }
 
+header { position:relative; }
 header h1 {
-  font-size:2.5rem;
-  color:#ff0077;
-  text-shadow:0 0 8px #00ffff,0 0 16px #ff0077;
-  animation: neonGlow 1.5s ease-in-out infinite alternate;
+  font-size:2.5rem; margin-bottom:8px;
+  color:var(--accent1);
+  text-shadow:0 0 8px var(--accent2),0 0 16px var(--accent1);
+  animation:neonGlow 1.5s ease-in-out infinite alternate;
 }
-
 @keyframes neonGlow {
-  from { text-shadow:0 0 8px #00ffff,0 0 16px #ff0077; }
-  to   { text-shadow:0 0 16px #00ffff,0 0 32px #ff0077; }
+  from{ text-shadow:0 0 8px var(--accent2),0 0 16px var(--accent1); }
+  to{ text-shadow:0 0 16px var(--accent2),0 0 32px var(--accent1); }
+}
+.icon-btn {
+  position:absolute; top:0; right:0;
+  background:transparent; border:none; font-size:1.8rem;
+  cursor:pointer; color:var(--accent2);
 }
 
 .module {
-  background: rgba(255,255,255,0.05);
-  border: 3px solid #0ff;
-  border-radius:12px;
-  margin:15px 0; padding:15px;
-  box-shadow:0 0 12px #0ff;
-  transition: transform .2s, box-shadow .2s;
+  background:var(--mod-bg);
+  border:3px solid var(--accent2);
+  border-radius:12px; margin:15px 0; padding:15px;
+  box-shadow:0 0 12px var(--accent2);
+  transition:transform .2s,box-shadow .2s;
 }
-
 .module:hover {
-  transform: scale(1.02);
-  box-shadow:0 0 30px #ff00ff;
+  transform:scale(1.02);
+  box-shadow:0 0 30px var(--accent1);
 }
-
 .module h2 {
-  font-size:1.6rem; color:#0ff;
-  text-shadow:0 0 6px #0ff;
-  margin-bottom:10px;
+  font-size:1.6rem; color:var(--accent2);
+  text-shadow:0 0 6px var(--accent2); margin-bottom:10px;
 }
 
 .glow-btn {
-  display:inline-block;
-  max-width:100%;
-  width:auto;
-  margin:8px auto;
-  padding:12px 20px;
-  font-size:1.1rem;
-  background:#ff0077;
-  color:#fff;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
-  text-shadow:0 0 6px #000;
-  box-shadow:0 0 8px #ff0077;
-  transition: all .25s ease;
+  display:inline-block; max-width:100%; margin:8px auto;
+  padding:12px 20px; font-size:1.1rem;
+  background:var(--btn-bg); color:var(--btn-text);
+  border:none; border-radius:8px; cursor:pointer;
+  font-weight:bold; text-shadow:0 0 6px #000;
+  box-shadow:0 0 8px var(--accent1);
+  transition:all .25s;
 }
-
 .glow-btn:hover {
-  background:#0ff;
-  color:#000;
-  box-shadow:0 0 20px #0ff,0 0 40px #0ff;
+  background:var(--accent2); color:#000;
+  box-shadow:0 0 20px var(--accent2),0 0 40px var(--accent2);
   transform:scale(1.05);
 }
 
-.output {
-  font-size:1.05rem;
-  margin-top:10px;
-  min-height:40px;
-  padding:0 8px;
+.output, .chat-window {
+  font-size:1.05rem; margin-top:10px; min-height:40px;
+  padding:0 8px; text-align:left; overflow-wrap:break-word;
+}
+.chat-window {
+  max-height:150px; overflow-y:auto; background:rgba(0,0,0,0.1);
+  padding:10px; border-radius:8px;
 }
 
 .box {
-  width:80px; height:80px;
-  margin:12px auto;
-  background:#222;
-  border:4px solid #ff0077;
-  border-radius:12px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:2.5rem;
+  width:80px; height:80px; margin:12px auto;
+  background:var(--mod-bg); border:4px solid var(--accent1);
+  border-radius:12px; display:flex; align-items:center;
+  justify-content:center; font-size:2.5rem; transition:transform .3s;
 }
 
 #gameCanvas {
-  background:#111;
-  border:2px solid #0ff;
-  border-radius:8px;
-  width:100%; height:auto;
-  margin:10px auto;
+  background:rgba(0,0,0,0.2); border:2px solid var(--accent2);
+  border-radius:8px; width:100%; height:auto; margin:10px auto;
   touch-action:none;
 }
 
-/* MOBILE TWEAKS */
-@media (max-width: 480px) {
+/* Mobile tweaks */
+@media (max-width:480px) {
   header h1 { font-size:2rem; }
   .module h2 { font-size:1.4rem; }
   .glow-btn { font-size:1rem; padding:10px; }
