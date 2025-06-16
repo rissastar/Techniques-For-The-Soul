@@ -114,3 +114,76 @@ document.addEventListener("keydown", (e) => {
     }
   }
 });
+  window.showFunnyFacts = () => {
+    const facts = [
+      "Octopuses have three hearts!",
+      "Bananas are berries, but strawberries aren't.",
+      "Lobsters pee out of their faces to communicate!",
+      "You can hear a blue whale’s heartbeat from 2 miles away."
+    ];
+    showPopup(`
+      <h2>🧠 Funny Facts</h2>
+      <button id="fact-btn" class="glow-btn">Show Me</button>
+      <p id="fact-text"></p>
+    `);
+    const factText = document.getElementById("fact-text");
+    document.getElementById("fact-btn").addEventListener("click", () => {
+      factText.textContent = facts[Math.floor(Math.random() * facts.length)];
+    });
+  };
+
+  window.showSnackIdeas = () => {
+    const snacks = [
+      "🍫 Chocolate-dipped bacon",
+      "🍟 Fries with gravy and hot sauce",
+      "🍓 Frozen grapes with lemon juice",
+      "🧀 Cheese quesadilla + ranch dip"
+    ];
+    showPopup(`
+      <h2>🍿 Snack Ideas</h2>
+      <button id="snack-btn" class="glow-btn">I’m Hungry</button>
+      <p id="snack-text"></p>
+    `);
+    const snackText = document.getElementById("snack-text");
+    document.getElementById("snack-btn").addEventListener("click", () => {
+      snackText.textContent = snacks[Math.floor(Math.random() * snacks.length)];
+    });
+  };
+
+  window.showDanteBot = () => {
+    showPopup(`
+      <h2>🤖 DanteBot</h2>
+      <input id="dantebot-input" type="text" placeholder="Ask me anything..." />
+      <button id="dantebot-btn" class="glow-btn">Ask</button>
+      <p id="dantebot-response"></p>
+    `);
+    const input = document.getElementById("dantebot-input");
+    const response = document.getElementById("dantebot-response");
+    document.getElementById("dantebot-btn").addEventListener("click", () => {
+      const q = input.value.toLowerCase();
+      let a = "Hmm... I'm thinking about that.";
+      if (q.includes("car")) a = "Sounds like you need more horsepower, bro.";
+      else if (q.includes("lobster")) a = "🦞 They’re plotting underwater, I swear.";
+      else if (q.includes("love")) a = "Larissa loves you like crazy, you goof.";
+      else if (q.includes("joke")) a = "Why did the lobster blush? It saw the ocean’s bottom!";
+      response.textContent = a;
+    });
+  };
+
+  window.showZeusCorner = () => {
+    const zeusStuff = [
+      "🐾 Zeus says: I only chew expensive shoes.",
+      "🐶 If it fits, I sits. Even if it’s your face.",
+      "🐾 Zeus Fact: Dogs can smell your feelings. And snacks.",
+      "🐶 Zeus Joke: Why did the dog sit in the shade? Because he didn’t want to be a hot dog!"
+    ];
+    showPopup(`
+      <h2>🐶 Zeus’s Corner</h2>
+      <button id="zeus-btn" class="glow-btn">Woof!</button>
+      <p id="zeus-text"></p>
+    `);
+    const zeusText = document.getElementById("zeus-text");
+    document.getElementById("zeus-btn").addEventListener("click", () => {
+      zeusText.textContent = zeusStuff[Math.floor(Math.random() * zeusStuff.length)];
+    });
+  };
