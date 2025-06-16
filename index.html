@@ -2,80 +2,234 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dante’s Sh*t That Reels Me In</title>
-  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Patrick+Hand&family=Orbitron&display=swap" rel="stylesheet" />
   <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 20px;
+      padding: 30px 20px;
       font-family: 'Patrick Hand', cursive;
       background: linear-gradient(135deg, #1e1e2f, #3b0a45);
       color: #fff8dc;
       text-align: center;
       overflow-x: hidden;
+      user-select: none;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
+    /* Header with layered glow */
     h1 {
       font-family: 'Luckiest Guy', cursive;
-      font-size: 2.5em;
+      font-size: clamp(2rem, 6vw, 3.2rem);
       margin-bottom: 20px;
       color: #ffb6f2;
-      text-shadow: 0 0 10px #ff00ff, 0 0 20px #8800cc;
+      text-shadow:
+        0 0 8px #ff00ff,
+        0 0 20px #d100ff,
+        0 0 30px #ff00ffcc,
+        0 0 40px #8800cc;
+      animation: sparkle 4s infinite ease-in-out alternate;
+      user-select: text;
     }
 
+    /* Button container flex wrap */
     .button-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
+      gap: 14px;
+      max-width: 800px;
       margin-top: 10px;
+      margin-bottom: 30px;
     }
 
+    /* Buttons styling with hover and focus */
     button {
-      padding: 12px 18px;
-      font-size: 1em;
+      padding: 14px 20px;
+      font-size: 1.1em;
       border: 2px dashed #fff5ee;
-      border-radius: 15px;
+      border-radius: 16px;
       background: #290d3c;
       color: #ffebcd;
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      box-shadow: 0 0 10px #e75480;
+      transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.25s ease,
+        box-shadow 0.4s ease;
+      box-shadow:
+        0 0 10px #e75480aa,
+        inset 0 0 5px #ff77aa44;
       font-family: 'Patrick Hand', cursive;
+      user-select: none;
+      filter: drop-shadow(0 0 1.5px #ff77aacc);
     }
 
-    button:hover {
+    /* Pulsing glow on hover and focus */
+    button:hover,
+    button:focus {
       background: #ff77aa;
       color: #200020;
-      transform: scale(1.08);
       border-style: solid;
-      text-shadow: 0 0 5px #fff;
+      text-shadow: 0 0 6px #fff;
+      transform: scale(1.1);
+      box-shadow:
+        0 0 18px #ff4dbb,
+        inset 0 0 8px #ff77aa88;
+      outline: none;
+      animation: pulseGlow 2s infinite ease-in-out;
     }
 
+    /* Output area */
     #output {
       margin-top: 30px;
-      font-size: 1.3em;
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
       color: #ffd1fa;
-      padding: 15px;
+      padding: 18px 25px;
       border: 2px dotted #ffebcd;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      text-shadow: 0 0 2px #fff;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.07);
+      text-shadow: 0 0 4px #fff5ff;
+      max-width: 700px;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: text;
+      opacity: 0;
+      animation: fadeIn 0.8s forwards;
+      transition: opacity 0.4s ease;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.3;
+      font-weight: 600;
+      letter-spacing: 0.03em;
     }
 
+    /* Show output with fade */
+    #output.visible {
+      opacity: 1;
+    }
+
+    /* Animations */
     @keyframes sparkle {
-      0%, 100% { text-shadow: 0 0 8px #ff00ff; }
-      50% { text-shadow: 0 0 15px #00ffff; }
+      0%, 100% {
+        text-shadow:
+          0 0 8px #ff00ff,
+          0 0 20px #d100ff,
+          0 0 30px #ff00ffcc,
+          0 0 40px #8800cc;
+      }
+      50% {
+        text-shadow:
+          0 0 15px #00ffff,
+          0 0 25px #66ffffcc,
+          0 0 35px #00ffffaa,
+          0 0 50px #44aaffcc;
+      }
     }
 
-    h1, #output {
-      animation: sparkle 3s infinite ease-in-out;
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 18px #ff4dbb, inset 0 0 8px #ff77aa88; }
+      50% { box-shadow: 0 0 28px #ff77cc, inset 0 0 12px #ff99bbcc; }
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    /* Modal overlay for intro message */
+    #intro-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(29, 0, 29, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 9999;
+      opacity: 0;
+      animation: modalFadeIn 0.5s forwards;
+    }
+
+    @keyframes modalFadeIn {
+      to { opacity: 1; }
+    }
+
+    #intro-modal .modal-content {
+      background: #3b0a45;
+      border: 3px solid #ff66bb;
+      border-radius: 20px;
+      max-width: 380px;
+      padding: 25px 30px;
+      box-shadow:
+        0 0 25px #ff66bbaa,
+        inset 0 0 12px #ff44aa99;
+      color: #ffe1fa;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.2rem;
+      line-height: 1.4;
+      position: relative;
+      user-select: text;
+      text-align: center;
+    }
+
+    #intro-modal .modal-content h2 {
+      font-family: 'Luckiest Guy', cursive;
+      margin-bottom: 15px;
+      color: #ffb6f2;
+      text-shadow:
+        0 0 6px #ff00ff,
+        0 0 12px #d100ff;
+    }
+
+    #intro-modal button.close-btn {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      border: none;
+      background: transparent;
+      font-size: 1.5rem;
+      color: #ff77aa;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    #intro-modal button.close-btn:hover {
+      color: #ffbbdd;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 420px) {
+      body {
+        padding: 20px 12px;
+      }
+      button {
+        font-size: 0.9em;
+        padding: 12px 14px;
+      }
+      #intro-modal .modal-content {
+        max-width: 90vw;
+        font-size: 1.1rem;
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
+
   <h1>🎣 Sh*t That Reels Me In<br>For Dante 💖</h1>
+
   <div class="button-container">
     <button onclick="whatIf()">🧠 What If…</button>
     <button onclick="panicButton()">🚨 Panic Button</button>
@@ -91,13 +245,39 @@
     <button onclick="munchieMood()">🍔 Munchie Mood Matcher</button>
     <button onclick="buildCar()">🚗 Build-a-Car Dreamer</button>
   </div>
+
   <div id="output"></div>
 
+  <!-- Intro Modal -->
+  <div id="intro-modal" role="dialog" aria-modal="true" aria-labelledby="intro-title" aria-describedby="intro-text">
+    <div class="modal-content">
+      <button class="close-btn" aria-label="Close Intro Message" onclick="closeIntroModal()">×</button>
+      <h2 id="intro-title">Hey Dante 💖</h2>
+      <p id="intro-text">
+        Welcome to your custom dopamine dive! Whenever you need a spark, a laugh, or just some wild vibes, hit the buttons and reel in the fun. Made with love by Larissa. 🎣✨
+      </p>
+    </div>
+  </div>
+
   <script>
+    // Helper to pick random from array
     function getRandom(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
     }
 
+    // Output area reference
+    const output = document.getElementById('output');
+
+    // Utility to show text in output with fade effect
+    function showOutput(text) {
+      output.classList.remove('visible');  // reset for fade
+      setTimeout(() => {
+        output.textContent = text;
+        output.classList.add('visible');
+      }, 150);
+    }
+
+    // Button functions
     function whatIf() {
       const ideas = [
         "What if lobsters had rap battles to decide trap hierarchy?",
@@ -106,11 +286,15 @@
         "What if hot dogs could talk and just wanted to be left alone?",
         "What if your fishing trap caught a mixtape and it slapped?"
       ];
-      document.getElementById("output").innerText = getRandom(ideas);
+      showOutput(getRandom(ideas));
     }
 
     function panicButton() {
-      const sounds = ["Smoke break!", "Hide! It’s your parole officer!", "Get in the Civic, Dante – we’re going to Dollarama!"];
+      const sounds = [
+        "Smoke break!",
+        "Hide! It’s your parole officer!",
+        "Get in the Civic, Dante – we’re going to Dollarama!"
+      ];
       alert(getRandom(sounds));
       document.body.style.background = "#ff00ff";
       setTimeout(() => {
@@ -126,7 +310,7 @@
         "A fish with a neck tattoo",
         "Ricky from TPB passed out in a trap"
       ];
-      document.getElementById("output").innerText = getRandom(catches);
+      showOutput(getRandom(catches));
     }
 
     function freestyle() {
@@ -136,7 +320,7 @@
         "Freestyle like you’re Sassy the Sasquatch on molly",
         "Rap your last munchie order like a love song"
       ];
-      document.getElementById("output").innerText = getRandom(challenges);
+      showOutput(getRandom(challenges));
     }
 
     function movieRoast() {
@@ -146,7 +330,7 @@
         "The Trapfather: Crustacean Crime Wars",
         "Rave Wars: The Bass Awakens"
       ];
-      document.getElementById("output").innerText = getRandom(roasts);
+      showOutput(getRandom(roasts));
     }
 
     function fixIt() {
@@ -156,7 +340,7 @@
         "Fix a trailer axle with poutine grease",
         "Invent a stoner-proof fair ride"
       ];
-      document.getElementById("output").innerText = getRandom(builds);
+      showOutput(getRandom(builds));
     }
 
     function raveVibes() {
@@ -166,7 +350,7 @@
         "Laser lobsters in the sky ✨🦞",
         "This track slaps like Sassy’s tail"
       ];
-      document.getElementById("output").innerText = getRandom(vibes);
+      showOutput(getRandom(vibes));
     }
 
     function sassySay() {
@@ -175,7 +359,7 @@
         "If you can’t rave with the wolves, stay in the Civic",
         "Smoke 'em if ya got 'em – just not near the traps"
       ];
-      document.getElementById("output").innerText = getRandom(sass);
+      showOutput(getRandom(sass));
     }
 
     function darkJoke() {
@@ -184,7 +368,7 @@
         "I asked a lobster for advice. Now I owe him $20 and my dignity.",
         "Life’s like a broken Civic – loud, confusing, and full of smoke."
       ];
-      document.getElementById("output").innerText = getRandom(jokes);
+      showOutput(getRandom(jokes));
     }
 
     function trapTalk() {
@@ -193,7 +377,7 @@
         "'We rotating traps or feelings today?'",
         "'If I get caught again, I’m blaming the humans.'"
       ];
-      document.getElementById("output").innerText = getRandom(convos);
+      showOutput(getRandom(convos));
     }
 
     function funnyStory() {
@@ -202,7 +386,7 @@
         "He rolled a blunt with a parking ticket and passed it to a seagull.",
         "Once caught a fish wearing a glow stick necklace from Evolve."
       ];
-      document.getElementById("output").innerText = getRandom(stories);
+      showOutput(getRandom(stories));
     }
 
     function munchieMood() {
@@ -213,7 +397,7 @@
         "Funnel cake burrito with bacon",
         "Fried pickles with caramel drizzle"
       ];
-      document.getElementById("output").innerText = getRandom(combos);
+      showOutput(getRandom(combos));
     }
 
     function buildCar() {
@@ -223,8 +407,35 @@
         "A van powered by weed smoke and dreams",
         "Go-kart modded with fishing rods"
       ];
-      document.getElementById("output").innerText = getRandom(builds);
+      showOutput(getRandom(builds));
     }
+
+    // Intro modal logic
+    const introModal = document.getElementById('intro-modal');
+
+    function closeIntroModal() {
+      introModal.style.animation = 'modalFadeOut 0.3s forwards';
+      introModal.addEventListener('animationend', () => {
+        introModal.style.display = 'none';
+      }, { once: true });
+    }
+
+    // Add fade out keyframe
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `
+      @keyframes modalFadeOut {
+        from {opacity: 1;}
+        to {opacity: 0;}
+      }
+    `;
+    document.head.appendChild(styleSheet);
+
+    // Optional: Auto close modal after 12 seconds
+    setTimeout(() => {
+      if (introModal.style.display !== 'none') closeIntroModal();
+    }, 12000);
+
   </script>
+
 </body>
 </html>
