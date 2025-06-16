@@ -2,127 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dante’s Fun Hub 4.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Dante’s Fun Hub 4.2</title>
   <style>
     body {
+      background: linear-gradient(to bottom, #000010, #0f001a);
+      font-family: 'Comic Sans MS', sans-serif;
       margin: 0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(135deg, #000000, #1a1a2e, #16213e);
+      padding: 0;
       color: #fff;
       text-align: center;
-      padding: 2rem;
-      background-attachment: fixed;
     }
     h1 {
-      font-size: 2.5rem;
-      color: #00ffe1;
-      text-shadow: 0 0 10px #00ffe1;
+      font-size: 2em;
+      color: #00ffcc;
+      padding: 20px;
+      text-shadow: 0 0 10px #0ff;
     }
     .btn {
-      background: #ff00c8;
-      color: #fff;
-      padding: 15px 20px;
+      background: #111;
+      border: 2px solid #0ff;
+      color: #0ff;
+      padding: 10px 20px;
       margin: 10px;
-      border: none;
-      font-size: 1.1rem;
+      font-size: 1.2em;
       border-radius: 10px;
-      box-shadow: 0 0 15px #ff00c8;
-      cursor: pointer;
-      transition: transform 0.2s;
+      box-shadow: 0 0 10px #0ff;
     }
     .btn:hover {
-      transform: scale(1.05);
+      background: #0ff;
+      color: #000;
     }
     .popup {
       display: none;
       position: fixed;
       top: 10%;
       left: 5%;
-      right: 5%;
-      background: rgba(10,10,20,0.95);
-      border: 2px solid #00ffe1;
+      width: 90%;
+      background: #222;
+      color: #fff;
+      border: 3px solid #0ff;
+      box-shadow: 0 0 15px #0ff;
       border-radius: 15px;
+      z-index: 1000;
       padding: 20px;
-      z-index: 100;
-      box-shadow: 0 0 25px #00ffe1;
+      text-align: center;
     }
     .popup-content {
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
+      font-size: 1.2em;
+      margin-bottom: 15px;
     }
     .close-btn {
-      background: #00ffe1;
-      color: #000;
-      padding: 10px 15px;
+      background: #ff0066;
+      color: white;
       border: none;
-      font-weight: bold;
+      padding: 8px 15px;
       border-radius: 8px;
+      font-weight: bold;
     }
-    footer {
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      opacity: 0.7;
+    .popup img {
+      max-width: 100%;
+      border-radius: 10px;
     }
+    .themed-420 { background: url('https://i.imgur.com/XpL8N2n.jpg') center/cover no-repeat; }
   </style>
 </head>
 <body>
+  <h1>Welcome to Dante's Fun Hub 4.2 🎉</h1>
+  <p>Hi Dante, this is a special place just for you. Love, Larissa 💖</p>
 
-  <h1>Dante’s Fun Hub 💥</h1>
-  <p>Hey Dante! 💖 Larissa made this for you — all your favorite things in one place. ADHD-friendly, rave-approved, and Zeus-certified 🐾</p>
+  <button class="btn" onclick="showPopup('popup420')">🌿 420 Facts</button>
+  <button class="btn" onclick="showPopup('popupLobster')">🦞 Lobster Facts</button>
+  <button class="btn" onclick="showPopup('popupSnacks')">🍕 Snack Ideas</button>
+  <button class="btn" onclick="showPopup('popupCars')">🚗 Car Tips</button>
+  <button class="btn" onclick="showPopup('popupJokes')">😂 TPB Jokes</button>
+  <button class="btn" onclick="showPopup('popupZeus')">🐾 Zeus's Corner</button>
+  <button class="btn" onclick="showPopup('popupGame')">🎮 Mini Game</button>
 
-  <button class="btn" onclick="showPopup('danteBox')">🎁 Open DanteBox</button>
-  <button class="btn" onclick="showPopup('dailyChallenge')">🔥 Daily Challenge</button>
-  <button class="btn" onclick="showPopup('zeusCorner')">🐾 Zeus’s Corner</button>
-  <button class="btn" onclick="showPopup('carCorner')">🚗 Car Fix Corner</button>
-  <button class="btn" onclick="showPopup('danteBot')">🤖 Talk to DanteBot</button>
-  <button class="btn" onclick="showPopup('funFact')">😂 Funny Fact</button>
-  <button class="btn" onclick="showPopup('snackIdeas')">🍟 Snack Attack</button>
-
-  <!-- Popups -->
-  <div id="danteBox" class="popup">
-    <div class="popup-content" id="danteBoxText"></div>
-    <button class="btn" onclick="newDanteBox()">🔁 Another!</button>
-    <button class="close-btn" onclick="hidePopup('danteBox')">Close</button>
+  <!-- Popup Template -->
+  <div id="popup420" class="popup themed-420">
+    <div class="popup-content" id="fact420"></div>
+    <button class="btn" onclick="nextFact('420')">💨 Next</button>
+    <button class="close-btn" onclick="hidePopup('popup420')">Close</button>
   </div>
 
-  <div id="dailyChallenge" class="popup">
-    <div class="popup-content" id="challengeText"></div>
-    <button class="btn" onclick="newChallenge()">Try Another</button>
-    <button class="close-btn" onclick="hidePopup('dailyChallenge')">Close</button>
+  <div id="popupLobster" class="popup">
+    <div class="popup-content" id="factLobster"></div>
+    <button class="btn" onclick="nextFact('Lobster')">Next 🦞</button>
+    <button class="close-btn" onclick="hidePopup('popupLobster')">Close</button>
   </div>
 
-  <div id="zeusCorner" class="popup">
-    <div class="popup-content" id="zeusText"></div>
-    <button class="btn" onclick="newZeus()">🐶 Woof Again</button>
-    <button class="close-btn" onclick="hidePopup('zeusCorner')">Close</button>
+  <div id="popupSnacks" class="popup">
+    <div class="popup-content" id="factSnacks"></div>
+    <button class="btn" onclick="nextFact('Snacks')">Next 🍟</button>
+    <button class="close-btn" onclick="hidePopup('popupSnacks')">Close</button>
   </div>
 
-  <div id="carCorner" class="popup">
-    <div class="popup-content" id="carText"></div>
-    <button class="btn" onclick="newCar()">🔧 Another</button>
-    <button class="close-btn" onclick="hidePopup('carCorner')">Close</button>
+  <div id="popupCars" class="popup">
+    <div class="popup-content" id="factCars"></div>
+    <button class="btn" onclick="nextFact('Cars')">Next 🛠</button>
+    <button class="close-btn" onclick="hidePopup('popupCars')">Close</button>
   </div>
 
-  <div id="danteBot" class="popup">
-    <div class="popup-content" id="botText"></div>
-    <button class="btn" onclick="newBot()">💬 Ask Again</button>
-    <button class="close-btn" onclick="hidePopup('danteBot')">Close</button>
+  <div id="popupJokes" class="popup">
+    <div class="popup-content" id="factJokes"></div>
+    <button class="btn" onclick="nextFact('Jokes')">Next 🤪</button>
+    <button class="close-btn" onclick="hidePopup('popupJokes')">Close</button>
   </div>
 
-  <div id="funFact" class="popup">
-    <div class="popup-content" id="factText"></div>
-    <button class="btn" onclick="newFact()">😂 Another</button>
-    <button class="close-btn" onclick="hidePopup('funFact')">Close</button>
+  <div id="popupZeus" class="popup">
+    <div class="popup-content" id="factZeus"></div>
+    <button class="btn" onclick="nextFact('Zeus')">Next 🐶</button>
+    <button class="close-btn" onclick="hidePopup('popupZeus')">Close</button>
   </div>
 
-  <div id="snackIdeas" class="popup">
-    <div class="popup-content" id="snackText"></div>
-    <button class="btn" onclick="newSnack()">🍕 New Idea</button>
-    <button class="close-btn" onclick="hidePopup('snackIdeas')">Close</button>
+  <div id="popupGame" class="popup">
+    <div class="popup-content">
+      <p>Click the glowing button as fast as you can!</p>
+      <button class="btn" onclick="clickCounter()">Click Me!</button>
+      <p>Score: <span id="score">0</span></p>
+    </div>
+    <button class="close-btn" onclick="hidePopup('popupGame')">Close</button>
   </div>
-
-  <footer>Made with 💖 by Larissa — for Dante only.</footer>
 
   <script>
     function showPopup(id) {
@@ -132,73 +133,60 @@
       document.getElementById(id).style.display = 'none';
     }
 
-    const danteBoxItems = [
-      "🎧 Your rap anthem of the day: 'Still D.R.E.'",
-      "🍔 Go eat: Chips + cheese + ranch = stoner heaven.",
-      "💡 Fix something today. Even if it’s just your snack.",
-      "🤣 TPB Quote: 'I’m not a drunk, I’m just drinkin’!' - Ricky"
-    ];
-    const challenges = [
-      "Do your best Bubbles impression 🕶️",
-      "Name 3 car parts in 5 seconds!",
-      "Freestyle rap for 30 seconds about Zeus 🐾",
-      "Describe the weirdest thing you’ve fixed!"
-    ];
-    const zeusLines = [
-      "🐾 I'm the goodest boy. Gimme cheese.",
-      "🐶 Woof. Take me for a cruise!",
-      "🦴 That snack? Mine now.",
-      "🎾 You throw it. I judge you."
-    ];
-    const carLines = [
-      "Did you check the spark plugs tho? 🔧",
-      "Trailer Park Tip: Duct tape fixes *everything*.",
-      "Engine fact: Your alternator’s watching you 👀",
-      "You’d be a deadly mechanic, no cap."
-    ];
-    const botReplies = [
-      "Yo bro that’s wild fr 💯",
-      "I’d fix it like this… but higher.",
-      "Let’s rave about it 🔊",
-      "Yoo tell Zeus to calm down 😂"
-    ];
-    const funFacts = [
-      "TPB was originally a *mockumentary* 📹",
-      "Sassy the Sasquatch was banned in 3 towns 👣",
-      "A lobster’s bladder is in its head 🦞",
-      "You're 420% cooler than you think 💨"
-    ];
-    const snacks = [
-      "Pickles in peanut butter. Don’t ask, just try.",
-      "Nachos + sour cream + hot sauce = yes.",
-      "Wrap hot dogs in cheese, microwave 30s.",
-      "Cereal with chocolate milk = breakfast rave"
-    ];
+    const facts = {
+      '420': [
+        "💨 Weed was once legal and taxed in the US!",
+        "🌿 Snoop Dogg smokes ~81 blunts a day.",
+        "🎶 Music hits different when you’re baked.",
+        "🧠 THC boosts dopamine & ideas.",
+        "😂 'I’m not lazy, I’m in energy-saving mode.'",
+      ],
+      'Lobster': [
+        "🦞 Lobsters pee out of their faces.",
+        "🦞 They can live over 100 years!",
+        "🦞 Mi’kmaq people have treaty rights to lobster fishing.",
+      ],
+      'Snacks': [
+        "🍕 Pizza rolls + ranch = elite snack.",
+        "🍫 Chocolate & peanut butter? Always yes.",
+        "🌮 DIY tacos with Doritos as shells = genius.",
+      ],
+      'Cars': [
+        "🛠 Dante, your fix-it brain is 🔥.",
+        "🚘 Fun fact: The Bugatti Veyron has 10 radiators!",
+        "⚙️ Native gearheads rule the garage.",
+      ],
+      'Jokes': [
+        "😂 Ricky: 'Worst case Ontario!'",
+        "💀 Bubbles: 'Kitties are nice… liquor is not.'",
+        "🍁 Julian: 'All I need is rum and coke.'",
+      ],
+      'Zeus': [
+        "🐶 Zeus is the goodest boy ever.",
+        "🐾 He protects you like a warrior pup.",
+        "🐕 He deserves ALL the treats today.",
+      ]
+    };
 
-    function newDanteBox() {
-      document.getElementById('danteBoxText').textContent = danteBoxItems[Math.floor(Math.random() * danteBoxItems.length)];
-    }
-    function newChallenge() {
-      document.getElementById('challengeText').textContent = challenges[Math.floor(Math.random() * challenges.length)];
-    }
-    function newZeus() {
-      document.getElementById('zeusText').textContent = zeusLines[Math.floor(Math.random() * zeusLines.length)];
-    }
-    function newCar() {
-      document.getElementById('carText').textContent = carLines[Math.floor(Math.random() * carLines.length)];
-    }
-    function newBot() {
-      document.getElementById('botText').textContent = botReplies[Math.floor(Math.random() * botReplies.length)];
-    }
-    function newFact() {
-      document.getElementById('factText').textContent = funFacts[Math.floor(Math.random() * funFacts.length)];
-    }
-    function newSnack() {
-      document.getElementById('snackText').textContent = snacks[Math.floor(Math.random() * snacks.length)];
+    const indexes = { '420': 0, 'Lobster': 0, 'Snacks': 0, 'Cars': 0, 'Jokes': 0, 'Zeus': 0 };
+
+    function nextFact(type) {
+      let i = indexes[type];
+      const el = document.getElementById(`fact${type}`);
+      el.textContent = facts[type][i];
+      indexes[type] = (i + 1) % facts[type].length;
     }
 
-    // Load random first values
-    newDanteBox(); newChallenge(); newZeus(); newCar(); newBot(); newFact(); newSnack();
+    let score = 0;
+    function clickCounter() {
+      score++;
+      document.getElementById("score").textContent = score;
+    }
+
+    // Load first fact on startup
+    window.onload = () => {
+      Object.keys(facts).forEach(type => nextFact(type));
+    };
   </script>
 </body>
 </html>
