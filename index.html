@@ -1,103 +1,118 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="neon">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dante’s Fun Hub 🎉</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --neon1: #00ffff;
-      --neon2: #ff00ff;
-      --bg: #0c0c1b;
-      --text: #ffffff;
+document.addEventListener("DOMContentLoaded", () => {
+  const gameArea = document.getElementById("game-area");
+
+  function showPopup(contentHTML) {
+    const popup = document.createElement("div");
+    popup.className = "popup";
+    popup.innerHTML = `
+      <div class="popup-content">
+        <button class="close-btn">❌</button>
+        ${contentHTML}
+      </div>`;
+    document.body.appendChild(popup);
+
+    popup.querySelector(".close-btn").addEventListener("click", () => popup.remove());
+  }
+
+  window.showFocusTimer = () => {
+    showPopup(`
+      <h2>⏱ Focus Timer</h2>
+      <input id="timer-input" type="number" placeholder="Minutes (1–60)" />
+      <button id="start-timer" class="glow-btn">Start</button>
+      <p id="timer-display"></p>
+    `);
+    const timerInput = document.getElementById("timer-input");
+    const timerDisplay = document.getElementById("timer-display");
+    let timeLeft, timerId;
+
+    document.getElementById("start-timer").addEventListener("click", () => {
+      const mins = parseInt(timerInput.value);
+      if (!mins || mins < 1 || mins > 60) return alert("1–60 minutes only!");
+      clearInterval(timerId);
+      timeLeft = mins * 60;
+      update();
+      timerId = setInterval(() => {
+        timeLeft--;
+        update();
+        if (timeLeft <= 0) {
+          clearInterval(timerId);
+          timerDisplay.textContent = "⏰ Done! Take a break.";
+          navigator.vibrate?.([300, 150, 300]);
+        }
+      }, 1000);
+    });
+
+    function update() {
+      const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+      const s = String(timeLeft % 60).padStart(2, '0');
+      timerDisplay.textContent = `${m}:${s}`;
     }
+  };
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Orbitron', sans-serif;
-      margin: 0;
-      padding: 2rem;
-      text-align: center;
-    }
+  window.showRaveRhythm = () => {
+    let score = 0;
+    showPopup(`
+      <h2>🎵 Rave Rhythm</h2>
+      <p>Tap the beat!</p>
+      <button id="beat-btn" class="glow-btn">🎶 TAP 🎶</button>
+      <p id="beat-score">Score: 0</p>
+    `);
+    const btn = document.getElementById("beat-btn");
+    const scoreDisplay = document.getElementById("beat-score");
+    btn.addEventListener("click", () => {
+      score++;
+      scoreDisplay.textContent = `Score: ${score}`;
+      btn.classList.add("pulse");
+      setTimeout(() => btn.classList.remove("pulse"), 100);
+    });
+  };
 
-    h1 {
-      font-size: 2.5rem;
-      color: var(--neon1);
-      text-shadow: 0 0 5px var(--neon2), 0 0 10px var(--neon1);
-      margin-bottom: 1.5rem;
-    }
+  window.showDarkJokes = () => {
+    const jokes = [
+      "Why don’t graveyards ever get overcrowded? People are dying to get in.",
+      "What’s the last thing that goes through a bug’s mind when it hits a windshield? Its butt.",
+      "Parallel lines have so much in common. It’s a shame they’ll never meet.",
+      "I used to play piano by ear, but now I use my hands.",
+      "My dark humour is like a broken pencil. Pointless."
+    ];
+    showPopup(`
+      <h2>🃏 Dark Jokes</h2>
+      <button id="joke-btn" class="glow-btn">Tell Me</button>
+      <p id="joke-text"></p>
+    `);
+    const jokeText = document.getElementById("joke-text");
+    document.getElementById("joke-btn").addEventListener("click", () => {
+      jokeText.textContent = jokes[Math.floor(Math.random() * jokes.length)];
+    });
+  };
 
-    #intro {
-      font-size: 1.2rem;
-      background: #111122;
-      padding: 1rem;
-      border-radius: 12px;
-      margin-bottom: 2rem;
-      box-shadow: 0 0 10px var(--neon2);
-    }
+  window.showCarRepair = () => {
+    let count = 0;
+    showPopup(`
+      <h2>🔧 Fix It Fast</h2>
+      <button id="fix-btn" class="glow-btn">Fix 🔧</button>
+      <p id="fix-count">Fixed: 0</p>
+    `);
+    const fixBtn = document.getElementById("fix-btn");
+    const countDisplay = document.getElementById("fix-count");
+    fixBtn.addEventListener("click", () => {
+      count++;
+      countDisplay.textContent = `Fixed: ${count}`;
+      fixBtn.textContent = count % 5 === 0 ? "You're a machine!" : "Fix 🔧";
+    });
+  };
 
-    .module-btn {
-      background: linear-gradient(135deg, var(--neon1), var(--neon2));
-      border: none;
-      padding: 1rem 1.5rem;
-      margin: 0.5rem;
-      color: black;
-      font-weight: bold;
-      font-size: 1.1rem;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: 0 0 15px var(--neon1);
-      transition: transform 0.2s;
-    }
+  window.showMemoryMatch = () => {
+    showPopup(`
+      <h2>🧠 Memory Match</h2>
+      <p>Card match game in development!</p>
+    `);
+  };
 
-    .module-btn:hover {
-      transform: scale(1.1);
-    }
-
-    #game-area {
-      margin-top: 2rem;
-      padding: 2rem;
-      border-radius: 1rem;
-      background: #111;
-      box-shadow: 0 0 20px var(--neon2);
-      min-height: 200px;
-    }
-
-    footer {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      opacity: 0.6;
-    }
-  </style>
-</head>
-<body>
-  <h1>Dante’s Fun Hub 🎮🔥</h1>
-
-  <div id="intro">
-    Yo Dante! This is your personal ADHD rave-powered fun zone 🎧🌀  
-    Tap anything below when you're bored, need a boost, or want a laugh.  
-    You got this. One moment at a time. Love, Larissa ❤️
-  </div>
-
-  <div id="buttons">
-    <button class="module-btn" onclick="loadModule('focusTimer')">🕒 Focus Timer</button>
-    <button class="module-btn" onclick="loadModule('raveRhythm')">🎶 Rave Rhythm</button>
-    <button class="module-btn" onclick="loadModule('darkJokes')">🃏 Dark Jokes</button>
-    <button class="module-btn" onclick="loadModule('lobsterMaze')">🦞 Lobster Maze</button>
-    <button class="module-btn" onclick="loadModule('carRepair')">🔧 Car Repair Tycoon</button>
-    <button class="module-btn" onclick="loadModule('memoryMatch')">🧠 Memory Match</button>
-  </div>
-
-  <div id="game-area">
-    <p>🎈 Pick something above to get started! 🎈</p>
-  </div>
-
-  <footer>
-    Built with good vibes, neon lights, and love 💜 | Powered by ADHD
-  </footer>
-
-  <script type="module" src="js/main.js"></script>
-</body>
-</html>
+  window.showLobsterMaze = () => {
+    showPopup(`
+      <h2>🦞 Lobster Escape</h2>
+      <p>Maze game coming soon...</p>
+    `);
+  };
+});
