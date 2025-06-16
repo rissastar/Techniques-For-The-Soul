@@ -1,9 +1,9 @@
-import { raveRhythmTapper } from "./raveRhythm.js";
-import { carRepairPuzzle } from "./carRepair.js";
-import { darkJokeGenerator } from "./darkJokes.js";
-import { memoryMatch } from "./memoryMatch.js";
-import { lobsterTrapMaze } from "./lobsterMaze.js";
-import { focusTimer } from "./focusTimer.js";
+import { raveRhythmTapper } from "raveRhythm.js";
+import { carRepairPuzzle } from "carRepair.js";
+import { darkJokeGenerator } from "darkJokes.js";
+import { memoryMatch } from "memoryMatch.js";
+import { lobsterTrapMaze } from "lobsterMaze.js";
+import { focusTimer } from "focusTimer.js";
 
 const gameArea = document.getElementById("game-area");
 const welcomeText = document.getElementById("welcome-text");
