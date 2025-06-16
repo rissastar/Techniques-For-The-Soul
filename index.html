@@ -2,440 +2,218 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dante’s Sh*t That Reels Me In</title>
-  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Patrick+Hand&family=Orbitron&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dante's Dopamine Dive v3</title>
   <style>
-    /* Reset and base */
-    * {
-      box-sizing: border-box;
+    @keyframes raveGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-
     body {
       margin: 0;
-      padding: 30px 20px;
-      font-family: 'Patrick Hand', cursive;
-      background: linear-gradient(135deg, #1e1e2f, #3b0a45);
-      color: #fff8dc;
-      text-align: center;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(270deg, #0ff, #f0f, #00f, #f0f, #0ff);
+      background-size: 1000% 1000%;
+      animation: raveGlow 20s ease infinite;
+      color: #00fff7;
       overflow-x: hidden;
-      user-select: none;
-      min-height: 100vh;
+      padding: 1rem;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #ff00ff;
+      text-shadow: 0 0 10px #ff00ff;
+    }
+    .nav-bar {
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      justify-content: space-around;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      border-radius: 15px;
+      margin: 1rem auto;
+      width: 95%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
-
-    /* Header with layered glow */
-    h1 {
-      font-family: 'Luckiest Guy', cursive;
-      font-size: clamp(2rem, 6vw, 3.2rem);
-      margin-bottom: 20px;
-      color: #ffb6f2;
-      text-shadow:
-        0 0 8px #ff00ff,
-        0 0 20px #d100ff,
-        0 0 30px #ff00ffcc,
-        0 0 40px #8800cc;
-      animation: sparkle 4s infinite ease-in-out alternate;
-      user-select: text;
-    }
-
-    /* Button container flex wrap */
-    .button-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 14px;
-      max-width: 800px;
-      margin-top: 10px;
-      margin-bottom: 30px;
-    }
-
-    /* Buttons styling with hover and focus */
-    button {
-      padding: 14px 20px;
-      font-size: 1.1em;
-      border: 2px dashed #fff5ee;
-      border-radius: 16px;
-      background: #290d3c;
-      color: #ffebcd;
+    .nav-button {
+      background: #000;
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      color: #00ffff;
+      padding: 10px;
       cursor: pointer;
-      transition:
-        background 0.3s ease,
-        color 0.3s ease,
-        transform 0.25s ease,
-        box-shadow 0.4s ease;
-      box-shadow:
-        0 0 10px #e75480aa,
-        inset 0 0 5px #ff77aa44;
-      font-family: 'Patrick Hand', cursive;
-      user-select: none;
-      filter: drop-shadow(0 0 1.5px #ff77aacc);
+      box-shadow: 0 0 10px #00ffff;
+      font-size: 1rem;
     }
-
-    /* Pulsing glow on hover and focus */
-    button:hover,
-    button:focus {
-      background: #ff77aa;
-      color: #200020;
-      border-style: solid;
-      text-shadow: 0 0 6px #fff;
-      transform: scale(1.1);
-      box-shadow:
-        0 0 18px #ff4dbb,
-        inset 0 0 8px #ff77aa88;
-      outline: none;
-      animation: pulseGlow 2s infinite ease-in-out;
-    }
-
-    /* Output area */
-    #output {
-      margin-top: 30px;
-      font-size: clamp(1.2rem, 2vw, 1.6rem);
-      color: #ffd1fa;
-      padding: 18px 25px;
-      border: 2px dotted #ffebcd;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.07);
-      text-shadow: 0 0 4px #fff5ff;
-      max-width: 700px;
-      min-height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: text;
-      opacity: 0;
-      animation: fadeIn 0.8s forwards;
-      transition: opacity 0.4s ease;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.3;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-    }
-
-    /* Show output with fade */
-    #output.visible {
-      opacity: 1;
-    }
-
-    /* Animations */
-    @keyframes sparkle {
-      0%, 100% {
-        text-shadow:
-          0 0 8px #ff00ff,
-          0 0 20px #d100ff,
-          0 0 30px #ff00ffcc,
-          0 0 40px #8800cc;
-      }
-      50% {
-        text-shadow:
-          0 0 15px #00ffff,
-          0 0 25px #66ffffcc,
-          0 0 35px #00ffffaa,
-          0 0 50px #44aaffcc;
-      }
-    }
-
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 18px #ff4dbb, inset 0 0 8px #ff77aa88; }
-      50% { box-shadow: 0 0 28px #ff77cc, inset 0 0 12px #ff99bbcc; }
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-
-    /* Modal overlay for intro message */
-    #intro-modal {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(29, 0, 29, 0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 9999;
-      opacity: 0;
-      animation: modalFadeIn 0.5s forwards;
-    }
-
-    @keyframes modalFadeIn {
-      to { opacity: 1; }
-    }
-
-    #intro-modal .modal-content {
-      background: #3b0a45;
-      border: 3px solid #ff66bb;
-      border-radius: 20px;
-      max-width: 380px;
-      padding: 25px 30px;
-      box-shadow:
-        0 0 25px #ff66bbaa,
-        inset 0 0 12px #ff44aa99;
-      color: #ffe1fa;
-      font-family: 'Patrick Hand', cursive;
+    .neon-button {
+      background-color: #000;
+      border: 2px solid #00ffff;
+      border-radius: 15px;
+      color: #00ffff;
+      padding: 1rem;
+      margin: 1rem auto;
+      display: block;
+      text-align: center;
       font-size: 1.2rem;
-      line-height: 1.4;
-      position: relative;
-      user-select: text;
+      width: 80%;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 15px #00ffff;
+    }
+    .neon-button:hover {
+      background-color: #00ffff;
+      color: #000;
+    }
+    .section {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+    #output, #bot-output {
+      text-align: center;
+      font-size: 1.3rem;
+      padding: 1rem;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin: 1rem auto;
+      width: 90%;
+      max-width: 500px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 10px #ff00ff;
+    }
+    .message {
+      font-style: italic;
+      margin-top: 1rem;
+      color: #ffb3ff;
+      text-shadow: 0 0 8px #ff69b4;
       text-align: center;
     }
-
-    #intro-modal .modal-content h2 {
-      font-family: 'Luckiest Guy', cursive;
-      margin-bottom: 15px;
-      color: #ffb6f2;
-      text-shadow:
-        0 0 6px #ff00ff,
-        0 0 12px #d100ff;
-    }
-
-    #intro-modal button.close-btn {
-      position: absolute;
-      top: 8px;
-      right: 10px;
-      border: none;
-      background: transparent;
-      font-size: 1.5rem;
-      color: #ff77aa;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    #intro-modal button.close-btn:hover {
-      color: #ffbbdd;
-    }
-
-    /* Responsive tweaks */
-    @media (max-width: 420px) {
-      body {
-        padding: 20px 12px;
-      }
-      button {
-        font-size: 0.9em;
-        padding: 12px 14px;
-      }
-      #intro-modal .modal-content {
-        max-width: 90vw;
-        font-size: 1.1rem;
-        padding: 20px;
-      }
+    .meme {
+      max-width: 90%;
+      display: block;
+      margin: 1rem auto;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #f0f;
     }
   </style>
 </head>
-<body>
+<body onclick="unlockAudio()">
+  <h1>🔥 Dante’s Dopamine Dive v3 🔥</h1>
+  <h2>Made with ❤️ by Larissa</h2>
+  <p class="message">“Explore, laugh, vibe out. This is your world, Dante 💋”</p>
 
-  <h1>🎣 Sh*t That Reels Me In<br>For Dante 💖</h1>
-
-  <div class="button-container">
-    <button onclick="whatIf()">🧠 What If…</button>
-    <button onclick="panicButton()">🚨 Panic Button</button>
-    <button onclick="catchOfTheDay()">🎣 Catch of the Day</button>
-    <button onclick="freestyle()">🎤 Freestyle or Fail</button>
-    <button onclick="movieRoast()">🎥 Movie Roast Roulette</button>
-    <button onclick="fixIt()">🔧 Fix It or Forget It</button>
-    <button onclick="raveVibes()">🌈 Rave Vibes</button>
-    <button onclick="sassySay()">🦶 Sassy the Sasquatch Says</button>
-    <button onclick="darkJoke()">😂 Dark Joke Dealer</button>
-    <button onclick="trapTalk()">🐟 Trap Talk</button>
-    <button onclick="funnyStory()">📖 Funny AF Storytime</button>
-    <button onclick="munchieMood()">🍔 Munchie Mood Matcher</button>
-    <button onclick="buildCar()">🚗 Build-a-Car Dreamer</button>
+  <div class="nav-bar">
+    <button class="nav-button" onclick="switchSection('dive')">🎯 Dive</button>
+    <button class="nav-button" onclick="switchSection('memes')">😂 Memes</button>
+    <button class="nav-button" onclick="switchSection('bot')">🤖 DanteBot</button>
   </div>
 
-  <div id="output"></div>
-
-  <!-- Intro Modal -->
-  <div id="intro-modal" role="dialog" aria-modal="true" aria-labelledby="intro-title" aria-describedby="intro-text">
-    <div class="modal-content">
-      <button class="close-btn" aria-label="Close Intro Message" onclick="closeIntroModal()">×</button>
-      <h2 id="intro-title">Hey Dante 💖</h2>
-      <p id="intro-text">
-        Welcome to your custom dopamine dive! Whenever you need a spark, a laugh, or just some wild vibes, hit the buttons and reel in the fun. Made with love by Larissa. 🎣✨
-      </p>
-    </div>
+  <div id="dive" class="section active">
+    <button class="neon-button" onclick="generate('lobster')">🎣 Lobster Loot</button>
+    <button class="neon-button" onclick="generate('car')">🚗 Car Mod Idea</button>
+    <button class="neon-button" onclick="generate('rap')">🎧 Rap Roulette</button>
+    <button class="neon-button" onclick="generate('darkjoke')">🖤 Dark Joke</button>
+    <button class="neon-button" onclick="generate('festival')">🎪 Festival Vibes</button>
+    <button class="neon-button" onclick="generate('food')">🍔 What to Munch</button>
+    <button class="neon-button" onclick="generate('stoner')">🔥 Stoner Fact</button>
+    <button class="neon-button" onclick="generate('whatif')">🌀 What If…?</button>
+    <button class="neon-button" onclick="generate('love')">💖 Love Note</button>
+    <div id="output">Tap a button above to dive in.</div>
   </div>
+
+  <div id="memes" class="section">
+    <img class="meme" id="memeDisplay" src="https://i.imgur.com/Mu5CEB9.jpg" alt="Funny meme">
+    <button class="neon-button" onclick="nextMeme()">Next Meme</button>
+  </div>
+
+  <div id="bot" class="section">
+    <input type="text" id="bot-input" placeholder="Ask DanteBot anything..." style="width: 90%; max-width: 500px; display: block; margin: 1rem auto; padding: 10px; border-radius: 10px; border: 2px solid #00ffff; background-color: #000; color: #00ffff; font-size: 1rem;">
+    <button class="neon-button" onclick="talkToBotTyped()">Send</button>
+    <div id="bot-output">DanteBot is listening...</div>
+  </div>
+
+  <audio id="bloop" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+  <audio id="raveTrack" src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Sawsquarenoise/~/Sawsquarenoise_-_03_-_Cyber_Acid_Dance.mp3" loop autoplay></audio>
 
   <script>
-    // Helper to pick random from array
-    function getRandom(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
+    const bloop = document.getElementById('bloop');
+    const raveTrack = document.getElementById('raveTrack');
+
+    const memeList = [
+      "https://i.imgur.com/Mu5CEB9.jpg",
+      "https://i.imgur.com/l64DhtY.jpg",
+      "https://i.imgur.com/hvzzv4m.jpg",
+      "https://i.imgur.com/NTuzxgP.jpg",
+      "https://i.imgur.com/hG3JLXQ.jpg",
+      "https://i.imgur.com/qCVbzS2.jpg",
+      "https://i.imgur.com/8IdYKFb.jpg"
+    ];
+    let memeIndex = 0;
+
+    const data = {
+      lobster: ["Lobster rave mode: activated", "Seaweed vibes 🌊", "Trap full of sass 🦞"],
+      car: ["Glow exhausts 💨", "Jet engine mod idea 🚀", "Subwoofers in tires 🎶"],
+      rap: ["Mi'kmaq bars 🔥", "High-stakes stoner cypher 💭", "Underwater freestyles 🎤"],
+      darkjoke: ["High tides, low morals 😈", "Engineer gone wild 🔧", "Sasquatch stole my stash 😂"],
+      festival: ["Glow pizza 🍕", "Hotbox ferris wheel 🎡", "EDM poutine 🧀"],
+      food: ["Nacho rave 🌶️", "Blunt burger 🍔", "Hotbox donut 🍩"],
+      stoner: ["Cloudy brain, sunny smile ☀️", "You baked like lobster 🦞", "Crustacean kush 🍃"],
+      whatif: ["What if lobsters raved?", "Blink teleport 💨", "High while skydiving? 🪂"],
+      love: ["I love you more than lobster tail 💖", "You're my rave lobster 🦞", "My heart traps only you ❤️"]
+    };
+
+    const botQuotes = [
+      "You ever wonder if lobsters have raves underwater?",
+      "Bro, if you smoked a joint the size of a lobster trap... what then?",
+      "Fun fact: You once tried to make a weed-powered go-kart.",
+      "Larissa loves you, ya wild stoner genius.",
+      "Trailer Park Boys ain't got nothin' on your dark humor.",
+      "You + me + fair fries = the holy trinity.",
+      "You're smarter than a lobster in an escape room."
+    ];
+
+    function generate(type) {
+      const random = data[type][Math.floor(Math.random() * data[type].length)];
+      document.getElementById("output").innerText = random;
+      bloop.currentTime = 0;
+      bloop.play();
     }
 
-    // Output area reference
-    const output = document.getElementById('output');
-
-    // Utility to show text in output with fade effect
-    function showOutput(text) {
-      output.classList.remove('visible');  // reset for fade
-      setTimeout(() => {
-        output.textContent = text;
-        output.classList.add('visible');
-      }, 150);
+    function switchSection(id) {
+      document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
     }
 
-    // Button functions
-    function whatIf() {
-      const ideas = [
-        "What if lobsters had rap battles to decide trap hierarchy?",
-        "What if Dante’s Civic turned into a rave boat during full moons?",
-        "What if Trailer Park Boys got abducted by aliens and started a band?",
-        "What if hot dogs could talk and just wanted to be left alone?",
-        "What if your fishing trap caught a mixtape and it slapped?"
-      ];
-      showOutput(getRandom(ideas));
+    function nextMeme() {
+      memeIndex = (memeIndex + 1) % memeList.length;
+      document.getElementById("memeDisplay").src = memeList[memeIndex];
+      bloop.currentTime = 0;
+      bloop.play();
     }
 
-    function panicButton() {
-      const sounds = [
-        "Smoke break!",
-        "Hide! It’s your parole officer!",
-        "Get in the Civic, Dante – we’re going to Dollarama!"
-      ];
-      alert(getRandom(sounds));
-      document.body.style.background = "#ff00ff";
-      setTimeout(() => {
-        document.body.style.background = "linear-gradient(135deg, #1e1e2f, #3b0a45)";
-      }, 1500);
+    function talkToBotTyped() {
+      const userInput = document.getElementById("bot-input").value.toLowerCase();
+      let response = "Hmm... DanteBot is vibin'. Try again?";
+      if (userInput.includes("love")) response = "Larissa loves you more than lobster and loud bass.";
+      else if (userInput.includes("high") || userInput.includes("stoned")) response = "You baked? Hydrate and laugh, my dude.";
+      else if (userInput.includes("fair")) response = "Bring back glowsticks and cotton candy from the fair, k?";
+      else if (userInput.includes("cars")) response = "Add some LEDs and make it rave-ready.";
+      else if (userInput.includes("lobster")) response = "Lobster rave confirmed. You're the DJ.";
+      else if (userInput.trim() === "") response = "Type something wild, Dante!";
+
+      document.getElementById("bot-output").innerText = response;
+      document.getElementById("bot-input").value = "";
+      bloop.currentTime = 0;
+      bloop.play();
     }
 
-    function catchOfTheDay() {
-      const catches = [
-        "A lobster with AirPods",
-        "A mixtape dropped by a trout",
-        "A boot full of poutine",
-        "A fish with a neck tattoo",
-        "Ricky from TPB passed out in a trap"
-      ];
-      showOutput(getRandom(catches));
+    function unlockAudio() {
+      raveTrack.play().catch(() => {});
     }
-
-    function freestyle() {
-      const challenges = [
-        "Rap about a stoned lobster with ADHD",
-        "Spit 3 bars about rave traps and Civic mods",
-        "Freestyle like you’re Sassy the Sasquatch on molly",
-        "Rap your last munchie order like a love song"
-      ];
-      showOutput(getRandom(challenges));
-    }
-
-    function movieRoast() {
-      const roasts = [
-        "Fast & Furious 26: Lobster Drift",
-        "Finding Nemo 3: Trailer Park Edition",
-        "The Trapfather: Crustacean Crime Wars",
-        "Rave Wars: The Bass Awakens"
-      ];
-      showOutput(getRandom(roasts));
-    }
-
-    function fixIt() {
-      const builds = [
-        "Rebuild a Civic using only duct tape and rave lights",
-        "Build a lobster trap that doubles as a smoker",
-        "Fix a trailer axle with poutine grease",
-        "Invent a stoner-proof fair ride"
-      ];
-      showOutput(getRandom(builds));
-    }
-
-    function raveVibes() {
-      const vibes = [
-        "Glowstick vibes activated 🌈",
-        "Drop that bass 🔊🔊🔊",
-        "Laser lobsters in the sky ✨🦞",
-        "This track slaps like Sassy’s tail"
-      ];
-      showOutput(getRandom(vibes));
-    }
-
-    function sassySay() {
-      const sass = [
-        "Don’t trap what you can’t cook 🦞",
-        "If you can’t rave with the wolves, stay in the Civic",
-        "Smoke 'em if ya got 'em – just not near the traps"
-      ];
-      showOutput(getRandom(sass));
-    }
-
-    function darkJoke() {
-      const jokes = [
-        "Why did the stoner fail the drug test? He studied too hard.",
-        "I asked a lobster for advice. Now I owe him $20 and my dignity.",
-        "Life’s like a broken Civic – loud, confusing, and full of smoke."
-      ];
-      showOutput(getRandom(jokes));
-    }
-
-    function trapTalk() {
-      const convos = [
-        "'Yo bro, you smell like bait or heartbreak?'",
-        "'We rotating traps or feelings today?'",
-        "'If I get caught again, I’m blaming the humans.'"
-      ];
-      showOutput(getRandom(convos));
-    }
-
-    function funnyStory() {
-      const stories = [
-        "That time we hotboxed an ice shack and thought the sonar was haunted.",
-        "He rolled a blunt with a parking ticket and passed it to a seagull.",
-        "Once caught a fish wearing a glow stick necklace from Evolve."
-      ];
-      showOutput(getRandom(stories));
-    }
-
-    function munchieMood() {
-      const combos = [
-        "Poutine + Gummy Worms = genius",
-        "KD + Hot Cheetos",
-        "Pizza rolls dipped in pancake syrup",
-        "Funnel cake burrito with bacon",
-        "Fried pickles with caramel drizzle"
-      ];
-      showOutput(getRandom(combos));
-    }
-
-    function buildCar() {
-      const builds = [
-        "A Civic with trap doors and rave lights",
-        "Lobster boat with NOS and 12” subs",
-        "A van powered by weed smoke and dreams",
-        "Go-kart modded with fishing rods"
-      ];
-      showOutput(getRandom(builds));
-    }
-
-    // Intro modal logic
-    const introModal = document.getElementById('intro-modal');
-
-    function closeIntroModal() {
-      introModal.style.animation = 'modalFadeOut 0.3s forwards';
-      introModal.addEventListener('animationend', () => {
-        introModal.style.display = 'none';
-      }, { once: true });
-    }
-
-    // Add fade out keyframe
-    const styleSheet = document.createElement("style");
-    styleSheet.textContent = `
-      @keyframes modalFadeOut {
-        from {opacity: 1;}
-        to {opacity: 0;}
-      }
-    `;
-    document.head.appendChild(styleSheet);
-
-    // Optional: Auto close modal after 12 seconds
-    setTimeout(() => {
-      if (introModal.style.display !== 'none') closeIntroModal();
-    }, 12000);
-
   </script>
-
 </body>
 </html>
