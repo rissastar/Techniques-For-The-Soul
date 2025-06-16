@@ -3,81 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dante's Neon Fun Hub</title>
+  <title>Dante’s Neon Fun Hub 2.0</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <canvas id="confettiCanvas"></canvas>
   <div class="container">
-    <header><h1>Dante’s Neon Fun Hub</h1></header>
+    <header><h1>Dante’s Neon Fun Hub 2.0</h1></header>
 
-    <section id="message">
+    <section id="message" class="module pulse">
       <h2>💖 Message from Larissa 💖</h2>
-      <p>Dante – you’re the brightest lobster in my pot. Here’s your personal playground when you’re bored. Love you! ❤️</p>
+      <p>Dante – you light up my world brighter than any rave. Here’s V2 of your playground. Love you! ❤️</p>
     </section>
 
-    <!-- Existing Modules -->
+    <!-- Lobster Fishing -->
     <section class="module" id="lobster-fishing">
       <h2>🦞 Lobster Fishing Facts</h2>
-      <button class="glow-btn" onclick="showFact()">Give me a fact!</button>
+      <button class="glow-btn" onclick="confettiBurst(); showFact()">Give me a fact!</button>
       <p id="fact" class="output"></p>
     </section>
 
+    <!-- General Fishing -->
     <section class="module" id="general-fishing">
       <h2>🎣 Fishing Extras</h2>
-      <button class="glow-btn" onclick="playFishing()">Cast a line</button>
+      <button class="glow-btn" onclick="confettiBurst(); playFishing()">Cast a line</button>
       <p id="fishResult" class="output"></p>
     </section>
 
+    <!-- Cars -->
     <section class="module" id="cars">
       <h2>🏎️ Dream Car Chooser</h2>
-      <button class="glow-btn" onclick="chooseCar()">Show me a ride</button>
+      <button class="glow-btn" onclick="confettiBurst(); chooseCar()">Show me a ride</button>
       <p id="car" class="output"></p>
     </section>
 
+    <!-- Music -->
     <section class="module" id="music">
       <h2>🎧 Rap Rave Beats</h2>
-      <button class="glow-btn" onclick="playBeat()">Surprise me!</button>
+      <button class="glow-btn" onclick="confettiBurst(); playBeat()">Surprise me!</button>
       <audio id="beatAudio" controls></audio>
     </section>
 
+    <!-- Dark Jokes -->
     <section class="module" id="dark-jokes">
       <h2>😈 Dark & Sassy Jokes</h2>
-      <button class="glow-btn" onclick="tellJoke()">Make me laugh</button>
+      <button class="glow-btn" onclick="confettiBurst(); tellJoke()">Make me laugh</button>
       <p id="joke" class="output"></p>
     </section>
 
+    <!-- Stories -->
     <section class="module" id="stories">
       <h2>😂 Wild & Funny Stories</h2>
-      <button class="glow-btn" onclick="tellStory()">Spin a tale</button>
+      <button class="glow-btn" onclick="confettiBurst(); tellStory()">Spin a tale</button>
       <p id="story" class="output"></p>
     </section>
 
-    <!-- New Modules -->
-    <section class="module" id="movies">
-      <h2>🎬 Movie Recommendation</h2>
-      <button class="glow-btn" onclick="recommendMovie()">What to watch?</button>
-      <p id="movie" class="output"></p>
+    <!-- Secret DanteBox -->
+    <section class="module" id="dantebox">
+      <h2>🎁 Secret DanteBox</h2>
+      <div id="box" class="box">🤫</div>
+      <button class="glow-btn" onclick="confettiBurst(); openBox()">Open the box</button>
+      <p id="compliment" class="output"></p>
     </section>
 
-    <section class="module" id="food">
-      <h2>🍔 Food Cravings</h2>
-      <button class="glow-btn" onclick="suggestFood()">Feed me!</button>
-      <p id="foodOutput" class="output"></p>
-    </section>
-
-    <section class="module" id="culture">
-      <h2>🌿 Mi’kmaq Culture Fact</h2>
-      <button class="glow-btn" onclick="showCultureFact()">Teach me</button>
-      <p id="cultureFact" class="output"></p>
-    </section>
-
-    <section class="module" id="tips">
-      <h2>💨 Stoner Tips & Tricks</h2>
-      <button class="glow-btn" onclick="showTip()">Need a tip?</button>
-      <p id="tip" class="output"></p>
+    <!-- Lobster-Catch Mini-Game -->
+    <section class="module" id="lobstergame">
+      <h2>🦞 Catch the Lobster!</h2>
+      <canvas id="gameCanvas" width="300" height="200"></canvas>
+      <p id="gameMsg" class="output"></p>
+      <button class="glow-btn" onclick="startGame()">Start Game</button>
     </section>
 
   </div>
+
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
