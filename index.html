@@ -1,367 +1,204 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>Dante’s Dopamine Dive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dante’s Fun Hub 4.0</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@700&display=swap');
-
-    /* Neon rave dark theme */
-    :root {
-      --bg: #0a001f;
-      --neon-pink: #ff2d95;
-      --neon-blue: #18ffff;
-      --neon-green: #00ff94;
-      --neon-yellow: #fff200;
-      --neon-purple: #bd00ff;
-      --text-light: #e0e0ff;
-      --btn-bg: #120029;
-      --btn-hover: #321341;
-      --shadow-neon: 0 0 8px var(--neon-pink), 0 0 20px var(--neon-pink);
-      --shadow-neon-blue: 0 0 8px var(--neon-blue), 0 0 20px var(--neon-blue);
-      --shadow-neon-green: 0 0 8px var(--neon-green), 0 0 20px var(--neon-green);
-      --shadow-neon-yellow: 0 0 8px var(--neon-yellow), 0 0 20px var(--neon-yellow);
-      --shadow-neon-purple: 0 0 8px var(--neon-purple), 0 0 20px var(--neon-purple);
-    }
-
-    /* Reset */
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
-
     body {
-      background: var(--bg);
-      color: var(--text-light);
-      font-family: 'Roboto', sans-serif;
-      user-select: none;
-      overflow-x: hidden;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem;
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #000000, #1a1a2e, #16213e);
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
+      background-attachment: fixed;
     }
-
     h1 {
-      font-family: 'Press Start 2P', cursive;
-      font-size: 1.8rem;
-      text-align: center;
-      margin-bottom: 0.3rem;
-      text-shadow: var(--shadow-neon);
-      letter-spacing: 0.15em;
+      font-size: 2.5rem;
+      color: #00ffe1;
+      text-shadow: 0 0 10px #00ffe1;
     }
-
-    h2 {
-      font-size: 1.3rem;
-      color: var(--neon-yellow);
-      margin: 0.8rem 0 0.4rem 0;
-      text-shadow: var(--shadow-neon-yellow);
-    }
-
-    .message-from-you {
-      background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
-      padding: 0.7rem 1rem;
-      border-radius: 15px;
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 0 10px var(--neon-pink);
-      user-select: text;
-    }
-
-    main {
-      background: #140031;
-      padding: 1rem 1.2rem;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 0 30px var(--neon-purple);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .content {
-      font-size: 1.15rem;
-      line-height: 1.4;
-      margin: 1rem 0;
-      min-height: 120px;
-      color: var(--text-light);
-      text-align: center;
-      padding: 0 0.6rem;
-    }
-
-    .category-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-      width: 100%;
-    }
-
-    button.category-btn {
-      flex: 1 1 45%;
-      min-width: 130px;
-      background: var(--btn-bg);
-      color: var(--neon-pink);
-      border: 2px solid var(--neon-pink);
-      border-radius: 15px;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 12px 8px;
+    .btn {
+      background: #ff00c8;
+      color: #fff;
+      padding: 15px 20px;
+      margin: 10px;
+      border: none;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #ff00c8;
       cursor: pointer;
-      transition: all 0.3s ease;
-      text-shadow: 0 0 5px var(--neon-pink);
-      box-shadow: 0 0 15px var(--neon-pink);
-      user-select: none;
-      outline-offset: 4px;
+      transition: transform 0.2s;
     }
-    button.category-btn:hover,
-    button.category-btn:focus {
-      color: var(--neon-yellow);
-      border-color: var(--neon-yellow);
-      box-shadow: 0 0 20px var(--neon-yellow);
-      outline: none;
+    .btn:hover {
       transform: scale(1.05);
     }
-
-    /* Neon animated glow pulse for active content */
-    .content.glow-pulse {
-      animation: neonPulse 2.5s infinite alternate ease-in-out;
+    .popup {
+      display: none;
+      position: fixed;
+      top: 10%;
+      left: 5%;
+      right: 5%;
+      background: rgba(10,10,20,0.95);
+      border: 2px solid #00ffe1;
+      border-radius: 15px;
+      padding: 20px;
+      z-index: 100;
+      box-shadow: 0 0 25px #00ffe1;
     }
-    @keyframes neonPulse {
-      0% {
-        text-shadow:
-          0 0 8px var(--neon-pink),
-          0 0 18px var(--neon-pink),
-          0 0 28px var(--neon-pink),
-          0 0 38px var(--neon-pink);
-      }
-      100% {
-        text-shadow:
-          0 0 12px var(--neon-pink),
-          0 0 24px var(--neon-pink),
-          0 0 36px var(--neon-pink),
-          0 0 48px var(--neon-pink);
-      }
+    .popup-content {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
     }
-
+    .close-btn {
+      background: #00ffe1;
+      color: #000;
+      padding: 10px 15px;
+      border: none;
+      font-weight: bold;
+      border-radius: 8px;
+    }
     footer {
-      margin-top: 20px;
+      margin-top: 2rem;
       font-size: 0.8rem;
-      color: var(--neon-blue);
-      text-align: center;
-      user-select: none;
+      opacity: 0.7;
     }
-
-    /* Scrollbar styling for mobile */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--neon-pink);
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
   </style>
 </head>
 <body>
-  <h1>Dante’s Dopamine Dive</h1>
 
-  <div class="message-from-you" aria-live="polite" role="region" aria-label="Message from Larissa to Dante">
-    Hey Dante — when life gets wild, dive into this to chill, laugh, and get inspired. Love you &amp; Zeus 🐾 Stay shining bright, always. — Larissa ❤️
+  <h1>Dante’s Fun Hub 💥</h1>
+  <p>Hey Dante! 💖 Larissa made this for you — all your favorite things in one place. ADHD-friendly, rave-approved, and Zeus-certified 🐾</p>
+
+  <button class="btn" onclick="showPopup('danteBox')">🎁 Open DanteBox</button>
+  <button class="btn" onclick="showPopup('dailyChallenge')">🔥 Daily Challenge</button>
+  <button class="btn" onclick="showPopup('zeusCorner')">🐾 Zeus’s Corner</button>
+  <button class="btn" onclick="showPopup('carCorner')">🚗 Car Fix Corner</button>
+  <button class="btn" onclick="showPopup('danteBot')">🤖 Talk to DanteBot</button>
+  <button class="btn" onclick="showPopup('funFact')">😂 Funny Fact</button>
+  <button class="btn" onclick="showPopup('snackIdeas')">🍟 Snack Attack</button>
+
+  <!-- Popups -->
+  <div id="danteBox" class="popup">
+    <div class="popup-content" id="danteBoxText"></div>
+    <button class="btn" onclick="newDanteBox()">🔁 Another!</button>
+    <button class="close-btn" onclick="hidePopup('danteBox')">Close</button>
   </div>
 
-  <main>
-    <h2 id="category-title" aria-live="polite"></h2>
-    <div class="content glow-pulse" id="content" tabindex="0" aria-live="polite" aria-atomic="true"></div>
+  <div id="dailyChallenge" class="popup">
+    <div class="popup-content" id="challengeText"></div>
+    <button class="btn" onclick="newChallenge()">Try Another</button>
+    <button class="close-btn" onclick="hidePopup('dailyChallenge')">Close</button>
+  </div>
 
-    <div class="category-buttons" role="list">
-      <button class="category-btn" data-cat="lobster" role="listitem" aria-label="Lobster fishing facts">Lobster Fishing 🦞</button>
-      <button class="category-btn" data-cat="cars" role="listitem" aria-label="Car trivia and facts">Cars 🚗</button>
-      <button class="category-btn" data-cat="music" role="listitem" aria-label="Rap music quotes and facts">Rap Music 🎤</button>
-      <button class="category-btn" data-cat="raves" role="listitem" aria-label="Rave, festival, and fair vibes">Raves & Fests 🎉</button>
-      <button class="category-btn" data-cat="jokes" role="listitem" aria-label="Dark jokes and humor">Dark Jokes 😂</button>
-      <button class="category-btn" data-cat="stories" role="listitem" aria-label="Funny stories snippets">Funny Stories 📖</button>
-      <button class="category-btn" data-cat="engineering" role="listitem" aria-label="Engineering brain teasers and ideas">Engineering 🛠️</button>
-      <button class="category-btn" data-cat="native" role="listitem" aria-label="Native culture quotes and trivia">Native Spirit 🌿</button>
-      <button class="category-btn" data-cat="stoner" role="listitem" aria-label="Stoner-friendly chill tips and food ideas">Stoner Vibes 🍃</button>
-      <button class="category-btn" data-cat="zeus" role="listitem" aria-label="Zeus the dog fun facts">Zeus 🐶</button>
-    </div>
-  </main>
+  <div id="zeusCorner" class="popup">
+    <div class="popup-content" id="zeusText"></div>
+    <button class="btn" onclick="newZeus()">🐶 Woof Again</button>
+    <button class="close-btn" onclick="hidePopup('zeusCorner')">Close</button>
+  </div>
 
-  <footer aria-hidden="true">Made with 💜 for Dante by Larissa</footer>
+  <div id="carCorner" class="popup">
+    <div class="popup-content" id="carText"></div>
+    <button class="btn" onclick="newCar()">🔧 Another</button>
+    <button class="close-btn" onclick="hidePopup('carCorner')">Close</button>
+  </div>
+
+  <div id="danteBot" class="popup">
+    <div class="popup-content" id="botText"></div>
+    <button class="btn" onclick="newBot()">💬 Ask Again</button>
+    <button class="close-btn" onclick="hidePopup('danteBot')">Close</button>
+  </div>
+
+  <div id="funFact" class="popup">
+    <div class="popup-content" id="factText"></div>
+    <button class="btn" onclick="newFact()">😂 Another</button>
+    <button class="close-btn" onclick="hidePopup('funFact')">Close</button>
+  </div>
+
+  <div id="snackIdeas" class="popup">
+    <div class="popup-content" id="snackText"></div>
+    <button class="btn" onclick="newSnack()">🍕 New Idea</button>
+    <button class="close-btn" onclick="hidePopup('snackIdeas')">Close</button>
+  </div>
+
+  <footer>Made with 💖 by Larissa — for Dante only.</footer>
 
   <script>
-    (() => {
-      // Data arrays
-      const data = {
-        lobster: [
-          "Did you know? Lobsters can live over 50 years and grow by molting their shells! 🦞",
-          "Lobster fishing tip: Use bait like herring or mackerel to attract the biggest lobsters.",
-          "Weymouth lobster season is prime for fresh catch – you’re basically a marine legend there!",
-          "Lobsters taste with their legs and smell with their antennae — nature’s little engineers!",
-          "Lobsters have blue blood due to copper in it, unlike our iron-rich red blood."
-        ],
-        cars: [
-          "Car fact: The first practical automobile was invented by Karl Benz in 1885. Talk about old school engineering!",
-          "Ever heard of the Tesla Cybertruck? Its angular design is polarizing but futuristic AF.",
-          "Fun fact: Some engines can rev over 10,000 RPM — that’s some serious speed for your passion.",
-          "If you ever want to fix a car, start with the basics: changing oil and checking spark plugs.",
-          "Ever noticed how car headlights kinda look like eyes? Maybe your car's just watching out for you."
-        ],
-        music: [
-          `"“I’m not a businessman, I’m a business, man!” – Jay-Z dropping truth in rap history.`,
-          "Rap trivia: The word 'hip-hop' was coined in the late 1970s by Keith Cowboy, a rapper from Grandmaster Flash's crew.",
-          "Did you know? Nas' album 'Illmatic' is often hailed as one of the greatest hip hop albums of all time.",
-          "Rap music often tells stories — like a street poet’s vivid diary set to beats.",
-          "Your music taste = 🔥. Some rap beats are engineered so well they can boost focus instantly."
-        ],
-        raves: [
-          "Rave fact: The first underground raves started in the late 1980s UK club scene.",
-          "Pro tip: Bring glow sticks and stay hydrated — rave essentials for max fun.",
-          "Festival hack: Pack snacks with protein to keep your energy up while dancing all night.",
-          "Fairs often have wild rides and even wilder food — ever tried a deep-fried Snickers?",
-          "Rave vibes = neon lights, bass drops, and a whole lot of good energy."
-        ],
-        jokes: [
-          "Why did Ricky from Trailer Park Boys bring a ladder to the bar? To get to the high spirits! 😜",
-          "Sassy the Sasquatch says: 'Why don’t bigfoot ever get caught? Because they’re always one foot ahead!'",
-          "Dark joke: Why don’t skeletons fight each other? They don’t have the guts.",
-          "Q: What do you call a stoner who fixes cars? A high mechanic!",
-          "Why do engineers always carry a pencil? Because ideas can’t be erased from the mind!"
-        ],
-        stories: [
-          "Once, a guy tried to catch a lobster with his bare hands and ended up with a crab pinch instead — classic fail turned legend.",
-          "Funny story: At a rave, someone lost their shoes and danced barefoot all night — they became the barefoot king!",
-          "An engineer friend once fixed a blender with duct tape and hope. It worked... kinda.",
-          "A dog named Zeus once stole a whole pizza at a festival — owner was mad, but Zeus was the real winner.",
-          "Movie night: Remember that time when a car chase ended with everyone stuck in traffic? Reality check!"
-        ],
-        engineering: [
-          "Brain teaser: If you had to build a lobster trap that signals you when a catch is inside, what tech would you use?",
-          "Idea prompt: Invent a car feature that automatically makes your favorite rap song play when you start the engine.",
-          "Engineering fact: The Golden Gate Bridge’s steel can expand and contract over 27 feet with temperature changes.",
-          "Fix-it tip: Sometimes the best engineering hack is just a good ol’ twist and tap.",
-          "Fun thought: What if we made rave shoes that light up and track your dance moves?"
-        ],
-        native: [
-          "Inspirational: 'We do not inherit the earth from our ancestors; we borrow it from our children.' — Native proverb",
-          "Native fact: The Mi’kmaq people have a rich tradition of storytelling and deep connection to the sea.",
-          "Traditional wisdom: Patience and respect for nature guide many Native engineering and hunting methods.",
-          "Did you know? Many Native crafts combine art, engineering, and spirituality seamlessly.",
-          "Celebration idea: Next festival, wear a nod to your heritage and honor the past with pride."
-        ],
-        stoner: [
-          "Stoner tip: Munchies hack — spicy snacks balance the sweet ones perfectly.",
-          "Chill fact: Cannabis has been used for centuries by many cultures for healing and relaxation.",
-          "Fun idea: Build your own mini bong from everyday stuff — but safety first, always.",
-          "Stoner joke: Why did the stoner fix his bike? Because it was two-tired.",
-          "Food love: Ever tried grilled cheese with pickles? Next level munchies combo."
-        ],
-        zeus: [
-          "Zeus fact: Dogs can understand up to 250 words and gestures — pretty smart pup!",
-          "Did you know? Dogs’ nose prints are unique like human fingerprints.",
-          "Zeus probably loves belly rubs as much as you love a good rave beat.",
-          "Fun idea: Teach Zeus a new trick and celebrate with a dance party!",
-          "Zeus is basically the chillest stoner buddy you could ask for. 🐾"
-        ],
-      };
+    function showPopup(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+    function hidePopup(id) {
+      document.getElementById(id).style.display = 'none';
+    }
 
-      // Neon color cycling for buttons & content glow
-      const neonColors = {
-        lobster: "var(--neon-pink)",
-        cars: "var(--neon-blue)",
-        music: "var(--neon-yellow)",
-        raves: "var(--neon-purple)",
-        jokes: "var(--neon-green)",
-        stories: "var(--neon-pink)",
-        engineering: "var(--neon-blue)",
-        native: "var(--neon-yellow)",
-        stoner: "var(--neon-green)",
-        zeus: "var(--neon-purple)",
-      };
+    const danteBoxItems = [
+      "🎧 Your rap anthem of the day: 'Still D.R.E.'",
+      "🍔 Go eat: Chips + cheese + ranch = stoner heaven.",
+      "💡 Fix something today. Even if it’s just your snack.",
+      "🤣 TPB Quote: 'I’m not a drunk, I’m just drinkin’!' - Ricky"
+    ];
+    const challenges = [
+      "Do your best Bubbles impression 🕶️",
+      "Name 3 car parts in 5 seconds!",
+      "Freestyle rap for 30 seconds about Zeus 🐾",
+      "Describe the weirdest thing you’ve fixed!"
+    ];
+    const zeusLines = [
+      "🐾 I'm the goodest boy. Gimme cheese.",
+      "🐶 Woof. Take me for a cruise!",
+      "🦴 That snack? Mine now.",
+      "🎾 You throw it. I judge you."
+    ];
+    const carLines = [
+      "Did you check the spark plugs tho? 🔧",
+      "Trailer Park Tip: Duct tape fixes *everything*.",
+      "Engine fact: Your alternator’s watching you 👀",
+      "You’d be a deadly mechanic, no cap."
+    ];
+    const botReplies = [
+      "Yo bro that’s wild fr 💯",
+      "I’d fix it like this… but higher.",
+      "Let’s rave about it 🔊",
+      "Yoo tell Zeus to calm down 😂"
+    ];
+    const funFacts = [
+      "TPB was originally a *mockumentary* 📹",
+      "Sassy the Sasquatch was banned in 3 towns 👣",
+      "A lobster’s bladder is in its head 🦞",
+      "You're 420% cooler than you think 💨"
+    ];
+    const snacks = [
+      "Pickles in peanut butter. Don’t ask, just try.",
+      "Nachos + sour cream + hot sauce = yes.",
+      "Wrap hot dogs in cheese, microwave 30s.",
+      "Cereal with chocolate milk = breakfast rave"
+    ];
 
-      // Titles for categories
-      const titles = {
-        lobster: "Lobster Fishing Fact 🦞",
-        cars: "Car Trivia 🚗",
-        music: "Rap Music 🎤",
-        raves: "Raves & Festivals 🎉",
-        jokes: "Dark Jokes 😂",
-        stories: "Funny Stories 📖",
-        engineering: "Engineering Ideas 🛠️",
-        native: "Native Spirit 🌿",
-        stoner: "Stoner Vibes 🍃",
-        zeus: "Zeus the Dog 🐶",
-      };
+    function newDanteBox() {
+      document.getElementById('danteBoxText').textContent = danteBoxItems[Math.floor(Math.random() * danteBoxItems.length)];
+    }
+    function newChallenge() {
+      document.getElementById('challengeText').textContent = challenges[Math.floor(Math.random() * challenges.length)];
+    }
+    function newZeus() {
+      document.getElementById('zeusText').textContent = zeusLines[Math.floor(Math.random() * zeusLines.length)];
+    }
+    function newCar() {
+      document.getElementById('carText').textContent = carLines[Math.floor(Math.random() * carLines.length)];
+    }
+    function newBot() {
+      document.getElementById('botText').textContent = botReplies[Math.floor(Math.random() * botReplies.length)];
+    }
+    function newFact() {
+      document.getElementById('factText').textContent = funFacts[Math.floor(Math.random() * funFacts.length)];
+    }
+    function newSnack() {
+      document.getElementById('snackText').textContent = snacks[Math.floor(Math.random() * snacks.length)];
+    }
 
-      // Get elements
-      const contentEl = document.getElementById("content");
-      const titleEl = document.getElementById("category-title");
-      const buttons = document.querySelectorAll(".category-btn");
-
-      // Helper: pick random item from array
-      function pickRandom(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-      }
-
-      // Show content function
-      function showContent(cat) {
-        // Get random fact for category
-        const fact = pickRandom(data[cat]);
-        titleEl.textContent = titles[cat] || "Fun";
-        contentEl.textContent = fact;
-
-        // Glow color update
-        const color = neonColors[cat] || "var(--neon-pink)";
-        contentEl.style.textShadow = `
-          0 0 10px ${color},
-          0 0 20px ${color},
-          0 0 30px ${color},
-          0 0 40px ${color}
-        `;
-        titleEl.style.color = color;
-        titleEl.style.textShadow = `0 0 15px ${color}`;
-        // Animate glow pulse
-        contentEl.classList.remove("glow-pulse");
-        void contentEl.offsetWidth; // trigger reflow for animation restart
-        contentEl.classList.add("glow-pulse");
-        contentEl.focus();
-      }
-
-      // Set up button listeners
-      buttons.forEach(btn => {
-        btn.addEventListener("click", () => {
-          const cat = btn.getAttribute("data-cat");
-          showContent(cat);
-        });
-      });
-
-      // On load, show a random category content
-      const categories = Object.keys(data);
-      const randomCat = pickRandom(categories);
-      showContent(randomCat);
-
-      // Keyboard navigation: press number keys 1-0 for categories
-      document.addEventListener("keydown", e => {
-        if (e.target.tagName === "BUTTON" || e.target.tagName === "INPUT" || e.target.isContentEditable) return;
-        let index = null;
-        if (e.key >= "1" && e.key <= "9") index = parseInt(e.key) - 1;
-        if (e.key === "0") index = 9;
-        if (index !== null && index < categories.length) {
-          showContent(categories[index]);
-        }
-      });
-    })();
+    // Load random first values
+    newDanteBox(); newChallenge(); newZeus(); newCar(); newBot(); newFact(); newSnack();
   </script>
 </body>
 </html>
