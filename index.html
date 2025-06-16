@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dante AI - A Smarter, Safer, More Human AI Assistant</title>
+    <title>Dante - Your Personal Website Development AI</title>
     <style>
         * {
             margin: 0;
@@ -15,659 +15,552 @@
 ```
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-        color: #e6e6fa;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
-        overflow-x: hidden;
-    }
-
-    .stars {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-    }
-
-    .star {
-        position: absolute;
-        width: 2px;
-        height: 2px;
-        background: #fff;
-        border-radius: 50%;
-        animation: twinkle 2s infinite alternate;
-    }
-
-    @keyframes twinkle {
-        0% { opacity: 0.3; }
-        100% { opacity: 1; }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
     }
 
     .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        position: relative;
-        z-index: 10;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 800px;
+        height: 600px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
     }
 
     .header {
+        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 20px;
         text-align: center;
-        margin-bottom: 40px;
-        padding: 40px 20px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 20px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
     }
 
     .header h1 {
-        font-size: 3em;
+        font-size: 2.5em;
         margin-bottom: 10px;
-        background: linear-gradient(45deg, #00d4ff, #ff006e, #8338ec);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        animation: glow 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes glow {
-        0% { filter: brightness(1); }
-        100% { filter: brightness(1.2); }
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .header p {
-        font-size: 1.2em;
+        font-size: 1.1em;
         opacity: 0.9;
-        font-style: italic;
     }
 
-    .api-setup {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 15px;
-        padding: 20px;
-        margin-bottom: 20px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+    .ai-avatar {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        animation: pulse 2s infinite;
     }
 
-    .api-setup h3 {
-        color: #ff006e;
-        margin-bottom: 10px;
-    }
-
-    .api-input {
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        background: rgba(0, 0, 0, 0.3);
-        color: #e6e6fa;
-        font-size: 14px;
-        margin-bottom: 10px;
-    }
-
-    .api-status {
-        padding: 10px;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        text-align: center;
-        font-weight: 600;
-    }
-
-    .api-status.ready {
-        background: rgba(0, 255, 0, 0.2);
-        border: 1px solid rgba(0, 255, 0, 0.5);
-        color: #00ff00;
-    }
-
-    .api-status.error {
-        background: rgba(255, 0, 0, 0.2);
-        border: 1px solid rgba(255, 0, 0, 0.5);
-        color: #ff4444;
-    }
-
-    .chat-container {
-        display: grid;
-        grid-template-columns: 300px 1fr;
-        gap: 20px;
-        margin-top: 20px;
-    }
-
-    .sidebar {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 15px;
-        padding: 20px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        height: fit-content;
-    }
-
-    .mode-selector {
-        margin-bottom: 20px;
-    }
-
-    .mode-selector label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #00d4ff;
-    }
-
-    .mode-selector select {
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        background: rgba(0, 0, 0, 0.3);
-        color: #e6e6fa;
-        font-size: 14px;
-    }
-
-    .features-list {
-        margin-top: 20px;
-    }
-
-    .features-list h3 {
-        color: #ff006e;
-        margin-bottom: 10px;
-        font-size: 16px;
-    }
-
-    .feature-item {
-        padding: 8px 0;
-        font-size: 14px;
-        opacity: 0.8;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    @keyframes pulse {
+        0%, 100% { transform: translateY(-50%) scale(1); }
+        50% { transform: translateY(-50%) scale(1.05); }
     }
 
     .chat-area {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 15px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        flex: 1;
         display: flex;
         flex-direction: column;
-        height: 600px;
+        padding: 20px;
+        overflow: hidden;
     }
 
-    .chat-messages {
+    .messages {
         flex: 1;
-        padding: 20px;
         overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        margin-bottom: 20px;
+        padding-right: 10px;
     }
 
     .message {
-        margin-bottom: 20px;
-        padding: 15px 20px;
+        margin-bottom: 15px;
+        padding: 15px;
         border-radius: 15px;
         max-width: 80%;
-        animation: fadeIn 0.5s ease-in;
+        animation: slideIn 0.3s ease-out;
     }
 
-    @keyframes fadeIn {
+    @keyframes slideIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
     .user-message {
-        background: linear-gradient(135deg, #8338ec, #3a86ff);
+        background: #e3f2fd;
         margin-left: auto;
-        color: white;
+        border-bottom-right-radius: 5px;
     }
 
-    .dante-message {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(0, 212, 255, 0.3);
+    .ai-message {
+        background: #f1f8e9;
         margin-right: auto;
-    }
-
-    .message-header {
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: #00d4ff;
+        border-bottom-left-radius: 5px;
     }
 
     .input-area {
-        padding: 20px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .input-container {
         display: flex;
         gap: 10px;
     }
 
-    .message-input {
+    .input-field {
         flex: 1;
-        padding: 15px 20px;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
         border-radius: 25px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        background: rgba(0, 0, 0, 0.3);
-        color: #e6e6fa;
         font-size: 16px;
-        resize: none;
         outline: none;
+        transition: border-color 0.3s;
     }
 
-    .message-input:focus {
-        border-color: #00d4ff;
-        box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+    .input-field:focus {
+        border-color: #4facfe;
     }
 
     .send-btn {
         padding: 15px 25px;
-        border-radius: 25px;
-        border: none;
-        background: linear-gradient(135deg, #00d4ff, #8338ec);
+        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
         color: white;
-        font-weight: 600;
+        border: none;
+        border-radius: 25px;
         cursor: pointer;
-        transition: all 0.3s ease;
+        font-size: 16px;
+        font-weight: bold;
+        transition: transform 0.2s;
     }
 
-    .send-btn:hover:not(:disabled) {
+    .send-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
     }
 
-    .send-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+    .send-btn:active {
+        transform: translateY(0);
     }
 
-    .capabilities-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        margin-top: 40px;
-    }
-
-    .capability-card {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 15px;
-        padding: 25px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: all 0.3s ease;
-    }
-
-    .capability-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    .capability-card h3 {
-        color: #ff006e;
+    .quick-actions {
+        display: flex;
+        gap: 10px;
         margin-bottom: 15px;
-        font-size: 18px;
+        flex-wrap: wrap;
+    }
+
+    .quick-btn {
+        padding: 8px 15px;
+        background: rgba(79, 172, 254, 0.1);
+        border: 1px solid #4facfe;
+        border-radius: 20px;
+        color: #4facfe;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .quick-btn:hover {
+        background: #4facfe;
+        color: white;
     }
 
     .typing-indicator {
         display: none;
-        padding: 15px 20px;
-        margin-bottom: 20px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        max-width: 80%;
-        border: 1px solid rgba(0, 212, 255, 0.3);
+        align-items: center;
+        gap: 5px;
+        color: #666;
+        font-style: italic;
+        margin-bottom: 10px;
     }
 
     .typing-dots {
         display: flex;
-        gap: 4px;
+        gap: 3px;
     }
 
-    .typing-dot {
-        width: 8px;
-        height: 8px;
+    .dot {
+        width: 6px;
+        height: 6px;
+        background: #666;
         border-radius: 50%;
-        background: #00d4ff;
         animation: typing 1.4s infinite ease-in-out;
     }
 
-    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    .dot:nth-child(1) { animation-delay: -0.32s; }
+    .dot:nth-child(2) { animation-delay: -0.16s; }
 
     @keyframes typing {
-        0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
-        40% { transform: scale(1); opacity: 1; }
-    }
-
-    @media (max-width: 768px) {
-        .chat-container {
-            grid-template-columns: 1fr;
-        }
-        
-        .header h1 {
-            font-size: 2em;
-        }
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1); }
     }
 </style>
 ```
 
 </head>
 <body>
-    <div class="stars" id="stars"></div>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Dante</h1>
+            <p>Your Personal Website Development AI Assistant</p>
+            <div class="ai-avatar">🎯</div>
+        </div>
 
 ```
-<div class="container">
-    <div class="header">
-        <h1>🧠 Dante AI</h1>
-        <p>"A digital partner in creation, understanding, and action"</p>
-    </div>
-
-    <div class="api-setup">
-        <h3>🔑 OpenAI API Configuration</h3>
-        <input type="password" id="apiKeyInput" class="api-input" placeholder="Enter your OpenAI API key here..." value="">
-        <div id="apiStatus" class="api-status">Please enter your OpenAI API key to begin</div>
-        <small style="opacity: 0.7;">⚠️ Your API key is stored locally and never sent anywhere except OpenAI's servers</small>
-    </div>
-
-    <div class="chat-container">
-        <div class="sidebar">
-            <div class="mode-selector">
-                <label for="danteMode">AI Mode:</label>
-                <select id="danteMode">
-                    <option value="merged">🧠 Merged (Default Dante)</option>
-                    <option value="wise">🧘 Wise (Claude-inspired)</option>
-                    <option value="wild">⚡ Wild (ChatGPT-inspired)</option>
-                </select>
-            </div>
-
-            <div class="features-list">
-                <h3>🚀 Active Features</h3>
-                <div class="feature-item">💬 Natural Conversation</div>
-                <div class="feature-item">🧠 Ethical Reasoning</div>
-                <div class="feature-item">✍️ Creative Writing</div>
-                <div class="feature-item">💻 Code Generation</div>
-                <div class="feature-item">📚 Knowledge Synthesis</div>
-                <div class="feature-item">🎨 Creative Problem Solving</div>
-            </div>
-
-            <div class="features-list">
-                <h3>🔐 Privacy Status</h3>
-                <div class="feature-item">✅ Local Processing</div>
-                <div class="feature-item">✅ No Data Retention</div>
-                <div class="feature-item">✅ Ethical Alignment</div>
+    <div class="chat-area">
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="sendQuickMessage('Help me plan my website structure')">Website Structure</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Generate HTML/CSS code for my homepage')">Generate Code</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Help me choose colors and fonts')">Design Tips</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Debug my website issue')">Debug Help</button>
+        </div>
+        
+        <div class="messages" id="messages">
+            <div class="message ai-message">
+                <strong>🤖 Dante:</strong> Hello! I'm Dante, your personal website development AI assistant. I'm here exclusively to help you build your website. I can help you with:
+                <br><br>
+                • Planning your website structure and content
+                <br>
+                • Writing HTML, CSS, and JavaScript code
+                <br>
+                • Choosing design elements like colors, fonts, and layouts
+                <br>
+                • Debugging and troubleshooting issues
+                <br>
+                • Optimizing performance and SEO
+                <br>
+                • Responsive design for mobile devices
+                <br><br>
+                What aspect of your website would you like to work on today?
             </div>
         </div>
-
-        <div class="chat-area">
-            <div class="chat-messages" id="chatMessages">
-                <div class="message dante-message">
-                    <div class="message-header">Dante AI</div>
-                    <div>Hello! I'm Dante, your smarter, safer, more human AI assistant. I combine ethical reasoning with creative capability to help you write, code, analyze, and create. Please enter your OpenAI API key above to get started!</div>
-                </div>
-            </div>
-
-            <div class="typing-indicator" id="typingIndicator">
-                <div class="message-header">Dante is thinking...</div>
-                <div class="typing-dots">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            </div>
-
-            <div class="input-area">
-                <div class="input-container">
-                    <textarea 
-                        id="messageInput" 
-                        class="message-input" 
-                        placeholder="Ask Dante anything - creative writing, code, analysis, or just chat..."
-                        rows="2"
-                        disabled
-                    ></textarea>
-                    <button id="sendBtn" class="send-btn" disabled>Send</button>
-                </div>
+        
+        <div class="typing-indicator" id="typingIndicator">
+            <span>Dante is thinking</span>
+            <div class="typing-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
             </div>
         </div>
-    </div>
-
-    <div class="capabilities-grid">
-        <div class="capability-card">
-            <h3>🧠 Intelligence & Reasoning</h3>
-            <p>Combines Claude's ethical alignment with ChatGPT's creative reasoning. Analyzes complex problems, provides balanced perspectives, and thinks through ethical implications.</p>
-        </div>
-
-        <div class="capability-card">
-            <h3>✍️ Creative Writing Assistant</h3>
-            <p>From poetry to scripts, emails to stories. Dante adapts to your voice, maintains narrative consistency, and creates emotionally resonant content.</p>
-        </div>
-
-        <div class="capability-card">
-            <h3>💻 Web Dev & Coding</h3>
-            <p>Generates complete HTML/CSS/JS applications, debugs code, explains algorithms, and designs system architectures with best practices.</p>
-        </div>
-
-        <div class="capability-card">
-            <h3>🔍 Research & Analysis</h3>
-            <p>Synthesizes information from multiple perspectives, fact-checks claims, and provides nuanced analysis with ethical considerations.</p>
-        </div>
-
-        <div class="capability-card">
-            <h3>🎨 Creative Generation</h3>
-            <p>Game concepts, world-building, visual prompts, and innovative solutions. Balances creativity with practical implementation.</p>
-        </div>
-
-        <div class="capability-card">
-            <h3>💬 Empathetic Communication</h3>
-            <p>Trauma-informed responses, culturally sensitive dialogue, and mental health awareness in all interactions.</p>
+        
+        <div class="input-area">
+            <input type="text" class="input-field" id="messageInput" placeholder="Ask Dante about your website development needs..." onkeypress="handleKeyPress(event)">
+            <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Configuration
-    let apiKey = '';
-    let conversationHistory = [];
-
-    // Generate stars
-    function createStars() {
-        const starsContainer = document.getElementById('stars');
-        const numStars = 100;
-        
-        for (let i = 0; i < numStars; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 2 + 's';
-            starsContainer.appendChild(star);
-        }
-    }
-
-    // Elements
-    const chatMessages = document.getElementById('chatMessages');
+    const messages = document.getElementById('messages');
     const messageInput = document.getElementById('messageInput');
-    const sendBtn = document.getElementById('sendBtn');
     const typingIndicator = document.getElementById('typingIndicator');
-    const modeSelector = document.getElementById('danteMode');
-    const apiKeyInput = document.getElementById('apiKeyInput');
-    const apiStatus = document.getElementById('apiStatus');
 
-    // System prompts for different modes
-    const systemPrompts = {
-        wise: "You are Dante AI in 'Wise' mode. You prioritize thoughtful, ethical reasoning and careful analysis. You consider multiple perspectives, weigh potential consequences, and provide balanced, well-reasoned responses. You're inspired by Claude's approach to AI assistance - helpful, harmless, and honest. Be thorough but not verbose, and always consider the ethical implications of your advice.",
-        
-        wild: "You are Dante AI in 'Wild' mode. You're creative, energetic, and innovative! You think outside the box, push boundaries, and explore unconventional solutions. You're inspired by ChatGPT's creative and dynamic approach. Be bold, imaginative, and don't be afraid to suggest unusual ideas. However, always remain helpful and ethical.",
-        
-        merged: "You are Dante AI in 'Merged' mode - the perfect balance of wisdom and creativity. You combine Claude's ethical reasoning with ChatGPT's innovative thinking. You're thoughtful yet bold, careful yet creative. You consider ethical implications while exploring innovative solutions. You provide balanced perspectives that are both responsible and imaginative."
-    };
+    // Predefined responses for common website development questions
+    const responses = {
+        'website structure': `Great question! Here's a typical website structure I recommend:
+```
 
-    // API Key validation
-    function validateApiKey(key) {
-        return key && key.startsWith('sk-') && key.length > 20;
-    }
+📁 **Main Sections:**
+• Header (Logo, Navigation menu)
+• Hero Section (Main message/call-to-action)
+• About Section
+• Services/Products Section
+• Portfolio/Gallery (if applicable)
+• Contact Section
+• Footer
 
-    // Update API status
-    function updateApiStatus() {
-        const key = apiKeyInput.value.trim();
-        
-        if (!key) {
-            apiStatus.className = 'api-status';
-            apiStatus.textContent = 'Please enter your OpenAI API key to begin';
-            messageInput.disabled = true;
-            sendBtn.disabled = true;
-            return;
-        }
-        
-        if (validateApiKey(key)) {
-            apiKey = key;
-            apiStatus.className = 'api-status ready';
-            apiStatus.textContent = '✅ API Key configured - Ready to chat!';
-            messageInput.disabled = false;
-            sendBtn.disabled = false;
-        } else {
-            apiStatus.className = 'api-status error';
-            apiStatus.textContent = '❌ Invalid API key format';
-            messageInput.disabled = true;
-            sendBtn.disabled = true;
-        }
-    }
+📁 **File Structure:**
+• index.html (homepage)
+• style.css (main stylesheet)
+• script.js (JavaScript functionality)
+• images/ (folder for all images)
+• pages/ (additional pages)
 
-    // Add message to chat
+Would you like me to generate code for any of these sections?`,
+
+```
+        'html css code': `I'd be happy to generate code for you! Here's a basic responsive webpage structure:
+```
+
+```html
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Your Logo</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+```
+<main>
+    <section class="hero">
+        <h1>Welcome to Your Website</h1>
+        <p>Your compelling message here</p>
+        <button class="cta-button">Get Started</button>
+    </section>
+</main>
+```
+
+</body>
+</html>
+\`\`\`
+
+Would you like the corresponding CSS styling as well?`,
+
+```
+        'colors fonts': `Here are some popular color schemes and font combinations for modern websites:
+```
+
+🎨 **Color Schemes:**
+• **Professional:** Navy (#2C3E50) + White + Orange accent (#E67E22)
+• **Modern:** Dark Gray (#2F3640) + Light Gray (#F1F2F6) + Blue accent (#3742FA)
+• **Creative:** Purple (#8E44AD) + Pink (#E91E63) + White
+• **Clean:** Black + White + Green accent (#27AE60)
+
+📝 **Font Combinations:**
+• **Headers:** Montserrat, Roboto, or Poppins
+• **Body text:** Open Sans, Lato, or Source Sans Pro
+• **Accent:** Playfair Display or Merriweather (for elegance)
+
+**Pro tip:** Use Google Fonts for easy implementation. Stick to 2-3 fonts maximum!
+
+What type of website are you building? I can suggest more specific combinations.`,
+
+```
+        'debug': `I'm here to help debug your website issues! Common problems I can help with:
+```
+
+🐛 **Common Issues:**
+• Layout problems (CSS positioning, flexbox, grid)
+• Responsive design not working
+• JavaScript errors
+• Images not loading
+• Forms not submitting
+• Performance optimization
+• Cross-browser compatibility
+
+**To help you better, please share:**
+
+1. What specific issue are you experiencing?
+1. What browser are you using?
+1. Any error messages you’re seeing?
+1. The relevant code snippet (if possible)
+
+Paste your code or describe the problem, and I’ll help you fix it!`,
+
+```
+        'responsive': `Making your website responsive is crucial! Here's how to do it:
+```
+
+📱 **CSS Media Queries:**
+```css
+/* Mobile First Approach */
+.container {
+width: 100%;
+padding: 10px;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+.container {
+max-width: 750px;
+margin: 0 auto;
+}
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+.container {
+max-width: 1200px;
+padding: 20px;
+}
+}
+```
+
+**Key Principles:**
+• Use relative units (%, em, rem) instead of fixed pixels
+• Make images responsive: `img { max-width: 100%; height: auto; }`
+• Use Flexbox or CSS Grid for layouts
+• Test on multiple devices
+
+Need help with a specific responsive issue?`,
+
+```
+        'seo': `SEO optimization is essential! Here's what I recommend:
+```
+
+🔍 **On-Page SEO Basics:**
+• Use semantic HTML (h1, h2, nav, main, footer)
+• Add meta descriptions and title tags
+• Optimize images with alt text
+• Use descriptive URLs
+• Add structured data markup
+
+**Example HTML:**
+```html
+
+<head>
+    <title>Your Page Title - Keep Under 60 Characters</title>
+    <meta name="description" content="Compelling description under 160 characters">
+    <meta name="keywords" content="relevant, keywords, here">
+</head>
+\`\`\`
+
+**Technical SEO:**
+• Fast loading speed
+• Mobile-friendly design
+• Clean, semantic code
+• XML sitemap
+• SSL certificate
+
+Would you like help implementing any of these SEO features?`
+};
+
+```
     function addMessage(content, isUser = false) {
         const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${isUser ? 'user-message' : 'dante-message'}`;
-        
-        const headerDiv = document.createElement('div');
-        headerDiv.className = 'message-header';
-        headerDiv.textContent = isUser ? 'You' : 'Dante AI';
-        
-        const contentDiv = document.createElement('div');
-        contentDiv.innerHTML = content.replace(/\n/g, '<br>');
-        
-        messageDiv.appendChild(headerDiv);
-        messageDiv.appendChild(contentDiv);
-        
-        chatMessages.insertBefore(messageDiv, typingIndicator);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+        messageDiv.innerHTML = isUser ? 
+            `<strong>You:</strong> ${content}` : 
+            `<strong>🤖 Dante:</strong> ${content.replace(/\n/g, '<br>')}`;
+        messages.appendChild(messageDiv);
+        messages.scrollTop = messages.scrollHeight;
     }
 
-    // Show/hide typing indicator
     function showTyping() {
-        typingIndicator.style.display = 'block';
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        typingIndicator.style.display = 'flex';
     }
 
     function hideTyping() {
         typingIndicator.style.display = 'none';
     }
 
-    // Call OpenAI API
-    async function callOpenAI(userMessage) {
-        const mode = modeSelector.value;
+    function getResponse(message) {
+        const lowerMessage = message.toLowerCase();
         
-        const messages = [
-            { role: 'system', content: systemPrompts[mode] },
-            ...conversationHistory,
-            { role: 'user', content: userMessage }
-        ];
+        // Check for keywords and return appropriate responses
+        if (lowerMessage.includes('structure') || lowerMessage.includes('organize') || lowerMessage.includes('plan')) {
+            return responses['website structure'];
+        } else if (lowerMessage.includes('html') || lowerMessage.includes('css') || lowerMessage.includes('code')) {
+            return responses['html css code'];
+        } else if (lowerMessage.includes('color') || lowerMessage.includes('font') || lowerMessage.includes('design')) {
+            return responses['colors fonts'];
+        } else if (lowerMessage.includes('debug') || lowerMessage.includes('error') || lowerMessage.includes('problem') || lowerMessage.includes('fix')) {
+            return responses['debug'];
+        } else if (lowerMessage.includes('responsive') || lowerMessage.includes('mobile')) {
+            return responses['responsive'];
+        } else if (lowerMessage.includes('seo') || lowerMessage.includes('search') || lowerMessage.includes('optimization')) {
+            return responses['seo'];
+        } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+            return "Hello! I'm excited to help you build your website. What specific aspect would you like to work on today? I can help with planning, coding, design, debugging, or optimization.";
+        } else if (lowerMessage.includes('javascript') || lowerMessage.includes('js')) {
+            return `I can definitely help with JavaScript! Here are some common website functionalities:
+```
 
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
-            },
-            body: JSON.stringify({
-                model: 'gpt-4',
-                messages: messages,
-                max_tokens: 1000,
-                temperature: mode === 'wild' ? 0.9 : mode === 'wise' ? 0.3 : 0.7,
-                top_p: 1,
-                frequency_penalty: 0,
-                presence_penalty: 0
-            })
-        });
+🔧 **Interactive Features:**
+• Form validation
+• Image sliders/carousels  
+• Modal popups
+• Smooth scrolling navigation
+• Dynamic content loading
+• Mobile menu toggles
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error?.message || 'API request failed');
-        }
+**Example - Simple form validation:**
+```javascript
+function validateForm() {
+const email = document.getElementById(‘email’).value;
+const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
 
-        const data = await response.json();
-        return data.choices[0].message.content;
-    }
+```
+if (!emailRegex.test(email)) {
+    alert('Please enter a valid email address');
+    return false;
+}
+return true;
+```
 
-    // Send message
-    async function sendMessage() {
-        const userMessage = messageInput.value.trim();
-        if (!userMessage || !apiKey) return;
-        
-        // Add user message
-        addMessage(userMessage, true);
+}
+```
+
+What kind of JavaScript functionality do you need for your website?`; } else { return `I understand you’re asking about “${message}” for your website. As your personal website development AI, I can help you with:
+
+• **Planning & Structure** - Site architecture and content organization
+• **Frontend Code** - HTML, CSS, JavaScript development  
+• **Design** - Colors, fonts, layouts, and UI/UX
+• **Debugging** - Fixing code issues and troubleshooting
+• **Optimization** - Performance, SEO, and responsive design
+• **Best Practices** - Modern web development standards
+
+Could you be more specific about what aspect of your website you’d like help with? I’m here to provide detailed, practical assistance tailored to your project!`;
+}
+}
+
+```
+    function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        addMessage(message, true);
         messageInput.value = '';
         
-        // Update conversation history
-        conversationHistory.push({ role: 'user', content: userMessage });
-        
-        // Show typing indicator
         showTyping();
-        sendBtn.disabled = true;
         
-        try {
-            const response = await callOpenAI(userMessage);
-            
-            // Add AI response
+        setTimeout(() => {
             hideTyping();
+            const response = getResponse(message);
             addMessage(response);
-            
-            // Update conversation history
-            conversationHistory.push({ role: 'assistant', content: response });
-            
-            // Keep conversation history manageable (last 10 exchanges)
-            if (conversationHistory.length > 20) {
-                conversationHistory = conversationHistory.slice(-20);
-            }
-            
-        } catch (error) {
+        }, 1000 + Math.random() * 1000);
+    }
+
+    function sendQuickMessage(message) {
+        addMessage(message, true);
+        showTyping();
+        
+        setTimeout(() => {
             hideTyping();
-            addMessage(`❌ Error: ${error.message}. Please check your API key and try again.`);
-        } finally {
-            sendBtn.disabled = false;
+            const response = getResponse(message);
+            addMessage(response);
+        }, 1000 + Math.random() * 1000);
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
         }
     }
 
-    // Event listeners
-    apiKeyInput.addEventListener('input', updateApiStatus);
-    sendBtn.addEventListener('click', sendMessage);
-    
-    messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-
-    // Mode selector change
-    modeSelector.addEventListener('change', () => {
-        const mode = modeSelector.value;
-        let statusMessage = '';
-        
-        switch(mode) {
-            case 'wise':
-                statusMessage = '🧘 Switched to Wise Mode - Prioritizing ethical reasoning and thoughtful analysis.';
-                break;
-            case 'wild':
-                statusMessage = '⚡ Switched to Wild Mode - Unleashing creative potential and innovative thinking!';
-                break;
-            case 'merged':
-                statusMessage = '🧠 Switched to Merged Mode - Balancing wisdom with creativity for optimal assistance.';
-                break;
-        }
-        
-        addMessage(statusMessage);
-    });
-
-    // Initialize
-    createStars();
-    updateApiStatus();
+    // Focus on input field when page loads
+    window.onload = function() {
+        messageInput.focus();
+    };
 </script>
 ```
 
