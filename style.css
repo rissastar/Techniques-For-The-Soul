@@ -1,99 +1,122 @@
 @import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap');
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; height:100%; }
 
 body {
-  margin: 0;
-  padding: 0;
-  background: #000;
-  color: #fff;
   font-family: 'Bungee Spice', cursive;
+  background: linear-gradient(270deg, #0f0f1f, #1f001f, #001f1f);
+  background-size: 600% 600%;
+  animation: bgGradient 12s ease infinite;
+  color: #fff;
   overflow-x: hidden;
-  animation: pulseBackground 6s infinite alternate;
+  padding: 0 10px;
 }
 
-@keyframes pulseBackground {
-  0% { background-color: #000; }
-  50% { background-color: #110022; }
-  100% { background-color: #000011; }
+@keyframes bgGradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+#confettiCanvas {
+  position: fixed; top:0; left:0;
+  width:100%; height:100%;
+  pointer-events:none; z-index:9999;
 }
 
 .container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-  text-align: center;
+  max-width:600px; margin:auto; padding:10px 0;
+  text-align:center;
 }
 
 header h1 {
-  font-size: 3rem;
-  color: #e60073;
-  text-shadow:
-    0 0 10px #0ff,
-    0 0 20px #e60073,
-    0 0 30px #ff00ff;
-  margin-bottom: 15px;
+  font-size:2.5rem;
+  color:#ff0077;
+  text-shadow:0 0 8px #00ffff,0 0 16px #ff0077;
+  animation: neonGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes neonGlow {
+  from { text-shadow:0 0 8px #00ffff,0 0 16px #ff0077; }
+  to   { text-shadow:0 0 16px #00ffff,0 0 32px #ff0077; }
 }
 
 .module {
   background: rgba(255,255,255,0.05);
   border: 3px solid #0ff;
-  border-radius: 12px;
-  margin: 25px 0;
-  padding: 20px;
-  box-shadow: 0 0 12px #0ff;
-  transition: box-shadow 0.3s ease-in-out;
+  border-radius:12px;
+  margin:15px 0; padding:15px;
+  box-shadow:0 0 12px #0ff;
+  transition: transform .2s, box-shadow .2s;
 }
 
 .module:hover {
-  box-shadow: 0 0 30px #ff00ff;
+  transform: scale(1.02);
+  box-shadow:0 0 30px #ff00ff;
 }
 
 .module h2 {
-  color: #0ff;
-  margin-bottom: 15px;
-  font-size: 1.8rem;
-  text-shadow: 0 0 6px #0ff;
+  font-size:1.6rem; color:#0ff;
+  text-shadow:0 0 6px #0ff;
+  margin-bottom:10px;
 }
 
-button.glow-btn {
-  font-size: 1.2rem;
-  padding: 15px 25px;
-  background: #e60073;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  cursor: pointer;
-  font-weight: bold;
-  text-shadow: 0 0 8px #000;
-  box-shadow: 0 0 8px #e60073;
-  transition: all 0.25s ease-in-out;
-  user-select: none;
+.glow-btn {
+  display:inline-block;
+  max-width:100%;
+  width:auto;
+  margin:8px auto;
+  padding:12px 20px;
+  font-size:1.1rem;
+  background:#ff0077;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+  text-shadow:0 0 6px #000;
+  box-shadow:0 0 8px #ff0077;
+  transition: all .25s ease;
 }
 
-button.glow-btn:hover,
-button.glow-btn:focus {
-  background: #0ff;
-  color: #000;
-  text-shadow: none;
-  box-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
-  outline: none;
-  transform: scale(1.05);
+.glow-btn:hover {
+  background:#0ff;
+  color:#000;
+  box-shadow:0 0 20px #0ff,0 0 40px #0ff;
+  transform:scale(1.05);
 }
 
 .output {
-  font-size: 1.15rem;
-  margin-top: 15px;
-  min-height: 50px;
-  padding: 0 10px;
+  font-size:1.05rem;
+  margin-top:10px;
+  min-height:40px;
+  padding:0 8px;
 }
 
-audio {
-  margin-top: 15px;
-  width: 100%;
-  border-radius: 8px;
-  outline: none;
-  box-shadow: 0 0 20px #e60073;
+.box {
+  width:80px; height:80px;
+  margin:12px auto;
+  background:#222;
+  border:4px solid #ff0077;
+  border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.5rem;
+}
+
+#gameCanvas {
+  background:#111;
+  border:2px solid #0ff;
+  border-radius:8px;
+  width:100%; height:auto;
+  margin:10px auto;
+  touch-action:none;
+}
+
+/* MOBILE TWEAKS */
+@media (max-width: 480px) {
+  header h1 { font-size:2rem; }
+  .module h2 { font-size:1.4rem; }
+  .glow-btn { font-size:1rem; padding:10px; }
+  .output { font-size:1rem; }
 }
