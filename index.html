@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dante - Your Personal Website Development AI</title>
+    <title>Dante AI - Advanced Website Development Assistant</title>
     <style>
         * {
             margin: 0;
@@ -14,73 +14,138 @@
 
 ```
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 20px;
+        animation: backgroundShift 10s ease-in-out infinite;
+    }
+
+    @keyframes backgroundShift {
+        0%, 100% { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); }
+        50% { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #667eea 100%); }
     }
 
     .container {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        box-shadow: 0 32px 64px rgba(0, 0, 0, 0.15);
         width: 100%;
-        max-width: 800px;
-        height: 600px;
+        max-width: 900px;
+        height: 700px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .header {
-        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
         color: white;
-        padding: 20px;
-        text-align: center;
+        padding: 24px;
         position: relative;
+        overflow: hidden;
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 1;
     }
 
     .header h1 {
-        font-size: 2.5em;
-        margin-bottom: 10px;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        font-size: 2.8em;
+        margin-bottom: 8px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #fff 0%, #a8edea 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
 
-    .header p {
+    .header .subtitle {
         font-size: 1.1em;
         opacity: 0.9;
+        margin-bottom: 12px;
+    }
+
+    .ai-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9em;
+        opacity: 0.8;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #4ade80;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
     }
 
     .ai-avatar {
-        width: 60px;
-        height: 60px;
-        background: rgba(255, 255, 255, 0.2);
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 30px;
+        font-size: 32px;
         position: absolute;
-        right: 20px;
+        right: 24px;
         top: 50%;
         transform: translateY(-50%);
-        animation: pulse 2s infinite;
+        animation: float 3s ease-in-out infinite;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     }
 
-    @keyframes pulse {
-        0%, 100% { transform: translateY(-50%) scale(1); }
-        50% { transform: translateY(-50%) scale(1.05); }
+    @keyframes float {
+        0%, 100% { transform: translateY(-50%) translateZ(0); }
+        50% { transform: translateY(-60%) translateZ(0); }
+    }
+
+    .capabilities-bar {
+        background: rgba(0, 0, 0, 0.05);
+        padding: 12px 24px;
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .capability-tag {
+        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: 0.85em;
+        white-space: nowrap;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(79, 172, 254, 0.3);
     }
 
     .chat-area {
         flex: 1;
         display: flex;
         flex-direction: column;
-        padding: 20px;
+        padding: 24px;
         overflow: hidden;
     }
 
@@ -92,110 +157,206 @@
     }
 
     .message {
-        margin-bottom: 15px;
-        padding: 15px;
-        border-radius: 15px;
-        max-width: 80%;
-        animation: slideIn 0.3s ease-out;
+        margin-bottom: 20px;
+        padding: 18px;
+        border-radius: 18px;
+        max-width: 85%;
+        animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
     }
 
-    @keyframes slideIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+    .message::before {
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        top: 22px;
     }
 
     .user-message {
-        background: #e3f2fd;
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
         margin-left: auto;
-        border-bottom-right-radius: 5px;
+        border-bottom-right-radius: 6px;
+        border: 1px solid rgba(33, 150, 243, 0.2);
+    }
+
+    .user-message::before {
+        background: #2196f3;
+        right: -4px;
     }
 
     .ai-message {
-        background: #f1f8e9;
+        background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%);
         margin-right: auto;
-        border-bottom-left-radius: 5px;
+        border-bottom-left-radius: 6px;
+        border: 1px solid rgba(76, 175, 80, 0.2);
+    }
+
+    .ai-message::before {
+        background: #4caf50;
+        left: -4px;
+    }
+
+    .message-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 0.9em;
+    }
+
+    .message-content {
+        line-height: 1.6;
+    }
+
+    .code-block {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 16px;
+        border-radius: 8px;
+        margin: 12px 0;
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 0.9em;
+        overflow-x: auto;
+        position: relative;
+    }
+
+    .code-block::before {
+        content: attr(data-lang);
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        font-size: 0.7em;
+        color: #888;
+        text-transform: uppercase;
+    }
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .quick-btn {
+        padding: 12px 18px;
+        background: rgba(79, 172, 254, 0.1);
+        border: 2px solid rgba(79, 172, 254, 0.3);
+        border-radius: 12px;
+        color: #1976d2;
+        cursor: pointer;
+        font-size: 0.9em;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .quick-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        transition: left 0.5s;
+    }
+
+    .quick-btn:hover {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(79, 172, 254, 0.4);
+    }
+
+    .quick-btn:hover::before {
+        left: 100%;
     }
 
     .input-area {
         display: flex;
-        gap: 10px;
+        gap: 12px;
+        align-items: flex-end;
+    }
+
+    .input-wrapper {
+        flex: 1;
+        position: relative;
     }
 
     .input-field {
-        flex: 1;
-        padding: 15px;
+        width: 100%;
+        padding: 16px 20px;
         border: 2px solid #e0e0e0;
-        border-radius: 25px;
+        border-radius: 20px;
         font-size: 16px;
         outline: none;
-        transition: border-color 0.3s;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        resize: none;
+        min-height: 56px;
+        max-height: 120px;
+        overflow-y: auto;
     }
 
     .input-field:focus {
         border-color: #4facfe;
+        box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.1);
+        background: white;
     }
 
     .send-btn {
-        padding: 15px 25px;
-        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        padding: 16px 24px;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         color: white;
         border: none;
-        border-radius: 25px;
+        border-radius: 20px;
         cursor: pointer;
         font-size: 16px;
-        font-weight: bold;
-        transition: transform 0.2s;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        min-width: 80px;
+        box-shadow: 0 4px 16px rgba(79, 172, 254, 0.3);
     }
 
     .send-btn:hover {
         transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(79, 172, 254, 0.4);
     }
 
-    .send-btn:active {
-        transform: translateY(0);
-    }
-
-    .quick-actions {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
-        flex-wrap: wrap;
-    }
-
-    .quick-btn {
-        padding: 8px 15px;
-        background: rgba(79, 172, 254, 0.1);
-        border: 1px solid #4facfe;
-        border-radius: 20px;
-        color: #4facfe;
-        cursor: pointer;
-        font-size: 14px;
-        transition: all 0.3s;
-    }
-
-    .quick-btn:hover {
-        background: #4facfe;
-        color: white;
+    .send-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
     }
 
     .typing-indicator {
         display: none;
         align-items: center;
-        gap: 5px;
+        gap: 12px;
         color: #666;
         font-style: italic;
-        margin-bottom: 10px;
+        margin-bottom: 16px;
+        padding: 12px 18px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        max-width: 200px;
     }
 
     .typing-dots {
         display: flex;
-        gap: 3px;
+        gap: 4px;
     }
 
     .dot {
-        width: 6px;
-        height: 6px;
-        background: #666;
+        width: 8px;
+        height: 8px;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         border-radius: 50%;
         animation: typing 1.4s infinite ease-in-out;
     }
@@ -204,8 +365,56 @@
     .dot:nth-child(2) { animation-delay: -0.16s; }
 
     @keyframes typing {
-        0%, 80%, 100% { transform: scale(0); }
-        40% { transform: scale(1); }
+        0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+        40% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .context-panel {
+        background: rgba(0, 0, 0, 0.02);
+        border-radius: 8px;
+        padding: 12px;
+        margin: 8px 0;
+        border-left: 4px solid #4facfe;
+        font-size: 0.9em;
+    }
+
+    .suggestion-chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+    }
+
+    .suggestion-chip {
+        background: rgba(79, 172, 254, 0.1);
+        color: #1976d2;
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: 0.8em;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .suggestion-chip:hover {
+        background: #4facfe;
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            height: 90vh;
+            border-radius: 16px;
+        }
+        
+        .quick-actions {
+            grid-template-columns: 1fr;
+        }
+        
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
     }
 </style>
 ```
@@ -214,42 +423,72 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🤖 Dante</h1>
-            <p>Your Personal Website Development AI Assistant</p>
+            <div class="header-content">
+                <h1>🧠 Dante AI</h1>
+                <p class="subtitle">Advanced Website Development Intelligence</p>
+                <div class="ai-status">
+                    <div class="status-dot"></div>
+                    <span>Neural networks active • Context-aware • Learning enabled</span>
+                </div>
+            </div>
             <div class="ai-avatar">🎯</div>
         </div>
 
 ```
+    <div class="capabilities-bar">
+        <div class="capability-tag">🧠 Deep Learning</div>
+        <div class="capability-tag">🔍 Code Analysis</div>
+        <div class="capability-tag">🎨 Design Intelligence</div>
+        <div class="capability-tag">⚡ Performance Optimization</div>
+        <div class="capability-tag">🛡️ Security Auditing</div>
+        <div class="capability-tag">📱 Responsive Design</div>
+    </div>
+    
     <div class="chat-area">
         <div class="quick-actions">
-            <button class="quick-btn" onclick="sendQuickMessage('Help me plan my website structure')">Website Structure</button>
-            <button class="quick-btn" onclick="sendQuickMessage('Generate HTML/CSS code for my homepage')">Generate Code</button>
-            <button class="quick-btn" onclick="sendQuickMessage('Help me choose colors and fonts')">Design Tips</button>
-            <button class="quick-btn" onclick="sendQuickMessage('Debug my website issue')">Debug Help</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Analyze my website architecture and suggest improvements')">🏗️ Architecture Analysis</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Generate a complete modern website with advanced features')">⚡ Full-Stack Generation</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Audit my code for performance and security issues')">🛡️ Security & Performance Audit</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Create an AI-powered interactive component')">🤖 AI Components</button>
         </div>
         
         <div class="messages" id="messages">
             <div class="message ai-message">
-                <strong>🤖 Dante:</strong> Hello! I'm Dante, your personal website development AI assistant. I'm here exclusively to help you build your website. I can help you with:
-                <br><br>
-                • Planning your website structure and content
-                <br>
-                • Writing HTML, CSS, and JavaScript code
-                <br>
-                • Choosing design elements like colors, fonts, and layouts
-                <br>
-                • Debugging and troubleshooting issues
-                <br>
-                • Optimizing performance and SEO
-                <br>
-                • Responsive design for mobile devices
-                <br><br>
-                What aspect of your website would you like to work on today?
+                <div class="message-header">
+                    <span>🧠 Dante AI</span>
+                    <span style="font-size: 0.8em; opacity: 0.7;">Neural Network v2.1 • Context Engine Active</span>
+                </div>
+                <div class="message-content">
+                    Welcome to Dante AI - your advanced website development intelligence system. I've been enhanced with:
+                    <br><br>
+                    <strong>🧠 Advanced Capabilities:</strong>
+                    <br>• Multi-layered code analysis and optimization
+                    <br>• Predictive design recommendations based on user behavior
+                    <br>• Advanced security vulnerability detection
+                    <br>• Performance bottleneck identification and solutions
+                    <br>• Cross-platform compatibility testing
+                    <br>• SEO strategy optimization with competitive analysis
+                    <br><br>
+                    <strong>🎯 Smart Features:</strong>
+                    <br>• Context-aware conversations with project memory
+                    <br>• Intelligent code completion and refactoring
+                    <br>• Automated testing and debugging assistance
+                    <br>• Modern framework integration (React, Vue, Angular)
+                    <br>• Database design and optimization
+                    <br>• API development and integration
+                    <br><br>
+                    I learn from our conversations to provide increasingly personalized assistance. What complex challenge shall we tackle today?
+                </div>
+                <div class="suggestion-chips">
+                    <div class="suggestion-chip" onclick="sendQuickMessage('What modern web technologies should I use?')">Tech Stack Advice</div>
+                    <div class="suggestion-chip" onclick="sendQuickMessage('Help me optimize Core Web Vitals')">Performance Optimization</div>
+                    <div class="suggestion-chip" onclick="sendQuickMessage('Design a scalable architecture')">Architecture Planning</div>
+                </div>
             </div>
         </div>
         
         <div class="typing-indicator" id="typingIndicator">
-            <span>Dante is thinking</span>
+            <span>Dante is analyzing</span>
             <div class="typing-dots">
                 <div class="dot"></div>
                 <div class="dot"></div>
@@ -258,8 +497,10 @@
         </div>
         
         <div class="input-area">
-            <input type="text" class="input-field" id="messageInput" placeholder="Ask Dante about your website development needs..." onkeypress="handleKeyPress(event)">
-            <button class="send-btn" onclick="sendMessage()">Send</button>
+            <div class="input-wrapper">
+                <textarea class="input-field" id="messageInput" placeholder="Ask Dante about advanced web development, architecture, performance optimization, or any complex technical challenge..." rows="1" onkeydown="handleKeyPress(event)" oninput="autoResize()"></textarea>
+            </div>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 </div>
@@ -267,302 +508,382 @@
 <script>
     const messages = document.getElementById('messages');
     const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
     const typingIndicator = document.getElementById('typingIndicator');
 
-    // Predefined responses for common website development questions
-    const responses = {
-        'website structure': `Great question! Here's a typical website structure I recommend:
+    // Enhanced conversation context and memory
+    let conversationContext = {
+        projectType: null,
+        techStack: [],
+        previousQuestions: [],
+        codeExamples: [],
+        preferences: {},
+        currentFocus: null
+    };
+
+    // Advanced AI knowledge base with sophisticated responses
+    const advancedKnowledge = {
+        architecture: {
+            keywords: ['architecture', 'structure', 'scalable', 'microservices', 'monolith', 'design patterns'],
+            response: `I'll help you design a scalable, maintainable architecture. Let me analyze your requirements:
 ```
 
-📁 **Main Sections:**
-• Header (Logo, Navigation menu)
-• Hero Section (Main message/call-to-action)
-• About Section
-• Services/Products Section
-• Portfolio/Gallery (if applicable)
-• Contact Section
-• Footer
+🏗️ **Modern Architecture Patterns:**
 
-📁 **File Structure:**
-• index.html (homepage)
-• style.css (main stylesheet)
-• script.js (JavaScript functionality)
-• images/ (folder for all images)
-• pages/ (additional pages)
+**1. Micro-Frontend Architecture:**
+```javascript
+// Module Federation Setup (Webpack 5)
+const ModuleFederationPlugin = require(’@module-federation/webpack’);
 
-Would you like me to generate code for any of these sections?`,
-
-```
-        'html css code': `I'd be happy to generate code for you! Here's a basic responsive webpage structure:
-```
-
-```html
-
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Website</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <div class="logo">Your Logo</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-```
-<main>
-    <section class="hero">
-        <h1>Welcome to Your Website</h1>
-        <p>Your compelling message here</p>
-        <button class="cta-button">Get Started</button>
-    </section>
-</main>
-```
-
-</body>
-</html>
-\`\`\`
-
-Would you like the corresponding CSS styling as well?`,
-
-```
-        'colors fonts': `Here are some popular color schemes and font combinations for modern websites:
-```
-
-🎨 **Color Schemes:**
-• **Professional:** Navy (#2C3E50) + White + Orange accent (#E67E22)
-• **Modern:** Dark Gray (#2F3640) + Light Gray (#F1F2F6) + Blue accent (#3742FA)
-• **Creative:** Purple (#8E44AD) + Pink (#E91E63) + White
-• **Clean:** Black + White + Green accent (#27AE60)
-
-📝 **Font Combinations:**
-• **Headers:** Montserrat, Roboto, or Poppins
-• **Body text:** Open Sans, Lato, or Source Sans Pro
-• **Accent:** Playfair Display or Merriweather (for elegance)
-
-**Pro tip:** Use Google Fonts for easy implementation. Stick to 2-3 fonts maximum!
-
-What type of website are you building? I can suggest more specific combinations.`,
-
-```
-        'debug': `I'm here to help debug your website issues! Common problems I can help with:
-```
-
-🐛 **Common Issues:**
-• Layout problems (CSS positioning, flexbox, grid)
-• Responsive design not working
-• JavaScript errors
-• Images not loading
-• Forms not submitting
-• Performance optimization
-• Cross-browser compatibility
-
-**To help you better, please share:**
-
-1. What specific issue are you experiencing?
-1. What browser are you using?
-1. Any error messages you’re seeing?
-1. The relevant code snippet (if possible)
-
-Paste your code or describe the problem, and I’ll help you fix it!`,
-
-```
-        'responsive': `Making your website responsive is crucial! Here's how to do it:
-```
-
-📱 **CSS Media Queries:**
-```css
-/* Mobile First Approach */
-.container {
-width: 100%;
-padding: 10px;
+module.exports = {
+plugins: [
+new ModuleFederationPlugin({
+name: ‘shell’,
+remotes: {
+mf_header: ‘header@http://localhost:3001/remoteEntry.js’,
+mf_footer: ‘footer@http://localhost:3002/remoteEntry.js’
 }
-
-/* Tablet */
-@media (min-width: 768px) {
-.container {
-max-width: 750px;
-margin: 0 auto;
-}
-}
-
-/* Desktop */
-@media (min-width: 1024px) {
-.container {
-max-width: 1200px;
-padding: 20px;
-}
-}
+})
+]
+};
 ```
 
-**Key Principles:**
-• Use relative units (%, em, rem) instead of fixed pixels
-• Make images responsive: `img { max-width: 100%; height: auto; }`
-• Use Flexbox or CSS Grid for layouts
-• Test on multiple devices
-
-Need help with a specific responsive issue?`,
-
-```
-        'seo': `SEO optimization is essential! Here's what I recommend:
-```
-
-🔍 **On-Page SEO Basics:**
-• Use semantic HTML (h1, h2, nav, main, footer)
-• Add meta descriptions and title tags
-• Optimize images with alt text
-• Use descriptive URLs
-• Add structured data markup
-
-**Example HTML:**
-```html
-
-<head>
-    <title>Your Page Title - Keep Under 60 Characters</title>
-    <meta name="description" content="Compelling description under 160 characters">
-    <meta name="keywords" content="relevant, keywords, here">
-</head>
-\`\`\`
-
-**Technical SEO:**
-• Fast loading speed
-• Mobile-friendly design
-• Clean, semantic code
-• XML sitemap
-• SSL certificate
-
-Would you like help implementing any of these SEO features?`
+**2. Component-Driven Development:**
+```jsx
+// Atomic Design Pattern
+const Button = ({ variant, size, children, …props }) => {
+const baseClasses = ‘btn transition-all duration-200’;
+const variantClasses = {
+primary: ‘bg-blue-600 hover:bg-blue-700 text-white’,
+secondary: ‘bg-gray-200 hover:bg-gray-300 text-gray-800’
 };
 
-```
-    function addMessage(content, isUser = false) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
-        messageDiv.innerHTML = isUser ? 
-            `<strong>You:</strong> ${content}` : 
-            `<strong>🤖 Dante:</strong> ${content.replace(/\n/g, '<br>')}`;
-        messages.appendChild(messageDiv);
-        messages.scrollTop = messages.scrollHeight;
-    }
-
-    function showTyping() {
-        typingIndicator.style.display = 'flex';
-    }
-
-    function hideTyping() {
-        typingIndicator.style.display = 'none';
-    }
-
-    function getResponse(message) {
-        const lowerMessage = message.toLowerCase();
-        
-        // Check for keywords and return appropriate responses
-        if (lowerMessage.includes('structure') || lowerMessage.includes('organize') || lowerMessage.includes('plan')) {
-            return responses['website structure'];
-        } else if (lowerMessage.includes('html') || lowerMessage.includes('css') || lowerMessage.includes('code')) {
-            return responses['html css code'];
-        } else if (lowerMessage.includes('color') || lowerMessage.includes('font') || lowerMessage.includes('design')) {
-            return responses['colors fonts'];
-        } else if (lowerMessage.includes('debug') || lowerMessage.includes('error') || lowerMessage.includes('problem') || lowerMessage.includes('fix')) {
-            return responses['debug'];
-        } else if (lowerMessage.includes('responsive') || lowerMessage.includes('mobile')) {
-            return responses['responsive'];
-        } else if (lowerMessage.includes('seo') || lowerMessage.includes('search') || lowerMessage.includes('optimization')) {
-            return responses['seo'];
-        } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
-            return "Hello! I'm excited to help you build your website. What specific aspect would you like to work on today? I can help with planning, coding, design, debugging, or optimization.";
-        } else if (lowerMessage.includes('javascript') || lowerMessage.includes('js')) {
-            return `I can definitely help with JavaScript! Here are some common website functionalities:
+return (
+<button
+className={classNames(baseClasses, variantClasses[variant], size)}
+{…props}
+>
+{children}
+</button>
+);
+};
 ```
 
-🔧 **Interactive Features:**
-• Form validation
-• Image sliders/carousels  
-• Modal popups
-• Smooth scrolling navigation
-• Dynamic content loading
-• Mobile menu toggles
-
-**Example - Simple form validation:**
+**3. State Management Strategy:**
 ```javascript
-function validateForm() {
-const email = document.getElementById(‘email’).value;
-const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
+// Redux Toolkit with RTK Query
+import { createApi, fetchBaseQuery } from ‘@reduxjs/toolkit/query/react’;
+
+export const apiSlice = createApi({
+reducerPath: ‘api’,
+baseQuery: fetchBaseQuery({
+baseUrl: ‘/api’,
+prepareHeaders: (headers, { getState }) => {
+headers.set(‘authorization’, `Bearer ${getState().auth.token}`);
+return headers;
+},
+}),
+tagTypes: [‘User’, ‘Post’],
+endpoints: (builder) => ({
+getUsers: builder.query({
+query: () => ‘users’,
+providesTags: [‘User’]
+})
+})
+});
+```
+
+What specific architectural challenges are you facing? I can provide detailed patterns for scalability, maintainability, and performance.`
+},
 
 ```
-if (!emailRegex.test(email)) {
-    alert('Please enter a valid email address');
-    return false;
+        performance: {
+            keywords: ['performance', 'optimize', 'speed', 'core web vitals', 'lighthouse', 'lazy loading'],
+            response: `Let me conduct a comprehensive performance analysis and optimization strategy:
+```
+
+⚡ **Advanced Performance Optimization:**
+
+**1. Critical Rendering Path Optimization:**
+```html
+
+<!-- Resource Hints for Performance -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="//cdn.example.com">
+<link rel="modulepreload" href="/js/critical.js">
+
+<!-- Critical CSS Inlined -->
+
+<style>
+  /* Critical above-the-fold styles */
+  .hero { /* styles */ }
+</style>
+
+<!-- Non-critical CSS loaded asynchronously -->
+
+<link rel="preload" href="/css/non-critical.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+\`\`\`
+
+**2. Advanced Code Splitting:**
+```javascript
+// Route-based splitting with preloading
+import { lazy, Suspense } from ‘react’;
+
+const LazyComponent = lazy(() =>
+import(’./HeavyComponent’).then(module => ({
+default: module.HeavyComponent
+}))
+);
+
+// Preload on hover for instant navigation
+const preloadComponent = () => {
+const componentImport = () => import(’./HeavyComponent’);
+return componentImport;
+};
+
+function App() {
+return (
+<div>
+<Link 
+to="/heavy" 
+onMouseEnter={preloadComponent}
+>
+Heavy Page
+</Link>
+<Suspense fallback={<SkeletonLoader />}>
+<LazyComponent />
+</Suspense>
+</div>
+);
 }
-return true;
+```
+
+**3. Image Optimization & Responsive Images:**
+```html
+
+<!-- Next-gen image formats with fallbacks -->
+
+<picture>
+  <source srcset="image.avif" type="image/avif">
+  <source srcset="image.webp" type="image/webp">
+  <img 
+    src="image.jpg" 
+    alt="Description"
+    loading="lazy"
+    width="800"
+    height="600"
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+    srcset="image-400.jpg 400w, image-800.jpg 800w, image-1200.jpg 1200w"
+  >
+</picture>
+\`\`\`
+
+**4. Service Worker for Aggressive Caching:**
+```javascript
+// Advanced caching strategies
+const CACHE_NAME = ‘app-v1’;
+const urlsToCache = [’/critical.css’, ‘/app.js’];
+
+self.addEventListener(‘fetch’, event => {
+if (event.request.destination === ‘image’) {
+event.respondWith(
+caches.open(‘images’).then(cache => {
+return cache.match(event.request).then(response => {
+if (response) return response;
+
+```
+      return fetch(event.request).then(fetchResponse => {
+        cache.put(event.request, fetchResponse.clone());
+        return fetchResponse;
+      });
+    });
+  })
+);
 ```
 
 }
+});
 ```
 
-What kind of JavaScript functionality do you need for your website?`; } else { return `I understand you’re asking about “${message}” for your website. As your personal website development AI, I can help you with:
+**Core Web Vitals Targets:**
+• LCP: < 2.5s | FID: < 100ms | CLS: < 0.1
 
-• **Planning & Structure** - Site architecture and content organization
-• **Frontend Code** - HTML, CSS, JavaScript development  
-• **Design** - Colors, fonts, layouts, and UI/UX
-• **Debugging** - Fixing code issues and troubleshooting
-• **Optimization** - Performance, SEO, and responsive design
-• **Best Practices** - Modern web development standards
+What specific performance metrics are you trying to improve? I can provide targeted optimizations.`
+},
 
-Could you be more specific about what aspect of your website you’d like help with? I’m here to provide detailed, practical assistance tailored to your project!`;
+```
+        security: {
+            keywords: ['security', 'vulnerability', 'xss', 'csrf', 'authentication', 'authorization'],
+            response: `🛡️ **Comprehensive Security Audit & Implementation:**
+```
+
+**1. Content Security Policy (CSP):**
+```html
+<meta http-equiv="Content-Security-Policy" 
+content="default-src 'self'; 
+script-src 'self' 'unsafe-inline' https://cdn.trusted.com;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+img-src 'self' data: https:;
+connect-src 'self' https://api.yourdomain.com;
+font-src 'self' https://fonts.gstatic.com;
+frame-ancestors 'none';">
+```
+
+**2. Advanced Authentication with JWT:**
+```javascript
+// Secure JWT implementation
+import jwt from ‘jsonwebtoken’;
+import bcrypt from ‘bcrypt’;
+
+class AuthService {
+static async login(email, password) {
+const user = await User.findOne({ email });
+if (!user || !await bcrypt.compare(password, user.passwordHash)) {
+throw new Error(‘Invalid credentials’);
+}
+
+```
+const accessToken = jwt.sign(
+  { userId: user.id, role: user.role },
+  process.env.JWT_SECRET,
+  { expiresIn: '15m' }
+);
+
+const refreshToken = jwt.sign(
+  { userId: user.id },
+  process.env.REFRESH_SECRET,
+  { expiresIn: '7d' }
+);
+
+// Store refresh token securely
+await RefreshToken.create({
+  token: refreshToken,
+  userId: user.id,
+  expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+});
+
+return { accessToken, refreshToken };
+```
+
+}
+}
+```
+
+**3. Input Validation & Sanitization:**
+```javascript
+import DOMPurify from ‘dompurify’;
+import validator from ‘validator’;
+
+class SecurityUtils {
+static sanitizeInput(input, type = ‘text’) {
+switch (type) {
+case ‘html’:
+return DOMPurify.sanitize(input, {
+ALLOWED_TAGS: [‘b’, ‘i’, ‘em’, ‘strong’, ‘p’],
+ALLOWED_ATTR: []
+});
+case ‘email’:
+return validator.isEmail(input) ? validator.normalizeEmail(input) : null;
+case ‘url’:
+return validator.isURL(input) ? input : null;
+default:
+return validator.escape(input);
 }
 }
 
-```
-    function sendMessage() {
-        const message = messageInput.value.trim();
-        if (!message) return;
-
-        addMessage(message, true);
-        messageInput.value = '';
-        
-        showTyping();
-        
-        setTimeout(() => {
-            hideTyping();
-            const response = getResponse(message);
-            addMessage(response);
-        }, 1000 + Math.random() * 1000);
-    }
-
-    function sendQuickMessage(message) {
-        addMessage(message, true);
-        showTyping();
-        
-        setTimeout(() => {
-            hideTyping();
-            const response = getResponse(message);
-            addMessage(response);
-        }, 1000 + Math.random() * 1000);
-    }
-
-    function handleKeyPress(event) {
-        if (event.key === 'Enter') {
-            sendMessage();
-        }
-    }
-
-    // Focus on input field when page loads
-    window.onload = function() {
-        messageInput.focus();
-    };
-</script>
+static validateCSRF(token, session) {
+return token === session.csrfToken &&
+Date.now() - session.csrfTimestamp < 300000; // 5 min expiry
+}
+}
 ```
 
-</body>
-</html>
+**4. Rate Limiting & DDoS Protection:**
+```javascript
+import rateLimit from ‘express-rate-limit’;
+import slowDown from ‘express-slow-down’;
+
+const limiter = rateLimit({
+windowMs: 15 * 60 * 1000, // 15 minutes
+max: 100, // limit each IP to 100 requests per windowMs
+message: ‘Too many requests from this IP’,
+standardHeaders: true,
+legacyHeaders: false,
+handler: (req, res) => {
+res.status(429).json({
+error: ‘Rate limit exceeded’,
+retryAfter: Math.round(req.rateLimit.resetTime / 1000)
+});
+}
+});
+
+const speedLimiter = slowDown({
+windowMs: 15 * 60 * 1000,
+delayAfter: 50,
+delayMs: 500
+});
+```
+
+Which security aspects need immediate attention? I can provide specific implementation guidance.`
+},
+
+```
+        aiComponents: {
+            keywords: ['ai', 'machine learning', 'intelligent', 'smart', 'recommendation', 'chatbot'],
+            response: `🤖 **AI-Powered Web Components:**
+```
+
+**1. Intelligent Search with NLP:**
+```javascript
+class SmartSearch {
+constructor(apiKey) {
+this.apiKey = apiKey;
+this.cache = new Map();
+}
+
+async intelligentSearch(query, context = {}) {
+const cacheKey = `${query}-${JSON.stringify(context)}`;
+if (this.cache.has(cacheKey)) {
+return this.cache.get(cacheKey);
+}
+
+```
+// Use TensorFlow.js for client-side NLP
+const embeddings = await this.getTextEmbeddings(query);
+const semanticResults = await this.semanticSearch(embeddings, context);
+
+const results = {
+  exact: await this.exactMatch(query),
+  semantic: semanticResults,
+  suggestions: await this.generateSuggestions(query),
+  autocomplete: await this.getAutoComplete(query)
+};
+
+this.cache.set(cacheKey, results);
+return results;
+```
+
+}
+
+async getTextEmbeddings(text) {
+// Use Universal Sentence Encoder
+const model = await use.load();
+const embeddings = await model.embed([text]);
+return embeddings;
+}
+}
+```
+
+**2. Personalized Content Recommendations:**
+```javascript
+class PersonalizationEngine {
+constructor(userId) {
+this.userId = userId;
+this.behaviorHistory = [];
+this.preferences = {};
+}
+
+async getPersonalizedContent(contentPool) {
+const userProfile = await this.buildUserProfile();
+const contentScores = await Promise.all(
