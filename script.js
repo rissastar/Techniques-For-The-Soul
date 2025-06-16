@@ -1,189 +1,216 @@
-// Dante's Dopamine Dive — Content and interaction logic
+document.addEventListener("DOMContentLoaded", () => {
 
-const data = {
-  lobster: [
-    "Did you know? Lobsters taste with their legs and chew with their stomachs!",
-    "Lobsters can live up to 50 years in the wild.",
-    "Lobster shells are blue before cooking, turning bright red after boiling.",
-    "Dante, here’s a crazy fact: Lobsters pee out of their faces to communicate!",
-    "In Nova Scotia, lobster fishing season is a huge festival of its own."
-  ],
-  cars: [
-    "Fun Fact: The first car to break 100 mph was the 1905 Peerless Green Dragon.",
-    "Did you know? Dante, your love for fixing cars is legendary!",
-    "Electric cars can accelerate faster than many gas-powered sports cars.",
-    "Pro tip: Regular oil changes help your car run smoother and longer.",
-    "That roar of a classic V8 engine? Pure adrenaline."
-  ],
-  rap: [
-    "Rap legend fact: The first rap song to hit #1 on Billboard was 'Rapture' by Blondie.",
-    "Dante, your rap playlists fire up the party every time.",
-    "Did you know? Rap started in the Bronx in the 1970s as a voice for the streets.",
-    "Eminem once said: 'Success is my only option, failure's not.'",
-    "Rap battles are modern-day poetry slams with rhythm and swagger."
-  ],
-  raves: [
-    "Raves started in the 1980s UK underground scene and exploded worldwide.",
-    "Dante, the neon lights and beats you love create magical escapes.",
-    "PLUR — Peace, Love, Unity, Respect — is the rave culture mantra.",
-    "Did you know? Glow sticks were invented for safety in raves but became iconic props.",
-    "Festivals bring thousands together for music, dancing, and unforgettable memories."
-  ],
-  darkJokes: [
-    "Why don't graveyards ever get overcrowded? Because people are dying to get in.",
-    "I told my therapist about my addiction. She said, 'Don't worry, we'll tackle it one joke at a time.'",
-    "Why don’t skeletons fight each other? They don’t have the guts.",
-    "Dark humor? More like lightening up the shadows.",
-    "Dante, you’d appreciate this: 'I have a stepladder because my real ladder left.'"
-  ],
-  stories: [
-    "Once, a mechanic fixed a car with duct tape and sheer willpower — just like you, Dante!",
-    "There was a dog named Zeus who once stole a whole pizza. Sound familiar?",
-    "At the fair, a guy tried to win a teddy bear by juggling lobsters — chaos ensued.",
-    "A stoner engineer once built a rocket... out of spare parts and good vibes.",
-    "Dante, remember that time you made everyone laugh with your dark jokes at the festival?"
-  ],
-  engineering: [
-    "Engineers turn ideas into reality — just like you turning wrenches into magic.",
-    "Did you know? The first programmable computer was designed in 1936.",
-    "Fixing things is an art form — you are the Da Vinci of repair!",
-    "A well-oiled machine runs smoother — both in cars and in life.",
-    "Dante’s engineering tip: Sometimes the simplest solution is the best one."
-  ],
-  native: [
-    "The Mi’kmaq people have inhabited Atlantic Canada for over 10,000 years.",
-    "Nature is the greatest teacher — wisdom flows from the land and water.",
-    "Dante, your native roots are a powerful source of strength and spirit.",
-    "Storytelling is the heart of culture, passing lessons through generations.",
-    "Respect for all living things keeps balance in the world."
-  ],
-  stoner: [
-    "Did you know? Cannabis was used medicinally for thousands of years worldwide.",
-    "Dante’s chill fact: Music sounds even better when you’re vibing high.",
-    "A good snack can make or break the stoner experience — choose wisely!",
-    "Laughing at dark jokes is the best medicine.",
-    "Remember, even in haze, your engineering mind is sharp and creative."
-  ],
-  zeus: [
-    "Zeus is one lucky dog to have you, Dante!",
-    "Dogs can read human emotions — no wonder Zeus knows you so well.",
-    "Did you know? Dogs have about 1,700 taste buds, humans have 9,000.",
-    "Zeus probably thinks lobster is a fancy treat — maybe he’s right!",
-    "Every day with Zeus is an adventure filled with love and wagging tails."
-  ]
-};
-
-const categories = Object.keys(data);
-const buttons = document.querySelectorAll("button[data-category]");
-const contentEl = document.getElementById("content");
-
-// Utility: get random item from array
-function getRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function showContent(category) {
-  if (!data[category]) return;
-
-  const text = getRandom(data[category]);
-  contentEl.innerHTML = `<p>${text}</p>`;
-  contentEl.focus();
-}
-
-// Event listeners for buttons
-buttons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const cat = btn.getAttribute("data-category");
-    showContent(cat);
-  });
-});
-
-// Keyboard shortcuts 1-0 for categories
-document.addEventListener("keydown", (e) => {
-  // Map number keys 1-9 and 0 to categories 0-9 index
-  const key = e.key;
-  if (key >= "1" && key <= "9") {
-    const idx = parseInt(key, 10) - 1;
-    if (categories[idx]) {
-      showContent(categories[idx]);
-    }
-  } else if (key === "0") {
-    // 0 = index 9
-    if (categories[9]) {
-      showContent(categories[9]);
-    }
+  function showPopup(contentHTML) {
+    const popup = document.createElement("div");
+    popup.className = "popup";
+    popup.innerHTML = `
+      <div class="popup-content">
+        <button class="close-btn">❌</button>
+        ${contentHTML}
+      </div>`;
+    document.body.appendChild(popup);
+    popup.querySelector(".close-btn").addEventListener("click", () => popup.remove());
   }
-});
+
+  /* 1. Focus Timer */
+  window.showFocusTimer = () => {
+    showPopup(`
+      <h2>⏱ Focus Timer</h2>
+      <input id="timer-input" type="number" placeholder="Minutes (1–60)" style="width:80%;padding:0.5rem;">
+      <br><br>
+      <button id="start-timer" class="glow-btn">Start</button>
+      <p id="timer-display" style="font-size:1.5rem;margin-top:1rem;"></p>
+    `);
+    const input = document.getElementById("timer-input");
+    const display = document.getElementById("timer-display");
+    let timeLeft, timerId;
+    document.getElementById("start-timer").addEventListener("click", () => {
+      const mins = parseInt(input.value);
+      if (!mins || mins<1||mins>60) return alert("Enter 1–60");
+      clearInterval(timerId);
+      timeLeft = mins*60; update();
+      timerId = setInterval(() => {
+        timeLeft--; update();
+        if (timeLeft<=0) {
+          clearInterval(timerId);
+          display.textContent = "⏰ Done! Take a break.";
+          navigator.vibrate?.([300,150,300]);
+        }
+      },1000);
+    });
+    function update() {
+      const m = String(Math.floor(timeLeft/60)).padStart(2,'0');
+      const s = String(timeLeft%60).padStart(2,'0');
+      display.textContent = `${m}:${s}`;
+    }
+  };
+
+  /* 2. Rave Rhythm */
+  window.showRaveRhythm = () => {
+    let score = 0;
+    showPopup(`
+      <h2>🎵 Rave Rhythm</h2>
+      <p>Tap the beat!</p>
+      <button id="beat-btn" class="glow-btn">🎶 TAP 🎶</button>
+      <p id="beat-score" style="font-size:1.5rem;margin-top:1rem;">Score: 0</p>
+    `);
+    const btn = document.getElementById("beat-btn");
+    const disp = document.getElementById("beat-score");
+    btn.addEventListener("click", () => {
+      score++;
+      disp.textContent = `Score: ${score}`;
+      btn.classList.add("pulse");
+      setTimeout(() => btn.classList.remove("pulse"),100);
+    });
+  };
+
+  /* 3. Dark Jokes */
+  window.showDarkJokes = () => {
+    const jokes = [
+      "Why don’t graveyards ever get overcrowded? People are dying to get in.",
+      "What’s the last thing that goes through a bug’s mind when it hits a windshield? Its butt.",
+      "Parallel lines have so much in common. It’s a shame they’ll never meet.",
+      "I used to play piano by ear, but now I use my hands.",
+      "My dark humour is like a broken pencil. Pointless."
+    ];
+    showPopup(`
+      <h2>🃏 Dark Jokes</h2>
+      <button id="joke-btn" class="glow-btn">Tell Me</button>
+      <p id="joke-text" style="margin-top:1rem;"></p>
+    `);
+    document.getElementById("joke-btn").addEventListener("click", () => {
+      document.getElementById("joke-text").textContent = jokes[Math.floor(Math.random()*jokes.length)];
+    });
+  };
+
+  /* 4. Car Repair */
+  window.showCarRepair = () => {
+    let count = 0;
+    showPopup(`
+      <h2>🔧 Fix It Fast</h2>
+      <button id="fix-btn" class="glow-btn">Fix 🔧</button>
+      <p id="fix-count" style="margin-top:1rem;">Fixed: 0</p>
+    `);
+    const btn = document.getElementById("fix-btn");
+    const disp = document.getElementById("fix-count");
+    btn.addEventListener("click", () => {
+      count++;
+      disp.textContent = `Fixed: ${count}`;
+      btn.textContent = count%5===0 ? "You're a machine!" : "Fix 🔧";
+    });
+  };
+
+  /* 5. Memory Match (placeholder) */
+  window.showMemoryMatch = () => {
+    showPopup(`
+      <h2>🧠 Memory Match</h2>
+      <p>Card match game in development!</p>
+    `);
+  };
+
+  /* 6. Lobster Maze (placeholder) */
+  window.showLobsterMaze = () => {
+    showPopup(`
+      <h2>🦞 Lobster Escape</h2>
+      <p>Maze game coming soon...</p>
+    `);
+  };
+
+  /* 7. Funny Facts */
   window.showFunnyFacts = () => {
     const facts = [
       "Octopuses have three hearts!",
       "Bananas are berries, but strawberries aren't.",
       "Lobsters pee out of their faces to communicate!",
-      "You can hear a blue whale’s heartbeat from 2 miles away."
+      "You can hear a blue whale’s heartbeat from 2 miles away.",
+      "Wombat poop is cube-shaped.",
+      "Sharks existed before trees.",
+      "A group of flamingos is called a 'flamboyance'.",
+      "Some turtles can breathe through their butts."
     ];
     showPopup(`
-      <h2>🧠 Funny Facts</h2>
-      <button id="fact-btn" class="glow-btn">Show Me</button>
-      <p id="fact-text"></p>
+      <div style="background:#1a1a2e; border:3px solid #9fef00; box-shadow:0 0 20px #9fef00; padding:1em; border-radius:12px;">
+        <h2 style="color:#9fef00">🧠 Funny Facts</h2>
+        <button id="fact-btn" class="glow-btn">Hit Me With a Fact</button>
+        <p id="fact-text" style="margin-top:10px;"></p>
+      </div>
     `);
-    const factText = document.getElementById("fact-text");
     document.getElementById("fact-btn").addEventListener("click", () => {
-      factText.textContent = facts[Math.floor(Math.random() * facts.length)];
+      document.getElementById("fact-text").textContent = facts[Math.floor(Math.random()*facts.length)];
     });
   };
 
+  /* 8. Snack Ideas */
   window.showSnackIdeas = () => {
     const snacks = [
       "🍫 Chocolate-dipped bacon",
       "🍟 Fries with gravy and hot sauce",
       "🍓 Frozen grapes with lemon juice",
-      "🧀 Cheese quesadilla + ranch dip"
+      "🧀 Cheese quesadilla + ranch dip",
+      "🥒 Pickles and peanut butter (don't knock it!)",
+      "🍗 Hot wings dipped in maple syrup",
+      "🥞 Mini pancake tacos with Nutella",
+      "🍕 Leftover pizza rolled into a burrito"
     ];
     showPopup(`
-      <h2>🍿 Snack Ideas</h2>
-      <button id="snack-btn" class="glow-btn">I’m Hungry</button>
-      <p id="snack-text"></p>
+      <div style="background:#2e1a1a; border:3px solid #ff9900; box-shadow:0 0 20px #ff9900; padding:1em; border-radius:12px;">
+        <h2 style="color:#ff9900">🍿 Snack Ideas</h2>
+        <button id="snack-btn" class="glow-btn">Feed Me Ideas</button>
+        <p id="snack-text" style="margin-top:10px;"></p>
+      </div>
     `);
-    const snackText = document.getElementById("snack-text");
     document.getElementById("snack-btn").addEventListener("click", () => {
-      snackText.textContent = snacks[Math.floor(Math.random() * snacks.length)];
+      document.getElementById("snack-text").textContent = snacks[Math.floor(Math.random()*snacks.length)];
     });
   };
 
+  /* 9. DanteBot */
   window.showDanteBot = () => {
     showPopup(`
-      <h2>🤖 DanteBot</h2>
-      <input id="dantebot-input" type="text" placeholder="Ask me anything..." />
-      <button id="dantebot-btn" class="glow-btn">Ask</button>
-      <p id="dantebot-response"></p>
+      <div style="background:#1a2e2a; border:3px solid #00ffee; box-shadow:0 0 20px #00ffee; padding:1em; border-radius:12px;">
+        <h2 style="color:#00ffee">🤖 DanteBot</h2>
+        <input id="dantebot-input" type="text" placeholder="Ask me anything..." style="width:100%;padding:6px;border-radius:6px;">
+        <button id="dantebot-btn" class="glow-btn" style="margin-top:8px;">Ask</button>
+        <p id="dantebot-response" style="margin-top:10px;"></p>
+      </div>
     `);
     const input = document.getElementById("dantebot-input");
-    const response = document.getElementById("dantebot-response");
+    const resp = document.getElementById("dantebot-response");
     document.getElementById("dantebot-btn").addEventListener("click", () => {
       const q = input.value.toLowerCase();
       let a = "Hmm... I'm thinking about that.";
-      if (q.includes("car")) a = "Sounds like you need more horsepower, bro.";
-      else if (q.includes("lobster")) a = "🦞 They’re plotting underwater, I swear.";
-      else if (q.includes("love")) a = "Larissa loves you like crazy, you goof.";
-      else if (q.includes("joke")) a = "Why did the lobster blush? It saw the ocean’s bottom!";
-      response.textContent = a;
+      if (q.includes("car")) a = "You’d probably invent the first rave-powered engine.";
+      else if (q.includes("lobster")) a = "🦞 You ARE the lobster king, my dude.";
+      else if (q.includes("love")) a = "Love you to the moon and back — Larissa.";
+      else if (q.includes("joke")) a = "What did the stoner lobster say? Claw-ver move, bro.";
+      else if (q.includes("fix")) a = "Duct tape and a good attitude fixes most things.";
+      else if (q.includes("dog")) a = "Zeus is planning world domination. Starting with snacks.";
+      resp.textContent = a;
     });
   };
 
+  /* 10. Zeus’s Corner */
   window.showZeusCorner = () => {
     const zeusStuff = [
       "🐾 Zeus says: I only chew expensive shoes.",
       "🐶 If it fits, I sits. Even if it’s your face.",
-      "🐾 Zeus Fact: Dogs can smell your feelings. And snacks.",
-      "🐶 Zeus Joke: Why did the dog sit in the shade? Because he didn’t want to be a hot dog!"
+      "🐾 Dogs can smell your feelings. And snacks.",
+      "🐶 Why did the dog sit in the shade? To avoid being a hot dog!",
+      "🐾 Zeus Fact: I chase dreams in my sleep... and squirrels.",
+      "🐶 Dog Tip: Lick it first. Then decide.",
+      "🐾 Zeus Reminder: I am your emotional support creature.",
+      "🐶 Dog Philosophy: If you can’t eat it or play with it, pee on it."
     ];
     showPopup(`
-      <h2>🐶 Zeus’s Corner</h2>
-      <button id="zeus-btn" class="glow-btn">Woof!</button>
-      <p id="zeus-text"></p>
+      <div style="background:#1a1f2e; border:3px solid #66d9ff; box-shadow:0 0 20px #66d9ff; padding:1em; border-radius:12px;">
+        <h2 style="color:#66d9ff">🐶 Zeus’s Corner</h2>
+        <button id="zeus-btn" class="glow-btn">Woof!</button>
+        <p id="zeus-text" style="margin-top:10px;"></p>
+      </div>
     `);
-    const zeusText = document.getElementById("zeus-text");
     document.getElementById("zeus-btn").addEventListener("click", () => {
-      zeusText.textContent = zeusStuff[Math.floor(Math.random() * zeusStuff.length)];
+      document.getElementById("zeus-text").textContent = zeusStuff[Math.floor(Math.random()*zeusStuff.length)];
     });
   };
+
+});
