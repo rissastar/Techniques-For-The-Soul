@@ -1,968 +1,603 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="neon" >
+<html lang="en" data-theme="neon">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Dante’s Fun Hub - Just For You</title>
-  <style>
-    /* NEON THEME + RAVE + ADHD-FRIENDLY STYLING */
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dante’s Fun Hub - Just for You</title>
+<style>
+  /* === Background gradient animation === */
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #220022, #440044, #001122);
+    background-size: 600% 600%;
+    animation: gradientShift 30s ease infinite;
+    color: #e0e0ff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0 3rem;
+    overflow-x: hidden;
+  }
+  @keyframes gradientShift {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+  }
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(255,255,255,0.08), transparent 40%),
+      radial-gradient(circle at 70% 70%, rgba(0,255,255,0.1), transparent 50%);
+    mix-blend-mode: screen;
+    animation: bubbleMove 20s linear infinite;
+    z-index: 0;
+  }
+  @keyframes bubbleMove {
+    0% {background-position: 0% 0%;}
+    100% {background-position: 100% 100%;}
+  }
 
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Montserrat:wght@600&display=swap');
+  /* === Main container === */
+  #app-container {
+    position: relative;
+    max-width: 640px;
+    width: 95%;
+    background: rgba(20, 10, 30, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 0 35px #aa00ffcc;
+    padding: 2rem 1.5rem 3rem;
+    margin: 2rem auto 4rem;
+    z-index: 1;
+  }
+  #app-container::before {
+    content: url('https://i.imgur.com/8a6RgTX.png'); /* neon lobster icon */
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 80px; height: 80px;
+    opacity: 0.15;
+    pointer-events: none;
+    filter: drop-shadow(0 0 8px #ff33ff);
+    user-select: none;
+    z-index: 0;
+  }
 
-    html, body {
-      margin: 0; padding: 0;
-      height: 100%;
-      background: radial-gradient(circle at center, #0a0a1a 0%, #000007 80%);
-      color: #0ff;
-      font-family: 'Montserrat', sans-serif;
-      user-select: none;
-      overflow-x: hidden;
-    }
+  /* === Header === */
+  header {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-weight: 900;
+    font-size: 2.8rem;
+    color: #ff55ff;
+    text-shadow: 0 0 10px #ff33ff;
+    user-select: none;
+  }
+  header p {
+    font-size: 1.25rem;
+    color: #cceeff;
+    text-shadow: 0 0 3px #33ccffaa;
+    margin-top: 0.3rem;
+  }
 
-    h1, h2, h3, h4 {
-      font-family: 'Orbitron', sans-serif;
-      color: #0ff;
-      text-shadow:
-        0 0 5px #0ff,
-        0 0 10px #0ff,
-        0 0 20px #0ff,
-        0 0 40px #0ff;
-      margin-bottom: 0.3em;
-      text-align: center;
-      letter-spacing: 0.1em;
-    }
+  /* === Button container === */
+  #buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  button.category-btn {
+    background: linear-gradient(45deg, #ff00cc, #3333ff);
+    border: none;
+    border-radius: 14px;
+    padding: 1.2rem 2.5rem;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 0 10px #ff33ff;
+    cursor: pointer;
+    box-shadow: 0 0 18px #ff00cc;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    flex: 1 1 180px;
+    max-width: 250px;
+  }
+  button.category-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 40px #ff55ff, 0 0 40px #33ccff;
+  }
 
-    p, li, button {
-      font-size: 1.15rem;
-      line-height: 1.4;
-      color: #b0fff0;
-      text-shadow: 0 0 3px #0ff;
-    }
+  /* === Popups === */
+  #popup-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 1000;
+  }
+  #popup {
+    background: #1a0033;
+    border-radius: 20px;
+    box-shadow: 0 0 30px #ff33ffcc;
+    max-width: 600px;
+    max-height: 80vh;
+    width: 90%;
+    color: #eee;
+    overflow-y: auto;
+    padding: 2rem 2.5rem;
+    position: relative;
+    font-size: 1.15rem;
+    line-height: 1.5;
+  }
+  #popup h2 {
+    margin-top: 0;
+    font-weight: 900;
+    font-size: 2rem;
+    color: #ff77ff;
+    text-shadow: 0 0 8px #ff44ff;
+  }
+  #popup p, #popup ul {
+    margin-bottom: 1rem;
+    user-select: text;
+  }
+  #popup ul {
+    padding-left: 1.2rem;
+  }
+  #popup ul li {
+    margin-bottom: 0.4rem;
+  }
+  #popup button.close-btn {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    color: #ff44ff;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s ease;
+  }
+  #popup button.close-btn:hover {
+    color: #ff77ff;
+  }
 
-    button {
-      background: transparent;
-      border: 2.5px solid #0ff;
-      border-radius: 12px;
-      color: #0ff;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      padding: 12px 24px;
-      margin: 10px auto;
-      cursor: pointer;
-      display: block;
-      transition: all 0.3s ease-in-out;
-      box-shadow:
-        0 0 5px #0ff,
-        0 0 15px #0ff,
-        0 0 25px #0ff;
-      max-width: 250px;
-      text-align: center;
-      user-select: none;
-    }
-    button:hover, button:focus {
-      background: #0ff;
-      color: #001;
-      box-shadow:
-        0 0 10px #0ff,
-        0 0 30px #0ff,
-        0 0 45px #0ff,
-        0 0 60px #0ff;
-      outline: none;
-    }
+  /* === Input & Textarea for DanteBot === */
+  #dantebot-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    border: 1.5px solid #ff33ff;
+    background: #220033;
+    color: #eee;
+    box-shadow: inset 0 0 15px #ff33ffaa;
+    outline: none;
+    margin-top: 0.7rem;
+    margin-bottom: 1rem;
+  }
+  #dantebot-submit {
+    background: linear-gradient(45deg, #ff33ff, #3300ff);
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 25px #ff33ff;
+    transition: box-shadow 0.3s ease;
+  }
+  #dantebot-submit:hover {
+    box-shadow: 0 0 40px #ff77ff;
+  }
 
-    .container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 10px 15px 50px;
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      background:
-        url('https://i.imgur.com/Ew6L2kE.gif') no-repeat center center fixed;
-      background-size: cover;
-      filter: brightness(0.65);
-      border-radius: 16px;
-      box-shadow:
-        0 0 20px #0ff inset,
-        0 0 80px #0ff;
-      color: #0ff;
-    }
-    .container > * {
-      position: relative;
-      z-index: 2;
-    }
+  /* DanteBot conversation area */
+  #dantebot-output {
+    background: #330055;
+    padding: 1rem 1.2rem;
+    border-radius: 15px;
+    color: #ddd;
+    font-size: 1.1rem;
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: inset 0 0 20px #ff33ffcc;
+  }
 
-    header {
-      margin: 20px 0 10px;
-      text-align: center;
-    }
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #110011;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #ff00cc;
+    border-radius: 6px;
+    box-shadow: 0 0 6px #ff33ff;
+  }
 
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 25px;
-      z-index: 2;
-    }
-
-    nav button {
-      flex: 1 1 130px;
-      max-width: 140px;
-    }
-
-    /* POPUP MODAL */
-    .popup-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.85);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      backdrop-filter: blur(5px);
-      padding: 15px;
-    }
-
-    .popup {
-      background: #00111f;
-      border: 3px solid #0ff;
-      border-radius: 18px;
-      padding: 25px 20px 30px;
-      max-width: 420px;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow:
-        0 0 20px #0ff,
-        0 0 50px #0ff inset;
-      color: #b0fff0;
+  /* Responsive adjustments */
+  @media (max-width: 450px) {
+    button.category-btn {
+      flex: 1 1 100%;
+      max-width: 100%;
       font-size: 1.1rem;
-      user-select: text;
+      padding: 1rem 1.5rem;
     }
-
-    .popup h3 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      color: #0ff;
-      font-family: 'Orbitron', sans-serif;
-      text-align: center;
+    #popup {
+      padding: 1.5rem 1.8rem;
+      font-size: 1rem;
     }
-
-    .popup button.close-btn {
-      background: #0ff;
-      color: #001;
-      border: none;
-      font-weight: 900;
-      font-size: 1.25rem;
-      padding: 6px 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow:
-        0 0 12px #0ff,
-        0 0 35px #0ff;
-      user-select: none;
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      transition: all 0.25s ease;
-    }
-    .popup button.close-btn:hover {
-      background: #00f0ff;
-      color: #000;
-      box-shadow:
-        0 0 20px #00f0ff,
-        0 0 50px #00f0ff;
-    }
-
-    /* CONTENT STYLES */
-    ul {
-      padding-left: 1.25em;
-      margin-bottom: 1em;
-    }
-
-    li {
-      margin-bottom: 8px;
-    }
-
-    /* INPUT AND CHAT */
-    .chat-area {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 10px;
-    }
-    .chat-log {
-      background: #012233;
-      border: 2px solid #0ff;
-      border-radius: 12px;
-      padding: 10px;
-      height: 170px;
-      overflow-y: auto;
-      font-family: monospace, monospace;
-      font-size: 0.95rem;
-      color: #afffdf;
-      box-shadow:
-        0 0 15px #0ff inset;
-      white-space: pre-wrap;
-    }
-    .chat-input {
-      display: flex;
-      gap: 8px;
-    }
-    .chat-input input {
-      flex: 1;
-      padding: 8px 12px;
-      border-radius: 12px;
-      border: 2px solid #0ff;
-      background: #00111f;
-      color: #b0fff0;
-      font-size: 1.1rem;
-      outline: none;
-      font-family: 'Montserrat', sans-serif;
-      box-shadow:
-        0 0 10px #0ff inset;
-    }
-    .chat-input input::placeholder {
-      color: #44dddd;
-    }
-    .chat-input button {
-      flex-shrink: 0;
-      min-width: 90px;
-      font-weight: 700;
-    }
-
-    /* Mini-games styling */
-    .game-section {
-      text-align: center;
-      margin-top: 12px;
-      font-family: 'Orbitron', monospace;
-      user-select: none;
-    }
-    .game-btn {
-      margin: 10px 4px;
-      font-size: 1.2rem;
-      border-radius: 14px;
-      padding: 14px 28px;
-      max-width: 220px;
-      box-shadow:
-        0 0 15px #0ff;
-      transition: background-color 0.3s ease;
-    }
-    .game-btn:hover {
-      background-color: #00ffffaa;
-      color: #000;
-      box-shadow:
-        0 0 25px #00ffff;
-    }
-
-    /* Reaction test styles */
-    #reaction-box {
-      width: 140px;
-      height: 140px;
-      margin: 20px auto 10px;
-      border-radius: 18px;
-      background-color: #0ff;
-      box-shadow:
-        0 0 15px #0ff;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: #001;
-      font-size: 2.5rem;
-      font-family: 'Orbitron', sans-serif;
-      letter-spacing: 0.05em;
-    }
-
-    /* Memory match styles */
-    #memory-board {
-      display: grid;
-      grid-template-columns: repeat(4, 70px);
-      gap: 12px;
-      justify-content: center;
-      margin-top: 12px;
-      user-select: none;
-    }
-    .memory-card {
-      width: 70px;
-      height: 70px;
-      font-size: 2.2rem;
-      background-color: #00111f;
-      border-radius: 12px;
-      color: #0ff;
-      box-shadow:
-        0 0 10px #0ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    .memory-card.flipped {
-      background-color: #00ffffdd;
-      color: #001;
-      box-shadow:
-        0 0 20px #0ff,
-        0 0 35px #0ff inset;
-    }
-    .memory-card.matched {
-      background-color: #00ffaa;
-      color: #004400;
-      cursor: default;
-      box-shadow:
-        0 0 25px #0faa00 inset;
-    }
-    #memory-result {
-      margin-top: 15px;
-      font-weight: 700;
-      font-family: 'Orbitron', sans-serif;
-      color: #0ff;
-      text-align: center;
-    }
-
-    /* Rave jump styles */
-    #rave-game {
-      position: relative;
-      width: 320px;
-      height: 140px;
-      margin: 0 auto 10px;
-      background: #00111f;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow:
-        0 0 15px #0ff inset;
-      user-select: none;
-    }
-    #lobster {
-      position: absolute;
-      bottom: 20px;
-      left: 40px;
-      font-size: 3.2rem;
-      transition: bottom 0.3s ease;
-      text-shadow:
-        0 0 8px #00ffff;
-    }
-    #obstacle {
-      position: absolute;
-      top: calc(50% - 22px);
-      right: -50px;
-      font-size: 3rem;
-      text-shadow:
-        0 0 10px #ff0044;
-      user-select: none;
-    }
-    #score {
-      font-family: 'Orbitron', monospace;
-      font-weight: 700;
-      font-size: 1.8rem;
-      text-align: center;
-      margin-bottom: 10px;
-      color: #0ff;
-      text-shadow:
-        0 0 15px #0ff;
-    }
-
-    /* Scrollbar for popup content */
-    .popup::-webkit-scrollbar {
-      width: 8px;
-    }
-    .popup::-webkit-scrollbar-track {
-      background: #000011;
-      border-radius: 10px;
-    }
-    .popup::-webkit-scrollbar-thumb {
-      background: #00ffffaa;
-      border-radius: 10px;
-    }
-
-    /* Responsive */
-    @media (max-width: 400px) {
-      .container {
-        max-width: 100vw;
-        border-radius: 0;
-        padding-bottom: 80px;
-      }
-      nav button {
-        flex: 1 1 100%;
-        max-width: none;
-      }
-      #rave-game {
-        width: 90vw;
-        height: 120px;
-      }
-      #lobster {
-        font-size: 2.6rem;
-        left: 10vw;
-      }
-      #obstacle {
-        font-size: 2.6rem;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <div class="container" role="main" aria-label="Dante's Fun Hub">
-    <header>
-      <h1>Dante’s Fun Hub</h1>
-      <h4>Just for you, Dante — with love from Larissa 💖</h4>
-    </header>
 
-    <nav aria-label="Fun Hub main navigation">
-      <button id="btn-minigames" aria-haspopup="dialog" aria-controls="popup" aria-expanded="false">Mini Games</button>
-      <button id="btn-dailychallenge" aria-haspopup="dialog" aria-controls="popup" aria-expanded="false">Daily Challenge</button>
-      <button id="btn-funnyfacts" aria-haspopup="dialog" aria-controls="popup" aria-expanded="false">Funny Facts</button>
-      <button id="btn-snackideas" aria-haspopup="dialog" aria-controls="popup" aria-expanded="false">Snack Ideas</button>
-      <button id="btn-dantebot" aria-haspopup="dialog" aria-controls="popup" aria-expanded="false">DanteBot Chat</button>
-      <button id="btn-zeuscorner" aria-haspopup="dialog" aria-controls="popup" aria-expanded="false">Zeus’s Corner</button>
-    </nav>
+<div id="app-container">
+  <header>
+    <h1>Dante’s Fun Hub</h1>
+    <p>Just for you, Dante — from Larissa 💜</p>
+  </header>
 
-    <footer style="text-align:center; margin-top:auto; padding-bottom:10px; font-size:0.9rem; color:#06f;">
-      <p>© 2025 Just for Dante ❤️</p>
-    </footer>
+  <div id="buttons">
+    <button class="category-btn" data-category="games">🎮 Mini Games</button>
+    <button class="category-btn" data-category="dailyChallenge">🔥 Daily Challenge</button>
+    <button class="category-btn" data-category="funnyFacts">🤣 Funny Facts</button>
+    <button class="category-btn" data-category="snackIdeas">🍕 Snack Ideas</button>
+    <button class="category-btn" data-category="danteBot">🤖 DanteBot</button>
+    <button class="category-btn" data-category="zeusCorner">🐶 Zeus’s Corner</button>
+    <button class="category-btn" data-category="darkJokes">😈 Dark Jokes</button>
   </div>
+</div>
 
-  <!-- Popup Overlay -->
-  <div class="popup-overlay" role="dialog" aria-modal="true" aria-labelledby="popup-title" tabindex="-1" id="popup" >
-    <div class="popup" tabindex="0">
-      <button class="close-btn" aria-label="Close popup">&times;</button>
-      <div id="popup-content">
-        <!-- dynamic content injected here -->
-      </div>
-    </div>
+<!-- Popup overlay -->
+<div id="popup-overlay" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+  <div id="popup" tabindex="-1">
+    <button class="close-btn" aria-label="Close popup">&times;</button>
+    <h2 id="popup-title"></h2>
+    <div id="popup-content"></div>
   </div>
+</div>
 
-  <script>
-    (() => {
-      "use strict";
+<script>
+(() => {
+  const buttons = document.querySelectorAll('.category-btn');
+  const popupOverlay = document.getElementById('popup-overlay');
+  const popup = document.getElementById('popup');
+  const popupTitle = document.getElementById('popup-title');
+  const popupContent = document.getElementById('popup-content');
+  const closeBtn = popup.querySelector('.close-btn');
 
-      const popupOverlay = document.getElementById('popup');
-      const popupContent = document.getElementById('popup-content');
-      const closeBtn = popupOverlay.querySelector('.close-btn');
-      const navButtons = document.querySelectorAll('nav button');
+  // DanteBot elements will be added dynamically when DanteBot popup opens
 
-      // Manage aria-expanded for accessibility
-      function setAriaExpanded(button, expanded) {
-        button.setAttribute('aria-expanded', expanded);
+  // Data for categories
+  const data = {
+    games: [
+      {name: 'Quick Click Challenge', description: 'Click the button as many times as you can in 10 seconds! Ready? Click Start!', action: quickClickGame},
+      {name: 'Memory Match', description: 'Try to match pairs of colorful cards. Simple and fun!', action: memoryMatchGame},
+      {name: 'Reaction Test', description: 'Wait for the screen to turn green and tap as fast as you can!'},
+    ],
+    dailyChallenge: [
+      'Write a quick joke about lobsters and share it with Larissa.',
+      'Try a new snack recipe today — maybe something with cheese or spicy flavors!',
+      'Fix or improve one thing around your space, even if it’s tiny.',
+      'Take Zeus for a 10-minute walk and play fetch with him.',
+      'Spend 5 minutes listening to your favorite rap album and dance like nobody’s watching.',
+    ],
+    funnyFacts: [
+      "Lobsters can live up to 100 years and they pee out of their faces!",
+      "The Mi’kmaq people are one of the oldest Indigenous groups in North America, with rich traditions and stories.",
+      "Cars actually have more than 30,000 parts — imagine fixing them all!",
+      "Trailer Park Boys was originally a low-budget show but became a cult classic for its dark humor and heart.",
+      "Sassy the Sasquatch loves to prank and mess with campers in the show.",
+    ],
+    snackIdeas: [
+      "Grilled cheese with jalapeños",
+      "Spicy popcorn with lime zest",
+      "Peanut butter and honey sandwich on toasted bread",
+      "Fruit salad with a sprinkle of chili powder",
+      "Homemade nachos with melted cheese and salsa",
+    ],
+    darkJokes: [
+      "Why don’t graveyards ever get overcrowded? People are dying to get in.",
+      "I told my addiction counselor I was addicted to brake fluid — but I can stop anytime.",
+      "Why did the scarecrow win an award? Because he was outstanding in his field… unlike me sometimes.",
+      "Life’s like a broken car — sometimes you just gotta push through the rough patches.",
+      "I tried to tell a joke about cirrhosis, but it went over people’s heads.",
+    ],
+    zeusCorner: [
+      "Zeus loves belly rubs and can fall asleep anywhere in 2 seconds flat.",
+      "Did you know Zeus once stole a whole sandwich and ate it behind the couch?",
+      "Zeus has a secret talent: catching lobsters… in dreams.",
+      "Whenever Dante plays music, Zeus wags his tail like crazy.",
+      "Zeus’s favorite snack is peanut butter on a spoon.",
+    ]
+  };
+
+  // Show popup helper
+  function showPopup(title, contentHTML) {
+    popupTitle.textContent = title;
+    popupContent.innerHTML = contentHTML;
+    popupOverlay.style.display = 'flex';
+    popup.focus();
+  }
+
+  // Close popup handler
+  closeBtn.addEventListener('click', () => {
+    popupOverlay.style.display = 'none';
+    popupContent.innerHTML = '';
+  });
+
+  // Clicking outside popup closes it
+  popupOverlay.addEventListener('click', (e) => {
+    if (e.target === popupOverlay) {
+      popupOverlay.style.display = 'none';
+      popupContent.innerHTML = '';
+    }
+  });
+
+  // Quick Click Game Implementation
+  function quickClickGame() {
+    let count = 0;
+    let timer = null;
+    const html = `
+      <p>Click the big pink button as many times as you can in <strong>10 seconds</strong>. Ready?</p>
+      <button id="click-button" style="
+        background: #ff33ff;
+        font-size: 2rem;
+        padding: 1.5rem 3rem;
+        border-radius: 20px;
+        box-shadow: 0 0 20px #ff66ff;
+        color: white;
+        font-weight: 900;
+        user-select: none;
+        cursor: pointer;
+        margin-top: 1rem;
+        ">Click Me!</button>
+      <p id="score" style="margin-top:1rem;font-size:1.3rem;"></p>
+      <button id="start-btn" style="
+        background: linear-gradient(45deg, #ff00cc, #3333ff);
+        padding: 1rem 2rem;
+        border-radius: 15px;
+        margin-top: 1rem;
+        font-weight: 900;
+        color: white;
+        cursor: pointer;
+      ">Start</button>
+    `;
+    showPopup('Quick Click Challenge', html);
+
+    const clickBtn = document.getElementById('click-button');
+    const scoreP = document.getElementById('score');
+    const startBtn = document.getElementById('start-btn');
+
+    clickBtn.disabled = true;
+    scoreP.textContent = '';
+
+    startBtn.addEventListener('click', () => {
+      count = 0;
+      scoreP.textContent = 'Clicks: 0';
+      clickBtn.disabled = false;
+      startBtn.disabled = true;
+
+      timer = setTimeout(() => {
+        clickBtn.disabled = true;
+        startBtn.disabled = false;
+        alert(`Time's up! You clicked ${count} times!`);
+      }, 10000);
+    });
+
+    clickBtn.addEventListener('click', () => {
+      if (!clickBtn.disabled) {
+        count++;
+        scoreP.textContent = `Clicks: ${count}`;
       }
+    });
+  }
 
-      function openPopup(contentHtml, title = "Popup") {
-        popupContent.innerHTML = contentHtml;
-        popupOverlay.style.display = "flex";
-        popupContent.parentElement.querySelector('h3#popup-title')?.remove();
-        const h3 = document.createElement('h3');
-        h3.id = "popup-title";
-        h3.textContent = title;
-        popupContent.prepend(h3);
+  // Memory Match placeholder (for simplicity, just message)
+  function memoryMatchGame() {
+    const html = `
+      <p>This memory match game is coming soon! But here’s a fun idea:</p>
+      <ul>
+        <li>Match pairs of neon rave icons.</li>
+        <li>Sharp colors and fast reactions.</li>
+        <li>Challenge your brain and have fun!</li>
+      </ul>
+      <p>For now, enjoy some quick clicks or other games!</p>
+    `;
+    showPopup('Memory Match Game', html);
+  }
 
-        popupOverlay.setAttribute('aria-hidden', 'false');
-        popupContent.parentElement.focus();
+  // Reaction Test placeholder
+  function reactionTestGame() {
+    const html = `
+      <p>Reaction Test is coming soon! Here's a quick challenge:</p>
+      <p>Wait for the screen to turn green, then tap as fast as you can!</p>
+      <p>For now, try the Quick Click Challenge or explore other fun stuff.</p>
+    `;
+    showPopup('Reaction Test Game', html);
+  }
 
-        // Disable all nav buttons aria-expanded false except the one opened
-        navButtons.forEach(btn => setAriaExpanded(btn, "false"));
-        // Find the button that triggered popup (optional)
+  // DanteBot simple chat simulation
+  function danteBot() {
+    const html = `
+      <p>Hi Dante! Chat with me or ask questions. I’m your personal AI sidekick 🤖</p>
+      <div id="dantebot-output" aria-live="polite" aria-atomic="true"></div>
+      <input id="dantebot-input" type="text" placeholder="Type your message here..." aria-label="DanteBot message input" />
+      <button id="dantebot-submit">Send</button>
+    `;
+    showPopup('DanteBot 🤖', html);
 
-        // Focus trapping inside popup for accessibility
-        popupOverlay.addEventListener('keydown', trapFocus);
-      }
-      function closePopup() {
-        popupOverlay.style.display = "none";
-        popupOverlay.setAttribute('aria-hidden', 'true');
-        navButtons.forEach(btn => setAriaExpanded(btn, "false"));
-        // Return focus to last active nav button
-        if (lastFocusedBtn) lastFocusedBtn.focus();
-        popupOverlay.removeEventListener('keydown', trapFocus);
-      }
+    const output = document.getElementById('dantebot-output');
+    const input = document.getElementById('dantebot-input');
+    const sendBtn = document.getElementById('dantebot-submit');
 
-      let lastFocusedBtn = null;
+    function appendMessage(from, msg) {
+      const p = document.createElement('p');
+      p.style.margin = '0.25rem 0';
+      p.innerHTML = `<strong>${from}:</strong> ${msg}`;
+      output.appendChild(p);
+      output.scrollTop = output.scrollHeight;
+    }
 
-      navButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          lastFocusedBtn = btn;
-          setAriaExpanded(btn, "true");
-          switch (btn.id) {
-            case "btn-minigames": showMiniGames(); break;
-            case "btn-dailychallenge": showDailyChallenge(); break;
-            case "btn-funnyfacts": showFunnyFacts(); break;
-            case "btn-snackideas": showSnackIdeas(); break;
-            case "btn-dantebot": showDanteBot(); break;
-            case "btn-zeuscorner": showZeusCorner(); break;
-          }
-        });
-      });
+    // Simple predefined responses for demo
+    const responses = [
+      "That's awesome, Dante!",
+      "I love raves too! 🕺💃",
+      "Fishing sounds fun! Have you caught anything recently?",
+      "Here's a joke: Why did the lobster refuse to share? Because he was a little shellfish!",
+      "Keep rocking, Dante! 🎸",
+      "I'm here to help you chill anytime.",
+      "If you want, ask me for snack ideas or dark jokes.",
+      "Remember to take breaks and breathe deeply."
+    ];
 
-      closeBtn.addEventListener('click', closePopup);
-      popupOverlay.addEventListener('click', (e) => {
-        if (e.target === popupOverlay) closePopup();
-      });
+    sendBtn.addEventListener('click', () => {
+      const msg = input.value.trim();
+      if (!msg) return;
+      appendMessage('You', msg);
+      input.value = '';
+      setTimeout(() => {
+        const resp = responses[Math.floor(Math.random() * responses.length)];
+        appendMessage('DanteBot', resp);
+      }, 800);
+    });
 
-      // Focus trap inside popup for accessibility
-      function trapFocus(e) {
-        if (e.key === "Tab") {
-          const focusableElements = popupOverlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-          const firstEl = focusableElements[0];
-          const lastEl = focusableElements[focusableElements.length - 1];
-          if (e.shiftKey) {
-            if (document.activeElement === firstEl) {
-              e.preventDefault();
-              lastEl.focus();
-            }
-          } else {
-            if (document.activeElement === lastEl) {
-              e.preventDefault();
-              firstEl.focus();
-            }
-          }
-        }
-        if (e.key === "Escape") {
-          closePopup();
-        }
-      }
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendBtn.click();
+    });
+  }
 
-      // --- CONTENT SECTIONS ---
+  // Show random content list for chosen category except games & danteBot
+  function showRandomList(category) {
+    if (!data[category]) {
+      showPopup('Oops!', 'No data found for this category.');
+      return;
+    }
+    const items = data[category];
+    let content = '<ul>';
+    items.forEach(item => {
+      content += `<li>${item}</li>`;
+    });
+    content += '</ul>';
+    let titleMap = {
+      funnyFacts: '🤣 Funny Facts',
+      snackIdeas: '🍕 Snack Ideas',
+      darkJokes: '😈 Dark Jokes',
+      zeusCorner: '🐶 Zeus’s Corner',
+      dailyChallenge: '🔥 Daily Challenges'
+    };
+    showPopup(titleMap[category] || 'Info', content);
+  }
 
-      // 1. Mini Games
-
-      function showMiniGames() {
-        const content = `
-          <p>Pick a mini-game below and have fun!</p>
-          <div class="game-section">
-            <button class="game-btn" data-game="reaction">Reaction Test</button>
-            <button class="game-btn" data-game="memory">Memory Match</button>
-            <button class="game-btn" data-game="ravejump">Rave Jump</button>
-          </div>
-          <div id="game-container"></div>
-        `;
-        openPopup(content, "Mini Games");
-        addGameListeners();
-      }
-
-      function addGameListeners() {
-        const gameBtns = document.querySelectorAll('.game-btn');
-        gameBtns.forEach(btn => btn.addEventListener('click', () => {
-          const game = btn.getAttribute('data-game');
-          startGame(game);
-        }));
-      }
-
-      // Reaction Test Game
-      let reactionTimeout, reactionStartTime;
-      function startReactionTest() {
-        const gameContainer = document.getElementById('game-container');
-        gameContainer.innerHTML = `
-          <p>Wait for the box to turn green, then click it as fast as you can!</p>
-          <div id="reaction-box" tabindex="0" aria-live="polite" aria-atomic="true" role="button" aria-label="Reaction Test Box">WAIT</div>
-          <p id="reaction-result"></p>
-          <button id="reaction-restart">Try Again</button>
-        `;
-        const box = document.getElementById('reaction-box');
-        const result = document.getElementById('reaction-result');
-        const restartBtn = document.getElementById('reaction-restart');
-
-        let reacted = false;
-
-        box.style.backgroundColor = '#0ff';
-        box.textContent = "WAIT";
-        result.textContent = "";
-
-        // Start random timer to turn green
-        reactionTimeout = setTimeout(() => {
-          reactionStartTime = performance.now();
-          box.style.backgroundColor = '#0f0';
-          box.textContent = "CLICK!";
-          box.focus();
-          reacted = false;
-        }, 1500 + Math.random() * 3000);
-
-        function clickHandler() {
-          if (!reactionStartTime) {
-            result.textContent = "Too soon! Wait for green.";
-            clearTimeout(reactionTimeout);
-            box.style.backgroundColor = '#f00';
-            box.textContent = "TOO SOON!";
-          } else if (!reacted) {
-            reacted = true;
-            const reactionTime = performance.now() - reactionStartTime;
-            result.textContent = `Your reaction time: ${reactionTime.toFixed(0)} ms`;
-            box.style.backgroundColor = '#0ff';
-            box.textContent = "DONE!";
-            reactionStartTime = null;
-          }
-        }
-        box.addEventListener('click', clickHandler);
-        box.addEventListener('keydown', (e) => {
-          if (e.key === "Enter" || e.key === " ") clickHandler();
-        });
-
-        restartBtn.addEventListener('click', () => {
-          clearTimeout(reactionTimeout);
-          startReactionTest();
-        });
-      }
-
-      // Memory Match Game
-      let memoryCards = [];
-      let flippedCards = [];
-      let matchedPairs = 0;
-
-      function startMemoryMatch() {
-        const gameContainer = document.getElementById('game-container');
-        gameContainer.innerHTML = `
-          <p>Find all matching pairs of emojis by clicking the cards!</p>
-          <div id="memory-board" aria-label="Memory matching game board"></div>
-          <p id="memory-result" aria-live="polite"></p>
-          <button id="memory-restart">Restart</button>
-        `;
-
-        const board = document.getElementById('memory-board');
-        const result = document.getElementById('memory-result');
-        const restartBtn = document.getElementById('memory-restart');
-
-        const emojis = ["🦞","🦀","🐟","🐠","🐡","🐙","🦑","🐬"];
-        const cardsArray = [...emojis, ...emojis];
-        shuffleArray(cardsArray);
-
-        memoryCards = [];
-        flippedCards = [];
-        matchedPairs = 0;
-
-        board.innerHTML = "";
-
-        cardsArray.forEach((emoji, i) => {
-          const card = document.createElement('button');
-          card.className = 'memory-card';
-          card.setAttribute('aria-label', 'Memory card');
-          card.setAttribute('aria-pressed', 'false');
-          card.dataset.emoji = emoji;
-          card.dataset.index = i;
-          card.textContent = "❓";
-          card.addEventListener('click', () => flipCard(card));
-          board.appendChild(card);
-          memoryCards.push(card);
-        });
-
-        restartBtn.addEventListener('click', () => {
-          startMemoryMatch();
-          result.textContent = "";
-        });
-
-        function flipCard(card) {
-          if (flippedCards.length >= 2 || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-          card.classList.add('flipped');
-          card.textContent = card.dataset.emoji;
-          card.setAttribute('aria-pressed', 'true');
-          flippedCards.push(card);
-
-          if (flippedCards.length === 2) {
-            const [c1, c2] = flippedCards;
-            if (c1.dataset.emoji === c2.dataset.emoji) {
-              c1.classList.add('matched');
-              c2.classList.add('matched');
-              matchedPairs++;
-              flippedCards = [];
-              if (matchedPairs === emojis.length) {
-                result.textContent = "🎉 You matched all pairs! 🎉";
-              }
-            } else {
-              setTimeout(() => {
-                c1.classList.remove('flipped');
-                c2.classList.remove('flipped');
-                c1.textContent = "❓";
-                c2.textContent = "❓";
-                c1.setAttribute('aria-pressed', 'false');
-                c2.setAttribute('aria-pressed', 'false');
-                flippedCards = [];
-              }, 900);
-            }
-          }
-        }
-      }
-
-      // Utility to shuffle array
-      function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-      }
-
-      // Rave Jump Game
-      let raveInterval, raveScore = 0, lobsterBottom = 20;
-      let obstaclePosition = 320;
-      let jumping = false;
-      function startRaveJump() {
-        const gameContainer = document.getElementById('game-container');
-        gameContainer.innerHTML = `
-          <p>Press SPACE or CLICK the lobster to jump over the obstacle!</p>
-          <div id="rave-game" aria-label="Rave jump game">
-            <div id="lobster" tabindex="0" role="button" aria-label="Lobster character">🦞</div>
-            <div id="obstacle">💥</div>
-          </div>
-          <p id="score">Score: 0</p>
-          <button id="rave-restart">Restart</button>
-        `;
-
-        const lobster = document.getElementById('lobster');
-        const obstacle = document.getElementById('obstacle');
-        const scoreDisplay = document.getElementById('score');
-        const restartBtn = document.getElementById('rave-restart');
-
-        raveScore = 0;
-        obstaclePosition = 320;
-        lobsterBottom = 20;
-        jumping = false;
-        scoreDisplay.textContent = `Score: ${raveScore}`;
-        obstacle.style.right = obstaclePosition + 'px';
-        lobster.style.bottom = lobsterBottom + 'px';
-
-        function gameLoop() {
-          obstaclePosition -= 8;
-          if (obstaclePosition < -50) {
-            obstaclePosition = 320;
-            raveScore++;
-            scoreDisplay.textContent = `Score: ${raveScore}`;
-          }
-          obstacle.style.right = obstaclePosition + 'px';
-
-          // Collision detection (simple)
-          if (
-            obstaclePosition < 100 && obstaclePosition > 40 &&
-            lobsterBottom < 50
-          ) {
-            clearInterval(raveInterval);
-            alert(`Game over! Your final score is ${raveScore}.`);
-          }
-        }
-
-        function jump() {
-          if (jumping) return;
-          jumping = true;
-          let upInterval = setInterval(() => {
-            if (lobsterBottom >= 120) {
-              clearInterval(upInterval);
-              let downInterval = setInterval(() => {
-                if (lobsterBottom <= 20) {
-                  clearInterval(downInterval);
-                  jumping = false;
-                }
-                lobsterBottom -= 15;
-                lobster.style.bottom = lobsterBottom + 'px';
-              }, 30);
-            } else {
-              lobsterBottom += 20;
-              lobster.style.bottom = lobsterBottom + 'px';
-            }
-          }, 30);
-        }
-
-        raveInterval = setInterval(gameLoop, 40);
-
-        lobster.addEventListener('click', jump);
-        lobster.addEventListener('keydown', e => {
-          if (e.key === " " || e.key === "Enter") {
-            e.preventDefault();
-            jump();
-          }
-        });
-
-        restartBtn.addEventListener('click', () => {
-          clearInterval(raveInterval);
-          startRaveJump();
-        });
-      }
-
-      // Start game based on selection
-      function startGame(gameName) {
-        switch (gameName) {
-          case "reaction": startReactionTest(); break;
-          case "memory": startMemoryMatch(); break;
-          case "ravejump": startRaveJump(); break;
-          default:
-            document.getElementById('game-container').innerHTML = `<p>Game not found.</p>`;
-        }
-      }
-
-      // 2. Daily Challenge (random funny question)
-      function showDailyChallenge() {
-        const questions = [
-          "If you could invent a new holiday, what would it be?",
-          "What's your ultimate comfort food on a rave night?",
-          "Tell a quick joke that always makes you laugh.",
-          "What's the weirdest snack combo you actually enjoy?",
-          "If you were a lobster, what rave song would be your anthem?",
-          "Describe your perfect chill day in three words.",
-          "What's a fun fact about lobsters you just learned?",
-          "If you had a secret rave nickname, what would it be?"
-        ];
-        const q = questions[Math.floor(Math.random() * questions.length)];
-        const content = `
-          <p><strong>Daily Challenge:</strong></p>
-          <p style="font-size:1.3rem; margin-top: 10px; text-align:center;">"${q}"</p>
-          <button id="daily-next">Give me another challenge</button>
-        `;
-        openPopup(content, "Daily Challenge");
-        document.getElementById('daily-next').addEventListener('click', showDailyChallenge);
-      }
-
-      // 3. Funny Facts
-      function showFunnyFacts() {
-        const facts = [
-          "Lobsters communicate by peeing at each other 🦞💦",
-          "Raves were originally called 'acid tests' in the 60s!",
-          "The average rap song has about 600 words — that’s like a mini novel!",
-          "Some lobsters can live over 100 years (long rave career!)",
-          "Dante is the patron saint of cool vibes (definitely true).",
-          "A single rave can burn up to 500 calories. Dance it off!",
-          "Dark humor lovers often have the sharpest wit and hearts.",
-          "Engineering minds like yours find patterns even in chaos."
-        ];
-        const fact = facts[Math.floor(Math.random() * facts.length)];
-        const content = `
-          <p><strong>Funny Fact:</strong></p>
-          <p style="font-size:1.3rem; margin-top: 10px; text-align:center;">${fact}</p>
-          <button id="funny-next">Another funny fact</button>
-        `;
-        openPopup(content, "Funny Fact");
-        document.getElementById('funny-next').addEventListener('click', showFunnyFacts);
-      }
-
-      // 4. Snack Ideas
-      function showSnackIdeas() {
-        const snacks = [
-          "Spicy Lobster Roll Bites 🌶️🦞",
-          "Electric Neon Gummies 🍬✨",
-          "Rave Fruit Skewers 🍓🍍🍉",
-          "Cheesy Jalapeño Popcorn 🧀🌶️",
-          "Midnight Energy Smoothie 🍌🥤",
-          "Glowing Glowstick Jello 🥄💡",
-          "Crunchy Caramel Pretzels 🥨🍯",
-          "Chocolate-Dipped Strawberries 🍫🍓"
-        ];
-        const snack = snacks[Math.floor(Math.random() * snacks.length)];
-        const content = `
-          <p><strong>Snack Idea:</strong></p>
-          <p style="font-size:1.3rem; margin-top: 10px; text-align:center;">${snack}</p>
-          <button id="snack-next">Give me another snack idea</button>
-        `;
-        openPopup(content, "Snack Ideas");
-        document.getElementById('snack-next').addEventListener('click', showSnackIdeas);
-      }
-
-      // 5. DanteBot Chat - simple AI-ish echo + fun replies
-      function showDanteBot() {
-        const content = `
-          <p>Chat with <strong>DanteBot</strong>. Ask anything or just say hi!</p>
-          <div class="chat-area">
-            <div id="chat-log" class="chat-log" aria-live="polite" aria-relevant="additions"></div>
-            <form id="chat-form" class="chat-input" role="search" aria-label="DanteBot chat input">
-              <input type="text" id="chat-input" autocomplete="off" placeholder="Type your message here..." aria-label="Type your message" required/>
-              <button type="submit">Send</button>
-            </form>
-          </div>
-        `;
-        openPopup(content, "DanteBot Chat");
-
-        const chatLog = document.getElementById('chat-log');
-        const chatForm = document.getElementById('chat-form');
-        const chatInput = document.getElementById('chat-input');
-
-        function addMessage(text, from = "bot") {
-          const msg = document.createElement('div');
-          msg.style.marginBottom = "8px";
-          if (from === "bot") {
-            msg.style.color = "#0ff";
-            msg.textContent = `DanteBot: ${text}`;
-          } else {
-            msg.style.color = "#afffdf";
-            msg.textContent = `You: ${text}`;
-          }
-          chatLog.appendChild(msg);
-          chatLog.scrollTop = chatLog.scrollHeight;
-        }
-
-        function botReply(userText) {
-          userText = userText.toLowerCase().trim();
-
-          // Fun simple bot replies based on keywords
-          if (!userText) return "Say something to me!";
-          if (userText.includes("hello") || userText.includes("hi")) return "Hey Dante! Ready to rave and chill?";
-          if (userText.includes("lobster")) return "🦞 Lobsters are awesome rave partners!";
-          if (userText.includes("music")) return "Rap and rave beats? That's my jam!";
-          if (userText.includes("rave")) return "Glow sticks ready? Let's dance till dawn!";
-          if (userText.includes("joke")) return "Why don't lobsters ever share? Because they're a little shellfish! 😄";
-          if (userText.includes("help")) return "I'm here! Ask me for a snack idea or a fun fact anytime.";
-          if (userText.includes("love")) return "Love is the best vibe — especially from Larissa 💖";
-          if (userText.includes("dark humor")) return "I get it — sometimes the darkest jokes shine the brightest light!";
-          if (userText.includes("engineer")) return "Engineering the perfect rave experience... initializing dance mode!";
-          if (userText.includes("bye") || userText.includes("later")) return "Catch you on the flip side, Dante! ✌️";
-          // Default fallback
-          return "That's cool! Tell me more or ask for a fun fact or game.";
-        }
-
-        chatForm.addEventListener('submit', e => {
-          e.preventDefault();
-          const userText = chatInput.value.trim();
-          if (!userText) return;
-          addMessage(userText, "user");
-          chatInput.value = "";
+  // Handler for button clicks
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.getAttribute('data-category');
+      switch(category) {
+        case 'games':
+          // Let user pick between quick click, memory, reaction
+          showPopup('Mini Games 🎮', `
+            <p>Choose a mini-game to play:</p>
+            <button id="quick-click-btn" style="
+              margin: 0.5rem; padding: 1rem 2rem;
+              font-weight: 900;
+              font-size: 1.2rem;
+              border-radius: 15px;
+              background: linear-gradient(45deg, #ff00cc, #3333ff);
+              color: white;
+              border: none;
+              cursor: pointer;
+              box-shadow: 0 0 15px #ff33ff;
+            ">Quick Click Challenge</button>
+            <button id="memory-match-btn" style="
+              margin: 0.5rem; padding: 1rem 2rem;
+              font-weight: 900;
+              font-size: 1.2rem;
+              border-radius: 15px;
+              background: linear-gradient(45deg, #33ccff, #aa33ff);
+              color: white;
+              border: none;
+              cursor: pointer;
+              box-shadow: 0 0 15px #33ccff;
+            ">Memory Match (Coming Soon)</button>
+            <button id="reaction-test-btn" style="
+              margin: 0.5rem; padding: 1rem 2rem;
+              font-weight: 900;
+              font-size: 1.2rem;
+              border-radius: 15px;
+              background: linear-gradient(45deg, #ff6666, #ff33aa);
+              color: white;
+              border: none;
+              cursor: pointer;
+              box-shadow: 0 0 15px #ff3366;
+            ">Reaction Test (Coming Soon)</button>
+          `);
+          // After popup opens, attach handlers
           setTimeout(() => {
-            const reply = botReply(userText);
-            addMessage(reply, "bot");
-          }, 700);
-        });
+            document.getElementById('quick-click-btn').onclick = quickClickGame;
+            document.getElementById('memory-match-btn').onclick = memoryMatchGame;
+            document.getElementById('reaction-test-btn').onclick = reactionTestGame;
+          }, 100);
+          break;
 
-        // Focus the input for user convenience
-        chatInput.focus();
+        case 'danteBot':
+          danteBot();
+          break;
+
+        default:
+          showRandomList(category);
       }
+    });
+  });
 
-      // 6. Zeus’s Corner - inspirational quotes and messages
-      function showZeusCorner() {
-        const quotes = [
-          "“Strength doesn’t come from what you can do. It comes from overcoming the things you once thought you couldn’t.”",
-          "“Even the darkest nights will end and the sun will rise.”",
-          "“Every step forward, no matter how small, is progress.”",
-          "“Dance like no one’s watching, live like it’s your last rave.”",
-          "“Courage is not the absence of fear, but the triumph over it.”",
-          "“You are stronger than your storms, Dante.”",
-          "“Glow bright, shine harder — your light is needed in this world.”",
-          "“Keep your heart wild and your mind free.”"
-        ];
-        const quote = quotes[Math.floor(Math.random() * quotes.length)];
-        const content = `
-          <p><strong>Zeus’s Corner:</strong></p>
-          <p style="font-size:1.3rem; margin-top: 10px; font-style: italic; text-align:center; color: #0ff;">"${quote}"</p>
-          <button id="zeus-next">More inspiration</button>
-        `;
-        openPopup(content, "Zeus's Corner");
-        document.getElementById('zeus-next').addEventListener('click', showZeusCorner);
+  // Accessibility: trap focus inside popup when open
+  popupOverlay.addEventListener('keydown', e => {
+    if (e.key === 'Tab') {
+      const focusable = popup.querySelectorAll('button, input, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          last.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === last) {
+          first.focus();
+          e.preventDefault();
+        }
       }
+    }
+    if (e.key === 'Escape') {
+      popupOverlay.style.display = 'none';
+      popupContent.innerHTML = '';
+    }
+  });
 
-      // On page load, show a personal intro message from you to Dante
-      function showIntroMessage() {
-        const intro = `
-          <p style="font-size:1.2rem; margin-top: 10px; text-align:center;">
-            Hey Dante, this is your personal fun hub built just for you by Larissa!<br>
-            Enjoy the games, laughs, and vibes. Love you tons! 💖🎉
-          </p>
-          <button id="intro-close">Let's go!</button>
-        `;
-        openPopup(intro, "Welcome, Dante!");
-        document.getElementById('intro-close').addEventListener('click', closePopup);
-      }
+  // Focus popup when it opens
+  const observer = new MutationObserver(() => {
+    if (popupOverlay.style.display === 'flex') {
+      popup.focus();
+    }
+  });
+  observer.observe(popupOverlay, { attributes: true, attributeFilter: ['style'] });
 
-      // Initialize
-      window.addEventListener('load', () => {
-        showIntroMessage();
-      });
+})();
+</script>
 
-    })();
-  </script>
 </body>
 </html>
