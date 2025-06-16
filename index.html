@@ -1,192 +1,942 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="neon">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Dante’s Fun Hub 4.2</title>
-  <style>
-    body {
-      background: linear-gradient(to bottom, #000010, #0f001a);
-      font-family: 'Comic Sans MS', sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #fff;
-      text-align: center;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Dante’s Fun Hub 4.0</title>
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #fff;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1,h2,h3,h4,h5 {
+    margin: 0 0 10px 0;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 8px #39ff14;
+  }
+  p {
+    margin: 0 0 1em 0;
+    line-height: 1.4;
+  }
+
+  /* Neon glow container */
+  #app {
+    max-width: 480px;
+    margin: 1.5rem auto 3rem auto;
+    padding: 0 15px 80px 15px;
+    border-radius: 16px;
+    background:
+      radial-gradient(circle at top left, #39ff14 20%, transparent 80%),
+      radial-gradient(circle at bottom right, #00ffe7 20%, transparent 80%);
+    box-shadow:
+      0 0 20px #39ff14,
+      0 0 30px #00ffe7 inset;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  header h1 {
+    font-size: 2.5rem;
+    color: #00ffe7;
+    text-shadow: 0 0 15px #00ffe7;
+  }
+  header p {
+    font-size: 1.1rem;
+    color: #39ff14;
+    font-style: italic;
+    text-shadow: 0 0 8px #39ff14;
+  }
+
+  /* Navigation buttons */
+  #navButtons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  button.nav-btn {
+    background: #111;
+    border: 2px solid #39ff14;
+    color: #39ff14;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1 0 45%;
+    max-width: 160px;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+    box-shadow: 0 0 8px #39ff14;
+  }
+  button.nav-btn:hover, button.nav-btn:focus {
+    background: #39ff14;
+    color: #111;
+    box-shadow: 0 0 20px #39ff14;
+    outline: none;
+  }
+
+  /* Popup overlay */
+  #popupOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  #popupOverlay.active {
+    display: flex;
+  }
+
+  /* Popup content */
+  #popupContent {
+    position: relative;
+    max-width: 400px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: #000d14;
+    border-radius: 16px;
+    padding: 20px 25px 30px 25px;
+    box-shadow: 0 0 20px #00ffe7;
+    color: #39ff14;
+    font-weight: 600;
+    line-height: 1.4;
+    user-select: text;
+  }
+
+  /* Close button */
+  #closePopup {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    color: #39ff14;
+    cursor: pointer;
+    font-weight: 900;
+    user-select: none;
+    transition: color 0.2s ease;
+  }
+  #closePopup:hover {
+    color: #00ffe7;
+  }
+
+  /* Popup headers */
+  #popupContent h2 {
+    margin-top: 0;
+    color: #00ffe7;
+    text-shadow: 0 0 10px #00ffe7;
+  }
+
+  /* Navigation inside popup for multiple content */
+  #popupNav {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+  }
+  #popupNav button {
+    background: #111;
+    border: 2px solid #00ffe7;
+    color: #00ffe7;
+    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1;
+    margin: 0 5px;
+    box-shadow: 0 0 8px #00ffe7;
+  }
+  #popupNav button:hover {
+    background: #00ffe7;
+    color: #111;
+    box-shadow: 0 0 20px #00ffe7;
+  }
+
+  /* Scrollbar styling for popup */
+  #popupContent::-webkit-scrollbar {
+    width: 8px;
+  }
+  #popupContent::-webkit-scrollbar-track {
+    background: #000a12;
+    border-radius: 10px;
+  }
+  #popupContent::-webkit-scrollbar-thumb {
+    background: #00ffe7;
+    border-radius: 10px;
+  }
+
+  /* Mini-games area */
+  #miniGameArea {
+    margin-top: 10px;
+  }
+  .game-btn {
+    background: #111;
+    border: 2px solid #39ff14;
+    color: #39ff14;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 8px #39ff14;
+    user-select: none;
+    transition: all 0.2s ease-in-out;
+  }
+  .game-btn:hover {
+    background: #39ff14;
+    color: #111;
+    box-shadow: 0 0 20px #39ff14;
+  }
+
+  /* Draw Pad styles */
+  #drawPad {
+    border: 3px solid #00ffe7;
+    border-radius: 12px;
+    background: #001822;
+    touch-action: none;
+    width: 100%;
+    height: 250px;
+    margin-top: 15px;
+  }
+
+  /* Neon rave effect for text */
+  .neonText {
+    text-shadow:
+      0 0 5px #39ff14,
+      0 0 10px #39ff14,
+      0 0 20px #00ffe7,
+      0 0 30px #00ffe7,
+      0 0 40px #00ffe7,
+      0 0 55px #00ffe7,
+      0 0 75px #00ffe7;
+  }
+
+  /* Responsive for iPhone XR width */
+  @media (max-width: 480px) {
+    #app {
+      margin: 1rem 10px 60px 10px;
+      padding: 0 10px 70px 10px;
     }
-    h1 {
-      font-size: 2em;
-      color: #00ffcc;
-      padding: 20px;
-      text-shadow: 0 0 10px #0ff;
+    button.nav-btn {
+      flex: 1 0 100%;
+      max-width: none;
     }
-    .btn {
-      background: #111;
-      border: 2px solid #0ff;
-      color: #0ff;
-      padding: 10px 20px;
-      margin: 10px;
-      font-size: 1.2em;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #0ff;
-    }
-    .btn:hover {
-      background: #0ff;
-      color: #000;
-    }
-    .popup {
-      display: none;
-      position: fixed;
-      top: 10%;
-      left: 5%;
-      width: 90%;
-      background: #222;
-      color: #fff;
-      border: 3px solid #0ff;
-      box-shadow: 0 0 15px #0ff;
-      border-radius: 15px;
-      z-index: 1000;
-      padding: 20px;
-      text-align: center;
-    }
-    .popup-content {
-      font-size: 1.2em;
-      margin-bottom: 15px;
-    }
-    .close-btn {
-      background: #ff0066;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-    .popup img {
-      max-width: 100%;
-      border-radius: 10px;
-    }
-    .themed-420 { background: url('https://i.imgur.com/XpL8N2n.jpg') center/cover no-repeat; }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <h1>Welcome to Dante's Fun Hub 4.2 🎉</h1>
-  <p>Hi Dante, this is a special place just for you. Love, Larissa 💖</p>
 
-  <button class="btn" onclick="showPopup('popup420')">🌿 420 Facts</button>
-  <button class="btn" onclick="showPopup('popupLobster')">🦞 Lobster Facts</button>
-  <button class="btn" onclick="showPopup('popupSnacks')">🍕 Snack Ideas</button>
-  <button class="btn" onclick="showPopup('popupCars')">🚗 Car Tips</button>
-  <button class="btn" onclick="showPopup('popupJokes')">😂 TPB Jokes</button>
-  <button class="btn" onclick="showPopup('popupZeus')">🐾 Zeus's Corner</button>
-  <button class="btn" onclick="showPopup('popupGame')">🎮 Mini Game</button>
+<div id="app" role="main" aria-label="Dante's Fun Hub">
+  <header>
+    <h1 class="neonText">Dante’s Fun Hub 4.0</h1>
+    <p class="neonText">Hey Dante! From Larissa: You’re awesome — enjoy your fun zone! 💚🐾</p>
+  </header>
 
-  <!-- Popup Template -->
-  <div id="popup420" class="popup themed-420">
-    <div class="popup-content" id="fact420"></div>
-    <button class="btn" onclick="nextFact('420')">💨 Next</button>
-    <button class="close-btn" onclick="hidePopup('popup420')">Close</button>
+  <nav id="navButtons" aria-label="Main navigation">
+    <button class="nav-btn" data-module="dantebox">🎁 DanteBox Surprise</button>
+    <button class="nav-btn" data-module="dailyChallenge">🧠 Daily Dopamine Challenge</button>
+    <button class="nav-btn" data-module="zeusCorner">🐾 Zeus’s Corner</button>
+    <button class="nav-btn" data-module="carEngineering">🚗 Car & Engineering</button>
+    <button class="nav-btn" data-module="dantebot">🤖 DanteBot Chat</button>
+    <button class="nav-btn" data-module="miniGames">🎮 Mini Games</button>
+    <button class="nav-btn" data-module="funnyFacts">😂 Funny Fact Machine</button>
+    <button class="nav-btn" data-module="snackIdeas">🍟 Snack Attack Ideas</button>
+    <button class="nav-btn" data-module="facts420">🌿 420 Facts</button>
+    <button class="nav-btn" data-module="highThoughts">🚬 High Thoughts Generator</button>
+    <button class="nav-btn" data-module="drawPad">🖼️ High Doodles Draw Pad</button>
+    <button class="nav-btn" data-module="sassyCameo">🎉 Sassy the Sasquatch</button>
+    <button class="nav-btn" data-module="whatIf">❓ “What If?” Deep Dive</button>
+    <button class="nav-btn" data-module="brainTeasers">🛠 Fix-It Brain Teasers</button>
+    <button class="nav-btn" data-module="memeVault">📦 Meme Vault</button>
+    <button class="nav-btn" data-module="movieQuiz">🎬 Quick Movie Quote Quiz</button>
+    <button class="nav-btn" data-module="visualizer">🔆 Light Visualizer</button>
+    <button class="nav-btn" data-module="stonerWisdom">🌈 Daily Stoner Wisdom</button>
+    <button class="nav-btn" data-module="triviaTime">❓ Trivia Time</button>
+    <button class="nav-btn" data-module="creativeIdeas">💡 Creative Idea Generator</button>
+    <button class="nav-btn" data-module="memeQuiz">🖼️ Meme Quiz</button>
+  </nav>
+</div>
+
+<!-- Popup Overlay -->
+<div id="popupOverlay" role="dialog" aria-modal="true" aria-labelledby="popupTitle" tabindex="-1">
+  <div id="popupContent" tabindex="0">
+    <button id="closePopup" aria-label="Close popup">&times;</button>
+    <h2 id="popupTitle"></h2>
+    <div id="popupBody"></div>
+    <div id="popupNav"></div>
   </div>
+</div>
 
-  <div id="popupLobster" class="popup">
-    <div class="popup-content" id="factLobster"></div>
-    <button class="btn" onclick="nextFact('Lobster')">Next 🦞</button>
-    <button class="close-btn" onclick="hidePopup('popupLobster')">Close</button>
-  </div>
+<script>
+(() => {
+  const app = document.getElementById('app');
+  const popupOverlay = document.getElementById('popupOverlay');
+  const popupTitle = document.getElementById('popupTitle');
+  const popupBody = document.getElementById('popupBody');
+  const popupNav = document.getElementById('popupNav');
+  const closePopupBtn = document.getElementById('closePopup');
 
-  <div id="popupSnacks" class="popup">
-    <div class="popup-content" id="factSnacks"></div>
-    <button class="btn" onclick="nextFact('Snacks')">Next 🍟</button>
-    <button class="close-btn" onclick="hidePopup('popupSnacks')">Close</button>
-  </div>
+  // Content Data ------------------------------------------------------------------
 
-  <div id="popupCars" class="popup">
-    <div class="popup-content" id="factCars"></div>
-    <button class="btn" onclick="nextFact('Cars')">Next 🛠</button>
-    <button class="close-btn" onclick="hidePopup('popupCars')">Close</button>
-  </div>
+  const danteBoxItems = [
+    "🎤 Rap Quote: “Started from the bottom now we’re here.”",
+    "😂 Funny Story: Once Zeus ate an entire lobster... and asked for seconds!",
+    "🍔 Food Idea: Try peanut butter and pickle chips — trust me.",
+    "😎 Random Fact: Native engineers built innovative fishing tools for lobsters.",
+  ];
 
-  <div id="popupJokes" class="popup">
-    <div class="popup-content" id="factJokes"></div>
-    <button class="btn" onclick="nextFact('Jokes')">Next 🤪</button>
-    <button class="close-btn" onclick="hidePopup('popupJokes')">Close</button>
-  </div>
+  const dailyChallenges = [
+    "Do a Trailer Park Boys impression out loud.",
+    "Name 5 rap songs as fast as you can.",
+    "Draw a quick doodle inspired by a rave.",
+    "Come up with a quick fix for a broken gadget nearby.",
+  ];
 
-  <div id="popupZeus" class="popup">
-    <div class="popup-content" id="factZeus"></div>
-    <button class="btn" onclick="nextFact('Zeus')">Next 🐶</button>
-    <button class="close-btn" onclick="hidePopup('popupZeus')">Close</button>
-  </div>
+  const zeusCorner = [
+    "🐶 Zeus says: ‘I’m the goodest boy! More cheese, please!’ 🧀",
+    "🐾 Zeus tip: Dogs love rave beats, try some neon music for him.",
+    "🐶 Zeus meme: *Imagine Zeus wearing glow sticks.*",
+    "🐾 Zeus trick: Teach Zeus ‘spin’ with a cheesy reward!",
+  ];
 
-  <div id="popupGame" class="popup">
-    <div class="popup-content">
-      <p>Click the glowing button as fast as you can!</p>
-      <button class="btn" onclick="clickCounter()">Click Me!</button>
-      <p>Score: <span id="score">0</span></p>
-    </div>
-    <button class="close-btn" onclick="hidePopup('popupGame')">Close</button>
-  </div>
+  const carEngineering = [
+    "🚗 Fix-it Tip: Always check your spark plugs if the engine’s sluggish.",
+    "🛠 Engineer Joke: Why did the engine break up? It couldn’t handle the pressure.",
+    "🔧 Build Idea: Try modifying your car’s exhaust for a better sound.",
+    "🛠 Quick Fact: Lobster traps inspired some hydraulic system designs.",
+  ];
 
-  <script>
-    function showPopup(id) {
-      document.getElementById(id).style.display = 'block';
+  const danteBotReplies = [
+    "Yo that’s dope 😎",
+    "Fix it like a pro, Dante!",
+    "Rave on, my dude! ⚡",
+    "Zeus approves this message 🐾",
+  ];
+
+  const funnyFacts = [
+    "Trailer Park Boys' Bubbles once said: 'Lick the tip of the cookie, that’s the best part!'",
+    "Sassy the Sasquatch hates Mondays more than humans do.",
+    "Lobsters pee from their faces — weird but true.",
+    "Raves used to be illegal parties before becoming worldwide festivals.",
+  ];
+
+  const snackIdeas = [
+    "Peanut butter and pickle chips sandwich.",
+    "Cheese cubes and spicy pepperoni bites.",
+    "Chocolate dipped bacon (trust the taste).",
+    "Fresh fruit with a drizzle of honey and sea salt.",
+  ];
+
+  const facts420 = [
+    "Cannabis was used by native peoples for medicinal purposes for thousands of years.",
+    "420 originated from a group of students who met at 4:20 pm to smoke.",
+    "Indica strains are great for relaxation, sativa for energy and creativity.",
+    "Cannabis and creativity often go hand in hand for many artists and engineers.",
+  ];
+
+  const highThoughts = [
+    "If Zeus could talk, what would he say about raves?",
+    "What if lobsters had tiny rave parties underwater?",
+    "Could rap music be the rhythm of the ocean?",
+    "Is the glow of neon lights just an earthly version of stars?",
+  ];
+
+  const sassyCameo = [
+    "Sassy says: ‘Don’t mess with the Sasquatch, or you’ll end up in a rave mosh pit!’",
+    "Sassy’s tip: ‘Always carry snacks, you never know when hunger hits.’",
+    "Sassy joke: ‘Why don’t Sasquatches ever get lost? Because they leave glow-stick trails!’",
+    "Sassy fact: Sasquatches love dancing to rap beats after dark.",
+  ];
+
+  const whatIfs = [
+    "What if you could build a car powered by lobster shells?",
+    "What if Zeus was the DJ at the rave?",
+    "What if Trailer Park Boys starred in a futuristic rave festival?",
+    "What if rap lyrics controlled the weather?",
+  ];
+
+  const brainTeasers = [
+    {question: "You have 3 wires and a broken engine. Which wire do you cut to stop a short circuit?", answer: "The red wire" },
+    {question: "If a gear has 20 teeth and another has 40, how many rotations does the smaller gear make if the big gear makes 1 turn?", answer: "2 rotations" },
+    {question: "What’s heavier: A pound of feathers or a pound of lobster?", answer: "They weigh the same" },
+    {question: "If Zeus barks once every 10 seconds, how many barks in a minute?", answer: "6 barks" },
+  ];
+
+  const memeVault = [
+    "https://i.imgur.com/1V4fVcd.jpg", // TPB Bubbles meme
+    "https://i.imgur.com/kK5a37K.jpg", // Sassy the Sasquatch meme
+    "https://i.imgur.com/Xz5D6KW.jpg", // Car meme
+    "https://i.imgur.com/ZYFYX6L.jpg", // Stoner meme
+  ];
+
+  const movieQuotes = [
+    {quote: "I’m the liquor.", source: "Trailer Park Boys - Ricky"},
+    {quote: "Bubbles, you better learn how to drive that shit.", source: "Trailer Park Boys - Julian"},
+    {quote: "Got lobster? Got lobsters.", source: "Dante’s Fun Hub special"},
+    {quote: "It’s all about the bass and the beats.", source: "Rap classic"},
+  ];
+
+  const visualizerColors = ['#39ff14', '#00ffe7', '#ff00de', '#ffea00', '#00ffff'];
+  let visualizerInterval;
+
+  const stonerWisdom = [
+    "Sometimes the best fix is just to chill and listen.",
+    "Creativity flows best when the mind is free.",
+    "Every problem has a neon-lit solution.",
+    "Zeus teaches us to enjoy the little things.",
+  ];
+
+  const triviaQuestions = [
+    {
+      question: "Where do lobsters live?",
+      choices: ["In the desert", "In the ocean", "On the moon"],
+      answer: 1
+    },
+    {
+      question: "Which car part ignites the fuel?",
+      choices: ["Spark plug", "Exhaust pipe", "Windshield"],
+      answer: 0
+    },
+    {
+      question: "Who is Bubbles?",
+      choices: ["A Sasquatch", "A Trailer Park Boys character", "A rap artist"],
+      answer: 1
+    },
+    {
+      question: "What is a rave?",
+      choices: ["A type of dance party", "A fishing tool", "A car engine part"],
+      answer: 0
     }
-    function hidePopup(id) {
-      document.getElementById(id).style.display = 'none';
+  ];
+
+  const creativeIdeas = [
+    "Build a mini hydro-powered lobster trap.",
+    "Create a glowing car dashboard with neon LEDs.",
+    "Design a rap battle robot.",
+    "Invent a device that plays music when Zeus barks.",
+  ];
+
+  const memeQuiz = [
+    {
+      image: "https://i.imgur.com/1V4fVcd.jpg",
+      question: "Is this meme from Trailer Park Boys, Sasquatch, or Stoner humor?",
+      choices: ["Trailer Park Boys", "Sasquatch", "Stoner humor"],
+      answer: 0
+    },
+    {
+      image: "https://i.imgur.com/kK5a37K.jpg",
+      question: "Who is this sassy character?",
+      choices: ["Sasquatch", "Zeus", "Bubbles"],
+      answer: 0
+    },
+    {
+      image: "https://i.imgur.com/ZYFYX6L.jpg",
+      question: "This meme is about which theme?",
+      choices: ["Car Engineering", "Stoner", "Fishing"],
+      answer: 1
     }
+  ];
 
-    const facts = {
-      '420': [
-        "💨 Weed was once legal and taxed in the US!",
-        "🌿 Snoop Dogg smokes ~81 blunts a day.",
-        "🎶 Music hits different when you’re baked.",
-        "🧠 THC boosts dopamine & ideas.",
-        "😂 'I’m not lazy, I’m in energy-saving mode.'",
-      ],
-      'Lobster': [
-        "🦞 Lobsters pee out of their faces.",
-        "🦞 They can live over 100 years!",
-        "🦞 Mi’kmaq people have treaty rights to lobster fishing.",
-      ],
-      'Snacks': [
-        "🍕 Pizza rolls + ranch = elite snack.",
-        "🍫 Chocolate & peanut butter? Always yes.",
-        "🌮 DIY tacos with Doritos as shells = genius.",
-      ],
-      'Cars': [
-        "🛠 Dante, your fix-it brain is 🔥.",
-        "🚘 Fun fact: The Bugatti Veyron has 10 radiators!",
-        "⚙️ Native gearheads rule the garage.",
-      ],
-      'Jokes': [
-        "😂 Ricky: 'Worst case Ontario!'",
-        "💀 Bubbles: 'Kitties are nice… liquor is not.'",
-        "🍁 Julian: 'All I need is rum and coke.'",
-      ],
-      'Zeus': [
-        "🐶 Zeus is the goodest boy ever.",
-        "🐾 He protects you like a warrior pup.",
-        "🐕 He deserves ALL the treats today.",
-      ]
-    };
+  // Utility ---------------------------------------------------------------------
 
-    const indexes = { '420': 0, 'Lobster': 0, 'Snacks': 0, 'Cars': 0, 'Jokes': 0, 'Zeus': 0 };
+  function randomChoice(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
 
-    function nextFact(type) {
-      let i = indexes[type];
-      const el = document.getElementById(`fact${type}`);
-      el.textContent = facts[type][i];
-      indexes[type] = (i + 1) % facts[type].length;
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
+  }
 
+  // Popup Control ---------------------------------------------------------------
+
+  function openPopup(title, contentHTML, navButtons=[]) {
+    popupTitle.textContent = title;
+    popupBody.innerHTML = contentHTML;
+    popupNav.innerHTML = '';
+    if (navButtons.length > 0) {
+      navButtons.forEach(btn => {
+        const button = document.createElement('button');
+        button.textContent = btn.label;
+        button.addEventListener('click', btn.onClick);
+        popupNav.appendChild(button);
+      });
+    }
+    popupOverlay.classList.add('active');
+    popupContent.focus();
+  }
+
+  function closePopup() {
+    popupOverlay.classList.remove('active');
+    stopVisualizer();
+    clearDrawPad();
+  }
+
+  closePopupBtn.addEventListener('click', closePopup);
+  popupOverlay.addEventListener('click', (e) => {
+    if (e.target === popupOverlay) closePopup();
+  });
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && popupOverlay.classList.contains('active')) {
+      closePopup();
+    }
+  });
+
+  // Modules Implementation -------------------------------------------------------
+
+  // 1. DanteBox Surprise --------------------------------------------------------
+  function openDanteBox() {
+    // Animation effect before reveal
+    let count = 0;
+    const flashes = 6;
+    popupTitle.textContent = "🎁 DanteBox Surprise 🎁";
+    popupBody.innerHTML = "<p class='neonText'>Opening...</p>";
+    popupNav.innerHTML = '';
+    popupOverlay.classList.add('active');
+    popupContent.focus();
+
+    const interval = setInterval(() => {
+      if (count < flashes) {
+        popupBody.innerHTML = `<p class="neonText" style="color:${count%2 === 0 ? '#39ff14' : '#00ffe7'};">Opening${'.'.repeat(count % 4)}</p>`;
+        count++;
+      } else {
+        clearInterval(interval);
+        const surprise = randomChoice(danteBoxItems);
+        openPopup("🎁 DanteBox Surprise 🎁", `<p>${surprise}</p><p>Enjoy your special dose of dopamine, Dante!</p>`, [
+          {label: "Close", onClick: closePopup},
+          {label: "Open Again", onClick: openDanteBox}
+        ]);
+      }
+    }, 400);
+  }
+
+  // 2. Daily Dopamine Challenge ------------------------------------------------
+  function openDailyChallenge() {
+    const challenge = randomChoice(dailyChallenges);
+    openPopup("🧠 Daily Dopamine Challenge", `<p>${challenge}</p><p>Ready to spark your brain?</p>`, [
+      {label: "New Challenge", onClick: openDailyChallenge},
+      {label: "Close", onClick: closePopup}
+    ]);
+  }
+
+  // 3. Zeus’s Corner -------------------------------------------------------------
+  function openZeusCorner() {
+    let index = 0;
+    function render() {
+      openPopup("🐾 Zeus’s Corner", `<p>${zeusCorner[index]}</p>`, [
+        {label: "Prev", onClick: () => { index = (index-1 + zeusCorner.length) % zeusCorner.length; render(); }},
+        {label: "Next", onClick: () => { index = (index+1) % zeusCorner.length; render(); }},
+        {label: "Close", onClick: closePopup}
+      ]);
+    }
+    render();
+  }
+
+  // 4. Car & Engineering --------------------------------------------------------
+  function openCarEngineering() {
+    let index = 0;
+    function render() {
+      openPopup("🚗 Car & Engineering Tips", `<p>${carEngineering[index]}</p>`, [
+        {label: "Prev", onClick: () => { index = (index-1 + carEngineering.length) % carEngineering.length; render(); }},
+        {label: "Next", onClick: () => { index = (index+1) % carEngineering.length; render(); }},
+        {label: "Close", onClick: closePopup}
+      ]);
+    }
+    render();
+  }
+
+  // 5. DanteBot Chat -------------------------------------------------------------
+  function openDanteBot() {
+    let chatHistory = [`DanteBot: Yo, what's up Dante?`];
+    function render() {
+      const chatHtml = chatHistory.map(msg => `<p>${msg}</p>`).join('');
+      openPopup("🤖 DanteBot Chat", `
+        <div id="chatWindow" style="max-height:250px; overflow-y:auto; background:#001822; border-radius:10px; padding:10px; color:#00ffe7; font-family: monospace; margin-bottom:10px;">${chatHtml}</div>
+        <input id="chatInput" type="text" placeholder="Type something..." style="width:calc(100% - 80px); padding:8px; border-radius:8px; border:none; font-size:1rem;"/>
+        <button id="sendChat" style="width:60px; background:#39ff14; border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#111; margin-left:5px;">Send</button>
+      `, [
+        {label: "Close", onClick: closePopup}
+      ]);
+      const chatWindow = document.getElementById('chatWindow');
+      const chatInput = document.getElementById('chatInput');
+      const sendChat = document.getElementById('sendChat');
+      chatInput.focus();
+
+      function botReply() {
+        const reply = randomChoice(danteBotReplies);
+        chatHistory.push(`DanteBot: ${reply}`);
+        render();
+      }
+
+      sendChat.onclick = () => {
+        const msg = chatInput.value.trim();
+        if (msg.length === 0) return;
+        chatHistory.push(`You: ${msg}`);
+        chatInput.value = '';
+        render();
+        setTimeout(botReply, 1000);
+      };
+      chatInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          sendChat.click();
+        }
+      });
+
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+    render();
+  }
+
+  // 6. Mini Games ---------------------------------------------------------------
+  function openMiniGames() {
+    const gamesHTML = `
+      <p>Pick a game to play:</p>
+      <button class="game-btn" id="gameGuessNumber">🔢 Guess the Number</button>
+      <button class="game-btn" id="gameRaveQuiz">🎧 Rave Music Quiz</button>
+      <button class="game-btn" id="gameCatchZeus">🐾 Catch Zeus!</button>
+    `;
+    openPopup("🎮 Mini Games", gamesHTML, [
+      {label: "Close", onClick: closePopup}
+    ]);
+
+    document.getElementById('gameGuessNumber').onclick = startGuessNumber;
+    document.getElementById('gameRaveQuiz').onclick = startRaveQuiz;
+    document.getElementById('gameCatchZeus').onclick = startCatchZeus;
+  }
+
+  // Mini Game: Guess the Number -----------------------------------------------
+  function startGuessNumber() {
+    let target = Math.floor(Math.random() * 50) + 1;
+    let attempts = 0;
+    function render(stateMsg = '') {
+      openPopup("🔢 Guess the Number", `
+        <p>I'm thinking of a number between 1 and 50.</p>
+        <input id="guessInput" type="number" min="1" max="50" placeholder="Your guess" style="width:100%; padding:8px; border-radius:8px; border:none; font-size:1rem;" />
+        <button id="guessBtn" class="game-btn" style="margin-top:10px;">Guess</button>
+        <p id="feedback" style="margin-top:12px; font-weight:bold;">${stateMsg}</p>
+      `, [
+        {label: "Back to Games", onClick: openMiniGames},
+        {label: "Close", onClick: closePopup}
+      ]);
+      const guessInput = document.getElementById('guessInput');
+      const guessBtn = document.getElementById('guessBtn');
+      const feedback = document.getElementById('feedback');
+      guessInput.focus();
+
+      guessBtn.onclick = () => {
+        const guess = Number(guessInput.value);
+        attempts++;
+        if (isNaN(guess) || guess < 1 || guess > 50) {
+          feedback.textContent = "Enter a valid number between 1 and 50.";
+          return;
+        }
+        if (guess === target) {
+          openPopup("🎉 You got it!", `<p>Congrats! You guessed it in ${attempts} attempts.</p>`, [
+            {label: "Play Again", onClick: startGuessNumber},
+            {label: "Back to Games", onClick: openMiniGames},
+            {label: "Close", onClick: closePopup}
+          ]);
+        } else if (guess < target) {
+          render("Try higher!");
+        } else {
+          render("Try lower!");
+        }
+      };
+    }
+    render();
+  }
+
+  // Mini Game: Rave Music Quiz -----------------------------------------------
+  function startRaveQuiz() {
+    const questions = [
+      {
+        q: "Which instrument is most common in rave music?",
+        choices: ["Synthesizer", "Guitar", "Violin"],
+        answer: 0
+      },
+      {
+        q: "What is a common BPM (beats per minute) range for rave songs?",
+        choices: ["60-80", "120-140", "200-220"],
+        answer: 1
+      },
+      {
+        q: "Which DJ is famous for rave music?",
+        choices: ["Tiesto", "Mozart", "Beyonce"],
+        answer: 0
+      },
+    ];
+    let current = 0;
     let score = 0;
-    function clickCounter() {
-      score++;
-      document.getElementById("score").textContent = score;
+
+    function render() {
+      const q = questions[current];
+      let choicesHtml = '';
+      q.choices.forEach((choice,i) => {
+        choicesHtml += `<button class="game-btn" data-choice="${i}" style="display:block; width:100%; margin: 5px 0;">${choice}</button>`;
+      });
+      openPopup(`🎧 Rave Music Quiz (${current+1}/${questions.length})`, `
+        <p>${q.q}</p>
+        ${choicesHtml}
+        <p id="quizFeedback" style="font-weight:bold; margin-top:10px;"></p>
+      `, [
+        {label: "Close", onClick: closePopup}
+      ]);
+      const buttons = [...popupBody.querySelectorAll('button[data-choice]')];
+      const feedback = document.getElementById('quizFeedback');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const choice = Number(btn.getAttribute('data-choice'));
+          if (choice === q.answer) {
+            feedback.textContent = "Correct! 🎉";
+            score++;
+          } else {
+            feedback.textContent = "Oops, wrong!";
+          }
+          buttons.forEach(b => b.disabled = true);
+          setTimeout(() => {
+            current++;
+            if (current >= questions.length) {
+              openPopup("Quiz Complete!", `<p>You scored ${score} out of ${questions.length}!</p>`, [
+                {label: "Play Again", onClick: startRaveQuiz},
+                {label: "Back to Games", onClick: openMiniGames},
+                {label: "Close", onClick: closePopup}
+              ]);
+            } else {
+              render();
+            }
+          }, 1500);
+        });
+      });
+    }
+    render();
+  }
+
+  // Mini Game: Catch Zeus ---------------------------------------------------
+  // A simple game where a glowing "Zeus" button randomly appears and you try to catch it fast.
+
+  function startCatchZeus() {
+    let score = 0;
+    let timeLeft = 15; // seconds
+    let catchBtn;
+    let timerId;
+    let intervalId;
+
+    function spawnZeus() {
+      popupBody.innerHTML = '';
+      catchBtn = document.createElement('button');
+      catchBtn.textContent = "🐾 Catch Zeus!";
+      catchBtn.className = 'game-btn';
+      catchBtn.style.position = 'absolute';
+      catchBtn.style.top = Math.random() * 200 + 'px';
+      catchBtn.style.left = Math.random() * 300 + 'px';
+      catchBtn.style.fontSize = '1.6rem';
+      catchBtn.style.boxShadow = '0 0 20px #39ff14, 0 0 40px #00ffe7';
+      popupBody.appendChild(catchBtn);
+
+      catchBtn.onclick = () => {
+        score++;
+        updateScore();
+        spawnZeus();
+      };
     }
 
-    // Load first fact on startup
-    window.onload = () => {
-      Object.keys(facts).forEach(type => nextFact(type));
-    };
-  </script>
+    function updateScore() {
+      const scoreP = document.getElementById('scoreP');
+      if (scoreP) scoreP.textContent = `Score: ${score}`;
+    }
+
+    function render() {
+      openPopup("🐾 Catch Zeus! (15 seconds)", `<p id="scoreP">Score: 0</p><p>Tap the glowing Zeus as fast as you can!</p>`, [
+        {label: "Quit", onClick: () => { clearInterval(intervalId); clearTimeout(timerId); openMiniGames(); }},
+        {label: "Close", onClick: () => { clearInterval(intervalId); clearTimeout(timerId); closePopup(); }},
+      ]);
+      spawnZeus();
+
+      intervalId = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          clearInterval(intervalId);
+          clearTimeout(timerId);
+          openPopup("⏰ Time’s up!", `<p>Your final score is ${score}.</p>`, [
+            {label: "Play Again", onClick: startCatchZeus},
+            {label: "Back to Games", onClick: openMiniGames},
+            {label: "Close", onClick: closePopup}
+          ]);
+        }
+      }, 1000);
+    }
+
+    render();
+  }
+
+  // 7. Funny Fact Machine ---------------------------------------------------------
+  function openFunnyFacts() {
+    let index = 0;
+    function render() {
+      openPopup("😂 Funny Fact Machine", `<p>${funnyFacts[index]}</p>`, [
+        {label: "Prev", onClick: () => { index = (index-1 + funnyFacts.length) % funnyFacts.length; render(); }},
+        {label: "Next", onClick: () => { index = (index+1) % funnyFacts.length; render(); }},
+        {label: "Close", onClick: closePopup}
+      ]);
+    }
+    render();
+  }
+
+  // 8. Snack Attack Ideas ---------------------------------------------------------
+  function openSnackIdeas() {
+    let index = 0;
+    function render() {
+      openPopup("🍟 Snack Attack Ideas", `<p>${snackIdeas[index]}</p>`, [
+        {label: "Prev", onClick: () => { index = (index-1 + snackIdeas.length) % snackIdeas.length; render(); }},
+        {label: "Next", onClick: () => { index = (index+1) % snackIdeas.length; render(); }},
+        {label: "Close", onClick: closePopup}
+      ]);
+    }
+    render();
+  }
+
+  // 9. 420 Facts ------------------------------------------------------------------
+  function open420Facts() {
+    let index = 0;
+    function render() {
+      openPopup("🌿 420 Facts", `<p>${facts420[index]}</p>`, [
+        {label: "Prev", onClick: () => { index = (index-1 + facts420.length) % facts420.length; render(); }},
+        {label: "Next", onClick: () => { index = (index+1) % facts420.length; render(); }},
+        {label: "Close", onClick: closePopup}
+      ]);
+    }
+    render();
+  }
+
+  // 10. High Thoughts Generator ---------------------------------------------------
+  function openHighThoughts() {
+    openPopup("🚬 High Thoughts Generator", `<p>${randomChoice(highThoughts)}</p>`, [
+      {label: "Another Thought", onClick: openHighThoughts},
+      {label: "Close", onClick: closePopup}
+    ]);
+  }
+
+  // 11. High Doodles Draw Pad -----------------------------------------------------
+  let canvas, ctx, drawing = false, lastX = 0, lastY = 0;
+
+  function setupDrawPad() {
+    if (!canvas) {
+      canvas = document.createElement('canvas');
+      canvas.id = "drawPad";
+      canvas.width = 400;
+      canvas.height = 250;
+      canvas.style.touchAction = "none";
+      popupBody.innerHTML = '';
+      popupBody.appendChild(canvas);
+      canvas.style.width = '100%';
+      canvas.style.height = '250px';
+      ctx = canvas.getContext('2d');
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#39ff14';
+
+      function startPosition(e) {
+        drawing = true;
+        [lastX, lastY] = getXY(e);
+      }
+      function finishedPosition() {
+        drawing = false;
+      }
+      function draw(e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const [x, y] = getXY(e);
+        ctx.strokeStyle = '#00ffe7';
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        [lastX, lastY] = [x, y];
+      }
+      function getXY(e) {
+        if (e.touches && e.touches.length > 0) {
+          const rect = canvas.getBoundingClientRect();
+          return [
+            e.touches[0].clientX - rect.left,
+            e.touches[0].clientY - rect.top
+          ];
+        } else {
+          const rect = canvas.getBoundingClientRect();
+          return [
+            e.clientX - rect.left,
+            e.clientY - rect.top
+          ];
+        }
+      }
+
+      canvas.addEventListener('mousedown', startPosition);
+      canvas.addEventListener('mouseup', finishedPosition);
+      canvas.addEventListener('mouseout', finishedPosition);
+      canvas.addEventListener('mousemove', draw);
+
+      canvas.addEventListener('touchstart', startPosition);
+      canvas.addEventListener('touchend', finishedPosition);
+      canvas.addEventListener('touchcancel', finishedPosition);
+      canvas.addEventListener('touchmove', draw);
+    }
+    openPopup("✍️ High Doodles Draw Pad", '', [
+      {label: "Clear", onClick: clearDrawPad},
+      {label: "Close", onClick: closePopup}
+    ]);
+  }
+
+  function clearDrawPad() {
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  function stopVisualizer() {
+    // Placeholder if we want to stop animations on popup close
+  }
+
+  // Attach Buttons --------------------------------------------------------------
+  document.getElementById('btnDanteBox').onclick = openDanteBox;
+  document.getElementById('btnDailyChallenge').onclick = openDailyChallenge;
+  document.getElementById('btnZeusCorner').onclick = openZeusCorner;
+  document.getElementById('btnCarEngineering').onclick = openCarEngineering;
+  document.getElementById('btnDanteBot').onclick = openDanteBot;
+  document.getElementById('btnMiniGames').onclick = openMiniGames;
+  document.getElementById('btnFunnyFacts').onclick = openFunnyFacts;
+  document.getElementById('btnSnackIdeas').onclick = openSnackIdeas;
+  document.getElementById('btn420Facts').onclick = open420Facts;
+  document.getElementById('btnHighThoughts').onclick = openHighThoughts;
+  document.getElementById('btnDrawPad').onclick = setupDrawPad;
+
+  // Initial personal greeting on page load
+  window.onload = () => {
+    openPopup("Welcome to Dante’s Fun Hub!", `
+      <p>Hey Dante! Ready to get your dopamine fix? Explore, play, and have some fun!</p>
+      <p>Much love ❤️ from Larissa.</p>
+    `, [
+      {label: "Let’s Go!", onClick: closePopup}
+    ]);
+  };
+})();
+</script>
 </body>
 </html>
