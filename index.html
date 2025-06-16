@@ -1,64 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="neon">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dante’s Neon Fun Hub 2.0</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dante’s Fun Hub 3.1</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Restore saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
 </head>
 <body>
   <canvas id="confettiCanvas"></canvas>
   <div class="container">
-    <header><h1>Dante’s Neon Fun Hub 2.0</h1></header>
 
-    <section id="message" class="module pulse">
-      <h2>💖 Message from Larissa 💖</h2>
-      <p>Dante – you light up my world brighter than any rave. Here’s V2 of your playground. Love you! ❤️</p>
+    <header>
+      <h1>Dante’s Fun Hub 3.1</h1>
+      <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">🌓</button>
+    </header>
+
+    <section id="message" class="module">
+      <h2>💖 Message from Larissa</h2>
+      <p>Dante—you’re my brightest rave star. Welcome to V3.1: even more modules, fully functional! ❤️</p>
     </section>
 
-    <!-- Lobster Fishing -->
+    <!-- 1 Lobster Fishing Facts -->
     <section class="module" id="lobster-fishing">
       <h2>🦞 Lobster Fishing Facts</h2>
       <button class="glow-btn" onclick="confettiBurst(); showFact()">Give me a fact!</button>
       <p id="fact" class="output"></p>
     </section>
 
-    <!-- General Fishing -->
+    <!-- 2 General Fishing -->
     <section class="module" id="general-fishing">
       <h2>🎣 Fishing Extras</h2>
       <button class="glow-btn" onclick="confettiBurst(); playFishing()">Cast a line</button>
       <p id="fishResult" class="output"></p>
     </section>
 
-    <!-- Cars -->
+    <!-- 3 Dream Cars -->
     <section class="module" id="cars">
       <h2>🏎️ Dream Car Chooser</h2>
       <button class="glow-btn" onclick="confettiBurst(); chooseCar()">Show me a ride</button>
       <p id="car" class="output"></p>
     </section>
 
-    <!-- Music -->
+    <!-- 4 Rap Rave Beats -->
     <section class="module" id="music">
       <h2>🎧 Rap Rave Beats</h2>
       <button class="glow-btn" onclick="confettiBurst(); playBeat()">Surprise me!</button>
       <audio id="beatAudio" controls></audio>
     </section>
 
-    <!-- Dark Jokes -->
+    <!-- 5 Dark & Sassy Jokes -->
     <section class="module" id="dark-jokes">
       <h2>😈 Dark & Sassy Jokes</h2>
       <button class="glow-btn" onclick="confettiBurst(); tellJoke()">Make me laugh</button>
       <p id="joke" class="output"></p>
     </section>
 
-    <!-- Stories -->
+    <!-- 6 Wild & Funny Stories -->
     <section class="module" id="stories">
       <h2>😂 Wild & Funny Stories</h2>
       <button class="glow-btn" onclick="confettiBurst(); tellStory()">Spin a tale</button>
       <p id="story" class="output"></p>
     </section>
 
-    <!-- Secret DanteBox -->
+    <!-- 7 Movie Recommendations -->
+    <section class="module" id="movies">
+      <h2>🎬 Movie Recommendation</h2>
+      <button class="glow-btn" onclick="confettiBurst(); recommendMovie()">What to watch?</button>
+      <p id="movie" class="output"></p>
+    </section>
+
+    <!-- 8 Food Cravings -->
+    <section class="module" id="food">
+      <h2>🍔 Food Cravings</h2>
+      <button class="glow-btn" onclick="confettiBurst(); suggestFood()">Feed me!</button>
+      <p id="foodOutput" class="output"></p>
+    </section>
+
+    <!-- 9 Mi’kmaq Culture Facts -->
+    <section class="module" id="culture">
+      <h2>🌿 Mi’kmaq Culture Fact</h2>
+      <button class="glow-btn" onclick="confettiBurst(); showCultureFact()">Teach me</button>
+      <p id="cultureFact" class="output"></p>
+    </section>
+
+    <!-- 10 Stoner Tips & Tricks -->
+    <section class="module" id="tips">
+      <h2>💨 Stoner Tips & Tricks</h2>
+      <button class="glow-btn" onclick="confettiBurst(); showTip()">Need a tip?</button>
+      <p id="tip" class="output"></p>
+    </section>
+
+    <!-- 11 Secret DanteBox -->
     <section class="module" id="dantebox">
       <h2>🎁 Secret DanteBox</h2>
       <div id="box" class="box">🤫</div>
@@ -70,14 +108,27 @@
     <section class="module" id="lobstergame">
       <h2>🦞 Catch the Lobster!</h2>
       <canvas id="gameCanvas" width="300" height="200"></canvas>
-      <p id="gameMsg" class="output"></p>
+      <p id="gameMsg" class="output" data-score="0"></p>
+      <p>High Score: <span id="highScore">0</span> catches</p>
       <button class="glow-btn" onclick="startGame()">Start Game</button>
+    </section>
+
+    <!-- DanteBot Chat -->
+    <section class="module" id="dantebot">
+      <h2>🤖 DanteBot Chat</h2>
+      <div id="chatWindow" class="chat-window"></div>
+      <input id="chatInput" type="text" placeholder="Say something..." />
+      <button class="glow-btn" onclick="chatSend()">Send</button>
     </section>
 
   </div>
 
-  <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
 </body>
 </html>
