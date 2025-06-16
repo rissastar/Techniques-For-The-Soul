@@ -1,777 +1,813 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="neon">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dante’s Fun Hub 4.0 — Trailer Park Boys x Sassy Sasquatch Edition</title>
-<style>
-  /* Reset & base */
-  * {
-    margin: 0; padding: 0; box-sizing: border-box;
-  }
-  html, body {
-    height: 100%;
-    background: radial-gradient(circle at center, #1a1a2e, #0f0f1f);
-    font-family: 'Courier New', Courier, monospace;
-    color: #f0f0f5;
-    user-select: none;
-    overflow-x: hidden;
-  }
-  body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    background-image:
-      url('https://i.imgur.com/zrJhz6z.png'), /* Sassy Sasquatch silhouette - subtle */
-      radial-gradient(circle, #1a1a2e, #0f0f1f);
-    background-repeat: no-repeat;
-    background-position: bottom right;
-    background-size: 150px 150px;
-  }
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 0.3rem;
-    text-shadow:
-      0 0 5px #ff00ff,
-      0 0 10px #ff00ff,
-      0 0 20px #ff00ff,
-      0 0 30px #00ffff,
-      0 0 40px #00ffff;
-  }
-  h2 {
-    margin: 0.5rem 0 1rem 0;
-    font-weight: 600;
-    text-shadow: 0 0 5px #ff66cc;
-  }
-  #watermark {
-    position: fixed;
-    bottom: 10px; left: 10px;
-    opacity: 0.15;
-    user-select: none;
-    pointer-events: none;
-    z-index: 1;
-  }
-  /* Buttons container */
-  #button-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
-    gap: 1rem;
-    width: 100%;
-    max-width: 700px;
-    margin-bottom: 1.5rem;
-  }
-  button {
-    padding: 1.2rem 1rem;
-    font-weight: 900;
-    font-size: 1.1rem;
-    border-radius: 15px;
-    border: none;
-    cursor: pointer;
-    color: white;
-    background: linear-gradient(45deg, #ff00cc, #3333ff);
-    box-shadow: 0 0 15px #ff33ff;
-    transition: transform 0.15s ease, box-shadow 0.3s ease;
-    position: relative;
-  }
-  button::after {
-    content: '💥';
-    position: absolute;
-    top: 6px;
-    right: 8px;
-    font-size: 1.2rem;
-    animation: sparkle 2s infinite ease-in-out;
-  }
-  button:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 30px #ff33ff, 0 0 40px #ff66ff;
-  }
-  @keyframes sparkle {
-    0%, 100% {opacity: 1; transform: scale(1);}
-    50% {opacity: 0.5; transform: scale(1.3);}
-  }
-  /* Popup overlay */
-  #popup-overlay {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(10, 10, 30, 0.85);
-    backdrop-filter: blur(4px);
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-  }
-  #popup {
-    background: #222244;
-    border-radius: 18px;
-    max-width: 500px;
-    max-height: 80vh;
-    overflow-y: auto;
-    padding: 1rem 1.5rem 2rem 1.5rem;
-    box-shadow:
-      0 0 10px #ff33ff,
-      0 0 20px #ff00cc,
-      0 0 30px #aa00ff;
-    color: #eee;
-    position: relative;
-    font-size: 1rem;
-  }
-  #popup h3 {
-    margin-bottom: 1rem;
-    color: #ff66cc;
-    text-align: center;
-  }
-  #popup ul {
-    list-style: none;
-    padding-left: 0;
-    max-height: 50vh;
-    overflow-y: auto;
-  }
-  #popup ul li {
-    margin-bottom: 0.6rem;
-    padding-left: 1.4rem;
-    position: relative;
-  }
-  #popup ul li::before {
-    content: '➡️';
-    position: absolute;
-    left: 0;
-    font-size: 1rem;
-  }
-  #close-popup {
-    position: absolute;
-    top: 10px; right: 10px;
-    background: transparent;
-    border: none;
-    font-size: 1.8rem;
-    color: #ff3399;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  #close-popup:hover {
-    color: #ff66cc;
-  }
-  /* Scrollbar for popup */
-  #popup::-webkit-scrollbar {
-    width: 8px;
-  }
-  #popup::-webkit-scrollbar-thumb {
-    background: #ff33cc88;
-    border-radius: 4px;
-  }
-  /* Chatbot */
-  #chat-container {
-    display: flex;
-    flex-direction: column;
-    height: 350px;
-    max-height: 80vh;
-  }
-  #chat-output {
-    flex: 1;
-    background: #110022;
-    border: 1px solid #660066;
-    border-radius: 12px;
-    padding: 0.8rem;
-    overflow-y: auto;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-    color: #d0b3ff;
-    margin-bottom: 0.8rem;
-  }
-  #chat-output p {
-    margin-bottom: 0.5rem;
-  }
-  #chat-output p.user-msg {
-    color: #ff99cc;
-    font-weight: 700;
-  }
-  #chat-output p.bot-msg {
-    color: #b3d1ff;
-  }
-  #chat-input {
-    display: flex;
-  }
-  #chat-input input[type=text] {
-    flex: 1;
-    border: 1px solid #660066;
-    border-radius: 12px 0 0 12px;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    outline: none;
-    color: #fff;
-    background: #220044;
-  }
-  #chat-input button {
-    border-radius: 0 12px 12px 0;
-    border: none;
-    background: linear-gradient(45deg, #ff00cc, #3333ff);
-    color: white;
-    font-weight: 700;
-    padding: 0 1.5rem;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  #chat-input button:hover {
-    background: linear-gradient(45deg, #ff33ff, #6600cc);
-  }
-  /* Mini games style */
-  .game-container {
-    background: #1a0033;
-    border: 2px solid #ff33cc;
-    border-radius: 16px;
-    padding: 1rem;
-    text-align: center;
-  }
-  .game-btn {
-    margin-top: 1rem;
-    padding: 0.7rem 1.2rem;
-    font-size: 1rem;
-    font-weight: 700;
-    color: white;
-    background: linear-gradient(45deg, #ff33cc, #6600cc);
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 0 15px #ff33cc;
-    transition: box-shadow 0.3s ease;
-  }
-  .game-btn:hover {
-    box-shadow: 0 0 30px #ff66ff;
-  }
-  /* Quick Click Game */
-  #quick-click-button {
-    padding: 1rem 2rem;
-    font-size: 2rem;
-    font-weight: 900;
-    border-radius: 25px;
-    background: linear-gradient(45deg, #ff0066, #330099);
-    color: white;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 0 25px #ff3399;
-  }
-  #quick-click-button:disabled {
-    background: #660033;
-    cursor: not-allowed;
-    box-shadow: none;
-  }
-  /* Memory Match Game */
-  #memory-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 65px);
-    gap: 12px;
-    justify-content: center;
-    margin-top: 1rem;
-  }
-  .memory-card {
-    width: 65px;
-    height: 65px;
-    background: #220044;
-    border-radius: 12px;
-    box-shadow: 0 0 8px #aa00ff;
-    cursor: pointer;
-    position: relative;
-    perspective: 600px;
-  }
-  .memory-card.flipped .front {
-    transform: rotateY(0deg);
-  }
-  .memory-card.flipped .back {
-    transform: rotateY(180deg);
-  }
-  .front, .back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    backface-visibility: hidden;
-    transition: transform 0.4s ease;
-  }
-  .front {
-    background: #bb33ff;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 900;
-    font-size: 1.5rem;
-    transform: rotateY(180deg);
-    box-shadow: 0 0 15px #cc55ff;
-  }
-  .back {
-    background: #330066;
-    box-shadow: inset 0 0 8px #aa00ff;
-    transform: rotateY(0deg);
-  }
-  /* Reaction Test */
-  #reaction-area {
-    background: #330066;
-    border-radius: 20px;
-    height: 200px;
-    margin: 1rem auto;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    box-shadow: 0 0 15px #ff33cc;
-  }
-  #reaction-box {
-    width: 70px;
-    height: 70px;
-    background: #ff33cc;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: -35px;
-    margin-top: -35px;
-    border-radius: 18px;
-    box-shadow: 0 0 20px #ff66ff;
-    cursor: pointer;
-  }
-  #reaction-start-btn {
-    margin-top: 1rem;
-    padding: 0.7rem 1.5rem;
-    font-weight: 700;
-    font-size: 1.1rem;
-    background: linear-gradient(45deg, #ff33cc, #6600cc);
-    border-radius: 15px;
-    border: none;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 0 15px #ff33cc;
-  }
-  #reaction-start-btn:hover {
-    box-shadow: 0 0 30px #ff66ff;
-  }
-  /* Scrollbar for content */
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #110022;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #cc33cc88;
-    border-radius: 5px;
-  }
-  /* Quotes area */
-  #quotes {
-    max-width: 700px;
-    margin-bottom: 1rem;
-    font-style: italic;
-    font-size: 1.2rem;
-    color: #ff99cc;
-    text-shadow: 0 0 5px #ff3399;
-  }
-  /* Sassy gif */
-  #sassy-gif {
-    max-width: 150px;
-    margin: 0 auto 1.5rem auto;
-    display: block;
-    border-radius: 18px;
-    box-shadow:
-      0 0 15px #ff00cc,
-      0 0 25px #ff66cc;
-  }
-  /* Responsive */
-  @media (max-width: 500px) {
-    h1 {
-      font-size: 2.2rem;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dante’s Fun Hub 🎉</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+    * {
+      box-sizing: border-box;
     }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at center, #2a003d, #0f0014);
+      color: #eee;
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    #app-container {
+      max-width: 480px;
+      width: 100%;
+      background: linear-gradient(145deg, #3b0050, #210027);
+      border-radius: 16px;
+      box-shadow: 0 0 25px #a45fff88;
+      padding: 1.5rem 1rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+    }
+
+    header h1 {
+      font-weight: 900;
+      font-size: 2.5rem;
+      text-align: center;
+      color: #ff7fff;
+      text-shadow:
+        0 0 8px #ff7fff99,
+        0 0 12px #f400d1bb;
+      margin-bottom: 0.3rem;
+    }
+
+    header p {
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-align: center;
+      color: #dda3ffcc;
+      margin-bottom: 1.5rem;
+      user-select: text;
+    }
+
     #button-container {
-      grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 1rem;
     }
-    #memory-grid {
-      grid-template-columns: repeat(3, 65px);
+
+    button[data-category] {
+      background: #6e00af;
+      border: none;
+      border-radius: 12px;
+      padding: 1rem 0.5rem;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+      cursor: pointer;
+      box-shadow:
+        0 0 5px #ff56ffaa,
+        0 0 15px #bb33ccaa;
+      transition:
+        background-color 0.3s ease,
+        box-shadow 0.4s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+
+    button[data-category]:hover,
+    button[data-category]:focus {
+      background: #b034ff;
+      box-shadow:
+        0 0 10px #ff8affee,
+        0 0 25px #d362ffcc;
+      outline: none;
+    }
+
+    /* Popup overlay */
+    #popup-overlay {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(30, 0, 60, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    #popup-content {
+      background: linear-gradient(135deg, #440066, #220033);
+      border-radius: 16px;
+      box-shadow: 0 0 30px #ff66ffcc;
+      max-width: 400px;
+      width: 100%;
+      padding: 1.5rem 1.3rem 2rem;
+      color: #ffd9ff;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      position: relative;
+      user-select: text;
+      text-align: center;
+      font-weight: 600;
+      text-shadow:
+        0 0 3px #ff8affaa;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    #popup-content h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.7rem;
+      color: #ff8aff;
+      text-shadow:
+        0 0 15px #ff8affcc,
+        0 0 40px #ff00ffc9;
+    }
+
+    #popup-content p {
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    #popup-content .popup-buttons {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    #popup-content button {
+      background: #9b1fff;
+      border: none;
+      border-radius: 12px;
+      padding: 0.7rem 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow:
+        0 0 8px #ff56ffcc,
+        0 0 15px #bb33ccdd;
+      user-select: none;
+      transition:
+        background-color 0.25s ease,
+        box-shadow 0.3s ease;
+    }
+
+    #popup-content button:disabled {
+      background: #4b0040;
+      box-shadow: none;
+      cursor: not-allowed;
+      color: #bbb;
+    }
+
+    #popup-content button:hover:not(:disabled),
+    #popup-content button:focus:not(:disabled) {
+      background: #d459ff;
+      box-shadow:
+        0 0 15px #ff99ffdd,
+        0 0 30px #e07bffdd;
+      outline: none;
+    }
+
+    #close-popup {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 2rem;
+      color: #ff66ffcc;
+      cursor: pointer;
+      text-shadow:
+        0 0 5px #ff66ffcc;
+      user-select: none;
+      transition: color 0.3s ease;
+      z-index: 1100;
+    }
+    #close-popup:hover,
+    #close-popup:focus {
+      color: #ff00ff;
+      outline: none;
+      text-shadow:
+        0 0 12px #ff00ffdd,
+        0 0 30px #ff00ffdd;
+    }
+
+    /* Scrollbar for popup if needed */
+    #popup-overlay::-webkit-scrollbar {
+      width: 8px;
+    }
+    #popup-overlay::-webkit-scrollbar-thumb {
+      background: #7f0099cc;
+      border-radius: 10px;
+    }
+
+    /* Mini game canvas styling */
+    #mini-game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      user-select: none;
+    }
+
+    #game-canvas {
+      background: #33004d;
+      border: 3px solid #bb33cc;
+      border-radius: 12px;
+      box-shadow:
+        0 0 15px #d362ffcc;
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 4 / 3;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #game-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    #game-controls button {
+      background: #9b1fff;
+      border: none;
+      border-radius: 12px;
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow:
+        0 0 8px #ff56ffcc,
+        0 0 15px #bb33ccdd;
+      user-select: none;
+      transition:
+        background-color 0.25s ease,
+        box-shadow 0.3s ease;
+    }
+
+    #game-controls button:hover,
+    #game-controls button:focus {
+      background: #d459ff;
+      box-shadow:
+        0 0 15px #ff99ffdd,
+        0 0 30px #e07bffdd;
+      outline: none;
+    }
+
+    /* DanteBot Chat UI */
+    #dantebot-container {
+      display: flex;
+      flex-direction: column;
+      max-width: 380px;
+      margin: 0 auto;
       gap: 10px;
+      color: #eee;
+      font-weight: 600;
+      user-select: text;
     }
-  }
-</style>
+    #dantebot-log {
+      background: #220022dd;
+      border-radius: 12px;
+      padding: 1rem;
+      height: 180px;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      box-shadow: inset 0 0 10px #a142f5cc;
+    }
+    #dantebot-input-container {
+      display: flex;
+      gap: 8px;
+    }
+    #dantebot-input {
+      flex-grow: 1;
+      border-radius: 12px;
+      border: none;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      font-family: 'Montserrat', sans-serif;
+      background: #440066dd;
+      color: #eee;
+      box-shadow:
+        0 0 8px #d460ffcc;
+      outline: none;
+      user-select: text;
+    }
+    #dantebot-input::placeholder {
+      color: #bb99ffcc;
+    }
+    #dantebot-send {
+      background: #bb33cc;
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 700;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow:
+        0 0 8px #ff56ffcc,
+        0 0 15px #bb33ccdd;
+      user-select: none;
+      transition: background-color 0.25s ease;
+    }
+    #dantebot-send:hover,
+    #dantebot-send:focus {
+      background: #e055ff;
+      box-shadow:
+        0 0 15px #ff99ffdd,
+        0 0 30px #e07bffdd;
+      outline: none;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 400px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      button[data-category] {
+        font-size: 0.9rem;
+        padding: 0.75rem 0.5rem;
+      }
+      #popup-content {
+        font-size: 1rem;
+        max-width: 90vw;
+      }
+    }
+  </style>
 </head>
 <body>
-
-<img id="watermark" src="https://i.imgur.com/E89hKiZ.png" alt="Neon Lobster Watermark" width="180" height="180" />
-
-<h1>Dante’s Fun Hub 4.0</h1>
-<h2>Trailer Park Boys x Sassy the Sasquatch Edition</h2>
-
-<div id="quotes">“I’m not a bad guy, I just like to party.” — Ricky | “I’m Sassy, and I’m classy!” — Sassy the Sasquatch 🦶🦴</div>
-<img id="sassy-gif" src="https://media.giphy.com/media/3o7btNGboh0f1U10lq/giphy.gif" alt="Sassy the Sasquatch Dancing" />
-
-<div id="button-container">
-  <button data-category="miniGames">🎮 Mini Games</button>
-  <button data-category="dailyChallenge">🔥 Daily Challenges</button>
-  <button data-category="funnyFacts">🤣 Funny Facts</button>
-  <button data-category="snackIdeas">🍕 Snack Ideas</button>
-  <button data-category="darkJokes">😈 Dark Jokes</button>
-  <button data-category="zeusCorner">🐶 Zeus’s Corner</button>
-  <button data-category="danteBot">🤖 Chat with DanteBot</button>
-</div>
-
-<div id="popup-overlay" tabindex="-1" aria-modal="true" role="dialog" aria-labelledby="popup-title">
-  <div id="popup" role="document">
-    <button id="close-popup" aria-label="Close popup">&times;</button>
-    <div id="popup-content"></div>
+  <div id="app-container" role="main">
+    <header>
+      <h1>Dante’s Fun Hub 🎉</h1>
+      <p>Welcome to your personalized fun zone! Pick a category below.</p>
+    </header>
+    <main>
+      <div id="button-container" role="list">
+        <button data-category="funnyFacts" aria-label="Funny Facts" role="listitem">😂 Funny Facts</button>
+        <button data-category="dailyChallenges" aria-label="Daily Challenges" role="listitem">🏆 Daily Challenges</button>
+        <button data-category="snackIdeas" aria-label="Snack Ideas" role="listitem">🍿 Snack Ideas</button>
+        <button data-category="jokes" aria-label="Jokes" role="listitem">🤣 Jokes</button>
+        <button data-category="zeusCorner" aria-label="Zeus’s Corner" role="listitem">🐶 Zeus’s Corner</button>
+        <button data-category="miniGames" aria-label="Mini Games" role="listitem">🎮 Mini Games</button>
+        <button data-category="danteBot" aria-label="Chat with DanteBot" role="listitem">🤖 DanteBot</button>
+      </div>
+    </main>
   </div>
-</div>
 
-<script>
-(() => {
-  // Data expanded for more content and Sassy/TPB flavor
-  const data = {
-    dailyChallenge: [
-      "Try to say 'Lick my balls, Ricky!' without laughing.",
-      "Make a sandwich and call it a 'cheeseburger, Randy style'.",
-      "Do a dance inspired by Sassy the Sasquatch.",
-      "Write your own Trailer Park Boys quote and share it with Dante.",
-      "Attempt a 10-second plank and say 'I’m a bad boy!' while doing it.",
-      "Call a friend and talk about lobsters for 2 minutes.",
-      "Try to do a rap verse about raves and lobster fishing."
-    ],
-    funnyFacts: [
-      "Ricky’s idea of a good day: getting drunk and losing track of time.",
-      "Sassy the Sasquatch once scared off an entire rave party with a single stomp!",
-      "Did you know lobsters taste with their feet?",
-      "The Trailer Park Boys have been raving since before raves were cool.",
-      "Sassy is secretly a professional breakdancer.",
-      "Lobsters can live up to 100 years — talk about party longevity!",
-      "Ricky once tried to catch lobsters with his bare hands. It didn’t end well."
-    ],
-    snackIdeas: [
-      "Lobster rolls with a spicy rave sauce.",
-      "Ricky’s famous ‘drunken sandwich’ (two slices of bread, a lot of mayo).",
-      "Sassy-approved Sasquatch trail mix (nuts, berries, and mystery snacks).",
-      "Neon-colored gummy candies shaped like lobsters.",
-      "Grilled cheese with a hint of jalapeño for that extra kick.",
-      "Mini pizzas topped with lobster and extra cheese.",
-      "Popcorn with a drizzle of hot sauce and lime."
-    ],
-    darkJokes: [
-      "Why don’t lobsters ever share their secrets? Because they’re a little shellfish.",
-      "Ricky’s plan: ‘I’m gonna dig a hole so deep, I disappear from my problems.’",
-      "Why did Sassy break up with the forest? Too many shady trees.",
-      "What do you call a rave in the woods? A Sasquatch party — and no one remembers it.",
-      "Life’s like a lobster trap: sometimes you’re caught, sometimes you’re the trap.",
-      "Ricky once told a joke so dark, even the moon blinked.",
-      "Why don’t zombies eat lobsters? They’re too shellfish to share."
-    ],
-    zeusCorner: [
-      "Zeus loves belly rubs more than lobster dinners.",
-      "Zeus can catch a frisbee mid-air — like a ninja Sasquatch!",
-      "Zeus once sneezed so hard, he scared the neighbors.",
-      "Favorite pastime: chasing his tail until dizzy.",
-      "Zeus’s motto: ‘If in doubt, nap it out.’",
-      "Did you know Zeus is terrified of vacuum cleaners?",
-      "Zeus dreams of being the first dog DJ at a rave."
-    ]
-  };
+  <!-- Popup Overlay -->
+  <div id="popup-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Popup content">
+    <div id="popup-content" tabindex="0"></div>
+    <button id="close-popup" aria-label="Close popup" title="Close popup">✖</button>
+  </div>
 
-  // Popup elements
-  const popupOverlay = document.getElementById('popup-overlay');
-  const popupContent = document.getElementById('popup-content');
-  const closePopupBtn = document.getElementById('close-popup');
+  <script>
+    (() => {
+      // Content data
+      const data = {
+        funnyFacts: [
+          "Lobsters can live up to 100 years and grow new limbs if they lose them!",
+          "Dante’s dog Zeus once scared a raccoon away just by barking twice.",
+          "The first rap song recorded was in 1979 — “Rapper’s Delight” by the Sugarhill Gang.",
+          "Sassy the Sasquatch is known for her wild antics and savage burns!",
+          "Trailer Park Boys’ Bubbles has over 200 pairs of glasses.",
+          "Lobster shells are soft when they hatch, making baby lobsters vulnerable to predators.",
+          "Cars can lose up to 15% fuel efficiency if tires are under-inflated.",
+          "The Mi’kmaq language has unique words for different types of snow and ice.",
+          "Raves originally started as underground parties in the late 80s and 90s.",
+          "Zeus loves snacks but has a favorite — peanut butter treats!"
+        ],
+        dailyChallenges: [
+          "Fix something small around the house or workshop today.",
+          "Try a new snack or food item you’ve never had before.",
+          "Take Zeus for an extra-long walk and enjoy the fresh air.",
+          "Write a short funny story inspired by Trailer Park Boys or Sassy the Sasquatch.",
+          "Find a new rap song to add to your playlist.",
+          "Build or tinker with something mechanical or electronic for 30 minutes.",
+          "Learn 3 words in Mi’kmaq and try to use them in a sentence.",
+          "Plan your next rave or festival outfit — get creative!",
+          "Practice deep breathing or a quick grounding exercise for focus.",
+          "Tell a friend or me a joke that made you laugh recently."
+        ],
+        snackIdeas: [
+          "Chili lime popcorn with a dash of cayenne pepper.",
+          "Peanut butter and honey sandwich on toasted rye.",
+          "Sweet potato fries with garlic aioli.",
+          "Frozen grapes dipped in dark chocolate.",
+          "Homemade trail mix with nuts, dried fruit, and M&Ms.",
+          "Spicy hummus with crunchy carrot sticks.",
+          "Zeus’s favorite peanut butter treats (for sharing!).",
+          "Cold brew coffee with a splash of vanilla almond milk.",
+          "Microwave nachos with melted cheese and jalapeños.",
+          "Banana and almond butter rolled in granola."
+        ],
+        jokes: [
+          "Why don’t lobsters share their food? Because they’re shellfish!",
+          "What’s a mechanic’s favorite type of music? Heavy metal!",
+          "Why did the rap artist go to school? To improve his flow!",
+          "How does Sassy the Sasquatch make a party? With some wild footwork!",
+          "Why don’t Trailer Park Boys ever get lost? Because Bubbles is their GPS!",
+          "What did the car say to the mechanic? 'I’m exhausted!'",
+          "Why did Zeus the dog sit in the shade? Because he didn’t want to be a hot dog!",
+          "What do you call a rapper who fixes cars? A rapairman!",
+          "Why was the rave so bright? Because the neon lights were lit!",
+          "What’s an engineer’s favorite drink? A Screwdriver!"
+        ],
+        zeusCorner: [
+          "Zeus loves belly rubs and will do a happy dance for peanut butter treats.",
+          "Did you know Zeus can do a perfect sit and high-five on command?",
+          "Zeus once tried to catch a squirrel but ended up chasing his own tail instead.",
+          "Zeus’s favorite game is fetch with his neon green ball.",
+          "Remember to give Zeus plenty of fresh water on those hot rave nights.",
+          "Zeus likes to nap in the weirdest places — sometimes on the workbench!",
+          "Zeus’s howl sounds like a mix between a wolf and a rapper’s beatbox.",
+          "Zeus’s ears perk up instantly when he hears the car engine start.",
+          "Zeus is the best co-pilot on car rides — always ready for an adventure.",
+          "Zeus once got rave lights stuck on his collar and looked like a disco dog!"
+        ]
+      };
 
-  // Handle popup close
-  closePopupBtn.addEventListener('click', () => {
-    popupOverlay.style.display = 'none';
-    popupContent.innerHTML = '';
-    resetMiniGames();
-  });
-  popupOverlay.addEventListener('click', e => {
-    if (e.target === popupOverlay) {
-      popupOverlay.style.display = 'none';
-      popupContent.innerHTML = '';
-      resetMiniGames();
-    }
-  });
+      // Personal message for Dante
+      const personalMessage = `Hey Dante! This hub is made just for you — filled with all the things you love, from raves to lobsters, to your boy Zeus. Hope it brightens your day and keeps your ADHD brain entertained and energized. Love you tons! ❤️ — Larissa`;
 
-  // Main buttons container
-  const buttons = document.querySelectorAll('#button-container button');
+      // State for current index per category
+      const categoryIndices = {};
 
-  buttons.forEach(button => {
-    button.addEventListener('click', () => {
-      const cat = button.dataset.category;
-      if (cat === 'miniGames') {
-        openMiniGames();
-      } else if (cat === 'danteBot') {
-        openDanteBot();
-      } else {
-        openListPopup(cat);
+      // Elements
+      const buttons = document.querySelectorAll('button[data-category]');
+      const popupOverlay = document.getElementById('popup-overlay');
+      const popupContent = document.getElementById('popup-content');
+      const closePopupBtn = document.getElementById('close-popup');
+
+      // Utility: clear popup and hide
+      function closePopup() {
+        popupOverlay.style.display = 'none';
+        popupContent.innerHTML = '';
+        popupOverlay.setAttribute('aria-hidden', 'true');
       }
-    });
-  });
 
-  // Functions for content popups
-  function openListPopup(category) {
-    const items = data[category];
-    if (!items) return;
-    popupContent.innerHTML = `<h3>${category
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, str => str.toUpperCase())}</h3>
-      <ul>${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
-    popupOverlay.style.display = 'flex';
-  }
+      // Show content with Prev/Next navigation for text categories
+      function showTextCategory(category) {
+        const items = data[category];
+        if (!items || items.length === 0) return;
 
-  // Mini games popup
-  function openMiniGames() {
-    popupContent.innerHTML = `
-      <h3>Mini Games</h3>
-      <div id="mini-games-list" style="display:flex; flex-direction:column; gap:1rem;">
-        <button class="game-btn" id="start-quick-click">Quick Click Challenge</button>
-        <button class="game-btn" id="start-memory-match">Memory Match Game</button>
-        <button class="game-btn" id="start-reaction-test">Reaction Speed Test</button>
-      </div>
-      <div id="game-area" style="margin-top: 1rem;"></div>
-    `;
-    popupOverlay.style.display = 'flex';
+        if (!(category in categoryIndices)) categoryIndices[category] = 0;
 
-    // Setup game buttons
-    document.getElementById('start-quick-click').onclick = quickClickGame;
-    document.getElementById('start-memory-match').onclick = memoryMatchGame;
-    document.getElementById('start-reaction-test').onclick = reactionTestGame;
-  }
+        function renderContent() {
+          const idx = categoryIndices[category];
+          popupContent.innerHTML = `
+            <h3>${capitalizeWords(category.replace(/([A-Z])/g, ' $1'))}</h3>
+            <p>${items[idx]}</p>
+            <div class="popup-buttons" role="group" aria-label="Navigate content">
+              <button id="prev-btn" ${idx === 0 ? 'disabled' : ''} aria-disabled="${idx === 0}">⬅️ Prev</button>
+              <span aria-live="polite" aria-atomic="true" style="font-weight:bold; user-select:none;">${idx + 1} / ${items.length}</span>
+              <button id="next-btn" ${idx === items.length - 1 ? 'disabled' : ''} aria-disabled="${idx === items.length - 1}">Next ➡️</button>
+            </div>
+          `;
+          popupOverlay.style.display = 'flex';
+          popupOverlay.setAttribute('aria-hidden', 'false');
+          popupContent.focus();
 
-  // Reset games when popup closes
-  function resetMiniGames() {
-    clearTimeout(quickClickTimeout);
-    clearTimeout(reactionTimeout);
-    quickClickRunning = false;
-    reactionRunning = false;
-  }
-
-  /**********************
-   * Quick Click Challenge
-   **********************/
-  let quickClickRunning = false;
-  let quickClickTimeout;
-  function quickClickGame() {
-    const gameArea = document.getElementById('game-area');
-    gameArea.innerHTML = `
-      <div class="game-container">
-        <p>Click the pink button as many times as you can in 10 seconds!</p>
-        <button id="quick-click-button">CLICK ME!</button>
-        <p>Score: <span id="quick-click-score">0</span></p>
-      </div>
-    `;
-    let score = 0;
-    quickClickRunning = true;
-    const btn = document.getElementById('quick-click-button');
-    const scoreDisplay = document.getElementById('quick-click-score');
-    btn.disabled = false;
-
-    btn.onclick = () => {
-      if (!quickClickRunning) return;
-      score++;
-      scoreDisplay.textContent = score;
-    };
-
-    // Timer end
-    quickClickTimeout = setTimeout(() => {
-      quickClickRunning = false;
-      btn.disabled = true;
-      alert(`Time's up! Your final score is ${score}.`);
-    }, 10000);
-  }
-
-  /**********************
-   * Memory Match Game
-   **********************/
-  const cardSymbols = ['🦞','🦀','🐟','🐚','🦑','🐙','🐡','🐠'];
-  let memoryGrid, flippedCards, matchedCount;
-
-  function shuffleArray(arr) {
-    let a = arr.slice();
-    for(let i=a.length -1; i>0; i--) {
-      const j = Math.floor(Math.random()*(i+1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  function memoryMatchGame() {
-    const gameArea = document.getElementById('game-area');
-    gameArea.innerHTML = `
-      <div class="game-container">
-        <p>Match all the pairs! Click cards to flip them.</p>
-        <div id="memory-grid"></div>
-        <p id="memory-status" style="margin-top:1rem; font-weight:bold; color:#ff99cc;"></p>
-      </div>
-    `;
-
-    memoryGrid = document.getElementById('memory-grid');
-    flippedCards = [];
-    matchedCount = 0;
-    const pairs = shuffleArray(cardSymbols.concat(cardSymbols));
-    memoryGrid.innerHTML = '';
-
-    pairs.forEach((symbol, i) => {
-      const card = document.createElement('div');
-      card.className = 'memory-card';
-      card.dataset.symbol = symbol;
-      card.innerHTML = `
-        <div class="front">${symbol}</div>
-        <div class="back"></div>
-      `;
-      card.addEventListener('click', () => {
-        if (flippedCards.length === 2 || card.classList.contains('flipped')) return;
-        flipCard(card);
-      });
-      memoryGrid.appendChild(card);
-    });
-
-    function flipCard(card) {
-      card.classList.add('flipped');
-      flippedCards.push(card);
-
-      if (flippedCards.length === 2) {
-        const [first, second] = flippedCards;
-        if (first.dataset.symbol === second.dataset.symbol) {
-          matchedCount += 2;
-          flippedCards = [];
-          updateStatus();
-          if (matchedCount === pairs.length) {
-            setTimeout(() => alert('You matched them all! Great job!'), 100);
-          }
-        } else {
-          setTimeout(() => {
-            first.classList.remove('flipped');
-            second.classList.remove('flipped');
-            flippedCards = [];
-          }, 1000);
+          // Attach handlers
+          document.getElementById('prev-btn').onclick = () => {
+            if (categoryIndices[category] > 0) {
+              categoryIndices[category]--;
+              renderContent();
+            }
+          };
+          document.getElementById('next-btn').onclick = () => {
+            if (categoryIndices[category] < items.length - 1) {
+              categoryIndices[category]++;
+              renderContent();
+            }
+          };
         }
+
+        renderContent();
       }
-    }
-    function updateStatus() {
-      const status = document.getElementById('memory-status');
-      status.textContent = `Matched ${matchedCount} of ${pairs.length} cards`;
-    }
-    updateStatus();
-  }
 
-  /**********************
-   * Reaction Speed Test
-   **********************/
-  let reactionRunning = false;
-  let reactionTimeout, reactionStartTime;
-  function reactionTestGame() {
-    const gameArea = document.getElementById('game-area');
-    gameArea.innerHTML = `
-      <div class="game-container">
-        <p>Click the pink box as soon as it appears!</p>
-        <div id="reaction-area">
-          <div id="reaction-box" style="display:none;"></div>
-        </div>
-        <button id="reaction-start-btn">Start Test</button>
-        <p id="reaction-result" style="margin-top:1rem; font-weight:bold; color:#ff99cc;"></p>
-      </div>
-    `;
-    const reactionBox = document.getElementById('reaction-box');
-    const reactionArea = document.getElementById('reaction-area');
-    const startBtn = document.getElementById('reaction-start-btn');
-    const resultP = document.getElementById('reaction-result');
+      // Capitalize words utility
+      function capitalizeWords(str) {
+        return str.replace(/\b\w/g, c => c.toUpperCase());
+      }
 
-    function showBox() {
-      reactionBox.style.display = 'block';
-      const maxX = reactionArea.clientWidth - reactionBox.clientWidth;
-      const maxY = reactionArea.clientHeight - reactionBox.clientHeight;
-      const randomX = Math.floor(Math.random() * maxX);
-      const randomY = Math.floor(Math.random() * maxY);
-      reactionBox.style.left = randomX + 'px';
-      reactionBox.style.top = randomY + 'px';
-      reactionStartTime = performance.now();
-      reactionRunning = true;
-    }
+      // --- Mini Game: Lobster Catch ---
+      function showMiniGame() {
+        popupContent.innerHTML = `
+          <h3>Lobster Rave Catch 🦞🎉</h3>
+          <div id="mini-game-container" aria-label="Lobster catching mini game" role="region">
+            <canvas id="game-canvas" width="380" height="285" aria-describedby="game-instructions"></canvas>
+            <p id="game-instructions" style="margin-top: 0.6rem; font-weight: 600; font-size: 0.95rem; color: #ffccffcc;">
+              Use LEFT and RIGHT arrow keys to move Dante's net. Catch falling lobsters to score points!
+            </p>
+            <div id="game-controls">
+              <button id="start-game-btn">Start Game</button>
+              <button id="stop-game-btn" disabled>Stop Game</button>
+              <span id="score-display" style="font-weight:bold; color:#ff7fff;">Score: 0</span>
+            </div>
+          </div>
+        `;
+        popupOverlay.style.display = 'flex';
+        popupOverlay.setAttribute('aria-hidden', 'false');
+        popupContent.focus();
 
-    function hideBox() {
-      reactionBox.style.display = 'none';
-      reactionRunning = false;
-    }
+        // Game variables
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const netWidth = 60;
+        const netHeight = 20;
+        const lobsterRadius = 15;
 
-    startBtn.onclick = () => {
-      resultP.textContent = '';
-      startBtn.disabled = true;
-      const waitTime = Math.random() * 3000 + 2000; // 2-5 seconds delay
-      reactionTimeout = setTimeout(() => {
-        showBox();
-      }, waitTime);
-    };
+        let netX = canvas.width / 2 - netWidth / 2;
+        let lobsters = [];
+        let score = 0;
+        let gameInterval;
+        let lobsterInterval;
+        let animationFrameId;
+        let keysPressed = {};
 
-    reactionBox.onclick = () => {
-      if (!reactionRunning) return;
-      const reactionEnd = performance.now();
-      const reactionTime = (reactionEnd - reactionStartTime).toFixed(0);
-      resultP.textContent = `Your reaction time: ${reactionTime} ms!`;
-      hideBox();
-      startBtn.disabled = false;
-      clearTimeout(reactionTimeout);
-    };
-  }
+        // Draw net function
+        function drawNet() {
+          ctx.fillStyle = '#bb33cc';
+          ctx.shadowColor = '#ff56ffcc';
+          ctx.shadowBlur = 10;
+          ctx.fillRect(netX, canvas.height - netHeight - 10, netWidth, netHeight);
+          ctx.shadowBlur = 0;
+        }
 
-  /**********************
-   * DanteBot Chatbot
-   **********************/
-  function openDanteBot() {
-    popupContent.innerHTML = `
-      <h3>Chat with DanteBot 🤖</h3>
-      <div id="chat-container">
-        <div id="chat-output" aria-live="polite" role="log"></div>
-        <form id="chat-form" autocomplete="off" aria-label="Chat input form">
-          <input type="text" id="chat-input-text" placeholder="Say something..." aria-label="Chat input"/>
-          <button type="submit" aria-label="Send message">Send</button>
-        </form>
-      </div>
-    `;
-    popupOverlay.style.display = 'flex';
+        // Draw lobster function (circle)
+        function drawLobster(lobster) {
+          ctx.beginPath();
+          ctx.fillStyle = '#ff33cc';
+          ctx.shadowColor = '#ff77ffcc';
+          ctx.shadowBlur = 8;
+          ctx.arc(lobster.x, lobster.y, lobsterRadius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          // Claws
+          ctx.beginPath();
+          ctx.strokeStyle = '#ff99ff';
+          ctx.lineWidth = 2;
+          ctx.moveTo(lobster.x - 10, lobster.y);
+          ctx.lineTo(lobster.x - 20, lobster.y - 10);
+          ctx.moveTo(lobster.x + 10, lobster.y);
+          ctx.lineTo(lobster.x + 20, lobster.y - 10);
+          ctx.stroke();
+        }
 
-    const chatOutput = document.getElementById('chat-output');
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input-text');
+        // Update lobsters position
+        function updateLobsters() {
+          lobsters.forEach(lobster => {
+            lobster.y += lobster.speed;
+          });
+          lobsters = lobsters.filter(lobster => lobster.y < canvas.height + lobsterRadius);
+        }
 
-    const botResponses = [
-      "Yo, what's up, dude? 🦞",
-      "Keep it real, keep it ravey! 💜💙",
-      "Sassy says: 'Don't step on my turf!'",
-      "Ricky would say: 'Bubbles, you got this!'",
-      "Zeus is napping... again. 💤",
-      "You ever tried lobster at a rave? Wild combo!",
-      "Dark joke? Nah, let's keep it bright, like neon lights!",
-      "Remember: Lobsters taste with their feet, crazy huh?",
-      "If you had one wish from Sassy, what would it be?",
-      "Hey man, what's your favorite Trailer Park Boys quote?",
-    ];
+        // Check collision between net and lobster
+        function checkCollision() {
+          lobsters.forEach((lobster, index) => {
+            const netTop = canvas.height - netHeight - 10;
+            const netBottom = canvas.height - 10;
+            const netLeft = netX;
+            const netRight = netX + netWidth;
 
-    function addMessage(text, isUser = false) {
-      const p = document.createElement('p');
-      p.textContent = text;
-      p.className = isUser ? 'user-msg' : 'bot-msg';
-      chatOutput.appendChild(p);
-      chatOutput.scrollTop = chatOutput.scrollHeight;
-    }
+            const lobX = lobster.x;
+            const lobY = lobster.y;
 
-    chatForm.onsubmit = e => {
-      e.preventDefault();
-      const msg = chatInput.value.trim();
-      if (!msg) return;
-      addMessage(msg, true);
-      chatInput.value = '';
-      setTimeout(() => {
-        // Simple canned bot reply based on keywords
-        let reply = "I’m not sure about that. But keep raving! 🎉";
-        const lc = msg.toLowerCase();
-        if (lc.includes('ricky')) reply = "Ricky would say: 'Get two birds stoned at once!'";
-        else if (lc.includes('sassy')) reply = "Sassy says: 'Step aside, this Sasquatch is dancing!'";
-        else if (lc.includes('lobster')) reply = "Lobsters are the rave of the sea!";
-        else if (lc.includes('zeus')) reply = "Zeus barks in approval!";
-        else if (lc.includes('joke')) reply = "Why don’t lobsters share their secrets? Because they’re a little shellfish!";
-        else if (lc.includes('party')) reply = "Party on, dude! Lobsters love a good rave too.";
-        else reply = botResponses[Math.floor(Math.random()*botResponses.length)];
+            if (
+              lobY + lobsterRadius >= netTop &&
+              lobY - lobsterRadius <= netBottom &&
+              lobX + lobsterRadius >= netLeft &&
+              lobX - lobsterRadius <= netRight
+            ) {
+              // Caught!
+              lobsters.splice(index, 1);
+              score++;
+              updateScore();
+            }
+          });
+        }
 
-        addMessage(reply, false);
-      }, 1200);
-    };
-  }
-})();
-</script>
+        // Draw everything
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawNet();
+          lobsters.forEach(drawLobster);
+        }
 
+        // Update game state
+        function gameLoop() {
+          if (keysPressed['ArrowLeft']) {
+            netX -= 7;
+            if (netX < 0) netX = 0;
+          }
+          if (keysPressed['ArrowRight']) {
+            netX += 7;
+            if (netX + netWidth > canvas.width) netX = canvas.width - netWidth;
+          }
+          updateLobsters();
+          checkCollision();
+          draw();
+          animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        // Create a new lobster at random x with random speed
+        function spawnLobster() {
+          const x = Math.random() * (canvas.width - lobsterRadius * 2) + lobsterRadius;
+          const speed = 2 + Math.random() * 2;
+          lobsters.push({ x, y: -lobsterRadius, speed });
+        }
+
+        // Update score display
+        function updateScore() {
+          const scoreSpan = document.getElementById('score-display');
+          if (scoreSpan) scoreSpan.textContent = `Score: ${score}`;
+        }
+
+        // Start game function
+        function startGame() {
+          score = 0;
+          lobsters = [];
+          netX = canvas.width / 2 - netWidth / 2;
+          updateScore();
+          document.getElementById('start-game-btn').disabled = true;
+          document.getElementById('stop-game-btn').disabled = false;
+          window.addEventListener('keydown', keyDownHandler);
+          window.addEventListener('keyup', keyUpHandler);
+          gameLoop();
+          lobsterInterval = setInterval(spawnLobster, 1200);
+        }
+
+        // Stop game function
+        function stopGame() {
+          document.getElementById('start-game-btn').disabled = false;
+          document.getElementById('stop-game-btn').disabled = true;
+          window.removeEventListener('keydown', keyDownHandler);
+          window.removeEventListener('keyup', keyUpHandler);
+          lobsters = [];
+          keysPressed = {};
+          cancelAnimationFrame(animationFrameId);
+          clearInterval(lobsterInterval);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          popupContent.querySelector('#score-display').textContent = `Final Score: ${score}`;
+        }
+
+        // Keyboard handlers
+        function keyDownHandler(e) {
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            keysPressed[e.key] = true;
+            e.preventDefault();
+          }
+        }
+        function keyUpHandler(e) {
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            keysPressed[e.key] = false;
+            e.preventDefault();
+          }
+        }
+
+        // Attach buttons handlers
+        document.getElementById('start-game-btn').onclick = startGame;
+        document.getElementById('stop-game-btn').onclick = stopGame;
+      }
+
+      // --- DanteBot: simple AI chat ---
+      function showDanteBot() {
+        popupContent.innerHTML = `
+          <h3>Chat with DanteBot 🤖</h3>
+          <div id="dantebot-container" role="region" aria-live="polite" aria-label="Chat conversation">
+            <div id="dantebot-log" tabindex="0" aria-live="polite" aria-atomic="true"></div>
+            <div id="dantebot-input-container">
+              <input type="text" id="dantebot-input" aria-label="Type your message here" placeholder="Say hi to DanteBot..." autocomplete="off" />
+              <button id="dantebot-send" aria-label="Send message">Send</button>
+            </div>
+          </div>
+        `;
+        popupOverlay.style.display = 'flex';
+        popupOverlay.setAttribute('aria-hidden', 'false');
+        popupContent.focus();
+
+        const log = document.getElementById('dantebot-log');
+        const input = document.getElementById('dantebot-input');
+        const sendBtn = document.getElementById('dantebot-send');
+
+        // Simple responses database
+        const responses = [
+          "Yo Dante! What’s on your mind today?",
+          "That’s lit! Tell me more.",
+          "Sounds like a plan!",
+          "Haha, that’s a good one!",
+          "I hear you, dude.",
+          "Keep grinding, you're doing awesome.",
+          "Need a snack idea? I gotchu.",
+          "Zeus says woof! 🐶",
+          "Rave on! 💜",
+          "Got any dark jokes to share?",
+          "Engineering is magic, right?",
+          "I’m here to hype you up!",
+          "Lobsters and raves make life better.",
+          "Want a daily challenge to level up?",
+          "I'm always down for a good laugh."
+        ];
+
+        // Append message to log
+        function appendMessage(sender, message) {
+          const msgDiv = document.createElement('div');
+          msgDiv.textContent = (sender === 'bot' ? '🤖 DanteBot: ' : 'You: ') + message;
+          msgDiv.style.marginBottom = '6px';
+          msgDiv.style.whiteSpace = 'pre-wrap';
+          msgDiv.style.fontWeight = sender === 'bot' ? '700' : '600';
+          msgDiv.style.color = sender === 'bot' ? '#dd99ff' : '#ffd9ff';
+          log.appendChild(msgDiv);
+          log.scrollTop = log.scrollHeight;
+        }
+
+        // Respond with random message after a short delay
+        function respond() {
+          const randomIndex = Math.floor(Math.random() * responses.length);
+          setTimeout(() => {
+            appendMessage('bot', responses[randomIndex]);
+          }, 800);
+        }
+
+        // Initial greeting
+        appendMessage('bot', personalMessage);
+
+        // Handle send
+        function sendMessage() {
+          const msg = input.value.trim();
+          if (!msg) return;
+          appendMessage('user', msg);
+          input.value = '';
+          respond();
+        }
+
+        sendBtn.onclick = sendMessage;
+        input.onkeydown = (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            sendMessage();
+          }
+        };
+
+        // Focus input on popup open
+        input.focus();
+      }
+
+      // Main event listeners
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const category = btn.getAttribute('data-category');
+          if (category === 'miniGames') {
+            showMiniGame();
+          } else if (category === 'danteBot') {
+            showDanteBot();
+          } else {
+            showTextCategory(category);
+          }
+        });
+      });
+
+      closePopupBtn.addEventListener('click', () => {
+        closePopup();
+      });
+
+      // Close popup on overlay click outside content
+      popupOverlay.addEventListener('click', (e) => {
+        if (e.target === popupOverlay) closePopup();
+      });
+
+      // Close popup with Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && popupOverlay.style.display === 'flex') {
+          closePopup();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
