@@ -1,259 +1,174 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="neon">
+<html lang="en" data-theme="dark" >
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <title>Dante’s Dopamine Dive 3.2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Dante’s Dopamine Dive</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto+Mono&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@700&display=swap');
+
+    /* Neon rave dark theme */
     :root {
+      --bg: #0a001f;
       --neon-pink: #ff2d95;
-      --neon-blue: #2df4ff;
-      --neon-green: #2dff95;
-      --neon-yellow: #fff42d;
-      --bg-dark: #0a0a1a;
-      --text-light: #f0f0f0;
-      --button-bg: #1a1a3a;
-      --button-hover: #ff2d95;
-      --confetti-colors: var(--neon-pink), var(--neon-blue), var(--neon-green), var(--neon-yellow);
+      --neon-blue: #18ffff;
+      --neon-green: #00ff94;
+      --neon-yellow: #fff200;
+      --neon-purple: #bd00ff;
+      --text-light: #e0e0ff;
+      --btn-bg: #120029;
+      --btn-hover: #321341;
+      --shadow-neon: 0 0 8px var(--neon-pink), 0 0 20px var(--neon-pink);
+      --shadow-neon-blue: 0 0 8px var(--neon-blue), 0 0 20px var(--neon-blue);
+      --shadow-neon-green: 0 0 8px var(--neon-green), 0 0 20px var(--neon-green);
+      --shadow-neon-yellow: 0 0 8px var(--neon-yellow), 0 0 20px var(--neon-yellow);
+      --shadow-neon-purple: 0 0 8px var(--neon-purple), 0 0 20px var(--neon-purple);
     }
 
+    /* Reset */
     * {
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
+
     body {
-      margin: 0; padding: 0;
-      background: var(--bg-dark);
+      background: var(--bg);
       color: var(--text-light);
-      font-family: 'Roboto Mono', monospace;
+      font-family: 'Roboto', sans-serif;
+      user-select: none;
+      overflow-x: hidden;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      user-select: none;
+      align-items: center;
+      padding: 1rem;
     }
+
     h1 {
-      font-family: 'Fredoka One', cursive;
-      font-size: 2.8rem;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.8rem;
       text-align: center;
-      margin: 1rem 0 0.5rem;
-      color: var(--neon-pink);
-      text-shadow:
-        0 0 8px var(--neon-pink),
-        0 0 15px var(--neon-pink),
-        0 0 20px var(--neon-pink);
+      margin-bottom: 0.3rem;
+      text-shadow: var(--shadow-neon);
+      letter-spacing: 0.15em;
     }
+
     h2 {
-      font-family: 'Fredoka One', cursive;
-      color: var(--neon-blue);
+      font-size: 1.3rem;
+      color: var(--neon-yellow);
+      margin: 0.8rem 0 0.4rem 0;
+      text-shadow: var(--shadow-neon-yellow);
+    }
+
+    .message-from-you {
+      background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
+      padding: 0.7rem 1rem;
+      border-radius: 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      max-width: 400px;
       text-align: center;
-      margin-top: 1rem;
-      text-shadow:
-        0 0 6px var(--neon-blue),
-        0 0 12px var(--neon-blue);
+      box-shadow: 0 0 10px var(--neon-pink);
+      user-select: text;
     }
 
     main {
-      flex: 1;
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 0 1rem 3rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      user-select: none;
-    }
-
-    /* Game container */
-    #gameContainer {
-      background: #111126;
-      border: 3px solid var(--neon-pink);
-      border-radius: 15px;
-      padding: 1rem;
-      position: relative;
-      box-shadow:
-        0 0 12px var(--neon-pink),
-        inset 0 0 8px var(--neon-pink);
+      background: #140031;
+      padding: 1rem 1.2rem;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 0 30px var(--neon-purple);
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    canvas {
-      background: #0a0a1a;
-      border-radius: 12px;
-      width: 100%;
-      height: 320px;
-      max-height: 320px;
-      image-rendering: pixelated;
-      user-select: none;
-      touch-action: none;
-      outline: none;
+    .content {
+      font-size: 1.15rem;
+      line-height: 1.4;
+      margin: 1rem 0;
+      min-height: 120px;
+      color: var(--text-light);
+      text-align: center;
+      padding: 0 0.6rem;
     }
 
-    #scoreDisplay {
-      color: var(--neon-yellow);
-      font-size: 1.5rem;
-      margin-top: 0.8rem;
-      font-weight: bold;
-      text-shadow:
-        0 0 8px var(--neon-yellow);
-    }
-
-    #touchControls {
-      margin-top: 1rem;
-      width: 100%;
+    .category-buttons {
       display: flex;
-      justify-content: space-between;
-      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      width: 100%;
     }
-    .controlBtn {
-      flex: 1;
-      background: var(--button-bg);
-      border: 2px solid var(--neon-blue);
-      color: var(--neon-blue);
-      font-family: 'Fredoka One', cursive;
-      font-size: 1.6rem;
-      padding: 0.75rem 0;
-      border-radius: 12px;
-      box-shadow:
-        0 0 8px var(--neon-blue);
-      user-select: none;
+
+    button.category-btn {
+      flex: 1 1 45%;
+      min-width: 130px;
+      background: var(--btn-bg);
+      color: var(--neon-pink);
+      border: 2px solid var(--neon-pink);
+      border-radius: 15px;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 8px;
       cursor: pointer;
-      transition: background-color 0.25s ease, color 0.25s ease;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 5px var(--neon-pink);
+      box-shadow: 0 0 15px var(--neon-pink);
+      user-select: none;
+      outline-offset: 4px;
+    }
+    button.category-btn:hover,
+    button.category-btn:focus {
+      color: var(--neon-yellow);
+      border-color: var(--neon-yellow);
+      box-shadow: 0 0 20px var(--neon-yellow);
+      outline: none;
+      transform: scale(1.05);
+    }
+
+    /* Neon animated glow pulse for active content */
+    .content.glow-pulse {
+      animation: neonPulse 2.5s infinite alternate ease-in-out;
+    }
+    @keyframes neonPulse {
+      0% {
+        text-shadow:
+          0 0 8px var(--neon-pink),
+          0 0 18px var(--neon-pink),
+          0 0 28px var(--neon-pink),
+          0 0 38px var(--neon-pink);
+      }
+      100% {
+        text-shadow:
+          0 0 12px var(--neon-pink),
+          0 0 24px var(--neon-pink),
+          0 0 36px var(--neon-pink),
+          0 0 48px var(--neon-pink);
+      }
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: var(--neon-blue);
       text-align: center;
       user-select: none;
     }
-    .controlBtn:active,
-    .controlBtn:hover {
-      background: var(--neon-blue);
-      color: var(--bg-dark);
-      box-shadow:
-        0 0 16px var(--neon-blue),
-        0 0 28px var(--neon-blue);
-    }
-    .controlBtn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
 
-    #startGameBtn, #stopGameBtn {
-      margin: 0.75rem 0 0.25rem;
-      width: 100%;
-      font-family: 'Fredoka One', cursive;
-      font-size: 1.6rem;
-      padding: 0.8rem 0;
-      border-radius: 14px;
-      border: 3px solid var(--neon-pink);
-      background: var(--button-bg);
-      color: var(--neon-pink);
-      cursor: pointer;
-      box-shadow:
-        0 0 10px var(--neon-pink);
-      transition: background-color 0.3s ease, color 0.3s ease;
-      user-select: none;
+    /* Scrollbar styling for mobile */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
     }
-    #startGameBtn:hover:not(:disabled),
-    #stopGameBtn:hover:not(:disabled) {
+    ::-webkit-scrollbar-thumb {
       background: var(--neon-pink);
-      color: var(--bg-dark);
-      box-shadow:
-        0 0 24px var(--neon-pink),
-        0 0 40px var(--neon-pink);
+      border-radius: 3px;
     }
-    #stopGameBtn {
-      display: none;
-    }
-
-    /* DanteBot Chat Section */
-    #chatContainer {
-      background: #111126;
-      border: 3px solid var(--neon-green);
-      border-radius: 15px;
-      padding: 1rem;
-      box-shadow:
-        0 0 12px var(--neon-green),
-        inset 0 0 8px var(--neon-green);
-      display: flex;
-      flex-direction: column;
-      max-height: 350px;
-    }
-    #response {
-      background: #0a0a1a;
-      border-radius: 12px;
-      color: var(--neon-green);
-      font-family: 'Roboto Mono', monospace;
-      font-size: 1rem;
-      padding: 1rem;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      flex-grow: 1;
-      user-select: text;
-      box-shadow: inset 0 0 10px var(--neon-green);
-    }
-    #chatInputArea {
-      margin-top: 1rem;
-      display: flex;
-      gap: 0.75rem;
-    }
-    #userInput {
-      flex-grow: 1;
-      padding: 0.6rem 0.75rem;
-      font-size: 1.2rem;
-      border-radius: 12px;
-      border: 2px solid var(--neon-green);
-      background: #0a0a1a;
-      color: var(--neon-green);
-      font-family: 'Roboto Mono', monospace;
-      box-shadow: inset 0 0 10px var(--neon-green);
-      outline: none;
-      user-select: text;
-    }
-    #userInput::placeholder {
-      color: #446644aa;
-    }
-    #sendBtn {
-      background: var(--button-bg);
-      border: 3px solid var(--neon-green);
-      color: var(--neon-green);
-      font-family: 'Fredoka One', cursive;
-      font-size: 1.3rem;
-      padding: 0.55rem 1.2rem;
-      border-radius: 14px;
-      cursor: pointer;
-      box-shadow:
-        0 0 10px var(--neon-green);
-      user-select: none;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    #sendBtn:hover {
-      background: var(--neon-green);
-      color: var(--bg-dark);
-      box-shadow:
-        0 0 20px var(--neon-green),
-        0 0 30px var(--neon-green);
-    }
-
-    /* Confetti styles */
-    canvas.confetti {
-      position: fixed !important;
-      pointer-events: none !important;
-      top: 0; left: 0;
-      width: 100vw !important;
-      height: 100vh !important;
-      z-index: 9999 !important;
-    }
-
-    /* Responsive tweaks */
-    @media (max-width: 400px) {
-      h1 {
-        font-size: 2rem;
-      }
-      canvas {
-        height: 240px;
-      }
+    ::-webkit-scrollbar-track {
+      background: transparent;
     }
 
   </style>
@@ -261,384 +176,192 @@
 <body>
   <h1>Dante’s Dopamine Dive</h1>
 
+  <div class="message-from-you" aria-live="polite" role="region" aria-label="Message from Larissa to Dante">
+    Hey Dante — when life gets wild, dive into this to chill, laugh, and get inspired. Love you &amp; Zeus 🐾 Stay shining bright, always. — Larissa ❤️
+  </div>
+
   <main>
+    <h2 id="category-title" aria-live="polite"></h2>
+    <div class="content glow-pulse" id="content" tabindex="0" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- Game Section -->
-    <section id="gameContainer" aria-label="Lobster Catch Mini-Game">
-      <canvas id="gameCanvas" tabindex="0" aria-label="Lobster Catch Game Canvas"></canvas>
-      <div id="scoreDisplay" aria-live="polite" aria-atomic="true">Score: 0</div>
-
-      <div id="touchControls" role="group" aria-label="Game Movement Controls">
-        <button class="controlBtn" id="leftBtn" aria-label="Move Left" type="button">⬅️ Left</button>
-        <button class="controlBtn" id="rightBtn" aria-label="Move Right" type="button">Right ➡️</button>
-      </div>
-
-      <button id="startGameBtn" type="button" aria-pressed="false">Start Game</button>
-      <button id="stopGameBtn" type="button" aria-pressed="false">Stop Game</button>
-    </section>
-
-    <!-- Chat Section -->
-    <section id="chatContainer" aria-label="DanteBot Chat">
-      <h2>DanteBot Chat 🤖</h2>
-      <pre id="response" role="log" aria-live="polite" aria-atomic="false"></pre>
-      <div id="chatInputArea">
-        <textarea id="userInput" rows="2" placeholder="Type a message for DanteBot..." aria-label="Message input"></textarea>
-        <button id="sendBtn" type="button" aria-label="Send message">Send</button>
-      </div>
-    </section>
-
+    <div class="category-buttons" role="list">
+      <button class="category-btn" data-cat="lobster" role="listitem" aria-label="Lobster fishing facts">Lobster Fishing 🦞</button>
+      <button class="category-btn" data-cat="cars" role="listitem" aria-label="Car trivia and facts">Cars 🚗</button>
+      <button class="category-btn" data-cat="music" role="listitem" aria-label="Rap music quotes and facts">Rap Music 🎤</button>
+      <button class="category-btn" data-cat="raves" role="listitem" aria-label="Rave, festival, and fair vibes">Raves & Fests 🎉</button>
+      <button class="category-btn" data-cat="jokes" role="listitem" aria-label="Dark jokes and humor">Dark Jokes 😂</button>
+      <button class="category-btn" data-cat="stories" role="listitem" aria-label="Funny stories snippets">Funny Stories 📖</button>
+      <button class="category-btn" data-cat="engineering" role="listitem" aria-label="Engineering brain teasers and ideas">Engineering 🛠️</button>
+      <button class="category-btn" data-cat="native" role="listitem" aria-label="Native culture quotes and trivia">Native Spirit 🌿</button>
+      <button class="category-btn" data-cat="stoner" role="listitem" aria-label="Stoner-friendly chill tips and food ideas">Stoner Vibes 🍃</button>
+      <button class="category-btn" data-cat="zeus" role="listitem" aria-label="Zeus the dog fun facts">Zeus 🐶</button>
+    </div>
   </main>
 
+  <footer aria-hidden="true">Made with 💜 for Dante by Larissa</footer>
+
   <script>
-    // ========== Lobster Catch Game ==========
+    (() => {
+      // Data arrays
+      const data = {
+        lobster: [
+          "Did you know? Lobsters can live over 50 years and grow by molting their shells! 🦞",
+          "Lobster fishing tip: Use bait like herring or mackerel to attract the biggest lobsters.",
+          "Weymouth lobster season is prime for fresh catch – you’re basically a marine legend there!",
+          "Lobsters taste with their legs and smell with their antennae — nature’s little engineers!",
+          "Lobsters have blue blood due to copper in it, unlike our iron-rich red blood."
+        ],
+        cars: [
+          "Car fact: The first practical automobile was invented by Karl Benz in 1885. Talk about old school engineering!",
+          "Ever heard of the Tesla Cybertruck? Its angular design is polarizing but futuristic AF.",
+          "Fun fact: Some engines can rev over 10,000 RPM — that’s some serious speed for your passion.",
+          "If you ever want to fix a car, start with the basics: changing oil and checking spark plugs.",
+          "Ever noticed how car headlights kinda look like eyes? Maybe your car's just watching out for you."
+        ],
+        music: [
+          `"“I’m not a businessman, I’m a business, man!” – Jay-Z dropping truth in rap history.`,
+          "Rap trivia: The word 'hip-hop' was coined in the late 1970s by Keith Cowboy, a rapper from Grandmaster Flash's crew.",
+          "Did you know? Nas' album 'Illmatic' is often hailed as one of the greatest hip hop albums of all time.",
+          "Rap music often tells stories — like a street poet’s vivid diary set to beats.",
+          "Your music taste = 🔥. Some rap beats are engineered so well they can boost focus instantly."
+        ],
+        raves: [
+          "Rave fact: The first underground raves started in the late 1980s UK club scene.",
+          "Pro tip: Bring glow sticks and stay hydrated — rave essentials for max fun.",
+          "Festival hack: Pack snacks with protein to keep your energy up while dancing all night.",
+          "Fairs often have wild rides and even wilder food — ever tried a deep-fried Snickers?",
+          "Rave vibes = neon lights, bass drops, and a whole lot of good energy."
+        ],
+        jokes: [
+          "Why did Ricky from Trailer Park Boys bring a ladder to the bar? To get to the high spirits! 😜",
+          "Sassy the Sasquatch says: 'Why don’t bigfoot ever get caught? Because they’re always one foot ahead!'",
+          "Dark joke: Why don’t skeletons fight each other? They don’t have the guts.",
+          "Q: What do you call a stoner who fixes cars? A high mechanic!",
+          "Why do engineers always carry a pencil? Because ideas can’t be erased from the mind!"
+        ],
+        stories: [
+          "Once, a guy tried to catch a lobster with his bare hands and ended up with a crab pinch instead — classic fail turned legend.",
+          "Funny story: At a rave, someone lost their shoes and danced barefoot all night — they became the barefoot king!",
+          "An engineer friend once fixed a blender with duct tape and hope. It worked... kinda.",
+          "A dog named Zeus once stole a whole pizza at a festival — owner was mad, but Zeus was the real winner.",
+          "Movie night: Remember that time when a car chase ended with everyone stuck in traffic? Reality check!"
+        ],
+        engineering: [
+          "Brain teaser: If you had to build a lobster trap that signals you when a catch is inside, what tech would you use?",
+          "Idea prompt: Invent a car feature that automatically makes your favorite rap song play when you start the engine.",
+          "Engineering fact: The Golden Gate Bridge’s steel can expand and contract over 27 feet with temperature changes.",
+          "Fix-it tip: Sometimes the best engineering hack is just a good ol’ twist and tap.",
+          "Fun thought: What if we made rave shoes that light up and track your dance moves?"
+        ],
+        native: [
+          "Inspirational: 'We do not inherit the earth from our ancestors; we borrow it from our children.' — Native proverb",
+          "Native fact: The Mi’kmaq people have a rich tradition of storytelling and deep connection to the sea.",
+          "Traditional wisdom: Patience and respect for nature guide many Native engineering and hunting methods.",
+          "Did you know? Many Native crafts combine art, engineering, and spirituality seamlessly.",
+          "Celebration idea: Next festival, wear a nod to your heritage and honor the past with pride."
+        ],
+        stoner: [
+          "Stoner tip: Munchies hack — spicy snacks balance the sweet ones perfectly.",
+          "Chill fact: Cannabis has been used for centuries by many cultures for healing and relaxation.",
+          "Fun idea: Build your own mini bong from everyday stuff — but safety first, always.",
+          "Stoner joke: Why did the stoner fix his bike? Because it was two-tired.",
+          "Food love: Ever tried grilled cheese with pickles? Next level munchies combo."
+        ],
+        zeus: [
+          "Zeus fact: Dogs can understand up to 250 words and gestures — pretty smart pup!",
+          "Did you know? Dogs’ nose prints are unique like human fingerprints.",
+          "Zeus probably loves belly rubs as much as you love a good rave beat.",
+          "Fun idea: Teach Zeus a new trick and celebrate with a dance party!",
+          "Zeus is basically the chillest stoner buddy you could ask for. 🐾"
+        ],
+      };
 
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const scoreDisplay = document.getElementById('scoreDisplay');
-    const startGameBtn = document.getElementById('startGameBtn');
-    const stopGameBtn = document.getElementById('stopGameBtn');
-    const leftBtn = document.getElementById('leftBtn');
-    const rightBtn = document.getElementById('rightBtn');
+      // Neon color cycling for buttons & content glow
+      const neonColors = {
+        lobster: "var(--neon-pink)",
+        cars: "var(--neon-blue)",
+        music: "var(--neon-yellow)",
+        raves: "var(--neon-purple)",
+        jokes: "var(--neon-green)",
+        stories: "var(--neon-pink)",
+        engineering: "var(--neon-blue)",
+        native: "var(--neon-yellow)",
+        stoner: "var(--neon-green)",
+        zeus: "var(--neon-purple)",
+      };
 
-    // Set canvas size considering devicePixelRatio for sharpness
-    function resizeCanvas() {
-      const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
-    }
-    resizeCanvas();
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-    });
+      // Titles for categories
+      const titles = {
+        lobster: "Lobster Fishing Fact 🦞",
+        cars: "Car Trivia 🚗",
+        music: "Rap Music 🎤",
+        raves: "Raves & Festivals 🎉",
+        jokes: "Dark Jokes 😂",
+        stories: "Funny Stories 📖",
+        engineering: "Engineering Ideas 🛠️",
+        native: "Native Spirit 🌿",
+        stoner: "Stoner Vibes 🍃",
+        zeus: "Zeus the Dog 🐶",
+      };
 
-    // Game variables
-    const canvasWidth = canvas.clientWidth;
-    const canvasHeight = canvas.clientHeight;
-    const playerWidth = 60;
-    const playerHeight = 40;
-    const lobsterSize = 40;
-    let playerX = canvasWidth / 2 - playerWidth / 2;
-    const playerY = canvasHeight - playerHeight - 10;
-    let lobsters = [];
-    let score = 0;
-    let gameRunning = false;
-    let moveLeft = false;
-    let moveRight = false;
+      // Get elements
+      const contentEl = document.getElementById("content");
+      const titleEl = document.getElementById("category-title");
+      const buttons = document.querySelectorAll(".category-btn");
 
-    // Draw player (lobster catcher)
-    function drawPlayer() {
-      ctx.fillStyle = 'cyan';
-      ctx.strokeStyle = '#00ffffcc';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(playerX, playerY + playerHeight);
-      ctx.lineTo(playerX + playerWidth * 0.5, playerY);
-      ctx.lineTo(playerX + playerWidth, playerY + playerHeight);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-      // Add detail - "catcher net" handle
-      ctx.strokeStyle = 'white';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(playerX + playerWidth * 0.5, playerY);
-      ctx.lineTo(playerX + playerWidth * 0.5, playerY + playerHeight + 20);
-      ctx.stroke();
-    }
+      // Helper: pick random item from array
+      function pickRandom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
 
-    // Draw a lobster
-    function drawLobster(x, y) {
-      // Lobster body - red oval
-      ctx.fillStyle = '#ff2222';
-      ctx.strokeStyle = '#aa0000';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.ellipse(x, y, lobsterSize / 2, lobsterSize / 3, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-      // Lobster claws
-      ctx.strokeStyle = '#cc0000';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(x - lobsterSize / 3, y);
-      ctx.lineTo(x - lobsterSize / 2, y - lobsterSize / 2);
-      ctx.moveTo(x + lobsterSize / 3, y);
-      ctx.lineTo(x + lobsterSize / 2, y - lobsterSize / 2);
-      ctx.stroke();
-      // Lobster eyes
-      ctx.fillStyle = 'white';
-      ctx.beginPath();
-      ctx.arc(x - 7, y - 5, 4, 0, Math.PI * 2);
-      ctx.arc(x + 7, y - 5, 4, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = 'black';
-      ctx.beginPath();
-      ctx.arc(x - 7, y - 5, 2, 0, Math.PI * 2);
-      ctx.arc(x + 7, y - 5, 2, 0, Math.PI * 2);
-      ctx.fill();
-    }
+      // Show content function
+      function showContent(cat) {
+        // Get random fact for category
+        const fact = pickRandom(data[cat]);
+        titleEl.textContent = titles[cat] || "Fun";
+        contentEl.textContent = fact;
 
-    // Check collision between lobster and player (simple box overlap)
-    function checkCollision(lobster) {
-      const lobX = lobster.x;
-      const lobY = lobster.y;
-      const playerLeft = playerX;
-      const playerRight = playerX + playerWidth;
-      const playerTop = playerY;
-      const playerBottom = playerY + playerHeight + 20; // include handle
+        // Glow color update
+        const color = neonColors[cat] || "var(--neon-pink)";
+        contentEl.style.textShadow = `
+          0 0 10px ${color},
+          0 0 20px ${color},
+          0 0 30px ${color},
+          0 0 40px ${color}
+        `;
+        titleEl.style.color = color;
+        titleEl.style.textShadow = `0 0 15px ${color}`;
+        // Animate glow pulse
+        contentEl.classList.remove("glow-pulse");
+        void contentEl.offsetWidth; // trigger reflow for animation restart
+        contentEl.classList.add("glow-pulse");
+        contentEl.focus();
+      }
 
-      // Simple collision: lobster within horizontal range and close vertically
-      return (
-        lobX > playerLeft &&
-        lobX < playerRight &&
-        lobY + lobsterSize / 2 > playerTop &&
-        lobY - lobsterSize / 2 < playerBottom
-      );
-    }
-
-    // Confetti particles for celebration
-    const confettiParticles = [];
-    const confettiColors = ['#ff2d95', '#2df4ff', '#2dff95', '#fff42d'];
-    function createConfetti() {
-      for (let i = 0; i < 100; i++) {
-        confettiParticles.push({
-          x: Math.random() * window.innerWidth,
-          y: Math.random() * -window.innerHeight,
-          size: (Math.random() * 6) + 4,
-          speed: Math.random() * 5 + 2,
-          color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
-          tilt: Math.random() * 10,
-          tiltSpeed: Math.random() * 0.1 + 0.05,
+      // Set up button listeners
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const cat = btn.getAttribute("data-cat");
+          showContent(cat);
         });
-      }
-    }
-    let confettiCanvas, confettiCtx;
+      });
 
-    function setupConfetti() {
-      confettiCanvas = document.createElement('canvas');
-      confettiCanvas.classList.add('confetti');
-      confettiCanvas.width = window.innerWidth;
-      confettiCanvas.height = window.innerHeight;
-      confettiCtx = confettiCanvas.getContext('2d');
-      document.body.appendChild(confettiCanvas);
-      createConfetti();
-      requestAnimationFrame(updateConfetti);
-    }
-    function updateConfetti() {
-      if (!confettiCanvas) return;
-      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-      for (let i = 0; i < confettiParticles.length; i++) {
-        const p = confettiParticles[i];
-        p.y += p.speed;
-        p.x += Math.sin(p.tilt) * 0.5;
-        p.tilt += p.tiltSpeed;
-        confettiCtx.fillStyle = p.color;
-        confettiCtx.beginPath();
-        confettiCtx.ellipse(p.x, p.y, p.size, p.size / 2, p.tilt, 0, Math.PI * 2);
-        confettiCtx.fill();
+      // On load, show a random category content
+      const categories = Object.keys(data);
+      const randomCat = pickRandom(categories);
+      showContent(randomCat);
 
-        if (p.y > confettiCanvas.height) {
-          p.y = -10;
-          p.x = Math.random() * confettiCanvas.width;
+      // Keyboard navigation: press number keys 1-0 for categories
+      document.addEventListener("keydown", e => {
+        if (e.target.tagName === "BUTTON" || e.target.tagName === "INPUT" || e.target.isContentEditable) return;
+        let index = null;
+        if (e.key >= "1" && e.key <= "9") index = parseInt(e.key) - 1;
+        if (e.key === "0") index = 9;
+        if (index !== null && index < categories.length) {
+          showContent(categories[index]);
         }
-      }
-      if (gameRunning) {
-        requestAnimationFrame(updateConfetti);
-      } else {
-        document.body.removeChild(confettiCanvas);
-        confettiCanvas = null;
-        confettiParticles.length = 0;
-      }
-    }
-    function launchConfetti() {
-      if (!confettiCanvas) {
-        setupConfetti();
-      }
-      setTimeout(() => {
-        // Stop confetti after 2.5s
-        gameRunning = false;
-      }, 2500);
-    }
-
-    // Update and draw game
-    function updateGame() {
-      if (!gameRunning) return;
-
-      // Clear canvas
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
-      // Move player based on keys or buttons pressed
-      if (moveLeft) {
-        playerX -= 7;
-        if (playerX < 0) playerX = 0;
-      }
-      if (moveRight) {
-        playerX += 7;
-        if (playerX > canvasWidth - playerWidth) playerX = canvasWidth - playerWidth;
-      }
-
-      // Draw player
-      drawPlayer();
-
-      // Move lobsters down
-      for (let i = lobsters.length - 1; i >= 0; i--) {
-        lobsters[i].y += lobsters[i].speed;
-
-        // Check if caught
-        if (checkCollision(lobsters[i])) {
-          lobsters.splice(i, 1);
-          score++;
-          scoreDisplay.textContent = `Score: ${score}`;
-          launchConfetti();
-          continue;
-        }
-
-        // Remove if out of bottom
-        if (lobsters[i].y > canvasHeight + lobsterSize) {
-          lobsters.splice(i, 1);
-          continue;
-        }
-      }
-
-      // Occasionally spawn new lobster
-      if (Math.random() < 0.03) {
-        lobsters.push({
-          x: Math.random() * (canvasWidth - lobsterSize) + lobsterSize / 2,
-          y: -lobsterSize,
-          speed: 2 + Math.random() * 2,
-        });
-      }
-
-      // Draw lobsters
-      lobsters.forEach(l => drawLobster(l.x, l.y));
-
-      requestAnimationFrame(updateGame);
-    }
-
-    // Control handlers
-    function onLeftDown() {
-      moveLeft = true;
-    }
-    function onLeftUp() {
-      moveLeft = false;
-    }
-    function onRightDown() {
-      moveRight = true;
-    }
-    function onRightUp() {
-      moveRight = false;
-    }
-
-    leftBtn.addEventListener('touchstart', e => { e.preventDefault(); onLeftDown(); });
-    leftBtn.addEventListener('touchend', e => { e.preventDefault(); onLeftUp(); });
-    leftBtn.addEventListener('mousedown', e => { e.preventDefault(); onLeftDown(); });
-    leftBtn.addEventListener('mouseup', e => { e.preventDefault(); onLeftUp(); });
-    leftBtn.addEventListener('mouseleave', e => { e.preventDefault(); onLeftUp(); });
-
-    rightBtn.addEventListener('touchstart', e => { e.preventDefault(); onRightDown(); });
-    rightBtn.addEventListener('touchend', e => { e.preventDefault(); onRightUp(); });
-    rightBtn.addEventListener('mousedown', e => { e.preventDefault(); onRightDown(); });
-    rightBtn.addEventListener('mouseup', e => { e.preventDefault(); onRightUp(); });
-    rightBtn.addEventListener('mouseleave', e => { e.preventDefault(); onRightUp(); });
-
-    // Keyboard control support
-    window.addEventListener('keydown', (e) => {
-      if (!gameRunning) return;
-      if (e.code === 'ArrowLeft') moveLeft = true;
-      if (e.code === 'ArrowRight') moveRight = true;
-    });
-    window.addEventListener('keyup', (e) => {
-      if (e.code === 'ArrowLeft') moveLeft = false;
-      if (e.code === 'ArrowRight') moveRight = false;
-    });
-
-    // Start and stop game functions
-    startGameBtn.addEventListener('click', () => {
-      if (gameRunning) return;
-      gameRunning = true;
-      score = 0;
-      scoreDisplay.textContent = 'Score: 0';
-      lobsters = [];
-      playerX = canvasWidth / 2 - playerWidth / 2;
-      startGameBtn.style.display = 'none';
-      stopGameBtn.style.display = 'block';
-      updateGame();
-      canvas.focus();
-    });
-
-    stopGameBtn.addEventListener('click', () => {
-      gameRunning = false;
-      startGameBtn.style.display = 'block';
-      stopGameBtn.style.display = 'none';
-    });
-
-    // ========== DanteBot Chat ==========
-
-    const userInput = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
-    const response = document.getElementById('response');
-
-    // Simple AI replies based on keywords
-    function generateDanteBotReply(input) {
-      const lower = input.toLowerCase();
-
-      if (!input.trim()) return "Hey, you didn't say anything! Try typing something fun or ask me about lobsters! 🦞";
-
-      if (lower.includes('lobster')) {
-        return "Lobsters are awesome! Did you know they taste with their legs? Pretty wild, huh?";
-      }
-      if (lower.includes('dante')) {
-        return "Dante is the coolest dude around! Big shoutout to him! 🎉";
-      }
-      if (lower.includes('rave') || lower.includes('party')) {
-        return "Ready to rave all night? Let’s keep those dopamine levels high! 💃🕺";
-      }
-      if (lower.includes('joke') || lower.includes('funny')) {
-        return "Why don’t lobsters share their food? Because they’re a little shellfish! 😄";
-      }
-      if (lower.includes('help')) {
-        return "Need a hand? Just keep playing the lobster catch or chat with me — I’m here for you!";
-      }
-      if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey')) {
-        return "Hey there! What’s on your mind today?";
-      }
-      // Fallback: encourage creativity
-      return "That sounds interesting! Tell me more or try asking about lobsters, raves, or Dante!";
-    }
-
-    function appendChatMessage(message, isUser = false) {
-      const prefix = isUser ? "You: " : "DanteBot: ";
-      response.textContent += prefix + message + "\n\n";
-      response.scrollTop = response.scrollHeight;
-    }
-
-    sendBtn.addEventListener('click', () => {
-      const message = userInput.value.trim();
-      if (!message) return;
-      appendChatMessage(message, true);
-      userInput.value = '';
-      setTimeout(() => {
-        const reply = generateDanteBotReply(message);
-        appendChatMessage(reply);
-      }, 400);
-    });
-
-    // Also send message on Enter (shift+enter for newline)
-    userInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendBtn.click();
-      }
-    });
-
-    // Focus game canvas on load for keyboard support
-    window.addEventListener('load', () => {
-      canvas.setAttribute('tabindex', '0');
-    });
-
+      });
+    })();
   </script>
 </body>
 </html>
