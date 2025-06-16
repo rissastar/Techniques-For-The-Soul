@@ -1,24 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dante’s Ultimate Fun Hub 🎉</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover" />
+  <title>Dante’s Fun Hub</title>
 
-  <!-- Modern Neon Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- iOS Web App Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Dante’s Fun Hub" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 
-  <!-- Link to external CSS -->
+  <!-- Android & Modern -->
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- Particle overlay -->
+  <!-- Particle background -->
   <canvas id="particle-canvas"></canvas>
 
   <header>
     <h1>💖 Hey Dante 💖</h1>
-    <p>From Larissa: “Your sleek neon rave hub—now with a matching visual backdrop.”</p>
+    <p>From Larissa: “Your sleek neon rave hub—add me to your Home Screen!”</p>
   </header>
 
   <div id="game-area">
@@ -34,7 +43,13 @@
     <button onclick="showZeusCorner()">🐶 Zeus’s Corner</button>
   </div>
 
-  <!-- Link to external JS -->
+  <!-- Main Script -->
   <script src="script.js"></script>
+  <!-- Register Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(console.error);
+    }
+  </script>
 </body>
 </html>
