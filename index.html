@@ -3,621 +3,501 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dante’s Fun Hub 4.0 - All-in-One ADHD Rave Zone</title>
+  <title>Dante’s Fun Hub 4.0</title>
   <style>
-    /* === BASE STYLES === */
-    @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto+Mono&display=swap');
+    /* Reset & base */
     * {
       box-sizing: border-box;
-      margin: 0; padding: 0;
-      user-select: none;
     }
     body {
-      font-family: 'Roboto Mono', monospace;
-      background: radial-gradient(circle at center, #0f0f20, #070710);
-      color: #0ff;
-      min-height: 100vh;
+      margin: 0; padding: 0;
+      background: #0b0f1a;
+      color: #00fff7;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      user-select: none;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 0 10px 50px;
-      overflow-x: hidden;
+      min-height: 100vh;
     }
     h1 {
-      font-family: 'Luckiest Guy', cursive;
-      font-size: 3rem;
-      color: #0ff;
-      text-shadow:
-        0 0 10px #0ff,
-        0 0 20px #0ff,
-        0 0 30px #00ffff,
-        0 0 40px #00ffff,
-        0 0 50px #00ffff;
-      margin: 15px 0 10px;
       text-align: center;
-    }
-    h2 {
-      font-family: 'Luckiest Guy', cursive;
-      font-size: 1.8rem;
-      margin: 10px 0;
+      font-weight: 900;
+      font-size: 3rem;
+      margin: 20px 0 10px;
       color: #0ff;
-      text-shadow: 0 0 8px #0ff;
+      text-shadow: 0 0 10px #00ffffaa;
     }
-    p {
-      line-height: 1.5;
-      font-size: 1.15rem;
-      margin-bottom: 1em;
-      color: #aff;
-      text-shadow: 0 0 5px #088;
-    }
-    button {
-      font-family: 'Luckiest Guy', cursive;
-      font-size: 1.25rem;
-      color: #0ff;
-      background: transparent;
-      border: 2px solid #0ff;
-      border-radius: 12px;
-      padding: 10px 22px;
-      cursor: pointer;
-      margin: 5px 8px;
-      transition: all 0.3s ease;
-      text-shadow: 0 0 6px #0ff;
+    header {
+      background: linear-gradient(90deg, #00ffffdd, #008080dd);
+      padding: 10px 0;
+      box-shadow: 0 2px 8px #00ffffaa;
+      font-weight: 900;
+      color: #004d4d;
+      text-align: center;
       user-select: none;
     }
-    button:hover, button:focus {
-      background: #0ff;
-      color: #000;
-      box-shadow: 0 0 12px #0ff;
-      outline: none;
-    }
-    /* === NAVIGATION TABS === */
-    #navTabs {
-      margin: 20px 0 10px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-    #navTabs button.active {
-      background: #00ffff;
-      color: #111;
-      border-color: #00ffff;
-      box-shadow: 0 0 20px #0ff inset;
-      cursor: default;
-    }
-    /* === CONTENT SECTIONS === */
-    .module {
-      display: none;
-      max-width: 960px;
-      width: 100%;
-      background: rgba(0,255,255,0.1);
-      border: 2px solid #0ff;
-      border-radius: 16px;
+    main {
+      flex: 1;
+      max-width: 800px;
+      margin: 0 auto 20px;
+      background: #111827;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #00ffffaa;
       padding: 15px 25px;
-      margin-bottom: 20px;
-      box-shadow:
-        0 0 12px #0ff,
-        0 0 25px #00ffff;
+      display: flex;
+      flex-direction: column;
+      min-height: 500px;
     }
-    .module.active {
+
+    /* Tabs container */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: #002b2b;
+      color: #00ffff;
+      border: none;
+      padding: 10px 20px;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 5px #00ffffaa;
+      transition: background 0.3s, color 0.3s;
+      user-select: none;
+    }
+    .tab-btn:hover {
+      background: #00ffff;
+      color: #002b2b;
+      box-shadow: 0 0 15px #00ffffff;
+    }
+    .tab-btn.active {
+      background: #00ffff;
+      color: #002b2b;
+      box-shadow: 0 0 20px #00ffffff;
+    }
+
+    /* Content areas */
+    .tab-content {
+      flex: 1;
+      overflow-y: auto;
+      color: #00fff7;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      padding: 10px;
+      background: #001f1f;
+      border-radius: 10px;
+      box-shadow: inset 0 0 15px #00ffffbb;
+    }
+    .tab-content.hidden {
+      display: none;
+    }
+
+    /* Memes & Rave facts & Funny stories list */
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      margin: 8px 0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #003636bb;
+      cursor: default;
+      user-select: text;
+      transition: background 0.25s;
+    }
+    li:hover {
+      background: #005555ee;
+    }
+
+    /* Funny story display */
+    #storyDisplay {
+      margin-top: 10px;
+      font-style: italic;
+      font-weight: 600;
+      color: #aaffff;
+      min-height: 80px;
+      padding: 10px;
+      background: #004d4d;
+      border-radius: 10px;
+      box-shadow: 0 0 8px #00ffffcc inset;
+    }
+    #nextStoryBtn {
+      margin-top: 10px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: none;
+      background: #00ffff;
+      color: #002b2b;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 0 10px #00ffffcc;
+      transition: background 0.3s;
+    }
+    #nextStoryBtn:hover {
+      background: #33ffff;
+    }
+
+    /* Mini-game canvas */
+    #lobsterCanvas {
       display: block;
-      animation: fadeIn 0.7s ease forwards;
+      margin: 15px auto;
+      background: #001f1f;
+      border: 3px solid #00ffff;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #00ffffaa inset;
+      touch-action: none;
+      user-select: none;
     }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+    #gameControls {
+      text-align: center;
+      margin: 10px 0;
     }
-    /* === DANTEBOX === */
+    #startGameBtn, #stopGameBtn {
+      margin: 0 10px;
+      padding: 10px 18px;
+      border-radius: 30px;
+      border: none;
+      font-weight: 700;
+      background: #00ffff;
+      color: #002b2b;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffffcc;
+      user-select: none;
+      transition: background 0.3s;
+    }
+    #startGameBtn:hover:not(:disabled) {
+      background: #33ffff;
+    }
+    #stopGameBtn:hover:not(:disabled) {
+      background: #33ffff;
+    }
+    #startGameBtn:disabled, #stopGameBtn:disabled {
+      background: #003f3f;
+      cursor: default;
+      box-shadow: none;
+    }
+    #scoreDisplay {
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffffbb;
+      user-select: none;
+    }
+
+    /* DanteBox */
     #danteBox {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 100px;
-      height: 100px;
-      background: linear-gradient(45deg, #0ff, #00ffff);
+      bottom: 15px;
+      right: 15px;
+      width: 60px;
+      height: 60px;
+      background: #00ffff;
       border-radius: 50%;
-      box-shadow: 0 0 20px #0ff, 0 0 30px #0ff inset;
+      box-shadow: 0 0 20px #00ffffcc;
+      cursor: pointer;
+      user-select: none;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Luckiest Guy', cursive;
-      font-size: 1.5rem;
-      color: #000;
-      cursor: pointer;
-      user-select: none;
-      z-index: 1000;
+      font-weight: 900;
+      font-size: 2rem;
+      color: #002b2b;
+      outline: none;
       transition: transform 0.3s ease;
-      filter: drop-shadow(0 0 5px #0ff);
+      z-index: 9999;
+    }
+    #danteBox:focus {
+      outline: 3px solid #33ffff;
     }
     #danteBox.shake {
-      animation: shake 0.5s ease-in-out 3;
-    }
-    @keyframes shake {
-      0%, 100% {transform: translateX(0);}
-      25% {transform: translateX(-5px) rotate(-5deg);}
-      50% {transform: translateX(5px) rotate(5deg);}
-      75% {transform: translateX(-5px) rotate(-5deg);}
+      animation: shake 0.7s ease infinite;
     }
     #danteBox.opened {
-      background: #00ffff;
-      color: #111;
-      box-shadow:
-        0 0 40px #00ffff,
-        0 0 50px #00ffff inset;
+      background: #33ffff;
+      box-shadow: 0 0 40px #33ffffff;
+      cursor: default;
       transform: scale(1.2);
-      pointer-events: none;
     }
-    /* === CONFETTI CANVAS === */
+    @keyframes shake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      20% { transform: translate(-1px, -2px) rotate(-2deg); }
+      40% { transform: translate(-3px, 0px) rotate(2deg); }
+      60% { transform: translate(3px, 2px) rotate(0deg); }
+      80% { transform: translate(1px, -1px) rotate(1deg); }
+      100% { transform: translate(1px, 1px) rotate(0deg); }
+    }
+
+    /* Confetti canvas */
     #confettiCanvas {
+      pointer-events: none;
       position: fixed;
       top: 0; left: 0;
       width: 100vw;
       height: 100vh;
-      pointer-events: none;
-      z-index: 1500;
+      z-index: 9998;
+      user-select: none;
     }
-    /* === AI CHAT (DanteBot) === */
-    #aiChat {
-      background: rgba(0,255,255,0.05);
-      border: 2px solid #0ff;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 1rem;
-      font-family: monospace;
-      max-width: 960px;
-      margin: 0 auto 20px;
-      box-shadow: 0 0 15px #0ff inset;
+
+    /* DanteBot chat */
+    #chatContainer {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
-    #aiChat textarea {
-      width: 100%;
-      height: 80px;
-      background: #001f20;
-      border: 1px solid #0ff;
-      border-radius: 8px;
-      color: #0ff;
-      font-family: monospace;
+    #response {
+      flex: 1;
+      background: #002a2a;
+      padding: 15px;
+      border-radius: 15px;
+      color: #66ffff;
+      font-weight: 700;
+      overflow-y: auto;
+      user-select: text;
+      margin-bottom: 10px;
+      font-family: 'Courier New', Courier, monospace;
       font-size: 1.1rem;
-      padding: 10px;
-      resize: none;
-      box-shadow: inset 0 0 8px #0ff;
-    }
-    #aiChat button {
-      margin-top: 8px;
-      width: 100%;
-      background: #0ff;
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      font-family: 'Luckiest Guy', cursive;
-      font-size: 1.3rem;
-      cursor: pointer;
-      box-shadow: 0 0 12px #0ff;
-      transition: background 0.3s ease;
-    }
-    #aiChat button:hover {
-      background: #00cccc;
-    }
-    #aiChat #response {
-      margin-top: 12px;
-      background: #002222;
-      padding: 10px;
-      border-radius: 8px;
-      min-height: 60px;
       white-space: pre-wrap;
-      color: #0ff;
-      font-family: monospace;
+    }
+    #inputArea {
+      display: flex;
+      gap: 10px;
+    }
+    #userInput {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 20px;
+      border: none;
       font-size: 1.1rem;
-      box-shadow: inset 0 0 10px #0ff;
+      font-weight: 700;
+      background: #005050;
+      color: #aaffff;
+      user-select: text;
     }
-    /* === MINI GAME - LOBSTER RAVE CATCH === */
-    #lobsterGame {
-      text-align: center;
+    #userInput:focus {
+      outline: 3px solid #00ffff;
     }
-    #lobsterCanvas {
-      background: #001922;
-      border: 2px solid #0ff;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #0ff inset;
-      max-width: 100%;
-      margin: 15px auto;
-      display: block;
+    #sendBtn {
+      padding: 12px 18px;
+      border-radius: 30px;
+      border: none;
+      background: #00ffff;
+      color: #002b2b;
+      font-weight: 900;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s;
     }
-    #lobsterGameControls {
-      margin-top: 10px;
+    #sendBtn:hover {
+      background: #33ffff;
     }
-    #lobsterGameControls button {
-      font-size: 1.2rem;
-      min-width: 100px;
+
+    /* Scrollbar for content */
+    .tab-content::-webkit-scrollbar {
+      width: 10px;
     }
-    /* === SCROLLBAR === */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+    .tab-content::-webkit-scrollbar-track {
+      background: #001919;
+      border-radius: 10px;
     }
-    ::-webkit-scrollbar-track {
-      background: #000;
+    .tab-content::-webkit-scrollbar-thumb {
+      background: #00ffffbb;
+      border-radius: 10px;
     }
-    ::-webkit-scrollbar-thumb {
-      background: #0ff;
-      border-radius: 4px;
-    }
-    /* === RESPONSIVE === */
+
+    /* Responsive */
     @media (max-width: 600px) {
-      h1 { font-size: 2.2rem; }
-      button { font-size: 1.1rem; padding: 8px 18px; }
-      #danteBox {
-        width: 80px; height: 80px; font-size: 1.2rem;
-        bottom: 15px; right: 15px;
+      main {
+        padding: 10px 15px;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
+      .tab-btn {
+        font-size: 0.9rem;
+        padding: 8px 14px;
+      }
+      #lobsterCanvas {
+        width: 300px !important;
+        height: 200px !important;
       }
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Dante’s Fun Hub 4.0 🎉🦞</h1>
+  </header>
+  <main>
+    <nav class="tabs" role="tablist" aria-label="Fun Hub Navigation">
+      <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="memesTab" id="memesBtn">Memes</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="raveFactsTab" id="raveFactsBtn">Rave Facts</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="funnyStoriesTab" id="funnyStoriesBtn">Funny Stories</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="miniGameTab" id="miniGameBtn">Mini-Game</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="danteBotTab" id="danteBotBtn">DanteBot Chat</button>
+    </nav>
 
-  <h1>Dante’s Fun Hub 4.0 🎉🦞</h1>
-  <p style="text-align:center; font-size: 1.1rem; color:#0ff; margin-bottom: 12px;">
-    Welcome to your ultimate ADHD-friendly rave zone, Dante! Let’s get wild, chill, and have fun. <br/>
-    Use the tabs below to explore everything — memes, facts, jokes, games, stories & more!
-  </p>
+    <!-- Memes -->
+    <section class="tab-content" id="memesTab" role="tabpanel" aria-labelledby="memesBtn">
+      <ul id="memesList" aria-live="polite" aria-relevant="additions"></ul>
+    </section>
 
-  <!-- NAVIGATION TABS -->
-  <nav id="navTabs" role="tablist" aria-label="Dante's Fun Hub Navigation">
-    <button role="tab" aria-selected="true" data-target="memesModule" class="active">Memes 😂</button>
-    <button role="tab" aria-selected="false" data-target="raveFactsModule">Rave Facts 🎇</button>
-    <button role="tab" aria-selected="false" data-target="funStoriesModule">Funny Stories 😆</button>
-    <button role="tab" aria-selected="false" data-target="miniGamesModule">Mini Games 🎮</button>
-    <button role="tab" aria-selected="false" data-target="danteBotModule">DanteBot 🤖</button>
-  </nav>
+    <!-- Rave Facts -->
+    <section class="tab-content hidden" id="raveFactsTab" role="tabpanel" aria-labelledby="raveFactsBtn">
+      <ul id="raveFactsList" aria-live="polite" aria-relevant="additions"></ul>
+    </section>
 
-  <!-- MEMES MODULE -->
-  <section id="memesModule" class="module active" role="tabpanel" aria-labelledby="memesTab">
-    <h2>🔥 Top Memes for Dante 🔥</h2>
-    <button id="nextMemeBtn">Show me a Meme!</button>
-    <p id="memeDisplay" aria-live="polite" style="margin-top:12px; font-size:1.3rem;"></p>
-  </section>
+    <!-- Funny Stories -->
+    <section class="tab-content hidden" id="funnyStoriesTab" role="tabpanel" aria-labelledby="funnyStoriesBtn">
+      <div id="storyDisplay" aria-live="polite" aria-atomic="true" tabindex="0" role="region" aria-label="Funny story display">
+        Click 'Next Story' for a laugh!
+      </div>
+      <button id="nextStoryBtn" aria-controls="storyDisplay" aria-label="Show next funny story">Next Story 😂</button>
+    </section>
 
-  <!-- RAVE FACTS MODULE -->
-  <section id="raveFactsModule" class="module" role="tabpanel" aria-labelledby="raveFactsTab">
-    <h2>🎧 Fun Rave Facts</h2>
-    <button id="nextFactBtn">Hit me with a Fact!</button>
-    <p id="factDisplay" aria-live="polite" style="margin-top:12px; font-size:1.3rem;"></p>
-  </section>
+    <!-- Mini-Game -->
+    <section class="tab-content hidden" id="miniGameTab" role="tabpanel" aria-labelledby="miniGameBtn">
+      <canvas id="lobsterCanvas" width="400" height="250" aria-label="Lobster Rave Catch game area"></canvas>
+      <div id="gameControls" aria-live="polite" aria-atomic="true" aria-label="Game controls">
+        <button id="startGameBtn">Start Game 🦞</button>
+        <button id="stopGameBtn" disabled>Stop Game ✋</button>
+        <span id="scoreDisplay" aria-live="polite" aria-atomic="true">Score: 0</span>
+      </div>
+      <p style="color:#33ffff; font-style:italic; font-size:0.9rem; text-align:center; user-select:none;">
+        Use Left/Right arrows or A/D keys to move the crab and catch falling lobsters!
+      </p>
+    </section>
 
-  <!-- FUNNY STORIES MODULE -->
-  <section id="funStoriesModule" class="module" role="tabpanel" aria-labelledby="funStoriesTab">
-    <h2>🤣 Dark & Funny Stories</h2>
-    <button id="nextStoryBtn">Tell me a Story!</button>
-    <p id="storyDisplay" aria-live="polite" style="margin-top:12px; font-size:1.3rem;"></p>
-  </section>
+    <!-- DanteBot Chat -->
+    <section class="tab-content hidden" id="danteBotTab" role="tabpanel" aria-labelledby="danteBotBtn">
+      <div id="chatContainer">
+        <div id="response" aria-live="polite" aria-atomic="true" tabindex="0" role="log">Say hi to DanteBot! 👋</div>
+        <div id="inputArea">
+          <input type="text" id="userInput" aria-label="Type your message to DanteBot" autocomplete="off" />
+          <button id="sendBtn" aria-label="Send message to DanteBot">Send</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  <!-- MINI GAMES MODULE -->
-  <section id="miniGamesModule" class="module" role="tabpanel" aria-labelledby="miniGamesTab">
-    <h2>🎮 Lobster Rave Catch Mini-Game</h2>
-    <p>Catch the lobsters before they escape the rave! Use arrow keys to move the rave crab and catch lobsters 🦞🦀.</p>
-    <canvas id="lobsterCanvas" width="480" height="320" aria-label="Lobster Rave Catch Game"></canvas>
-    <div id="lobsterGameControls">
-      <button id="startGameBtn">Start Game</button>
-      <button id="stopGameBtn" disabled>Stop Game</button>
-      <p>Score: <span id="scoreDisplay">0</span></p>
-    </div>
-  </section>
-
-  <!-- DANTEBOT AI CHAT MODULE -->
-  <section id="danteBotModule" class="module" role="tabpanel" aria-labelledby="danteBotTab">
-    <h2>🤖 Chat with DanteBot (AI)</h2>
-    <p><em>Note: AI chat is simulated locally for now.</em></p>
-    <div id="aiChat">
-      <textarea id="userInput" placeholder="Ask DanteBot anything..."></textarea>
-      <button id="sendBtn">Send</button>
-      <div id="response" aria-live="polite"></div>
-    </div>
-  </section>
-
-  <!-- DANTEBOX (Fixed corner surprise) -->
-  <div id="danteBox" tabindex="0" role="button" aria-label="DanteBox surprise gift" title="Click me!">🎁</div>
-
-  <!-- CONFETTI CANVAS -->
+  <button id="danteBox" aria-label="Open DanteBox surprise gift" tabindex="0" title="Click me for a surprise!">🎁</button>
   <canvas id="confettiCanvas"></canvas>
 
   <script>
-    // === Intro Popup ===
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        alert("Hey Dante! 💖 Larissa says: Welcome to your Fun Hub 4.0! Let's dive into all the fun and vibes together. Enjoy and rave on! 🎉🦞");
-      }, 600);
-    });
-
-    // === NAV TABS FUNCTIONALITY ===
-    const tabs = document.querySelectorAll('#navTabs button');
-    const modules = document.querySelectorAll('.module');
-
+    // === TAB SWITCHING LOGIC ===
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        if(tab.classList.contains('active')) return;
+        // Deactivate all
         tabs.forEach(t => {
           t.classList.remove('active');
           t.setAttribute('aria-selected', 'false');
         });
-        modules.forEach(mod => mod.classList.remove('active'));
-
+        contents.forEach(c => c.classList.add('hidden'));
+        // Activate clicked
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
-        document.getElementById(tab.dataset.target).classList.add('active');
+        const id = tab.getAttribute('aria-controls');
+        document.getElementById(id).classList.remove('hidden');
+        // Focus the content container for accessibility
+        document.getElementById(id).focus();
       });
     });
 
-    // === MEMES MODULE ===
+    // === MEMES ===
     const memes = [
-      "I'm not lazy, I'm on energy-saving mode.",
-      "ADHD: Attention Deficit Hyperdrive Disorder!",
-      "If at first you don’t succeed, skydiving is not for you.",
-      "Why don’t scientists trust atoms? Because they make up everything!",
-      "Running late is my cardio.",
-      "My brain has too many tabs open.",
-      "Procrastinators unite... tomorrow.",
-      "Life’s too short to fold fitted sheets.",
-      "I’m multitasking: I can listen, ignore, and forget all at once."
+      "Why don’t scientists trust atoms? Because they make up everything! 😂",
+      "I told my computer I needed a break, and now it won’t stop sending me Kit-Kats.",
+      "Parallel lines have so much in common… it’s a shame they’ll never meet.",
+      "Why did the scarecrow win an award? Because he was outstanding in his field!",
+      "I would tell you a joke about UDP… but you might not get it.",
+      "I’m reading a book about anti-gravity. It’s impossible to put down!",
+      "Why don’t programmers like nature? Too many bugs.",
+      "There are only 10 types of people in the world: those who understand binary, and those who don’t.",
+      "I tried to catch fog yesterday. Mist.",
+      "Why was the math book sad? It had too many problems."
     ];
-    const memeDisplay = document.getElementById('memeDisplay');
-    document.getElementById('nextMemeBtn').addEventListener('click', () => {
-      const meme = memes[Math.floor(Math.random() * memes.length)];
-      memeDisplay.textContent = meme;
-      triggerConfetti(15);
+    const memesList = document.getElementById('memesList');
+    memes.forEach(meme => {
+      const li = document.createElement('li');
+      li.textContent = meme;
+      memesList.appendChild(li);
     });
 
-    // === RAVE FACTS MODULE ===
+    // === RAVE FACTS ===
     const raveFacts = [
-      "The first rave parties started in the 1980s in the UK underground scene.",
-      "EDM stands for Electronic Dance Music.",
-      "Glow sticks were invented in 1962 and became rave staples.",
-      "The largest rave event in history was the Love Parade in Berlin, with over 1.5 million attendees.",
-      "PLUR: Peace, Love, Unity, Respect — the rave mantra.",
-      "Rave music genres include house, techno, trance, and dubstep.",
-      "The iconic smiley face symbol was adopted by the rave scene in the late 1980s.",
-      "Raves often include vibrant neon fashion and glow accessories.",
-      "Rave culture emphasizes community, acceptance, and freedom."
+      "The first modern rave took place in the UK in the late 1980s.",
+      "Raves often feature electronic music genres like techno, house, and drum and bass.",
+      "Glow sticks were invented for raves and safety at night events.",
+      "The PLUR philosophy (Peace, Love, Unity, Respect) is central to rave culture.",
+      "Many raves started in underground warehouses and clubs.",
+      "Light shows and lasers create immersive rave environments.",
+      "Raves encourage self-expression through unique clothing and dance.",
+      "Music at raves often has a steady beat of 120-150 BPM to keep energy high.",
+      "Rave culture helped popularize electronic dance music worldwide.",
+      "Some of the biggest festivals today evolved from underground rave scenes."
     ];
-    const factDisplay = document.getElementById('factDisplay');
-    document.getElementById('nextFactBtn').addEventListener('click', () => {
-      const fact = raveFacts[Math.floor(Math.random() * raveFacts.length)];
-      factDisplay.textContent = fact;
-      triggerConfetti(10);
+    const raveFactsList = document.getElementById('raveFactsList');
+    raveFacts.forEach(fact => {
+      const li = document.createElement('li');
+      li.textContent = fact;
+      raveFactsList.appendChild(li);
     });
 
-    // === FUNNY STORIES MODULE ===
+    // === FUNNY STORIES ===
     const funnyStories = [
-      "Once, at a rave, a friend accidentally danced with a mop thinking it was another person. The mop got all the moves!",
-      "Dante tried to convince everyone the lobster was the DJ's mascot, now it has a fan club.",
-      "At the last festival, the power went out and everyone started singing ‘Electric Feel’ unplugged — best rave ever!",
-      "I once tried to teach a crab how to dance. It just pinched my finger and walked away.",
-      "Dante's rave hat got stolen — turns out it was just a seagull's new nest.",
-      "That time the lobster wore sunglasses and nobody noticed because the rave lights were so bright.",
-      "Lost in the crowd, Dante found himself talking to a plant — turns out it was a really chill guy in a costume.",
-      "The funniest DJ mix? ‘Crabstep’ — heavy bass with ocean sounds."
+      "Once, I tried to impress someone by juggling lobsters. Turns out, they don’t like to be juggled. Who knew?",
+      "At a rave, I accidentally danced so hard I lost my shoes. Still found them… under someone else’s rave pants.",
+      "I told my friends I’m an engineer. They asked if I can fix their Wi-Fi. Spoiler: I’m still working on mine!",
+      "Went fishing with Dante. Caught more sunburn than lobsters. Next time, sunscreen is mandatory!",
+      "I tried to rap once. My dog gave me a standing ovation… by running away.",
+      "Dante made a mixtape for the rave. It was fire! Literally, the speaker caught a spark.",
+      "Got lost at a festival and found a secret taco stand. Best wrong turn ever.",
+      "Tried to build a lobster trap out of old rave glow sticks. It mostly glowed and didn’t catch anything.",
+      "Once fell asleep during a rave and woke up thinking I was the DJ. The crowd disagreed.",
+      "My dance moves are like code: sometimes they work, sometimes they cause a crash."
     ];
     const storyDisplay = document.getElementById('storyDisplay');
-    document.getElementById('nextStoryBtn').addEventListener('click', () => {
-      const story = funnyStories[Math.floor(Math.random() * funnyStories.length)];
-      storyDisplay.textContent = story;
-      triggerConfetti(20);
-    });
-
-    // === MINI GAME: LOBSTER RAVE CATCH ===
-    const canvas = document.getElementById('lobsterCanvas');
-    const ctx = canvas.getContext('2d');
-
-    const crab = {
-      x: canvas.width / 2 - 25,
-      y: canvas.height - 60,
-      width: 50,
-      height: 50,
-      speed: 7,
-      dx: 0,
-      color: '#00ffff'
-    };
-
-    const lobsterSize = 30;
-    let lobsters = [];
-    let score = 0;
-    let gameRunning = false;
-    let gameInterval, lobsterInterval;
-
-    function drawCrab() {
-      ctx.fillStyle = crab.color;
-      ctx.beginPath();
-      ctx.arc(crab.x + crab.width / 2, crab.y + crab.height / 2, crab.width / 2, 0, Math.PI * 2);
-      ctx.fill();
-      // eyes
-      ctx.fillStyle = '#000';
-      ctx.beginPath();
-      ctx.arc(crab.x + 15, crab.y + 20, 5, 0, Math.PI * 2);
-      ctx.arc(crab.x + 35, crab.y + 20, 5, 0, Math.PI * 2);
-      ctx.fill();
+    const nextStoryBtn = document.getElementById('nextStoryBtn');
+    let currentStoryIndex = -1;
+    function showNextStory() {
+      currentStoryIndex = (currentStoryIndex + 1) % funnyStories.length;
+      storyDisplay.textContent = funnyStories[currentStoryIndex];
+      storyDisplay.focus();
+      launchConfetti();
     }
-
-    function drawLobster(lobster) {
-      ctx.fillStyle = lobster.color;
-      ctx.beginPath();
-      ctx.ellipse(lobster.x + lobsterSize / 2, lobster.y + lobsterSize / 2, lobsterSize / 2, lobsterSize / 3, 0, 0, Math.PI * 2);
-      ctx.fill();
-      // claws
-      ctx.strokeStyle = lobster.color;
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(lobster.x + 3, lobster.y + lobsterSize / 2);
-      ctx.lineTo(lobster.x - 5, lobster.y + lobsterSize / 4);
-      ctx.moveTo(lobster.x + 3, lobster.y + lobsterSize / 2);
-      ctx.lineTo(lobster.x - 5, lobster.y + lobsterSize * 0.75);
-      ctx.stroke();
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawCrab();
-      lobsters.forEach(drawLobster);
-      ctx.fillStyle = '#0ff';
-      ctx.font = '18px monospace';
-      ctx.fillText(`Score: ${score}`, 10, 25);
-    }
-
-    function update() {
-      crab.x += crab.dx;
-      if (crab.x < 0) crab.x = 0;
-      if (crab.x + crab.width > canvas.width) crab.x = canvas.width - crab.width;
-
-      // Move lobsters downwards
-      lobsters.forEach((lobster, index) => {
-        lobster.y += lobster.speed;
-        if (lobster.y > canvas.height) {
-          lobsters.splice(index, 1);
-          score--;
-        }
-        // Collision with crab
-        if (
-          lobster.x < crab.x + crab.width &&
-          lobster.x + lobsterSize > crab.x &&
-          lobster.y < crab.y + crab.height &&
-          lobster.y + lobsterSize > crab.y
-        ) {
-          lobsters.splice(index, 1);
-          score++;
-          triggerConfetti(5);
-        }
-      });
-      draw();
-    }
-
-    function startGame() {
-      if(gameRunning) return;
-      lobsters = [];
-      score = 0;
-      gameRunning = true;
-      crab.x = canvas.width / 2 - crab.width / 2;
-      document.getElementById('scoreDisplay').textContent = score;
-      gameInterval = setInterval(update, 30);
-      lobsterInterval = setInterval(() => {
-        // Spawn lobster at random x
-        const x = Math.random() * (canvas.width - lobsterSize);
-        lobsters.push({x, y: -lobsterSize, speed: 2 + Math.random() * 2, color: '#00ffff'});
-      }, 1000);
-      document.getElementById('startGameBtn').disabled = true;
-      document.getElementById('stopGameBtn').disabled = false;
-    }
-
-    function stopGame() {
-      gameRunning = false;
-      clearInterval(gameInterval);
-      clearInterval(lobsterInterval);
-      lobsters = [];
-      draw();
-      document.getElementById('startGameBtn').disabled = false;
-      document.getElementById('stopGameBtn').disabled = true;
-    }
-
-    // Keyboard controls
-    function keyDownHandler(e) {
-      if (!gameRunning) return;
-      if(e.key === 'ArrowLeft' || e.key === 'a') crab.dx = -crab.speed;
-      if(e.key === 'ArrowRight' || e.key === 'd') crab.dx = crab.speed;
-    }
-    function keyUpHandler(e) {
-      if(e.key === 'ArrowLeft' || e.key === 'a') crab.dx = 0;
-      if(e.key === 'ArrowRight' || e.key === 'd') crab.dx = 0;
-    }
-    window.addEventListener('keydown', keyDownHandler);
-    window.addEventListener('keyup', keyUpHandler);
-
-    document.getElementById('startGameBtn').addEventListener('click', startGame);
-    document.getElementById('stopGameBtn').addEventListener('click', stopGame);
-
-    // Update score display
-    setInterval(() => {
-      document.getElementById('scoreDisplay').textContent = score;
-    }, 200);
+    nextStoryBtn.addEventListener('click', showNextStory);
 
     // === DANTEBOX ===
     const danteBox = document.getElementById('danteBox');
+    let danteBoxOpened = false;
     danteBox.addEventListener('click', () => {
-      if (danteBox.classList.contains('opened')) return;
+      if (danteBoxOpened) return;
+      danteBoxOpened = true;
       danteBox.classList.add('shake');
       setTimeout(() => {
         danteBox.classList.remove('shake');
         danteBox.classList.add('opened');
-        alert("🎉 Surprise Dante! You found the secret DanteBox! Sending rave vibes your way! 🦞✨");
-        triggerConfetti(30);
+        danteBox.textContent = "✨";
+        alert("🎉 Surprise from Larissa to Dante! 🎉\n\nKeep shining and keep having fun! Love, Larissa ❤️");
+        launchConfetti();
       }, 1500);
     });
-    danteBox.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        danteBox.click();
-      }
-    });
 
-    // === CONFETTI ANIMATION ===
+    // === CONFETTI ===
     const confettiCanvas = document.getElementById('confettiCanvas');
     const confettiCtx = confettiCanvas.getContext('2d');
     let confettiPieces = [];
-
-    function ConfettiPiece() {
-      this.x = Math.random() * window.innerWidth;
-      this.y = Math.random() * window.innerHeight - window.innerHeight;
-      this.size = (Math.random() * 7) + 5;
-      this.speed = (Math.random() * 3) + 2;
-      this.angle = Math.random() * 360;
-      this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
-      this.tilt = (Math.random() * 10) - 5;
-      this.tiltAngle = 0;
-      this.tiltAngleIncrement = (Math.random() * 0.1) + 0.05;
-    }
-    ConfettiPiece.prototype.update = function() {
-      this.y += this.speed;
-      this.tiltAngle += this.tiltAngleIncrement;
-      this.x += Math.sin(this.angle * Math.PI/180);
-      this.tilt = Math.sin(this.tiltAngle) * 15;
-
-      if(this.y > window.innerHeight) {
-        this.x = Math.random() * window.innerWidth;
-        this.y = -10;
-      }
-    }
-    ConfettiPiece.prototype.draw = function(ctx) {
-      ctx.beginPath();
-      ctx.lineWidth = this.size / 2;
-      ctx.strokeStyle = this.color;
-      ctx.moveTo(this.x + this.tilt + this.size / 2, this.y);
-      ctx.lineTo(this.x + this.tilt, this.y + this.tilt + this.size / 2);
-      ctx.stroke();
-    }
-
-    function triggerConfetti(count = 20) {
-      for(let i=0; i<count; i++) {
-        confettiPieces.push(new ConfettiPiece());
-      }
-      if(!confettiRunning) {
-        confettiRunning = true;
-        requestAnimationFrame(runConfetti);
-      }
-    }
-
-    let confettiRunning = false;
-    function runConfetti() {
-      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-      confettiPieces.forEach((p, i) => {
-        p.update();
-        p.draw(confettiCtx);
-        // Remove if too old
-        if(p.y > window.innerHeight + 20) {
-          confettiPieces.splice(i, 1);
-        }
-      });
-      if(confettiPieces.length > 0) {
-        requestAnimationFrame(runConfetti);
-      } else {
-        confettiRunning = false;
-      }
-    }
+    let confettiAnimationId;
 
     function resizeCanvas() {
       confettiCanvas.width = window.innerWidth;
@@ -626,34 +506,272 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // === DANTEBOT AI CHAT SIMULATION ===
+    class ConfettiPiece {
+      constructor() {
+        this.x = Math.random() * confettiCanvas.width;
+        this.y = Math.random() * confettiCanvas.height - confettiCanvas.height;
+        this.size = 8 + Math.random() * 6;
+        this.speed = 2 + Math.random() * 3;
+        this.angle = Math.random() * 2 * Math.PI;
+        this.angularSpeed = 0.05 + Math.random() * 0.05;
+        this.color = `hsl(${Math.floor(Math.random()*360)}, 100%, 70%)`;
+        this.opacity = 1;
+        this.spin = Math.random() > 0.5 ? 1 : -1;
+      }
+      update() {
+        this.y += this.speed;
+        this.angle += this.angularSpeed * this.spin;
+        if (this.y > confettiCanvas.height) {
+          this.y = -this.size;
+          this.x = Math.random() * confettiCanvas.width;
+        }
+      }
+      draw() {
+        confettiCtx.save();
+        confettiCtx.translate(this.x, this.y);
+        confettiCtx.rotate(this.angle);
+        confettiCtx.fillStyle = this.color;
+        confettiCtx.globalAlpha = this.opacity;
+        confettiCtx.fillRect(-this.size/2, -this.size/2, this.size, this.size / 3);
+        confettiCtx.restore();
+      }
+    }
+    function createConfetti(num = 150) {
+      confettiPieces = [];
+      for(let i=0; i<num; i++) {
+        confettiPieces.push(new ConfettiPiece());
+      }
+    }
+    function renderConfetti() {
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      confettiPieces.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      confettiAnimationId = requestAnimationFrame(renderConfetti);
+    }
+    function launchConfetti() {
+      createConfetti();
+      if(!confettiAnimationId) renderConfetti();
+      setTimeout(() => {
+        cancelAnimationFrame(confettiAnimationId);
+        confettiAnimationId = null;
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      }, 4000);
+    }
+
+    // === LOBSTER RAVE CATCH MINI-GAME ===
+    const canvas = document.getElementById('lobsterCanvas');
+    const ctx = canvas.getContext('2d');
+    const startGameBtn = document.getElementById('startGameBtn');
+    const stopGameBtn = document.getElementById('stopGameBtn');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+
+    let gameRunning = false;
+    let score = 0;
+    const crabWidth = 80;
+    const crabHeight = 40;
+    const lobsterSize = 30;
+
+    // Crab position and speed
+    let crabX = canvas.width / 2 - crabWidth/2;
+    const crabY = canvas.height - crabHeight - 10;
+    const crabSpeed = 7;
+    let moveLeft = false;
+    let moveRight = false;
+
+    // Lobsters array
+    let lobsters = [];
+
+    // Lobster falling speed
+    const lobsterFallSpeed = 3;
+
+    // Draw crab
+    function drawCrab() {
+      ctx.fillStyle = '#00ffff';
+      ctx.beginPath();
+      ctx.ellipse(crabX + crabWidth/2, crabY + crabHeight/2, crabWidth/2, crabHeight/2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Crab claws
+      ctx.strokeStyle = '#00ffff';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(crabX + 10, crabY + 20);
+      ctx.lineTo(crabX, crabY + 10);
+      ctx.moveTo(crabX + crabWidth - 10, crabY + 20);
+      ctx.lineTo(crabX + crabWidth + 5, crabY + 10);
+      ctx.stroke();
+    }
+
+    // Draw lobster
+    function drawLobster(lob) {
+      ctx.fillStyle = '#ff3300';
+      ctx.beginPath();
+      ctx.ellipse(lob.x, lob.y, lobsterSize/2, lobsterSize/3, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // antenna
+      ctx.strokeStyle = '#ff3300';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(lob.x - 5, lob.y - 5);
+      ctx.lineTo(lob.x - 15, lob.y - 15);
+      ctx.moveTo(lob.x + 5, lob.y - 5);
+      ctx.lineTo(lob.x + 15, lob.y - 15);
+      ctx.stroke();
+    }
+
+    // Update game state
+    function updateGame() {
+      if (!gameRunning) return;
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Move crab
+      if (moveLeft) crabX -= crabSpeed;
+      if (moveRight) crabX += crabSpeed;
+
+      // Clamp crab position inside canvas
+      crabX = Math.max(0, Math.min(canvas.width - crabWidth, crabX));
+
+      // Draw crab
+      drawCrab();
+
+      // Update and draw lobsters
+      for (let i = lobsters.length -1; i >= 0; i--) {
+        const lob = lobsters[i];
+        lob.y += lobsterFallSpeed;
+        drawLobster(lob);
+
+        // Check if lobster caught
+        if (
+          lob.y + lobsterSize/3 >= crabY &&
+          lob.x > crabX &&
+          lob.x < crabX + crabWidth
+        ) {
+          lobsters.splice(i, 1);
+          score++;
+          scoreDisplay.textContent = "Score: " + score;
+          launchConfetti();
+        } else if (lob.y > canvas.height + lobsterSize) {
+          // Remove lobster if it falls off screen
+          lobsters.splice(i, 1);
+        }
+      }
+
+      // Randomly add lobsters
+      if (Math.random() < 0.03) {
+        lobsters.push({
+          x: Math.random() * (canvas.width - lobsterSize) + lobsterSize/2,
+          y: -lobsterSize
+        });
+      }
+
+      requestAnimationFrame(updateGame);
+    }
+
+    // Keyboard controls
+    function keyDownHandler(e) {
+      if (!gameRunning) return;
+      if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") {
+        moveLeft = true;
+      } else if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") {
+        moveRight = true;
+      }
+    }
+    function keyUpHandler(e) {
+      if (!gameRunning) return;
+      if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") {
+        moveLeft = false;
+      } else if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") {
+        moveRight = false;
+      }
+    }
+
+    // Start game
+    startGameBtn.addEventListener('click', () => {
+      if (gameRunning) return;
+      gameRunning = true;
+      score = 0;
+      scoreDisplay.textContent = "Score: 0";
+      lobsters = [];
+      crabX = canvas.width / 2 - crabWidth/2;
+      startGameBtn.disabled = true;
+      stopGameBtn.disabled = false;
+      updateGame();
+      window.addEventListener('keydown', keyDownHandler);
+      window.addEventListener('keyup', keyUpHandler);
+    });
+
+    // Stop game
+    stopGameBtn.addEventListener('click', () => {
+      if (!gameRunning) return;
+      gameRunning = false;
+      startGameBtn.disabled = false;
+      stopGameBtn.disabled = true;
+      window.removeEventListener('keydown', keyDownHandler);
+      window.removeEventListener('keyup', keyUpHandler);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      scoreDisplay.textContent = "Score: " + score + " (Game stopped)";
+    });
+
+    // === DANTEBOT CHAT ===
+    const chatResponse = document.getElementById('response');
     const userInput = document.getElementById('userInput');
     const sendBtn = document.getElementById('sendBtn');
-    const responseBox = document.getElementById('response');
 
-    sendBtn.addEventListener('click', () => {
-      const text = userInput.value.trim();
-      if(!text) return;
-      responseBox.textContent = "🤖 DanteBot is thinking...";
-      setTimeout(() => {
-        // Simple mock AI response logic
-        let resp = "Hmm... I gotta rave on that!";
-        if (text.toLowerCase().includes("lobster")) {
-          resp = "Lobsters love the rave too! 🦞✨";
-        } else if (text.toLowerCase().includes("fun")) {
-          resp = "Fun is the only way to be, Dante!";
-        } else if (text.toLowerCase().includes("music")) {
-          resp = "Drop that beat and dance all night!";
-        } else if (text.endsWith("?")) {
-          resp = "That's an interesting question... Let's find out together!";
-        } else {
-          resp = "Keep the good vibes flowing!";
-        }
-        responseBox.textContent = resp;
-        triggerConfetti(10);
-      }, 1200);
-      userInput.value = "";
+    // Simple local DanteBot AI responses
+    const danteBotReplies = [
+      "Hey Dante! Ready to rave? 🕺",
+      "Did you hear the one about the lobster that threw the party? It was shell-tastic!",
+      "You bring the vibe, I bring the rave facts!",
+      "Lobsters can live up to 50 years. That's a long rave!",
+      "Don't forget to stay hydrated at the rave, bud!",
+      "If you need a laugh, just ask me for a funny story.",
+      "Let's catch some lobsters and some good times!",
+      "Feeling the rave energy today? Let's keep it going!",
+      "I’m your rave sidekick, Dante. What’s up?",
+      "Dark humor? I got you covered. Just ask!"
+    ];
+
+    function danteBotReply(userMsg) {
+      userMsg = userMsg.toLowerCase();
+      if (userMsg.includes('lobster')) return "Lobsters love to rave too! 🦞🔥";
+      if (userMsg.includes('rave')) return "Raves are all about peace, love, unity, and respect! ✌️❤️🤝✨";
+      if (userMsg.includes('funny')) return funnyStories[Math.floor(Math.random() * funnyStories.length)];
+      if (userMsg.includes('hello') || userMsg.includes('hi')) return "Hey Dante! Ready for some fun?";
+      if (userMsg.includes('love')) return "Sending you rave love and good vibes! ❤️🎉";
+      if (userMsg.includes('music')) return "Turn up the bass and let’s dance all night!";
+      if (userMsg.includes('dark')) return "Dark humor detected. Here’s a light-hearted joke instead: Why don’t scientists trust atoms? Because they make up everything! 😂";
+      // Default fallback random reply
+      return danteBotReplies[Math.floor(Math.random() * danteBotReplies.length)];
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendMessage();
     });
+
+    function sendMessage() {
+      const msg = userInput.value.trim();
+      if (!msg) return;
+      appendMessage(`You: ${msg}`);
+      userInput.value = '';
+      setTimeout(() => {
+        const reply = danteBotReply(msg);
+        appendMessage(`DanteBot: ${reply}`);
+        launchConfetti();
+      }, 800);
+    }
+
+    function appendMessage(text) {
+      chatResponse.textContent += "\n" + text;
+      chatResponse.scrollTop = chatResponse.scrollHeight;
+      chatResponse.focus();
+    }
+
+    // Accessibility: focus main area on load
+    document.querySelector('main').focus();
 
   </script>
 </body>
