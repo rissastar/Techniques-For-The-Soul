@@ -1,2 +1,197 @@
-•	🧠 “What If…” generator for ADHD rabbit holes.
-	•	🚨 A funny “Panic Button” with a rave siren that just yells “Smoke break!” or “Hide! It’s your parole officer!”
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sh*t That Reels Me In</title>
+  <style>
+    body {
+      background: #0b0c10;
+      color: #f0f0f0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #66fcf1;
+    }
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      background: #1f2833;
+      color: #c5c6c7;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a29e;
+    }
+    #output {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #ffcc70;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎣 Sh*t That Reels Me In</h1>
+  <div class="button-container">
+    <button onclick="whatIf()">🧠 What If…</button>
+    <button onclick="panicButton()">🚨 Panic Button</button>
+    <button onclick="catchOfTheDay()">🎣 Catch of the Day</button>
+    <button onclick="freestyle()">🎤 Freestyle or Fail</button>
+    <button onclick="movieRoast()">🎥 Movie Roast Roulette</button>
+    <button onclick="fixIt()">🔧 Fix It or Forget It</button>
+    <button onclick="raveVibes()">🌈 Rave Vibes</button>
+    <button onclick="sassySay()">🦶 Sassy the Sasquatch Says</button>
+    <button onclick="darkJoke()">😂 Dark Joke Dealer</button>
+    <button onclick="trapTalk()">🐟 Trap Talk</button>
+    <button onclick="funnyStory()">📖 Funny AF Storytime</button>
+    <button onclick="munchieMood()">🍔 Munchie Mood Matcher</button>
+    <button onclick="buildCar()">🚗 Build-a-Car Dreamer</button>
+  </div>
+  <div id="output"></div>
+  <script>
+    function getRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function whatIf() {
+      const ideas = [
+        "What if lobsters had rap battles to decide trap hierarchy?",
+        "What if your Civic turned into a rave boat during full moons?",
+        "What if Trailer Park Boys got abducted by aliens and started a band?",
+        "What if hot dogs could talk and just wanted to be left alone?",
+        "What if your fishing trap caught a mixtape and it slapped?"
+      ];
+      document.getElementById("output").innerText = getRandom(ideas);
+    }
+
+    function panicButton() {
+      const sounds = ["Smoke break!", "Hide! It’s your parole officer!", "Get in the Civic, we’re going to Dollarama!"];
+      alert(getRandom(sounds));
+      document.body.style.background = "#ff00ff";
+      setTimeout(() => {
+        document.body.style.background = "#0b0c10";
+      }, 1500);
+    }
+
+    function catchOfTheDay() {
+      const catches = [
+        "A lobster with AirPods",
+        "A mixtape dropped by a trout",
+        "A boot full of poutine",
+        "A fish with a neck tattoo",
+        "Ricky from TPB passed out in a trap"
+      ];
+      document.getElementById("output").innerText = getRandom(catches);
+    }
+
+    function freestyle() {
+      const challenges = [
+        "Rap about a stoned lobster with ADHD",
+        "Spit 3 bars about rave traps and Civic mods",
+        "Freestyle like you’re Sassy the Sasquatch on molly",
+        "Rap your last munchie order like a love song"
+      ];
+      document.getElementById("output").innerText = getRandom(challenges);
+    }
+
+    function movieRoast() {
+      const roasts = [
+        "Fast & Furious 26: Lobster Drift",
+        "Finding Nemo 3: Trailer Park Edition",
+        "The Trapfather: Crustacean Crime Wars",
+        "Rave Wars: The Bass Awakens"
+      ];
+      document.getElementById("output").innerText = getRandom(roasts);
+    }
+
+    function fixIt() {
+      const builds = [
+        "Rebuild a Civic using only duct tape and rave lights",
+        "Build a lobster trap that doubles as a smoker",
+        "Fix a trailer axle with poutine grease",
+        "Invent a stoner-proof fair ride"
+      ];
+      document.getElementById("output").innerText = getRandom(builds);
+    }
+
+    function raveVibes() {
+      const vibes = [
+        "Glowstick vibes activated 🌈",
+        "Drop that bass 🔊🔊🔊",
+        "Laser lobsters in the sky ✨🦞",
+        "This track slaps like Sassy’s tail"
+      ];
+      document.getElementById("output").innerText = getRandom(vibes);
+    }
+
+    function sassySay() {
+      const sass = [
+        "Don’t trap what you can’t cook 🦞",
+        "If you can’t rave with the wolves, stay in the Civic",
+        "Smoke 'em if ya got 'em – just not near the traps"
+      ];
+      document.getElementById("output").innerText = getRandom(sass);
+    }
+
+    function darkJoke() {
+      const jokes = [
+        "Why did the stoner fail the drug test? He studied too hard.",
+        "I asked a lobster for advice. Now I owe him $20 and my dignity.",
+        "Life’s like a broken Civic – loud, confusing, and full of smoke."
+      ];
+      document.getElementById("output").innerText = getRandom(jokes);
+    }
+
+    function trapTalk() {
+      const convos = [
+        "'Yo bro, you smell like bait or heartbreak?'",
+        "'We rotating traps or feelings today?'",
+        "'If I get caught again, I’m blaming the humans.'"
+      ];
+      document.getElementById("output").innerText = getRandom(convos);
+    }
+
+    function funnyStory() {
+      const stories = [
+        "That time we hotboxed an ice shack and thought the sonar was haunted.",
+        "He rolled a blunt with a parking ticket and passed it to a seagull.",
+        "Once caught a fish wearing a glow stick necklace from Evolve."
+      ];
+      document.getElementById("output").innerText = getRandom(stories);
+    }
+
+    function munchieMood() {
+      const combos = [
+        "Poutine + Gummy Worms = genius",
+        "KD + Hot Cheetos",
+        "Pizza rolls dipped in pancake syrup",
+        "Funnel cake burrito with bacon",
+        "Fried pickles with caramel drizzle"
+      ];
+      document.getElementById("output").innerText = getRandom(combos);
+    }
+
+    function buildCar() {
+      const builds = [
+        "A Civic with trap doors and rave lights",
+        "Lobster boat with NOS and 12” subs",
+        "A van powered by weed smoke and dreams",
+        "Go-kart modded with fishing rods"
+      ];
+      document.getElementById("output").innerText = getRandom(builds);
+    }
+  </script>
+</body>
+</html>
