@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover" />
-  <title>Dante’s Fun Hub</title>
+  <title>Dante’s Fun Hub 🎉</title>
 
   <!-- iOS Web App Meta -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -11,23 +11,23 @@
   <meta name="apple-mobile-web-app-title" content="Dante’s Fun Hub" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 
-  <!-- Android & Modern -->
+  <!-- Android & modern browsers manifest -->
   <link rel="manifest" href="manifest.json" />
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"/>
+  <!-- Neon fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
 
-  <!-- Styles -->
+  <!-- Main styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- Particle background -->
+  <!-- Particle background canvas -->
   <canvas id="particle-canvas"></canvas>
 
   <header>
     <h1>💖 Hey Dante 💖</h1>
-    <p>From Larissa: “Your sleek neon rave hub—add me to your Home Screen!”</p>
+    <p>From Larissa: “Your sleek neon rave hub—add me to Home Screen!”</p>
   </header>
 
   <div id="game-area">
@@ -43,9 +43,9 @@
     <button onclick="showZeusCorner()">🐶 Zeus’s Corner</button>
   </div>
 
-  <!-- Main Script -->
+  <!-- Main script -->
   <script src="script.js"></script>
-  <!-- Register Service Worker -->
+  <!-- Register service worker for offline support -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(console.error);
