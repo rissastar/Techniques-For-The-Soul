@@ -2,885 +2,476 @@
 <html lang="en" data-theme="neon">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Dante’s Fun Hub - iPhone Safari Edition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dante's Fun Hub - Interactive Edition</title>
 <style>
-  /* Reset & basics */
-  * {
-    margin: 0; padding: 0; box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-  html, body {
-    height: 100%;
-    background: #050017;
-    color: #0ff;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-    touch-action: manipulation;
-  }
-
+  /* Base neon rave style */
   body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  }
-
-  h1 {
-    text-align: center;
-    margin: 1rem 0 0.5rem;
-    font-weight: 900;
-    font-size: 2.2rem;
-    text-shadow: 0 0 8px #00ffffaa, 0 0 20px #0ff;
-  }
-
-  nav {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    background: #111032;
-    border-bottom: 2px solid #0ff;
-  }
-  nav button {
-    flex: 0 0 auto;
-    background: transparent;
-    border: none;
-    padding: 14px 18px;
+    margin: 0; padding: 0; font-family: 'Arial Black', Gadget, sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     color: #0ff;
-    font-size: 1.2rem;
-    font-weight: 700;
-    text-shadow: 0 0 6px #0ff88;
-    cursor: pointer;
+    overflow-x: hidden;
     user-select: none;
-    -webkit-user-select:none;
-    outline-offset: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border-bottom: 3px solid transparent;
   }
-  nav button.active,
-  nav button:focus {
-    background: #0ff1;
-    border-bottom: 3px solid #0ff;
-    color: #00ffff;
+  h1, h2 {
+    text-align: center;
+    text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
   }
-  nav::-webkit-scrollbar {
-    height: 8px;
-  }
-  nav::-webkit-scrollbar-thumb {
-    background: #0ff6;
-    border-radius: 4px;
-  }
-
-  main {
-    flex: 1 1 auto;
-    overflow-y: auto;
-    padding: 1rem;
-  }
-
-  section {
-    display: none;
-    outline: none;
-  }
-  section.active {
-    display: block;
-  }
-
-  .content-container {
-    font-size: 1.3rem;
-    line-height: 1.5;
-    padding: 0.8rem 1rem;
-    background: #001011cc;
-    border-radius: 12px;
-    box-shadow: 0 0 14px #00ffff99 inset;
-    min-height: 130px;
-    user-select: text;
-  }
-
-  /* Navigation for prev/next in each category */
-  .nav-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  .nav-buttons button {
-    flex: 1 1 45%;
-    background: #003344;
+  button {
+    background: #0ff;
     border: none;
-    color: #0ff;
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 10px;
+    padding: 0.8rem 1.5rem;
+    margin: 1rem auto;
+    display: block;
+    font-weight: 900;
     border-radius: 10px;
-    box-shadow: 0 0 10px #0ff7 inset;
     cursor: pointer;
-    user-select: none;
-    -webkit-user-select:none;
-    transition: background-color 0.25s ease;
+    color: #111;
+    box-shadow: 0 0 15px #0ff;
+    transition: background 0.3s ease-in-out;
   }
-  .nav-buttons button:active {
-    background: #00ffffcc;
-    color: #002233;
-  }
-
-  /* Chat Bot Styles */
-  #chat-container {
-    margin-top: 1.5rem;
-    background: #001a1aee;
-    border-radius: 15px;
-    box-shadow: 0 0 20px #00ffffcc inset;
-    max-height: 320px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  #chat-window {
-    flex: 1 1 auto;
-    overflow-y: auto;
-    padding: 1rem;
-    font-size: 1.15rem;
-    color: #0ff;
-  }
-  .chat-msg {
-    margin-bottom: 12px;
-    padding: 8px 14px;
-    border-radius: 20px;
-    max-width: 85%;
-    line-height: 1.3;
-  }
-  .chat-msg.bot {
-    background: #00444ccc;
-    align-self: flex-start;
-    box-shadow: 0 0 10px #00ffff99;
-  }
-  .chat-msg.user {
-    background: #00ccccdd;
-    color: #002222;
-    align-self: flex-end;
-    font-weight: 700;
-    box-shadow: 0 0 10px #008888cc;
-  }
-
-  #chat-form {
-    display: flex;
-    padding: 8px 10px;
-    background: #002222cc;
-    border-top: 2px solid #0ff;
-    border-radius: 0 0 15px 15px;
-  }
-
-  #chat-input {
-    flex: 1 1 auto;
-    border-radius: 14px;
-    border: none;
-    padding: 12px 16px;
-    font-size: 1.15rem;
-    outline-offset: 3px;
-    color: #004d4d;
-    font-weight: 600;
-  }
-  #chat-input::placeholder {
-    color: #0ff7;
-  }
-
-  #chat-submit-btn {
-    background: #0ff;
-    border: none;
-    padding: 0 18px;
-    margin-left: 10px;
-    border-radius: 14px;
-    font-weight: 700;
-    color: #004d4d;
-    font-size: 1.2rem;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select:none;
-    transition: background-color 0.3s ease;
-  }
-  #chat-submit-btn:active {
-    background: #00ffffcc;
-  }
-
-  /* Game container styles */
-  #lobster-game, #rave-rhythm {
-    margin-top: 1.5rem;
-    background: #000b10ee;
-    border-radius: 15px;
-    padding: 12px;
-    box-shadow: 0 0 22px #00ffffbb inset;
-    display: none;
+  button:hover, button:focus {
+    background: #33ffff;
     outline: none;
+    box-shadow: 0 0 25px #33ffff;
   }
-  #lobster-game.active, #rave-rhythm.active {
-    display: block;
+  section {
+    max-width: 420px;
+    margin: 1rem auto;
+    background: rgba(0, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 0 15px #0ff inset;
   }
-
-  /* Lobster Catch Game */
-  #lobster-canvas {
-    background: #01001c;
-    border-radius: 12px;
-    width: 100% !important;
-    height: 240px !important;
-    touch-action: none;
-    user-select: none;
-    display: block;
-    margin: 0 auto;
-    box-shadow: 0 0 18px #ff2200 inset;
+  .hidden {
+    display: none;
   }
-  #lobster-score {
-    margin-top: 8px;
-    font-size: 1.3rem;
+  .flex-row {
+    display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap;
+  }
+  /* Tap Challenge styles */
+  #roar-btn {
+    font-size: 2rem;
+    padding: 1rem 2rem;
+  }
+  #roar-score {
+    font-size: 1.8rem;
     text-align: center;
-    text-shadow: 0 0 8px #ff2200aa;
+    margin-top: 0.5rem;
   }
-  #lobster-restart-btn {
-    margin-top: 8px;
-    background: #cc3300;
-    border: none;
-    border-radius: 12px;
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.1rem;
-    padding: 10px 0;
-    width: 100%;
-    cursor: pointer;
-    box-shadow: 0 0 20px #ff4400;
-    user-select: none;
-    -webkit-user-select:none;
-    transition: background-color 0.25s ease;
-  }
-  #lobster-restart-btn:active {
-    background: #ff5533;
-  }
-
-  /* Rave Rhythm Game */
-  #rave-buttons {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 10px;
-  }
-  .rave-arrow {
-    background: #0ff;
-    color: #002222;
-    font-size: 2.8rem;
-    border-radius: 14px;
-    width: 68px;
-    height: 68px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 900;
-    user-select: none;
-    -webkit-user-select:none;
-    cursor: pointer;
-    box-shadow: 0 0 16px #00ffffbb;
-    transition: background-color 0.3s ease;
-    touch-action: manipulation;
-  }
-  .rave-arrow.highlight {
-    background: #00ffaa;
-    box-shadow: 0 0 22px #00ffffee;
-  }
-  #rave-score {
-    margin-top: 12px;
-    font-size: 1.4rem;
-    font-weight: 700;
-    text-align: center;
-    color: #0ff;
-    text-shadow: 0 0 10px #00ffccbb;
-  }
-  #rave-restart-btn {
-    margin-top: 10px;
-    background: #00ccaa;
-    border: none;
-    border-radius: 14px;
-    padding: 10px 0;
-    width: 100%;
-    color: #003322;
-    font-weight: 700;
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 0 20px #00ffbb;
-    user-select: none;
-    -webkit-user-select:none;
-    transition: background-color 0.25s ease;
-  }
-  #rave-restart-btn:active {
-    background: #00eecc;
-  }
-
-  /* Buttons for games toggle */
-  #game-toggle-buttons {
+  /* Drag and drop */
+  #junkyard {
+    display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
     margin-top: 1rem;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
   }
-  #game-toggle-buttons button {
-    background: #11103f;
-    border: none;
-    border-radius: 12px;
-    color: #0ff;
-    padding: 10px 18px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 0 10px #0ff9 inset;
+  .car-part {
+    width: 70px; height: 70px;
+    border: 2px solid #0ff;
+    border-radius: 15px;
+    background-color: #112;
+    display: flex; align-items: center; justify-content: center;
+    color: #0ff; font-weight: bold;
+    cursor: grab;
     user-select: none;
-    -webkit-user-select:none;
-    transition: background-color 0.3s ease;
   }
-  #game-toggle-buttons button.active {
+  .dropzone {
+    width: 70px; height: 70px;
+    border: 2px dashed #0ff;
+    border-radius: 15px;
+    margin: 0 10px;
+  }
+  .correct {
+    background-color: #0f6 !important;
+    border-color: #0f0 !important;
+  }
+  /* Quiz */
+  #quiz-question {
+    font-weight: 900;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .quiz-btn {
     background: #0ff;
-    color: #002222;
-    box-shadow: 0 0 20px #00ffffcc;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0.3rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    color: #111;
+    box-shadow: 0 0 8px #0ff;
   }
-  #game-toggle-buttons button:active {
-    background: #0ee;
-    color: #001f1f;
+  .quiz-btn:hover {
+    background: #33ffff;
   }
-
-  /* Scrollbar for chat and content on iOS */
-  #chat-window::-webkit-scrollbar, main::-webkit-scrollbar {
-    height: 6px;
-    width: 6px;
+  #quiz-feedback {
+    text-align: center;
+    margin-top: 0.7rem;
+    font-weight: 700;
   }
-  #chat-window::-webkit-scrollbar-thumb, main::-webkit-scrollbar-thumb {
-    background-color: #0ff7;
-    border-radius: 3px;
+  /* Sound guess */
+  #sound-options {
+    display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap;
   }
-
-  /* Accessibility focus styles */
-  button:focus, input:focus {
-    outline: 3px solid #00ffff;
-    outline-offset: 3px;
+  /* Memory game */
+  #memory-board {
+    display: grid;
+    grid-template-columns: repeat(4, 60px);
+    gap: 12px;
+    justify-content: center;
+    margin-top: 1rem;
   }
-
+  .memory-card {
+    width: 60px; height: 60px;
+    background: #0ff;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #0ff inset;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900;
+    color: #111;
+    font-size: 1.4rem;
+    user-select: none;
+  }
+  .flipped {
+    background: #33ffff;
+    color: #000;
+  }
+  .matched {
+    background: #0f6;
+    box-shadow: 0 0 20px #0f0 inset;
+    cursor: default;
+    color: #000;
+  }
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background-color: #0ff;
+    opacity: 0.9;
+    pointer-events: none;
+    animation-name: fallConfetti;
+    animation-timing-function: linear;
+  }
+  @keyframes fallConfetti {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
 </style>
 </head>
 <body>
 
-<h1>Dante’s Fun Hub</h1>
+<h1>Dante’s Fun Hub 🎉</h1>
 
-<nav aria-label="Category navigation">
-  <button data-section="fun-facts" class="active" type="button">Fun Facts</button>
-  <button data-section="dark-jokes" type="button">Dark Jokes</button>
-  <button data-section="rave-facts" type="button">Rave Facts</button>
-  <button data-section="memes" type="button">Memes</button>
-  <button data-section="snack-ideas" type="button">Snack Ideas</button>
-  <button data-section="zeus-corner" type="button">Zeus Corner</button>
-</nav>
+<!-- 1. Sassy the Sasquatch Roar Challenge -->
+<section id="sassy-section" aria-label="Sassy the Sasquatch Roar Challenge">
+  <h2>🦶 Sassy the Sasquatch - Roar Challenge</h2>
+  <button id="roar-btn" aria-label="Tap to stomp">STOMP!</button>
+  <div id="roar-score">Taps: 0 / 15</div>
+  <p style="text-align:center; font-size:0.9rem; margin-top:0.5rem;">
+    Tap the button as fast as you can to scare off the rival Sasquatches!
+  </p>
+</section>
 
-<main tabindex="0">
-
-  <!-- Sections for categories -->
-  <section id="fun-facts" class="active" tabindex="0" aria-live="polite" aria-label="Fun Facts content">
-    <div class="content-container" id="fun-facts-content"></div>
-    <div class="nav-buttons">
-      <button id="fun-facts-prev" type="button" aria-label="Previous Fun Fact">← Previous</button>
-      <button id="fun-facts-next" type="button" aria-label="Next Fun Fact">Next →</button>
-    </div>
-  </section>
-
-  <section id="dark-jokes" tabindex="0" aria-live="polite" aria-label="Dark Jokes content">
-    <div class="content-container" id="dark-jokes-content"></div>
-    <div class="nav-buttons">
-      <button id="dark-jokes-prev" type="button" aria-label="Previous Dark Joke">← Previous</button>
-      <button id="dark-jokes-next" type="button" aria-label="Next Dark Joke">Next →</button>
-    </div>
-  </section>
-
-  <section id="rave-facts" tabindex="0" aria-live="polite" aria-label="Rave Facts content">
-    <div class="content-container" id="rave-facts-content"></div>
-    <div class="nav-buttons">
-      <button id="rave-facts-prev" type="button" aria-label="Previous Rave Fact">← Previous</button>
-      <button id="rave-facts-next" type="button" aria-label="Next Rave Fact">Next →</button>
-    </div>
-  </section>
-
-  <section id="memes" tabindex="0" aria-live="polite" aria-label="Memes content">
-    <div class="content-container" id="memes-content"></div>
-    <div class="nav-buttons">
-      <button id="memes-prev" type="button" aria-label="Previous Meme">← Previous</button>
-      <button id="memes-next" type="button" aria-label="Next Meme">Next →</button>
-    </div>
-  </section>
-
-  <section id="snack-ideas" tabindex="0" aria-live="polite" aria-label="Snack Ideas content">
-    <div class="content-container" id="snack-ideas-content"></div>
-    <div class="nav-buttons">
-      <button id="snack-ideas-prev" type="button" aria-label="Previous Snack Idea">← Previous</button>
-      <button id="snack-ideas-next" type="button" aria-label="Next Snack Idea">Next →</button>
-    </div>
-  </section>
-
-  <section id="zeus-corner" tabindex="0" aria-live="polite" aria-label="Zeus Corner content">
-    <div class="content-container" id="zeus-corner-content"></div>
-    <div class="nav-buttons">
-      <button id="zeus-corner-prev" type="button" aria-label="Previous Zeus Corner Fact">← Previous</button>
-      <button id="zeus-corner-next" type="button" aria-label="Next Zeus Corner Fact">Next →</button>
-    </div>
-  </section>
-
-  <!-- Chatbot -->
-  <div id="chat-container" role="region" aria-label="DanteBot chat">
-    <div id="chat-window" tabindex="0" aria-live="polite" aria-atomic="false"></div>
-    <form id="chat-form" aria-label="Chat input">
-      <input id="chat-input" type="text" placeholder="Talk to DanteBot..." aria-label="Message input" autocomplete="off" />
-      <button id="chat-submit-btn" type="submit" aria-label="Send message">➤</button>
-    </form>
+<!-- 2. Trailer Park Boys - Fix Ricky’s Junker -->
+<section id="tpb-fixit" aria-label="Trailer Park Boys Fix-It Game">
+  <h2>🎬 Trailer Park Boys - Fix Ricky’s Junker</h2>
+  <p>Drag the parts into the right spots to fix the car!</p>
+  <div id="junkyard">
+    <div draggable="true" class="car-part" id="engine" aria-grabbed="false" tabindex="0">Engine</div>
+    <div draggable="true" class="car-part" id="wheel" aria-grabbed="false" tabindex="0">Wheel</div>
+    <div draggable="true" class="car-part" id="battery" aria-grabbed="false" tabindex="0">Battery</div>
   </div>
-
-  <!-- Game toggle buttons -->
-  <div id="game-toggle-buttons" role="group" aria-label="Toggle between mini games">
-    <button id="lobster-game-btn" class="active" type="button" aria-pressed="true">Lobster Catch</button>
-    <button id="rave-rhythm-btn" type="button" aria-pressed="false">Rave Rhythm</button>
+  <div id="dropzones" style="display:flex; justify-content:center; gap: 2rem; margin-top: 1rem;">
+    <div class="dropzone" data-accept="engine" aria-label="Engine slot"></div>
+    <div class="dropzone" data-accept="wheel" aria-label="Wheel slot"></div>
+    <div class="dropzone" data-accept="battery" aria-label="Battery slot"></div>
   </div>
+  <button id="tpb-reset-btn">Reset Game</button>
+  <p id="tpb-fix-feedback" style="text-align:center; font-weight:bold; margin-top: 0.7rem;"></p>
+</section>
 
-  <!-- Lobster Catch Game -->
-  <section id="lobster-game" class="active" tabindex="0" aria-label="Lobster Catch game">
-    <canvas id="lobster-canvas" width="360" height="240" aria-label="Lobster catch game canvas"></canvas>
-    <div id="lobster-score" aria-live="polite" style="margin-top:0.3rem;">Score: 0</div>
-    <button id="lobster-restart-btn" type="button" aria-label="Restart Lobster Catch Game">Restart Game</button>
-  </section>
+<!-- 3. TPB Quick Trivia -->
+<section id="tpb-quiz" aria-label="Trailer Park Boys Trivia">
+  <h2>🎤 TPB Quick Trivia</h2>
+  <p id="quiz-question">Who said: "Get two birds stoned at once"?</p>
+  <div style="text-align:center;">
+    <button class="quiz-btn" data-answer="Ricky">Ricky</button>
+    <button class="quiz-btn" data-answer="Julian">Julian</button>
+    <button class="quiz-btn" data-answer="Bubbles">Bubbles</button>
+  </div>
+  <p id="quiz-feedback"></p>
+</section>
 
-  <!-- Rave Rhythm Game -->
-  <section id="rave-rhythm" tabindex="0" aria-label="Rave Rhythm game">
-    <div id="rave-buttons" role="group" aria-label="Rave arrow buttons">
-      <button class="rave-arrow" data-direction="left" type="button" aria-label="Left arrow">←</button>
-      <button class="rave-arrow" data-direction="down" type="button" aria-label="Down arrow">↓</button>
-      <button class="rave-arrow" data-direction="up" type="button" aria-label="Up arrow">↑</button>
-      <button class="rave-arrow" data-direction="right" type="button" aria-label="Right arrow">→</button>
-    </div>
-    <div id="rave-score" aria-live="polite">Score: 0</div>
-    <button id="rave-restart-btn" type="button" aria-label="Restart Rave Rhythm Game">Restart Game</button>
-  </section>
+<!-- 4. Cars & Mechanics - Guess the Sound -->
+<section id="sound-guess" aria-label="Cars & Mechanics Sound Guessing Game">
+  <h2>🚗 Guess the Car Sound</h2>
+  <button id="play-sound-btn">▶️ Play Sound</button>
+  <div id="sound-options" class="flex-row" style="margin-top: 1rem;">
+    <button class="quiz-btn" data-sound="engine">Engine</button>
+    <button class="quiz-btn" data-sound="horn">Horn</button>
+    <button class="quiz-btn" data-sound="brake">Brake</button>
+  </div>
+  <p id="sound-feedback" style="text-align:center; font-weight:bold; margin-top:0.7rem;"></p>
+</section>
 
-</main>
+<!-- 5. Mechanic's Toolbox Memory Game -->
+<section id="memory-game" aria-label="Mechanic's Toolbox Memory Game">
+  <h2>🔧 Mechanic’s Toolbox Memory Match</h2>
+  <div id="memory-board" aria-live="polite" aria-atomic="true"></div>
+  <p id="memory-feedback" style="text-align:center; font-weight:bold; margin-top: 0.7rem;"></p>
+  <button id="memory-reset-btn">Restart Memory Game</button>
+</section>
+
+<!-- Personal Message -->
+<section style="text-align:center; margin: 2rem 1rem 3rem; font-size:1rem; color:#ff66cc; text-shadow: 0 0 6px #ff66cc;">
+  <p>💖 Hey Dante, this hub is made just for you. Have fun, relax, and remember Zeus loves you! 🐕🔥</p>
+</section>
 
 <script>
-  // Data arrays for each category (short samples)
-  const data = {
-    "fun-facts": [
-      "Dante’s favorite hobby is lobster fishing – something he’s really passionate about!",
-      "Did you know? Lobsters can live for over 50 years in the wild.",
-      "The Mi’kmaq have treaty rights to fish lobsters in Nova Scotia, protecting their culture.",
-      "Fishing is a great way to relax and connect with nature.",
-      "Dante loves listening to rap music while at the dock."
-    ],
-    "dark-jokes": [
-      "Why don't skeletons fight each other? They don't have the guts.",
-      "I told my friend she drew her eyebrows too high. She seemed surprised.",
-      "Why don’t graveyards ever get overcrowded? Because people are dying to get in.",
-      "I'm reading a book about anti-gravity. It's impossible to put down.",
-      "I used to play piano by ear, but now I use my hands."
-    ],
-    "rave-facts": [
-      "Raves started as underground parties in the 1980s.",
-      "Glow sticks were invented in the 1960s and became rave staples decades later.",
-      "The term 'PLUR' stands for Peace, Love, Unity, Respect – core rave values.",
-      "Many DJs use turntables and digital controllers to create mixes live.",
-      "Dante’s favorite rave song is 'Sandstorm' by Darude."
-    ],
-    "memes": [
-      "When you catch a lobster but forget your cooler: 'Well, guess I’m dinner now!'",
-      "Me: I’m just gonna have one snack. Also me at midnight: *eats the whole fridge*",
-      "That feeling when the bass drops at a rave and your whole body goes brrrr.",
-      "Fishing license? Nah, I’m just here for the vibes.",
-      "Dante's face when someone says ‘lobsters aren’t cool’ — priceless."
-    ],
-    "snack-ideas": [
-      "Spicy shrimp chips with cool ranch dip.",
-      "Homemade lobster rolls with garlic butter.",
-      "Neon-colored gummy bears – rave snack vibes!",
-      "Crunchy seaweed snacks – healthy and tasty.",
-      "Dante’s favorite: mac & cheese bites with a hot sauce drizzle."
-    ],
-    "zeus-corner": [
-      "Zeus says: “Always keep your vibe electric ⚡”",
-      "Zeus recommends: ‘Don’t forget to hydrate during your rave!’",
-      "Zeus joke: Why did the lightning bolt break up? It found a better spark!",
-      "Zeus wisdom: ‘The power’s in your hands – use it wisely.’",
-      "Zeus tip: ‘Turn up the bass, turn down the stress.’"
-    ]
-  };
-
-  // Track indices for each category
-  const indices = {
-    "fun-facts": 0,
-    "dark-jokes": 0,
-    "rave-facts": 0,
-    "memes": 0,
-    "snack-ideas": 0,
-    "zeus-corner": 0
-  };
-
-  // DOM Elements
-  const navButtons = document.querySelectorAll('nav button');
-  const sections = document.querySelectorAll('main section');
-  const chatWindow = document.getElementById('chat-window');
-  const chatForm = document.getElementById('chat-form');
-  const chatInput = document.getElementById('chat-input');
-
-  // Game toggle buttons
-  const lobsterBtn = document.getElementById('lobster-game-btn');
-  const raveBtn = document.getElementById('rave-rhythm-btn');
-
-  // Lobster Game Elements
-  const lobsterGameSection = document.getElementById('lobster-game');
-  const lobsterCanvas = document.getElementById('lobster-canvas');
-  const lobsterScoreDisplay = document.getElementById('lobster-score');
-  const lobsterRestartBtn = document.getElementById('lobster-restart-btn');
-
-  // Rave Rhythm Game Elements
-  const raveGameSection = document.getElementById('rave-rhythm');
-  const raveButtons = document.querySelectorAll('.rave-arrow');
-  const raveScoreDisplay = document.getElementById('rave-score');
-  const raveRestartBtn = document.getElementById('rave-restart-btn');
-
-  // Initialize content for each category
-  function updateCategoryContent(category) {
-    const contentDiv = document.getElementById(`${category}-content`);
-    if (!contentDiv) return;
-    const items = data[category];
-    const idx = indices[category];
-    contentDiv.textContent = items[idx];
-  }
-
-  // Navigation buttons handlers for categories
-  function setupNavButtons(category) {
-    const prevBtn = document.getElementById(`${category}-prev`);
-    const nextBtn = document.getElementById(`${category}-next`);
-
-    prevBtn.addEventListener('click', () => {
-      indices[category] = (indices[category] - 1 + data[category].length) % data[category].length;
-      updateCategoryContent(category);
-    });
-    nextBtn.addEventListener('click', () => {
-      indices[category] = (indices[category] + 1) % data[category].length;
-      updateCategoryContent(category);
-    });
-  }
-
-  // Setup all nav buttons prev/next
-  Object.keys(data).forEach(cat => {
-    updateCategoryContent(cat);
-    setupNavButtons(cat);
+  // Sassy the Sasquatch Roar Challenge
+  const roarBtn = document.getElementById('roar-btn');
+  const roarScore = document.getElementById('roar-score');
+  let taps = 0;
+  const tapGoal = 15;
+  roarBtn.addEventListener('click', () => {
+    taps++;
+    roarScore.textContent = `Taps: ${taps} / ${tapGoal}`;
+    if (taps >= tapGoal) {
+      roarScore.textContent = "You scared them off! 🦶💥";
+      roarBtn.disabled = true;
+      playConfetti();
+      setTimeout(() => {
+        taps = 0;
+        roarScore.textContent = `Taps: 0 / ${tapGoal}`;
+        roarBtn.disabled = false;
+      }, 3000);
+    }
   });
 
-  // Handle main nav to switch categories
-  navButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      navButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      sections.forEach(sec => sec.classList.remove('active'));
-      const section = document.getElementById(btn.dataset.section);
-      if (section) {
-        section.classList.add('active');
-        section.focus();
-      }
+  // Drag and Drop Fix-It Game
+  const parts = document.querySelectorAll('.car-part');
+  const dropzones = document.querySelectorAll('.dropzone');
+  const tpbFeedback = document.getElementById('tpb-fix-feedback');
+  const tpbResetBtn = document.getElementById('tpb-reset-btn');
+  let correctCount = 0;
+
+  parts.forEach(part => {
+    part.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', part.id);
+      part.style.opacity = '0.5';
+    });
+    part.addEventListener('dragend', e => {
+      e.target.style.opacity = '';
     });
   });
 
-  // Simple DanteBot chat (echo-like for demo)
-  chatForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const userMsg = chatInput.value.trim();
-    if (!userMsg) return;
-    appendChatMessage(userMsg, 'user');
-    chatInput.value = '';
-    setTimeout(() => {
-      // Simple canned response for demo, could be AI call
-      const botMsg = generateBotResponse(userMsg);
-      appendChatMessage(botMsg, 'bot');
-    }, 700);
-  });
-
-  function appendChatMessage(text, sender) {
-    const msgDiv = document.createElement('div');
-    msgDiv.classList.add('chat-msg', sender);
-    msgDiv.textContent = text;
-    chatWindow.appendChild(msgDiv);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  }
-
-  // Basic responses (can be expanded or integrated with real AI)
-  function generateBotResponse(msg) {
-    const lower = msg.toLowerCase();
-    if (lower.includes('lobster')) return "Lobsters are the real kings of the sea!";
-    if (lower.includes('rave')) return "Get ready to dance all night!";
-    if (lower.includes('hi') || lower.includes('hello')) return "Hey Dante! What’s good?";
-    if (lower.includes('joke')) return "Why don't skeletons fight? They don't have the guts.";
-    return "That's cool! Tell me more!";
-  }
-
-  // --- Lobster Catch Game Code ---
-  const ctx = lobsterCanvas.getContext('2d');
-  let lobsterGame = null;
-
-  class LobsterCatchGame {
-    constructor(canvas, scoreDisplay) {
-      this.canvas = canvas;
-      this.ctx = canvas.getContext('2d');
-      this.scoreDisplay = scoreDisplay;
-      this.width = canvas.width;
-      this.height = canvas.height;
-      this.lobster = { x: this.width / 2, y: this.height - 40, width: 40, height: 40 };
-      this.lobsters = [];
-      this.score = 0;
-      this.gameOver = false;
-      this.spawnInterval = null;
-      this.animationFrame = null;
-
-      this.init();
-    }
-
-    init() {
-      this.lobsters = [];
-      this.score = 0;
-      this.gameOver = false;
-      this.spawnInterval = setInterval(() => this.spawnLobster(), 2000);
-      this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
-      this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
-      this.loop();
-    }
-
-    spawnLobster() {
-      if (this.gameOver) return;
-      const size = 30 + Math.random() * 20;
-      this.lobsters.push({
-        x: Math.random() * (this.width - size),
-        y: -size,
-        width: size,
-        height: size,
-        speed: 1 + Math.random() * 2,
-      });
-    }
-
-    handleTouchMove(e) {
+  dropzones.forEach(zone => {
+    zone.addEventListener('dragover', e => {
       e.preventDefault();
-      const touch = e.touches[0];
-      const rect = this.canvas.getBoundingClientRect();
-      const x = touch.clientX - rect.left;
-      this.lobster.x = Math.min(Math.max(0, x - this.lobster.width / 2), this.width - this.lobster.width);
-    }
-
-    handleMouseMove(e) {
-      const rect = this.canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      this.lobster.x = Math.min(Math.max(0, x - this.lobster.width / 2), this.width - this.lobster.width);
-    }
-
-    update() {
-      if (this.gameOver) return;
-      // Move lobsters down
-      this.lobsters.forEach(lob => lob.y += lob.speed);
-
-      // Check collisions
-      for (let i = this.lobsters.length - 1; i >= 0; i--) {
-        const lob = this.lobsters[i];
-        if (this.isColliding(lob, this.lobster)) {
-          this.score++;
-          this.lobsters.splice(i, 1);
-        } else if (lob.y > this.height) {
-          // Lobster escaped - game over
-          this.gameOver = true;
-          clearInterval(this.spawnInterval);
-        }
-      }
-      this.scoreDisplay.textContent = `Score: ${this.score}`;
-    }
-
-    isColliding(a, b) {
-      return !(
-        b.x > a.x + a.width ||
-        b.x + b.width < a.x ||
-        b.y > a.y + a.height ||
-        b.y + b.height < a.y
-      );
-    }
-
-    drawLobster(x, y, w, h) {
-      // Simple red lobster shape
-      const ctx = this.ctx;
-      ctx.fillStyle = '#cc2200';
-      ctx.beginPath();
-      ctx.ellipse(x + w / 2, y + h / 2, w / 2, h / 3, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#ff3300';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-
-    draw() {
-      this.ctx.clearRect(0, 0, this.width, this.height);
-      // Draw lobster catcher
-      this.ctx.fillStyle = '#00ffffcc';
-      this.ctx.fillRect(this.lobster.x, this.lobster.y, this.lobster.width, this.lobster.height);
-
-      // Draw falling lobsters
-      this.lobsters.forEach(lob => {
-        this.drawLobster(lob.x, lob.y, lob.width, lob.height);
-      });
-
-      if (this.gameOver) {
-        this.ctx.fillStyle = '#ff3300cc';
-        this.ctx.font = 'bold 36px sans-serif';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText('Game Over!', this.width / 2, this.height / 2 - 20);
-        this.ctx.font = '20px sans-serif';
-        this.ctx.fillText(`Your Score: ${this.score}`, this.width / 2, this.height / 2 + 20);
-        this.ctx.font = 'italic 14px sans-serif';
-        this.ctx.fillText('Tap Restart to try again.', this.width / 2, this.height / 2 + 50);
-      }
-    }
-
-    loop() {
-      this.update();
-      this.draw();
-      if (!this.gameOver) {
-        this.animationFrame = requestAnimationFrame(this.loop.bind(this));
-      }
-    }
-
-    restart() {
-      this.lobsters = [];
-      this.score = 0;
-      this.gameOver = false;
-      this.lobster.x = this.width / 2;
-      this.spawnInterval = setInterval(() => this.spawnLobster(), 2000);
-      this.loop();
-    }
-  }
-
-  // Initialize lobster game
-  function initLobsterGame() {
-    if (lobsterGame) {
-      lobsterGame.restart();
-    } else {
-      lobsterGame = new LobsterCatchGame(lobsterCanvas, lobsterScoreDisplay);
-    }
-  }
-
-  lobsterRestartBtn.addEventListener('click', () => {
-    initLobsterGame();
-  });
-
-  // --- Rave Rhythm Game Code ---
-  class RaveRhythmGame {
-    constructor(buttons, scoreDisplay) {
-      this.buttons = buttons;
-      this.scoreDisplay = scoreDisplay;
-      this.sequence = [];
-      this.playerIndex = 0;
-      this.score = 0;
-      this.active = false;
-
-      this.directions = ['left', 'down', 'up', 'right'];
-
-      this.buttons.forEach(btn => {
-        btn.addEventListener('click', () => this.handlePlayerInput(btn.dataset.direction));
-      });
-    }
-
-    start() {
-      this.sequence = [];
-      this.score = 0;
-      this.playerIndex = 0;
-      this.active = true;
-      this.scoreDisplay.textContent = `Score: ${this.score}`;
-      this.addStep();
-    }
-
-    addStep() {
-      const randomDir = this.directions[Math.floor(Math.random() * this.directions.length)];
-      this.sequence.push(randomDir);
-      this.showSequence();
-    }
-
-    async showSequence() {
-      this.active = false; // block input while showing
-      for (let dir of this.sequence) {
-        await this.highlightButton(dir);
-        await this.sleep(400);
-      }
-      this.active = true;
-      this.playerIndex = 0;
-    }
-
-    highlightButton(direction) {
-      return new Promise(resolve => {
-        const btn = [...this.buttons].find(b => b.dataset.direction === direction);
-        if (!btn) return resolve();
-        btn.classList.add('highlight');
-        setTimeout(() => {
-          btn.classList.remove('highlight');
-          resolve();
-        }, 600);
-      });
-    }
-
-    sleep(ms) {
-      return new Promise(res => setTimeout(res, ms));
-    }
-
-    handlePlayerInput(direction) {
-      if (!this.active) return;
-      if (direction === this.sequence[this.playerIndex]) {
-        this.playerIndex++;
-        if (this.playerIndex === this.sequence.length) {
-          this.score++;
-          this.scoreDisplay.textContent = `Score: ${this.score}`;
-          this.playerIndex = 0;
-          this.addStep();
+      zone.style.background = 'rgba(0,255,255,0.3)';
+    });
+    zone.addEventListener('dragleave', e => {
+      zone.style.background = '';
+    });
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.style.background = '';
+      const id = e.dataTransfer.getData('text/plain');
+      if (zone.dataset.accept === id) {
+        const part = document.getElementById(id);
+        zone.textContent = id.charAt(0).toUpperCase() + id.slice(1);
+        zone.classList.add('correct');
+        part.style.display = 'none';
+        correctCount++;
+        if (correctCount === dropzones.length) {
+          tpbFeedback.textContent = "Car fixed! Ricky’s ready to roll! 🚗🔥";
+          playConfetti();
         }
       } else {
-        this.gameOver();
+        tpbFeedback.textContent = "Wrong spot! Try again.";
+        setTimeout(() => { tpbFeedback.textContent = ""; }, 1500);
       }
-    }
+    });
+  });
 
-    gameOver() {
-      this.active = false;
-      this.scoreDisplay.textContent = `Game Over! Final Score: ${this.score}`;
+  tpbResetBtn.addEventListener('click', () => {
+    correctCount = 0;
+    tpbFeedback.textContent = "";
+    dropzones.forEach(zone => {
+      zone.textContent = "";
+      zone.classList.remove('correct');
+    });
+    parts.forEach(part => {
+      part.style.display = 'flex';
+    });
+  });
+
+  // TPB Quick Trivia
+  const quizQuestion = document.getElementById('quiz-question');
+  const quizButtons = document.querySelectorAll('#tpb-quiz .quiz-btn');
+  const quizFeedback = document.getElementById('quiz-feedback');
+  const quizData = {
+    question: 'Who said: "Get two birds stoned at once"?',
+    options: ['Ricky', 'Julian', 'Bubbles'],
+    answer: 'Ricky',
+  };
+  quizQuestion.textContent = quizData.question;
+  quizButtons.forEach(btn => {
+    btn.textContent = btn.dataset.answer;
+    btn.addEventListener('click', () => {
+      if (btn.dataset.answer === quizData.answer) {
+        quizFeedback.textContent = '✅ Correct! Ricky knows best.';
+        playConfetti();
+      } else {
+        quizFeedback.textContent = '❌ Nope, try again!';
+      }
+    });
+  });
+
+  // Cars & Mechanics - Guess the Sound
+  const sounds = {
+    engine: new Audio('https://actions.google.com/sounds/v1/vehicles/car_engine_revving.ogg'),
+    horn: new Audio('https://actions.google.com/sounds/v1/vehicles/car_horn_beep.ogg'),
+    brake: new Audio('https://actions.google.com/sounds/v1/vehicles/car_brake_squeal.ogg'),
+  };
+  const playSoundBtn = document.getElementById('play-sound-btn');
+  const soundOptions = document.querySelectorAll('#sound-options .quiz-btn');
+  const soundFeedback = document.getElementById('sound-feedback');
+
+  let currentSoundKey = null;
+  function pickRandomSound() {
+    const keys = Object.keys(sounds);
+    currentSoundKey = keys[Math.floor(Math.random() * keys.length)];
+  }
+  pickRandomSound();
+
+  playSoundBtn.addEventListener('click', () => {
+    if (currentSoundKey) {
+      sounds[currentSoundKey].play();
+      soundFeedback.textContent = 'Listen carefully...';
+    }
+  });
+  soundOptions.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!currentSoundKey) return;
+      if (btn.dataset.sound === currentSoundKey) {
+        soundFeedback.textContent = '✅ Correct!';
+        playConfetti();
+      } else {
+        soundFeedback.textContent = '❌ Nope, try again!';
+      }
+      pickRandomSound();
+    });
+  });
+
+  // Memory Game (Mechanic’s Toolbox)
+  const memoryBoard = document.getElementById('memory-board');
+  const memoryFeedback = document.getElementById('memory-feedback');
+  const memoryResetBtn = document.getElementById('memory-reset-btn');
+
+  const memoryItems = [
+    '🔧', '🔧',
+    '🔩', '🔩',
+    '⚙️', '⚙️',
+    '🛠️', '🛠️',
+  ];
+  let firstCard = null;
+  let secondCard = null;
+  let lockBoard = false;
+  let matchedPairs = 0;
+
+  function shuffle(array) {
+    for (let i = array.length -1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i+1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function createMemoryCards() {
+    memoryBoard.innerHTML = '';
+    shuffle(memoryItems).forEach((item, idx) => {
+      const card = document.createElement('div');
+      card.classList.add('memory-card');
+      card.dataset.item = item;
+      card.setAttribute('tabindex', '0');
+      card.textContent = '';
+      card.addEventListener('click', () => flipCard(card));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          flipCard(card);
+        }
+      });
+      memoryBoard.appendChild(card);
+    });
+    matchedPairs = 0;
+    memoryFeedback.textContent = '';
+  }
+  createMemoryCards();
+
+  function flipCard(card) {
+    if (lockBoard) return;
+    if (card === firstCard) return;
+
+    card.textContent = card.dataset.item;
+    card.classList.add('flipped');
+
+    if (!firstCard) {
+      firstCard = card;
+      return;
+    }
+    secondCard = card;
+    checkForMatch();
+  }
+
+  function checkForMatch() {
+    lockBoard = true;
+    if (firstCard.dataset.item === secondCard.dataset.item) {
+      firstCard.classList.add('matched');
+      secondCard.classList.add('matched');
+      matchedPairs++;
+      memoryFeedback.textContent = `Matched pairs: ${matchedPairs} / 4`;
+      resetBoard();
+      if (matchedPairs === 4) {
+        memoryFeedback.textContent = "🎉 You matched them all! Mechanic Pro!";
+        playConfetti();
+      }
+    } else {
+      setTimeout(() => {
+        firstCard.textContent = '';
+        secondCard.textContent = '';
+        firstCard.classList.remove('flipped');
+        secondCard.classList.remove('flipped');
+        resetBoard();
+      }, 1000);
     }
   }
 
-  const raveGame = new RaveRhythmGame(raveButtons, raveScoreDisplay);
+  function resetBoard() {
+    [firstCard, secondCard] = [null, null];
+    lockBoard = false;
+  }
 
-  raveRestartBtn.addEventListener('click', () => {
-    raveGame.start();
+  memoryResetBtn.addEventListener('click', () => {
+    createMemoryCards();
   });
 
-  // Toggle games display
-  lobsterBtn.addEventListener('click', () => {
-    lobsterBtn.classList.add('active');
-    raveBtn.classList.remove('active');
-    lobsterBtn.setAttribute('aria-pressed', 'true');
-    raveBtn.setAttribute('aria-pressed', 'false');
-    lobsterGameSection.classList.add('active');
-    raveGameSection.classList.remove('active');
-    lobsterCanvas.focus();
-    initLobsterGame();
-  });
-
-  raveBtn.addEventListener('click', () => {
-    raveBtn.classList.add('active');
-    lobsterBtn.classList.remove('active');
-    raveBtn.setAttribute('aria-pressed', 'true');
-    lobsterBtn.setAttribute('aria-pressed', 'false');
-    raveGameSection.classList.add('active');
-    lobsterGameSection.classList.remove('active');
-    raveGame.start();
-    raveGameSection.focus();
-  });
-
-  // Init default game on load
-  window.addEventListener('load', () => {
-    initLobsterGame();
-  });
+  // Confetti function (small bursts)
+  function playConfetti() {
+    for (let i=0; i<30; i++) {
+      const confetti = document.createElement('div');
+      confetti.classList.add('confetti-piece');
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 70%)`;
+      confetti.style.animationDuration = 2000 + Math.random()*2000 + 'ms';
+      confetti.style.animationDelay = (Math.random()*500) + 'ms';
+      document.body.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 3000);
+    }
+  }
 </script>
 
 </body>
