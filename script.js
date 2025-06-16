@@ -1,568 +1,425 @@
 (() => {
-  "use strict";
-
-  // Elements
-  const navButtons = document.querySelectorAll("nav button[data-popup]");
-  const popups = {
-    minigames: document.getElementById("popup-minigames"),
-    dailychallenge: document.getElementById("popup-dailychallenge"),
-    zeuscorner: document.getElementById("popup-zeuscorner"),
-    dantebot: document.getElementById("popup-dantebot"),
-    settings: document.getElementById("popup-settings"),
-  };
-  const closeButtons = document.querySelectorAll(".close-btn");
-
-  // Settings elements
-  const fontSizeRange = document.getElementById("font-size-range");
-  const fontSizeDisplay = document.getElementById("font-size-display");
-  const colorThemeSelect = document.getElementById("color-theme-select");
-  const toggleSound = document.getElementById("toggle-sound");
-  const simpleModeToggle = document.getElementById("simple-mode-toggle");
-
-  // DanteBot chat elements
-  const chatLog = document.getElementById("chat-log");
-  const chatInput = document.getElementById("chat-input");
-  const chatSendBtn = document.getElementById("chat-send-btn");
-
-  // Game container for minigames
-  const gameContainer = document.getElementById("game-container");
-
-  // Helper: Sound effect
-  const beepSound = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
-  beepSound.volume = 0.25;
-
-  // Utility to show popup
-  function showPopup(name) {
-    for (const key in popups) {
-      if (popups[key]) {
-        popups[key].hidden = true;
-      }
-    }
-    if (popups[name]) {
-      popups[name].hidden = false;
-      popups[name].querySelector(".popup-content").focus();
-    }
-  }
-
-  // Utility to hide all popups
-  function hideAllPopups() {
-    for (const key in popups) {
-      if (popups[key]) {
-        popups[key].hidden = true;
-      }
-    }
-    clearGameContainer();
-  }
-
-  // Event: open popup when nav button clicked
-  navButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const popupName = btn.getAttribute("data-popup");
-      showPopup(popupName);
-
-      // Load content for popups if needed
-      if (popupName === "dailychallenge") {
-        loadDailyChallenge();
-      } else if (popupName === "zeuscorner") {
-        loadZeusCorner();
-      }
-    });
-  });
-
-  // Event: close popup when close button clicked
-  closeButtons.forEach((btn) => {
-    btn.addEventListener("click", hideAllPopups);
-  });
-
-  // Close popup if user clicks outside popup content
-  Object.values(popups).forEach((popup) => {
-    popup.addEventListener("click", (e) => {
-      if (e.target === popup) {
-        hideAllPopups();
-      }
-    });
-  });
-
-  // Settings functionality
-  // Load settings from localStorage or set defaults
-  function loadSettings() {
-    const fs = localStorage.getItem("danteFontSize");
-    const theme = localStorage.getItem("danteColorTheme");
-    const sound = localStorage.getItem("danteSoundEnabled");
-    const simpleMode = localStorage.getItem("danteSimpleMode");
-
-    if (fs) {
-      document.documentElement.style.setProperty("--font-base-size", fs + "px");
-      fontSizeRange.value = fs;
-      fontSizeDisplay.textContent = fs;
-    }
-    if (theme) {
-      colorThemeSelect.value = theme;
-      applyTheme(theme);
-    }
-    if (sound !== null) {
-      toggleSound.checked = sound === "true";
-    }
-    if (simpleMode !== null) {
-      simpleModeToggle.checked = simpleMode === "true";
-      toggleSimpleMode(simpleModeToggle.checked);
-    }
-  }
-
-  function saveSettings() {
-    localStorage.setItem("danteFontSize", fontSizeRange.value);
-    localStorage.setItem("danteColorTheme", colorThemeSelect.value);
-    localStorage.setItem("danteSoundEnabled", toggleSound.checked);
-    localStorage.setItem("danteSimpleMode", simpleModeToggle.checked);
-  }
-
-  fontSizeRange.addEventListener("input", () => {
-    const val = fontSizeRange.value;
-    fontSizeDisplay.textContent = val;
-    document.documentElement.style.setProperty("--font-base-size", val + "px");
-    saveSettings();
-  });
-
-  colorThemeSelect.addEventListener("change", () => {
-    applyTheme(colorThemeSelect.value);
-    saveSettings();
-  });
-
-  toggleSound.addEventListener("change", saveSettings);
-  simpleModeToggle.addEventListener("change", () => {
-    toggleSimpleMode(simpleModeToggle.checked);
-    saveSettings();
-  });
-
-  // Apply color theme
-  function applyTheme(theme) {
-    const root = document.documentElement;
-    switch (theme) {
-      case "sunset":
-        root.style.setProperty("--neon-bg", "#381819");
-        root.style.setProperty("--neon-pink", "#ff6f91");
-        root.style.setProperty("--neon-blue", "#f7b32b");
-        root.style.setProperty("--neon-orange", "#ff9671");
-        root.style.setProperty("--neon-green", "#6bcf91");
-        root.style.setProperty("--neon-white", "#f5f5f5");
-        root.style.setProperty("--popup-bg", "rgba(56, 24, 25, 0.95)");
-        break;
-      case "darkrave":
-        root.style.setProperty("--neon-bg", "#0b0c17");
-        root.style.setProperty("--neon-pink", "#f700ff");
-        root.style.setProperty("--neon-blue", "#00ffee");
-        root.style.setProperty("--neon-orange", "#ff8c00");
-        root.style.setProperty("--neon-green", "#00ff88");
-        root.style.setProperty("--neon-white", "#cccccc");
-        root.style.setProperty("--popup-bg", "rgba(11, 12, 23, 0.95)");
-        break;
-      case "daylight":
-        root.style.setProperty("--neon-bg", "#f9f9f9");
-        root.style.setProperty("--neon-pink", "#ff5c8d");
-        root.style.setProperty("--neon-blue", "#5ca8ff");
-        root.style.setProperty("--neon-orange", "#ffb347");
-        root.style.setProperty("--neon-green", "#2ecc71");
-        root.style.setProperty("--neon-white", "#333333");
-        root.style.setProperty("--popup-bg", "rgba(255, 255, 255, 0.97)");
-        break;
-      default: // neon default
-        root.style.setProperty("--neon-bg", "#0d0f1a");
-        root.style.setProperty("--neon-pink", "#ff29f7");
-        root.style.setProperty("--neon-blue", "#29d6ff");
-        root.style.setProperty("--neon-orange", "#ffb347");
-        root.style.setProperty("--neon-green", "#29ff73");
-        root.style.setProperty("--neon-white", "#e0e0e0");
-        root.style.setProperty("--popup-bg", "rgba(10, 10, 30, 0.95)");
-    }
-  }
-
-  // Toggle simple mode for less visuals
-  function toggleSimpleMode(enabled) {
-    if (enabled) {
-      document.body.style.filter = "grayscale(0.6)";
-    } else {
-      document.body.style.filter = "none";
-    }
-  }
-
-  // Initial load of settings
-  loadSettings();
-
-  // Mini Games
-  const miniGames = {
-    "reaction-game-btn": reactionGame,
-    "trivia-game-btn": triviaGame,
-    "wordpuzzle-game-btn": wordPuzzleGame,
-    "fixcode-game-btn": fixCodeGame,
+  // Content for each category
+  const content = {
+    minigames: `
+      <h2>Mini Games 🎮</h2>
+      <p>Choose a game to play:</p>
+      <ul>
+        <li><button class="game-btn" data-game="reaction">⚡ Reaction Test</button></li>
+        <li><button class="game-btn" data-game="memory">🧠 Memory Match</button></li>
+        <li><button class="game-btn" data-game="ravejump">🎉 Rave Jump</button></li>
+      </ul>
+      <div id="game-container"></div>
+    `,
+    dailychallenge: `
+      <h2>Daily Challenge 💥</h2>
+      <p id="challenge-text">Loading challenge...</p>
+      <button id="new-challenge-btn" class="neon-btn">New Challenge</button>
+    `,
+    funnyfacts: `
+      <h2>Funny Facts 😂</h2>
+      <p id="fact-text">Loading fact...</p>
+      <button id="new-fact-btn" class="neon-btn">Show Another</button>
+    `,
+    snackideas: `
+      <h2>Snack Ideas 🍿</h2>
+      <p id="snack-text">Loading snack idea...</p>
+      <button id="new-snack-btn" class="neon-btn">Show Another</button>
+    `,
+    dantebot: `
+      <h2>DanteBot 🤖</h2>
+      <p>Chat with DanteBot! (Try asking about raves, lobster fishing, or dark jokes!)</p>
+      <input type="text" id="dantebot-input" placeholder="Say something..." autocomplete="off" />
+      <button id="dantebot-send" class="neon-btn">Send</button>
+      <div id="dantebot-chat" class="chat-box"></div>
+    `,
+    zeuscorner: `
+      <h2>Zeus’s Corner 🐶</h2>
+      <p>Zeus says: "Woof! Here are some fun dog facts and silly jokes for you."</p>
+      <p id="zeus-fact-text">Loading...</p>
+      <button id="new-zeus-fact-btn" class="neon-btn">Another Zeus Fact</button>
+    `,
   };
 
-  // Clear game container content
-  function clearGameContainer() {
-    gameContainer.innerHTML = "";
+  // Data arrays
+  const dailyChallenges = [
+    "Build something with household items today!",
+    "Try a new snack you’ve never had before.",
+    "Listen to a full rap album start to finish.",
+    "Take a 10-minute break and dance like no one’s watching!",
+    "Write a funny story about Zeus’s secret adventures.",
+  ];
+  const funnyFacts = [
+    "Did you know? Lobsters pee out of their faces!",
+    "Trailer Park Boys was mostly improvised!",
+    "Sasquatch has inspired many dark jokes in Canadian folklore.",
+    "Laughing 100 times is equivalent to 15 minutes of exercise!",
+  ];
+  const snackIdeas = [
+    "Spicy cheese popcorn with a cold drink.",
+    "Sweet potato fries with a zesty dip.",
+    "Choco-covered espresso beans for a buzz.",
+    "Loaded nachos with jalapeños and guac.",
+  ];
+  const zeusFacts = [
+    "Dogs can hear 4 times the distance humans can.",
+    "Zeus’s favorite toy is probably a squeaky bone!",
+    "Some dogs dream just like humans.",
+    "If Zeus could talk, he’d say 'More treats, please!'",
+  ];
+
+  // State for DanteBot chat
+  let dantebotMessages = [];
+
+  // Utility functions
+  function getRandom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
   }
 
-  // Reaction game implementation
-  function reactionGame() {
-    clearGameContainer();
-    const container = document.createElement("div");
-    container.style.textAlign = "center";
+  // Popup element refs
+  const popup = document.getElementById("popup");
+  const popupContent = document.getElementById("popup-content");
+  const popupClose = document.getElementById("popup-close");
 
-    const instruction = document.createElement("p");
-    instruction.textContent = "Wait for the box to turn green, then click as fast as you can!";
-    instruction.style.marginBottom = "15px";
+  // Show popup with specific content
+  function showPopup(category) {
+    popupContent.innerHTML = content[category] || "<p>Oops! No content found.</p>";
+    popup.classList.remove("hidden");
 
-    const box = document.createElement("div");
-    box.style.width = "120px";
-    box.style.height = "120px";
-    box.style.margin = "0 auto 20px";
-    box.style.backgroundColor = "red";
-    box.style.borderRadius = "20px";
-    box.style.cursor = "pointer";
-    box.style.boxShadow = "0 0 10px red";
-    container.appendChild(instruction);
-    container.appendChild(box);
-
-    const result = document.createElement("p");
-    container.appendChild(result);
-
-    let timeoutId;
-    let startTime;
-    let waiting = true;
-
-    function start() {
-      box.style.backgroundColor = "red";
-      box.style.boxShadow = "0 0 10px red";
-      result.textContent = "Get ready...";
-      waiting = true;
-      timeoutId = setTimeout(() => {
-        box.style.backgroundColor = "limegreen";
-        box.style.boxShadow = "0 0 20px limegreen";
-        startTime = Date.now();
-        waiting = false;
-        result.textContent = "CLICK!";
-        if (toggleSound.checked) beepSound.play();
-      }, 1500 + Math.random() * 2000);
+    // Add event listeners for category-specific features
+    if (category === "dailychallenge") {
+      loadDailyChallenge();
+      document.getElementById("new-challenge-btn").onclick = loadDailyChallenge;
     }
-
-    box.addEventListener("click", () => {
-      if (waiting) {
-        // Clicked too soon
-        clearTimeout(timeoutId);
-        result.textContent = "Too soon! Wait for green.";
-        if (toggleSound.checked) beepSound.play();
-        start();
-      } else {
-        const reactionTime = Date.now() - startTime;
-        result.textContent = `Your reaction time: ${reactionTime} ms! 🎉 Click box to try again.`;
-        start();
-      }
-    });
-
-    start();
-    gameContainer.appendChild(container);
-  }
-
-  // Trivia game implementation
-  function triviaGame() {
-    clearGameContainer();
-
-    const questions = [
-      {
-        q: "What is the capital of Canada?",
-        choices: ["Toronto", "Ottawa", "Vancouver", "Montreal"],
-        answer: 1,
-      },
-      {
-        q: "Who is the inventor of the light bulb?",
-        choices: ["Nikola Tesla", "Thomas Edison", "Albert Einstein", "Alexander Graham Bell"],
-        answer: 1,
-      },
-      {
-        q: "What year did humans first land on the moon?",
-        choices: ["1969", "1972", "1965", "1959"],
-        answer: 0,
-      },
-      {
-        q: "Which element has the chemical symbol 'O'?",
-        choices: ["Gold", "Oxygen", "Osmium", "Silver"],
-        answer: 1,
-      },
-      {
-        q: "What is the largest ocean on Earth?",
-        choices: ["Atlantic", "Indian", "Pacific", "Arctic"],
-        answer: 2,
-      },
-    ];
-
-    let currentIndex = 0;
-    let score = 0;
-
-    const container = document.createElement("div");
-    container.style.textAlign = "left";
-
-    const questionEl = document.createElement("h4");
-    const choicesEl = document.createElement("div");
-    const resultEl = document.createElement("p");
-    resultEl.style.fontWeight = "700";
-    resultEl.style.marginTop = "1rem";
-
-    container.appendChild(questionEl);
-    container.appendChild(choicesEl);
-    container.appendChild(resultEl);
-    gameContainer.appendChild(container);
-
-    function loadQuestion() {
-      const currentQ = questions[currentIndex];
-      questionEl.textContent = `Q${currentIndex + 1}: ${currentQ.q}`;
-      choicesEl.innerHTML = "";
-
-      currentQ.choices.forEach((choice, idx) => {
-        const btn = document.createElement("button");
-        btn.textContent = choice;
-        btn.className = "game-btn";
-        btn.style.display = "block";
-        btn.style.margin = "5px 0";
-        btn.addEventListener("click", () => {
-          if (idx === currentQ.answer) {
-            score++;
-            resultEl.textContent = "Correct! 🎉";
-            if (toggleSound.checked) beepSound.play();
-          } else {
-            resultEl.textContent = `Wrong! The correct answer was "${currentQ.choices[currentQ.answer]}".`;
-          }
-          currentIndex++;
-          if (currentIndex < questions.length) {
-            setTimeout(() => {
-              resultEl.textContent = "";
-              loadQuestion();
-            }, 1200);
-          } else {
-            setTimeout(() => {
-              questionEl.textContent = `Game Over! Your score: ${score} / ${questions.length}`;
-              choicesEl.innerHTML = "";
-              resultEl.textContent = "Play again by selecting a game!";
-            }, 1200);
-          }
-        });
-        choicesEl.appendChild(btn);
-      });
+    if (category === "funnyfacts") {
+      loadFunnyFact();
+      document.getElementById("new-fact-btn").onclick = loadFunnyFact;
     }
-
-    loadQuestion();
-  }
-
-  // Word Puzzle game implementation
-  function wordPuzzleGame() {
-    clearGameContainer();
-
-    const words = ["dante", "zeus", "fun", "rave", "lobster", "engineer", "festival", "music", "rap", "dark"];
-
-    let currentWord = "";
-    let scrambledWord = "";
-
-    const container = document.createElement("div");
-    container.style.textAlign = "center";
-
-    const instruction = document.createElement("p");
-    instruction.textContent = "Unscramble the word! Type your guess and submit.";
-    instruction.style.marginBottom = "15px";
-
-    const scrambledEl = document.createElement("h3");
-    const input = document.createElement("input");
-    input.type = "text";
-    input.placeholder = "Your guess";
-    input.autocomplete = "off";
-    input.style.fontSize = "1.2rem";
-    input.style.padding = "0.4rem 0.8rem";
-    input.style.borderRadius = "10px";
-    input.style.border = "2px solid var(--neon-blue)";
-    input.style.marginBottom = "12px";
-
-    const submitBtn = document.createElement("button");
-    submitBtn.textContent = "Guess";
-    submitBtn.className = "game-btn";
-
-    const feedback = document.createElement("p");
-    feedback.style.fontWeight = "700";
-    feedback.style.minHeight = "24px";
-
-    container.appendChild(instruction);
-    container.appendChild(scrambledEl);
-    container.appendChild(input);
-    container.appendChild(submitBtn);
-    container.appendChild(feedback);
-    gameContainer.appendChild(container);
-
-    function scramble(word) {
-      return word.split("").sort(() => Math.random() - 0.5).join("");
+    if (category === "snackideas") {
+      loadSnackIdea();
+      document.getElementById("new-snack-btn").onclick = loadSnackIdea;
     }
-
-    function newWord() {
-      currentWord = words[Math.floor(Math.random() * words.length)];
-      scrambledWord = scramble(currentWord);
-      while (scrambledWord === currentWord) {
-        scrambledWord = scramble(currentWord);
-      }
-      scrambledEl.textContent = scrambledWord.toUpperCase();
-      feedback.textContent = "";
-      input.value = "";
-      input.focus();
+    if (category === "dantebot") {
+      setupDanteBot();
     }
-
-    submitBtn.addEventListener("click", () => {
-      const guess = input.value.trim().toLowerCase();
-      if (!guess) return;
-      if (guess === currentWord) {
-        feedback.textContent = "Correct! 🎉 New word coming...";
-        if (toggleSound.checked) beepSound.play();
-        setTimeout(newWord, 1500);
-      } else {
-        feedback.textContent = "Nope, try again.";
-        if (toggleSound.checked) beepSound.play();
-      }
-      input.value = "";
-      input.focus();
-    });
-
-    input.addEventListener("keyup", (e) => {
-      if (e.key === "Enter") submitBtn.click();
-    });
-
-    newWord();
+    if (category === "zeuscorner") {
+      loadZeusFact();
+      document.getElementById("new-zeus-fact-btn").onclick = loadZeusFact;
+    }
+    if (category === "minigames") {
+      setupMiniGames();
+    }
   }
 
-  // Fix the Code game implementation (simple code puzzle)
-  function fixCodeGame() {
-    clearGameContainer();
-
-    const codeSnippet = `
-function greet() {
-  console.log("Hello, Dante!");
-}
-
-greet();
-    `.trim();
-
-    const brokenCodeSnippet = `
-function greet()
-  console.log("Hello, Dante!");
-}
-
-greet();
-    `.trim();
-
-    const container = document.createElement("div");
-    container.style.textAlign = "left";
-
-    const instruction = document.createElement("p");
-    instruction.textContent = "Fix the broken code snippet below! Add missing symbols to make it run correctly.";
-    instruction.style.marginBottom = "10px";
-
-    const brokenCodePre = document.createElement("pre");
-    brokenCodePre.style.background = "#11122b";
-    brokenCodePre.style.color = "var(--neon-pink)";
-    brokenCodePre.style.padding = "10px";
-    brokenCodePre.style.borderRadius = "12px";
-    brokenCodePre.style.fontFamily = "Courier New, monospace";
-    brokenCodePre.textContent = brokenCodeSnippet;
-
-    const inputArea = document.createElement("textarea");
-    inputArea.rows = 6;
-    inputArea.style.width = "100%";
-    inputArea.style.marginTop = "10px";
-    inputArea.style.fontFamily = "Courier New, monospace";
-    inputArea.style.fontSize = "1rem";
-    inputArea.style.borderRadius = "10px";
-    inputArea.placeholder = "Type your fixed code here...";
-
-    const submitBtn = document.createElement("button");
-    submitBtn.textContent = "Check Code";
-    submitBtn.className = "game-btn";
-    submitBtn.style.marginTop = "12px";
-
-    const feedback = document.createElement("p");
-    feedback.style.fontWeight = "700";
-    feedback.style.minHeight = "24px";
-
-    container.appendChild(instruction);
-    container.appendChild(brokenCodePre);
-    container.appendChild(inputArea);
-    container.appendChild(submitBtn);
-    container.appendChild(feedback);
-    gameContainer.appendChild(container);
-
-    submitBtn.addEventListener("click", () => {
-      const userCode = inputArea.value.trim();
-
-      // Simple check ignoring whitespace and case
-      if (userCode.replace(/\s/g, "") === codeSnippet.replace(/\s/g, "")) {
-        feedback.textContent = "Nice! Code looks good. ✅";
-        if (toggleSound.checked) beepSound.play();
-      } else {
-        feedback.textContent = "Hmm, that doesn’t match the expected code. Try again!";
-        if (toggleSound.checked) beepSound.play();
-      }
-    });
+  // Hide popup
+  function hidePopup() {
+    popup.classList.add("hidden");
+    popupContent.innerHTML = "";
+    dantebotMessages = [];
   }
 
-  // Load Daily Challenge content
+  // Daily challenge
   function loadDailyChallenge() {
-    const container = document.getElementById("dailychallenge-content");
-    const challenges = [
-      "Take a 10-minute walk outside and soak in the sun ☀️",
-      "Write down 3 things you're grateful for today 🙏",
-      "Listen to your favorite rap song and vibe out 🎧",
-      "Try to make a new joke and share it with someone 😂",
-      "Build a small Lego or model kit piece for 15 minutes 🛠️",
-      "Call or text a close friend just to say 'Hey!' 📱",
-      "Spend 5 minutes meditating or doing deep breathing 🧘‍♂️",
-      "Make a colorful drawing or doodle, no skill required 🎨",
-      "Plan a fun weekend activity or festival to attend 🎉",
-      "Tell Zeus a new trick or give extra cuddles 🐶",
-    ];
-    const today = new Date().getDate();
-    const challenge = challenges[today % challenges.length];
-    container.textContent = challenge;
+    const challengeText = document.getElementById("challenge-text");
+    challengeText.textContent = getRandom(dailyChallenges);
   }
 
-  // Load Zeus’s Corner content
-  function loadZeusCorner() {
-    const container = document.getElementById("zeus-content");
-    const zeusQuotes = [
-      "🐾 Zeus says: Never underestimate the power of a good nap.",
-      "🐾 Zeus says: Treats > Troubles.",
-      "🐾 Zeus says: Life’s better with a tail wag and a wet nose.",
-      "🐾 Zeus says: If you feel down, just chase your tail for a bit!",
-      "🐾 Zeus says: Always protect your humans (especially Dante!).",
-      "🐾 Zeus says: Rave harder, fetch longer.",
-      "🐾 Zeus says: Don’t forget to stretch those paws.",
-      "🐾 Zeus says: Bark once for yes, twice for heck yes!",
-      "🐾 Zeus says: Dark jokes make the best laughs (just like humans).",
-    ];
-    const quote = zeusQuotes[Math.floor(Math.random() * zeusQuotes.length)];
-    container.textContent = quote;
+  // Funny facts
+  function loadFunnyFact() {
+    const factText = document.getElementById("fact-text");
+    factText.textContent = getRandom(funnyFacts);
   }
 
-  // Initialization
-  document.addEventListener("DOMContentLoaded", () => {
-    // Attach game buttons
-    Object.entries(miniGames).forEach(([btnId, gameFn]) => {
-      const btn = document.getElementById(btnId);
-      if (btn) {
-        btn.addEventListener("click", () => {
-          hideAllPopups();
-          gameFn();
-        });
+  // Snack ideas
+  function loadSnackIdea() {
+    const snackText = document.getElementById("snack-text");
+    snackText.textContent = getRandom(snackIdeas);
+  }
+
+  // Zeus corner facts
+  function loadZeusFact() {
+    const zeusFactText = document.getElementById("zeus-fact-text");
+    zeusFactText.textContent = getRandom(zeusFacts);
+  }
+
+  // DanteBot simple responses
+  function danteBotResponse(message) {
+    message = message.toLowerCase();
+    if (message.includes("rave")) return "Raves are lit! Don’t forget your glowsticks 🔥✨";
+    if (message.includes("lobster")) return "Lobster fishing is the best! Fresh catch = fresh vibes 🦞";
+    if (message.includes("joke")) return "Why don’t lobsters ever share? Because they’re shellfish! 😂";
+    if (message.includes("movie")) return "Trailer Park Boys is classic — have you seen the latest season?";
+    if (message.includes("zeus")) return "Zeus says: Woof! Ready for a walk or a snack?";
+    if (message.includes("fix") || message.includes("engineer")) return "Got a tricky problem? Let’s brainstorm some clever fixes!";
+    if (message.includes("hi") || message.includes("hello")) return "Hey Dante! What’s up?";
+    if (message.trim() === "") return "Say something, Dante! I'm all ears 👂";
+    return "Hmm... tell me more!";
+  }
+
+  // Setup DanteBot chat UI & handlers
+  function setupDanteBot() {
+    const input = document.getElementById("dantebot-input");
+    const sendBtn = document.getElementById("dantebot-send");
+    const chatBox = document.getElementById("dantebot-chat");
+    chatBox.innerHTML = "";
+
+    function addMessage(text, fromUser) {
+      const msg = document.createElement("div");
+      msg.className = fromUser ? "chat-msg user" : "chat-msg bot";
+      msg.textContent = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    sendBtn.onclick = () => {
+      const userText = input.value.trim();
+      if (!userText) return;
+      addMessage(userText, true);
+      input.value = "";
+      setTimeout(() => {
+        const reply = danteBotResponse(userText);
+        addMessage(reply, false);
+      }, 700);
+    };
+
+    input.onkeydown = (e) => {
+      if (e.key === "Enter") {
+        sendBtn.click();
       }
+    };
+  }
+
+  // Mini-games setup
+  function setupMiniGames() {
+    const container = document.getElementById("game-container");
+    container.innerHTML = "";
+
+    // Reaction Test game
+    function reactionTest() {
+      container.innerHTML = `
+        <h3>⚡ Reaction Test</h3>
+        <p>Wait for green, then tap as fast as you can!</p>
+        <div id="reaction-box" class="reaction-box">Wait...</div>
+        <p id="reaction-result"></p>
+        <button id="reaction-reset" class="neon-btn">Play Again</button>
+      `;
+      const box = document.getElementById("reaction-box");
+      const result = document.getElementById("reaction-result");
+      const resetBtn = document.getElementById("reaction-reset");
+      let timeoutId;
+      let startTime;
+
+      function startTest() {
+        box.textContent = "Wait...";
+        box.style.backgroundColor = "#aa0000";
+        result.textContent = "";
+        timeoutId = setTimeout(() => {
+          box.textContent = "TAP!";
+          box.style.backgroundColor = "#39ff14";
+          startTime = performance.now();
+        }, 1500 + Math.random() * 2000);
+      }
+
+      box.onclick = () => {
+        if (box.textContent === "Wait...") {
+          // Too early
+          clearTimeout(timeoutId);
+          result.textContent = "Too soon! Wait for green.";
+          box.style.backgroundColor = "#aa0000";
+          setTimeout(startTest, 1500);
+        } else if (box.textContent === "TAP!") {
+          const reactionTime = (performance.now() - startTime).toFixed(0);
+          result.textContent = `Your reaction time: ${reactionTime} ms!`;
+          box.style.backgroundColor = "#007700";
+          box.textContent = "Good!";
+        }
+      };
+
+      resetBtn.onclick = () => startTest();
+
+      startTest();
+    }
+
+    // Memory Match game (simple)
+    function memoryMatch() {
+      container.innerHTML = `
+        <h3>🧠 Memory Match</h3>
+        <p>Find matching pairs fast!</p>
+        <div id="memory-board" class="memory-board"></div>
+        <p id="memory-result"></p>
+        <button id="memory-reset" class="neon-btn">Restart</button>
+      `;
+      const board = document.getElementById("memory-board");
+      const result = document.getElementById("memory-result");
+      const resetBtn = document.getElementById("memory-reset");
+
+      const icons = ["🦞","🚗","🎵","🐶","🔥","🌈"];
+      const cards = [...icons, ...icons];
+      let shuffled = [];
+      let flipped = [];
+      let matchedPairs = 0;
+
+      function shuffle(arr) {
+        return arr.sort(() => 0.5 - Math.random());
+      }
+
+      function createCard(icon) {
+        const card = document.createElement("div");
+        card.className = "memory-card";
+        card.dataset.icon = icon;
+        card.textContent = "❓";
+        card.addEventListener("click", () => {
+          if (flipped.length < 2 && !card.classList.contains("matched") && !flipped.includes(card)) {
+            flipCard(card);
+          }
+        });
+        return card;
+      }
+
+      function flipCard(card) {
+        card.textContent = card.dataset.icon;
+        flipped.push(card);
+        if (flipped.length === 2) {
+          if (flipped[0].dataset.icon === flipped[1].dataset.icon) {
+            flipped.forEach(c => c.classList.add("matched"));
+            matchedPairs++;
+            result.textContent = `Matches found: ${matchedPairs}/${icons.length}`;
+            flipped = [];
+            if (matchedPairs === icons.length) {
+              result.textContent = "You matched all pairs! 🎉";
+            }
+          } else {
+            setTimeout(() => {
+              flipped.forEach(c => c.textContent = "❓");
+              flipped = [];
+            }, 1000);
+          }
+        }
+      }
+
+      function initGame() {
+        board.innerHTML = "";
+        matchedPairs = 0;
+        result.textContent = "";
+        flipped = [];
+        shuffled = shuffle(cards);
+        shuffled.forEach(icon => board.appendChild(createCard(icon)));
+      }
+
+      resetBtn.onclick = initGame;
+      initGame();
+    }
+
+    // Rave Jump game - simple click to jump the lobster over obstacles
+    function raveJump() {
+      container.innerHTML = `
+        <h3>🎉 Rave Jump</h3>
+        <p>Click "Jump" to hop over obstacles and score points!</p>
+        <div id="rave-game" class="rave-game">
+          <div id="lobster" class="lobster">🦞</div>
+          <div id="obstacle" class="obstacle">🚧</div>
+        </div>
+        <p>Score: <span id="score">0</span></p>
+        <button id="jump-btn" class="neon-btn">Jump</button>
+      `;
+      const lobster = document.getElementById("lobster");
+      const obstacle = document.getElementById("obstacle");
+      const scoreEl = document.getElementById("score");
+      const jumpBtn = document.getElementById("jump-btn");
+
+      let isJumping = false;
+      let score = 0;
+
+      function jump() {
+        if (isJumping) return;
+        isJumping = true;
+        lobster.style.bottom = "80px";
+        setTimeout(() => {
+          lobster.style.bottom = "20px";
+          isJumping = false;
+        }, 600);
+      }
+
+      function checkCollision() {
+        const lobsterRect = lobster.getBoundingClientRect();
+        const obstacleRect = obstacle.getBoundingClientRect();
+
+        if (
+          lobsterRect.right > obstacleRect.left &&
+          lobsterRect.left < obstacleRect.right &&
+          lobsterRect.bottom > obstacleRect.top &&
+          lobsterRect.top < obstacleRect.bottom &&
+          lobster.style.bottom === "20px"
+        ) {
+          alert(`Oops! You hit the obstacle. Final score: ${score}`);
+          score = 0;
+          scoreEl.textContent = score;
+        } else if (
+          lobsterRect.right > obstacleRect.left &&
+          lobsterRect.left < obstacleRect.right &&
+          lobster.style.bottom === "80px"
+        ) {
+          score++;
+          scoreEl.textContent = score;
+          // Move obstacle off screen and back randomly
+          obstacle.style.left = "-50px";
+          setTimeout(() => {
+            obstacle.style.left = "100%";
+          }, 800);
+        }
+      }
+
+      jumpBtn.onclick = jump;
+      // Move obstacle continuously left to right every 3 seconds
+      function animateObstacle() {
+        obstacle.style.left = "100%";
+        let pos = window.innerWidth;
+        let speed = 8; // pixels per frame approx
+
+        function frame() {
+          pos -= speed;
+          if (pos < -50) {
+            pos = window.innerWidth + Math.random() * 200;
+          }
+          obstacle.style.left = pos + "px";
+          checkCollision();
+          requestAnimationFrame(frame);
+        }
+        frame();
+      }
+      // Init styles
+      lobster.style.position = "relative";
+      lobster.style.bottom = "20px";
+      obstacle.style.position = "fixed";
+      obstacle.style.top = "calc(50vh + 30px)";
+      obstacle.style.left = "100%";
+      animateObstacle();
+    }
+
+    // Game buttons handler
+    const gameBtns = container.querySelectorAll(".game-btn");
+    gameBtns.forEach(btn => {
+      btn.onclick = () => {
+        const game = btn.dataset.game;
+        if (game === "reaction") reactionTest();
+        else if (game === "memory") memoryMatch();
+        else if (game === "ravejump") raveJump();
+      };
     });
+  }
 
-    // Show initial popup or welcome message
-    // For example, open daily challenge by default
-    showPopup("dailychallenge");
-    loadDailyChallenge();
-  });
+  // Setup nav buttons
+  document.getElementById("btn-minigames").onclick = () => showPopup("minigames");
+  document.getElementById("btn-dailychallenge").onclick = () => showPopup("dailychallenge");
+  document.getElementById("btn-funnyfacts").onclick = () => showPopup("funnyfacts");
+  document.getElementById("btn-snackideas").onclick = () => showPopup("snackideas");
+  document.getElementById("btn-dantebot").onclick = () => showPopup("dantebot");
+  document.getElementById("btn-zeuscorner").onclick = () => showPopup("zeuscorner");
+
+  popupClose.onclick = hidePopup;
+
+  // Personal intro popup on page load
+  window.onload = () => {
+    alert(`Hey Dante! This is your Fun Hub, filled with games, jokes, snacks, and more — all picked just for you by Larissa 💖 Enjoy!`);
+  };
 })();
-</script>
-
-</body>
-</html>
