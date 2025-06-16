@@ -7,105 +7,31 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <header>
     <h1>Dante’s Fun Hub 🎉</h1>
-    <p class="subtitle">For my boy, Dante — Stay lit, stay focused 🔥</p>
+    <p class="subtitle">Hey Dante! Here’s a little playground just for you — with games, laughs, snacks, and a shoutout from me 💖</p>
   </header>
 
   <nav>
-    <button data-popup="minigames" aria-label="Mini Games">🎮 Mini Games</button>
-    <button data-popup="dailychallenge" aria-label="Daily Challenge">📅 Daily Challenge</button>
-    <button data-popup="zeuscorner" aria-label="Zeus’s Corner">🐾 Zeus’s Corner</button>
-    <button data-popup="dantebot" aria-label="DanteBot">🤖 DanteBot</button>
-    <button data-popup="settings" aria-label="Settings">⚙️ Settings</button>
+    <button id="btn-minigames" class="nav-btn neon-btn">Mini Games</button>
+    <button id="btn-dailychallenge" class="nav-btn neon-btn">Daily Challenge</button>
+    <button id="btn-funnyfacts" class="nav-btn neon-btn">Funny Facts</button>
+    <button id="btn-snackideas" class="nav-btn neon-btn">Snack Ideas</button>
+    <button id="btn-dantebot" class="nav-btn neon-btn">DanteBot 🤖</button>
+    <button id="btn-zeuscorner" class="nav-btn neon-btn">Zeus’s Corner 🐶</button>
   </nav>
 
   <main>
-    <section id="welcome-msg">
-      <h2>Welcome, Dante!</h2>
-      <p>Here’s a space made just for you — filled with fun, laughs, and good vibes. <br/>
-      Your dog Zeus says hi too! 🐕‍🦺</p>
-      <p class="from-larissa">💖 Message from Larissa: "Keep shining, babe. Proud of your strength."</p>
-    </section>
+    <!-- Popup container -->
+    <div id="popup" class="popup hidden">
+      <button id="popup-close" class="popup-close" aria-label="Close popup">×</button>
+      <div id="popup-content" class="popup-content"></div>
+    </div>
   </main>
 
-  <!-- Popups -->
-
-  <!-- Mini Games Popup -->
-  <div class="popup" id="popup-minigames" role="dialog" aria-modal="true" aria-labelledby="popup-minigames-title" hidden>
-    <div class="popup-content">
-      <button class="close-btn" aria-label="Close Mini Games popup">&times;</button>
-      <h3 id="popup-minigames-title">🎮 Mini Games</h3>
-      <div class="game-list">
-        <button id="reaction-game-btn" class="game-btn">⚡ Quick Reaction</button>
-        <button id="trivia-game-btn" class="game-btn">❓ Trivia Quiz</button>
-        <button id="wordpuzzle-game-btn" class="game-btn">🔤 Word Puzzle</button>
-        <button id="fixcode-game-btn" class="game-btn">🔧 Fix the Code</button>
-      </div>
-      <div id="game-container"></div>
-    </div>
-  </div>
-
-  <!-- Daily Challenge Popup -->
-  <div class="popup neon-orange" id="popup-dailychallenge" role="dialog" aria-modal="true" aria-labelledby="popup-dailychallenge-title" hidden>
-    <div class="popup-content">
-      <button class="close-btn" aria-label="Close Daily Challenge popup">&times;</button>
-      <h3 id="popup-dailychallenge-title">📅 Daily Challenge</h3>
-      <div id="dailychallenge-content"></div>
-    </div>
-  </div>
-
-  <!-- Zeus's Corner Popup -->
-  <div class="popup neon-pink" id="popup-zeuscorner" role="dialog" aria-modal="true" aria-labelledby="popup-zeuscorner-title" hidden>
-    <div class="popup-content">
-      <button class="close-btn" aria-label="Close Zeus’s Corner popup">&times;</button>
-      <h3 id="popup-zeuscorner-title">🐾 Zeus’s Corner</h3>
-      <div id="zeus-content"></div>
-    </div>
-  </div>
-
-  <!-- DanteBot Popup -->
-  <div class="popup neon-blue" id="popup-dantebot" role="dialog" aria-modal="true" aria-labelledby="popup-dantebot-title" hidden>
-    <div class="popup-content">
-      <button class="close-btn" aria-label="Close DanteBot popup">&times;</button>
-      <h3 id="popup-dantebot-title">🤖 DanteBot</h3>
-      <div id="dantebot-chat">
-        <div id="chat-log"></div>
-        <input type="text" id="chat-input" placeholder="Ask DanteBot something..." autocomplete="off" />
-        <button id="chat-send-btn" aria-label="Send message to DanteBot">Send</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Settings Popup -->
-  <div class="popup neon-green" id="popup-settings" role="dialog" aria-modal="true" aria-labelledby="popup-settings-title" hidden>
-    <div class="popup-content">
-      <button class="close-btn" aria-label="Close Settings popup">&times;</button>
-      <h3 id="popup-settings-title">⚙️ Settings</h3>
-      <div class="settings-section">
-        <label for="font-size-range">Font Size: <span id="font-size-display">16</span>px</label>
-        <input type="range" id="font-size-range" min="12" max="28" value="16" />
-      </div>
-      <div class="settings-section">
-        <label for="color-theme-select">Color Theme:</label>
-        <select id="color-theme-select" aria-label="Select color theme">
-          <option value="neon">Neon (Default)</option>
-          <option value="sunset">Sunset</option>
-          <option value="darkrave">Dark Rave</option>
-          <option value="daylight">Daylight</option>
-        </select>
-      </div>
-      <div class="settings-section">
-        <label><input type="checkbox" id="toggle-sound" checked /> Enable Sound Effects</label>
-      </div>
-      <div class="settings-section">
-        <label><input type="checkbox" id="simple-mode-toggle" /> Simple Mode (Less Visuals)</label>
-      </div>
-    </div>
-  </div>
-
   <footer>
-    <p>© 2025 Larissa’s Love for Dante ❤️</p>
+    <p>Made with ❤️ for Dante by Larissa</p>
   </footer>
 
   <script src="script.js"></script>
