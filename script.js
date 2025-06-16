@@ -1,274 +1,269 @@
+// Wait for DOM to load
 document.addEventListener("DOMContentLoaded", () => {
+  // Particle effect for background - subtle glowing dots
   const canvas = document.getElementById("particle-canvas");
   const ctx = canvas.getContext("2d");
-  let particles = [];
+  let particlesArray;
 
-  // Resize canvas
-  function resize() {
+  function initParticles() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-  }
-  window.addEventListener("resize", resize);
-  resize();
+    particlesArray = [];
+    const numberOfParticles = Math.floor((canvas.width * canvas.height) / 8000);
 
-  // Particle class
-  class Particle {
-    constructor(x,y){
-      this.x = x; this.y = y;
-      this.size = 4 + Math.random()*4;
-      this.speedX = (Math.random()-0.5)*4;
-      this.speedY = (Math.random()-1.5)*4;
-      this.color = `hsl(${Math.random()*360},100%,70%)`;
-      this.life = 60;
+    for(let i = 0; i < numberOfParticles; i++) {
+      particlesArray.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 1,
+        speedX: (Math.random() - 0.5) * 0.3,
+        speedY: (Math.random() - 0.5) * 0.3,
+        alpha: Math.random() * 0.5 + 0.3,
+      });
     }
-    update(){
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.life--;
-    }
-    draw(){
-      ctx.fillStyle = this.color;
+  }
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particlesArray.forEach(p => {
       ctx.beginPath();
-      ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+      ctx.fillStyle = `rgba(212,0,255,${p.alpha})`;
+      ctx.shadowColor = 'rgba(212,0,255,0.8)';
+      ctx.shadowBlur = 8;
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fill();
-    }
-  }
 
-  // Animate particles
-  function animate(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    particles = particles.filter(p=>p.life>0);
-    particles.forEach(p=>{
-      p.update();
-      p.draw();
+      p.x += p.speedX;
+      p.y += p.speedY;
+
+      if(p.x < 0 || p.x > canvas.width) p.speedX = -p.speedX;
+      if(p.y < 0 || p.y > canvas.height) p.speedY = -p.speedY;
     });
-    requestAnimationFrame(animate);
-  }
-  animate();
-
-  // Spawn particles at x,y
-  function spawn(x,y){
-    for(let i=0;i<20;i++) particles.push(new Particle(x,y));
+    requestAnimationFrame(animateParticles);
   }
 
-  // Delegate click events to spawn particles on any button
-  document.body.addEventListener("click", e=>{
-    if(e.target.tagName==="BUTTON"){
-      const rect = e.target.getBoundingClientRect();
-      const x = rect.left + rect.width/2;
-      const y = rect.top + rect.height/2;
-      spawn(x,y);
-    }
+  window.addEventListener("resize", () => {
+    initParticles();
   });
 
-  // Popup helper
-  function showPopup(html){
-    const pop = document.createElement("div");
-    pop.className = "popup";
-    pop.innerHTML = `<div class="popup-content">
-      <button class="close-btn">❌</button>${html}
-    </div>`;
-    document.body.appendChild(pop);
-    pop.querySelector(".close-btn").onclick = ()=>pop.remove();
+  initParticles();
+  animateParticles();
+
+  // Popup helper function
+  function createPopup(title, content, theme = 'default') {
+    const overlay = document.createElement("div");
+    overlay.classList.add("popup");
+    // Theme styles
+    if(theme === 'rave') {
+      overlay.style.background = "rgba(255, 0, 255, 0.95)";
+    } else if(theme === 'zeus') {
+      overlay.style.background = "rgba(0, 150, 255, 0.95)";
+    } else if(theme === 'darkjoke') {
+      overlay.style.background = "rgba(40, 40, 40, 0.97)";
+      overlay.style.color = "#f0f0f0";
+    } else if(theme === 'snack') {
+      overlay.style.background = "rgba(255, 140, 0, 0.95)";
+    } else if(theme === 'dantebot') {
+      overlay.style.background = "rgba(0, 200, 150, 0.95)";
+    } else {
+      overlay.style.background = "rgba(10,10,30,0.95)";
+    }
+
+    const popup = document.createElement("div");
+    popup.classList.add("popup-content");
+
+    const closeBtn = document.createElement("button");
+    closeBtn.classList.add("close-btn");
+    closeBtn.innerHTML = "✖";
+    closeBtn.onclick = () => document.body.removeChild(overlay);
+
+    const header = document.createElement("h2");
+    header.textContent = title;
+
+    const body = document.createElement("div");
+    body.innerHTML = content;
+
+    popup.appendChild(closeBtn);
+    popup.appendChild(header);
+    popup.appendChild(body);
+    overlay.appendChild(popup);
+
+    document.body.appendChild(overlay);
   }
 
-  /* ==== All showXYZ functions below ==== */
-
-  window.showFocusTimer = () => {
-    showPopup(`
-      <h2>⏱ Focus Timer</h2>
-      <input id="timer-input" type="number" placeholder="Minutes (1–60)" style="width:80%;padding:0.5rem;">
-      <br><br>
-      <button id="start-timer" class="glow-btn">Start</button>
-      <p id="timer-display" style="font-size:1.5rem;margin-top:1rem;"></p>
+  // ======= Content functions =======
+  function showFocusTimer() {
+    createPopup("⏱ Focus Timer", `
+      <p>Use the timer to boost your focus in short bursts.</p>
+      <button id="startFocusBtn" class="glow-btn">Start 25 Minutes</button>
+      <p id="focusMsg"></p>
     `);
-    const input = document.getElementById("timer-input");
-    const disp = document.getElementById("timer-display");
-    let timeLeft, tid;
-    document.getElementById("start-timer").onclick = ()=>{
-      const m = parseInt(input.value);
-      if(!m||m<1||m>60)return alert("Enter 1–60");
-      clearInterval(tid); timeLeft = m*60; upd();
-      tid = setInterval(()=>{
-        timeLeft--; upd();
-        if(timeLeft<=0){
-          clearInterval(tid);
-          disp.textContent = "⏰ Done! Take a break.";
-          navigator.vibrate?.([300,150,300]);
+
+    let timer;
+    let countdown = 25 * 60;
+
+    const startBtn = document.getElementById("startFocusBtn");
+    const msg = document.getElementById("focusMsg");
+
+    startBtn.onclick = () => {
+      startBtn.disabled = true;
+      msg.textContent = "Focus session started!";
+      timer = setInterval(() => {
+        countdown--;
+        const mins = Math.floor(countdown / 60);
+        const secs = countdown % 60;
+        msg.textContent = `Time left: ${mins}:${secs < 10 ? '0' + secs : secs}`;
+        if(countdown <= 0) {
+          clearInterval(timer);
+          msg.textContent = "Time's up! Take a break, Dante!";
+          startBtn.disabled = false;
+          countdown = 25 * 60;
         }
-      },1000);
+      }, 1000);
     };
-    function upd(){
-      const mm=String(Math.floor(timeLeft/60)).padStart(2,'0');
-      const ss=String(timeLeft%60).padStart(2,'0');
-      disp.textContent=`${mm}:${ss}`;
-    }
-  };
+  }
 
-  window.showRaveRhythm = () => {
-    let score=0;
-    showPopup(`
-      <h2>🎵 Rave Rhythm</h2>
-      <p>Tap the beat!</p>
-      <button id="beat-btn" class="glow-btn">🎶 TAP 🎶</button>
-      <p id="beat-score" style="font-size:1.5rem;margin-top:1rem;">Score: 0</p>
-    `);
-    const btn=document.getElementById("beat-btn");
-    const ds=document.getElementById("beat-score");
-    btn.onclick=()=>{
-      score++; ds.textContent=`Score: ${score}`;
-      btn.classList.add("pulse");
-      setTimeout(()=>btn.classList.remove("pulse"),100);
-    };
-  };
+  function showRaveRhythm() {
+    createPopup("🎵 Rave Rhythm", `
+      <p>Tap the button to play a funky rave beat!</p>
+      <button id="playBeatBtn" class="glow-btn">Play Beat</button>
+    `, 'rave');
 
-  window.showDarkJokes = () => {
-    const jokes=[
-      "Why don’t graveyards ever get overcrowded? People are dying to get in.",
-      "What’s the last thing that goes through a bug’s mind when it hits a windshield? Its butt.",
-      "Parallel lines have so much in common. It’s a shame they’ll never meet.",
-      "I used to play piano by ear, but now I use my hands.",
-      "My dark humour is like a broken pencil. Pointless."
+    const sounds = [
+      new Audio("https://cdn.pixabay.com/download/audio/2022/03/28/audio_93651f9b69.mp3?filename=electronic-drum-12683.mp3"),
+      new Audio("https://cdn.pixabay.com/download/audio/2022/03/27/audio_7c75567bf0.mp3?filename=electronic-bass-12663.mp3"),
+      new Audio("https://cdn.pixabay.com/download/audio/2022/03/28/audio_6f1d923060.mp3?filename=electronic-beat-12685.mp3")
     ];
-    showPopup(`
-      <h2>🃏 Dark Jokes</h2>
-      <button id="joke-btn" class="glow-btn">Tell Me</button>
-      <p id="joke-text" style="margin-top:1rem;"></p>
-    `);
-    document.getElementById("joke-btn").onclick = ()=>{
-      document.getElementById("joke-text").textContent =
-        jokes[Math.floor(Math.random()*jokes.length)];
+
+    const playBtn = document.getElementById("playBeatBtn");
+
+    playBtn.onclick = () => {
+      sounds.forEach((s, i) => {
+        setTimeout(() => {
+          s.currentTime = 0;
+          s.play();
+        }, i * 500);
+      });
     };
-  };
+  }
 
-  window.showCarRepair = () => {
-    let cnt=0;
-    showPopup(`
-      <h2>🔧 Fix It Fast</h2>
-      <button id="fix-btn" class="glow-btn">Fix 🔧</button>
-      <p id="fix-count" style="margin-top:1rem;">Fixed: 0</p>
-    `);
-    const btn=document.getElementById("fix-btn");
-    const dc=document.getElementById("fix-count");
-    btn.onclick=()=>{
-      cnt++; dc.textContent=`Fixed: ${cnt}`;
-      btn.textContent=cnt%5===0?"You're a machine!":"Fix 🔧";
-    };
-  };
-
-  window.showMemoryMatch = () => {
-    showPopup(`
-      <h2>🧠 Memory Match</h2>
-      <p>Card match game in development!</p>
-    `);
-  };
-
-  window.showLobsterMaze = () => {
-    showPopup(`
-      <h2>🦞 Lobster Escape</h2>
-      <p>Maze game coming soon...</p>
-    `);
-  };
-
-  window.showFunnyFacts = () => {
-    const facts=[
-      "Octopuses have three hearts!",
-      "Bananas are berries, but strawberries aren't.",
-      "Lobsters pee out of their faces to communicate!",
-      "You can hear a blue whale’s heartbeat from 2 miles away.",
-      "Wombat poop is cube-shaped.",
-      "Sharks existed before trees.",
-      "A group of flamingos is called a 'flamboyance'.",
-      "Some turtles can breathe through their butts."
+  function showDarkJokes() {
+    const jokes = [
+      "Why don't graveyards ever get overcrowded? Because people are dying to get in.",
+      "I told my wife she was drawing her eyebrows too high. She looked surprised.",
+      "Why don't skeletons fight each other? They don't have the guts.",
+      "I’d tell you a joke about addiction, but I’m hooked on something else."
     ];
-    showPopup(`
-      <div style="background:#1a1a2e;border:3px solid #9fef00;
-          box-shadow:0 0 20px #9fef00;padding:1em;border-radius:12px;">
-        <h2 style="color:#9fef00">🧠 Funny Facts</h2>
-        <button id="fact-btn" class="glow-btn">Hit Me With a Fact</button>
-        <p id="fact-text" style="margin-top:10px;"></p>
-      </div>
-    `);
-    document.getElementById("fact-btn").onclick = ()=>{
-      document.getElementById("fact-text").textContent =
-        facts[Math.floor(Math.random()*facts.length)];
-    };
-  };
+    const joke = jokes[Math.floor(Math.random() * jokes.length)];
+    createPopup("🃏 Dark Joke", `<p>${joke}</p>`, 'darkjoke');
+  }
 
-  window.showSnackIdeas = () => {
-    const snacks=[
-      "🍫 Chocolate-dipped bacon",
-      "🍟 Fries with gravy and hot sauce",
-      "🍓 Frozen grapes with lemon juice",
-      "🧀 Cheese quesadilla + ranch dip",
-      "🥒 Pickles and peanut butter (don't knock it!)",
-      "🍗 Hot wings dipped in maple syrup",
-      "🥞 Mini pancake tacos with Nutella",
-      "🍕 Leftover pizza rolled into a burrito"
+  function showCarRepair() {
+    createPopup("🔧 Fix It Fast", `
+      <p>Need a quick engineering brain teaser?</p>
+      <p>How would you fix a squeaky car door? Type your idea below:</p>
+      <textarea id="repairInput" rows="4" style="width:100%; border-radius:8px; padding:8px;"></textarea>
+      <button id="submitRepair" class="glow-btn" style="margin-top:10px;">Submit Idea</button>
+      <p id="repairResponse" style="margin-top:1rem;"></p>
+    `);
+
+    document.getElementById("submitRepair").onclick = () => {
+      const idea = document.getElementById("repairInput").value.trim();
+      const resp = document.getElementById("repairResponse");
+      if(!idea) {
+        resp.textContent = "Come on Dante, share your genius!";
+      } else {
+        resp.textContent = `Nice idea! "${idea}" sounds like a pro fix!`;
+      }
+    };
+  }
+
+  function showMemoryMatch() {
+    createPopup("🧠 Memory Match", `
+      <p>Match the pairs!</p>
+      <p><i>Game coming soon...</i></p>
+    `);
+  }
+
+  function showLobsterMaze() {
+    createPopup("🦞 Lobster Escape", `
+      <p>Help the lobster find its way out!</p>
+      <p><i>Mini-game coming soon...</i></p>
+    `);
+  }
+
+  function showFunnyFacts() {
+    const facts = [
+      "Did you know? Lobsters taste with their legs!",
+      "Rap music started in the 1970s in the Bronx, NYC.",
+      "Sassy the Sasquatch is a hilarious character from a Canadian mockumentary show.",
+      "Zeus is probably the coolest dog on the planet!",
+      "Engineers invented the first hoverboard in the 1960s."
     ];
-    showPopup(`
-      <div style="background:#2e1a1a;border:3px solid #ff9900;
-          box-shadow:0 0 20px #ff9900;padding:1em;border-radius:12px;">
-        <h2 style="color:#ff9900">🍿 Snack Ideas</h2>
-        <button id="snack-btn" class="glow-btn">Feed Me Ideas</button>
-        <p id="snack-text" style="margin-top:10px;"></p>
-      </div>
-    `);
-    document.getElementById("snack-btn").onclick = ()=>{
-      document.getElementById("snack-text").textContent =
-        snacks[Math.floor(Math.random()*snacks.length)];
-    };
-  };
+    const fact = facts[Math.floor(Math.random() * facts.length)];
+    createPopup("🧠 Funny Fact", `<p>${fact}</p>`);
+  }
 
-  window.showDanteBot = () => {
-    showPopup(`
-      <div style="background:#1a2e2a;border:3px solid #00ffee;
-          box-shadow:0 0 20px #00ffee;padding:1em;border-radius:12px;">
-        <h2 style="color:#00ffee">🤖 DanteBot</h2>
-        <input id="dantebot-input" type="text" placeholder="Ask me anything..."
-               style="width:100%;padding:6px;border-radius:6px;">
-        <button id="dantebot-btn" class="glow-btn" style="margin-top:8px;">Ask</button>
-        <p id="dantebot-response" style="margin-top:10px;"></p>
-      </div>
-    `);
-    const input=document.getElementById("dantebot-input");
-    const resp=document.getElementById("dantebot-response");
-    document.getElementById("dantebot-btn").onclick = ()=>{
-      const q=input.value.toLowerCase();
-      let a="Hmm... I'm thinking about that.";
-      if(q.includes("car")) a="You’d probably invent the first rave-powered engine.";
-      else if(q.includes("lobster")) a="🦞 You ARE the lobster king, my dude.";
-      else if(q.includes("love")) a="Love you to the moon and back — Larissa.";
-      else if(q.includes("joke")) a="What did the stoner lobster say? Claw-ver move, bro.";
-      else if(q.includes("fix")) a="Duct tape and a good attitude fixes most things.";
-      else if(q.includes("dog")) a="Zeus is planning world domination. Starting with snacks.";
-      resp.textContent=a;
-    };
-  };
-
-  window.showZeusCorner = () => {
-    const z=[
-      "🐾 Zeus says: I only chew expensive shoes.",
-      "🐶 If it fits, I sits. Even if it’s your face.",
-      "🐾 Dogs can smell your feelings. And snacks.",
-      "🐶 Why did the dog sit in the shade? To avoid being a hot dog!",
-      "🐾 Zeus Fact: I chase dreams in my sleep... and squirrels.",
-      "🐶 Dog Tip: Lick it first. Then decide.",
-      "🐾 Zeus Reminder: I am your emotional support creature.",
-      "🐶 Dog Philosophy: If you can’t eat it or play with it, pee on it."
+  function showSnackIdeas() {
+    const snacks = [
+      "Nachos with extra cheese and jalapeños!",
+      "Classic poutine—fries, gravy, and cheese curds.",
+      "Trail mix with nuts, chocolate, and dried fruit.",
+      "Sriracha popcorn for a spicy kick.",
+      "Homemade guacamole with crunchy chips."
     ];
-    showPopup(`
-      <div style="background:#1a1f2e;border:3px solid #66d9ff;
-          box-shadow:0 0 20px #66d9ff;padding:1em;border-radius:12px;">
-        <h2 style="color:#66d9ff">🐶 Zeus’s Corner</h2>
-        <button id="zeus-btn" class="glow-btn">Woof!</button>
-        <p id="zeus-text" style="margin-top:10px;"></p>
-      </div>
-    `);
-    document.getElementById("zeus-btn").onclick = ()=>{
-      document.getElementById("zeus-text").textContent =
-        z[Math.floor(Math.random()*z.length)];
-    };
-  };
+    const snack = snacks[Math.floor(Math.random() * snacks.length)];
+    createPopup("🍿 Snack Idea", `<p>How about: <strong>${snack}</strong>?</p>`, 'snack');
+  }
 
+  function showDanteBot() {
+    createPopup("🤖 DanteBot", `
+      <p>Ask me anything, Dante!</p>
+      <input type="text" id="danteInput" style="width:100%; padding:8px; border-radius:8px; margin-bottom:10px;" placeholder="Type your question..." />
+      <button id="danteAskBtn" class="glow-btn">Ask</button>
+      <p id="danteReply" style="margin-top:1rem;"></p>
+    `, 'dantebot');
+
+    document.getElementById("danteAskBtn").onclick = () => {
+      const question = document.getElementById("danteInput").value.trim().toLowerCase();
+      const replyEl = document.getElementById("danteReply");
+      if (!question) {
+        replyEl.textContent = "I’m waiting for your question!";
+        return;
+      }
+
+      // Simple fun responses
+      if(question.includes("rap")) {
+        replyEl.textContent = "Rap is fire, Dante! Keep vibin’ 🔥🎤";
+      } else if(question.includes("lobster")) {
+        replyEl.textContent = "Lobsters are the kings of the sea crustaceans!";
+      } else if(question.includes("zeus")) {
+        replyEl.textContent = "Zeus sounds like a good boy. Give him a belly rub for me!";
+      } else if(question.includes("rave")) {
+        replyEl.textContent = "Raves bring the energy! Don’t forget your glow sticks!";
+      } else {
+        replyEl.textContent = "Hmm... That’s a tough one! Keep being awesome, Dante!";
+      }
+    };
+  }
+
+  function showZeusCorner() {
+    createPopup("🐶 Zeus’s Corner", `
+      <p>Here’s a cute dog fact for you:</p>
+      <p>Dogs can understand up to 250 words and gestures!</p>
+      <img src="https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=400&q=80" alt="Cute dog" style="border-radius:12px; width:100%; margin-top:1rem;" />
+    `, 'zeus');
+  }
+
+  // Expose functions globally for inline onclick handlers
+  window.showFocusTimer = showFocusTimer;
+  window.showRaveRhythm = showRaveRhythm;
+  window.showDarkJokes = showDarkJokes;
+  window.showCarRepair = showCarRepair;
+  window.showMemoryMatch = showMemoryMatch;
+  window.showLobsterMaze = showLobsterMaze;
+  window.showFunnyFacts = showFunnyFacts;
+  window.showSnackIdeas = showSnackIdeas;
+  window.showDanteBot = showDanteBot;
+  window.showZeusCorner = showZeusCorner;
 });
