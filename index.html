@@ -3,47 +3,79 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sh*t That Reels Me In</title>
+  <title>Dante’s Sh*t That Reels Me In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     body {
-      background: #0b0c10;
-      color: #f0f0f0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      text-align: center;
+      margin: 0;
       padding: 20px;
+      font-family: 'Patrick Hand', cursive;
+      background: linear-gradient(135deg, #1e1e2f, #3b0a45);
+      color: #fff8dc;
+      text-align: center;
+      overflow-x: hidden;
     }
+
     h1 {
-      font-size: 2em;
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 2.5em;
       margin-bottom: 20px;
-      color: #66fcf1;
+      color: #ffb6f2;
+      text-shadow: 0 0 10px #ff00ff, 0 0 20px #8800cc;
     }
+
     .button-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
+      margin-top: 10px;
     }
+
     button {
-      padding: 10px 20px;
+      padding: 12px 18px;
       font-size: 1em;
-      border: none;
-      border-radius: 10px;
-      background: #1f2833;
-      color: #c5c6c7;
+      border: 2px dashed #fff5ee;
+      border-radius: 15px;
+      background: #290d3c;
+      color: #ffebcd;
       cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 0 10px #e75480;
+      font-family: 'Patrick Hand', cursive;
     }
+
     button:hover {
-      background: #45a29e;
+      background: #ff77aa;
+      color: #200020;
+      transform: scale(1.08);
+      border-style: solid;
+      text-shadow: 0 0 5px #fff;
     }
+
     #output {
-      margin-top: 20px;
-      font-size: 1.2em;
-      color: #ffcc70;
+      margin-top: 30px;
+      font-size: 1.3em;
+      color: #ffd1fa;
+      padding: 15px;
+      border: 2px dotted #ffebcd;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      text-shadow: 0 0 2px #fff;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { text-shadow: 0 0 8px #ff00ff; }
+      50% { text-shadow: 0 0 15px #00ffff; }
+    }
+
+    h1, #output {
+      animation: sparkle 3s infinite ease-in-out;
     }
   </style>
 </head>
 <body>
-  <h1>🎣 Sh*t That Reels Me In</h1>
+  <h1>🎣 Sh*t That Reels Me In<br>For Dante 💖</h1>
   <div class="button-container">
     <button onclick="whatIf()">🧠 What If…</button>
     <button onclick="panicButton()">🚨 Panic Button</button>
@@ -60,6 +92,7 @@
     <button onclick="buildCar()">🚗 Build-a-Car Dreamer</button>
   </div>
   <div id="output"></div>
+
   <script>
     function getRandom(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
@@ -68,7 +101,7 @@
     function whatIf() {
       const ideas = [
         "What if lobsters had rap battles to decide trap hierarchy?",
-        "What if your Civic turned into a rave boat during full moons?",
+        "What if Dante’s Civic turned into a rave boat during full moons?",
         "What if Trailer Park Boys got abducted by aliens and started a band?",
         "What if hot dogs could talk and just wanted to be left alone?",
         "What if your fishing trap caught a mixtape and it slapped?"
@@ -77,11 +110,11 @@
     }
 
     function panicButton() {
-      const sounds = ["Smoke break!", "Hide! It’s your parole officer!", "Get in the Civic, we’re going to Dollarama!"];
+      const sounds = ["Smoke break!", "Hide! It’s your parole officer!", "Get in the Civic, Dante – we’re going to Dollarama!"];
       alert(getRandom(sounds));
       document.body.style.background = "#ff00ff";
       setTimeout(() => {
-        document.body.style.background = "#0b0c10";
+        document.body.style.background = "linear-gradient(135deg, #1e1e2f, #3b0a45)";
       }, 1500);
     }
 
