@@ -1,38 +1,766 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="neon">
+<html lang="en" data-theme="neon-pink-blue">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dante’s Dopamine Dive</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dante’s Fun Hub - ADHD Rave Edition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Mono&display=swap');
+
+  :root {
+    --neon-pink: #ff2d95;
+    --neon-blue: #00d2ff;
+    --neon-green: #39ff14;
+    --neon-purple: #bd00ff;
+    --neon-orange: #ff6f00;
+    --neon-yellow: #f7ff00;
+    --bg-dark: #050014;
+    --font-family-main: 'Orbitron', sans-serif;
+    --font-family-mono: 'Roboto Mono', monospace;
+  }
+
+  /* Theme palettes */
+  [data-theme="neon-pink-blue"] {
+    --neon1: var(--neon-pink);
+    --neon2: var(--neon-blue);
+    background: var(--bg-dark);
+    color: white;
+  }
+  [data-theme="neon-green-purple"] {
+    --neon1: var(--neon-green);
+    --neon2: var(--neon-purple);
+    background: #010a00;
+    color: white;
+  }
+  [data-theme="neon-orange-yellow"] {
+    --neon1: var(--neon-orange);
+    --neon2: var(--neon-yellow);
+    background: #1a0a00;
+    color: black;
+  }
+
+  /* Global Styles */
+  body {
+    font-family: var(--font-family-main);
+    background-color: var(--bg-dark);
+    color: white;
+    margin: 0;
+    padding: 0 1rem 3rem;
+    overflow-x: hidden;
+    user-select: none;
+  }
+
+  h1, h2, h3 {
+    text-align: center;
+    text-shadow:
+      0 0 5px var(--neon1),
+      0 0 10px var(--neon2),
+      0 0 20px var(--neon1);
+    margin: 0.5rem 0;
+  }
+
+  button, select, input[type=range] {
+    font-family: var(--font-family-mono);
+    font-weight: 700;
+    background: transparent;
+    border: 2px solid var(--neon1);
+    border-radius: 12px;
+    color: var(--neon1);
+    padding: 0.5rem 1rem;
+    margin: 0.5rem auto;
+    display: block;
+    cursor: pointer;
+    transition: 0.3s ease;
+    min-width: 160px;
+  }
+
+  button:hover, select:hover, input[type=range]:hover {
+    background: var(--neon1);
+    color: var(--bg-dark);
+    box-shadow:
+      0 0 10px var(--neon1),
+      0 0 20px var(--neon2),
+      0 0 30px var(--neon1);
+  }
+
+  #theme-select {
+    max-width: 180px;
+  }
+
+  main {
+    max-width: 500px;
+    margin: 1rem auto;
+  }
+
+  /* Neon box style for sections */
+  .neon-box {
+    border: 2px solid var(--neon1);
+    border-radius: 16px;
+    padding: 1rem;
+    margin: 1rem 0;
+    box-shadow:
+      0 0 10px var(--neon1),
+      0 0 20px var(--neon2),
+      0 0 30px var(--neon1);
+    background: rgba(0,0,0,0.5);
+  }
+
+  /* Bold and readable text */
+  p, li {
+    font-family: var(--font-family-mono);
+    font-weight: 700;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    margin: 0.3rem 0;
+  }
+
+  /* Neon input sliders */
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    background: #222;
+    border-radius: 10px;
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: var(--neon1);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid var(--neon2);
+    box-shadow:
+      0 0 8px var(--neon1),
+      0 0 12px var(--neon2);
+  }
+
+  /* Confetti container */
+  #confetti-canvas {
+    position: fixed;
+    pointer-events: none;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 9999;
+  }
+
+  /* Game container */
+  #game-area {
+    margin-top: 1rem;
+  }
+
+  /* Neon buttons container */
+  #game-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  /* Mini game styles */
+  .game-screen {
+    margin-top: 1rem;
+    min-height: 250px;
+    background: rgba(0,0,0,0.8);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow:
+      inset 0 0 15px var(--neon1),
+      inset 0 0 30px var(--neon2);
+  }
+
+  /* Hide inactive game screens */
+  .hidden {
+    display: none;
+  }
+
+  /* Big neon text */
+  .neon-text {
+    color: var(--neon1);
+    text-shadow:
+      0 0 10px var(--neon1),
+      0 0 20px var(--neon2),
+      0 0 30px var(--neon1);
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+  }
+
+  /* Interactive list for jokes, quotes etc. */
+  ul.interactive-list {
+    max-height: 150px;
+    overflow-y: auto;
+    padding-left: 1rem;
+  }
+
+  ul.interactive-list li {
+    cursor: pointer;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid var(--neon2);
+  }
+  ul.interactive-list li:hover {
+    background: var(--neon2);
+    color: var(--bg-dark);
+  }
+
+  /* Controls container */
+  #controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  /* Responsive font size */
+  @media (max-width: 400px) {
+    body {
+      font-size: 14px;
+    }
+    h1, h2, h3 {
+      font-size: 1.3rem;
+    }
+  }
+</style>
 </head>
 <body>
-  <main>
-    <h1>Dante’s Dopamine Dive</h1>
-    <section class="message-from-you" aria-live="polite">
-      <p>Hey Dante! Here’s a fun little tool packed with your favorite vibes. Dive in and enjoy — love, Larissa 💜</p>
-    </section>
 
-    <nav aria-label="Category navigation">
-      <div class="buttons-container">
-        <button data-category="lobster">🦞 Lobster Fishing</button>
-        <button data-category="cars">🚗 Cars</button>
-        <button data-category="rap">🎤 Rap Music</button>
-        <button data-category="raves">🎉 Raves & Festivals</button>
-        <button data-category="darkJokes">😂 Dark Jokes</button>
-        <button data-category="stories">📖 Funny Stories</button>
-        <button data-category="engineering">🛠️ Engineering</button>
-        <button data-category="native">🌿 Native Spirit</button>
-        <button data-category="stoner">🍃 Stoner Vibes</button>
-        <button data-category="zeus">🐶 Zeus the Dog</button>
+<canvas id="confetti-canvas"></canvas>
+
+<main>
+  <h1>Dante’s Fun Hub</h1>
+  <h3>ADHD-Friendly Neon Rave Edition</h3>
+  <p style="text-align:center; max-width: 400px; margin: auto; font-weight: 600;">
+    Hey Dante! This is your personal rave space filled with games, challenges, and fun vibes from Larissa 💖
+  </p>
+
+  <div id="controls" class="neon-box">
+    <button id="btn-rhythm">🎵 Rave Rhythm Tapper</button>
+    <button id="btn-carfix">🛠️ Car Repair Puzzle</button>
+    <button id="btn-jokes">😂 Dark Joke Generator</button>
+    <button id="btn-memory">🧠 Memory Match</button>
+    <button id="btn-maze">🦞 Lobster Trap Maze</button>
+    <button id="btn-daily">📅 Daily Challenge</button>
+    <button id="btn-hug">🤗 Send Virtual Hug</button>
+    <button id="btn-timer">⏱️ ADHD Focus Timer</button>
+    <button id="btn-quotes">💪 Recovery Quotes</button>
+  </div>
+
+  <div id="theme-controls" class="neon-box" style="text-align:center;">
+    <label for="theme-select" style="font-weight:700; margin-right: 0.5rem;">Choose Neon Theme:</label>
+    <select id="theme-select" aria-label="Choose neon theme">
+      <option value="neon-pink-blue">Pink & Blue</option>
+      <option value="neon-green-purple">Green & Purple</option>
+      <option value="neon-orange-yellow">Orange & Yellow</option>
+    </select>
+
+    <label for="font-size-range" style="font-weight:700; margin-left: 1rem;">Font Size:</label>
+    <input type="range" id="font-size-range" min="12" max="22" value="16" aria-label="Adjust font size" />
+  </div>
+
+  <section id="game-area" class="neon-box" aria-live="polite">
+    <!-- Game screens will appear here -->
+    <p class="neon-text" id="welcome-text">Select a game or feature to start!</p>
+  </section>
+</main>
+
+<script>
+  /* ==== Globals ==== */
+  const gameArea = document.getElementById('game-area');
+  const welcomeText = document.getElementById('welcome-text');
+  const confettiCanvas = document.getElementById('confetti-canvas');
+  const ctx = confettiCanvas.getContext('2d');
+
+  // Confetti particles array
+  let confettiParticles = [];
+
+  // Adjust canvas size to full screen
+  function resizeCanvas() {
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  /* ==== Confetti Effect ==== */
+  class ConfettiParticle {
+    constructor() {
+      this.x = Math.random() * confettiCanvas.width;
+      this.y = Math.random() * confettiCanvas.height - confettiCanvas.height;
+      this.size = 5 + Math.random() * 5;
+      this.speedY = 2 + Math.random() * 3;
+      this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+      this.tilt = Math.random() * 10;
+      this.tiltSpeed = 0.05 + Math.random() * 0.05;
+    }
+    update() {
+      this.y += this.speedY;
+      this.tilt += this.tiltSpeed;
+      if (this.y > confettiCanvas.height) {
+        this.y = -this.size;
+        this.x = Math.random() * confettiCanvas.width;
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.fillStyle = this.color;
+      ctx.moveTo(this.x + this.tilt, this.y);
+      ctx.lineTo(this.x + this.tilt + this.size / 2, this.y + this.size);
+      ctx.lineTo(this.x + this.tilt - this.size / 2, this.y + this.size);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+
+  function initConfetti() {
+    confettiParticles = [];
+    for (let i = 0; i < 150; i++) {
+      confettiParticles.push(new ConfettiParticle());
+    }
+  }
+
+  function animateConfetti() {
+    ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    confettiParticles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    requestAnimationFrame(animateConfetti);
+  }
+
+  function startConfetti() {
+    initConfetti();
+    animateConfetti();
+    setTimeout(() => {
+      confettiParticles = [];
+      ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    }, 8000);
+  }
+
+  /* ==== Theme & Font Controls ==== */
+  const themeSelect = document.getElementById('theme-select');
+  const fontSizeRange = document.getElementById('font-size-range');
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  function applyFontSize(size) {
+    document.body.style.fontSize = size + 'px';
+  }
+
+  themeSelect.addEventListener('change', e => applyTheme(e.target.value));
+  fontSizeRange.addEventListener('input', e => applyFontSize(e.target.value));
+
+  // Initialize theme and font size from controls
+  applyTheme(themeSelect.value);
+  applyFontSize(fontSizeRange.value);
+
+  /* ==== Virtual Hug ==== */
+  function virtualHug() {
+    gameArea.innerHTML = `
+      <div style="text-align:center; font-size: 1.8rem; font-weight: 900; color: var(--neon2); animation: glow 1s infinite alternate;">
+        🤗 Sending you a huge virtual hug, Dante! 💖<br>
+        <small style="font-weight: 600; font-family: var(--font-family-mono); margin-top: 0.5rem; display: block;">
+          Love, Larissa
+        </small>
       </div>
-    </nav>
+    `;
+    startConfetti();
+  }
 
-    <section id="content" aria-live="polite" tabindex="0" aria-label="Category content">
-      <p>Tap a category button above to get started!</p>
-    </section>
-  </main>
+  /* ==== Recovery Quotes ==== */
+  const recoveryQuotes = [
+    "One day at a time, you’ve got this.",
+    "Progress is progress, no matter how small.",
+    "Strength grows in the moments you think you can’t go on.",
+    "Every sunrise is a new chance to shine.",
+    "Keep grinding, Dante. The best is ahead.",
+    "Recovery is a journey, not a race.",
+    "You’re stronger than any struggle.",
+    "Small victories lead to big wins."
+  ];
 
-  <script src="script.js"></script>
+  function showRandomQuote() {
+    const quote = recoveryQuotes[Math.floor(Math.random() * recoveryQuotes.length)];
+    gameArea.innerHTML = `
+      <p class="neon-text" style="color: var(--neon2);">${quote}</p>
+    `;
+  }
+
+  /* ==== Daily Challenges ==== */
+  const dailyChallenges = [
+    "Try to list 3 new ideas you want to build today!",
+    "Share your funniest memory from a rave or festival.",
+    "Name your top 5 rap songs right now.",
+    "Think of 3 ways to fix something broken around you.",
+    "Describe Zeus in 3 words.",
+    "Take a 5-minute mindful break and breathe deeply.",
+    "Write a quick dark joke (keep it fun!)",
+    "Plan a dream road trip with your favorite cars."
+  ];
+
+  function showDailyChallenge() {
+    const challenge = dailyChallenges[Math.floor(Math.random() * dailyChallenges.length)];
+    gameArea.innerHTML = `
+      <p class="neon-text" style="color: var(--neon1);">📅 Daily Challenge:</p>
+      <p style="font-weight: 700; font-family: var(--font-family-mono); font-size: 1.3rem; margin-top: 1rem;">${challenge}</p>
+    `;
+  }
+
+  /* ==== Mini Games ==== */
+
+  // 1) Rave Rhythm Tapper
+  function raveRhythmTapper() {
+    gameArea.innerHTML = `
+      <p class="neon-text" style="color: var(--neon1);">🎵 Rave Rhythm Tapper</p>
+      <p style="font-weight: 700; margin-bottom: 1rem;">Tap the button in time with the beat! Score points for accuracy.</p>
+      <button id="tap-btn" style="font-size:2rem; padding:1rem 2rem;">Tap Me!</button>
+      <p id="score" style="margin-top: 1rem; font-weight: 900;">Score: 0</p>
+      <p id="timer" style="font-weight: 700; margin-top: 0.5rem;">Time Left: 15s</p>
+    `;
+
+    const tapBtn = document.getElementById('tap-btn');
+    const scoreDisplay = document.getElementById('score');
+    const timerDisplay = document.getElementById('timer');
+
+    let score = 0;
+    let timeLeft = 15;
+    let lastTap = 0;
+
+    // Beat interval in ms (rave beat ~120bpm = 500ms interval)
+    const beatInterval = 500;
+    let beatTimeout;
+
+    function startTimer() {
+      if (timeLeft <= 0) {
+        tapBtn.disabled = true;
+        gameArea.innerHTML += `<p style="font-weight: 900; color: var(--neon2); margin-top: 1rem;">Game over! Your final score: ${score}</p>`;
+        startConfetti();
+        return;
+      }
+      timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+      timeLeft--;
+      setTimeout(startTimer, 1000);
+    }
+
+    function onTap() {
+      const now = Date.now();
+      const delta = Math.abs((now - lastTap) - beatInterval);
+      lastTap = now;
+      // Score higher if tap is close to beat interval (within 150ms)
+      if (delta < 150) {
+        score += 5;
+      } else if (delta < 300) {
+        score += 2;
+      } else {
+        score += 1;
+      }
+      scoreDisplay.textContent = `Score: ${score}`;
+    }
+
+    tapBtn.addEventListener('click', onTap);
+
+    lastTap = Date.now();
+    startTimer();
+  }
+
+  // 2) Car Repair Puzzle (Drag and drop)
+  function carRepairPuzzle() {
+    gameArea.innerHTML = `
+      <p class="neon-text" style="color: var(--neon1);">🛠️ Car Repair Puzzle</p>
+      <p style="font-weight: 700;">Drag the correct parts to fix the car!</p>
+      <div id="car-container" style="position:relative; width: 300px; height: 180px; margin: auto; background:#111; border-radius:12px; box-shadow: inset 0 0 20px var(--neon1);">
+        <!-- Car outline -->
+        <svg width="300" height="180" viewBox="0 0 300 180">
+          <rect x="50" y="80" width="200" height="50" fill="none" stroke="var(--neon1)" stroke-width="3" rx="10" ry="10"/>
+          <circle id="wheel-front" cx="80" cy="140" r="25" fill="none" stroke="var(--neon1)" stroke-width="3"/>
+          <circle id="wheel-back" cx="220" cy="140" r="25" fill="none" stroke="var(--neon1)" stroke-width="3"/>
+          <!-- Slot for bumper -->
+          <rect id="slot-bumper" x="220" y="70" width="60" height="40" fill="none" stroke="var(--neon2)" stroke-width="3" rx="6" ry="6"/>
+          <!-- Slot for headlight -->
+          <rect id="slot-headlight" x="50" y="70" width="40" height="40" fill="none" stroke="var(--neon2)" stroke-width="3" rx="6" ry="6"/>
+        </svg>
+      </div>
+      <div id="parts" style="display:flex; justify-content:center; gap:1rem; margin-top: 1rem;">
+        <div class="part" draggable="true" id="part-bumper" style="width:60px; height:40px; background: var(--neon1); border-radius: 6px; cursor: grab; text-align:center; line-height:40px; font-weight: 700;">Bumper</div>
+        <div class="part" draggable="true" id="part-headlight" style="width:40px; height:40px; background: var(--neon2); border-radius: 6px; cursor: grab; text-align:center; line-height:40px; font-weight: 700;">Headlight</div>
+      </div>
+      <p id="puzzle-result" style="font-weight: 700; margin-top: 1rem; text-align:center;"></p>
+    `;
+
+    const parts = document.querySelectorAll('.part');
+    let placedParts = 0;
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+      ev.preventDefault();
+      const data = ev.dataTransfer.getData("text");
+      const part = document.getElementById(data);
+      if (!part) return;
+      // Check drop target id to match part id
+      if (
+        (ev.target.id === 'slot-bumper' && data === 'part-bumper') ||
+        (ev.target.id === 'slot-headlight' && data === 'part-headlight')
+      ) {
+        ev.target.style.fill = part.style.backgroundColor;
+        part.style.visibility = 'hidden';
+        placedParts++;
+        if (placedParts === 2) {
+          document.getElementById('puzzle-result').textContent = "🎉 Car is fully repaired! Great job!";
+          startConfetti();
+        }
+      } else {
+        document.getElementById('puzzle-result').textContent = "❌ That's not the right spot for that part. Try again!";
+      }
+    }
+
+    // Add drag and drop handlers for slots and parts
+    const slotBumper = document.getElementById('slot-bumper');
+    const slotHeadlight = document.getElementById('slot-headlight');
+
+    [slotBumper, slotHeadlight].forEach(slot => {
+      slot.addEventListener('dragover', allowDrop);
+      slot.addEventListener('drop', drop);
+    });
+
+    parts.forEach(part => {
+      part.addEventListener('dragstart', drag);
+    });
+  }
+
+  // 3) Dark Joke Generator
+  const darkJokes = [
+    "Why don’t graveyards ever get overcrowded? Because people are dying to get in.",
+    "I told my therapist about my fears. He said, 'You’re not alone.' Then he left.",
+    "Why did the scarecrow win an award? Because he was outstanding in his field... unlike me.",
+    "Why don’t skeletons fight each other? They don’t have the guts.",
+    "I have a joke about depression, but it’s too dark to share.",
+    "Why don’t zombies eat clowns? Because they taste funny.",
+  ];
+
+  function darkJokeGenerator() {
+    const joke = darkJokes[Math.floor(Math.random() * darkJokes.length)];
+    gameArea.innerHTML = `
+      <p class="neon-text" style="color: var(--neon1);">😂 Dark Joke Generator</p>
+      <p style="font-weight: 700; margin-top: 1rem;">${joke}</p>
+      <button id="new-joke-btn">Another One</button>
+    `;
+    document.getElementById('new-joke-btn').addEventListener('click', darkJokeGenerator);
+  }
+
+  // 4) Memory Match (simple emoji card matching)
+  function memoryMatch() {
+    const emojis = ['🦞','🎤','🚗','🎧','💡','🔥','🌈','🕺'];
+    let cards = [...emojis, ...emojis]; // pairs
+    // shuffle
+    cards.sort(() => Math.random() - 0.5);
+
+    gameArea.innerHTML = `
+      <p class="neon-text" style="color: var(--neon2);">🧠 Memory Match</p>
+      <p style="font-weight:700;">Tap two cards to find pairs.</p>
+      <div id="memory-grid" style="display:grid; grid-template-columns: repeat(4, 60px); gap:10px; justify-content:center; margin-top:1rem;"></div>
+      <p id="memory-status" style="margin-top:1rem; font-weight:900;"></p>
+    `;
+
+    const grid = document.getElementById('memory-grid');
+    let firstCard = null;
+    let lockBoard = false;
+    let matchesFound = 0;
+
+    cards.forEach((emoji, index) => {
+      const card = document.createElement('button');
+      card.classList.add('memory-card');
+      card.style.width = '60px';
+      card.style.height = '60px';
+      card.style.fontSize = '2rem';
+      card.style.background = 'var(--bg-dark)';
+      card.style.border = `2px solid var(--neon1)`;
+      card.style.borderRadius = '12px';
+      card.style.color = 'transparent';
+      card.style.cursor = 'pointer';
+      card.dataset.emoji = emoji;
+      card.dataset.index = index;
+      card.textContent = emoji;
+
+      card.addEventListener('click', () => {
+        if (lockBoard || card === firstCard || card.style.color !== 'transparent') return;
+        card.style.color = 'white';
+
+        if (!firstCard) {
+          firstCard = card;
+          return;
+        }
+
+        // Check match
+        if (firstCard.dataset.emoji === card.dataset.emoji) {
+          matchesFound++;
+          firstCard = null;
+          if (matchesFound === emojis.length) {
+            document.getElementById('memory-status').textContent = "🎉 You matched all pairs! Well done!";
+            startConfetti();
+          }
+        } else {
+          lockBoard = true;
+          setTimeout(() => {
+            firstCard.style.color = 'transparent';
+            card.style.color = 'transparent';
+            firstCard = null;
+            lockBoard = false;
+          }, 1000);
+        }
+      });
+      card.style.color = 'transparent';
+      grid.appendChild(card);
+    });
+  }
+
+  // 5) Lobster Trap Maze (simple directional button maze)
+  function lobsterTrapMaze() {
+    const maze = [
+      ['S', ' ', ' ', ' ', 'X'],
+      ['X', 'X', ' ', 'X', ' '],
+      [' ', ' ', ' ', 'X', ' '],
+      [' ', 'X', ' ', ' ', ' '],
+      [' ', ' ', ' ', 'X', 'E'],
+    ];
+    // S = start, E = end, X = wall, ' ' = path
+
+    let playerPos = {x:0, y:0};
+
+    function renderMaze() {
+      let html = '<table style="margin:auto; border-collapse: collapse;">';
+      for(let y=0; y<maze.length; y++){
+        html += '<tr>';
+        for(let x=0; x<maze[y].length; x++){
+          let cell = maze[y][x];
+          let content = '';
+          let bgColor = '#111';
+          if(x === playerPos.x && y === playerPos.y) {
+            content = '🦞';
+            bgColor = 'var(--neon1)';
+          } else if(cell === 'X') {
+            bgColor = '#222';
+          } else if(cell === 'S') {
+            content = '🚢';
+            bgColor = 'var(--neon2)';
+          } else if(cell === 'E') {
+            content = '🏁';
+            bgColor = 'var(--neon2)';
+          }
+          html += `<td style="width:40px; height:40px; text-align:center; vertical-align:middle; background:${bgColor}; border: 1px solid var(--neon2); font-size: 1.5rem;">${content}</td>`;
+        }
+        html += '</tr>';
+      }
+      html += '</table>';
+      return html;
+    }
+
+    function movePlayer(dx, dy) {
+      let newX = playerPos.x + dx;
+      let newY = playerPos.y + dy;
+      if(newX < 0 || newY < 0 || newY >= maze.length || newX >= maze[0].length) return;
+      if(maze[newY][newX] === 'X') return;
+      playerPos = {x: newX, y: newY};
+      updateGame();
+    }
+
+    function updateGame() {
+      gameArea.innerHTML = `
+        <p class="neon-text" style="color: var(--neon1);">🦞 Lobster Trap Maze</p>
+        <p style="font-weight: 700; margin-bottom: 0.5rem;">Use buttons to move the lobster trap to the exit!</p>
+        <div>${renderMaze()}</div>
+        <div style="text-align:center; margin-top: 1rem;">
+          <button id="up-btn">⬆️</button><br/>
+          <button id="left-btn">⬅️</button>
+          <button id="down-btn">⬇️</button>
+          <button id="right-btn">➡️</button>
+        </div>
+        <p id="maze-status" style="font-weight: 700; margin-top: 1rem; text-align:center;"></p>
+      `;
+
+      document.getElementById('up-btn').onclick = () => movePlayer(0,-1);
+      document.getElementById('down-btn').onclick = () => movePlayer(0,1);
+      document.getElementById('left-btn').onclick = () => movePlayer(-1,0);
+      document.getElementById('right-btn').onclick = () => movePlayer(1,0);
+
+      if (maze[playerPos.y][playerPos.x] === 'E') {
+        document.getElementById('maze-status').textContent = "🎉 You escaped the lobster trap maze! Great job!";
+        startConfetti();
+      } else {
+        document.getElementById('maze-status').textContent = "";
+      }
+    }
+
+    updateGame();
+  }
+
+  /* ==== ADHD Focus Timer ==== */
+  function focusTimer() {
+    gameArea.innerHTML = `
+      <p class="neon-text" style="color: var(--neon2);">⏱️ ADHD Focus Timer</p>
+      <p style="font-weight: 700;">Set your focus session time and press start.</p>
+      <label for="focus-minutes" style="font-weight: 700;">Minutes:</label>
+      <input type="number" id="focus-minutes" min="1" max="60" value="25" style="width: 60px; font-weight: 700;"/>
+      <button id="start-timer-btn">Start</button>
+      <p id="timer-display" style="font-weight: 900; font-size: 2rem; margin-top: 1rem;">00:00</p>
+    `;
+
+    const startBtn = document.getElementById('start-timer-btn');
+    const timerDisplay = document.getElementById('timer-display');
+    const minutesInput = document.getElementById('focus-minutes');
+
+    let timerInterval;
+    let totalSeconds = 0;
+
+    function updateTimer() {
+      if(totalSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerDisplay.textContent = "⏰ Time's up! Take a break 🎉";
+        startConfetti();
+        return;
+      }
+      totalSeconds--;
+      let m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+      let s = (totalSeconds % 60).toString().padStart(2, '0');
+      timerDisplay.textContent = `${m}:${s}`;
+    }
+
+    startBtn.onclick = () => {
+      let mins = parseInt(minutesInput.value);
+      if (isNaN(mins) || mins < 1 || mins > 60) {
+        alert("Please enter a valid minute between 1 and 60");
+        return;
+      }
+      totalSeconds = mins * 60;
+      updateTimer();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(updateTimer, 1000);
+    };
+  }
+
+  /* ==== Main Button Event Listeners ==== */
+  document.getElementById('btn-rhythm').addEventListener('click', raveRhythmTapper);
+  document.getElementById('btn-carfix').addEventListener('click', carRepairPuzzle);
+  document.getElementById('btn-jokes').addEventListener('click', darkJokeGenerator);
+  document.getElementById('btn-memory').addEventListener('click', memoryMatch);
+  document.getElementById('btn-maze').addEventListener('click', lobsterTrapMaze);
+  document.getElementById('btn-daily').addEventListener('click', showDailyChallenge);
+  document.getElementById('btn-hug').addEventListener('click', virtualHug);
+  document.getElementById('btn-timer').addEventListener('click', focusTimer);
+  document.getElementById('btn-quotes').addEventListener('click', showRandomQuote);
+
+  // Init with welcome text
+  welcomeText.textContent = "Select a game or feature to start!";
+
+</script>
+
 </body>
 </html>
