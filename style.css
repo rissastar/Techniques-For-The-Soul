@@ -1,214 +1,155 @@
-/* style.css */
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto&display=swap');
+/* Neon rave inspired, bold and ADHD-friendly */
 
 :root {
-  --neon-blue: #00f0ff;
-  --neon-pink: #ff00f7;
-  --neon-green: #00ff85;
-  --neon-yellow: #fff700;
-  --dark-bg: #111;
-  --dark-bg-alt: #1a1a1a;
-  --text-color: #eee;
+  --bg-color: #0a0a0a;
+  --text-color: #0ff;
+  --highlight-color: #ff0080;
+  --button-bg: #111111;
+  --button-hover-bg: #222222;
+  --button-active-bg: #ff0080;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-html, body {
-  margin: 0; padding: 0; height: 100%;
-  background: var(--dark-bg);
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
   color: var(--text-color);
-  font-family: 'Roboto', sans-serif;
-  overflow-x: hidden;
-}
-
-h1, h2 {
-  font-family: 'Orbitron', monospace;
-  text-shadow:
-    0 0 5px var(--neon-pink),
-    0 0 10px var(--neon-pink),
-    0 0 20px var(--neon-pink);
+  font-family: var(--font-family);
+  line-height: 1.5;
+  margin: 0;
+  padding: 1rem;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 h1 {
-  font-size: 2.8rem;
-  margin-bottom: 0.2em;
+  font-size: 2.5rem;
   text-align: center;
+  text-shadow:
+    0 0 10px var(--highlight-color),
+    0 0 20px var(--highlight-color),
+    0 0 30px var(--highlight-color);
+  margin-bottom: 1rem;
+}
+
+.message-from-you {
+  background: linear-gradient(45deg, #ff0080, #00ffe5);
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #111;
+  box-shadow:
+    0 0 20px #ff0080,
+    0 0 40px #00ffe5;
+}
+
+.buttons-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+button {
+  background-color: var(--button-bg);
+  border: none;
+  border-radius: 12px;
+  color: var(--text-color);
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-shadow:
+    0 0 5px #00fff7,
+    0 0 10px #ff00aa;
+  transition: background-color 0.3s ease, transform 0.15s ease;
+  box-shadow:
+    0 0 10px #00fff7,
+    0 0 20px #ff00aa;
   user-select: none;
 }
 
-h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5em;
-  text-align: center;
-  user-select: none;
+button:hover,
+button:focus-visible {
+  background-color: var(--button-hover-bg);
+  outline: none;
+  transform: scale(1.05);
+  box-shadow:
+    0 0 15px #ff0080,
+    0 0 30px #00ffe5;
 }
 
-.container {
-  max-width: 480px;
-  margin: auto;
-  padding: 15px;
-  background: linear-gradient(135deg, #080808, #222222);
+button:active {
+  background-color: var(--button-active-bg);
+  transform: scale(0.95);
+  box-shadow:
+    0 0 40px #ff0080,
+    0 0 60px #00ffe5;
+  color: #111;
+}
+
+#content {
+  min-height: 150px;
+  padding: 1.5rem;
+  background-color: #111111;
   border-radius: 15px;
+  font-size: 1.25rem;
+  line-height: 1.6;
   box-shadow:
-    0 0 10px var(--neon-pink),
-    inset 0 0 30px #330033;
-}
-
-.module {
-  background: var(--dark-bg-alt);
-  margin: 15px 0;
-  border-radius: 12px;
-  padding: 12px 20px;
-  box-shadow:
-    0 0 10px var(--neon-blue),
-    inset 0 0 8px var(--neon-pink);
-}
-
-.output {
-  font-size: 1.15rem;
-  margin-top: 12px;
-  color: var(--neon-green);
-  font-weight: 600;
-  min-height: 40px;
-  user-select: text;
-}
-
-button.glow-btn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--neon-yellow);
-  background: transparent;
-  border: 2px solid var(--neon-yellow);
-  border-radius: 12px;
-  cursor: pointer;
-  text-shadow: 0 0 5px var(--neon-yellow);
-  box-shadow:
-    0 0 10px var(--neon-yellow),
-    inset 0 0 6px var(--neon-yellow);
-  transition: background-color 0.3s ease, color 0.3s ease;
-  user-select: none;
-  margin: 0 auto;
-  max-width: 300px;
+    inset 0 0 15px #ff0080,
+    inset 0 0 25px #00ffe5;
   text-align: center;
-}
-
-button.glow-btn:hover,
-button.glow-btn:focus {
-  background-color: var(--neon-yellow);
-  color: var(--dark-bg);
+  user-select: text;
   outline: none;
-  box-shadow:
-    0 0 20px var(--neon-yellow),
-    inset 0 0 12px var(--neon-yellow);
 }
 
-.icon-btn {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: var(--neon-pink);
-  position: fixed;
-  top: 15px;
-  right: 20px;
-  user-select: none;
-  transition: color 0.3s ease;
-  z-index: 1000;
+/* Neon glow animation for content */
+#content p {
+  animation: neonPulse 2.5s ease-in-out infinite alternate;
 }
 
-.icon-btn:hover {
-  color: var(--neon-yellow);
-}
-
-canvas#confettiCanvas {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 900;
-}
-
-/* Game Canvas */
-#gameCanvas {
-  display: block;
-  margin: 10px auto;
-  background: #000;
-  border: 2px solid var(--neon-pink);
-  border-radius: 10px;
-  box-shadow: 0 0 20px var(--neon-pink);
-}
-
-/* Chat */
-.chat-window {
-  background: #222222;
-  height: 150px;
-  overflow-y: auto;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  padding: 8px;
-  color: var(--neon-green);
-  font-weight: 600;
-  font-size: 1rem;
-  font-family: monospace;
-  box-shadow:
-    inset 0 0 10px var(--neon-green);
-}
-
-#chatInput {
-  width: calc(100% - 85px);
-  padding: 10px;
-  border-radius: 8px 0 0 8px;
-  border: none;
-  font-size: 1rem;
-  font-weight: 600;
-  outline: none;
-  color: var(--dark-bg);
-}
-
-#chatInput::placeholder {
-  color: #999;
-}
-
-#dantebot button {
-  width: 80px;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 0 8px 8px 0;
-  border: none;
-  background: var(--neon-pink);
-  color: var(--dark-bg);
-  cursor: pointer;
-  font-weight: 700;
-  box-shadow:
-    0 0 10px var(--neon-pink);
-  transition: background-color 0.3s ease;
-}
-
-#dantebot button:hover {
-  background: var(--neon-yellow);
-  box-shadow: 0 0 15px var(--neon-yellow);
-}
-
-/* Responsive & Mobile */
-@media (max-width: 520px) {
-  .container {
-    margin: 10px;
-    padding: 10px;
+@keyframes neonPulse {
+  0% {
+    text-shadow:
+      0 0 10px #ff0080,
+      0 0 20px #00ffe5,
+      0 0 30px #ff0080,
+      0 0 40px #00ffe5;
+    color: #0ff;
   }
-  button.glow-btn {
-    font-size: 1rem;
-    padding: 10px;
+  100% {
+    text-shadow:
+      0 0 20px #ff00aa,
+      0 0 40px #00fff7,
+      0 0 60px #ff00aa,
+      0 0 80px #00fff7;
+    color: #f0f;
   }
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  body {
+    padding: 0.5rem;
+  }
+
   h1 {
     font-size: 2rem;
   }
-  h2 {
-    font-size: 1.2rem;
-  }
-  #chatInput {
+
+  button {
     font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  #content {
+    font-size: 1.1rem;
+    padding: 1rem;
   }
 }
