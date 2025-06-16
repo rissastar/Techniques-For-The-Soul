@@ -2,124 +2,102 @@
 <html lang="en" data-theme="neon">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dante’s ADHD Fun Hub - Modular Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dante’s Fun Hub 🎉</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
   <style>
-    /* Neon rave-themed CSS */
     :root {
-      --neon1: #ff00ff;
-      --neon2: #00ffff;
-      --neon3: #ff0055;
-      --bg: #111;
-      --text: #eee;
-      --button-bg: #222;
-      --button-hover: #444;
+      --neon1: #00ffff;
+      --neon2: #ff00ff;
+      --bg: #0c0c1b;
+      --text: #ffffff;
     }
+
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0; padding: 0;
-      display: flex; flex-direction: column; min-height: 100vh;
-    }
-    header {
-      padding: 1rem;
+      font-family: 'Orbitron', sans-serif;
+      margin: 0;
+      padding: 2rem;
       text-align: center;
-      background: linear-gradient(45deg, var(--neon1), var(--neon2));
-      color: black;
-      font-size: 1.5rem;
-      font-weight: 900;
-      text-shadow: 0 0 10px #fff;
     }
-    main {
-      flex-grow: 1;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    #welcome-text {
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-      font-weight: 700;
+
+    h1 {
+      font-size: 2.5rem;
       color: var(--neon1);
-      text-align: center;
+      text-shadow: 0 0 5px var(--neon2), 0 0 10px var(--neon1);
+      margin-bottom: 1.5rem;
     }
-    #game-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      width: 100%;
-      max-width: 600px;
-    }
-    #game-buttons button {
-      background: var(--button-bg);
-      border: none;
-      color: var(--neon2);
-      font-weight: 700;
-      padding: 0.8rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 0 10px var(--neon2);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-      flex: 1 1 45%;
-      min-width: 140px;
-      max-width: 220px;
-      user-select: none;
-    }
-    #game-buttons button:hover,
-    #game-buttons button:focus {
-      background: var(--button-hover);
-      box-shadow: 0 0 15px var(--neon3);
-      outline: none;
-      color: var(--neon3);
-    }
-    #game-area {
-      width: 100%;
-      max-width: 700px;
-      background: #222;
-      border-radius: 15px;
+
+    #intro {
+      font-size: 1.2rem;
+      background: #111122;
       padding: 1rem;
-      box-shadow: 0 0 15px var(--neon1);
-      min-height: 300px;
-      color: var(--text);
-      font-size: 1.1rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 10px var(--neon2);
     }
-    .neon-text {
-      text-shadow:
-        0 0 5px var(--neon1),
-        0 0 10px var(--neon2),
-        0 0 20px var(--neon3),
-        0 0 30px var(--neon1),
-        0 0 40px var(--neon2);
+
+    .module-btn {
+      background: linear-gradient(135deg, var(--neon1), var(--neon2));
+      border: none;
+      padding: 1rem 1.5rem;
+      margin: 0.5rem;
+      color: black;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 15px var(--neon1);
+      transition: transform 0.2s;
+    }
+
+    .module-btn:hover {
+      transform: scale(1.1);
+    }
+
+    #game-area {
+      margin-top: 2rem;
+      padding: 2rem;
+      border-radius: 1rem;
+      background: #111;
+      box-shadow: 0 0 20px var(--neon2);
+      min-height: 200px;
+    }
+
+    footer {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      opacity: 0.6;
     }
   </style>
 </head>
 <body>
-  <header>
-    Dante’s ADHD Fun Hub 💡🎉
-  </header>
-  <main>
-    <div id="welcome-text">
-      Hey Dante! Here's a personal message from Larissa:<br />
-      <em style="color: var(--neon3); font-weight: 900;">“Keep shining bright, no matter what. I love you and believe in your strength!”</em>
-    </div>
-    <div id="game-buttons">
-      <button id="btn-rhythm">Rave Rhythm Tapper</button>
-      <button id="btn-carfix">Car Repair Puzzle</button>
-      <button id="btn-jokes">Dark Joke Generator</button>
-      <button id="btn-memory">Memory Match</button>
-      <button id="btn-maze">Lobster Trap Maze</button>
-      <button id="btn-timer">Focus Timer</button>
-    </div>
-    <div id="game-area">
-      <!-- Mini-game content loads here -->
-      Select a game to get started!
-    </div>
-  </main>
-  <script type="module" src="js/main.js"></script>
+  <h1>Dante’s Fun Hub 🎮🔥</h1>
+
+  <div id="intro">
+    Yo Dante! This is your personal ADHD rave-powered fun zone 🎧🌀  
+    Tap anything below when you're bored, need a boost, or want a laugh.  
+    You got this. One moment at a time. Love, Larissa ❤️
+  </div>
+
+  <div id="buttons">
+    <button class="module-btn" onclick="loadModule('focusTimer')">🕒 Focus Timer</button>
+    <button class="module-btn" onclick="loadModule('raveRhythm')">🎶 Rave Rhythm</button>
+    <button class="module-btn" onclick="loadModule('darkJokes')">🃏 Dark Jokes</button>
+    <button class="module-btn" onclick="loadModule('lobsterMaze')">🦞 Lobster Maze</button>
+    <button class="module-btn" onclick="loadModule('carRepair')">🔧 Car Repair Tycoon</button>
+    <button class="module-btn" onclick="loadModule('memoryMatch')">🧠 Memory Match</button>
+  </div>
+
+  <div id="game-area">
+    <p>🎈 Pick something above to get started! 🎈</p>
+  </div>
+
+  <footer>
+    Built with good vibes, neon lights, and love 💜 | Powered by ADHD
+  </footer>
+
+  <script type="module" src="./js/main.js"></script>
 </body>
 </html>
