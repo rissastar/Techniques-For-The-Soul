@@ -2,340 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dante’s Dopamine Dive 🎣</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-      overflow-x: hidden;
-    }
-    h1, h2 {
-      color: #0ff;
-      text-shadow: 2px 2px #f0f;
-    }
-    button {
-      margin: 15px;
-      padding: 15px 25px;
-      border: none;
-      font-size: 1.2em;
-      font-weight: bold;
-      border-radius: 10px;
-      background: #ff00ff;
-      color: #fff;
-      box-shadow: 0 0 10px #00f0ff;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-    button:hover {
-      background: #00ffff;
-      box-shadow: 0 0 15px #ff00ff;
-      color: #000;
-    }
-    #message {
-      font-size: 1.1em;
-      margin-bottom: 30px;
-      background: #222;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #ff0;
-    }
-    .section {
-      margin-top: 30px;
-      padding: 20px;
-      background: #111;
-      border-radius: 20px;
-      box-shadow: 0 0 20px #0ff;
-    }
-    .output {
-      margin-top: 20px;
-      font-size: 1.3em;
-      font-weight: bold;
-      color: #0f0;
-    }
-    #danteBox {
-      animation: none;
-    }
-    @keyframes shake {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(3deg); }
-      50% { transform: rotate(-3deg); }
-      75% { transform: rotate(3deg); }
-      100% { transform: rotate(0deg); }
-    }
-    #confetti {
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      width: 100%;
-      height: 100%;
-      z-index: 999;
-    }
-    textarea {
-      width: 90%;
-      height: 100px;
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 1em;
-      border-radius: 10px;
-      border: none;
-      resize: none;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dante's Neon Fun Hub</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>🎉 Dante's Dopamine Dive 🎉</h1>
-  <div id="message">
-    Hey Dante 😎 — I made this just for you 🫶 <br>
-    When you’re bored, hyped, stuck, or need to laugh… this is your chaotic little love app. <br>
-    Love always, <strong>Larissa 💜</strong>
+  <div class="container">
+    <header><h1>Dante’s Neon Fun Hub</h1></header>
+    <section id="message">
+      <h2>💖 Message from Larissa 💖</h2>
+      <p>Dante – you’re the brightest lobster in my pot. Here’s your personal playground when you're bored. Love you! ❤️</p>
+    </section>
+
+    <section class="module" id="lobster-fishing">
+      <h2>🦞 Lobster Fishing Facts</h2>
+      <button class="glow-btn" onclick="showFact()">Give me a fact!</button>
+      <p id="fact" class="output"></p>
+    </section>
+
+    <section class="module" id="general-fishing">
+      <h2>🎣 Fishing Extras</h2>
+      <button class="glow-btn" onclick="playFishing()">Cast a line</button>
+      <p id="fishResult" class="output"></p>
+    </section>
+
+    <section class="module" id="cars">
+      <h2>🏎️ Dream Car Chooser</h2>
+      <button class="glow-btn" onclick="chooseCar()">Show me a ride</button>
+      <p id="car" class="output"></p>
+    </section>
+
+    <section class="module" id="music">
+      <h2>🎧 Rap Rave Beats</h2>
+      <button class="glow-btn" onclick="playBeat()">Surprise me!</button>
+      <audio id="beatAudio" controls></audio>
+    </section>
+
+    <section class="module" id="dark-jokes">
+      <h2>😈 Dark & Sassy Jokes</h2>
+      <button class="glow-btn" onclick="tellJoke()">Make me laugh</button>
+      <p id="joke" class="output"></p>
+    </section>
+
+    <section class="module" id="stories">
+      <h2>😂 Wild & Funny Stories</h2>
+      <button class="glow-btn" onclick="tellStory()">Spin a tale</button>
+      <p id="story" class="output"></p>
+    </section>
   </div>
 
-  <div class="section">
-    <h2>🎣 Lobster Fishing</h2>
-    <button onclick="generateFishing()">Drop A Line</button>
-    <div class="output" id="fishingOutput"></div>
-  </div>
-
-  <div class="section">
-    <h2>🎵 Rap Bars</h2>
-    <button onclick="generateLyric()">Spin A Bar</button>
-    <div class="output" id="rapOutput"></div>
-  </div>
-
-  <div class="section">
-    <h2>🎬 Funny Story Time</h2>
-    <button onclick="generateStory()">Tell Me Something Dumb</button>
-    <div class="output" id="storyOutput"></div>
-  </div>
-
-  <div class="section">
-    <h2>🚗 Car & Rave Combo</h2>
-    <button onclick="generateCar()">Rev It Up</button>
-    <div class="output" id="carOutput"></div>
-  </div>
-
-  <div class="section">
-    <h2>😈 Dark Jokes</h2>
-    <button onclick="generateJoke()">Send It</button>
-    <div class="output" id="jokeOutput"></div>
-  </div>
-
-  <div class="section">
-    <h2>🪩 Rave Facts</h2>
-    <button onclick="generateRaveFact()">Drop Some Glow Knowledge</button>
-    <div class="output" id="raveOutput"></div>
-  </div>
-
-  <div class="section">
-    <h2>🤣 Memes</h2>
-    <button onclick="generateMeme()">Make Me Wheeze</button>
-    <div class="output" id="memeOutput"></div>
-  </div>
-
-  <div class="section" id="danteBox">
-    <h2>🎁 DanteBox</h2>
-    <button onclick="openDanteBox()">Open The DanteBox</button>
-    <div class="output" id="danteBoxOutput"></div>
-  </div>
-
-  <div class="section">
-    <h2>🤖 DanteBot</h2>
-    <textarea placeholder="Type a random thought, question, or joke for DanteBot..." id="botInput"></textarea><br>
-    <button onclick="talkToBot()">Ask DanteBot</button>
-    <div class="output" id="botReply"></div>
-  </div>
-
-  <div class="section">
-    <h2>🕺 Secret Rave Room</h2>
-    <button onclick="startSecretRave()">ENTER THE RAVE</button>
-    <div class="output" id="raveRoomOutput"></div>
-  </div>
-
-  <canvas id="confetti"></canvas>
-
-  <script>
-    const fishingThings = [
-      "🎣 You caught a legendary bluntfish.",
-      "🦞 You wrestled a rave lobster under the wharf.",
-      "🐠 You reeled in a bass spitting bars.",
-      "🌊 You caught a stoned mermaid arguing about drag torque.",
-      "🧠 ADHD got you tangled in your own line — again."
-    ];
-
-    const rapLines = [
-      "“Started from the wharf now we here.”",
-      "“My rods are clean, but my past ain't.”",
-      "“Engine roaring like my thoughts at 3AM.”",
-      "“Fishin’ through my feelings like I'm deep sea diving.”",
-      "“Glowsticks and heartbreaks, that's my weekend plan.”"
-    ];
-
-    const stories = [
-      "You once raced a lobster boat with a stolen bike. And won.",
-      "Built a hotbox with duct tape and deep fryer coils.",
-      "Ate 3 poutines then hit the Gravitron. Regret? Zero.",
-      "Trained a seagull to fetch fries. Named it Ricky.",
-      "Built a rave strobe bong out of a headlight and hope."
-    ];
-
-    const cars = [
-      "🚗 Your car just got underglow that pulses to trap beats.",
-      "🎧 Installed subs so loud they summoned a rave fairy.",
-      "🛠 Weed-powered turbocharger. Patent pending.",
-      "🏁 Rave race on the Rez track tonight. You’re winning.",
-      "🌀 Glow-in-the-dark war paint. Respect."
-    ];
-
-    const darkJokes = [
-      "What’s red and smells like a wharf? …A bad idea.",
-      "Why did the lobster dump the crab? Too shellfish.",
-      "ADHD driving: fast, distracted, vibin’.",
-      "Saved the last nugget? That’s real love.",
-      "My attention span lasted longer than that last job. Barely."
-    ];
-
-    const raveFacts = [
-      "Ravers blink 73% less during a beat drop. Science probably.",
-      "EDM = Everyone’s Dancing Manically.",
-      "Raves are human glowstick farms. 🌈",
-      "Bass you can feel in your spleen is the sweet spot.",
-      "Glowsticks were made for military. Now: potty navigation."
-    ];
-
-    const memes = [
-      "Me: I’ll go to bed early. Brain: What if lobsters had jobs?",
-      "ADHD be like: opens Dante’s app, forgets to blink.",
-      "Rave Tip: If it glows, bite it. (Don't.)",
-      "Engineers at 3AM: I can fix it with gum.",
-      "Stoner logic: duct tape fixes emotions too."
-    ];
-
-    const danteBox = [
-      "💜 You are wildly loved. Even on your messiest days.",
-      "🔥 Random burst of hype: YOU ARE A RAVE LEGEND.",
-      "🧠 Your brain is chaotic magic. Never dull, always brilliant.",
-      "😂 You just unlocked… a spicy seagull with opinions.",
-      "💀 Your past is wild, but your glow-up is legendary.",
-      "🍟 There are fries in your future. Possibly cheese covered.",
-      "🪶 Your ancestors are proud. Your vibe is sacred.",
-      "🛠️ You could build a spaceship out of duct tape and vibes.",
-      "🌊 ADHD may rock your boat, but you *ride the waves.*"
-    ];
-
-    const botReplies = [
-      "Yo, that thought is wild. I vibe with it.",
-      "Let’s engineer a rave-powered lobster trap.",
-      "That made my brain wiggle. Respect.",
-      "This question smells like fish and genius.",
-      "You’re a chaotic good and I love it here.",
-      "I would respond but I got distracted by my own headlights."
-    ];
-
-    function randomFrom(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
-    }
-
-    function generateFishing() {
-      document.getElementById("fishingOutput").innerText = randomFrom(fishingThings);
-    }
-
-    function generateLyric() {
-      document.getElementById("rapOutput").innerText = randomFrom(rapLines);
-    }
-
-    function generateStory() {
-      document.getElementById("storyOutput").innerText = randomFrom(stories);
-    }
-
-    function generateCar() {
-      document.getElementById("carOutput").innerText = randomFrom(cars);
-    }
-
-    function generateJoke() {
-      document.getElementById("jokeOutput").innerText = randomFrom(darkJokes);
-    }
-
-    function generateRaveFact() {
-      document.getElementById("raveOutput").innerHTML = randomFrom(raveFacts);
-    }
-
-    function generateMeme() {
-      document.getElementById("memeOutput").innerHTML = randomFrom(memes);
-    }
-
-    function openDanteBox() {
-      const box = document.getElementById("danteBox");
-      const output = document.getElementById("danteBoxOutput");
-      box.style.animation = "shake 0.5s";
-      setTimeout(() => {
-        box.style.animation = "";
-        output.innerText = randomFrom(danteBox);
-        triggerConfetti();
-      }, 600);
-    }
-
-    function talkToBot() {
-      const reply = document.getElementById("botReply");
-      reply.innerText = randomFrom(botReplies);
-    }
-
-    function startSecretRave() {
-      const raveRoomOutput = document.getElementById("raveRoomOutput");
-      raveRoomOutput.innerHTML = "🕺🎶 Welcome to the Secret Rave. No rules, just vibes. 🔊💃";
-      triggerConfetti();
-    }
-
-    function triggerConfetti() {
-      const canvas = document.getElementById("confetti");
-      const ctx = canvas.getContext("2d");
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      const confettis = Array.from({ length: 100 }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 6 + 4,
-        d: Math.random() * 20 + 10,
-        color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-        tilt: Math.random() * 10 - 10,
-        tiltAngle: 0,
-        tiltAngleIncremental: Math.random() * 0.07 + 0.05
-      }));
-
-      function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        confettis.forEach(c => {
-          ctx.beginPath();
-          ctx.lineWidth = c.r;
-          ctx.strokeStyle = c.color;
-          ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
-          ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 2);
-          ctx.stroke();
-        });
-        update();
-      }
-
-      function update() {
-        confettis.forEach(c => {
-          c.y += Math.cos(c.d / 10);
-          c.tiltAngle += c.tiltAngleIncremental;
-          c.tilt = Math.sin(c.tiltAngle - Math.PI / 4) * 15;
-          if (c.y > canvas.height) {
-            c.y = -10;
-            c.x = Math.random() * canvas.width;
-          }
-        });
-      }
-
-      const interval = setInterval(draw, 30);
-      setTimeout(() => clearInterval(interval), 3000);
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
