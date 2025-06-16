@@ -4,16 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dante's Neon Fun Hub</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <header><h1>Dante’s Neon Fun Hub</h1></header>
+    <header><h1>Dante’s Neon Fun Hub</h1></header>
+
     <section id="message">
       <h2>💖 Message from Larissa 💖</h2>
-      <p>Dante – you’re the brightest lobster in my pot. Here’s your personal playground when you're bored. Love you! ❤️</p>
+      <p>Dante – you’re the brightest lobster in my pot. Here’s your personal playground when you’re bored. Love you! ❤️</p>
     </section>
 
+    <!-- Existing Modules -->
     <section class="module" id="lobster-fishing">
       <h2>🦞 Lobster Fishing Facts</h2>
       <button class="glow-btn" onclick="showFact()">Give me a fact!</button>
@@ -49,8 +51,33 @@
       <button class="glow-btn" onclick="tellStory()">Spin a tale</button>
       <p id="story" class="output"></p>
     </section>
-  </div>
 
+    <!-- New Modules -->
+    <section class="module" id="movies">
+      <h2>🎬 Movie Recommendation</h2>
+      <button class="glow-btn" onclick="recommendMovie()">What to watch?</button>
+      <p id="movie" class="output"></p>
+    </section>
+
+    <section class="module" id="food">
+      <h2>🍔 Food Cravings</h2>
+      <button class="glow-btn" onclick="suggestFood()">Feed me!</button>
+      <p id="foodOutput" class="output"></p>
+    </section>
+
+    <section class="module" id="culture">
+      <h2>🌿 Mi’kmaq Culture Fact</h2>
+      <button class="glow-btn" onclick="showCultureFact()">Teach me</button>
+      <p id="cultureFact" class="output"></p>
+    </section>
+
+    <section class="module" id="tips">
+      <h2>💨 Stoner Tips & Tricks</h2>
+      <button class="glow-btn" onclick="showTip()">Need a tip?</button>
+      <p id="tip" class="output"></p>
+    </section>
+
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
