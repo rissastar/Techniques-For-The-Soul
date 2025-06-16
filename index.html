@@ -1,118 +1,26 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const gameArea = document.getElementById("game-area");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dante’s Fun Hub 🎉</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="header">
+    <h1>💖 Hey Dante 💖</h1>
+    <p>From Larissa: “I made this just for you — your own little dopamine rave.”</p>
+  </div>
 
-  function showPopup(contentHTML) {
-    const popup = document.createElement("div");
-    popup.className = "popup";
-    popup.innerHTML = `
-      <div class="popup-content">
-        <button class="close-btn">❌</button>
-        ${contentHTML}
-      </div>`;
-    document.body.appendChild(popup);
+  <div id="game-area" class="grid">
+    <button onclick="showFocusTimer()">⏱ Focus Timer</button>
+    <button onclick="showRaveRhythm()">🎵 Rave Rhythm</button>
+    <button onclick="showDarkJokes()">🃏 Dark Jokes</button>
+    <button onclick="showCarRepair()">🔧 Fix It Fast</button>
+    <button onclick="showMemoryMatch()">🧠 Memory Match</button>
+    <button onclick="showLobsterMaze()">🦞 Lobster Escape</button>
+  </div>
 
-    popup.querySelector(".close-btn").addEventListener("click", () => popup.remove());
-  }
-
-  window.showFocusTimer = () => {
-    showPopup(`
-      <h2>⏱ Focus Timer</h2>
-      <input id="timer-input" type="number" placeholder="Minutes (1–60)" />
-      <button id="start-timer" class="glow-btn">Start</button>
-      <p id="timer-display"></p>
-    `);
-    const timerInput = document.getElementById("timer-input");
-    const timerDisplay = document.getElementById("timer-display");
-    let timeLeft, timerId;
-
-    document.getElementById("start-timer").addEventListener("click", () => {
-      const mins = parseInt(timerInput.value);
-      if (!mins || mins < 1 || mins > 60) return alert("1–60 minutes only!");
-      clearInterval(timerId);
-      timeLeft = mins * 60;
-      update();
-      timerId = setInterval(() => {
-        timeLeft--;
-        update();
-        if (timeLeft <= 0) {
-          clearInterval(timerId);
-          timerDisplay.textContent = "⏰ Done! Take a break.";
-          navigator.vibrate?.([300, 150, 300]);
-        }
-      }, 1000);
-    });
-
-    function update() {
-      const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-      const s = String(timeLeft % 60).padStart(2, '0');
-      timerDisplay.textContent = `${m}:${s}`;
-    }
-  };
-
-  window.showRaveRhythm = () => {
-    let score = 0;
-    showPopup(`
-      <h2>🎵 Rave Rhythm</h2>
-      <p>Tap the beat!</p>
-      <button id="beat-btn" class="glow-btn">🎶 TAP 🎶</button>
-      <p id="beat-score">Score: 0</p>
-    `);
-    const btn = document.getElementById("beat-btn");
-    const scoreDisplay = document.getElementById("beat-score");
-    btn.addEventListener("click", () => {
-      score++;
-      scoreDisplay.textContent = `Score: ${score}`;
-      btn.classList.add("pulse");
-      setTimeout(() => btn.classList.remove("pulse"), 100);
-    });
-  };
-
-  window.showDarkJokes = () => {
-    const jokes = [
-      "Why don’t graveyards ever get overcrowded? People are dying to get in.",
-      "What’s the last thing that goes through a bug’s mind when it hits a windshield? Its butt.",
-      "Parallel lines have so much in common. It’s a shame they’ll never meet.",
-      "I used to play piano by ear, but now I use my hands.",
-      "My dark humour is like a broken pencil. Pointless."
-    ];
-    showPopup(`
-      <h2>🃏 Dark Jokes</h2>
-      <button id="joke-btn" class="glow-btn">Tell Me</button>
-      <p id="joke-text"></p>
-    `);
-    const jokeText = document.getElementById("joke-text");
-    document.getElementById("joke-btn").addEventListener("click", () => {
-      jokeText.textContent = jokes[Math.floor(Math.random() * jokes.length)];
-    });
-  };
-
-  window.showCarRepair = () => {
-    let count = 0;
-    showPopup(`
-      <h2>🔧 Fix It Fast</h2>
-      <button id="fix-btn" class="glow-btn">Fix 🔧</button>
-      <p id="fix-count">Fixed: 0</p>
-    `);
-    const fixBtn = document.getElementById("fix-btn");
-    const countDisplay = document.getElementById("fix-count");
-    fixBtn.addEventListener("click", () => {
-      count++;
-      countDisplay.textContent = `Fixed: ${count}`;
-      fixBtn.textContent = count % 5 === 0 ? "You're a machine!" : "Fix 🔧";
-    });
-  };
-
-  window.showMemoryMatch = () => {
-    showPopup(`
-      <h2>🧠 Memory Match</h2>
-      <p>Card match game in development!</p>
-    `);
-  };
-
-  window.showLobsterMaze = () => {
-    showPopup(`
-      <h2>🦞 Lobster Escape</h2>
-      <p>Maze game coming soon...</p>
-    `);
-  };
-});
+  <script src="script.js"></script>
+</body>
+</html>
