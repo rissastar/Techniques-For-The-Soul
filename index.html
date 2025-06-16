@@ -3,475 +3,868 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dante's Fun Hub - Interactive Edition</title>
+<title>Dante’s Fun Hub 4.0</title>
 <style>
-  /* Base neon rave style */
-  body {
-    margin: 0; padding: 0; font-family: 'Arial Black', Gadget, sans-serif;
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    color: #0ff;
-    overflow-x: hidden;
-    user-select: none;
+  /* Reset */
+  * {
+    box-sizing: border-box;
   }
-  h1, h2 {
-    text-align: center;
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #eee;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3 {
+    font-weight: 900;
     text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
   }
-  button {
-    background: #0ff;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    margin: 1rem auto;
-    display: block;
-    font-weight: 900;
-    border-radius: 10px;
-    cursor: pointer;
-    color: #111;
-    box-shadow: 0 0 15px #0ff;
-    transition: background 0.3s ease-in-out;
+  /* Container & layout */
+  #app {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 15px;
   }
-  button:hover, button:focus {
-    background: #33ffff;
-    outline: none;
-    box-shadow: 0 0 25px #33ffff;
-  }
-  section {
-    max-width: 420px;
-    margin: 1rem auto;
-    background: rgba(0, 255, 255, 0.1);
-    border-radius: 15px;
-    padding: 1rem 1.5rem;
-    box-shadow: 0 0 15px #0ff inset;
-  }
-  .hidden {
-    display: none;
-  }
-  .flex-row {
-    display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap;
-  }
-  /* Tap Challenge styles */
-  #roar-btn {
-    font-size: 2rem;
-    padding: 1rem 2rem;
-  }
-  #roar-score {
-    font-size: 1.8rem;
+  header {
     text-align: center;
-    margin-top: 0.5rem;
+    margin-bottom: 15px;
   }
-  /* Drag and drop */
-  #junkyard {
-    display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
-    margin-top: 1rem;
+  /* Neon Tab navigation */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
   }
-  .car-part {
-    width: 70px; height: 70px;
+  nav button {
+    background: transparent;
     border: 2px solid #0ff;
-    border-radius: 15px;
-    background-color: #112;
-    display: flex; align-items: center; justify-content: center;
-    color: #0ff; font-weight: bold;
-    cursor: grab;
-    user-select: none;
-  }
-  .dropzone {
-    width: 70px; height: 70px;
-    border: 2px dashed #0ff;
-    border-radius: 15px;
-    margin: 0 10px;
-  }
-  .correct {
-    background-color: #0f6 !important;
-    border-color: #0f0 !important;
-  }
-  /* Quiz */
-  #quiz-question {
-    font-weight: 900;
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-  .quiz-btn {
-    background: #0ff;
-    border: none;
-    padding: 0.5rem 1rem;
-    margin: 0.3rem;
-    border-radius: 10px;
-    cursor: pointer;
+    color: #0ff;
+    padding: 10px 18px;
     font-weight: 700;
-    color: #111;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
     box-shadow: 0 0 8px #0ff;
   }
-  .quiz-btn:hover {
-    background: #33ffff;
-  }
-  #quiz-feedback {
-    text-align: center;
-    margin-top: 0.7rem;
-    font-weight: 700;
-  }
-  /* Sound guess */
-  #sound-options {
-    display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap;
-  }
-  /* Memory game */
-  #memory-board {
-    display: grid;
-    grid-template-columns: repeat(4, 60px);
-    gap: 12px;
-    justify-content: center;
-    margin-top: 1rem;
-  }
-  .memory-card {
-    width: 60px; height: 60px;
+  nav button:hover,
+  nav button.active {
     background: #0ff;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #0ff inset;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 900;
     color: #111;
-    font-size: 1.4rem;
+    box-shadow: 0 0 20px #0ff, 0 0 30px #0ff inset;
+  }
+
+  section {
+    display: none;
+    animation: fadeIn 0.7s ease forwards;
+  }
+  section.active {
+    display: block;
+  }
+
+  /* Personal intro popup */
+  #introPopup {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: #00333fdd;
+    border: 3px solid #0ff;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 0 20px #0ff;
+    color: #a0ffff;
+    font-weight: 700;
+    font-size: 1.15rem;
+    z-index: 9999;
+  }
+  #introPopup button {
+    margin-top: 15px;
+    background: #0ff;
+    color: #111;
+    border: none;
+    padding: 8px 20px;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 15px #0ff;
+    transition: background-color 0.3s ease;
+  }
+  #introPopup button:hover {
+    background: #00d6ff;
+  }
+
+  /* Common button style */
+  button.main-btn {
+    background: #0ff;
+    border: none;
+    color: #111;
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 15px #0ff;
+    transition: background-color 0.3s ease;
     user-select: none;
   }
-  .flipped {
-    background: #33ffff;
-    color: #000;
+  button.main-btn:hover {
+    background: #00d6ff;
   }
-  .matched {
-    background: #0f6;
-    box-shadow: 0 0 20px #0f0 inset;
+
+  /* Mini-game container style */
+  .game-container {
+    background: #112233cc;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 0 15px #0ff inset;
+    margin-bottom: 25px;
+  }
+  .game-title {
+    margin-bottom: 10px;
+    font-weight: 900;
+    font-size: 1.25rem;
+    text-align: center;
+    color: #0ff;
+    text-shadow: 0 0 8px #0ff;
+  }
+
+  /* Stomp Challenge */
+  #stompBtn {
+    font-size: 2rem;
+    width: 100%;
+    max-width: 320px;
+    margin: 10px auto;
+    display: block;
+    padding: 18px;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #0ff, 0 0 30px #0ff inset;
+    user-select: none;
+  }
+  #stompCount {
+    font-size: 1.3rem;
+    margin-top: 8px;
+    text-align: center;
+    color: #a0ffff;
+    font-weight: 700;
+  }
+
+  /* Car Repair Game */
+  #carParts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  .part {
+    background: #0ff;
+    color: #111;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 12px 16px;
+    cursor: grab;
+    user-select: none;
+    box-shadow: 0 0 12px #0ff;
+    transition: transform 0.2s ease;
+  }
+  .part:active {
+    cursor: grabbing;
+    transform: scale(1.1);
+  }
+  .slot {
+    background: #222844;
+    border: 2px dashed #0ff;
+    border-radius: 12px;
+    width: 130px;
+    height: 50px;
+    margin: 5px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0ff;
+    font-weight: 700;
+    user-select: none;
+  }
+
+  /* Trivia */
+  #triviaQuestion {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+  #triviaAnswers button {
+    display: block;
+    margin: 8px auto;
+    max-width: 280px;
+    padding: 10px;
+    border-radius: 25px;
+    background: #0ff;
+    border: none;
+    font-weight: 700;
+    color: #111;
+    cursor: pointer;
+    box-shadow: 0 0 15px #0ff;
+    user-select: none;
+  }
+  #triviaAnswers button:hover {
+    background: #00d6ff;
+  }
+  #triviaFeedback {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: 800;
+  }
+
+  /* Car Sound Quiz */
+  #carSoundPlay {
+    font-size: 1.5rem;
+    margin: 10px auto;
+    display: block;
+    cursor: pointer;
+    background: #0ff;
+    border-radius: 30px;
+    padding: 12px 18px;
+    font-weight: 700;
+    color: #111;
+    box-shadow: 0 0 20px #0ff;
+    user-select: none;
+  }
+  #carSoundAnswers button {
+    margin: 8px auto;
+    display: block;
+    max-width: 280px;
+    padding: 10px;
+    border-radius: 25px;
+    background: #0ff;
+    border: none;
+    font-weight: 700;
+    color: #111;
+    cursor: pointer;
+    box-shadow: 0 0 15px #0ff;
+    user-select: none;
+  }
+  #carSoundAnswers button:hover {
+    background: #00d6ff;
+  }
+  #carSoundFeedback {
+    margin-top: 12px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  /* Memory Match */
+  #memoryCards {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    grid-gap: 12px;
+    justify-content: center;
+  }
+  .memory-card {
+    width: 80px;
+    height: 80px;
+    background: #111a33;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 2.5rem;
+    color: #0ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    box-shadow: 0 0 15px #0ff inset;
+    transition: transform 0.3s ease;
+  }
+  .memory-card.flipped {
+    background: #0ff;
+    color: #111;
+    transform: scale(1.1);
+  }
+  .memory-card.matched {
+    background: #22ffcc;
+    color: #111;
     cursor: default;
-    color: #000;
+    box-shadow: 0 0 25px #22ffcc;
   }
-  /* Confetti */
+  #memoryFeedback {
+    margin-top: 12px;
+    text-align: center;
+    font-weight: 700;
+    color: #0ff;
+  }
+  #memoryResetBtn {
+    display: block;
+    margin: 12px auto;
+    background: #0ff;
+    color: #111;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 0 15px #0ff;
+    user-select: none;
+  }
+  #memoryResetBtn:hover {
+    background: #00d6ff;
+  }
+
+  /* Confetti pieces */
   .confetti-piece {
     position: fixed;
     width: 8px;
-    height: 8px;
-    background-color: #0ff;
+    height: 12px;
     opacity: 0.9;
+    background-color: #0ff;
+    animation-name: confetti-fall;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
     pointer-events: none;
-    animation-name: fallConfetti;
-    animation-timing-function: linear;
+    z-index: 9999;
+    border-radius: 3px;
   }
-  @keyframes fallConfetti {
-    0% { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  @keyframes confetti-fall {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(90vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    #carParts, #memoryCards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    nav button {
+      font-size: 0.9rem;
+      padding: 8px 14px;
+    }
   }
 </style>
 </head>
 <body>
 
-<h1>Dante’s Fun Hub 🎉</h1>
+<div id="app">
+  <header>
+    <h1>Dante’s Fun Hub 🎉</h1>
+    <p style="font-weight:700; color:#0ff; text-shadow: 0 0 8px #0ff;">For my amazing boyfriend, Dante — enjoy these ADHD-friendly rave-style games & tools!</p>
+  </header>
 
-<!-- 1. Sassy the Sasquatch Roar Challenge -->
-<section id="sassy-section" aria-label="Sassy the Sasquatch Roar Challenge">
-  <h2>🦶 Sassy the Sasquatch - Roar Challenge</h2>
-  <button id="roar-btn" aria-label="Tap to stomp">STOMP!</button>
-  <div id="roar-score">Taps: 0 / 15</div>
-  <p style="text-align:center; font-size:0.9rem; margin-top:0.5rem;">
-    Tap the button as fast as you can to scare off the rival Sasquatches!
-  </p>
-</section>
+  <nav>
+    <button class="active" data-tab="stomp">Sasquatch Stomp</button>
+    <button data-tab="carRepair">Fix Ricky’s Junker</button>
+    <button data-tab="trivia">TPB Trivia</button>
+    <button data-tab="carSound">Guess Car Sound</button>
+    <button data-tab="memory">Memory Match</button>
+  </nav>
 
-<!-- 2. Trailer Park Boys - Fix Ricky’s Junker -->
-<section id="tpb-fixit" aria-label="Trailer Park Boys Fix-It Game">
-  <h2>🎬 Trailer Park Boys - Fix Ricky’s Junker</h2>
-  <p>Drag the parts into the right spots to fix the car!</p>
-  <div id="junkyard">
-    <div draggable="true" class="car-part" id="engine" aria-grabbed="false" tabindex="0">Engine</div>
-    <div draggable="true" class="car-part" id="wheel" aria-grabbed="false" tabindex="0">Wheel</div>
-    <div draggable="true" class="car-part" id="battery" aria-grabbed="false" tabindex="0">Battery</div>
-  </div>
-  <div id="dropzones" style="display:flex; justify-content:center; gap: 2rem; margin-top: 1rem;">
-    <div class="dropzone" data-accept="engine" aria-label="Engine slot"></div>
-    <div class="dropzone" data-accept="wheel" aria-label="Wheel slot"></div>
-    <div class="dropzone" data-accept="battery" aria-label="Battery slot"></div>
-  </div>
-  <button id="tpb-reset-btn">Reset Game</button>
-  <p id="tpb-fix-feedback" style="text-align:center; font-weight:bold; margin-top: 0.7rem;"></p>
-</section>
+  <!-- Sections for each mini-game/tool -->
+  <section id="stomp" class="active game-container" aria-label="Sasquatch stomp challenge">
+    <h2 class="game-title">Sasquatch Stomp Challenge 🦶</h2>
+    <button id="stompBtn" aria-label="Stomp button">STOMP!</button>
+    <div id="stompCount" aria-live="polite" aria-atomic="true">Hits: 0</div>
+  </section>
 
-<!-- 3. TPB Quick Trivia -->
-<section id="tpb-quiz" aria-label="Trailer Park Boys Trivia">
-  <h2>🎤 TPB Quick Trivia</h2>
-  <p id="quiz-question">Who said: "Get two birds stoned at once"?</p>
-  <div style="text-align:center;">
-    <button class="quiz-btn" data-answer="Ricky">Ricky</button>
-    <button class="quiz-btn" data-answer="Julian">Julian</button>
-    <button class="quiz-btn" data-answer="Bubbles">Bubbles</button>
-  </div>
-  <p id="quiz-feedback"></p>
-</section>
+  <section id="carRepair" class="game-container" aria-label="Car repair drag and drop game">
+    <h2 class="game-title">Fix Ricky’s Junker Car 🔧🚗</h2>
+    <p>Drag the car parts onto the correct slots:</p>
+    <div id="carParts" aria-label="Car parts draggable list" role="list">
+      <!-- parts dynamically inserted -->
+    </div>
+    <div style="display:flex; justify-content:center; gap: 16px; flex-wrap: wrap; margin-top:15px;">
+      <div>
+        <div class="slot" data-slot="tire" aria-label="Tire slot" tabindex="0"></div>
+        <div style="text-align:center; color:#0ff; font-weight:700;">Tire</div>
+      </div>
+      <div>
+        <div class="slot" data-slot="engine" aria-label="Engine slot" tabindex="0"></div>
+        <div style="text-align:center; color:#0ff; font-weight:700;">Engine</div>
+      </div>
+      <div>
+        <div class="slot" data-slot="door" aria-label="Door slot" tabindex="0"></div>
+        <div style="text-align:center; color:#0ff; font-weight:700;">Door</div>
+      </div>
+      <div>
+        <div class="slot" data-slot="window" aria-label="Window slot" tabindex="0"></div>
+        <div style="text-align:center; color:#0ff; font-weight:700;">Window</div>
+      </div>
+    </div>
+    <div id="carRepairFeedback" style="margin-top:12px; text-align:center; font-weight:700; color:#0ff;"></div>
+  </section>
 
-<!-- 4. Cars & Mechanics - Guess the Sound -->
-<section id="sound-guess" aria-label="Cars & Mechanics Sound Guessing Game">
-  <h2>🚗 Guess the Car Sound</h2>
-  <button id="play-sound-btn">▶️ Play Sound</button>
-  <div id="sound-options" class="flex-row" style="margin-top: 1rem;">
-    <button class="quiz-btn" data-sound="engine">Engine</button>
-    <button class="quiz-btn" data-sound="horn">Horn</button>
-    <button class="quiz-btn" data-sound="brake">Brake</button>
-  </div>
-  <p id="sound-feedback" style="text-align:center; font-weight:bold; margin-top:0.7rem;"></p>
-</section>
+  <section id="trivia" class="game-container" aria-label="Trailer Park Boys trivia quiz">
+    <h2 class="game-title">Trailer Park Boys Trivia Quiz 🎬</h2>
+    <div id="triviaQuestion" aria-live="polite" aria-atomic="true"></div>
+    <div id="triviaAnswers" role="list"></div>
+    <div id="triviaFeedback" aria-live="polite"></div>
+    <button id="triviaNextBtn" class="main-btn" style="display:none; margin: 15px auto 0;">Next Question</button>
+  </section>
 
-<!-- 5. Mechanic's Toolbox Memory Game -->
-<section id="memory-game" aria-label="Mechanic's Toolbox Memory Game">
-  <h2>🔧 Mechanic’s Toolbox Memory Match</h2>
-  <div id="memory-board" aria-live="polite" aria-atomic="true"></div>
-  <p id="memory-feedback" style="text-align:center; font-weight:bold; margin-top: 0.7rem;"></p>
-  <button id="memory-reset-btn">Restart Memory Game</button>
-</section>
+  <section id="carSound" class="game-container" aria-label="Guess the car sound game">
+    <h2 class="game-title">Guess the Car Sound 🔊</h2>
+    <button id="carSoundPlay" class="main-btn" aria-label="Play car sound">▶ Play Sound</button>
+    <div id="carSoundAnswers" role="list"></div>
+    <div id="carSoundFeedback" aria-live="polite"></div>
+  </section>
 
-<!-- Personal Message -->
-<section style="text-align:center; margin: 2rem 1rem 3rem; font-size:1rem; color:#ff66cc; text-shadow: 0 0 6px #ff66cc;">
-  <p>💖 Hey Dante, this hub is made just for you. Have fun, relax, and remember Zeus loves you! 🐕🔥</p>
-</section>
+  <section id="memory" class="game-container" aria-label="Memory matching game">
+    <h2 class="game-title">Memory Match: Mechanic Tools 🛠️</h2>
+    <div id="memoryCards" role="list"></div>
+    <div id="memoryFeedback" aria-live="polite"></div>
+    <button id="memoryResetBtn" class="main-btn">Reset Memory Game</button>
+  </section>
+</div>
+
+<!-- Personal intro popup -->
+<div id="introPopup" role="dialog" aria-modal="true" aria-labelledby="introTitle" aria-describedby="introDesc" style="display:none;">
+  <h2 id="introTitle">Hey Dante! ❤️</h2>
+  <p id="introDesc">This Fun Hub is packed with things I made just for you! Dive in and enjoy — can’t wait to laugh and play together. Love you tons! — Larissa</p>
+  <button id="closeIntroBtn" aria-label="Close intro message">Let’s Go!</button>
+</div>
 
 <script>
-  // Sassy the Sasquatch Roar Challenge
-  const roarBtn = document.getElementById('roar-btn');
-  const roarScore = document.getElementById('roar-score');
-  let taps = 0;
-  const tapGoal = 15;
-  roarBtn.addEventListener('click', () => {
-    taps++;
-    roarScore.textContent = `Taps: ${taps} / ${tapGoal}`;
-    if (taps >= tapGoal) {
-      roarScore.textContent = "You scared them off! 🦶💥";
-      roarBtn.disabled = true;
-      playConfetti();
-      setTimeout(() => {
-        taps = 0;
-        roarScore.textContent = `Taps: 0 / ${tapGoal}`;
-        roarBtn.disabled = false;
-      }, 3000);
+  (() => {
+    // Show intro popup on load, then hide when dismissed
+    const introPopup = document.getElementById('introPopup');
+    const closeIntroBtn = document.getElementById('closeIntroBtn');
+
+    window.addEventListener('load', () => {
+      introPopup.style.display = 'block';
+    });
+    closeIntroBtn.addEventListener('click', () => {
+      introPopup.style.display = 'none';
+    });
+
+    // Tabs navigation
+    const tabs = document.querySelectorAll('nav button');
+    const sections = document.querySelectorAll('section');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    /*** Sasquatch Stomp Challenge ***/
+    const stompBtn = document.getElementById('stompBtn');
+    const stompCount = document.getElementById('stompCount');
+    let stompHits = 0;
+
+    stompBtn.addEventListener('click', () => {
+      stompHits++;
+      stompCount.textContent = `Hits: ${stompHits}`;
+      if (stompHits % 25 === 0) {
+        playConfetti();
+      }
+    });
+
+    /*** Car Repair Drag & Drop ***/
+    const carPartsContainer = document.getElementById('carParts');
+    const carSlots = document.querySelectorAll('.slot');
+    const carRepairFeedback = document.getElementById('carRepairFeedback');
+
+    // Define parts and their correct slot
+    const parts = [
+      { id: 'tire', name: 'Tire' },
+      { id: 'engine', name: 'Engine' },
+      { id: 'door', name: 'Door' },
+      { id: 'window', name: 'Window' }
+    ];
+
+    // Shuffle helper
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
     }
-  });
 
-  // Drag and Drop Fix-It Game
-  const parts = document.querySelectorAll('.car-part');
-  const dropzones = document.querySelectorAll('.dropzone');
-  const tpbFeedback = document.getElementById('tpb-fix-feedback');
-  const tpbResetBtn = document.getElementById('tpb-reset-btn');
-  let correctCount = 0;
+    // Create draggable parts
+    function setupCarParts() {
+      carPartsContainer.innerHTML = '';
+      let shuffledParts = [...parts];
+      shuffleArray(shuffledParts);
+      shuffledParts.forEach(part => {
+        const partEl = document.createElement('div');
+        partEl.className = 'part';
+        partEl.draggable = true;
+        partEl.id = `part-${part.id}`;
+        partEl.textContent = part.name;
+        partEl.setAttribute('aria-grabbed', 'false');
+        carPartsContainer.appendChild(partEl);
 
-  parts.forEach(part => {
-    part.addEventListener('dragstart', e => {
-      e.dataTransfer.setData('text/plain', part.id);
-      part.style.opacity = '0.5';
-    });
-    part.addEventListener('dragend', e => {
-      e.target.style.opacity = '';
-    });
-  });
+        partEl.addEventListener('dragstart', dragStart);
+        partEl.addEventListener('dragend', dragEnd);
+      });
+      // Clear slots content
+      carSlots.forEach(slot => slot.textContent = '');
+    }
 
-  dropzones.forEach(zone => {
-    zone.addEventListener('dragover', e => {
-      e.preventDefault();
-      zone.style.background = 'rgba(0,255,255,0.3)';
+    let draggedPart = null;
+
+    function dragStart(e) {
+      draggedPart = e.target;
+      e.dataTransfer.setData('text/plain', e.target.id);
+      e.target.style.opacity = '0.5';
+      e.target.setAttribute('aria-grabbed', 'true');
+    }
+    function dragEnd(e) {
+      e.target.style.opacity = '1';
+      e.target.setAttribute('aria-grabbed', 'false');
+      draggedPart = null;
+    }
+
+    carSlots.forEach(slot => {
+      slot.addEventListener('dragover', e => {
+        e.preventDefault();
+        slot.style.borderColor = '#00d6ff';
+      });
+      slot.addEventListener('dragleave', e => {
+        slot.style.borderColor = '#0ff';
+      });
+      slot.addEventListener('drop', e => {
+        e.preventDefault();
+        slot.style.borderColor = '#0ff';
+        const partId = e.dataTransfer.getData('text/plain');
+        const partEl = document.getElementById(partId);
+        if (!partEl) return;
+
+        // Check if correct part for slot
+        const partKey = partId.replace('part-', '');
+        if (partKey === slot.dataset.slot) {
+          // Correct!
+          slot.textContent = partEl.textContent;
+          slot.style.backgroundColor = '#22ffcc';
+          slot.style.color = '#111';
+          slot.style.border = '2px solid #22ffcc';
+
+          partEl.style.display = 'none';
+
+          // Check if all done
+          let doneCount = 0;
+          carSlots.forEach(s => {
+            if (s.textContent !== '') doneCount++;
+          });
+          if (doneCount === carSlots.length) {
+            carRepairFeedback.textContent = 'All parts fixed! Ricky’s car is ready to roll! 🚗🔥';
+            playConfetti();
+          } else {
+            carRepairFeedback.textContent = 'Nice! Keep going...';
+          }
+        } else {
+          carRepairFeedback.textContent = 'Oops, that part doesn’t fit there. Try another slot!';
+          setTimeout(() => {
+            carRepairFeedback.textContent = '';
+          }, 3000);
+        }
+      });
     });
-    zone.addEventListener('dragleave', e => {
-      zone.style.background = '';
+
+    setupCarParts();
+
+    /*** Trailer Park Boys Trivia ***/
+    const triviaQuestions = [
+      {
+        question: "What is Ricky's favorite pastime?",
+        answers: ["Growing weed", "Playing hockey", "Fishing", "Racing cars"],
+        correct: 0
+      },
+      {
+        question: "Who is Julian's partner?",
+        answers: ["Ricky", "Bubbles", "Sarah", "Lucy"],
+        correct: 3
+      },
+      {
+        question: "What does Bubbles love most?",
+        answers: ["Cats", "Cars", "Fishing", "Junk food"],
+        correct: 0
+      },
+      {
+        question: "What is the name of the trailer park?",
+        answers: ["Sunnyvale", "Green Acres", "Pine Hills", "Lakeview"],
+        correct: 0
+      },
+      {
+        question: "Which character often wears thick glasses?",
+        answers: ["Ricky", "Julian", "Bubbles", "Lahey"],
+        correct: 2
+      }
+    ];
+
+    let triviaIndex = 0;
+    const triviaQuestionEl = document.getElementById('triviaQuestion');
+    const triviaAnswersEl = document.getElementById('triviaAnswers');
+    const triviaFeedbackEl = document.getElementById('triviaFeedback');
+    const triviaNextBtn = document.getElementById('triviaNextBtn');
+
+    function showTriviaQuestion() {
+      const q = triviaQuestions[triviaIndex];
+      triviaQuestionEl.textContent = q.question;
+      triviaAnswersEl.innerHTML = '';
+      triviaFeedbackEl.textContent = '';
+      triviaNextBtn.style.display = 'none';
+
+      q.answers.forEach((answer, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = answer;
+        btn.setAttribute('data-index', i);
+        btn.addEventListener('click', triviaAnswerSelected);
+        triviaAnswersEl.appendChild(btn);
+      });
+    }
+
+    function triviaAnswerSelected(e) {
+      const selected = parseInt(e.target.dataset.index);
+      const correct = triviaQuestions[triviaIndex].correct;
+
+      // Disable all buttons
+      Array.from(triviaAnswersEl.children).forEach(btn => btn.disabled = true);
+
+      if (selected === correct) {
+        triviaFeedbackEl.style.color = '#22ffcc';
+        triviaFeedbackEl.textContent = 'Correct! 🎉';
+        playConfetti();
+      } else {
+        triviaFeedbackEl.style.color = '#ff4444';
+        triviaFeedbackEl.textContent = `Wrong! The right answer was "${triviaQuestions[triviaIndex].answers[correct]}".`;
+      }
+      triviaNextBtn.style.display = 'inline-block';
+    }
+
+    triviaNextBtn.addEventListener('click', () => {
+      triviaIndex++;
+      if (triviaIndex >= triviaQuestions.length) {
+        triviaQuestionEl.textContent = 'Quiz Complete! Great job!';
+        triviaAnswersEl.innerHTML = '';
+        triviaNextBtn.style.display = 'none';
+        triviaFeedbackEl.style.color = '#0ff';
+        triviaFeedbackEl.textContent = 'Thanks for playing!';
+      } else {
+        showTriviaQuestion();
+      }
     });
-    zone.addEventListener('drop', e => {
-      e.preventDefault();
-      zone.style.background = '';
-      const id = e.dataTransfer.getData('text/plain');
-      if (zone.dataset.accept === id) {
-        const part = document.getElementById(id);
-        zone.textContent = id.charAt(0).toUpperCase() + id.slice(1);
-        zone.classList.add('correct');
-        part.style.display = 'none';
-        correctCount++;
-        if (correctCount === dropzones.length) {
-          tpbFeedback.textContent = "Car fixed! Ricky’s ready to roll! 🚗🔥";
+
+    showTriviaQuestion();
+
+    /*** Guess the Car Sound ***/
+    const carSounds = [
+      { name: 'Muscle Car', src: 'https://actions.google.com/sounds/v1/vehicles/car_accelerate_fast.ogg' },
+      { name: 'Race Car', src: 'https://actions.google.com/sounds/v1/vehicles/car_driving_fast.ogg' },
+      { name: 'Electric Car', src: 'https://actions.google.com/sounds/v1/vehicles/electric_car_motor_start.ogg' },
+      { name: 'Motorcycle', src: 'https://actions.google.com/sounds/v1/vehicles/motorcycle_accelerate.ogg' }
+    ];
+
+    const carSoundPlayBtn = document.getElementById('carSoundPlay');
+    const carSoundAnswersEl = document.getElementById('carSoundAnswers');
+    const carSoundFeedbackEl = document.getElementById('carSoundFeedback');
+
+    let currentSoundIndex = null;
+    let audio = null;
+
+    function shuffleArraySimple(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function setupCarSoundAnswers() {
+      carSoundAnswersEl.innerHTML = '';
+      const shuffled = shuffleArraySimple([...carSounds]);
+
+      shuffled.forEach((sound, idx) => {
+        const btn = document.createElement('button');
+        btn.textContent = sound.name;
+        btn.setAttribute('data-index', idx);
+        btn.addEventListener('click', carSoundAnswerSelected);
+        carSoundAnswersEl.appendChild(btn);
+      });
+    }
+
+    function carSoundAnswerSelected(e) {
+      if (currentSoundIndex === null) return;
+      const selectedName = e.target.textContent;
+      const correctName = carSounds[currentSoundIndex].name;
+
+      Array.from(carSoundAnswersEl.children).forEach(btn => btn.disabled = true);
+
+      if (selectedName === correctName) {
+        carSoundFeedbackEl.style.color = '#22ffcc';
+        carSoundFeedbackEl.textContent = 'You got it right! 🎉';
+        playConfetti();
+      } else {
+        carSoundFeedbackEl.style.color = '#ff4444';
+        carSoundFeedbackEl.textContent = `Nope, it was "${correctName}".`;
+      }
+    }
+
+    carSoundPlayBtn.addEventListener('click', () => {
+      // Pick a random sound
+      currentSoundIndex = Math.floor(Math.random() * carSounds.length);
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+      audio = new Audio(carSounds[currentSoundIndex].src);
+      audio.play();
+
+      carSoundFeedbackEl.textContent = '';
+      Array.from(carSoundAnswersEl.children).forEach(btn => btn.disabled = false);
+    });
+
+    setupCarSoundAnswers();
+
+    /*** Memory Match Game ***/
+    const memoryCardsContainer = document.getElementById('memoryCards');
+    const memoryFeedback = document.getElementById('memoryFeedback');
+    const memoryResetBtn = document.getElementById('memoryResetBtn');
+
+    // Memory cards data (pairs)
+    const memoryItems = [
+      '🔧', '🔧',
+      '🛠️', '🛠️',
+      '⚙️', '⚙️',
+      '🪛', '🪛',
+      '🧰', '🧰',
+      '🔩', '🔩',
+      '🪚', '🪚',
+      '🔨', '🔨'
+    ];
+
+    let memoryDeck = [];
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let matches = 0;
+
+    function shuffleDeck() {
+      memoryDeck = [...memoryItems];
+      for (let i = memoryDeck.length -1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [memoryDeck[i], memoryDeck[j]] = [memoryDeck[j], memoryDeck[i]];
+      }
+    }
+
+    function setupMemoryGame() {
+      shuffleDeck();
+      memoryCardsContainer.innerHTML = '';
+      matches = 0;
+      memoryFeedback.textContent = '';
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+
+      memoryDeck.forEach((icon, idx) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.setAttribute('data-icon', icon);
+        card.setAttribute('tabindex', 0);
+        card.textContent = ''; // face down
+        memoryCardsContainer.appendChild(card);
+
+        card.addEventListener('click', () => flipCard(card));
+        card.addEventListener('keypress', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            flipCard(card);
+          }
+        });
+      });
+    }
+
+    function flipCard(card) {
+      if(lockBoard) return;
+      if(card === firstCard) return;
+      if(card.classList.contains('matched')) return;
+
+      card.classList.add('flipped');
+      card.textContent = card.getAttribute('data-icon');
+
+      if(!firstCard) {
+        firstCard = card;
+        return;
+      }
+      secondCard = card;
+
+      checkForMatch();
+    }
+
+    function checkForMatch() {
+      const isMatch = firstCard.getAttribute('data-icon') === secondCard.getAttribute('data-icon');
+      if(isMatch) {
+        disableCards();
+        matches++;
+        if(matches === memoryItems.length / 2) {
+          memoryFeedback.style.color = '#22ffcc';
+          memoryFeedback.textContent = 'You matched all the tools! Well done! 🎉';
           playConfetti();
         }
       } else {
-        tpbFeedback.textContent = "Wrong spot! Try again.";
-        setTimeout(() => { tpbFeedback.textContent = ""; }, 1500);
+        unflipCards();
       }
-    });
-  });
-
-  tpbResetBtn.addEventListener('click', () => {
-    correctCount = 0;
-    tpbFeedback.textContent = "";
-    dropzones.forEach(zone => {
-      zone.textContent = "";
-      zone.classList.remove('correct');
-    });
-    parts.forEach(part => {
-      part.style.display = 'flex';
-    });
-  });
-
-  // TPB Quick Trivia
-  const quizQuestion = document.getElementById('quiz-question');
-  const quizButtons = document.querySelectorAll('#tpb-quiz .quiz-btn');
-  const quizFeedback = document.getElementById('quiz-feedback');
-  const quizData = {
-    question: 'Who said: "Get two birds stoned at once"?',
-    options: ['Ricky', 'Julian', 'Bubbles'],
-    answer: 'Ricky',
-  };
-  quizQuestion.textContent = quizData.question;
-  quizButtons.forEach(btn => {
-    btn.textContent = btn.dataset.answer;
-    btn.addEventListener('click', () => {
-      if (btn.dataset.answer === quizData.answer) {
-        quizFeedback.textContent = '✅ Correct! Ricky knows best.';
-        playConfetti();
-      } else {
-        quizFeedback.textContent = '❌ Nope, try again!';
-      }
-    });
-  });
-
-  // Cars & Mechanics - Guess the Sound
-  const sounds = {
-    engine: new Audio('https://actions.google.com/sounds/v1/vehicles/car_engine_revving.ogg'),
-    horn: new Audio('https://actions.google.com/sounds/v1/vehicles/car_horn_beep.ogg'),
-    brake: new Audio('https://actions.google.com/sounds/v1/vehicles/car_brake_squeal.ogg'),
-  };
-  const playSoundBtn = document.getElementById('play-sound-btn');
-  const soundOptions = document.querySelectorAll('#sound-options .quiz-btn');
-  const soundFeedback = document.getElementById('sound-feedback');
-
-  let currentSoundKey = null;
-  function pickRandomSound() {
-    const keys = Object.keys(sounds);
-    currentSoundKey = keys[Math.floor(Math.random() * keys.length)];
-  }
-  pickRandomSound();
-
-  playSoundBtn.addEventListener('click', () => {
-    if (currentSoundKey) {
-      sounds[currentSoundKey].play();
-      soundFeedback.textContent = 'Listen carefully...';
     }
-  });
-  soundOptions.forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (!currentSoundKey) return;
-      if (btn.dataset.sound === currentSoundKey) {
-        soundFeedback.textContent = '✅ Correct!';
-        playConfetti();
-      } else {
-        soundFeedback.textContent = '❌ Nope, try again!';
-      }
-      pickRandomSound();
-    });
-  });
 
-  // Memory Game (Mechanic’s Toolbox)
-  const memoryBoard = document.getElementById('memory-board');
-  const memoryFeedback = document.getElementById('memory-feedback');
-  const memoryResetBtn = document.getElementById('memory-reset-btn');
-
-  const memoryItems = [
-    '🔧', '🔧',
-    '🔩', '🔩',
-    '⚙️', '⚙️',
-    '🛠️', '🛠️',
-  ];
-  let firstCard = null;
-  let secondCard = null;
-  let lockBoard = false;
-  let matchedPairs = 0;
-
-  function shuffle(array) {
-    for (let i = array.length -1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i+1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-
-  function createMemoryCards() {
-    memoryBoard.innerHTML = '';
-    shuffle(memoryItems).forEach((item, idx) => {
-      const card = document.createElement('div');
-      card.classList.add('memory-card');
-      card.dataset.item = item;
-      card.setAttribute('tabindex', '0');
-      card.textContent = '';
-      card.addEventListener('click', () => flipCard(card));
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          flipCard(card);
-        }
-      });
-      memoryBoard.appendChild(card);
-    });
-    matchedPairs = 0;
-    memoryFeedback.textContent = '';
-  }
-  createMemoryCards();
-
-  function flipCard(card) {
-    if (lockBoard) return;
-    if (card === firstCard) return;
-
-    card.textContent = card.dataset.item;
-    card.classList.add('flipped');
-
-    if (!firstCard) {
-      firstCard = card;
-      return;
-    }
-    secondCard = card;
-    checkForMatch();
-  }
-
-  function checkForMatch() {
-    lockBoard = true;
-    if (firstCard.dataset.item === secondCard.dataset.item) {
+    function disableCards() {
       firstCard.classList.add('matched');
       secondCard.classList.add('matched');
-      matchedPairs++;
-      memoryFeedback.textContent = `Matched pairs: ${matchedPairs} / 4`;
       resetBoard();
-      if (matchedPairs === 4) {
-        memoryFeedback.textContent = "🎉 You matched them all! Mechanic Pro!";
-        playConfetti();
-      }
-    } else {
+    }
+
+    function unflipCards() {
+      lockBoard = true;
       setTimeout(() => {
-        firstCard.textContent = '';
-        secondCard.textContent = '';
         firstCard.classList.remove('flipped');
+        firstCard.textContent = '';
         secondCard.classList.remove('flipped');
+        secondCard.textContent = '';
         resetBoard();
       }, 1000);
     }
-  }
 
-  function resetBoard() {
-    [firstCard, secondCard] = [null, null];
-    lockBoard = false;
-  }
-
-  memoryResetBtn.addEventListener('click', () => {
-    createMemoryCards();
-  });
-
-  // Confetti function (small bursts)
-  function playConfetti() {
-    for (let i=0; i<30; i++) {
-      const confetti = document.createElement('div');
-      confetti.classList.add('confetti-piece');
-      confetti.style.left = Math.random() * 100 + 'vw';
-      confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 70%)`;
-      confetti.style.animationDuration = 2000 + Math.random()*2000 + 'ms';
-      confetti.style.animationDelay = (Math.random()*500) + 'ms';
-      document.body.appendChild(confetti);
-      setTimeout(() => confetti.remove(), 3000);
+    function resetBoard() {
+      [firstCard, secondCard] = [null, null];
+      lockBoard = false;
     }
-  }
+
+    memoryResetBtn.addEventListener('click', setupMemoryGame);
+
+    setupMemoryGame();
+
+    /*** Confetti effect ***/
+    function playConfetti() {
+      const confettiCount = 30;
+      for(let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti-piece');
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        confetti.style.animationDuration = (Math.random() * 1 + 1) + 's';
+        confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+
+        document.body.appendChild(confetti);
+
+        setTimeout(() => {
+          confetti.remove();
+        }, 2000);
+      }
+    }
+  })();
 </script>
 
 </body>
