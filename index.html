@@ -502,268 +502,825 @@
             </div>
             <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
         </div>
-    </div>
-</div>
-
 <script>
-    const messages = document.getElementById('messages');
-    const messageInput = document.getElementById('messageInput');
-    const sendBtn = document.getElementById('sendBtn');
-    const typingIndicator = document.getElementById('typingIndicator');
+// Dante AI - Advanced Website Development Assistant
+// Neural Network Engine with Context Awareness and Learning Capabilities
 
-    // Enhanced conversation context and memory
-    let conversationContext = {
-        projectType: null,
-        techStack: [],
-        previousQuestions: [],
-        codeExamples: [],
-        preferences: {},
-        currentFocus: null
+class DanteAI {
+constructor() {
+this.conversationContext = {
+projectType: null,
+techStack: [],
+previousQuestions: [],
+codeExamples: [],
+preferences: {},
+currentFocus: null,
+userSkillLevel: ‘intermediate’,
+conversationHistory: [],
+activeTopics: new Set(),
+sessionMemory: new Map()
+};
+
+```
+    this.neuralPatterns = {
+        complexity: 0.5,
+        creativity: 0.7,
+        technicalDepth: 0.8,
+        contextualAwareness: 0.9
     };
 
-    // Advanced AI knowledge base with sophisticated responses
-    const advancedKnowledge = {
+    this.knowledgeBase = this.initializeKnowledgeBase();
+    this.learningEngine = new LearningEngine();
+    this.codeAnalyzer = new CodeAnalyzer();
+    this.performanceAnalyzer = new PerformanceAnalyzer();
+    this.securityAuditor = new SecurityAuditor();
+    
+    this.initializeEventListeners();
+}
+
+initializeKnowledgeBase() {
+    return {
         architecture: {
-            keywords: ['architecture', 'structure', 'scalable', 'microservices', 'monolith', 'design patterns'],
-            response: `I'll help you design a scalable, maintainable architecture. Let me analyze your requirements:
+            keywords: ['architecture', 'structure', 'scalable', 'microservices', 'monolith', 'design patterns', 'mvc', 'mvvm', 'clean architecture'],
+            complexity: 0.9,
+            generateResponse: (context) => this.generateArchitectureResponse(context)
+        },
+        
+        performance: {
+            keywords: ['performance', 'optimize', 'speed', 'core web vitals', 'lighthouse', 'lazy loading', 'caching', 'cdn', 'compression'],
+            complexity: 0.8,
+            generateResponse: (context) => this.generatePerformanceResponse(context)
+        },
+        
+        security: {
+            keywords: ['security', 'vulnerability', 'xss', 'csrf', 'authentication', 'authorization', 'encryption', 'ssl', 'https'],
+            complexity: 0.9,
+            generateResponse: (context) => this.generateSecurityResponse(context)
+        },
+        
+        frameworks: {
+            keywords: ['react', 'vue', 'angular', 'svelte', 'next.js', 'nuxt', 'gatsby', 'typescript', 'javascript'],
+            complexity: 0.7,
+            generateResponse: (context) => this.generateFrameworkResponse(context)
+        },
+        
+        backend: {
+            keywords: ['api', 'database', 'node.js', 'express', 'mongodb', 'postgresql', 'redis', 'graphql', 'rest'],
+            complexity: 0.8,
+            generateResponse: (context) => this.generateBackendResponse(context)
+        },
+        
+        design: {
+            keywords: ['ui', 'ux', 'design', 'colors', 'typography', 'layout', 'responsive', 'mobile', 'accessibility'],
+            complexity: 0.6,
+            generateResponse: (context) => this.generateDesignResponse(context)
+        },
+        
+        testing: {
+            keywords: ['testing', 'unit test', 'integration', 'e2e', 'jest', 'cypress', 'testing library', 'tdd', 'bdd'],
+            complexity: 0.7,
+            generateResponse: (context) => this.generateTestingResponse(context)
+        },
+        
+        deployment: {
+            keywords: ['deployment', 'ci/cd', 'docker', 'kubernetes', 'aws', 'vercel', 'netlify', 'github actions'],
+            complexity: 0.8,
+            generateResponse: (context) => this.generateDeploymentResponse(context)
+        }
+    };
+}
+
+initializeEventListeners() {
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    
+    if (messageInput) {
+        messageInput.addEventListener('input', () => this.handleInputChange());
+        messageInput.addEventListener('keydown', (e) => this.handleKeyPress(e));
+    }
+    
+    if (sendBtn) {
+        sendBtn.addEventListener('click', () => this.sendMessage());
+    }
+}
+
+handleInputChange() {
+    const input = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    
+    if (input && sendBtn) {
+        sendBtn.disabled = input.value.trim().length === 0;
+        this.autoResize();
+        this.provideRealTimeInsights(input.value);
+    }
+}
+
+autoResize() {
+    const input = document.getElementById('messageInput');
+    if (input) {
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+    }
+}
+
+provideRealTimeInsights(text) {
+    if (text.length > 10) {
+        const insights = this.analyzeInputIntent(text);
+        this.displayInputInsights(insights);
+    }
+}
+
+analyzeInputIntent(text) {
+    const lowerText = text.toLowerCase();
+    const insights = {
+        detectedTopics: [],
+        suggestedActions: [],
+        complexity: this.calculateComplexity(text),
+        confidence: 0
+    };
+
+    // Analyze against knowledge base
+    for (const [category, knowledge] of Object.entries(this.knowledgeBase)) {
+        const matchScore = this.calculateMatchScore(lowerText, knowledge.keywords);
+        if (matchScore > 0.3) {
+            insights.detectedTopics.push({
+                category,
+                score: matchScore,
+                complexity: knowledge.complexity
+            });
+        }
+    }
+
+    // Sort by relevance
+    insights.detectedTopics.sort((a, b) => b.score - a.score);
+    insights.confidence = insights.detectedTopics.length > 0 ? insights.detectedTopics[0].score : 0;
+
+    return insights;
+}
+
+calculateMatchScore(text, keywords) {
+    let score = 0;
+    let matches = 0;
+    
+    keywords.forEach(keyword => {
+        if (text.includes(keyword.toLowerCase())) {
+            matches++;
+            score += keyword.length / text.length;
+        }
+    });
+    
+    return matches > 0 ? (score + matches / keywords.length) / 2 : 0;
+}
+
+calculateComplexity(text) {
+    const technicalTerms = ['api', 'database', 'algorithm', 'optimization', 'architecture', 'framework'];
+    const matches = technicalTerms.filter(term => text.toLowerCase().includes(term)).length;
+    return Math.min(matches / technicalTerms.length, 1);
+}
+
+displayInputInsights(insights) {
+    // Could display real-time suggestions or context hints
+    console.log('Input insights:', insights);
+}
+
+async sendMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+
+    this.addMessage(message, true);
+    input.value = '';
+    this.autoResize();
+    
+    this.showTyping();
+    
+    // Update conversation context
+    this.updateConversationContext(message);
+    
+    // Generate intelligent response
+    const response = await this.generateIntelligentResponse(message);
+    
+    setTimeout(() => {
+        this.hideTyping();
+        this.addMessage(response.content, false);
+        if (response.suggestions) {
+            this.addSuggestions(response.suggestions);
+        }
+    }, 1000 + Math.random() * 2000);
+}
+
+updateConversationContext(message) {
+    const context = this.conversationContext;
+    
+    context.previousQuestions.push({
+        message,
+        timestamp: Date.now(),
+        intent: this.analyzeInputIntent(message)
+    });
+
+    // Keep only last 10 questions for context
+    if (context.previousQuestions.length > 10) {
+        context.previousQuestions.shift();
+    }
+
+    // Update active topics
+    const insights = this.analyzeInputIntent(message);
+    insights.detectedTopics.forEach(topic => {
+        context.activeTopics.add(topic.category);
+    });
+
+    // Store in session memory
+    context.sessionMemory.set('lastMessage', message);
+    context.sessionMemory.set('lastTimestamp', Date.now());
+}
+
+async generateIntelligentResponse(message) {
+    const context = this.conversationContext;
+    const insights = this.analyzeInputIntent(message);
+    
+    // Determine primary topic
+    const primaryTopic = insights.detectedTopics[0];
+    
+    if (!primaryTopic) {
+        return this.generateFallbackResponse(message);
+    }
+
+    const knowledge = this.knowledgeBase[primaryTopic.category];
+    const response = await knowledge.generateResponse({
+        message,
+        context,
+        insights,
+        history: context.previousQuestions
+    });
+
+    return {
+        content: response.content,
+        suggestions: response.suggestions,
+        metadata: {
+            topic: primaryTopic.category,
+            complexity: insights.complexity,
+            confidence: insights.confidence
+        }
+    };
+}
+
+generateArchitectureResponse(context) {
+    const { message, insights, history } = context;
+    
+    const responses = [
+        {
+            trigger: ['microservices', 'scalable', 'distributed'],
+            content: `🏗️ **Advanced Microservices Architecture:**
 ```
 
-🏗️ **Modern Architecture Patterns:**
-
-**1. Micro-Frontend Architecture:**
+**1. Domain-Driven Design Approach:**
 ```javascript
-// Module Federation Setup (Webpack 5)
-const ModuleFederationPlugin = require(’@module-federation/webpack’);
+// Domain Service Pattern
+class UserDomainService {
+constructor(userRepository, eventBus) {
+this.userRepository = userRepository;
+this.eventBus = eventBus;
+}
+
+async createUser(userData) {
+const user = new User(userData);
+await user.validate();
+
+```
+const savedUser = await this.userRepository.save(user);
+
+// Publish domain event
+await this.eventBus.publish(new UserCreatedEvent(savedUser));
+
+return savedUser;
+```
+
+}
+}
+
+// Event-Driven Communication
+class EventBus {
+constructor() {
+this.handlers = new Map();
+}
+
+subscribe(eventType, handler) {
+if (!this.handlers.has(eventType)) {
+this.handlers.set(eventType, []);
+}
+this.handlers.get(eventType).push(handler);
+}
+
+async publish(event) {
+const handlers = this.handlers.get(event.type) || [];
+await Promise.all(handlers.map(handler => handler(event)));
+}
+}
+```
+
+**2. API Gateway Pattern:**
+```javascript
+// Gateway with Circuit Breaker
+class APIGateway {
+constructor() {
+this.services = new Map();
+this.circuitBreakers = new Map();
+}
+
+registerService(name, config) {
+this.services.set(name, config);
+this.circuitBreakers.set(name, new CircuitBreaker(config));
+}
+
+async routeRequest(request) {
+const service = this.determineService(request.path);
+const circuitBreaker = this.circuitBreakers.get(service);
+
+```
+return await circuitBreaker.execute(() => 
+  this.forwardRequest(service, request)
+);
+```
+
+}
+}
+```
+
+**3. CQRS with Event Sourcing:**
+```javascript
+// Command Query Responsibility Segregation
+class UserCommandHandler {
+async handle(command) {
+switch (command.type) {
+case ‘CREATE_USER’:
+return await this.createUser(command.payload);
+case ‘UPDATE_USER’:
+return await this.updateUser(command.payload);
+}
+}
+}
+
+class UserQueryHandler {
+constructor(readModel) {
+this.readModel = readModel;
+}
+
+async getUser(id) {
+return await this.readModel.findById(id);
+}
+
+async getUsersWithPagination(page, limit) {
+return await this.readModel.paginate(page, limit);
+}
+}
+```
+
+What specific architectural challenges are you facing? I can dive deeper into patterns like hexagonal architecture, event sourcing, or distributed system design.`, suggestions: [ 'Explain hexagonal architecture', 'Design event sourcing system', 'Implement distributed caching', 'Create service mesh architecture' ] }, { trigger: ['clean architecture', 'solid', 'design patterns'], content: `🎯 **Clean Architecture & SOLID Principles:**
+
+**1. Dependency Inversion with Interfaces:**
+```typescript
+// Domain Layer (Business Rules)
+interface UserRepository {
+save(user: User): Promise<User>;
+findById(id: string): Promise<User | null>;
+findByEmail(email: string): Promise<User | null>;
+}
+
+interface EmailService {
+sendWelcomeEmail(user: User): Promise<void>;
+}
+
+class UserService {
+constructor(
+private userRepository: UserRepository,
+private emailService: EmailService
+) {}
+
+async registerUser(userData: CreateUserDto): Promise<User> {
+// Business logic in domain layer
+const existingUser = await this.userRepository.findByEmail(userData.email);
+if (existingUser) {
+throw new Error(‘User already exists’);
+}
+
+```
+const user = new User(userData);
+await user.validate();
+
+const savedUser = await this.userRepository.save(user);
+await this.emailService.sendWelcomeEmail(savedUser);
+
+return savedUser;
+```
+
+}
+}
+```
+
+**2. Repository Pattern with Adapter:**
+```typescript
+// Infrastructure Layer
+class MongoUserRepository implements UserRepository {
+constructor(private mongoClient: MongoClient) {}
+
+async save(user: User): Promise<User> {
+const userDoc = this.toDocument(user);
+const result = await this.mongoClient
+.db(‘app’)
+.collection(‘users’)
+.insertOne(userDoc);
+
+```
+return this.toDomain(result);
+```
+
+}
+
+private toDocument(user: User): any {
+return {
+email: user.email,
+name: user.name,
+createdAt: user.createdAt
+};
+}
+
+private toDomain(doc: any): User {
+return new User({
+id: doc._id,
+email: doc.email,
+name: doc.name,
+createdAt: doc.createdAt
+});
+}
+}
+```
+
+**3. Command Pattern for Undo/Redo:**
+```typescript
+interface Command {
+execute(): Promise<void>;
+undo(): Promise<void>;
+}
+
+class CreateUserCommand implements Command {
+private createdUserId?: string;
+
+constructor(
+private userService: UserService,
+private userData: CreateUserDto
+) {}
+
+async execute(): Promise<void> {
+const user = await this.userService.registerUser(this.userData);
+this.createdUserId = user.id;
+}
+
+async undo(): Promise<void> {
+if (this.createdUserId) {
+await this.userService.deleteUser(this.createdUserId);
+}
+}
+}
+
+class CommandManager {
+private history: Command[] = [];
+private currentIndex = -1;
+
+async executeCommand(command: Command): Promise<void> {
+await command.execute();
+this.history = this.history.slice(0, this.currentIndex + 1);
+this.history.push(command);
+this.currentIndex++;
+}
+
+async undo(): Promise<void> {
+if (this.currentIndex >= 0) {
+const command = this.history[this.currentIndex];
+await command.undo();
+this.currentIndex–;
+}
+}
+}
+```
+
+Which architectural pattern would you like to explore further?`,
+suggestions: [
+‘Implement Observer pattern’,
+‘Create Factory pattern’,
+‘Design Strategy pattern’,
+‘Build Decorator pattern’
+]
+}
+];
+
+```
+    return this.selectBestResponse(message, responses);
+}
+
+generatePerformanceResponse(context) {
+    const { message, insights } = context;
+    
+    const responses = [
+        {
+            trigger: ['core web vitals', 'lighthouse', 'performance audit'],
+            content: `⚡ **Advanced Performance Optimization Strategy:**
+```
+
+**1. Critical Resource Optimization:**
+```javascript
+// Resource Loading Strategy
+class ResourceLoader {
+constructor() {
+this.criticalResources = new Set();
+this.deferredResources = new Set();
+this.preloadedResources = new Map();
+}
+
+// Critical resource preloading
+preloadCriticalResources() {
+const criticalCSS = document.createElement(‘link’);
+criticalCSS.rel = ‘preload’;
+criticalCSS.as = ‘style’;
+criticalCSS.href = ‘/css/critical.css’;
+criticalCSS.onload = () => {
+criticalCSS.rel = ‘stylesheet’;
+};
+document.head.appendChild(criticalCSS);
+}
+
+// Intersection Observer for lazy loading
+initializeLazyLoading() {
+const imageObserver = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+const img = entry.target;
+img.src = img.dataset.src;
+img.classList.remove(‘lazy’);
+imageObserver.unobserve(img);
+}
+});
+}, {
+rootMargin: ‘50px’
+});
+
+```
+document.querySelectorAll('img[data-src]').forEach(img => {
+  imageObserver.observe(img);
+});
+```
+
+}
+}
+```
+
+**2. Advanced Caching Strategies:**
+```javascript
+// Service Worker with Cache Strategies
+class CacheStrategy {
+constructor(cacheName) {
+this.cacheName = cacheName;
+this.strategies = {
+networkFirst: this.networkFirst.bind(this),
+cacheFirst: this.cacheFirst.bind(this),
+staleWhileRevalidate: this.staleWhileRevalidate.bind(this)
+};
+}
+
+async networkFirst(request) {
+try {
+const networkResponse = await fetch(request);
+const cache = await caches.open(this.cacheName);
+cache.put(request, networkResponse.clone());
+return networkResponse;
+} catch (error) {
+const cachedResponse = await caches.match(request);
+return cachedResponse || new Response(‘Offline’, { status: 503 });
+}
+}
+
+async cacheFirst(request) {
+const cachedResponse = await caches.match(request);
+if (cachedResponse) {
+return cachedResponse;
+}
+
+```
+const networkResponse = await fetch(request);
+const cache = await caches.open(this.cacheName);
+cache.put(request, networkResponse.clone());
+return networkResponse;
+```
+
+}
+
+async staleWhileRevalidate(request) {
+const cachedResponse = await caches.match(request);
+const fetchPromise = fetch(request).then(networkResponse => {
+const cache = caches.open(this.cacheName);
+cache.then(c => c.put(request, networkResponse.clone()));
+return networkResponse;
+});
+
+```
+return cachedResponse || fetchPromise;
+```
+
+}
+}
+```
+
+**3. Bundle Optimization & Code Splitting:**
+```javascript
+// Webpack Bundle Analyzer Configuration
+const BundleAnalyzerPlugin = require(‘webpack-bundle-analyzer’).BundleAnalyzerPlugin;
 
 module.exports = {
-plugins: [
-new ModuleFederationPlugin({
-name: ‘shell’,
-remotes: {
-mf_header: ‘header@http://localhost:3001/remoteEntry.js’,
-mf_footer: ‘footer@http://localhost:3002/remoteEntry.js’
+optimization: {
+splitChunks: {
+chunks: ‘all’,
+cacheGroups: {
+vendor: {
+test: /[\/]node_modules[\/]/,
+name: ‘vendors’,
+chunks: ‘all’,
+priority: 20
+},
+common: {
+name: ‘common’,
+minChunks: 2,
+chunks: ‘all’,
+priority: 10,
+reuseExistingChunk: true
 }
+}
+},
+runtimeChunk: {
+name: ‘runtime’
+}
+},
+plugins: [
+new BundleAnalyzerPlugin({
+analyzerMode: ‘static’,
+openAnalyzer: false,
+reportFilename: ‘bundle-report.html’
 })
 ]
 };
-```
 
-**2. Component-Driven Development:**
-```jsx
-// Atomic Design Pattern
-const Button = ({ variant, size, children, …props }) => {
-const baseClasses = ‘btn transition-all duration-200’;
-const variantClasses = {
-primary: ‘bg-blue-600 hover:bg-blue-700 text-white’,
-secondary: ‘bg-gray-200 hover:bg-gray-300 text-gray-800’
-};
-
-return (
-<button
-className={classNames(baseClasses, variantClasses[variant], size)}
-{…props}
->
-{children}
-</button>
-);
-};
-```
-
-**3. State Management Strategy:**
-```javascript
-// Redux Toolkit with RTK Query
-import { createApi, fetchBaseQuery } from ‘@reduxjs/toolkit/query/react’;
-
-export const apiSlice = createApi({
-reducerPath: ‘api’,
-baseQuery: fetchBaseQuery({
-baseUrl: ‘/api’,
-prepareHeaders: (headers, { getState }) => {
-headers.set(‘authorization’, `Bearer ${getState().auth.token}`);
-return headers;
-},
-}),
-tagTypes: [‘User’, ‘Post’],
-endpoints: (builder) => ({
-getUsers: builder.query({
-query: () => ‘users’,
-providesTags: [‘User’]
+// Dynamic imports with loading states
+const LazyComponent = React.lazy(() =>
+import(’./HeavyComponent’).then(module => {
+// Simulate minimum loading time for UX
+return new Promise(resolve => {
+setTimeout(() => resolve(module), 1000);
+});
 })
-})
-});
-```
-
-What specific architectural challenges are you facing? I can provide detailed patterns for scalability, maintainability, and performance.`
-},
-
-```
-        performance: {
-            keywords: ['performance', 'optimize', 'speed', 'core web vitals', 'lighthouse', 'lazy loading'],
-            response: `Let me conduct a comprehensive performance analysis and optimization strategy:
-```
-
-⚡ **Advanced Performance Optimization:**
-
-**1. Critical Rendering Path Optimization:**
-```html
-
-<!-- Resource Hints for Performance -->
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="dns-prefetch" href="//cdn.example.com">
-<link rel="modulepreload" href="/js/critical.js">
-
-<!-- Critical CSS Inlined -->
-
-<style>
-  /* Critical above-the-fold styles */
-  .hero { /* styles */ }
-</style>
-
-<!-- Non-critical CSS loaded asynchronously -->
-
-<link rel="preload" href="/css/non-critical.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-\`\`\`
-
-**2. Advanced Code Splitting:**
-```javascript
-// Route-based splitting with preloading
-import { lazy, Suspense } from ‘react’;
-
-const LazyComponent = lazy(() =>
-import(’./HeavyComponent’).then(module => ({
-default: module.HeavyComponent
-}))
 );
+```
 
-// Preload on hover for instant navigation
-const preloadComponent = () => {
-const componentImport = () => import(’./HeavyComponent’);
-return componentImport;
+**Performance Metrics Monitoring:**
+
+- **LCP Target:** < 2.5s
+- **FID Target:** < 100ms
+- **CLS Target:** < 0.1
+- **TTFB Target:** < 200ms
+
+What specific performance bottlenecks are you experiencing?`,
+suggestions: [
+‘Optimize images and assets’,
+‘Implement service worker caching’,
+‘Analyze bundle size’,
+‘Monitor Core Web Vitals’
+]
+}
+];
+
+```
+    return this.selectBestResponse(message, responses);
+}
+
+generateSecurityResponse(context) {
+    const { message } = context;
+    
+    const responses = [
+        {
+            trigger: ['security audit', 'vulnerability', 'xss', 'csrf'],
+            content: `🛡️ **Comprehensive Security Implementation:**
+```
+
+**1. Advanced Authentication System:**
+```javascript
+// Multi-Factor Authentication
+class MFAService {
+constructor(totpService, smsService) {
+this.totpService = totpService;
+this.smsService = smsService;
+}
+
+async enableMFA(userId, method = ‘totp’) {
+const user = await User.findById(userId);
+
+```
+switch (method) {
+  case 'totp':
+    const secret = this.totpService.generateSecret();
+    const qrCode = await this.totpService.generateQRCode(secret, user.email);
+    
+    await User.updateOne(
+      { _id: userId },
+      { 
+        $set: { 
+          mfaSecret: secret,
+          mfaEnabled: false // Enable after verification
+        }
+      }
+    );
+    
+    return { qrCode, backupCodes: this.generateBackupCodes() };
+    
+  case 'sms':
+    const phoneVerification = await this.smsService.sendVerification(user.phone);
+    return { verificationId: phoneVerification.id };
+}
+```
+
+}
+
+async verifyMFA(userId, token, method = ‘totp’) {
+const user = await User.findById(userId);
+
+```
+switch (method) {
+  case 'totp':
+    return this.totpService.verify(user.mfaSecret, token);
+  case 'sms':
+    return this.smsService.verifyToken(user.phone, token);
+  case 'backup':
+    return this.verifyBackupCode(user.backupCodes, token);
+}
+```
+
+}
+}
+```
+
+**2. Content Security Policy (CSP) Implementation:**
+```javascript
+// Dynamic CSP based on environment
+class CSPManager {
+constructor(environment = ‘production’) {
+this.environment = environment;
+this.nonces = new Map();
+}
+
+generateNonce() {
+const nonce = crypto.randomBytes(16).toString(‘base64’);
+this.nonces.set(nonce, Date.now());
+return nonce;
+}
+
+buildCSPHeader(options = {}) {
+const directives = {
+‘default-src’: “‘self’”,
+‘script-src’: this.getScriptSrc(options),
+‘style-src’: this.getStyleSrc(options),
+‘img-src’: “‘self’ data: https:”,
+‘connect-src’: this.getConnectSrc(options),
+‘font-src’: “‘self’ https://fonts.gstatic.com”,
+‘object-src’: “‘none’”,
+‘base-uri’: “‘self’”,
+‘form-action’: “‘self’”,
+‘frame-ancestors’: “‘none’”,
+‘upgrade-insecure-requests’: this.environment === ‘production’
 };
 
-function App() {
-return (
-<div>
-<Link 
-to="/heavy" 
-onMouseEnter={preloadComponent}
->
-Heavy Page
-</Link>
-<Suspense fallback={<SkeletonLoader />}>
-<LazyComponent />
-</Suspense>
-</div>
-);
-}
 ```
-
-**3. Image Optimization & Responsive Images:**
-```html
-
-<!-- Next-gen image formats with fallbacks -->
-
-<picture>
-  <source srcset="image.avif" type="image/avif">
-  <source srcset="image.webp" type="image/webp">
-  <img 
-    src="image.jpg" 
-    alt="Description"
-    loading="lazy"
-    width="800"
-    height="600"
-    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-    srcset="image-400.jpg 400w, image-800.jpg 800w, image-1200.jpg 1200w"
-  >
-</picture>
-\`\`\`
-
-**4. Service Worker for Aggressive Caching:**
-```javascript
-// Advanced caching strategies
-const CACHE_NAME = ‘app-v1’;
-const urlsToCache = [’/critical.css’, ‘/app.js’];
-
-self.addEventListener(‘fetch’, event => {
-if (event.request.destination === ‘image’) {
-event.respondWith(
-caches.open(‘images’).then(cache => {
-return cache.match(event.request).then(response => {
-if (response) return response;
-
-```
-      return fetch(event.request).then(fetchResponse => {
-        cache.put(event.request, fetchResponse.clone());
-        return fetchResponse;
-      });
-    });
-  })
-);
+return Object.entries(directives)
+  .filter(([key, value]) => value !== false)
+  .map(([key, value]) => \`\${key} \${value}\`)
+  .join('; ');
 ```
 
 }
-});
-```
 
-**Core Web Vitals Targets:**
-• LCP: < 2.5s | FID: < 100ms | CLS: < 0.1
-
-What specific performance metrics are you trying to improve? I can provide targeted optimizations.`
-},
+getScriptSrc(options) {
+const sources = [”‘self’”];
 
 ```
-        security: {
-            keywords: ['security', 'vulnerability', 'xss', 'csrf', 'authentication', 'authorization'],
-            response: `🛡️ **Comprehensive Security Audit & Implementation:**
-```
-
-**1. Content Security Policy (CSP):**
-```html
-<meta http-equiv="Content-Security-Policy" 
-content="default-src 'self'; 
-script-src 'self' 'unsafe-inline' https://cdn.trusted.com;
-style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-img-src 'self' data: https:;
-connect-src 'self' https://api.yourdomain.com;
-font-src 'self' https://fonts.gstatic.com;
-frame-ancestors 'none';">
-```
-
-**2. Advanced Authentication with JWT:**
-```javascript
-// Secure JWT implementation
-import jwt from ‘jsonwebtoken’;
-import bcrypt from ‘bcrypt’;
-
-class AuthService {
-static async login(email, password) {
-const user = await User.findOne({ email });
-if (!user || !await bcrypt.compare(password, user.passwordHash)) {
-throw new Error(‘Invalid credentials’);
+if (options.allowInlineScripts) {
+  sources.push("'unsafe-inline'");
 }
 
-```
-const accessToken = jwt.sign(
-  { userId: user.id, role: user.role },
-  process.env.JWT_SECRET,
-  { expiresIn: '15m' }
-);
+if (options.nonce) {
+  sources.push(\`'nonce-\${options.nonce}'\`);
+}
 
-const refreshToken = jwt.sign(
-  { userId: user.id },
-  process.env.REFRESH_SECRET,
-  { expiresIn: '7d' }
-);
+if (options.trustedDomains) {
+  sources.push(...options.trustedDomains);
+}
 
-// Store refresh token securely
-await RefreshToken.create({
-  token: refreshToken,
-  userId: user.id,
-  expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-});
-
-return { accessToken, refreshToken };
+return sources.join(' ');
 ```
 
 }
@@ -772,118 +1329,219 @@ return { accessToken, refreshToken };
 
 **3. Input Validation & Sanitization:**
 ```javascript
-import DOMPurify from ‘dompurify’;
-import validator from ‘validator’;
+// Advanced Input Validation
+class InputValidator {
+constructor() {
+this.rules = new Map();
+this.sanitizers = new Map();
+}
 
-class SecurityUtils {
-static sanitizeInput(input, type = ‘text’) {
-switch (type) {
-case ‘html’:
-return DOMPurify.sanitize(input, {
-ALLOWED_TAGS: [‘b’, ‘i’, ‘em’, ‘strong’, ‘p’],
-ALLOWED_ATTR: []
+addRule(field, validator) {
+this.rules.set(field, validator);
+}
+
+addSanitizer(field, sanitizer) {
+this.sanitizers.set(field, sanitizer);
+}
+
+async validate(data) {
+const errors = {};
+const sanitized = {};
+
+```
+for (const [field, value] of Object.entries(data)) {
+  // Sanitize first
+  const sanitizer = this.sanitizers.get(field);
+  sanitized[field] = sanitizer ? await sanitizer(value) : value;
+
+  // Then validate
+  const validator = this.rules.get(field);
+  if (validator) {
+    try {
+      await validator(sanitized[field]);
+    } catch (error) {
+      errors[field] = error.message;
+    }
+  }
+}
+
+if (Object.keys(errors).length > 0) {
+  throw new ValidationError(errors);
+}
+
+return sanitized;
+```
+
+}
+}
+
+// Usage Example
+const validator = new InputValidator();
+
+validator.addSanitizer(‘email’, (email) =>
+validator.normalizeEmail(email.toLowerCase().trim())
+);
+
+validator.addRule(‘email’, async (email) => {
+if (!validator.isEmail(email)) {
+throw new Error(‘Invalid email format’);
+}
+
+const disposableEmailDomains = await this.getDisposableEmailDomains();
+const domain = email.split(’@’)[1];
+
+if (disposableEmailDomains.includes(domain)) {
+throw new Error(‘Disposable email addresses are not allowed’);
+}
 });
-case ‘email’:
-return validator.isEmail(input) ? validator.normalizeEmail(input) : null;
-case ‘url’:
-return validator.isURL(input) ? input : null;
-default:
-return validator.escape(input);
-}
-}
 
-static validateCSRF(token, session) {
-return token === session.csrfToken &&
-Date.now() - session.csrfTimestamp < 300000; // 5 min expiry
-}
-}
+validator.addSanitizer(‘html’, (html) =>
+DOMPurify.sanitize(html, {
+ALLOWED_TAGS: [‘b’, ‘i’, ‘em’, ‘strong’, ‘p’, ‘br’],
+ALLOWED_ATTR: []
+})
+);
 ```
 
 **4. Rate Limiting & DDoS Protection:**
 ```javascript
-import rateLimit from ‘express-rate-limit’;
-import slowDown from ‘express-slow-down’;
-
-const limiter = rateLimit({
-windowMs: 15 * 60 * 1000, // 15 minutes
-max: 100, // limit each IP to 100 requests per windowMs
-message: ‘Too many requests from this IP’,
-standardHeaders: true,
-legacyHeaders: false,
-handler: (req, res) => {
-res.status(429).json({
-error: ‘Rate limit exceeded’,
-retryAfter: Math.round(req.rateLimit.resetTime / 1000)
-});
-}
-});
-
-const speedLimiter = slowDown({
-windowMs: 15 * 60 * 1000,
-delayAfter: 50,
-delayMs: 500
-});
-```
-
-Which security aspects need immediate attention? I can provide specific implementation guidance.`
-},
-
-```
-        aiComponents: {
-            keywords: ['ai', 'machine learning', 'intelligent', 'smart', 'recommendation', 'chatbot'],
-            response: `🤖 **AI-Powered Web Components:**
-```
-
-**1. Intelligent Search with NLP:**
-```javascript
-class SmartSearch {
-constructor(apiKey) {
-this.apiKey = apiKey;
-this.cache = new Map();
+// Intelligent Rate Limiting
+class SmartRateLimit {
+constructor(redis) {
+this.redis = redis;
+this.limits = new Map();
 }
 
-async intelligentSearch(query, context = {}) {
-const cacheKey = `${query}-${JSON.stringify(context)}`;
-if (this.cache.has(cacheKey)) {
-return this.cache.get(cacheKey);
+addLimit(key, config) {
+this.limits.set(key, {
+windowMs: config.windowMs,
+max: config.max,
+skipSuccessfulRequests: config.skipSuccessfulRequests || false,
+skipFailedRequests: config.skipFailedRequests || false,
+keyGenerator: config.keyGenerator || ((req) => req.ip)
+});
 }
 
-```
-// Use TensorFlow.js for client-side NLP
-const embeddings = await this.getTextEmbeddings(query);
-const semanticResults = await this.semanticSearch(embeddings, context);
+async check(req, limitKey) {
+const config = this.limits.get(limitKey);
+if (!config) return { allowed: true };
 
-const results = {
-  exact: await this.exactMatch(query),
-  semantic: semanticResults,
-  suggestions: await this.generateSuggestions(query),
-  autocomplete: await this.getAutoComplete(query)
+```
+const key = \`rate_limit:\${limitKey}:\${config.keyGenerator(req)}\`;
+const current = await this.redis.get(key);
+
+if (!current) {
+  await this.redis.setex(key, Math.ceil(config.windowMs / 1000), 1);
+  return { allowed: true, remaining: config.max - 1 };
+}
+
+const count = parseInt(current);
+
+if (count >= config.max) {
+  const ttl = await this.redis.ttl(key);
+  return { 
+    allowed: false, 
+    remaining: 0, 
+    resetTime: Date.now() + (ttl * 1000)
+  };
+}
+
+await this.redis.incr(key);
+return { 
+  allowed: true, 
+  remaining: config.max - count - 1 
+};
+```
+
+}
+}
+```
+
+Which security aspect needs immediate attention?`,
+suggestions: [
+‘Implement OAuth 2.0 + PKCE’,
+‘Set up security headers’,
+‘Create input validation system’,
+‘Design audit logging’
+]
+}
+];
+
+```
+    return this.selectBestResponse(message, responses);
+}
+
+generateFrameworkResponse(context) {
+    const { message } = context;
+    
+    return {
+        content: `⚛️ **Modern Framework Architecture:**
+```
+
+I’ll help you choose and implement the best framework for your needs. Based on your requirements, here are advanced implementations:
+
+**React with Advanced Patterns:**
+```jsx
+// Compound Component Pattern
+const Modal = ({ children, …props }) => {
+return <ModalProvider {…props}>{children}</ModalProvider>;
 };
 
-this.cache.set(cacheKey, results);
-return results;
+Modal.Header = ({ children }) => {
+const { closeModal } = useModalContext();
+return (
+<div className="modal-header">
+{children}
+<button onClick={closeModal}>×</button>
+</div>
+);
+};
+
+Modal.Body = ({ children }) => (
+
+  <div className="modal-body">{children}</div>
+);
+
+// Usage
+<Modal isOpen={isOpen} onClose={setIsOpen}>
+<Modal.Header>
+<h2>Confirmation</h2>
+</Modal.Header>
+<Modal.Body>
+<p>Are you sure?</p>
+</Modal.Body>
+</Modal>
 ```
 
-}
-
-async getTextEmbeddings(text) {
-// Use Universal Sentence Encoder
-const model = await use.load();
-const embeddings = await model.embed([text]);
-return embeddings;
-}
-}
-```
-
-**2. Personalized Content Recommendations:**
+**State Management with Zustand:**
 ```javascript
-class PersonalizationEngine {
-constructor(userId) {
-this.userId = userId;
-this.behaviorHistory = [];
-this.preferences = {};
-}
+import { create } from ‘zustand’;
+import { subscribeWithSelector } from ‘zustand/middleware’;
 
-async getPersonalizedContent(contentPool) {
-const userProfile = await this.buildUserProfile();
-const contentScores = await Promise.all(
+const useStore = create(
+subscribeWithSelector((set, get) => ({
+user: null,
+isLoading: false,
+
+```
+login: async (credentials) => {
+  set({ isLoading: true });
+  try {
+    const user = await authService.login(credentials);
+    set({ user, isLoading: false });
+  } catch (error) {
+    set({ isLoading: false });
+    throw error;
+  }
+},
+
+logout: () => {
+  set({ user: null });
+  authService.logout();
+}
+```
+
+}))
+</script>
+</body>
+</html>
