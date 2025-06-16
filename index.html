@@ -1,871 +1,660 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="neon">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dante’s Fun Hub 4.0</title>
-<style>
-  /* Reset */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0; padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    color: #eee;
-    user-select: none;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  h1, h2, h3 {
-    font-weight: 900;
-    text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
-  }
-  /* Container & layout */
-  #app {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 15px;
-  }
-  header {
-    text-align: center;
-    margin-bottom: 15px;
-  }
-  /* Neon Tab navigation */
-  nav {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-  }
-  nav button {
-    background: transparent;
-    border: 2px solid #0ff;
-    color: #0ff;
-    padding: 10px 18px;
-    font-weight: 700;
-    font-size: 1rem;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    box-shadow: 0 0 8px #0ff;
-  }
-  nav button:hover,
-  nav button.active {
-    background: #0ff;
-    color: #111;
-    box-shadow: 0 0 20px #0ff, 0 0 30px #0ff inset;
-  }
-
-  section {
-    display: none;
-    animation: fadeIn 0.7s ease forwards;
-  }
-  section.active {
-    display: block;
-  }
-
-  /* Personal intro popup */
-  #introPopup {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    background: #00333fdd;
-    border: 3px solid #0ff;
-    border-radius: 12px;
-    padding: 25px;
-    max-width: 320px;
-    text-align: center;
-    box-shadow: 0 0 20px #0ff;
-    color: #a0ffff;
-    font-weight: 700;
-    font-size: 1.15rem;
-    z-index: 9999;
-  }
-  #introPopup button {
-    margin-top: 15px;
-    background: #0ff;
-    color: #111;
-    border: none;
-    padding: 8px 20px;
-    font-weight: 700;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 0 15px #0ff;
-    transition: background-color 0.3s ease;
-  }
-  #introPopup button:hover {
-    background: #00d6ff;
-  }
-
-  /* Common button style */
-  button.main-btn {
-    background: #0ff;
-    border: none;
-    color: #111;
-    font-weight: 800;
-    font-size: 1.1rem;
-    padding: 12px 20px;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 0 15px #0ff;
-    transition: background-color 0.3s ease;
-    user-select: none;
-  }
-  button.main-btn:hover {
-    background: #00d6ff;
-  }
-
-  /* Mini-game container style */
-  .game-container {
-    background: #112233cc;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 0 15px #0ff inset;
-    margin-bottom: 25px;
-  }
-  .game-title {
-    margin-bottom: 10px;
-    font-weight: 900;
-    font-size: 1.25rem;
-    text-align: center;
-    color: #0ff;
-    text-shadow: 0 0 8px #0ff;
-  }
-
-  /* Stomp Challenge */
-  #stompBtn {
-    font-size: 2rem;
-    width: 100%;
-    max-width: 320px;
-    margin: 10px auto;
-    display: block;
-    padding: 18px;
-    border-radius: 50%;
-    box-shadow: 0 0 20px #0ff, 0 0 30px #0ff inset;
-    user-select: none;
-  }
-  #stompCount {
-    font-size: 1.3rem;
-    margin-top: 8px;
-    text-align: center;
-    color: #a0ffff;
-    font-weight: 700;
-  }
-
-  /* Car Repair Game */
-  #carParts {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
-  .part {
-    background: #0ff;
-    color: #111;
-    font-weight: 700;
-    border-radius: 10px;
-    padding: 12px 16px;
-    cursor: grab;
-    user-select: none;
-    box-shadow: 0 0 12px #0ff;
-    transition: transform 0.2s ease;
-  }
-  .part:active {
-    cursor: grabbing;
-    transform: scale(1.1);
-  }
-  .slot {
-    background: #222844;
-    border: 2px dashed #0ff;
-    border-radius: 12px;
-    width: 130px;
-    height: 50px;
-    margin: 5px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #0ff;
-    font-weight: 700;
-    user-select: none;
-  }
-
-  /* Trivia */
-  #triviaQuestion {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-  }
-  #triviaAnswers button {
-    display: block;
-    margin: 8px auto;
-    max-width: 280px;
-    padding: 10px;
-    border-radius: 25px;
-    background: #0ff;
-    border: none;
-    font-weight: 700;
-    color: #111;
-    cursor: pointer;
-    box-shadow: 0 0 15px #0ff;
-    user-select: none;
-  }
-  #triviaAnswers button:hover {
-    background: #00d6ff;
-  }
-  #triviaFeedback {
-    margin-top: 15px;
-    text-align: center;
-    font-weight: 800;
-  }
-
-  /* Car Sound Quiz */
-  #carSoundPlay {
-    font-size: 1.5rem;
-    margin: 10px auto;
-    display: block;
-    cursor: pointer;
-    background: #0ff;
-    border-radius: 30px;
-    padding: 12px 18px;
-    font-weight: 700;
-    color: #111;
-    box-shadow: 0 0 20px #0ff;
-    user-select: none;
-  }
-  #carSoundAnswers button {
-    margin: 8px auto;
-    display: block;
-    max-width: 280px;
-    padding: 10px;
-    border-radius: 25px;
-    background: #0ff;
-    border: none;
-    font-weight: 700;
-    color: #111;
-    cursor: pointer;
-    box-shadow: 0 0 15px #0ff;
-    user-select: none;
-  }
-  #carSoundAnswers button:hover {
-    background: #00d6ff;
-  }
-  #carSoundFeedback {
-    margin-top: 12px;
-    font-weight: 800;
-    text-align: center;
-  }
-
-  /* Memory Match */
-  #memoryCards {
-    display: grid;
-    grid-template-columns: repeat(4, 80px);
-    grid-gap: 12px;
-    justify-content: center;
-  }
-  .memory-card {
-    width: 80px;
-    height: 80px;
-    background: #111a33;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 2.5rem;
-    color: #0ff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
-    box-shadow: 0 0 15px #0ff inset;
-    transition: transform 0.3s ease;
-  }
-  .memory-card.flipped {
-    background: #0ff;
-    color: #111;
-    transform: scale(1.1);
-  }
-  .memory-card.matched {
-    background: #22ffcc;
-    color: #111;
-    cursor: default;
-    box-shadow: 0 0 25px #22ffcc;
-  }
-  #memoryFeedback {
-    margin-top: 12px;
-    text-align: center;
-    font-weight: 700;
-    color: #0ff;
-  }
-  #memoryResetBtn {
-    display: block;
-    margin: 12px auto;
-    background: #0ff;
-    color: #111;
-    border: none;
-    border-radius: 30px;
-    padding: 10px 18px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 0 15px #0ff;
-    user-select: none;
-  }
-  #memoryResetBtn:hover {
-    background: #00d6ff;
-  }
-
-  /* Confetti pieces */
-  .confetti-piece {
-    position: fixed;
-    width: 8px;
-    height: 12px;
-    opacity: 0.9;
-    background-color: #0ff;
-    animation-name: confetti-fall;
-    animation-timing-function: ease-out;
-    animation-fill-mode: forwards;
-    pointer-events: none;
-    z-index: 9999;
-    border-radius: 3px;
-  }
-  @keyframes confetti-fall {
-    0% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 1;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dante’s Fun Hub 4.0 - All-in-One ADHD Rave Zone</title>
+  <style>
+    /* === BASE STYLES === */
+    @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto+Mono&display=swap');
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      user-select: none;
     }
-    100% {
-      transform: translateY(90vh) rotate(720deg);
-      opacity: 0;
+    body {
+      font-family: 'Roboto Mono', monospace;
+      background: radial-gradient(circle at center, #0f0f20, #070710);
+      color: #0ff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 10px 50px;
+      overflow-x: hidden;
     }
-  }
-
-  /* Animations */
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-
-  /* Responsive */
-  @media (max-width: 480px) {
-    #carParts, #memoryCards {
-      grid-template-columns: repeat(2, 1fr);
+    h1 {
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 3rem;
+      color: #0ff;
+      text-shadow:
+        0 0 10px #0ff,
+        0 0 20px #0ff,
+        0 0 30px #00ffff,
+        0 0 40px #00ffff,
+        0 0 50px #00ffff;
+      margin: 15px 0 10px;
+      text-align: center;
     }
-    nav button {
-      font-size: 0.9rem;
-      padding: 8px 14px;
+    h2 {
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 1.8rem;
+      margin: 10px 0;
+      color: #0ff;
+      text-shadow: 0 0 8px #0ff;
     }
-  }
-</style>
+    p {
+      line-height: 1.5;
+      font-size: 1.15rem;
+      margin-bottom: 1em;
+      color: #aff;
+      text-shadow: 0 0 5px #088;
+    }
+    button {
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 1.25rem;
+      color: #0ff;
+      background: transparent;
+      border: 2px solid #0ff;
+      border-radius: 12px;
+      padding: 10px 22px;
+      cursor: pointer;
+      margin: 5px 8px;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 6px #0ff;
+      user-select: none;
+    }
+    button:hover, button:focus {
+      background: #0ff;
+      color: #000;
+      box-shadow: 0 0 12px #0ff;
+      outline: none;
+    }
+    /* === NAVIGATION TABS === */
+    #navTabs {
+      margin: 20px 0 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    #navTabs button.active {
+      background: #00ffff;
+      color: #111;
+      border-color: #00ffff;
+      box-shadow: 0 0 20px #0ff inset;
+      cursor: default;
+    }
+    /* === CONTENT SECTIONS === */
+    .module {
+      display: none;
+      max-width: 960px;
+      width: 100%;
+      background: rgba(0,255,255,0.1);
+      border: 2px solid #0ff;
+      border-radius: 16px;
+      padding: 15px 25px;
+      margin-bottom: 20px;
+      box-shadow:
+        0 0 12px #0ff,
+        0 0 25px #00ffff;
+    }
+    .module.active {
+      display: block;
+      animation: fadeIn 0.7s ease forwards;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    /* === DANTEBOX === */
+    #danteBox {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(45deg, #0ff, #00ffff);
+      border-radius: 50%;
+      box-shadow: 0 0 20px #0ff, 0 0 30px #0ff inset;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 1.5rem;
+      color: #000;
+      cursor: pointer;
+      user-select: none;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 0 5px #0ff);
+    }
+    #danteBox.shake {
+      animation: shake 0.5s ease-in-out 3;
+    }
+    @keyframes shake {
+      0%, 100% {transform: translateX(0);}
+      25% {transform: translateX(-5px) rotate(-5deg);}
+      50% {transform: translateX(5px) rotate(5deg);}
+      75% {transform: translateX(-5px) rotate(-5deg);}
+    }
+    #danteBox.opened {
+      background: #00ffff;
+      color: #111;
+      box-shadow:
+        0 0 40px #00ffff,
+        0 0 50px #00ffff inset;
+      transform: scale(1.2);
+      pointer-events: none;
+    }
+    /* === CONFETTI CANVAS === */
+    #confettiCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1500;
+    }
+    /* === AI CHAT (DanteBot) === */
+    #aiChat {
+      background: rgba(0,255,255,0.05);
+      border: 2px solid #0ff;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 1rem;
+      font-family: monospace;
+      max-width: 960px;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 15px #0ff inset;
+    }
+    #aiChat textarea {
+      width: 100%;
+      height: 80px;
+      background: #001f20;
+      border: 1px solid #0ff;
+      border-radius: 8px;
+      color: #0ff;
+      font-family: monospace;
+      font-size: 1.1rem;
+      padding: 10px;
+      resize: none;
+      box-shadow: inset 0 0 8px #0ff;
+    }
+    #aiChat button {
+      margin-top: 8px;
+      width: 100%;
+      background: #0ff;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 0 12px #0ff;
+      transition: background 0.3s ease;
+    }
+    #aiChat button:hover {
+      background: #00cccc;
+    }
+    #aiChat #response {
+      margin-top: 12px;
+      background: #002222;
+      padding: 10px;
+      border-radius: 8px;
+      min-height: 60px;
+      white-space: pre-wrap;
+      color: #0ff;
+      font-family: monospace;
+      font-size: 1.1rem;
+      box-shadow: inset 0 0 10px #0ff;
+    }
+    /* === MINI GAME - LOBSTER RAVE CATCH === */
+    #lobsterGame {
+      text-align: center;
+    }
+    #lobsterCanvas {
+      background: #001922;
+      border: 2px solid #0ff;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #0ff inset;
+      max-width: 100%;
+      margin: 15px auto;
+      display: block;
+    }
+    #lobsterGameControls {
+      margin-top: 10px;
+    }
+    #lobsterGameControls button {
+      font-size: 1.2rem;
+      min-width: 100px;
+    }
+    /* === SCROLLBAR === */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #000;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0ff;
+      border-radius: 4px;
+    }
+    /* === RESPONSIVE === */
+    @media (max-width: 600px) {
+      h1 { font-size: 2.2rem; }
+      button { font-size: 1.1rem; padding: 8px 18px; }
+      #danteBox {
+        width: 80px; height: 80px; font-size: 1.2rem;
+        bottom: 15px; right: 15px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div id="app">
-  <header>
-    <h1>Dante’s Fun Hub 🎉</h1>
-    <p style="font-weight:700; color:#0ff; text-shadow: 0 0 8px #0ff;">For my amazing boyfriend, Dante — enjoy these ADHD-friendly rave-style games & tools!</p>
-  </header>
+  <h1>Dante’s Fun Hub 4.0 🎉🦞</h1>
+  <p style="text-align:center; font-size: 1.1rem; color:#0ff; margin-bottom: 12px;">
+    Welcome to your ultimate ADHD-friendly rave zone, Dante! Let’s get wild, chill, and have fun. <br/>
+    Use the tabs below to explore everything — memes, facts, jokes, games, stories & more!
+  </p>
 
-  <nav>
-    <button class="active" data-tab="stomp">Sasquatch Stomp</button>
-    <button data-tab="carRepair">Fix Ricky’s Junker</button>
-    <button data-tab="trivia">TPB Trivia</button>
-    <button data-tab="carSound">Guess Car Sound</button>
-    <button data-tab="memory">Memory Match</button>
+  <!-- NAVIGATION TABS -->
+  <nav id="navTabs" role="tablist" aria-label="Dante's Fun Hub Navigation">
+    <button role="tab" aria-selected="true" data-target="memesModule" class="active">Memes 😂</button>
+    <button role="tab" aria-selected="false" data-target="raveFactsModule">Rave Facts 🎇</button>
+    <button role="tab" aria-selected="false" data-target="funStoriesModule">Funny Stories 😆</button>
+    <button role="tab" aria-selected="false" data-target="miniGamesModule">Mini Games 🎮</button>
+    <button role="tab" aria-selected="false" data-target="danteBotModule">DanteBot 🤖</button>
   </nav>
 
-  <!-- Sections for each mini-game/tool -->
-  <section id="stomp" class="active game-container" aria-label="Sasquatch stomp challenge">
-    <h2 class="game-title">Sasquatch Stomp Challenge 🦶</h2>
-    <button id="stompBtn" aria-label="Stomp button">STOMP!</button>
-    <div id="stompCount" aria-live="polite" aria-atomic="true">Hits: 0</div>
+  <!-- MEMES MODULE -->
+  <section id="memesModule" class="module active" role="tabpanel" aria-labelledby="memesTab">
+    <h2>🔥 Top Memes for Dante 🔥</h2>
+    <button id="nextMemeBtn">Show me a Meme!</button>
+    <p id="memeDisplay" aria-live="polite" style="margin-top:12px; font-size:1.3rem;"></p>
   </section>
 
-  <section id="carRepair" class="game-container" aria-label="Car repair drag and drop game">
-    <h2 class="game-title">Fix Ricky’s Junker Car 🔧🚗</h2>
-    <p>Drag the car parts onto the correct slots:</p>
-    <div id="carParts" aria-label="Car parts draggable list" role="list">
-      <!-- parts dynamically inserted -->
+  <!-- RAVE FACTS MODULE -->
+  <section id="raveFactsModule" class="module" role="tabpanel" aria-labelledby="raveFactsTab">
+    <h2>🎧 Fun Rave Facts</h2>
+    <button id="nextFactBtn">Hit me with a Fact!</button>
+    <p id="factDisplay" aria-live="polite" style="margin-top:12px; font-size:1.3rem;"></p>
+  </section>
+
+  <!-- FUNNY STORIES MODULE -->
+  <section id="funStoriesModule" class="module" role="tabpanel" aria-labelledby="funStoriesTab">
+    <h2>🤣 Dark & Funny Stories</h2>
+    <button id="nextStoryBtn">Tell me a Story!</button>
+    <p id="storyDisplay" aria-live="polite" style="margin-top:12px; font-size:1.3rem;"></p>
+  </section>
+
+  <!-- MINI GAMES MODULE -->
+  <section id="miniGamesModule" class="module" role="tabpanel" aria-labelledby="miniGamesTab">
+    <h2>🎮 Lobster Rave Catch Mini-Game</h2>
+    <p>Catch the lobsters before they escape the rave! Use arrow keys to move the rave crab and catch lobsters 🦞🦀.</p>
+    <canvas id="lobsterCanvas" width="480" height="320" aria-label="Lobster Rave Catch Game"></canvas>
+    <div id="lobsterGameControls">
+      <button id="startGameBtn">Start Game</button>
+      <button id="stopGameBtn" disabled>Stop Game</button>
+      <p>Score: <span id="scoreDisplay">0</span></p>
     </div>
-    <div style="display:flex; justify-content:center; gap: 16px; flex-wrap: wrap; margin-top:15px;">
-      <div>
-        <div class="slot" data-slot="tire" aria-label="Tire slot" tabindex="0"></div>
-        <div style="text-align:center; color:#0ff; font-weight:700;">Tire</div>
-      </div>
-      <div>
-        <div class="slot" data-slot="engine" aria-label="Engine slot" tabindex="0"></div>
-        <div style="text-align:center; color:#0ff; font-weight:700;">Engine</div>
-      </div>
-      <div>
-        <div class="slot" data-slot="door" aria-label="Door slot" tabindex="0"></div>
-        <div style="text-align:center; color:#0ff; font-weight:700;">Door</div>
-      </div>
-      <div>
-        <div class="slot" data-slot="window" aria-label="Window slot" tabindex="0"></div>
-        <div style="text-align:center; color:#0ff; font-weight:700;">Window</div>
-      </div>
+  </section>
+
+  <!-- DANTEBOT AI CHAT MODULE -->
+  <section id="danteBotModule" class="module" role="tabpanel" aria-labelledby="danteBotTab">
+    <h2>🤖 Chat with DanteBot (AI)</h2>
+    <p><em>Note: AI chat is simulated locally for now.</em></p>
+    <div id="aiChat">
+      <textarea id="userInput" placeholder="Ask DanteBot anything..."></textarea>
+      <button id="sendBtn">Send</button>
+      <div id="response" aria-live="polite"></div>
     </div>
-    <div id="carRepairFeedback" style="margin-top:12px; text-align:center; font-weight:700; color:#0ff;"></div>
   </section>
 
-  <section id="trivia" class="game-container" aria-label="Trailer Park Boys trivia quiz">
-    <h2 class="game-title">Trailer Park Boys Trivia Quiz 🎬</h2>
-    <div id="triviaQuestion" aria-live="polite" aria-atomic="true"></div>
-    <div id="triviaAnswers" role="list"></div>
-    <div id="triviaFeedback" aria-live="polite"></div>
-    <button id="triviaNextBtn" class="main-btn" style="display:none; margin: 15px auto 0;">Next Question</button>
-  </section>
+  <!-- DANTEBOX (Fixed corner surprise) -->
+  <div id="danteBox" tabindex="0" role="button" aria-label="DanteBox surprise gift" title="Click me!">🎁</div>
 
-  <section id="carSound" class="game-container" aria-label="Guess the car sound game">
-    <h2 class="game-title">Guess the Car Sound 🔊</h2>
-    <button id="carSoundPlay" class="main-btn" aria-label="Play car sound">▶ Play Sound</button>
-    <div id="carSoundAnswers" role="list"></div>
-    <div id="carSoundFeedback" aria-live="polite"></div>
-  </section>
+  <!-- CONFETTI CANVAS -->
+  <canvas id="confettiCanvas"></canvas>
 
-  <section id="memory" class="game-container" aria-label="Memory matching game">
-    <h2 class="game-title">Memory Match: Mechanic Tools 🛠️</h2>
-    <div id="memoryCards" role="list"></div>
-    <div id="memoryFeedback" aria-live="polite"></div>
-    <button id="memoryResetBtn" class="main-btn">Reset Memory Game</button>
-  </section>
-</div>
-
-<!-- Personal intro popup -->
-<div id="introPopup" role="dialog" aria-modal="true" aria-labelledby="introTitle" aria-describedby="introDesc" style="display:none;">
-  <h2 id="introTitle">Hey Dante! ❤️</h2>
-  <p id="introDesc">This Fun Hub is packed with things I made just for you! Dive in and enjoy — can’t wait to laugh and play together. Love you tons! — Larissa</p>
-  <button id="closeIntroBtn" aria-label="Close intro message">Let’s Go!</button>
-</div>
-
-<script>
-  (() => {
-    // Show intro popup on load, then hide when dismissed
-    const introPopup = document.getElementById('introPopup');
-    const closeIntroBtn = document.getElementById('closeIntroBtn');
-
+  <script>
+    // === Intro Popup ===
     window.addEventListener('load', () => {
-      introPopup.style.display = 'block';
-    });
-    closeIntroBtn.addEventListener('click', () => {
-      introPopup.style.display = 'none';
+      setTimeout(() => {
+        alert("Hey Dante! 💖 Larissa says: Welcome to your Fun Hub 4.0! Let's dive into all the fun and vibes together. Enjoy and rave on! 🎉🦞");
+      }, 600);
     });
 
-    // Tabs navigation
-    const tabs = document.querySelectorAll('nav button');
-    const sections = document.querySelectorAll('section');
+    // === NAV TABS FUNCTIONALITY ===
+    const tabs = document.querySelectorAll('#navTabs button');
+    const modules = document.querySelectorAll('.module');
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        sections.forEach(s => s.classList.remove('active'));
+        if(tab.classList.contains('active')) return;
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        modules.forEach(mod => mod.classList.remove('active'));
 
         tab.classList.add('active');
-        document.getElementById(tab.dataset.tab).classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        document.getElementById(tab.dataset.target).classList.add('active');
       });
     });
 
-    /*** Sasquatch Stomp Challenge ***/
-    const stompBtn = document.getElementById('stompBtn');
-    const stompCount = document.getElementById('stompCount');
-    let stompHits = 0;
-
-    stompBtn.addEventListener('click', () => {
-      stompHits++;
-      stompCount.textContent = `Hits: ${stompHits}`;
-      if (stompHits % 25 === 0) {
-        playConfetti();
-      }
-    });
-
-    /*** Car Repair Drag & Drop ***/
-    const carPartsContainer = document.getElementById('carParts');
-    const carSlots = document.querySelectorAll('.slot');
-    const carRepairFeedback = document.getElementById('carRepairFeedback');
-
-    // Define parts and their correct slot
-    const parts = [
-      { id: 'tire', name: 'Tire' },
-      { id: 'engine', name: 'Engine' },
-      { id: 'door', name: 'Door' },
-      { id: 'window', name: 'Window' }
+    // === MEMES MODULE ===
+    const memes = [
+      "I'm not lazy, I'm on energy-saving mode.",
+      "ADHD: Attention Deficit Hyperdrive Disorder!",
+      "If at first you don’t succeed, skydiving is not for you.",
+      "Why don’t scientists trust atoms? Because they make up everything!",
+      "Running late is my cardio.",
+      "My brain has too many tabs open.",
+      "Procrastinators unite... tomorrow.",
+      "Life’s too short to fold fitted sheets.",
+      "I’m multitasking: I can listen, ignore, and forget all at once."
     ];
+    const memeDisplay = document.getElementById('memeDisplay');
+    document.getElementById('nextMemeBtn').addEventListener('click', () => {
+      const meme = memes[Math.floor(Math.random() * memes.length)];
+      memeDisplay.textContent = meme;
+      triggerConfetti(15);
+    });
 
-    // Shuffle helper
-    function shuffleArray(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
+    // === RAVE FACTS MODULE ===
+    const raveFacts = [
+      "The first rave parties started in the 1980s in the UK underground scene.",
+      "EDM stands for Electronic Dance Music.",
+      "Glow sticks were invented in 1962 and became rave staples.",
+      "The largest rave event in history was the Love Parade in Berlin, with over 1.5 million attendees.",
+      "PLUR: Peace, Love, Unity, Respect — the rave mantra.",
+      "Rave music genres include house, techno, trance, and dubstep.",
+      "The iconic smiley face symbol was adopted by the rave scene in the late 1980s.",
+      "Raves often include vibrant neon fashion and glow accessories.",
+      "Rave culture emphasizes community, acceptance, and freedom."
+    ];
+    const factDisplay = document.getElementById('factDisplay');
+    document.getElementById('nextFactBtn').addEventListener('click', () => {
+      const fact = raveFacts[Math.floor(Math.random() * raveFacts.length)];
+      factDisplay.textContent = fact;
+      triggerConfetti(10);
+    });
+
+    // === FUNNY STORIES MODULE ===
+    const funnyStories = [
+      "Once, at a rave, a friend accidentally danced with a mop thinking it was another person. The mop got all the moves!",
+      "Dante tried to convince everyone the lobster was the DJ's mascot, now it has a fan club.",
+      "At the last festival, the power went out and everyone started singing ‘Electric Feel’ unplugged — best rave ever!",
+      "I once tried to teach a crab how to dance. It just pinched my finger and walked away.",
+      "Dante's rave hat got stolen — turns out it was just a seagull's new nest.",
+      "That time the lobster wore sunglasses and nobody noticed because the rave lights were so bright.",
+      "Lost in the crowd, Dante found himself talking to a plant — turns out it was a really chill guy in a costume.",
+      "The funniest DJ mix? ‘Crabstep’ — heavy bass with ocean sounds."
+    ];
+    const storyDisplay = document.getElementById('storyDisplay');
+    document.getElementById('nextStoryBtn').addEventListener('click', () => {
+      const story = funnyStories[Math.floor(Math.random() * funnyStories.length)];
+      storyDisplay.textContent = story;
+      triggerConfetti(20);
+    });
+
+    // === MINI GAME: LOBSTER RAVE CATCH ===
+    const canvas = document.getElementById('lobsterCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const crab = {
+      x: canvas.width / 2 - 25,
+      y: canvas.height - 60,
+      width: 50,
+      height: 50,
+      speed: 7,
+      dx: 0,
+      color: '#00ffff'
+    };
+
+    const lobsterSize = 30;
+    let lobsters = [];
+    let score = 0;
+    let gameRunning = false;
+    let gameInterval, lobsterInterval;
+
+    function drawCrab() {
+      ctx.fillStyle = crab.color;
+      ctx.beginPath();
+      ctx.arc(crab.x + crab.width / 2, crab.y + crab.height / 2, crab.width / 2, 0, Math.PI * 2);
+      ctx.fill();
+      // eyes
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.arc(crab.x + 15, crab.y + 20, 5, 0, Math.PI * 2);
+      ctx.arc(crab.x + 35, crab.y + 20, 5, 0, Math.PI * 2);
+      ctx.fill();
     }
 
-    // Create draggable parts
-    function setupCarParts() {
-      carPartsContainer.innerHTML = '';
-      let shuffledParts = [...parts];
-      shuffleArray(shuffledParts);
-      shuffledParts.forEach(part => {
-        const partEl = document.createElement('div');
-        partEl.className = 'part';
-        partEl.draggable = true;
-        partEl.id = `part-${part.id}`;
-        partEl.textContent = part.name;
-        partEl.setAttribute('aria-grabbed', 'false');
-        carPartsContainer.appendChild(partEl);
-
-        partEl.addEventListener('dragstart', dragStart);
-        partEl.addEventListener('dragend', dragEnd);
-      });
-      // Clear slots content
-      carSlots.forEach(slot => slot.textContent = '');
+    function drawLobster(lobster) {
+      ctx.fillStyle = lobster.color;
+      ctx.beginPath();
+      ctx.ellipse(lobster.x + lobsterSize / 2, lobster.y + lobsterSize / 2, lobsterSize / 2, lobsterSize / 3, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // claws
+      ctx.strokeStyle = lobster.color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(lobster.x + 3, lobster.y + lobsterSize / 2);
+      ctx.lineTo(lobster.x - 5, lobster.y + lobsterSize / 4);
+      ctx.moveTo(lobster.x + 3, lobster.y + lobsterSize / 2);
+      ctx.lineTo(lobster.x - 5, lobster.y + lobsterSize * 0.75);
+      ctx.stroke();
     }
 
-    let draggedPart = null;
-
-    function dragStart(e) {
-      draggedPart = e.target;
-      e.dataTransfer.setData('text/plain', e.target.id);
-      e.target.style.opacity = '0.5';
-      e.target.setAttribute('aria-grabbed', 'true');
-    }
-    function dragEnd(e) {
-      e.target.style.opacity = '1';
-      e.target.setAttribute('aria-grabbed', 'false');
-      draggedPart = null;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawCrab();
+      lobsters.forEach(drawLobster);
+      ctx.fillStyle = '#0ff';
+      ctx.font = '18px monospace';
+      ctx.fillText(`Score: ${score}`, 10, 25);
     }
 
-    carSlots.forEach(slot => {
-      slot.addEventListener('dragover', e => {
-        e.preventDefault();
-        slot.style.borderColor = '#00d6ff';
-      });
-      slot.addEventListener('dragleave', e => {
-        slot.style.borderColor = '#0ff';
-      });
-      slot.addEventListener('drop', e => {
-        e.preventDefault();
-        slot.style.borderColor = '#0ff';
-        const partId = e.dataTransfer.getData('text/plain');
-        const partEl = document.getElementById(partId);
-        if (!partEl) return;
+    function update() {
+      crab.x += crab.dx;
+      if (crab.x < 0) crab.x = 0;
+      if (crab.x + crab.width > canvas.width) crab.x = canvas.width - crab.width;
 
-        // Check if correct part for slot
-        const partKey = partId.replace('part-', '');
-        if (partKey === slot.dataset.slot) {
-          // Correct!
-          slot.textContent = partEl.textContent;
-          slot.style.backgroundColor = '#22ffcc';
-          slot.style.color = '#111';
-          slot.style.border = '2px solid #22ffcc';
-
-          partEl.style.display = 'none';
-
-          // Check if all done
-          let doneCount = 0;
-          carSlots.forEach(s => {
-            if (s.textContent !== '') doneCount++;
-          });
-          if (doneCount === carSlots.length) {
-            carRepairFeedback.textContent = 'All parts fixed! Ricky’s car is ready to roll! 🚗🔥';
-            playConfetti();
-          } else {
-            carRepairFeedback.textContent = 'Nice! Keep going...';
-          }
-        } else {
-          carRepairFeedback.textContent = 'Oops, that part doesn’t fit there. Try another slot!';
-          setTimeout(() => {
-            carRepairFeedback.textContent = '';
-          }, 3000);
+      // Move lobsters downwards
+      lobsters.forEach((lobster, index) => {
+        lobster.y += lobster.speed;
+        if (lobster.y > canvas.height) {
+          lobsters.splice(index, 1);
+          score--;
+        }
+        // Collision with crab
+        if (
+          lobster.x < crab.x + crab.width &&
+          lobster.x + lobsterSize > crab.x &&
+          lobster.y < crab.y + crab.height &&
+          lobster.y + lobsterSize > crab.y
+        ) {
+          lobsters.splice(index, 1);
+          score++;
+          triggerConfetti(5);
         }
       });
-    });
-
-    setupCarParts();
-
-    /*** Trailer Park Boys Trivia ***/
-    const triviaQuestions = [
-      {
-        question: "What is Ricky's favorite pastime?",
-        answers: ["Growing weed", "Playing hockey", "Fishing", "Racing cars"],
-        correct: 0
-      },
-      {
-        question: "Who is Julian's partner?",
-        answers: ["Ricky", "Bubbles", "Sarah", "Lucy"],
-        correct: 3
-      },
-      {
-        question: "What does Bubbles love most?",
-        answers: ["Cats", "Cars", "Fishing", "Junk food"],
-        correct: 0
-      },
-      {
-        question: "What is the name of the trailer park?",
-        answers: ["Sunnyvale", "Green Acres", "Pine Hills", "Lakeview"],
-        correct: 0
-      },
-      {
-        question: "Which character often wears thick glasses?",
-        answers: ["Ricky", "Julian", "Bubbles", "Lahey"],
-        correct: 2
-      }
-    ];
-
-    let triviaIndex = 0;
-    const triviaQuestionEl = document.getElementById('triviaQuestion');
-    const triviaAnswersEl = document.getElementById('triviaAnswers');
-    const triviaFeedbackEl = document.getElementById('triviaFeedback');
-    const triviaNextBtn = document.getElementById('triviaNextBtn');
-
-    function showTriviaQuestion() {
-      const q = triviaQuestions[triviaIndex];
-      triviaQuestionEl.textContent = q.question;
-      triviaAnswersEl.innerHTML = '';
-      triviaFeedbackEl.textContent = '';
-      triviaNextBtn.style.display = 'none';
-
-      q.answers.forEach((answer, i) => {
-        const btn = document.createElement('button');
-        btn.textContent = answer;
-        btn.setAttribute('data-index', i);
-        btn.addEventListener('click', triviaAnswerSelected);
-        triviaAnswersEl.appendChild(btn);
-      });
+      draw();
     }
 
-    function triviaAnswerSelected(e) {
-      const selected = parseInt(e.target.dataset.index);
-      const correct = triviaQuestions[triviaIndex].correct;
-
-      // Disable all buttons
-      Array.from(triviaAnswersEl.children).forEach(btn => btn.disabled = true);
-
-      if (selected === correct) {
-        triviaFeedbackEl.style.color = '#22ffcc';
-        triviaFeedbackEl.textContent = 'Correct! 🎉';
-        playConfetti();
-      } else {
-        triviaFeedbackEl.style.color = '#ff4444';
-        triviaFeedbackEl.textContent = `Wrong! The right answer was "${triviaQuestions[triviaIndex].answers[correct]}".`;
-      }
-      triviaNextBtn.style.display = 'inline-block';
-    }
-
-    triviaNextBtn.addEventListener('click', () => {
-      triviaIndex++;
-      if (triviaIndex >= triviaQuestions.length) {
-        triviaQuestionEl.textContent = 'Quiz Complete! Great job!';
-        triviaAnswersEl.innerHTML = '';
-        triviaNextBtn.style.display = 'none';
-        triviaFeedbackEl.style.color = '#0ff';
-        triviaFeedbackEl.textContent = 'Thanks for playing!';
-      } else {
-        showTriviaQuestion();
-      }
-    });
-
-    showTriviaQuestion();
-
-    /*** Guess the Car Sound ***/
-    const carSounds = [
-      { name: 'Muscle Car', src: 'https://actions.google.com/sounds/v1/vehicles/car_accelerate_fast.ogg' },
-      { name: 'Race Car', src: 'https://actions.google.com/sounds/v1/vehicles/car_driving_fast.ogg' },
-      { name: 'Electric Car', src: 'https://actions.google.com/sounds/v1/vehicles/electric_car_motor_start.ogg' },
-      { name: 'Motorcycle', src: 'https://actions.google.com/sounds/v1/vehicles/motorcycle_accelerate.ogg' }
-    ];
-
-    const carSoundPlayBtn = document.getElementById('carSoundPlay');
-    const carSoundAnswersEl = document.getElementById('carSoundAnswers');
-    const carSoundFeedbackEl = document.getElementById('carSoundFeedback');
-
-    let currentSoundIndex = null;
-    let audio = null;
-
-    function shuffleArraySimple(arr) {
-      return arr.sort(() => Math.random() - 0.5);
-    }
-
-    function setupCarSoundAnswers() {
-      carSoundAnswersEl.innerHTML = '';
-      const shuffled = shuffleArraySimple([...carSounds]);
-
-      shuffled.forEach((sound, idx) => {
-        const btn = document.createElement('button');
-        btn.textContent = sound.name;
-        btn.setAttribute('data-index', idx);
-        btn.addEventListener('click', carSoundAnswerSelected);
-        carSoundAnswersEl.appendChild(btn);
-      });
-    }
-
-    function carSoundAnswerSelected(e) {
-      if (currentSoundIndex === null) return;
-      const selectedName = e.target.textContent;
-      const correctName = carSounds[currentSoundIndex].name;
-
-      Array.from(carSoundAnswersEl.children).forEach(btn => btn.disabled = true);
-
-      if (selectedName === correctName) {
-        carSoundFeedbackEl.style.color = '#22ffcc';
-        carSoundFeedbackEl.textContent = 'You got it right! 🎉';
-        playConfetti();
-      } else {
-        carSoundFeedbackEl.style.color = '#ff4444';
-        carSoundFeedbackEl.textContent = `Nope, it was "${correctName}".`;
-      }
-    }
-
-    carSoundPlayBtn.addEventListener('click', () => {
-      // Pick a random sound
-      currentSoundIndex = Math.floor(Math.random() * carSounds.length);
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-      }
-      audio = new Audio(carSounds[currentSoundIndex].src);
-      audio.play();
-
-      carSoundFeedbackEl.textContent = '';
-      Array.from(carSoundAnswersEl.children).forEach(btn => btn.disabled = false);
-    });
-
-    setupCarSoundAnswers();
-
-    /*** Memory Match Game ***/
-    const memoryCardsContainer = document.getElementById('memoryCards');
-    const memoryFeedback = document.getElementById('memoryFeedback');
-    const memoryResetBtn = document.getElementById('memoryResetBtn');
-
-    // Memory cards data (pairs)
-    const memoryItems = [
-      '🔧', '🔧',
-      '🛠️', '🛠️',
-      '⚙️', '⚙️',
-      '🪛', '🪛',
-      '🧰', '🧰',
-      '🔩', '🔩',
-      '🪚', '🪚',
-      '🔨', '🔨'
-    ];
-
-    let memoryDeck = [];
-    let firstCard = null;
-    let secondCard = null;
-    let lockBoard = false;
-    let matches = 0;
-
-    function shuffleDeck() {
-      memoryDeck = [...memoryItems];
-      for (let i = memoryDeck.length -1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [memoryDeck[i], memoryDeck[j]] = [memoryDeck[j], memoryDeck[i]];
-      }
-    }
-
-    function setupMemoryGame() {
-      shuffleDeck();
-      memoryCardsContainer.innerHTML = '';
-      matches = 0;
-      memoryFeedback.textContent = '';
-      firstCard = null;
-      secondCard = null;
-      lockBoard = false;
-
-      memoryDeck.forEach((icon, idx) => {
-        const card = document.createElement('div');
-        card.className = 'memory-card';
-        card.setAttribute('data-icon', icon);
-        card.setAttribute('tabindex', 0);
-        card.textContent = ''; // face down
-        memoryCardsContainer.appendChild(card);
-
-        card.addEventListener('click', () => flipCard(card));
-        card.addEventListener('keypress', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            flipCard(card);
-          }
-        });
-      });
-    }
-
-    function flipCard(card) {
-      if(lockBoard) return;
-      if(card === firstCard) return;
-      if(card.classList.contains('matched')) return;
-
-      card.classList.add('flipped');
-      card.textContent = card.getAttribute('data-icon');
-
-      if(!firstCard) {
-        firstCard = card;
-        return;
-      }
-      secondCard = card;
-
-      checkForMatch();
-    }
-
-    function checkForMatch() {
-      const isMatch = firstCard.getAttribute('data-icon') === secondCard.getAttribute('data-icon');
-      if(isMatch) {
-        disableCards();
-        matches++;
-        if(matches === memoryItems.length / 2) {
-          memoryFeedback.style.color = '#22ffcc';
-          memoryFeedback.textContent = 'You matched all the tools! Well done! 🎉';
-          playConfetti();
-        }
-      } else {
-        unflipCards();
-      }
-    }
-
-    function disableCards() {
-      firstCard.classList.add('matched');
-      secondCard.classList.add('matched');
-      resetBoard();
-    }
-
-    function unflipCards() {
-      lockBoard = true;
-      setTimeout(() => {
-        firstCard.classList.remove('flipped');
-        firstCard.textContent = '';
-        secondCard.classList.remove('flipped');
-        secondCard.textContent = '';
-        resetBoard();
+    function startGame() {
+      if(gameRunning) return;
+      lobsters = [];
+      score = 0;
+      gameRunning = true;
+      crab.x = canvas.width / 2 - crab.width / 2;
+      document.getElementById('scoreDisplay').textContent = score;
+      gameInterval = setInterval(update, 30);
+      lobsterInterval = setInterval(() => {
+        // Spawn lobster at random x
+        const x = Math.random() * (canvas.width - lobsterSize);
+        lobsters.push({x, y: -lobsterSize, speed: 2 + Math.random() * 2, color: '#00ffff'});
       }, 1000);
+      document.getElementById('startGameBtn').disabled = true;
+      document.getElementById('stopGameBtn').disabled = false;
     }
 
-    function resetBoard() {
-      [firstCard, secondCard] = [null, null];
-      lockBoard = false;
+    function stopGame() {
+      gameRunning = false;
+      clearInterval(gameInterval);
+      clearInterval(lobsterInterval);
+      lobsters = [];
+      draw();
+      document.getElementById('startGameBtn').disabled = false;
+      document.getElementById('stopGameBtn').disabled = true;
     }
 
-    memoryResetBtn.addEventListener('click', setupMemoryGame);
+    // Keyboard controls
+    function keyDownHandler(e) {
+      if (!gameRunning) return;
+      if(e.key === 'ArrowLeft' || e.key === 'a') crab.dx = -crab.speed;
+      if(e.key === 'ArrowRight' || e.key === 'd') crab.dx = crab.speed;
+    }
+    function keyUpHandler(e) {
+      if(e.key === 'ArrowLeft' || e.key === 'a') crab.dx = 0;
+      if(e.key === 'ArrowRight' || e.key === 'd') crab.dx = 0;
+    }
+    window.addEventListener('keydown', keyDownHandler);
+    window.addEventListener('keyup', keyUpHandler);
 
-    setupMemoryGame();
+    document.getElementById('startGameBtn').addEventListener('click', startGame);
+    document.getElementById('stopGameBtn').addEventListener('click', stopGame);
 
-    /*** Confetti effect ***/
-    function playConfetti() {
-      const confettiCount = 30;
-      for(let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti-piece');
-        confetti.style.left = Math.random() * window.innerWidth + 'px';
-        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
-        confetti.style.animationDuration = (Math.random() * 1 + 1) + 's';
-        confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+    // Update score display
+    setInterval(() => {
+      document.getElementById('scoreDisplay').textContent = score;
+    }, 200);
 
-        document.body.appendChild(confetti);
+    // === DANTEBOX ===
+    const danteBox = document.getElementById('danteBox');
+    danteBox.addEventListener('click', () => {
+      if (danteBox.classList.contains('opened')) return;
+      danteBox.classList.add('shake');
+      setTimeout(() => {
+        danteBox.classList.remove('shake');
+        danteBox.classList.add('opened');
+        alert("🎉 Surprise Dante! You found the secret DanteBox! Sending rave vibes your way! 🦞✨");
+        triggerConfetti(30);
+      }, 1500);
+    });
+    danteBox.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        danteBox.click();
+      }
+    });
 
-        setTimeout(() => {
-          confetti.remove();
-        }, 2000);
+    // === CONFETTI ANIMATION ===
+    const confettiCanvas = document.getElementById('confettiCanvas');
+    const confettiCtx = confettiCanvas.getContext('2d');
+    let confettiPieces = [];
+
+    function ConfettiPiece() {
+      this.x = Math.random() * window.innerWidth;
+      this.y = Math.random() * window.innerHeight - window.innerHeight;
+      this.size = (Math.random() * 7) + 5;
+      this.speed = (Math.random() * 3) + 2;
+      this.angle = Math.random() * 360;
+      this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+      this.tilt = (Math.random() * 10) - 5;
+      this.tiltAngle = 0;
+      this.tiltAngleIncrement = (Math.random() * 0.1) + 0.05;
+    }
+    ConfettiPiece.prototype.update = function() {
+      this.y += this.speed;
+      this.tiltAngle += this.tiltAngleIncrement;
+      this.x += Math.sin(this.angle * Math.PI/180);
+      this.tilt = Math.sin(this.tiltAngle) * 15;
+
+      if(this.y > window.innerHeight) {
+        this.x = Math.random() * window.innerWidth;
+        this.y = -10;
       }
     }
-  })();
-</script>
+    ConfettiPiece.prototype.draw = function(ctx) {
+      ctx.beginPath();
+      ctx.lineWidth = this.size / 2;
+      ctx.strokeStyle = this.color;
+      ctx.moveTo(this.x + this.tilt + this.size / 2, this.y);
+      ctx.lineTo(this.x + this.tilt, this.y + this.tilt + this.size / 2);
+      ctx.stroke();
+    }
 
+    function triggerConfetti(count = 20) {
+      for(let i=0; i<count; i++) {
+        confettiPieces.push(new ConfettiPiece());
+      }
+      if(!confettiRunning) {
+        confettiRunning = true;
+        requestAnimationFrame(runConfetti);
+      }
+    }
+
+    let confettiRunning = false;
+    function runConfetti() {
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      confettiPieces.forEach((p, i) => {
+        p.update();
+        p.draw(confettiCtx);
+        // Remove if too old
+        if(p.y > window.innerHeight + 20) {
+          confettiPieces.splice(i, 1);
+        }
+      });
+      if(confettiPieces.length > 0) {
+        requestAnimationFrame(runConfetti);
+      } else {
+        confettiRunning = false;
+      }
+    }
+
+    function resizeCanvas() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // === DANTEBOT AI CHAT SIMULATION ===
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const responseBox = document.getElementById('response');
+
+    sendBtn.addEventListener('click', () => {
+      const text = userInput.value.trim();
+      if(!text) return;
+      responseBox.textContent = "🤖 DanteBot is thinking...";
+      setTimeout(() => {
+        // Simple mock AI response logic
+        let resp = "Hmm... I gotta rave on that!";
+        if (text.toLowerCase().includes("lobster")) {
+          resp = "Lobsters love the rave too! 🦞✨";
+        } else if (text.toLowerCase().includes("fun")) {
+          resp = "Fun is the only way to be, Dante!";
+        } else if (text.toLowerCase().includes("music")) {
+          resp = "Drop that beat and dance all night!";
+        } else if (text.endsWith("?")) {
+          resp = "That's an interesting question... Let's find out together!";
+        } else {
+          resp = "Keep the good vibes flowing!";
+        }
+        responseBox.textContent = resp;
+        triggerConfetti(10);
+      }, 1200);
+      userInput.value = "";
+    });
+
+  </script>
 </body>
 </html>
