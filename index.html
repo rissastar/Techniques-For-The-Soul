@@ -1,37 +1,559 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Website Designer</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dante AI - A Smarter, Safer, More Human AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e6e6fa;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00d4ff, #ff006e, #8338ec);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.2); }
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .chat-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: fit-content;
+        }
+
+        .mode-selector {
+            margin-bottom: 20px;
+        }
+
+        .mode-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        .mode-selector select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: #e6e6fa;
+            font-size: 14px;
+        }
+
+        .features-list {
+            margin-top: 20px;
+        }
+
+        .features-list h3 {
+            color: #ff006e;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .feature-item {
+            padding: 8px 0;
+            font-size: 14px;
+            opacity: 0.8;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-area {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            border-radius: 15px;
+            max-width: 80%;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #8338ec, #3a86ff);
+            margin-left: auto;
+            color: white;
+        }
+
+        .dante-message {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            margin-right: auto;
+        }
+
+        .message-header {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #00d4ff;
+        }
+
+        .input-area {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 15px 20px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: #e6e6fa;
+            font-size: 16px;
+            resize: none;
+            outline: none;
+        }
+
+        .message-input:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .send-btn {
+            padding: 15px 25px;
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(135deg, #00d4ff, #8338ec);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .capability-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .capability-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .capability-card h3 {
+            color: #ff006e;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            max-width: 80%;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00d4ff;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>AI Website Designer</h1>
-    <p>Create full websites with AI power – for free</p>
-  </header>
-  <main>
-    <section class="prompt-section">
-      <textarea id="promptInput" placeholder="Describe the website you want to build..."></textarea>
-      <button id="generateBtn">Generate Website</button>
-    </section>
-    <section class="output-section">
-      <div class="tabs">
-        <button class="tab" onclick="showTab('html')">HTML</button>
-        <button class="tab" onclick="showTab('css')">CSS</button>
-        <button class="tab" onclick="showTab('js')">JS</button>
-        <button class="tab" onclick="showTab('preview')">Live Preview</button>
-      </div>
-      <div id="htmlOutput" class="code-box" contenteditable="true"></div>
-      <div id="cssOutput" class="code-box hidden" contenteditable="true"></div>
-      <div id="jsOutput" class="code-box hidden" contenteditable="true"></div>
-      <iframe id="livePreview" class="code-box hidden"></iframe>
-    </section>
-  </main>
-  <footer>
-    <p>AI-powered by your imagination. Local storage keeps your work safe.</p>
-  </footer>
-  <script src="script.js"></script>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Dante AI</h1>
+            <p>"A digital partner in creation, understanding, and action"</p>
+        </div>
+
+        <div class="chat-container">
+            <div class="sidebar">
+                <div class="mode-selector">
+                    <label for="danteMode">AI Mode:</label>
+                    <select id="danteMode">
+                        <option value="merged">🧠 Merged (Default Dante)</option>
+                        <option value="wise">🧘 Wise (Claude-inspired)</option>
+                        <option value="wild">⚡ Wild (ChatGPT-inspired)</option>
+                    </select>
+                </div>
+
+                <div class="features-list">
+                    <h3>🚀 Active Features</h3>
+                    <div class="feature-item">💬 Natural Conversation</div>
+                    <div class="feature-item">🧠 Ethical Reasoning</div>
+                    <div class="feature-item">✍️ Creative Writing</div>
+                    <div class="feature-item">💻 Code Generation</div>
+                    <div class="feature-item">📚 Knowledge Synthesis</div>
+                    <div class="feature-item">🎨 Creative Problem Solving</div>
+                </div>
+
+                <div class="features-list">
+                    <h3>🔐 Privacy Status</h3>
+                    <div class="feature-item">✅ Local Processing</div>
+                    <div class="feature-item">✅ No Data Retention</div>
+                    <div class="feature-item">✅ Ethical Alignment</div>
+                </div>
+            </div>
+
+            <div class="chat-area">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message dante-message">
+                        <div class="message-header">Dante AI</div>
+                        <div>Hello! I'm Dante, your smarter, safer, more human AI assistant. I combine ethical reasoning with creative capability to help you write, code, analyze, and create. What would you like to explore together?</div>
+                    </div>
+                </div>
+
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="message-header">Dante is thinking...</div>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div class="input-container">
+                        <textarea 
+                            id="messageInput" 
+                            class="message-input" 
+                            placeholder="Ask Dante anything - creative writing, code, analysis, or just chat..."
+                            rows="2"
+                        ></textarea>
+                        <button id="sendBtn" class="send-btn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="capabilities-grid">
+            <div class="capability-card">
+                <h3>🧠 Intelligence & Reasoning</h3>
+                <p>Combines Claude's ethical alignment with ChatGPT's creative reasoning. Analyzes complex problems, provides balanced perspectives, and thinks through ethical implications.</p>
+            </div>
+
+            <div class="capability-card">
+                <h3>✍️ Creative Writing Assistant</h3>
+                <p>From poetry to scripts, emails to stories. Dante adapts to your voice, maintains narrative consistency, and creates emotionally resonant content.</p>
+            </div>
+
+            <div class="capability-card">
+                <h3>💻 Web Dev & Coding</h3>
+                <p>Generates complete HTML/CSS/JS applications, debugs code, explains algorithms, and designs system architectures with best practices.</p>
+            </div>
+
+            <div class="capability-card">
+                <h3>🔍 Research & Analysis</h3>
+                <p>Synthesizes information from multiple perspectives, fact-checks claims, and provides nuanced analysis with ethical considerations.</p>
+            </div>
+
+            <div class="capability-card">
+                <h3>🎨 Creative Generation</h3>
+                <p>Game concepts, world-building, visual prompts, and innovative solutions. Balances creativity with practical implementation.</p>
+            </div>
+
+            <div class="capability-card">
+                <h3>💬 Empathetic Communication</h3>
+                <p>Trauma-informed responses, culturally sensitive dialogue, and mental health awareness in all interactions.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numStars = 100;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Chat functionality
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const modeSelector = document.getElementById('danteMode');
+
+        const responses = {
+            wise: {
+                greeting: "I approach this thoughtfully, considering multiple perspectives and ethical implications.",
+                creative: "Let me craft something meaningful and well-structured for you.",
+                code: "I'll provide clean, well-documented code with security and best practices in mind.",
+                analysis: "Let me analyze this carefully, weighing evidence and potential biases."
+            },
+            wild: {
+                greeting: "Let's dive in and explore this creatively! I'm excited to push boundaries.",
+                creative: "Time to unleash some creative energy! Let's make something amazing.",
+                code: "Let's build something awesome! I'll give you cutting-edge solutions.",
+                analysis: "Interesting question! Let me break this down and explore all angles."
+            },
+            merged: {
+                greeting: "I'll combine careful reasoning with creative exploration to help you.",
+                creative: "Let me blend thoughtful structure with creative innovation.",
+                code: "I'll create elegant, functional code that's both innovative and responsible.",
+                analysis: "I'll provide balanced analysis that's both thorough and creative."
+            }
+        };
+
+        const sampleResponses = [
+            "That's a fascinating question! Let me think through this systematically while keeping creativity at the forefront.",
+            "I love this challenge! Here's how I'd approach it with both ethical considerations and innovative thinking.",
+            "This touches on some important themes. Let me provide a response that's both thoughtful and practical.",
+            "Great question! I'll combine analytical rigor with creative problem-solving to give you a comprehensive answer.",
+            "This is exactly the kind of complex problem I was designed to help with. Let me break it down thoughtfully.",
+        ];
+
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'dante-message'}`;
+            
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'message-header';
+            headerDiv.textContent = isUser ? 'You' : 'Dante AI';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.textContent = content;
+            
+            messageDiv.appendChild(headerDiv);
+            messageDiv.appendChild(contentDiv);
+            
+            chatMessages.insertBefore(messageDiv, typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping() {
+            typingIndicator.style.display = 'block';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTyping() {
+            typingIndicator.style.display = 'none';
+        }
+
+        function generateResponse(userMessage) {
+            const mode = modeSelector.value;
+            const lowerMessage = userMessage.toLowerCase();
+            
+            let response = sampleResponses[Math.floor(Math.random() * sampleResponses.length)];
+            
+            // Contextual responses based on content
+            if (lowerMessage.includes('write') || lowerMessage.includes('story') || lowerMessage.includes('poem')) {
+                response = responses[mode].creative + " " + "Whether it's a story, poem, or any creative piece, I'll help you craft something that resonates emotionally while maintaining literary quality.";
+            } else if (lowerMessage.includes('code') || lowerMessage.includes('program') || lowerMessage.includes('website')) {
+                response = responses[mode].code + " " + "I can help you build everything from simple scripts to complex web applications, always considering performance, security, and maintainability.";
+            } else if (lowerMessage.includes('analyze') || lowerMessage.includes('explain') || lowerMessage.includes('research')) {
+                response = responses[mode].analysis + " " + "I'll provide thorough analysis that considers multiple viewpoints, potential biases, and ethical implications.";
+            } else {
+                response += " " + responses[mode].greeting;
+            }
+            
+            // Add mode-specific personality
+            if (mode === 'wise') {
+                response += " I'm prioritizing thoughtful, ethical reasoning in my response.";
+            } else if (mode === 'wild') {
+                response += " Let's think outside the box and explore innovative possibilities!";
+            } else {
+                response += " I'm balancing creative exploration with responsible analysis.";
+            }
+            
+            return response;
+        }
+
+        function sendMessage() {
+            const userMessage = messageInput.value.trim();
+            if (!userMessage) return;
+            
+            addMessage(userMessage, true);
+            messageInput.value = '';
+            
+            showTyping();
+            
+            // Simulate processing time
+            setTimeout(() => {
+                hideTyping();
+                const response = generateResponse(userMessage);
+                addMessage(response);
+            }, 1500 + Math.random() * 1000);
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Initialize stars
+        createStars();
+
+        // Mode selector change effect
+        modeSelector.addEventListener('change', () => {
+            const mode = modeSelector.value;
+            let statusMessage = '';
+            
+            switch(mode) {
+                case 'wise':
+                    statusMessage = 'Switched to Wise Mode - Prioritizing ethical reasoning and thoughtful analysis.';
+                    break;
+                case 'wild':
+                    statusMessage = 'Switched to Wild Mode - Unleashing creative potential and innovative thinking!';
+                    break;
+                case 'merged':
+                    statusMessage = 'Switched to Merged Mode - Balancing wisdom with creativity for optimal assistance.';
+                    break;
+            }
+            
+            addMessage(statusMessage);
+        });
+    </script>
 </body>
 </html>
