@@ -58,6 +58,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     logList.innerHTML = '';
+   const labels = [];
+const severityData = [];
+
+data.forEach((log) => {
+  labels.push(new Date(log.created_at).toLocaleDateString());
+  severityData.push(log.severity);
+});
     data.forEach((log) => {
       const item = document.createElement('li');
       item.innerHTML = `
