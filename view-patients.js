@@ -101,3 +101,50 @@ async function loadSymptoms(patientId) {
     }
   });
 }
+document.getElementById('link-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('patient-email').value;
+  const status = document.getElementById('link-status');
+  status.textContent = '';
+
+  // Get patient ID from email
+  const { data: patientProfile, error } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('email', email)
+    .single();
+
+  if (!patientProfile) {
+    status.textContent = '❌ Patient not found.';
+    status.style.color = 'red';
+    return;
+  }
+
+  const patientId = patientProfile.id;
+
+  // Check if already linked
+  const { data: existing } = await supabase
+    .from('doctor_patient_links')
+    .select('*')
+    .eq('doctor_id', (await supabase.auth.getUser()).data.user.id)
+    .eq('patient_id', patientId);
+
+  if (existing.length > 0) {
+    status.textContent = '⚠️ Already linked to this patient.';
+    status.style.color = 'orange';
+    return;
+  }
+
+  // Insert new link
+  const { error: insertError } = await supabase
+    .from('doctor_patient_links')
+    .insert([{ doctor_id: (await supabase.auth.getUser()).data.user.id, patient_id: patientId }]);
+
+  if (insertError) {
+    status.textContent = '❌ Could not link.';
+    status.style.color = 'red';
+  } else {
+    status.textContent = '✅ Patient linked!';
+    status.style.color = 'lime';
+  }
+});
