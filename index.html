@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Breathe Easy – CF Companion</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
   <canvas id="animated-bg"></canvas>
@@ -13,12 +14,32 @@
     <h1>Breathe Easy</h1>
     <p class="tagline">A companion for CF patients & their doctors</p>
     <div class="button-container">
-      <button onclick="openLogin()">Log In</button>
-      <button onclick="openRegister()">Register</button>
+      <button onclick="openAuth('login')">Log In</button>
+      <button onclick="openAuth('register')">Register</button>
     </div>
   </div>
 
-  <!-- Modal placeholder (for future login/register popups) -->
+  <!-- Modal -->
+  <div class="modal" id="auth-modal">
+    <div class="modal-content">
+      <h2 id="modal-title">Login</h2>
+      <input type="email" id="auth-email" placeholder="Email" required />
+      <input type="password" id="auth-password" placeholder="Password" required />
+      <div id="role-select-container" style="display: none;">
+        <label for="role">I am a:</label>
+        <select id="role">
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+        </select>
+      </div>
+      <button id="auth-submit">Submit</button>
+      <p id="auth-switch">
+        Don’t have an account? <span onclick="toggleAuth()">Register</span>
+      </p>
+      <button onclick="closeModal()" class="close-btn">×</button>
+    </div>
+  </div>
+
   <script src="background.js"></script>
   <script src="script.js"></script>
 </body>
