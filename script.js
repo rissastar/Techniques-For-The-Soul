@@ -1,44 +1,78 @@
-const canvas = document.getElementById('animated-bg');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const { createClient } = supabase;
+const supabaseUrl = "https://ytgrzhtntwzefwjmhgjj.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8";
+const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
-let particles = [];
+let isLoginMode = true;
 
-function initParticles() {
-  particles = [];
-  for (let i = 0; i < 60; i++) {
-    particles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      radius: Math.random() * 2 + 1,
-      speedX: Math.random() * 0.5 + 0.2,
-      speedY: Math.random() * 0.3 - 0.15
-    });
+function openAuth(mode) {
+  isLoginMode = mode === 'login';
+  document.getElementById('modal-title').textContent = isLoginMode ? 'Login' : 'Register';
+  document.getElementById('auth-switch').innerHTML = isLoginMode
+    ? `Don't have an account? <span onclick="toggleAuth()">Register</span>`
+    : `Already have an account? <span onclick="toggleAuth()">Login</span>`;
+  document.getElementById('role-select-container').style.display = isLoginMode ? 'none' : 'block';
+  document.getElementById('auth-modal').style.display = 'flex';
+}
+
+function toggleAuth() {
+  openAuth(isLoginMode ? 'register' : 'login');
+}
+
+function closeModal() {
+  document.getElementById('auth-modal').style.display = 'none';
+}
+
+document.getElementById('auth-submit').addEventListener('click', async () => {
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value.trim();
+  const role = document.getElementById('role').value;
+
+  if (!email || !password) {
+    alert("Please fill in both fields.");
+    return;
   }
-}
 
-function animateParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'rgba(255,255,255,0.7)';
-  particles.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-    ctx.fill();
-    p.x += p.speedX;
-    p.y += p.speedY;
+  try {
+    if (isLoginMode) {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) throw error;
 
-    if (p.x > canvas.width) p.x = 0;
-    if (p.y > canvas.height || p.y < 0) p.y = Math.random() * canvas.height;
-  });
-  requestAnimationFrame(animateParticles);
-}
+      const user = data.user;
+      if (!user) {
+        alert("Login successful, but user info missing.");
+        return;
+      }
 
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  initParticles();
+      const role = user.user_metadata?.role;
+      if (!role) {
+        alert("Role not found. Contact support.");
+        return;
+      }
+
+      alert("Logged in successfully!");
+      closeModal();
+
+      if (role === 'patient') {
+        window.location.href = "patient-dashboard.html";
+      } else if (role === 'doctor') {
+        window.location.href = "doctor-dashboard.html";
+      } else {
+        alert("Unrecognized role.");
+      }
+    } else {
+      const { error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { role }
+        }
+      });
+      if (error) throw error;
+      alert("Registered! Please check your email to confirm.");
+      closeModal();
+    }
+  } catch (err) {
+    alert("Auth error: " + err.message);
+  }
 });
-
-initParticles();
-animateParticles();
