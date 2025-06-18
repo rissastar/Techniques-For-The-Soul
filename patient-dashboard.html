@@ -1,8 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8" /><title>Patient Dashboard</title></head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Patient Dashboard - Breathe Easy</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0; padding: 1em;
+      background: linear-gradient(135deg, #6dd5fa, #2980b9);
+      color: #fff;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center;
+    }
+    header {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 1.5em;
+    }
+    header h1 {
+      font-size: 2em;
+      margin-bottom: 0.3em;
+    }
+    .section {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 1em;
+      margin-bottom: 1em;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .section h2 {
+      margin-bottom: 0.7em;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      padding-bottom: 0.3em;
+    }
+    button {
+      background: #fff;
+      color: #2980b9;
+      border: none;
+      padding: 0.7em 1.5em;
+      font-size: 1em;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.5em;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background: #d0e8ff;
+    }
+  </style>
+</head>
 <body>
-  <h1>Welcome, Patient!</h1>
-  <p>This will be your personalized dashboard.</p>
+  <header>
+    <h1>Welcome, Patient!</h1>
+    <p>Your CF companion dashboard</p>
+  </header>
+
+  <div class="section">
+    <h2>My Health Summary</h2>
+    <p>Here you will see your latest lung function stats, medication schedules, and symptom tracker.</p>
+    <button onclick="alert('Feature coming soon!')">View Details</button>
+  </div>
+
+  <div class="section">
+    <h2>Doctor Messages</h2>
+    <p>Messages from your CF doctor will appear here.</p>
+    <button onclick="alert('Feature coming soon!')">View Messages</button>
+  </div>
+
+  <div class="section">
+    <h2>Upcoming Appointments</h2>
+    <p>Keep track of your upcoming CF clinic visits and tests.</p>
+    <button onclick="alert('Feature coming soon!')">View Schedule</button>
+  </div>
+
 </body>
 </html>
