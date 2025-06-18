@@ -1,78 +1,47 @@
-const { createClient } = supabase;
-const supabaseUrl = "https://ytgrzhtntwzefwjmhgjj.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8";
-const supabaseClient = createClient(supabaseUrl, supabaseKey);
+const supabase = supabase || createClient(
+  'https://ytgrzhtntwzefwjmhgjj.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8'
+);
 
-let isLoginMode = true;
+// Modal toggles
+document.getElementById('open-login').onclick = () => showModal('login');
+document.getElementById('open-register').onclick = () => showModal('register');
+document.getElementById('switch-to-login').onclick = () => showModal('login');
+document.getElementById('switch-to-register').onclick = () => showModal('register');
 
-function openAuth(mode) {
-  isLoginMode = mode === 'login';
-  document.getElementById('modal-title').textContent = isLoginMode ? 'Login' : 'Register';
-  document.getElementById('auth-switch').innerHTML = isLoginMode
-    ? `Don't have an account? <span onclick="toggleAuth()">Register</span>`
-    : `Already have an account? <span onclick="toggleAuth()">Login</span>`;
-  document.getElementById('role-select-container').style.display = isLoginMode ? 'none' : 'block';
-  document.getElementById('auth-modal').style.display = 'flex';
+function showModal(type) {
+  document.getElementById('login-modal').style.display = type === 'login' ? 'flex' : 'none';
+  document.getElementById('register-modal').style.display = type === 'register' ? 'flex' : 'none';
 }
 
-function toggleAuth() {
-  openAuth(isLoginMode ? 'register' : 'login');
-}
+// Register
+document.getElementById('register-btn').onclick = async () => {
+  const email = document.getElementById('register-email').value;
+  const password = document.getElementById('register-password').value;
+  const role = document.getElementById('register-role').value;
 
-function closeModal() {
-  document.getElementById('auth-modal').style.display = 'none';
-}
+  if (!email || !password || !role) return alert('Fill out all fields.');
 
-document.getElementById('auth-submit').addEventListener('click', async () => {
-  const email = document.getElementById('auth-email').value.trim();
-  const password = document.getElementById('auth-password').value.trim();
-  const role = document.getElementById('role').value;
+  const { data, error } = await supabase.auth.signUp({ email, password });
+  if (error) return alert(error.message);
 
-  if (!email || !password) {
-    alert("Please fill in both fields.");
-    return;
+  await supabase.from('profiles').insert([{ id: data.user.id, role }]);
+  alert('Registered! Please log in.');
+  showModal('login');
+};
+
+// Login
+document.getElementById('login-btn').onclick = async () => {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) return alert(error.message);
+
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
+  if (profile?.role === 'doctor') {
+    window.location.href = 'doctor-dashboard.html';
+  } else {
+    window.location.href = 'patient-dashboard.html';
   }
-
-  try {
-    if (isLoginMode) {
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-
-      const user = data.user;
-      if (!user) {
-        alert("Login successful, but user info missing.");
-        return;
-      }
-
-      const role = user.user_metadata?.role;
-      if (!role) {
-        alert("Role not found. Contact support.");
-        return;
-      }
-
-      alert("Logged in successfully!");
-      closeModal();
-
-      if (role === 'patient') {
-        window.location.href = "patient-dashboard.html";
-      } else if (role === 'doctor') {
-        window.location.href = "doctor-dashboard.html";
-      } else {
-        alert("Unrecognized role.");
-      }
-    } else {
-      const { error } = await supabaseClient.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { role }
-        }
-      });
-      if (error) throw error;
-      alert("Registered! Please check your email to confirm.");
-      closeModal();
-    }
-  } catch (err) {
-    alert("Auth error: " + err.message);
-  }
-});
+};
