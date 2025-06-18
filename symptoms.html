@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Symptom Log – Breathe Easy</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="background"></div>
+  <div class="container">
+    <h1>Log Your Symptoms</h1>
+    <p>Track how you're feeling to share with your care team.</p>
+
+    <form id="symptom-form">
+      <input type="text" id="symptom" placeholder="Describe your symptom" required />
+      <input type="number" id="severity" placeholder="Severity (1–10)" min="1" max="10" required />
+      <textarea id="notes" placeholder="Additional notes (optional)"></textarea>
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="symptom-history">
+      <h3>Your Symptom History</h3>
+      <ul id="log-list"></ul>
+    </div>
+
+    <button onclick="window.location.href='patient-dashboard.html'" class="back-btn">← Back to Dashboard</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="symptoms.js"></script>
+</body>
+</html>
