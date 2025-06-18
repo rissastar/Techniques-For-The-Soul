@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View Patients – Breathe Easy</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="background"></div>
+  <div class="container">
+    <h1>🔍 View Patient Logs</h1>
+    <label for="patient-select">Select a Patient:</label>
+    <select id="patient-select"><option>Loading...</option></select>
+
+    <h3>📈 Symptom Severity Over Time</h3>
+    <canvas id="severityChart" width="100%" height="40"></canvas>
+
+    <div id="symptom-history">
+      <h3>📋 Symptom History</h3>
+      <ul id="log-list"></ul>
+    </div>
+
+    <button onclick="window.location.href='doctor-dashboard.html'" class="back-btn">← Back to Dashboard</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="view-patients.js"></script>
+</body>
+</html>
