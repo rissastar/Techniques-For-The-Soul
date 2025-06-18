@@ -880,5 +880,528 @@
                         <textarea id="doctorSupportInput" placeholder="Share professional insights or encouragement..." rows="3"></textarea>
                         <button class="btn btn-primary" onclick="postDoctorSupport()" style="width: auto; min-width: 80px;">Post</button>
                     </div>
-                </div
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // App State Management
+    let currentUser = null;
+    let isOnline = navigator.onLine;
+    let offlineData = [];
+
+    // Mock Supabase Client (In production, replace with actual Supabase client)
+    const mockSupabase = {
+        auth: {
+            signUp: async (credentials) => {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const user = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    email: credentials.email,
+                    user_metadata: credentials.options?.data || {}
+                };
+                localStorage.setItem('user', JSON.stringify(user));
+                return { data: { user }, error: null };
+            },
+            signInWithPassword: async (credentials) => {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const user = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    email: credentials.email
+                };
+                localStorage.setItem('user', JSON.stringify(user));
+                return { data: { user }, error: null };
+            },
+            signOut: async () => {
+                localStorage.removeItem('user');
+                return { error: null };
+            },
+            getUser: async () => {
+                const user = localStorage.getItem('user');
+                return { data: { user: user ? JSON.parse(user) : null }, error: null };
+            }
+        },
+        from: (table) => ({
+            insert: async (data) => {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                return { data, error: null };
+            },
+            select: async () => {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                return { data: [], error: null };
+            },
+            update: async (data) => {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                return { data, error: null };
+            }
+        })
+    };
+
+    // Initialize App
+    document.addEventListener('DOMContentLoaded', async () => {
+        registerServiceWorker();
+        setupEventListeners();
+        setupOfflineHandling();
+        await checkAuth();
+    });
+
+    // Service Worker Registration
+    async function registerServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            try {
+                const registration = await navigator.serviceWorker.register('/service-worker.js');
+                console.log('SW registered: ', registration);
+            } catch (registrationError) {
+                console.log('SW registration failed: ', registrationError);
+            }
+        }
+    }
+
+    // Event Listeners Setup
+    function setupEventListeners() {
+        // Auth forms
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        document.getElementById('registerForm').addEventListener('submit', handleRegister);
+        
+        // Health log form
+        document.getElementById('healthLogForm').addEventListener('submit', handleHealthLog);
+        
+        // Clinical data form
+        document.getElementById('clinicalDataForm').addEventListener('submit', handleClinicalData);
+        
+        // Link patient form
+        document.getElementById('linkPatientForm').addEventListener('submit', handleLinkPatient);
+        
+        // Severity slider
+        document.getElementById('severity').addEventListener('input', updateSeverityValue);
+        
+        // Specialty select
+        document.getElementById('specialty').addEventListener('change', updateSpecialtyTags);
+    }
+
+    // Offline Handling
+    function setupOfflineHandling() {
+        window.addEventListener('online', () => {
+            isOnline = true;
+            document.getElementById('offlineIndicator').classList.remove('show');
+            syncOfflineData();
+        });
+
+        window.addEventListener('offline', () => {
+            isOnline = false;
+            document.getElementById('offlineIndicator').classList.add('show');
+        });
+    }
+
+    // Auth Functions
+    function switchTab(tab) {
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        
+        document.querySelector(`.auth-tab:${tab === 'login' ? 'first' : 'last'}-child`).classList.add('active');
+        document.getElementById(`${tab}Form`).classList.add('active');
+    }
+
+    function toggleSpecialtySelect() {
+        const role = document.getElementById('userRole').value;
+        const specialtySelect = document.getElementById('specialtySelect');
+        
+        if (role === 'doctor') {
+            specialtySelect.classList.add('show');
+        } else {
+            specialtySelect.classList.remove('show');
+        }
+    }
+
+    function updateSpecialtyTags() {
+        const select = document.getElementById('specialty');
+        const tagsContainer = document.getElementById('specialtyTags');
+        const selected = Array.from(select.selectedOptions).map(option => option.value);
+        
+        tagsContainer.innerHTML = selected.map(specialty => 
+            `<span class="specialty-tag">${specialty}</span>`
+        ).join('');
+    }
+
+    async function handleLogin(e) {
+        e.preventDefault();
+        const form = e.target;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const loading = submitBtn.querySelector('.loading');
+        
+        btnText.style.display = 'none';
+        loading.style.display = 'inline-block';
+        
+        try {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const { data, error } = await mockSupabase.auth.signInWithPassword({
+                email,
+                password
+            });
+            
+            if (error) throw error;
+            
+            currentUser = data.user;
+            showDashboard();
+            showMessage('Successfully signed in!', 'success');
+            
+        } catch (error) {
+            showMessage(error.message || 'Login failed', 'error');
+        } finally {
+            btnText.style.display = 'inline';
+            loading.style.display = 'none';
+        }
+    }
+
+    async function handleRegister(e) {
+        e.preventDefault();
+        const form = e.target;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const loading = submitBtn.querySelector('.loading');
+        
+        btnText.style.display = 'none';
+        loading.style.display = 'inline-block';
+        
+        try {
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const displayName = document.getElementById('displayName').value;
+            const role = document.getElementById('userRole').value;
+            const specialties = Array.from(document.getElementById('specialty').selectedOptions)
+                .map(option => option.value);
+            
+            const { data, error } = await mockSupabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        display_name: displayName,
+                        role,
+                        specialty: specialties
+                    }
+                }
+            });
+            
+            if (error) throw error;
+            
+            // Create profile
+            await mockSupabase.from('profiles').insert({
+                id: data.user.id,
+                email,
+                role,
+                display_name: displayName,
+                specialty: specialties
+            });
+            
+            currentUser = data.user;
+            showDashboard();
+            showMessage('Account created successfully!', 'success');
+            
+        } catch (error) {
+            showMessage(error.message || 'Registration failed', 'error');
+        } finally {
+            btnText.style.display = 'inline';
+            loading.style.display = 'none';
+        }
+    }
+
+    async function checkAuth() {
+        const { data } = await mockSupabase.auth.getUser();
+        if (data.user) {
+            currentUser = data.user;
+            showDashboard();
+        }
+    }
+
+    function showDashboard() {
+        document.getElementById('authContainer').style.display = 'none';
+        
+        const userRole = currentUser?.user_metadata?.role || 'patient';
+        
+        if (userRole === 'doctor') {
+            document.getElementById('doctorDashboard').classList.add('active');
+            loadDoctorData();
+        } else {
+            document.getElementById('patientDashboard').classList.add('active');
+            loadPatientData();
+        }
+    }
+
+    async function logout() {
+        await mockSupabase.auth.signOut();
+        currentUser = null;
+        
+        // Hide dashboards
+        document.getElementById('patientDashboard').classList.remove('active');
+        document.getElementById('doctorDashboard').classList.remove('active');
+        
+        // Show auth container
+        document.getElementById('authContainer').style.display = 'flex';
+    }
+
+    // Patient Dashboard Functions
+    function showPatientSection(section) {
+        document.querySelectorAll('.patient-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('#patientDashboard .nav-item').forEach(n => n.classList.remove('active'));
+        
+        document.getElementById(`${section}Section`).classList.add('active');
+        event.target.closest('.nav-item').classList.add('active');
+    }
+
+    function loadPatientData() {
+        // Load today's metrics
+        updateTodaysMetrics();
+        loadRecentEntries();
+        loadRecentMessages();
+        loadCareTeam();
+    }
+
+    function updateTodaysMetrics() {
+        // Mock data - in production, fetch from Supabase
+        document.getElementById('todaySymptoms').textContent = Math.floor(Math.random() * 5);
+        document.getElementById('moodToday').textContent = ['😊', '🙂', '😐', '😔'][Math.floor(Math.random() * 4)];
+        document.getElementById('medicationsTaken').textContent = `${Math.floor(Math.random() * 3)}/${Math.floor(Math.random() * 3) + 3}`;
+        document.getElementById('hydrationLevel').textContent = `${(Math.random() * 3 + 1).toFixed(1)}L`;
+    }
+
+    function updateSeverityValue() {
+        const severity = document.getElementById('severity').value;
+        document.getElementById('severityValue').textContent = severity;
+    }
+
+    async function handleHealthLog(e) {
+        e.preventDefault();
+        
+        const logData = {
+            symptom_type: document.getElementById('symptomType').value,
+            severity: parseInt(document.getElementById('severity').value),
+            mood: document.getElementById('moodLog').value,
+            hydration: parseFloat(document.getElementById('hydration').value) || 0,
+            notes: document.getElementById('notes').value,
+            created_at: new Date().toISOString()
+        };
+        
+        if (isOnline) {
+            try {
+                await mockSupabase.from('symptoms').insert(logData);
+                showMessage('Health data logged successfully!', 'success');
+                loadRecentEntries();
+                updateTodaysMetrics();
+            } catch (error) {
+                showMessage('Failed to log data', 'error');
+            }
+        } else {
+            offlineData.push({ table: 'symptoms', data: logData });
+            showMessage('Data saved offline. Will sync when online.', 'success');
+        }
+        
+        e.target.reset();
+        document.getElementById('severityValue').textContent = '0';
+    }
+
+    function loadRecentEntries() {
+        const container = document.getElementById('recentEntries');
+        // Mock recent entries
+        const entries = [
+            { type: 'cough', severity: 3, mood: '😐', time: '2 hours ago' },
+            { type: 'fatigue', severity: 2, mood: '🙂', time: '5 hours ago' },
+        ];
+        
+        if (entries.length === 0) {
+            container.innerHTML = '<p style="color: #64748b; text-align: center; padding: 20px;">No entries yet</p>';
+            return;
+        }
+        
+        container.innerHTML = entries.map(entry => `
+            <div class="support-post">
+                <div class="post-content">
+                    <strong>${entry.type.charAt(0).toUpperCase() + entry.type.slice(1)}</strong> 
+                    - Severity: ${entry.severity}/5 | Mood: ${entry.mood}
+                </div>
+                <div class="post-meta">${entry.time}</div>
+            </div>
+        `).join('');
+    }
+
+    function loadRecentMessages() {
+        const container = document.getElementById('recentMessages');
+        // Mock messages
+        container.innerHTML = '<p style="color: #64748b; text-align: center; padding: 20px;">No recent messages</p>';
+    }
+
+    function loadCareTeam() {
+        const container = document.getElementById('careTeam');
+        // Mock care team
+        container.innerHTML = '<p style="color: #64748b; text-align: center; padding: 20px;">No care team members connected</p>';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+        
+        if (!message) return;
+        
+        // In production, send via Supabase
+        showMessage('Message sent!', 'success');
+        input.value = '';
+    }
+
+    function postSupport() {
+        const input = document.getElementById('supportInput');
+        const content = input.value.trim();
+        
+        if (!content) return;
+        
+        const postsContainer = document.getElementById('supportPosts');
+        const newPost = document.createElement('div');
+        newPost.className = 'support-post';
+        newPost.innerHTML = `
+            <div class="post-content">${content}</div>
+            <div class="post-meta">Just now</div>
+        `;
+        
+        postsContainer.insertBefore(newPost, postsContainer.firstChild);
+        input.value = '';
+        showMessage('Support message posted!', 'success');
+    }
+
+    // Doctor Dashboard Functions
+    function showDoctorSection(section) {
+        document.querySelectorAll('.doctor-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('#doctorDashboard .nav-item').forEach(n => n.classList.remove('active'));
+        
+        document.getElementById(`${section}Section`).classList.add('active');
+        event.target.closest('.nav-item').classList.add('active');
+    }
+
+    function loadDoctorData() {
+        loadPatientsList();
+        loadDoctorMessages();
+    }
+
+    function loadPatientsList() {
+        const container = document.getElementById('patientsList');
+        container.innerHTML = '<p style="color: #64748b; text-align: center; padding: 20px;">No patients connected yet</p>';
+    }
+
+    function loadDoctorMessages() {
+        const container = document.getElementById('doctorMessagesList');
+        container.innerHTML = '<p style="color: #64748b; text-align: center; padding: 20px;">No messages yet</p>';
+    }
+
+    function showLinkPatientForm() {
+        document.getElementById('linkPatientCard').style.display = 'block';
+    }
+
+    function hideLinkPatientForm() {
+        document.getElementById('linkPatientCard').style.display = 'none';
+        document.getElementById('linkPatientForm').reset();
+    }
+
+    async function handleLinkPatient(e) {
+        e.preventDefault();
+        
+        const patientEmail = document.getElementById('patientEmail').value;
+        const message = document.getElementById('linkMessage').value;
+        
+        try {
+            // In production, send link request via Supabase
+            await mockSupabase.from('doctor_patient_links').insert({
+                doctor_id: currentUser.id,
+                patient_email: patientEmail,
+                message: message,
+                confirmed: false
+            });
+            
+            showMessage('Link request sent successfully!', 'success');
+            hideLinkPatientForm();
+        } catch (error) {
+            showMessage('Failed to send link request', 'error');
+        }
+    }
+
+    async function handleClinicalData(e) {
+        e.preventDefault();
+        
+        const clinicalData = {
+            patient_id: document.getElementById('patientSelect').value,
+            data_type: document.getElementById('dataType').value,
+            value: document.getElementById('clinicalValue').value,
+            notes: document.getElementById('clinicalNotes').value,
+            source: 'doctor',
+            created_at: new Date().toISOString()
+        };
+        
+        try {
+            await mockSupabase.from('clinical_data').insert(clinicalData);
+            showMessage('Clinical data recorded successfully!', 'success');
+            e.target.reset();
+        } catch (error) {
+            showMessage('Failed to record clinical data', 'error');
+        }
+    }
+
+    function postDoctorSupport() {
+        const input = document.getElementById('doctorSupportInput');
+        const content = input.value.trim();
+        
+        if (!content) return;
+        
+        const postsContainer = document.getElementById('doctorSupportPosts');
+        const newPost = document.createElement('div');
+        newPost.className = 'support-post';
+        newPost.innerHTML = `
+            <div class="post-content">${content}</div>
+            <div class="post-meta">Healthcare Provider • Just now</div>
+        `;
+        
+        postsContainer.insertBefore(newPost, postsContainer.firstChild);
+        input.value = '';
+        showMessage('Professional insight posted!', 'success');
+    }
+
+    // Utility Functions
+    function showMessage(message, type) {
+        const container = document.getElementById('authMessage');
+        container.className = `${type}-message`;
+        container.textContent = message;
+        container.style.display = 'block';
+        
+        setTimeout(() => {
+            container.style.display = 'none';
+        }, 5000);
+    }
+
+    async function syncOfflineData() {
+        if (offlineData.length === 0) return;
+        
+        try {
+            for (const item of offlineData) {
+                await mockSupabase.from(item.table).insert(item.data);
+            }
+            offlineData = [];
+            showMessage('Offline data synced successfully!', 'success');
+        } catch (error) {
+            showMessage('Failed to sync some offline data', 'error');
+        }
+    }
+
+    // PWA Install Prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // Show install button or banner
+    });
+</script>
 ```
+
+</body>
+</html>
