@@ -71,26 +71,3 @@ button:hover {
   cursor: pointer;
   font-size: 14px;
 }
-form input, form textarea {
-  width: 100%;
-  margin: 0.5em 0;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-}
-form button {
-  background-color: #ffffff;
-  color: #2980b9;
-  font-weight: bold;
-}
-#log-list {
-  text-align: left;
-  list-style: none;
-  padding-left: 0;
-}
-#log-list li {
-  background: rgba(255,255,255,0.1);
-  padding: 10px;
-  margin: 5px 0;
-  border-radius: 8px;
-}
