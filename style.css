@@ -9,6 +9,7 @@ body, html {
   font-family: 'Segoe UI', sans-serif;
   overflow: hidden;
   color: #ffffff;
+  background: linear-gradient(to bottom, #5dd0f3, #c4f0f9);
 }
 
 canvas#animated-bg {
@@ -18,7 +19,6 @@ canvas#animated-bg {
   width: 100%;
   height: 100%;
   z-index: 0;
-  background: linear-gradient(to bottom, #5dd0f3, #c4f0f9);
 }
 
 .main-content {
@@ -52,4 +52,73 @@ h1 {
 
 .button-container button:hover {
   background-color: #ffffff;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  z-index: 100;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #ffffff;
+  color: #333;
+  padding: 2em;
+  border-radius: 10px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+}
+
+.modal-content input, .modal-content select {
+  width: 100%;
+  margin: 0.5em 0;
+  padding: 0.8em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-content button {
+  background: #00aaff;
+  color: white;
+  padding: 0.7em 1.5em;
+  border: none;
+  border-radius: 6px;
+  margin-top: 1em;
+  cursor: pointer;
+}
+
+.close-btn {
+  position: absolute;
+  top: 0.5em;
+  right: 0.7em;
+  background: transparent;
+  font-size: 1.2em;
+  border: none;
+  cursor: pointer;
+  color: #555;
+}
+
+#auth-switch span {
+  color: #00aaff;
+  cursor: pointer;
+}
+
+#role-select-container {
+  margin-top: 1em;
+}
+
+#role {
+  width: 100%;
+  padding: 0.6em;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 0.3em;
 }
