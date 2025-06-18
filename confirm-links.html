@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confirm Doctor Links – Breathe Easy</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+  <h1>📬 Pending Doctor Requests</h1>
+  <ul id="requests"></ul>
+  <script>
+    const supabase = createClient('https://ytgrzhtntwzefwjmhgjj.supabase.co', 'anon_key_here');
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return location.href = 'index.html';
+
+      const userId = session.user.id;
+
+      const { data: links } = await supabase
+        .from('doctor_patient_links')
+        .select('id, doctor_id, confirmed')
+        .eq('patient_id', userId)
+        .eq('confirmed', false);
+
+      const requestList = document.getElementById('requests');
+
+      for (let link of links) {
+        const { data: docProfile } = await supabase
+          .from('profiles')
+          .select('email')
+          .eq('id', link.doctor_id)
+          .single();
+
+        const li = document.createElement('li');
+        li.innerHTML = `
+          Dr. ${docProfile.email}
+          <button onclick="confirmLink('${link.id}')">✅ Confirm</button>
+          <button onclick="declineLink('${link.id}')">❌ Decline</button>
+        `;
+        requestList.appendChild(li);
+      }
+    });
+
+    async function confirmLink(id) {
+      await supabase.from('doctor_patient_links').update({ confirmed: true }).eq('id', id);
+      location.reload();
+    }
+
+    async function declineLink(id) {
+      await supabase.from('doctor_patient_links').delete().eq('id', id);
+      location.reload();
+    }
+  </script>
+</body>
+</html>
