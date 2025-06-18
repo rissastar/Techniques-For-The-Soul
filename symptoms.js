@@ -78,3 +78,30 @@ data.forEach((log) => {
 
   loadLogs();
 });
+const ctx = document.getElementById('severityChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Symptom Severity',
+      data: severityData,
+      borderColor: '#ff4c91',
+      backgroundColor: 'rgba(255, 76, 145, 0.2)',
+      tension: 0.3,
+      pointRadius: 5
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        min: 0,
+        max: 10,
+        title: { display: true, text: 'Severity' }
+      },
+      x: {
+        title: { display: true, text: 'Date' }
+      }
+    }
+  }
+});
