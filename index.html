@@ -1,35 +1,884 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Breathe Easy</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <script src="js/supabase-client.js" defer></script>
-  <script src="js/main.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breathe Easy - CF Support</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="apple-touch-icon" href="/assets/icon-192.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        overflow: hidden;
+        height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        position: relative;
+    }
+
+    /* Animated Background */
+    .bg-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.7;
+    }
+
+    .floating-element {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .floating-element:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        top: 20%;
+        left: 10%;
+        animation-delay: 0s;
+    }
+
+    .floating-element:nth-child(2) {
+        width: 60px;
+        height: 60px;
+        top: 60%;
+        left: 80%;
+        animation-delay: 2s;
+    }
+
+    .floating-element:nth-child(3) {
+        width: 100px;
+        height: 100px;
+        top: 80%;
+        left: 20%;
+        animation-delay: 4s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+        50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+    }
+
+    /* Main Container */
+    .container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .app-header {
+        text-align: center;
+        margin-bottom: 40px;
+        color: white;
+    }
+
+    .app-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .app-header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        max-width: 300px;
+        line-height: 1.5;
+    }
+
+    /* Auth Modal */
+    .auth-modal {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .auth-tabs {
+        display: flex;
+        margin-bottom: 25px;
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 4px;
+    }
+
+    .auth-tab {
+        flex: 1;
+        padding: 12px;
+        text-align: center;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        color: #64748b;
+    }
+
+    .auth-tab.active {
+        background: white;
+        color: #6366f1;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .auth-form {
+        display: none;
+    }
+
+    .auth-form.active {
+        display: block;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #374151;
+        font-size: 14px;
+    }
+
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+        background: white;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+        outline: none;
+        border-color: #6366f1;
+    }
+
+    .specialty-select {
+        display: none;
+    }
+
+    .specialty-select.show {
+        display: block;
+    }
+
+    .specialty-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .specialty-tag {
+        background: #6366f1;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .btn-primary {
+        background: #6366f1;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #5855eb;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background: #f8fafc;
+        color: #6366f1;
+        border: 2px solid #e5e7eb;
+    }
+
+    .btn-secondary:hover {
+        background: #f1f5f9;
+    }
+
+    /* Dashboard Styles */
+    .dashboard {
+        display: none;
+        height: 100vh;
+        background: #f8fafc;
+        overflow-y: auto;
+    }
+
+    .dashboard.active {
+        display: block;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .dashboard-nav {
+        display: flex;
+        justify-content: space-around;
+        background: white;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .nav-item {
+        text-align: center;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        flex: 1;
+        margin: 0 5px;
+    }
+
+    .nav-item:hover {
+        background: #f1f5f9;
+    }
+
+    .nav-item.active {
+        background: #6366f1;
+        color: white;
+    }
+
+    .dashboard-content {
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+        margin-bottom: 15px;
+        color: #374151;
+    }
+
+    .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .metric-card {
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .metric-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #6366f1;
+    }
+
+    .metric-label {
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 5px;
+    }
+
+    .log-form {
+        display: grid;
+        gap: 15px;
+    }
+
+    .log-form .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .severity-slider {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .messages-list {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .message-item {
+        padding: 15px;
+        border-bottom: 1px solid #e5e7eb;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .message-item:hover {
+        background: #f8fafc;
+    }
+
+    .message-sender {
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .message-preview {
+        color: #64748b;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .message-time {
+        font-size: 12px;
+        color: #9ca3af;
+        float: right;
+    }
+
+    .support-post {
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border-left: 4px solid #6366f1;
+    }
+
+    .post-content {
+        margin-bottom: 10px;
+    }
+
+    .post-meta {
+        font-size: 12px;
+        color: #64748b;
+    }
+
+    .compose-area {
+        position: sticky;
+        bottom: 0;
+        background: white;
+        padding: 15px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .compose-input {
+        display: flex;
+        gap: 10px;
+    }
+
+    .compose-input textarea {
+        flex: 1;
+        padding: 10px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        resize: none;
+        font-family: inherit;
+    }
+
+    .error-message {
+        background: #fef2f2;
+        color: #dc2626;
+        padding: 10px;
+        border-radius: 8px;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .success-message {
+        background: #f0fdf4;
+        color: #16a34a;
+        padding: 10px;
+        border-radius: 8px;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        .app-header h1 {
+            font-size: 2rem;
+        }
+
+        .auth-modal {
+            padding: 20px;
+        }
+
+        .log-form .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-nav {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-item {
+            margin: 0;
+        }
+    }
+
+    /* Loading State */
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f4f6;
+        border-radius: 50%;
+        border-top-color: #6366f1;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Offline Indicator */
+    .offline-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #f59e0b;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+        z-index: 1000;
+        display: none;
+    }
+
+    .offline-indicator.show {
+        display: block;
+    }
+</style>
+```
+
 </head>
 <body>
-  <div class="background-animation"></div>
-  <div class="container">
-    <h1>Breathe Easy</h1>
-    <p>Your daily companion for CF wellness & care.</p>
-    <button id="openAuth">Join / Log In</button>
-  </div>
-
-  <!-- Auth Modal -->
-  <div id="authModal" class="modal hidden">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Register or Log In</h2>
-      <input type="email" id="email" placeholder="Email" />
-      <input type="password" id="password" placeholder="Password" />
-      <select id="role">
-        <option value="patient">Patient</option>
-        <option value="doctor">Doctor</option>
-      </select>
-      <button id="loginBtn">Log In</button>
-      <button id="registerBtn">Register</button>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
     </div>
-  </div>
-</body>
-</html>
+
+```
+<!-- Offline Indicator -->
+<div class="offline-indicator" id="offlineIndicator">
+    You're offline. Data will sync when connection is restored.
+</div>
+
+<!-- Main Container -->
+<div class="container" id="authContainer">
+    <div class="app-header">
+        <h1>🫁 Breathe Easy</h1>
+        <p>Supporting your CF journey with compassionate care coordination</p>
+    </div>
+
+    <div class="auth-modal">
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="switchTab('login')">Sign In</div>
+            <div class="auth-tab" onclick="switchTab('register')">Register</div>
+        </div>
+
+        <!-- Login Form -->
+        <form class="auth-form active" id="loginForm">
+            <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" required>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <span class="btn-text">Sign In</span>
+                <div class="loading" style="display: none;"></div>
+            </button>
+        </form>
+
+        <!-- Register Form -->
+        <form class="auth-form" id="registerForm">
+            <div class="form-group">
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label for="displayName">Display Name</label>
+                <input type="text" id="displayName" required>
+            </div>
+            <div class="form-group">
+                <label for="userRole">I am a:</label>
+                <select id="userRole" required onchange="toggleSpecialtySelect()">
+                    <option value="">Select role</option>
+                    <option value="patient">Patient</option>
+                    <option value="doctor">Healthcare Provider</option>
+                </select>
+            </div>
+            <div class="form-group specialty-select" id="specialtySelect">
+                <label for="specialty">Specialty (Select all that apply)</label>
+                <select id="specialty" multiple>
+                    <option value="Pulmonologist">Pulmonologist</option>
+                    <option value="Nurse">Nurse</option>
+                    <option value="Dietitian">Dietitian</option>
+                    <option value="Physiotherapist">Physiotherapist</option>
+                    <option value="Social Worker">Social Worker</option>
+                    <option value="Psychologist">Psychologist</option>
+                    <option value="Pharmacist">Pharmacist</option>
+                    <option value="CF Specialist">CF Specialist</option>
+                    <option value="Other">Other</option>
+                </select>
+                <div class="specialty-tags" id="specialtyTags"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <span class="btn-text">Register</span>
+                <div class="loading" style="display: none;"></div>
+            </button>
+        </form>
+
+        <div id="authMessage"></div>
+    </div>
+</div>
+
+<!-- Patient Dashboard -->
+<div class="dashboard" id="patientDashboard">
+    <div class="dashboard-header">
+        <h2>Welcome back!</h2>
+        <p>How are you feeling today?</p>
+    </div>
+
+    <div class="dashboard-nav">
+        <div class="nav-item active" onclick="showPatientSection('overview')">
+            <div>📊</div>
+            <div>Overview</div>
+        </div>
+        <div class="nav-item" onclick="showPatientSection('log')">
+            <div>📝</div>
+            <div>Log Data</div>
+        </div>
+        <div class="nav-item" onclick="showPatientSection('messages')">
+            <div>💬</div>
+            <div>Messages</div>
+        </div>
+        <div class="nav-item" onclick="showPatientSection('support')">
+            <div>🤝</div>
+            <div>Support</div>
+        </div>
+        <div class="nav-item" onclick="logout()">
+            <div>🚪</div>
+            <div>Logout</div>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <!-- Overview Section -->
+        <div class="patient-section active" id="overviewSection">
+            <div class="card">
+                <h3>Today's Health Summary</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="todaySymptoms">0</div>
+                        <div class="metric-label">Symptoms Logged</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="moodToday">😊</div>
+                        <div class="metric-label">Mood</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="medicationsTaken">0/0</div>
+                        <div class="metric-label">Medications</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="hydrationLevel">0L</div>
+                        <div class="metric-label">Hydration</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Recent Messages</h3>
+                <div id="recentMessages">
+                    <p style="color: #64748b; text-align: center; padding: 20px;">No messages yet</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Care Team</h3>
+                <div id="careTeam">
+                    <p style="color: #64748b; text-align: center; padding: 20px;">No care team members connected</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Log Data Section -->
+        <div class="patient-section" id="logSection">
+            <div class="card">
+                <h3>Log Your Health Data</h3>
+                <form class="log-form" id="healthLogForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="symptomType">Symptom Type</label>
+                            <select id="symptomType" required>
+                                <option value="">Select symptom</option>
+                                <option value="cough">Cough</option>
+                                <option value="breathlessness">Breathlessness</option>
+                                <option value="chest_pain">Chest Pain</option>
+                                <option value="fatigue">Fatigue</option>
+                                <option value="appetite_loss">Appetite Loss</option>
+                                <option value="nausea">Nausea</option>
+                                <option value="sleep_issues">Sleep Issues</option>
+                                <option value="anxiety">Anxiety</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="severity">Severity (0-5)</label>
+                            <input type="range" id="severity" min="0" max="5" value="0" class="severity-slider">
+                            <div style="text-align: center; font-weight: 600; color: #6366f1;" id="severityValue">0</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="moodLog">Mood</label>
+                            <select id="moodLog">
+                                <option value="">Select mood</option>
+                                <option value="😊">😊 Great</option>
+                                <option value="🙂">🙂 Good</option>
+                                <option value="😐">😐 Okay</option>
+                                <option value="😔">😔 Not Great</option>
+                                <option value="😢">😢 Difficult</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="hydration">Hydration (Liters)</label>
+                            <input type="number" id="hydration" step="0.1" min="0" max="10">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" rows="3" placeholder="Any additional notes about your health today..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Log Entry</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Recent Entries</h3>
+                <div id="recentEntries">
+                    <p style="color: #64748b; text-align: center; padding: 20px;">No entries yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages Section -->
+        <div class="patient-section" id="messagesSection">
+            <div class="card">
+                <h3>Messages with Care Team</h3>
+                <div class="messages-list" id="messagesList">
+                    <p style="color: #64748b; text-align: center; padding: 20px;">No messages yet</p>
+                </div>
+                <div class="compose-area">
+                    <div class="compose-input">
+                        <textarea id="messageInput" placeholder="Type your message..." rows="2"></textarea>
+                        <button class="btn btn-primary" onclick="sendMessage()" style="width: auto; min-width: 80px;">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support Section -->
+        <div class="patient-section" id="supportSection">
+            <div class="card">
+                <h3>Community Support Wall</h3>
+                <div id="supportPosts">
+                    <div class="support-post">
+                        <div class="post-content">
+                            "Just wanted to share that starting a gratitude journal has really helped me manage anxiety around treatments. Small wins matter! 💙"
+                        </div>
+                        <div class="post-meta">Posted 2 hours ago</div>
+                    </div>
+                    <div class="support-post">
+                        <div class="post-content">
+                            "Having a rough week with lung function, but my care team has been amazing. Remember it's okay to ask for help when you need it."
+                        </div>
+                        <div class="post-meta">Posted 5 hours ago</div>
+                    </div>
+                </div>
+                <div class="compose-area">
+                    <div class="compose-input">
+                        <textarea id="supportInput" placeholder="Share something supportive with the community..." rows="3"></textarea>
+                        <button class="btn btn-primary" onclick="postSupport()" style="width: auto; min-width: 80px;">Post</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Doctor Dashboard -->
+<div class="dashboard" id="doctorDashboard">
+    <div class="dashboard-header">
+        <h2>Healthcare Provider Dashboard</h2>
+        <p>Supporting your patients' CF journey</p>
+    </div>
+
+    <div class="dashboard-nav">
+        <div class="nav-item active" onclick="showDoctorSection('patients')">
+            <div>👥</div>
+            <div>Patients</div>
+        </div>
+        <div class="nav-item" onclick="showDoctorSection('clinical')">
+            <div>📋</div>
+            <div>Clinical Data</div>
+        </div>
+        <div class="nav-item" onclick="showDoctorSection('messages')">
+            <div>💬</div>
+            <div>Messages</div>
+        </div>
+        <div class="nav-item" onclick="showDoctorSection('support')">
+            <div>🤝</div>
+            <div>Community</div>
+        </div>
+        <div class="nav-item" onclick="logout()">
+            <div>🚪</div>
+            <div>Logout</div>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <!-- Patients Section -->
+        <div class="doctor-section active" id="patientsSection">
+            <div class="card">
+                <h3>Patient Connections</h3>
+                <div id="patientsList">
+                    <p style="color: #64748b; text-align: center; padding: 20px;">No patients connected yet</p>
+                </div>
+                <button class="btn btn-secondary" onclick="showLinkPatientForm()">Link New Patient</button>
+            </div>
+
+            <div class="card" id="linkPatientCard" style="display: none;">
+                <h3>Send Patient Link Request</h3>
+                <form id="linkPatientForm">
+                    <div class="form-group">
+                        <label for="patientEmail">Patient Email</label>
+                        <input type="email" id="patientEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="linkMessage">Message (Optional)</label>
+                        <textarea id="linkMessage" rows="3" placeholder="Introduce yourself to the patient..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Link Request</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideLinkPatientForm()">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Clinical Data Section -->
+        <div class="doctor-section" id="clinicalSection">
+            <div class="card">
+                <h3>Enter Clinical Data</h3>
+                <form class="log-form" id="clinicalDataForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="patientSelect">Patient</label>
+                            <select id="patientSelect" required>
+                                <option value="">Select patient</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dataType">Data Type</label>
+                            <select id="dataType" required>
+                                <option value="">Select type</option>
+                                <option value="pft">PFT Results</option>
+                                <option value="weight">Weight</option>
+                                <option value="visit_summary">Visit Summary</option>
+                                <option value="medication_change">Medication Change</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clinicalValue">Value/Result</label>
+                        <input type="text" id="clinicalValue" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clinicalNotes">Clinical Notes</label>
+                        <textarea id="clinicalNotes" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Record Clinical Data</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Messages Section (Doctor) -->
+        <div class="doctor-section" id="doctorMessagesSection">
+            <div class="card">
+                <h3>Patient Messages</h3>
+                <div class="messages-list" id="doctorMessagesList">
+                    <p style="color: #64748b; text-align: center; padding: 20px;">No messages yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support Section (Doctor) -->
+        <div class="doctor-section" id="doctorSupportSection">
+            <div class="card">
+                <h3>Community Support (Professional View)</h3>
+                <div id="doctorSupportPosts">
+                    <div class="support-post">
+                        <div class="post-content">
+                            "Reminder: New research shows the importance of mental health support alongside clinical care. Let's continue fostering hope and resilience in our patients. 💙"
+                        </div>
+                        <div class="post-meta">Healthcare Provider • Posted 1 hour ago</div>
+                    </div>
+                </div>
+                <div class="compose-area">
+                    <div class="compose-input">
+                        <textarea id="doctorSupportInput" placeholder="Share professional insights or encouragement..." rows="3"></textarea>
+                        <button class="btn btn-primary" onclick="postDoctorSupport()" style="width: auto; min-width: 80px;">Post</button>
+                    </div>
+                </div
+```
