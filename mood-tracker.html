@@ -42,7 +42,7 @@
       padding: 2.5rem 3rem;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.75rem;
       outline-offset: 4px;
     }
 
@@ -116,6 +116,7 @@
     #thank-you-section {
       display: none;
       text-align: center;
+      outline: none;
     }
     #thank-you-section[aria-hidden="false"] {
       display: block;
@@ -124,54 +125,98 @@
     #thank-you-section h2 {
       font-size: 2.5rem;
       font-weight: 700;
-      margin: 0 0 0.3rem 0;
+      margin: 0 0 0.6rem 0;
       color: var(--mood-color);
+      user-select: none;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.12);
     }
 
-    #thank-you-section p {
+    #thank-you-section p.support-text {
       font-size: 1.125rem;
-      margin: 0.3rem 0;
+      margin: 0.5rem 0 1rem 0;
       color: #4a5568;
-      max-width: 500px;
+      max-width: 600px;
       margin-left: auto;
       margin-right: auto;
     }
 
-    /* Recommended resources */
-    .recommended-links {
-      margin-top: 1.5rem;
+    /* Sections for Tip and Resources */
+    .section-wrapper {
+      margin-top: 1.75rem;
+      padding: 1.25rem 1.5rem;
+      border-radius: 1rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 3px 8px rgb(0 0 0 / 0.07);
+      background: #f9fafb;
+      color: #2d3748;
+      text-align: left;
+    }
+    .section-wrapper h3 {
+      margin-top: 0; margin-bottom: 0.6rem;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--mood-color);
       display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
+      align-items: center;
+      gap: 0.5rem;
+      user-select: none;
+    }
+    .section-wrapper p, .section-wrapper ul {
+      font-size: 1rem;
+      line-height: 1.45;
+      margin: 0;
     }
 
-    .recommended-links a {
+    /* Tip text styling */
+    .tip-text {
+      font-style: italic;
+      color: #4a5568;
+      user-select: text;
+    }
+
+    /* Resources list styling */
+    .resources-list {
+      margin-top: 0.25rem;
+      padding-left: 1.2rem;
+      list-style: none;
+    }
+    .resources-list li {
+      margin-bottom: 0.55rem;
+    }
+    .resources-list a {
       color: var(--mood-color);
       font-weight: 600;
       text-decoration: underline;
-      font-size: 1rem;
       transition: color 0.25s ease;
     }
-    .recommended-links a:hover,
-    .recommended-links a:focus-visible {
+    .resources-list a:hover,
+    .resources-list a:focus-visible {
       color: #2c5282;
       outline-offset: 3px;
     }
 
-    /* Affirmation & tip */
-    .affirmation, .tip {
+    /* Affirmation styling */
+    .affirmation {
       font-style: italic;
-      color: #4a5568;
-      margin-top: 0.5rem;
+      color: #718096;
+      font-weight: 600;
+      margin-top: 1rem;
+      user-select: text;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1.1rem;
     }
 
     /* Check in again button */
     #checkin-again-btn {
-      margin-top: 2rem;
+      margin-top: 2.5rem;
       background-color: var(--mood-color);
       border: none;
       color: white;
-      font-size: 1.125rem;
+      font-size: 1.25rem;
       font-weight: 700;
       padding: 1rem 2rem;
       border-radius: 1rem;
@@ -179,6 +224,11 @@
       box-shadow: 0 6px 14px rgb(0 0 0 / 0.15);
       transition: background-color 0.3s ease;
       user-select: none;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 260px;
+      width: 100%;
     }
     #checkin-again-btn:hover,
     #checkin-again-btn:focus-visible {
@@ -188,7 +238,7 @@
 
     /* Anonymous messages container */
     .anonymous-messages {
-      margin-top: 2.5rem;
+      margin-top: 3rem;
       background: #edf2f7;
       padding: 1.25rem 1.5rem;
       border-radius: 1rem;
@@ -198,12 +248,17 @@
       color: #2d3748;
       box-shadow: inset 0 0 6px rgb(0 0 0 / 0.08);
       user-select: none;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
     }
     .anonymous-messages h4 {
       margin: 0 0 1rem 0;
       font-weight: 700;
       color: var(--mood-color);
       text-align: center;
+      user-select: none;
     }
     .anonymous-messages ul {
       list-style-type: none;
@@ -234,6 +289,7 @@
       z-index: 9999;
       max-width: 90vw;
       text-align: center;
+      user-select: none;
     }
     #toast.show {
       opacity: 1;
@@ -255,6 +311,12 @@
         width: 100%;
         padding: 1rem 0;
       }
+      .section-wrapper {
+        max-width: 100%;
+      }
+      .anonymous-messages {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
@@ -266,11 +328,19 @@
 
     <section id="thank-you-section" aria-hidden="true" tabindex="-1" aria-label="Your mood check-in summary">
       <h2 id="mood-label"></h2>
-      <p id="mood-support-text"></p>
-      <p class="tip" id="mood-tip"></p>
-      <p class="affirmation" id="mood-affirmation"></p>
+      <p class="support-text" id="mood-support-text"></p>
 
-      <nav class="recommended-links" aria-label="Recommended resources"></nav>
+      <section class="section-wrapper" aria-label="Tip to help you today">
+        <h3>💡 Tip</h3>
+        <p class="tip-text" id="mood-tip"></p>
+      </section>
+
+      <section class="section-wrapper" aria-label="Recommended resources to support you">
+        <h3>📚 Recommended Resources</h3>
+        <ul class="resources-list" aria-live="polite"></ul>
+      </section>
+
+      <p class="affirmation" id="mood-affirmation"></p>
 
       <button id="checkin-again-btn" aria-label="Check in again">Check In Again</button>
 
@@ -384,77 +454,82 @@
     const moodSupport = document.getElementById('mood-support-text');
     const moodTip = document.getElementById('mood-tip');
     const moodAff = document.getElementById('mood-affirmation');
-    const recLinks = document.querySelector('.recommended-links');
+    const recLinks = document.querySelector('.resources-list');
     const messagesList = document.getElementById('anonymous-messages-list');
     const checkinAgain = document.getElementById('checkin-again-btn');
     const toast = document.getElementById('toast');
 
     // Render mood buttons
     function renderButtons() {
-      moods.forEach(m => {
+      moodGrid.innerHTML = '';
+      moods.forEach(mood => {
         const btn = document.createElement('button');
         btn.className = 'mood-btn';
-        btn.setAttribute('role', 'listitem');
-        btn.setAttribute('aria-label', m.label + ' mood');
-        btn.setAttribute('data-mood', m.id);
-        btn.style.setProperty('--mood-color', getMoodColor(m.id));
-        btn.innerHTML = `<span class="emoji" aria-hidden="true">${m.emoji}</span><span>${m.label}</span>`;
-        btn.addEventListener('click', () => selectMood(m));
+        btn.setAttribute('data-mood', mood.id);
+        btn.setAttribute('aria-label', `${mood.label} mood`);
+        btn.innerHTML = `<span class="emoji">${mood.emoji}</span><span>${mood.label}</span>`;
+        btn.type = 'button';
+        btn.addEventListener('click', () => selectMood(mood));
         moodGrid.appendChild(btn);
       });
     }
 
-    // Map mood id to color for CSS variable fallback
-    function getMoodColor(id) {
-      switch(id) {
+    // Select mood and show details
+    function selectMood(mood) {
+      localStorage.setItem(MKEY, mood.id);
+      // Set CSS variable for dynamic colors
+      document.documentElement.style.setProperty('--mood-color', getMoodColor(mood.id));
+      // Set background to mood background
+      document.body.style.background = mood.bg;
+
+      moodLabel.textContent = `${mood.emoji} ${mood.label}`;
+      moodSupport.textContent = mood.supportPrompt;
+      moodTip.textContent = mood.tip;
+      moodAff.textContent = `"${mood.affirmation}"`;
+
+      // Populate resource links
+      recLinks.innerHTML = '';
+      mood.resources.forEach(res => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = res.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer nofollow';
+        a.textContent = res.text;
+        li.appendChild(a);
+        recLinks.appendChild(li);
+      });
+
+      showAnonymousMessages();
+
+      thankYou.setAttribute('aria-hidden', 'false');
+      thankYou.focus();
+      moodGrid.setAttribute('aria-hidden', 'true');
+      moodGrid.style.display = 'none';
+
+      showToast(`Thank you for checking in as "${mood.label}"`);
+    }
+
+    // Get a hex color for CSS variable per mood
+    function getMoodColor(moodId) {
+      switch(moodId) {
         case 'overwhelmed': return '#fda085';
         case 'struggling': return '#e53e3e';
         case 'managing': return '#d69e2e';
         case 'neutral': return '#718096';
         case 'good': return '#38a169';
         case 'thriving': return '#3182ce';
-        default: return '#4c51bf';
+        default: return '#718096';
       }
     }
 
-    // Select mood and show thank you section
-    function selectMood(m) {
-      localStorage.setItem(MKEY, m.id);
-      document.body.style.background = m.bg;
-
-      moodGrid.setAttribute('aria-hidden', 'true');
-      moodGrid.style.display = 'none';
-
-      thankYou.setAttribute('aria-hidden', 'false');
-      thankYou.style.display = 'block';
-
-      moodLabel.textContent = `${m.emoji} ${m.label}`;
-      moodSupport.textContent = m.supportPrompt;
-      moodTip.textContent = 'Tip: ' + m.tip;
-      moodAff.textContent = 'Affirmation: "' + m.affirmation + '"';
-
-      recLinks.innerHTML = '';
-      m.resources.forEach(link => {
-        const a = document.createElement('a');
-        a.href = link.url;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer nofollow';
-        a.textContent = link.text;
-        recLinks.appendChild(a);
-      });
-
-      displayAnonymousMessages();
-      showToast('Thanks for checking in!');
-      thankYou.focus();
-    }
-
-    // Show 5 random anonymous messages
-    function displayAnonymousMessages() {
+    // Show random anonymous messages
+    function showAnonymousMessages() {
       messagesList.innerHTML = '';
       const shuffled = anonymousMessages
         .map(value => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value)
+        .sort((a,b) => a.sort - b.sort)
+        .map(({value}) => value)
         .slice(0, 5);
       shuffled.forEach(msg => {
         const li = document.createElement('li');
@@ -463,16 +538,14 @@
       });
     }
 
-    // Show toast notification
+    // Toast notification
     function showToast(message) {
       toast.textContent = message;
       toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3500);
+      setTimeout(() => toast.classList.remove('show'), 3500);
     }
 
-    // Reset for check in again
+    // Check in again
     checkinAgain.addEventListener('click', () => {
       localStorage.removeItem(MKEY);
       thankYou.setAttribute('aria-hidden', 'true');
@@ -481,25 +554,31 @@
       moodGrid.style.display = 'grid';
       document.body.style.background = 'linear-gradient(-45deg, #90caf9, #f48fb1, #a5d6a7, #ffcc80)';
       toast.textContent = '';
-      moodGrid.querySelector('button').focus();
+      // Reset color variable
+      document.documentElement.style.removeProperty('--mood-color');
+      // Focus first mood button
+      const firstBtn = moodGrid.querySelector('button');
+      if(firstBtn) firstBtn.focus();
     });
 
-    // Initialize app
+    // Init on load
     function init() {
       renderButtons();
       const saved = localStorage.getItem(MKEY);
       if (saved) {
-        const m = moods.find(x => x.id === saved);
-        if (m) {
-          selectMood(m);
+        const mood = moods.find(m => m.id === saved);
+        if (mood) {
+          selectMood(mood);
           return;
         }
       }
-      // Default: show mood grid
       moodGrid.setAttribute('aria-hidden', 'false');
       moodGrid.style.display = 'grid';
       thankYou.setAttribute('aria-hidden', 'true');
       thankYou.style.display = 'none';
+      // Reset background & color
+      document.body.style.background = 'linear-gradient(-45deg, #90caf9, #f48fb1, #a5d6a7, #ffcc80)';
+      document.documentElement.style.removeProperty('--mood-color');
     }
 
     window.addEventListener('DOMContentLoaded', init);
