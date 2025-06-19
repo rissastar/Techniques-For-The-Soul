@@ -3,347 +3,133 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>🌿 Enhanced Grounding Toolkit</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<title>Grounding Toolkit</title>
 <style>
-  * {
+  /* Reset & base */
+  *, *::before, *::after {
     margin: 0; padding: 0; box-sizing: border-box;
   }
   body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
+    overflow-x: hidden;
+    transition: background 0.6s ease;
   }
-  body::before {
-    content: '';
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: 
-      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.2) 0%, transparent 50%);
-    pointer-events: none; z-index: -1;
+  body.light {
+    background: linear-gradient(135deg, #dbe9ff 0%, #aac4ff 100%);
+    color: #222;
   }
   .container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem;
-    position: relative;
-    z-index: 1;
-  }
-  .header {
-    text-align: center;
-    margin-bottom: 3rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border-radius: 24px;
-    padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    max-width: 960px;
+    margin: 2rem auto 4rem;
+    padding: 0 1rem;
   }
   h1 {
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+    text-align: center;
+    margin-bottom: 0.3rem;
+    background: linear-gradient(135deg, #fff, #e0f0ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  .subtitle {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.1rem;
+  p.subtitle {
+    text-align: center;
     font-weight: 300;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.85;
   }
+  /* Stats */
   .stats {
     display: flex;
     justify-content: center;
     gap: 2rem;
-    margin-top: 1.5rem;
+    margin-bottom: 2rem;
   }
   .stat {
     text-align: center;
-    color: rgba(255, 255, 255, 0.9);
   }
   .stat-number {
-    font-size: 1.5rem;
     font-weight: 600;
-    display: block;
+    font-size: 1.6rem;
+    margin-bottom: 0.2rem;
   }
   .stat-label {
     font-size: 0.9rem;
-    opacity: 0.8;
+    opacity: 0.75;
   }
-  .search-container {
-    margin-bottom: 2rem;
-    position: relative;
+  /* Buttons */
+  button, .button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 0.7rem 1.3rem;
+    border-radius: 14px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    user-select: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
   }
-  .search-input {
+  button:hover, .button:hover {
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    transform: translateY(-3px);
+  }
+  button:disabled, button[disabled] {
+    opacity: 0.5;
+    cursor: default;
+    box-shadow: none;
+    transform: none;
+  }
+  /* Search */
+  #searchInput {
     width: 100%;
     padding: 1rem 1.5rem;
     font-size: 1rem;
-    border: none;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
+    border: 1px solid rgba(255 255 255 / 0.3);
+    background: rgba(255 255 255 / 0.15);
+    color: inherit;
+    margin-bottom: 1.5rem;
+    transition: background 0.3s ease;
   }
-  .search-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+  #searchInput::placeholder {
+    color: rgba(255 255 255 / 0.6);
   }
-  .search-input:focus {
+  #searchInput:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: rgba(255 255 255 / 0.3);
   }
+  /* Filters */
   .category-filters {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.6rem;
     margin-bottom: 2rem;
     flex-wrap: wrap;
     justify-content: center;
   }
   .filter-btn {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.9);
-    padding: 0.7rem 1.2rem;
+    background: rgba(255 255 255 / 0.15);
     border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    font-size: 0.9rem;
+    padding: 0.65rem 1.3rem;
+    font-weight: 600;
+    font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: inherit;
+    border: 1px solid rgba(255 255 255 / 0.2);
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    user-select: none;
   }
   .filter-btn:hover, .filter-btn.active {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-  .accordion {
-    display: grid;
-    gap: 1rem;
-  }
-  .card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    animation: fadeInUp 0.6s ease forwards;
-  }
-  .card:nth-child(even) {
-    animation-delay: 0.1s;
-  }
-  .card:nth-child(3n) {
-    animation-delay: 0.2s;
-  }
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .card:hover::before,
-  .card.active::before {
-    opacity: 1;
-  }
-  .card:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
-  }
-  .card.active {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: scale(1.02);
-  }
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .card-header::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left 0.5s ease;
-  }
-  .card-header:hover::before {
-    left: 100%;
-  }
-  .card-title {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .card-title h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: white;
-    margin: 0;
-  }
-  .card-emoji {
-    font-size: 1.5rem;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-  }
-  .card-category {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 500;
-  }
-  .card-toggle {
-    font-size: 1.5rem;
-    color: rgba(255, 255, 255, 0.7);
-    transition: all 0.3s ease;
-    transform-origin: center;
-  }
-  .card.active .card-toggle {
-    transform: rotate(45deg);
-    color: white;
-  }
-  .card-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(255, 255, 255, 0.05);
-  }
-  .card-content.active {
-    max-height: 1000px;
-    padding: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  .card-content p {
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    font-weight: 400;
-  }
-  .card-content ul {
-    color: rgba(255, 255, 255, 0.9);
-    padding-left: 1.5rem;
-    line-height: 1.6;
-  }
-  .card-content li {
-    margin-bottom: 0.5rem;
-  }
-  .button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    user-select: none;
-  }
-  .button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  }
-  .checklist {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 0.75rem;
-    margin: 1rem 0;
-  }
-  .checklist-item {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    padding: 0.75rem 1rem;
-    border-radius: 15px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-    user-select: none;
-  }
-  .checklist-item:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255 255 255 / 0.35);
     transform: translateY(-2px);
   }
-  .timer-display {
-    font-size: 2rem;
-    font-weight: 700;
-    color: white;
-    text-align: center;
-    margin: 1rem 0;
-    font-family: 'Monaco', monospace;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  }
-  .progress-bar {
-    width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    overflow: hidden;
-    margin: 1rem 0;
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #4ecdc4, #44a08d);
-    border-radius: 4px;
-    transition: width 0.3s ease;
-  }
-  .meditation-guide {
-    text-align: center;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    margin: 1rem 0;
-  }
-  .breath-circle {
-    width: 150px;
-    height: 150px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    margin: 1rem auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 600;
-    transition: all 4s ease-in-out;
-    user-select: none;
-  }
-  .breath-circle.inhale {
-    transform: scale(1.3);
-    border-color: #4ecdc4;
-    background: rgba(78, 205, 196, 0.1);
-  }
-  .breath-circle.exhale {
-    transform: scale(0.8);
-    border-color: #ff6b6b;
-    background: rgba(255, 107, 107, 0.1);
-  }
+  /* Floating action */
   .floating-action {
     position: fixed;
     bottom: 2rem;
@@ -355,528 +141,1024 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     cursor: pointer;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    z-index: 1000;
+    color: white;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    transition: transform 0.3s ease;
+    z-index: 1200;
     user-select: none;
   }
   .floating-action:hover {
-    transform: scale(1.1) translateY(-2px);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1) translateY(-3px);
   }
-  .emergency-message {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-    color: white;
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin: 1rem 0;
-    text-align: center;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  /* Card list */
+  #techniquesList {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
   }
-  @keyframes fadeInUp {
-    from {
-      opacity: 0; transform: translateY(30px);
-    }
-    to {
-      opacity: 1; transform: translateY(0);
-    }
-  }
-  /* Breathing animation keyframes */
-  @keyframes pulseInhale {
-    0%, 100% { transform: scale(1); border-color: #4ecdc4; background: rgba(78, 205, 196, 0.1);}
-    50% { transform: scale(1.3); border-color: #1abc9c; background: rgba(26, 188, 156, 0.2);}
-  }
-  @keyframes pulseExhale {
-    0%, 100% { transform: scale(1); border-color: #ff6b6b; background: rgba(255, 107, 107, 0.1);}
-    50% { transform: scale(0.8); border-color: #c0392b; background: rgba(192, 57, 43, 0.2);}
-  }
-  /* Soothing sound toggle */
-  #soundToggle {
-    position: fixed;
-    bottom: 2rem;
-    left: 2rem;
-    background: rgba(255, 255, 255, 0.15);
-    border: none;
-    border-radius: 50%;
-    width: 60px; height: 60px;
-    font-size: 1.5rem;
-    color: white;
+  .technique-card {
+    background: rgba(255 255 255 / 0.1);
+    backdrop-filter: blur(16px);
+    border-radius: 20px;
+    padding: 1.3rem 1.5rem;
     cursor: pointer;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+    position: relative;
+  }
+  .technique-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+  .technique-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .technique-emoji {
+    font-size: 1.6rem;
+  }
+  .technique-category {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+  }
+  /* Favorite icon */
+  .favorite-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s ease;
+  }
+  .favorite-icon.favorited {
+    color: #ff6b6b;
+    text-shadow: 0 0 6px #ff6b6b;
+  }
+  /* Modal background */
+  #modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(3px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 1500;
+  }
+  #modalOverlay.active {
+    display: flex;
+  }
+  /* Modal content */
+  #modalContent {
+    background: rgba(255 255 255 / 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    max-width: 680px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 2rem 2.5rem;
+    position: relative;
+    color: white;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    animation: modalIn 0.3s ease forwards;
+  }
+  body.light #modalContent {
+    color: #222;
+    background: rgba(255 255 255 / 0.9);
+  }
+  @keyframes modalIn {
+    from {opacity: 0; transform: translateY(40px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+  /* Modal close button */
+  #modalCloseBtn {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 1.7rem;
+    cursor: pointer;
+    color: inherit;
+    font-weight: 700;
+    user-select: none;
+  }
+  #modalCloseBtn:hover {
+    color: #ff6b6b;
+  }
+  /* Modal title */
+  #modalTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  /* Modal content text */
+  #modalBody {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  #modalBody ul {
+    margin-left: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  #modalBody li {
+    margin-bottom: 0.4rem;
+  }
+  /* Affirmation section */
+  #affirmationResult {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 1rem 0 1.5rem;
+    text-align: center;
+  }
+  /* Checklist */
+  #groundingChecklist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin: 1.5rem 0 2rem;
+  }
+  .checklist-item {
+    background: rgba(255 255 255 / 0.15);
+    backdrop-filter: blur(10px);
+    padding: 0.65rem 1rem;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+    user-select: none;
+    border: 1px solid rgba(255 255 255 / 0.25);
+    transition: background 0.3s ease;
+  }
+  .checklist-item.active {
+    background: #4ecdc4;
+    border-color: #45b7d1;
+    color: #222;
+  }
+  body.light .checklist-item {
+    color: #222;
+    background: rgba(0 0 0 / 0.05);
+    border-color: rgba(0 0 0 / 0.1);
+  }
+  body.light .checklist-item.active {
+    background: #4ecdc4;
+    color: #222;
+  }
+  /* Notes */
+  #notesSection {
+    margin-top: 2rem;
+  }
+  #notesTitle {
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+  }
+  #notesTextarea {
+    width: 100%;
+    min-height: 120px;
+    border-radius: 14px;
+    border: 1px solid rgba(255 255 255 / 0.4);
+    padding: 1rem;
+    resize: vertical;
+    font-size: 1rem;
+    background: rgba(255 255 255 / 0.12);
+    color: white;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  body.light #notesTextarea {
+    background: #fff;
+    color: #222;
+    border-color: #ccc;
+  }
+  /* Toggle switches */
+  .toggle-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.3rem;
+  }
+  .toggle-group label {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    user-select: none;
+  }
+  .toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+  }
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: #ccc;
+    border-radius: 24px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.3s;
+  }
+  .slider::before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.3s;
+  }
+  .toggle-switch input:checked + .slider {
+    background-color: #4ecdc4;
+  }
+  .toggle-switch input:checked + .slider::before {
+    transform: translateX(20px);
+  }
+  /* Breathing animation circle */
+  #breathCircle {
+    width: 150px;
+    height: 150px;
+    margin: 1.3rem auto 1rem;
+    border: 3px solid rgba(255 255 255 / 0.5);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: white;
     user-select: none;
-    transition: all 0.3s ease;
-    z-index: 1000;
+    transition: all 4s ease-in-out;
+    box-shadow: 0 0 10px rgba(255,255,255,0.3);
   }
-  #soundToggle:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: scale(1.1);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+  #breathCircle.inhale {
+    transform: scale(1.3);
+    border-color: #4ecdc4;
+    background: rgba(78, 205, 196, 0.15);
+    box-shadow: 0 0 20px #4ecdc4;
   }
+  #breathCircle.exhale {
+    transform: scale(0.8);
+    border-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.15);
+    box-shadow: 0 0 20px #ff6b6b;
+  }
+  /* Progress bar */
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255 255 255 / 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1.3rem 0 1.8rem;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4ecdc4, #44a08d);
+    border-radius: 8px;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  /* Challenges & Randomizer */
+  #challengeResult {
+    font-weight: 600;
+    margin: 1.3rem 0 2rem;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+  /* Section headings */
+  section h2 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+  }
+  /* Scrollbar for modal */
+  #modalContent::-webkit-scrollbar {
+    width: 10px;
+  }
+  #modalContent::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  #modalContent::-webkit-scrollbar-thumb {
+    background: rgba(255 255 255 / 0.2);
+    border-radius: 5px;
+  }
+  body.light #modalContent::-webkit-scrollbar-thumb {
+    background: rgba(0 0 0 / 0.15);
+  }
+  /* Responsive */
   @media (max-width: 768px) {
-    .container {
-      padding: 1rem;
-    }
     h1 {
       font-size: 2rem;
     }
-    .stats {
-      gap: 1rem;
-    }
-    .category-filters {
-      justify-content: flex-start;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-    }
-    .filter-btn {
-      flex-shrink: 0;
-      font-size: 0.8rem;
-      padding: 0.6rem 1rem;
+    #breathCircle {
+      width: 120px;
+      height: 120px;
+      font-size: 1rem;
     }
   }
 </style>
 </head>
 <body>
-  <div class="container" role="main" aria-label="Enhanced Grounding Toolkit">
-    <header class="header">
-      <h1>🌿 Enhanced Grounding Toolkit</h1>
-      <p class="subtitle">Calm your mind & reconnect with the present moment</p>
-      <div class="stats" aria-live="polite" aria-atomic="true">
-        <div class="stat">
-          <span class="stat-number" id="techCount">0</span>
-          <span class="stat-label">Techniques</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number" id="catCount">0</span>
-          <span class="stat-label">Categories</span>
-        </div>
+<div class="container">
+  <header>
+    <h1>🌿 Enhanced Grounding Toolkit</h1>
+    <p class="subtitle">Your personal mindfulness & grounding companion</p>
+    <div class="stats" aria-live="polite" aria-atomic="true" aria-relevant="text">
+      <div class="stat">
+        <span class="stat-number" id="totalTechniques">0</span>
+        <div class="stat-label">Techniques</div>
       </div>
-    </header>
-
-    <section class="search-container" aria-label="Search grounding techniques">
-      <input type="search" id="searchInput" class="search-input" placeholder="Search techniques..." aria-describedby="searchHelp" />
-      <small id="searchHelp" style="color: #ddd; display: block; margin-top: 0.3rem; font-size: 0.8rem;">Type keywords like “breathing”, “physical”, “mental”</small>
-    </section>
-
-    <section class="category-filters" aria-label="Filter techniques by category">
-      <!-- dynamically inserted buttons -->
-    </section>
-
-    <section class="accordion" id="techniquesAccordion" aria-live="polite" aria-atomic="true">
-      <!-- technique cards inserted here -->
-    </section>
-
-    <div class="meditation-guide" aria-label="Guided Breathing Exercise">
-      <h2 style="margin-bottom: 1rem; font-weight: 600;">Guided Breathing Exercise</h2>
-      <div class="breath-circle" id="breathCircle" aria-live="polite" aria-atomic="true">Inhale</div>
-      <div class="timer-display" id="breathTimer" aria-live="polite" aria-atomic="true">4</div>
-      <div style="text-align:center;">
-        <button class="button" id="startBreathingBtn" aria-pressed="false">Start</button>
-        <button class="button" id="stopBreathingBtn" disabled aria-pressed="false" style="margin-left: 1rem;">Stop</button>
+      <div class="stat">
+        <span class="stat-number" id="usedToday">0</span>
+        <div class="stat-label">Used Today</div>
+      </div>
+      <div class="stat">
+        <span class="stat-number" id="streakCount">0</span>
+        <div class="stat-label">Day Streak</div>
       </div>
     </div>
+  </header>
 
-    <div class="emergency-message" role="alert" aria-live="assertive" style="margin-top: 2rem;">
-      If you feel overwhelmed or unsafe, <strong>please reach out for immediate help:</strong><br/>
-      National Suicide Prevention Lifeline: <a href="tel:988" style="color:#fff; text-decoration: underline;">988</a> (USA)<br/>
-      Crisis Text Line: Text <a href="sms:741741" style="color:#fff; text-decoration: underline;">741741</a><br/>
-      Emergency Services: <a href="tel:911" style="color:#fff; text-decoration: underline;">911</a>
-    </div>
+  <input type="search" id="searchInput" aria-label="Search techniques" placeholder="Search techniques..." />
+
+  <div class="category-filters" role="list" aria-label="Technique categories">
+    <button class="filter-btn active" data-category="all" role="listitem" aria-pressed="true">All</button>
+    <button class="filter-btn" data-category="breathing" role="listitem" aria-pressed="false">Breathing</button>
+    <button class="filter-btn" data-category="sensory" role="listitem" aria-pressed="false">Sensory</button>
+    <button class="filter-btn" data-category="cognitive" role="listitem" aria-pressed="false">Cognitive</button>
+    <button class="filter-btn" data-category="physical" role="listitem" aria-pressed="false">Physical</button>
+    <button class="filter-btn" data-category="visualization" role="listitem" aria-pressed="false">Visualization</button>
+    <button class="filter-btn" data-category="emergency" role="listitem" aria-pressed="false">Emergency</button>
   </div>
 
-  <button id="soundToggle" aria-label="Toggle soothing ambient sounds" title="Toggle soothing ambient sounds">🎵</button>
+  <section aria-label="List of grounding techniques">
+    <div id="techniquesList" role="list" aria-live="polite"></div>
+  </section>
+
+  <section aria-label="Grounding checklist">
+    <h2>✅ Grounding Checklist</h2>
+    <div id="groundingChecklist" role="list"></div>
+  </section>
+
+  <section aria-label="Breathing exercise">
+    <h2>🌬️ Guided Breathing Exercise</h2>
+    <div id="breathCircle" aria-live="assertive" aria-atomic="true">Ready</div>
+    <div style="text-align:center;">
+      <button id="startBreathingBtn">Start Breathing</button>
+      <button id="stopBreathingBtn" disabled>Stop</button>
+    </div>
+  </section>
+
+  <section aria-label="Daily challenge">
+    <h2>🎯 Daily Challenge</h2>
+    <button id="dailyChallengeBtn" class="button" aria-live="polite">Get Random Challenge</button>
+    <div id="challengeResult" aria-live="polite"></div>
+  </section>
+
+  <section aria-label="Self-soothe journal">
+    <h2>📝 Self-Soothe Journal</h2>
+    <div id="notesSection">
+      <label for="notesTextarea" id="notesTitle">Your Notes</label>
+      <textarea id="notesTextarea" placeholder="Write your thoughts or reflections here..."></textarea>
+    </div>
+  </section>
+
+  <section aria-label="Preferences and settings" style="margin-top: 3rem;">
+    <h2>⚙️ Settings</h2>
+    <div class="toggle-group">
+      <label for="darkModeToggle">Dark Mode</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="darkModeToggle" aria-checked="false" />
+        <span class="slider"></span>
+      </div>
+    </div>
+    <div class="toggle-group">
+      <label for="motionToggle">Enable Animations</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="motionToggle" aria-checked="true" checked />
+        <span class="slider"></span>
+      </div>
+    </div>
+    <div class="toggle-group">
+      <label for="bgMusicToggle">Background Music</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="bgMusicToggle" aria-checked="false" />
+        <span class="slider"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Floating Action: Add Custom Technique -->
+<div class="floating-action" title="Add New Technique" aria-label="Add new grounding technique" role="button" tabindex="0" id="addTechniqueBtn">+</div>
+
+<!-- Modal Overlay -->
+<div id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+  <div id="modalContent">
+    <button id="modalCloseBtn" aria-label="Close modal">&times;</button>
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Audio Elements -->
+<audio id="inhaleAudio" src="https://actions.google.com/sounds/v1/human_voices/breath_inhale.ogg" preload="auto"></audio>
+<audio id="exhaleAudio" src="https://actions.google.com/sounds/v1/human_voices/breath_exhale.ogg" preload="auto"></audio>
+<audio id="bgMusic" src="https://cdn.pixabay.com/download/audio/2022/03/25/audio_107da62da3.mp3?filename=relaxing-calm-music-7899.mp3" loop preload="auto"></audio>
 
 <script>
-  (() => {
-    // Grounding Techniques Data
-    const techniques = [
-      {
-        id: 1,
-        title: "5-4-3-2-1 Grounding",
-        emoji: "🖐️",
-        category: "Mental",
-        description: `Use your senses to notice:
-          <ul>
-            <li>5 things you can see</li>
-            <li>4 things you can touch</li>
-            <li>3 things you can hear</li>
-            <li>2 things you can smell</li>
-            <li>1 thing you can taste</li>
-          </ul>
-          This technique helps bring your focus to the present moment.`
-      },
-      {
-        id: 2,
-        title: "Box Breathing",
-        emoji: "📦",
-        category: "Breathing",
-        description: `Breathe in for 4 seconds, hold for 4 seconds, breathe out for 4 seconds, hold for 4 seconds.<br/>
-        Repeat 4-5 times to calm your nervous system.`
-      },
-      {
-        id: 3,
-        title: "Physical Grounding - Touch",
-        emoji: "✋",
-        category: "Physical",
-        description: `Touch a nearby object and focus on its texture, temperature, and shape.<br/>
-        Describe it silently or aloud to yourself to stay anchored.`
-      },
-      {
-        id: 4,
-        title: "Guided Visualization",
-        emoji: "🌅",
-        category: "Mental",
-        description: `Close your eyes and imagine a safe, peaceful place.<br/>
-        Visualize the details: sights, sounds, smells, and sensations.<br/>
-        Stay there for 5 minutes to relax.`
-      },
-      {
-        id: 5,
-        title: "Stretching Break",
-        emoji: "🤸‍♂️",
-        category: "Physical",
-        description: `Slowly stretch your arms, neck, and legs.<br/>
-        Move gently and notice how your muscles feel as you stretch.`
-      },
-      {
-        id: 6,
-        title: "Grounding with Temperature",
-        emoji: "❄️🔥",
-        category: "Physical",
-        description: `Hold a cold or warm object (like a cool cloth or warm cup).<br/>
-        Notice the temperature and sensation to ground yourself physically.`
-      },
-      {
-        id: 7,
-        title: "Mantra Repetition",
-        emoji: "🕉️",
-        category: "Mental",
-        description: `Silently repeat a calming word or phrase (e.g. “I am safe”).<br/>
-        Use it to focus and reduce anxious thoughts.`
-      },
-      {
-        id: 8,
-        title: "Breath Counting",
-        emoji: "🧘‍♂️",
-        category: "Breathing",
-        description: `Breathe normally and count each exhale silently from 1 to 10.<br/>
-        When you reach 10, start over.`
-      },
-      {
-        id: 9,
-        title: "Grounding Walk",
-        emoji: "🚶‍♀️",
-        category: "Physical",
-        description: `Take a slow walk and focus on each step and your surroundings.<br/>
-        Notice the sensation of your feet touching the ground.`
-      },
-      {
-        id: 10,
-        title: "Progressive Muscle Relaxation",
-        emoji: "💆‍♂️",
-        category: "Physical",
-        description: `Tense and release muscle groups progressively from feet to head.<br/>
-        Helps reduce physical tension and anxiety.`
-      }
-    ];
+(() => {
+  'use strict';
 
-    // DOM refs
-    const container = document.querySelector('.container');
-    const accordion = document.getElementById('techniquesAccordion');
-    const searchInput = document.getElementById('searchInput');
-    const categoryFilters = document.querySelector('.category-filters');
-    const techCountSpan = document.getElementById('techCount');
-    const catCountSpan = document.getElementById('catCount');
-    const breathCircle = document.getElementById('breathCircle');
-    const breathTimer = document.getElementById('breathTimer');
-    const startBtn = document.getElementById('startBreathingBtn');
-    const stopBtn = document.getElementById('stopBreathingBtn');
-    const soundToggle = document.getElementById('soundToggle');
-
-    // Categories
-    const categories = [...new Set(techniques.map(t => t.category))].sort();
-
-    // State
-    let currentCategory = null;
-    let currentSearch = '';
-    let activeCard = null;
-
-    // Render categories
-    function renderCategories() {
-      categoryFilters.innerHTML = '';
-
-      // "All" filter
-      const allBtn = document.createElement('button');
-      allBtn.textContent = 'All';
-      allBtn.className = 'filter-btn active';
-      allBtn.setAttribute('aria-pressed', 'true');
-      allBtn.addEventListener('click', () => {
-        currentCategory = null;
-        updateCategoryActive();
-        renderTechniques();
-      });
-      categoryFilters.appendChild(allBtn);
-
-      categories.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.textContent = cat;
-        btn.className = 'filter-btn';
-        btn.setAttribute('aria-pressed', 'false');
-        btn.addEventListener('click', () => {
-          currentCategory = cat;
-          updateCategoryActive();
-          renderTechniques();
-        });
-        categoryFilters.appendChild(btn);
-      });
-
-      catCountSpan.textContent = categories.length;
+  // Data for techniques
+  const techniques = [
+    {
+      id: 'breath4-7-8',
+      title: '4-7-8 Breathing',
+      category: 'breathing',
+      emoji: '🌬️',
+      description: `1. Inhale quietly through your nose for 4 seconds.<br>
+      2. Hold your breath for 7 seconds.<br>
+      3. Exhale forcefully through your mouth for 8 seconds.<br>
+      Repeat 3-4 cycles. Helps reduce anxiety and stress.`
+    },
+    {
+      id: 'ground5-4-3-2-1',
+      title: '5-4-3-2-1 Grounding',
+      category: 'sensory',
+      emoji: '🖐️',
+      description: `Identify:<br>
+      - 5 things you see<br>
+      - 4 things you feel<br>
+      - 3 things you hear<br>
+      - 2 things you smell<br>
+      - 1 thing you taste<br>
+      Helps focus on present moment.`
+    },
+    {
+      id: 'cognitive-reframe',
+      title: 'Cognitive Reframe',
+      category: 'cognitive',
+      emoji: '🧠',
+      description: `Challenge negative thoughts by asking:<br>
+      "Is this thought true? Is there another way to see this?"<br>
+      Replace with more balanced, realistic thoughts.`
+    },
+    {
+      id: 'physical-touch',
+      title: 'Physical Touch',
+      category: 'physical',
+      emoji: '✋',
+      description: `Hold a comforting object or wrap yourself in a blanket.<br>
+      Engage your sense of touch to soothe distress.`
+    },
+    {
+      id: 'visualization-safeplace',
+      title: 'Safe Place Visualization',
+      category: 'visualization',
+      emoji: '🏞️',
+      description: `Close your eyes and imagine a place where you feel safe and calm.<br>
+      Engage all senses in your visualization.`
+    },
+    {
+      id: 'emergency-5-min-plan',
+      title: 'Emergency 5-Minute Plan',
+      category: 'emergency',
+      emoji: '🚨',
+      description: `Use this plan when feeling overwhelmed:<br>
+      - Find a quiet place<br>
+      - Use deep breathing<br>
+      - Reach out to a trusted person<br>
+      - Use grounding techniques<br>
+      Stay safe and seek help if needed.`
     }
+  ];
 
-    function updateCategoryActive() {
-      [...categoryFilters.children].forEach(btn => {
-        if ((btn.textContent === currentCategory) || (currentCategory === null && btn.textContent === 'All')) {
-          btn.classList.add('active');
-          btn.setAttribute('aria-pressed', 'true');
-        } else {
-          btn.classList.remove('active');
-          btn.setAttribute('aria-pressed', 'false');
-        }
-      });
+  // Daily challenges
+  const dailyChallenges = [
+    "Take a mindful 5-minute walk focusing on your senses.",
+    "Write down 3 things you're grateful for today.",
+    "Try a new breathing technique for 3 minutes.",
+    "Reach out to a friend or loved one just to check in.",
+    "Spend 10 minutes doodling or creating art.",
+    "Practice progressive muscle relaxation before bed.",
+    "Read a short inspiring quote and reflect on it."
+  ];
+
+  // Checklist items
+  const checklistItems = [
+    "Take 3 deep breaths",
+    "Notice 5 things you see",
+    "Focus on 4 things you feel",
+    "Listen for 3 different sounds",
+    "Name 2 things you smell",
+    "Identify 1 taste in your mouth",
+    "Stretch your arms and legs",
+    "Drink a glass of water"
+  ];
+
+  // LocalStorage keys
+  const STORAGE = {
+    favorites: 'egt_favorites',
+    notes: 'egt_notes',
+    usedToday: 'egt_usedToday',
+    streak: 'egt_streak',
+    lastUsedDate: 'egt_lastUsedDate',
+    darkMode: 'egt_darkMode',
+    motion: 'egt_motion',
+    bgMusic: 'egt_bgMusic',
+    checklist: 'egt_checklist'
+  };
+
+  // Elements
+  const techniquesListEl = document.getElementById('techniquesList');
+  const searchInputEl = document.getElementById('searchInput');
+  const filterButtons = [...document.querySelectorAll('.filter-btn')];
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const totalTechniquesEl = document.getElementById('totalTechniques');
+  const usedTodayEl = document.getElementById('usedToday');
+  const streakCountEl = document.getElementById('streakCount');
+  const groundingChecklistEl = document.getElementById('groundingChecklist');
+  const notesTextarea = document.getElementById('notesTextarea');
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const motionToggle = document.getElementById('motionToggle');
+  const bgMusicToggle = document.getElementById('bgMusicToggle');
+  const breathCircle = document.getElementById('breathCircle');
+  const startBreathingBtn = document.getElementById('startBreathingBtn');
+  const stopBreathingBtn = document.getElementById('stopBreathingBtn');
+  const dailyChallengeBtn = document.getElementById('dailyChallengeBtn');
+  const challengeResult = document.getElementById('challengeResult');
+  const addTechniqueBtn = document.getElementById('addTechniqueBtn');
+  const inhaleAudio = document.getElementById('inhaleAudio');
+  const exhaleAudio = document.getElementById('exhaleAudio');
+  const bgMusicAudio = document.getElementById('bgMusic');
+
+  // State
+  let currentCategory = 'all';
+  let favorites = JSON.parse(localStorage.getItem(STORAGE.favorites)) || [];
+  let usedToday = JSON.parse(localStorage.getItem(STORAGE.usedToday)) || {};
+  let streak = parseInt(localStorage.getItem(STORAGE.streak)) || 0;
+  let lastUsedDate = localStorage.getItem(STORAGE.lastUsedDate);
+  let checklistState = JSON.parse(localStorage.getItem(STORAGE.checklist)) || {};
+  let isBreathing = false;
+  let breathTimeouts = [];
+  let animationsEnabled = true;
+
+  // Initialize dark mode & motion & bg music
+  function loadSettings() {
+    const dark = localStorage.getItem(STORAGE.darkMode);
+    if (dark === 'true') {
+      document.body.classList.add('light');
+      darkModeToggle.checked = true;
     }
-
-    // Render techniques with filter & search
-    function renderTechniques() {
-      accordion.innerHTML = '';
-      let filtered = techniques;
-
-      if (currentCategory) {
-        filtered = filtered.filter(t => t.category === currentCategory);
-      }
-      if (currentSearch.trim()) {
-        const searchLower = currentSearch.toLowerCase();
-        filtered = filtered.filter(t =>
-          t.title.toLowerCase().includes(searchLower) ||
-          t.description.toLowerCase().includes(searchLower) ||
-          t.category.toLowerCase().includes(searchLower)
-        );
-      }
-
-      techCountSpan.textContent = filtered.length;
-
-      if (filtered.length === 0) {
-        accordion.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-style: italic; text-align:center;">No techniques found matching your criteria.</p>';
-        return;
-      }
-
-      filtered.forEach(t => {
-        const card = document.createElement('article');
-        card.className = 'card';
-        card.setAttribute('tabindex', '0');
-        card.setAttribute('role', 'region');
-        card.setAttribute('aria-labelledby', `title-${t.id}`);
-
-        const header = document.createElement('div');
-        header.className = 'card-header';
-        header.setAttribute('role', 'button');
-        header.setAttribute('aria-expanded', 'false');
-        header.setAttribute('aria-controls', `content-${t.id}`);
-        header.id = `header-${t.id}`;
-        header.tabIndex = 0;
-
-        const titleDiv = document.createElement('div');
-        titleDiv.className = 'card-title';
-
-        const emojiSpan = document.createElement('span');
-        emojiSpan.className = 'card-emoji';
-        emojiSpan.textContent = t.emoji;
-
-        const titleH3 = document.createElement('h3');
-        titleH3.className = 'card-title-text';
-        titleH3.id = `title-${t.id}`;
-        titleH3.textContent = t.title;
-
-        titleDiv.appendChild(emojiSpan);
-        titleDiv.appendChild(titleH3);
-
-        const categorySpan = document.createElement('span');
-        categorySpan.className = 'card-category';
-        categorySpan.textContent = t.category;
-
-        const toggleSpan = document.createElement('span');
-        toggleSpan.className = 'card-toggle';
-        toggleSpan.innerHTML = '+';
-
-        header.appendChild(titleDiv);
-        header.appendChild(categorySpan);
-        header.appendChild(toggleSpan);
-
-        const content = document.createElement('div');
-        content.className = 'card-content';
-        content.id = `content-${t.id}`;
-        content.setAttribute('aria-hidden', 'true');
-        content.innerHTML = t.description;
-
-        card.appendChild(header);
-        card.appendChild(content);
-
-        // Click / keyboard toggle event
-        function toggleCard() {
-          const expanded = header.getAttribute('aria-expanded') === 'true';
-          if (expanded) {
-            header.setAttribute('aria-expanded', 'false');
-            content.setAttribute('aria-hidden', 'true');
-            card.classList.remove('active');
-            toggleSpan.textContent = '+';
-          } else {
-            // close others
-            [...accordion.children].forEach(c => {
-              const hdr = c.querySelector('.card-header');
-              const cnt = c.querySelector('.card-content');
-              const tg = c.querySelector('.card-toggle');
-              if (hdr && cnt) {
-                hdr.setAttribute('aria-expanded', 'false');
-                cnt.setAttribute('aria-hidden', 'true');
-                c.classList.remove('active');
-                if(tg) tg.textContent = '+';
-              }
-            });
-            header.setAttribute('aria-expanded', 'true');
-            content.setAttribute('aria-hidden', 'false');
-            card.classList.add('active');
-            toggleSpan.textContent = '×';
-            card.focus();
-          }
-        }
-
-        header.addEventListener('click', toggleCard);
-        header.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            toggleCard();
-          }
-        });
-
-        accordion.appendChild(card);
-      });
+    const motion = localStorage.getItem(STORAGE.motion);
+    if (motion === 'false') {
+      animationsEnabled = false;
+      motionToggle.checked = false;
     }
-
-    // Search input listener
-    searchInput.addEventListener('input', (e) => {
-      currentSearch = e.target.value;
-      renderTechniques();
-    });
-
-    // Initialize
-    renderCategories();
-    renderTechniques();
-
-    // Breathing exercise logic
-    /*
-      Pattern: Inhale 4s → Hold 4s → Exhale 4s → Hold 4s → repeat
-    */
-    const breathCycleTimes = {
-      inhale: 4,
-      hold1: 4,
-      exhale: 4,
-      hold2: 4
-    };
-    const phases = ['inhale', 'hold1', 'exhale', 'hold2'];
-
-    let breathInterval = null;
-    let currentPhaseIndex = 0;
-    let currentSeconds = breathCycleTimes[phases[0]];
-    let running = false;
-
-    function updateBreathUI() {
-      const phase = phases[currentPhaseIndex];
-      breathCircle.textContent = phase.charAt(0).toUpperCase() + phase.slice(1).replace(/[0-9]/g, '');
-      breathTimer.textContent = currentSeconds;
-
-      // Set circle class for animation/color
-      breathCircle.className = 'breath-circle';
-      if (phase === 'inhale') {
-        breathCircle.classList.add('inhale');
-      } else if (phase === 'exhale') {
-        breathCircle.classList.add('exhale');
-      }
-
-      // Accessibility live region update (aria-live handled)
+    const bgMusicEnabled = localStorage.getItem(STORAGE.bgMusic);
+    if (bgMusicEnabled === 'true') {
+      bgMusicToggle.checked = true;
+      bgMusicAudio.volume = 0.25;
+      bgMusicAudio.play().catch(() => {/* Autoplay block */});
     }
+  }
 
-    function breathTick() {
-      if (!running) return;
-      currentSeconds--;
-      if (currentSeconds < 0) {
-        currentPhaseIndex = (currentPhaseIndex + 1) % phases.length;
-        currentSeconds = breathCycleTimes[phases[currentPhaseIndex]];
-      }
-      updateBreathUI();
-    }
+  // Save settings
+  function saveSettings() {
+    localStorage.setItem(STORAGE.darkMode, darkModeToggle.checked);
+    localStorage.setItem(STORAGE.motion, motionToggle.checked);
+    localStorage.setItem(STORAGE.bgMusic, bgMusicToggle.checked);
+  }
 
-    function startBreathing() {
-      if (running) return;
-      running = true;
-      startBtn.disabled = true;
-      stopBtn.disabled = false;
-      startBtn.setAttribute('aria-pressed', 'true');
-      stopBtn.setAttribute('aria-pressed', 'false');
-      currentPhaseIndex = 0;
-      currentSeconds = breathCycleTimes[phases[0]];
-      updateBreathUI();
-      breathInterval = setInterval(breathTick, 1000);
-    }
+  // Update stats
+  function updateStats() {
+    totalTechniquesEl.textContent = techniques.length;
+    usedTodayEl.textContent = Object.keys(usedToday).length;
+    streakCountEl.textContent = streak;
+  }
 
-    function stopBreathing() {
-      running = false;
-      startBtn.disabled = false;
-      stopBtn.disabled = true;
-      startBtn.setAttribute('aria-pressed', 'false');
-      stopBtn.setAttribute('aria-pressed', 'true');
-      breathCircle.textContent = 'Inhale';
-      breathTimer.textContent = '4';
-      breathCircle.className = 'breath-circle inhale';
-      clearInterval(breathInterval);
-    }
-
-    startBtn.addEventListener('click', startBreathing);
-    stopBtn.addEventListener('click', stopBreathing);
-
-    // Soothing sound embed
-    const ambientAudio = new Audio('https://cdn.pixabay.com/download/audio/2021/10/26/audio_439c76c5bb.mp3?filename=forest-birds-ambient-11327.mp3');
-    ambientAudio.loop = true;
-    ambientAudio.volume = 0.25;
-
-    let soundPlaying = false;
-
-    function toggleSound() {
-      if (soundPlaying) {
-        ambientAudio.pause();
-        soundPlaying = false;
-        soundToggle.textContent = '🎵';
-        soundToggle.setAttribute('aria-pressed', 'false');
+  // Check if date changed for streak reset
+  function checkDateForStreak() {
+    const todayStr = new Date().toISOString().slice(0,10);
+    if (lastUsedDate !== todayStr) {
+      // If last used yesterday, increment streak, else reset
+      if (lastUsedDate === new Date(Date.now() - 86400000).toISOString().slice(0,10)) {
+        streak++;
       } else {
-        ambientAudio.play();
-        soundPlaying = true;
-        soundToggle.textContent = '🔈';
-        soundToggle.setAttribute('aria-pressed', 'true');
+        streak = 1;
       }
+      localStorage.setItem(STORAGE.streak, streak);
+      lastUsedDate = todayStr;
+      localStorage.setItem(STORAGE.lastUsedDate, lastUsedDate);
+      usedToday = {};
+      localStorage.setItem(STORAGE.usedToday, JSON.stringify(usedToday));
+    }
+  }
+
+  // Save technique usage
+  function markUsedToday(id) {
+    usedToday[id] = true;
+    localStorage.setItem(STORAGE.usedToday, JSON.stringify(usedToday));
+    lastUsedDate = new Date().toISOString().slice(0,10);
+    localStorage.setItem(STORAGE.lastUsedDate, lastUsedDate);
+    updateStats();
+  }
+
+  // Render technique cards
+  function renderTechniques() {
+    let filtered = techniques;
+    if (currentCategory !== 'all') {
+      filtered = filtered.filter(t => t.category === currentCategory);
+    }
+    const searchTerm = searchInputEl.value.trim().toLowerCase();
+    if (searchTerm.length) {
+      filtered = filtered.filter(t => t.title.toLowerCase().includes(searchTerm) || t.description.toLowerCase().includes(searchTerm));
+    }
+    techniquesListEl.innerHTML = '';
+    if (filtered.length === 0) {
+      techniquesListEl.innerHTML = '<p style="text-align:center;opacity:0.7;">No techniques found.</p>';
+      return;
+    }
+    filtered.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'technique-card';
+      card.setAttribute('role', 'listitem');
+      card.tabIndex = 0;
+      card.dataset.id = t.id;
+      card.innerHTML = `
+        <div class="technique-title">
+          <span class="technique-emoji" aria-hidden="true">${t.emoji}</span>
+          <span>${t.title}</span>
+        </div>
+        <div class="technique-category">${t.category}</div>
+        <div class="favorite-icon" role="button" tabindex="0" aria-label="Toggle favorite" title="Toggle favorite">
+          ${favorites.includes(t.id) ? '❤️' : '🤍'}
+        </div>
+      `;
+      techniquesListEl.appendChild(card);
+
+      // Favorite toggle
+      const favIcon = card.querySelector('.favorite-icon');
+      favIcon.onclick = (e) => {
+        e.stopPropagation();
+        toggleFavorite(t.id, favIcon);
+      };
+      favIcon.onkeydown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleFavorite(t.id, favIcon);
+        }
+      };
+
+      // Show modal on click or keyboard Enter/Space
+      card.onclick = () => showTechniqueModal(t);
+      card.onkeydown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showTechniqueModal(t);
+        }
+      };
+
+      // Highlight favorite
+      if (favorites.includes(t.id)) {
+        favIcon.classList.add('favorited');
+      } else {
+        favIcon.classList.remove('favorited');
+      }
+    });
+  }
+
+  // Toggle favorite state
+  function toggleFavorite(id, element) {
+    const index = favorites.indexOf(id);
+    if (index === -1) {
+      favorites.push(id);
+      element.textContent = '❤️';
+      element.classList.add('favorited');
+    } else {
+      favorites.splice(index, 1);
+      element.textContent = '🤍';
+      element.classList.remove('favorited');
+    }
+    localStorage.setItem(STORAGE.favorites, JSON.stringify(favorites));
+  }
+
+  // Show modal with technique detail
+  function showTechniqueModal(technique) {
+    modalTitle.innerHTML = `${technique.emoji} ${technique.title}`;
+    modalBody.innerHTML = technique.description;
+    modalOverlay.classList.add('active');
+    modalOverlay.focus();
+    markUsedToday(technique.id);
+  }
+
+  // Close modal
+  modalCloseBtn.onclick = () => {
+    modalOverlay.classList.remove('active');
+  };
+  modalOverlay.onclick = (e) => {
+    if (e.target === modalOverlay) {
+      modalOverlay.classList.remove('active');
+    }
+  };
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+      modalOverlay.classList.remove('active');
+    }
+  });
+
+  // Filter button logic
+  filterButtons.forEach(btn => {
+    btn.onclick = () => {
+      filterButtons.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      currentCategory = btn.dataset.category;
+      renderTechniques();
+    };
+  });
+
+  // Search input
+  searchInputEl.addEventListener('input', () => {
+    renderTechniques();
+  });
+
+  // Checklist rendering
+  function renderChecklist() {
+    groundingChecklistEl.innerHTML = '';
+    checklistItems.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'checklist-item';
+      div.tabIndex = 0;
+      div.textContent = item;
+      if (checklistState[i]) div.classList.add('active');
+      div.onclick = () => toggleChecklist(i, div);
+      div.onkeydown = e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleChecklist(i, div);
+        }
+      };
+      groundingChecklistEl.appendChild(div);
+    });
+  }
+  function toggleChecklist(index, el) {
+    checklistState[index] = !checklistState[index];
+    if (checklistState[index]) {
+      el.classList.add('active');
+    } else {
+      el.classList.remove('active');
+    }
+    localStorage.setItem(STORAGE.checklist, JSON.stringify(checklistState));
+  }
+
+  // Notes saving & loading
+  function saveNotes() {
+    localStorage.setItem(STORAGE.notes, notesTextarea.value);
+  }
+  function loadNotes() {
+    const saved = localStorage.getItem(STORAGE.notes);
+    if (saved) {
+      notesTextarea.value = saved;
+    }
+  }
+  notesTextarea.addEventListener('input', () => {
+    saveNotes();
+  });
+
+  // Dark mode toggle
+  darkModeToggle.addEventListener('change', () => {
+    if (darkModeToggle.checked) {
+      document.body.classList.add('light');
+    } else {
+      document.body.classList.remove('light');
+    }
+    saveSettings();
+  });
+
+  // Motion toggle
+  motionToggle.addEventListener('change', () => {
+    animationsEnabled = motionToggle.checked;
+    saveSettings();
+  });
+
+  // Background music toggle
+  bgMusicToggle.addEventListener('change', () => {
+    if (bgMusicToggle.checked) {
+      bgMusicAudio.volume = 0.25;
+      bgMusicAudio.play().catch(() => {});
+    } else {
+      bgMusicAudio.pause();
+      bgMusicAudio.currentTime = 0;
+    }
+    saveSettings();
+  });
+
+  // Breathing exercise
+  let breathCycleIndex = 0;
+  let breathIntervals = [4000, 7000, 8000]; // ms inhale, hold, exhale
+  const breathTexts = ['Inhale', 'Hold', 'Exhale'];
+
+  function playBreathingCycle() {
+    if (!isBreathing) return;
+
+    switch(breathCycleIndex) {
+      case 0:
+        breathCircle.textContent = breathTexts[0];
+        breathCircle.classList.add('inhale');
+        breathCircle.classList.remove('exhale');
+        inhaleAudio.play().catch(() => {});
+        break;
+      case 1:
+        breathCircle.textContent = breathTexts[1];
+        breathCircle.classList.remove('inhale', 'exhale');
+        break;
+      case 2:
+        breathCircle.textContent = breathTexts[2];
+        breathCircle.classList.remove('inhale');
+        breathCircle.classList.add('exhale');
+        exhaleAudio.play().catch(() => {});
+        break;
     }
 
-    soundToggle.addEventListener('click', toggleSound);
+    const delay = breathIntervals[breathCycleIndex];
+    breathCycleIndex = (breathCycleIndex + 1) % 3;
+    breathTimeouts.push(setTimeout(playBreathingCycle, delay));
+  }
 
-    // Clean up audio on page unload
-    window.addEventListener('beforeunload', () => {
-      ambientAudio.pause();
-      ambientAudio.currentTime = 0;
-    });
-  })();
+  startBreathingBtn.onclick = () => {
+    if (isBreathing) return;
+    isBreathing = true;
+    breathCycleIndex = 0;
+    playBreathingCycle();
+    startBreathingBtn.disabled = true;
+    stopBreathingBtn.disabled = false;
+  };
+  stopBreathingBtn.onclick = () => {
+    isBreathing = false;
+    breathTimeouts.forEach(t => clearTimeout(t));
+    breathTimeouts = [];
+    breathCircle.textContent = 'Stopped';
+    breathCircle.classList.remove('inhale', 'exhale');
+    startBreathingBtn.disabled = false;
+    stopBreathingBtn.disabled = true;
+  };
+
+  // Daily challenge
+  dailyChallengeBtn.onclick = () => {
+    const idx = Math.floor(Math.random() * dailyChallenges.length);
+    challengeResult.textContent = dailyChallenges[idx];
+  };
+
+  // Add new technique modal & logic
+  addTechniqueBtn.onclick = () => {
+    modalTitle.textContent = "➕ Add New Grounding Technique";
+    modalBody.innerHTML = `
+      <form id="addTechniqueForm" style="display:flex; flex-direction:column; gap:0.8rem;">
+        <label>
+          Title:
+          <input type="text" name="title" required placeholder="Technique name" />
+        </label>
+        <label>
+          Emoji (optional):
+          <input type="text" name="emoji" maxlength="2" placeholder="e.g. 🌿" />
+        </label>
+        <label>
+          Category:
+          <select name="category" required>
+            <option value="">Select category</option>
+            <option value="breathing">Breathing</option>
+            <option value="sensory">Sensory</option>
+            <option value="cognitive">Cognitive</option>
+            <option value="physical">Physical</option>
+            <option value="visualization">Visualization</option>
+            <option value="emergency">Emergency</option>
+          </select>
+        </label>
+        <label>
+          Description:
+          <textarea name="description" rows="5" required placeholder="Describe the technique..."></textarea>
+        </label>
+        <button type="submit" class="button">Add Technique</button>
+      </form>
+      <p style="font-size: 0.85rem; opacity:0.8; margin-top:0.4rem;">
+        Your custom techniques will be saved in your browser.
+      </p>
+    `;
+    modalOverlay.classList.add('active');
+
+    const form = document.getElementById('addTechniqueForm');
+    form.onsubmit = e => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const newTechnique = {
+        id: 'custom-' + Date.now(),
+        title: formData.get('title').trim(),
+        emoji: formData.get('emoji').trim() || '🆕',
+        category: formData.get('category'),
+        description: formData.get('description').trim().replace(/\n/g, '<br>')
+      };
+      techniques.push(newTechnique);
+      saveCustomTechniques();
+      renderTechniques();
+      modalOverlay.classList.remove('active');
+      alert('Technique added successfully!');
+    };
+  };
+
+  // Save/load custom techniques to LS
+  function saveCustomTechniques() {
+    const custom = techniques.filter(t => t.id.startsWith('custom-'));
+    localStorage.setItem('egt_customTechniques', JSON.stringify(custom));
+  }
+  function loadCustomTechniques() {
+    const saved = localStorage.getItem('egt_customTechniques');
+    if (saved) {
+      try {
+        const custom = JSON.parse(saved);
+        custom.forEach(t => {
+          if (!techniques.find(x => x.id === t.id)) {
+            techniques.push(t);
+          }
+        });
+      } catch {}
+    }
+  }
+
+  // Accessibility: trap focus in modal
+  modalOverlay.addEventListener('keydown', e => {
+    if (e.key === 'Tab') {
+      const focusable = modalOverlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    }
+  });
+
+  // Initialize
+  function init() {
+    loadCustomTechniques();
+    checkDateForStreak();
+    updateStats();
+    renderTechniques();
+    renderChecklist();
+    loadNotes();
+    loadSettings();
+  }
+  init();
+
+  // Save checklist state on unload
+  window.addEventListener('beforeunload', () => {
+    localStorage.setItem(STORAGE.checklist, JSON.stringify(checklistState));
+    saveNotes();
+    saveSettings();
+  });
+
+  // Keyboard shortcut to open Add technique: Ctrl+N or Cmd+N
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      addTechniqueBtn.click();
+    }
+  });
+
+})();
 </script>
 </body>
 </html>
