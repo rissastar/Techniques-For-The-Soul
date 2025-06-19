@@ -1,790 +1,1094 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🌟 Personal Self-Care Toolkit 🌟</title>
-  <style>
-    /* Reset & Base */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem 4rem;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    h1, h2, h3, h4 {
-      margin: 0 0 1rem 0;
-      font-weight: 600;
-      color: #1e1e2f;
-      text-align: center;
-    }
-    p {
-      margin: 0 0 1rem 0;
-      line-height: 1.5;
-      color: #444;
-      max-width: 600px;
-    }
-    button {
-      font-family: inherit;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Enhanced Grounding Toolkit</title>
+<style>
+  /* Basic resets */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 0; background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+    color: #222;
+    min-height: 100vh;
+    display: flex; justify-content: center; align-items: flex-start;
+    padding: 1rem;
+    transition: background 0.5s ease;
+  }
+  body.light {
+    background: linear-gradient(135deg, #f0f4f8 0%, #c8d6e5 100%);
+    color: #222;
+  }
+  #app {
+    max-width: 900px;
+    width: 100%;
+    background: rgba(255 255 255 / 0.9);
+    border-radius: 12px;
+    padding: 1.5rem 2rem 3rem;
+    box-shadow: 0 10px 40px rgb(0 0 0 / 0.1);
+  }
+  body.light #app {
+    background: #fff;
+  }
+  h1, h2, h3 {
+    margin-top: 0;
+  }
+  h1 {
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  button, input, select, textarea {
+    font-family: inherit;
+    font-size: 1rem;
+  }
+  .filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+  }
+  .filter-btn {
+    background: #3b82f6;
+    border: none;
+    padding: 0.4rem 0.9rem;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    user-select: none;
+  }
+  .filter-btn:hover,
+  .filter-btn:focus {
+    background: #2563eb;
+    outline: none;
+  }
+  .filter-btn.active {
+    background: #1d4ed8;
+  }
 
-    /* Container */
-    .container {
-      width: 100%;
-      max-width: 900px;
-      background: #fff;
-      border-radius: 25px;
-      padding: 2rem 2.5rem 3rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-    }
+  #searchInput {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    border: 2px solid #3b82f6;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+  }
+  #searchInput:focus {
+    outline-color: #2563eb;
+  }
 
-    /* Header */
-    .header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.2rem;
-      color: #4a47a3;
-      text-shadow: 0 2px 6px rgba(102,126,234,0.6);
-    }
-    .header p {
-      font-size: 1.15rem;
-      color: #666;
-      margin-bottom: 2rem;
-    }
+  #techniquesList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+    gap: 1rem;
+  }
+  .technique-card {
+    background: #e0f2fe;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 5px 15px rgb(59 130 246 / 0.3);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  .technique-card:hover,
+  .technique-card:focus {
+    background: #bae6fd;
+    outline: none;
+    transform: translateY(-3px);
+  }
+  .technique-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .technique-emoji {
+    font-size: 1.5rem;
+  }
+  .technique-category {
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+    color: #2563eb;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  .favorite-icon {
+    align-self: flex-end;
+    cursor: pointer;
+    font-size: 1.3rem;
+    user-select: none;
+    margin-top: 0.7rem;
+    transition: transform 0.2s ease;
+  }
+  .favorite-icon.favorited {
+    color: #e11d48;
+  }
+  .favorite-icon:hover,
+  .favorite-icon:focus {
+    transform: scale(1.2);
+    outline: none;
+  }
 
-    /* Stats Bar */
-    .stats-bar {
-      display: flex;
-      justify-content: center;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-    .stat-item {
-      text-align: center;
-      user-select: none;
-    }
-    .stat-number {
-      font-weight: 700;
-      font-size: 2rem;
-      color: #667eea;
-      display: block;
-    }
+  /* Modal Styles */
+  #modalOverlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  #modalOverlay.active {
+    display: flex;
+  }
+  #modalContent {
+    background: white;
+    border-radius: 14px;
+    max-width: 520px;
+    width: 90%;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 8px 30px rgb(0 0 0 / 0.3);
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  #modalContent:focus {
+    outline: none;
+  }
+  #modalCloseBtn {
+    position: absolute;
+    top: 0.6rem;
+    right: 1rem;
+    font-size: 1.8rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #444;
+  }
+  #modalCloseBtn:hover,
+  #modalCloseBtn:focus {
+    color: #111;
+    outline: none;
+  }
+  #modalTitle {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+  #modalBody {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 
-    /* Tabs */
-    .plan-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-    .tab-btn {
-      background: #e2e8f0;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 15px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    }
-    .tab-btn.active,
-    .tab-btn:hover {
-      background: #667eea;
-      color: white;
-      box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
-      transform: translateY(-2px);
-    }
+  /* Checklist */
+  #groundingChecklist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.6rem;
+  }
+  .checklist-item {
+    background: #dbeafe;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+    flex: 1 1 140px;
+    text-align: center;
+  }
+  .checklist-item.active {
+    background: #3b82f6;
+    color: white;
+  }
+  .checklist-item:hover,
+  .checklist-item:focus {
+    background: #60a5fa;
+    outline: none;
+  }
 
-    /* Activity Grid & Cards */
-    .activity-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap: 1.5rem;
-    }
-    .activity-card {
-      background: #f9fafc;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.07);
-      padding: 1rem 1.3rem;
-      cursor: pointer;
-      user-select: none;
-      transition: transform 0.25s ease, box-shadow 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      border: 2px solid transparent;
-    }
-    .activity-card:hover {
-      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-      transform: translateY(-5px) scale(1.03);
-      border-color: #667eea;
-    }
-    .activity-card.selected {
-      border-color: #764ba2;
-      background: #dbe4ff;
-      box-shadow: 0 12px 30px rgba(118, 75, 162, 0.5);
-      transform: translateY(-5px) scale(1.05);
-    }
-    .activity-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.8rem;
-      color: #667eea;
-    }
-    .activity-title {
-      font-weight: 700;
-      font-size: 1.15rem;
-      margin-bottom: 0.3rem;
-      color: #3b3b5c;
-    }
-    .activity-desc {
+  /* Notes */
+  #notesSection {
+    margin-top: 1rem;
+  }
+  #notesTextarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    border: 2px solid #3b82f6;
+    resize: vertical;
+  }
+  #notesTextarea:focus {
+    outline-color: #2563eb;
+  }
+
+  /* Toggles */
+  .toggle-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .toggle-group label {
+    font-weight: 600;
+  }
+  .toggle-switch {
+    position: relative;
+    width: 46px;
+    height: 24px;
+  }
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: 0.4s;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+  }
+  input:checked + .slider {
+    background-color: #3b82f6;
+  }
+  input:checked + .slider:before {
+    transform: translateX(22px);
+  }
+
+  /* Breathing Circle */
+  #breathCircle {
+    width: 150px;
+    height: 150px;
+    margin: 1rem auto;
+    border-radius: 50%;
+    background: #93c5fd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e40af;
+    box-shadow: 0 0 30px 10px rgba(147,197,253,0.5);
+    transition: box-shadow 1s ease, transform 1s ease;
+    user-select: none;
+  }
+  #breathCircle.inhale {
+    animation: pulseInhale 4s ease-in-out forwards;
+  }
+  #breathCircle.exhale {
+    animation: pulseExhale 8s ease-in-out forwards;
+  }
+
+  @keyframes pulseInhale {
+    0%   { box-shadow: 0 0 15px 3px rgba(147,197,253,0.4); transform: scale(1); }
+    50%  { box-shadow: 0 0 40px 12px rgba(147,197,253,0.8); transform: scale(1.1); }
+    100% { box-shadow: 0 0 15px 3px rgba(147,197,253,0.4); transform: scale(1); }
+  }
+  @keyframes pulseExhale {
+    0%   { box-shadow: 0 0 40px 12px rgba(147,197,253,0.8); transform: scale(1.1); }
+    50%  { box-shadow: 0 0 15px 3px rgba(147,197,253,0.4); transform: scale(1); }
+    100% { box-shadow: 0 0 40px 12px rgba(147,197,253,0.8); transform: scale(1.1); }
+  }
+
+  /* Daily challenge */
+  #challengeResult {
+    margin-top: 0.8rem;
+    font-style: italic;
+    font-weight: 600;
+    min-height: 2rem;
+    text-align: center;
+  }
+
+  /* Floating Action Button */
+  .floating-action {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #2563eb;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: white;
+    font-size: 2.5rem;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.6);
+    user-select: none;
+    transition: background-color 0.3s ease;
+    z-index: 10000;
+  }
+  .floating-action:hover,
+  .floating-action:focus {
+    background: #1e40af;
+    outline: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    .technique-card {
       font-size: 0.9rem;
-      color: #5a5a7d;
     }
-
-    /* Plan Content */
-    .plan-category {
-      display: none;
-      margin-bottom: 3rem;
-    }
-    .plan-category.active {
-      display: block;
-    }
-
-    /* Generate Plan Button */
-    .generate-plan-btn {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: none;
-      padding: 1rem 2.5rem;
-      border-radius: 25px;
-      font-weight: 700;
-      font-size: 1.25rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-      display: block;
-      margin: 0 auto 3rem;
-    }
-    .generate-plan-btn:hover {
-      transform: translateY(-4px) scale(1.05);
-      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
-    }
-
-    /* Generated Plan Display */
-    .generated-plan {
-      background: #e8ebff;
-      border-radius: 20px;
-      padding: 1.5rem 2rem;
-      box-shadow: inset 0 0 8px rgba(102, 126, 234, 0.2);
-      max-width: 600px;
-      margin: 0 auto 3rem;
-      font-size: 1.1rem;
-      display: none;
-      color: #3a3a6a;
-    }
-    .generated-plan.show {
-      display: block;
-    }
-    .generated-plan ul {
-      list-style-type: disc;
-      margin-left: 1.5rem;
-      padding-left: 0;
-    }
-
-    /* Breathing Exercise */
-    .breathing-exercise {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-    .breathing-exercise h2 {
-      margin-bottom: 1rem;
-      color: #4a47a3;
-    }
-    .breathing-circle {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      margin: 0 auto 1rem;
-      background: #667eea;
-      box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
-      cursor: pointer;
-      user-select: none;
-      position: relative;
-      transition: box-shadow 0.3s ease;
-    }
-    .breathing-circle::after {
-      content: 'Click to Start/Stop';
-      position: absolute;
-      width: 100%;
-      bottom: -2rem;
-      left: 0;
-      font-weight: 600;
-      color: #444;
-      font-size: 0.9rem;
-      user-select: none;
-    }
-    .breathing-circle.animate {
-      animation: breatheAnimation 6s ease-in-out infinite;
-      box-shadow: 0 0 40px rgba(118, 75, 162, 0.8);
-    }
-    @keyframes breatheAnimation {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-    }
-    .breathing-instructions {
-      font-size: 1rem;
-      color: #555;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-
-    /* Mood Tracker */
-    .mood-tracker {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-    .mood-btn {
-      font-size: 2.2rem;
-      margin: 0 0.7rem;
-      cursor: pointer;
-      background: transparent;
-      border: none;
-      transition: transform 0.25s ease;
-      user-select: none;
-    }
-    .mood-btn:hover {
-      transform: scale(1.3);
-    }
-    .mood-btn.selected {
-      filter: drop-shadow(0 0 5px #764ba2);
-      transform: scale(1.5);
-    }
-    .mood-feedback {
+    #breathCircle {
+      width: 120px;
+      height: 120px;
       font-size: 1.2rem;
-      color: #4a47a3;
-      margin-top: 1rem;
-      font-weight: 600;
-      min-height: 1.5rem;
-      opacity: 0;
-      transition: opacity 0.4s ease;
     }
-    .mood-feedback.show {
-      opacity: 1;
-    }
-
-    /* Gratitude Journal */
-    .gratitude-container {
-      max-width: 600px;
-      margin: 0 auto 4rem;
-      text-align: center;
-    }
-    .gratitude-input {
-      width: 100%;
-      padding: 1rem 1.2rem;
-      font-size: 1.1rem;
-      border-radius: 15px;
-      border: 2px solid #e2e8f0;
-      resize: vertical;
-      min-height: 100px;
-      transition: border-color 0.3s ease;
-    }
-    .gratitude-input:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-      transform: scale(1.02);
-    }
-    .add-btn {
-      margin-top: 1rem;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border: none;
-      color: white;
-      font-weight: 700;
-      padding: 1rem 2.5rem;
-      font-size: 1.15rem;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-      user-select: none;
-    }
-    .add-btn:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.7);
-    }
-    .gratitude-list {
-      margin-top: 2rem;
-      max-height: 220px;
-      overflow-y: auto;
-    }
-    .gratitude-item {
-      background: #dbe4ff;
-      border-radius: 15px;
-      padding: 1rem 1.5rem;
-      margin-bottom: 1rem;
-      font-size: 1.05rem;
-      color: #3a3a6a;
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-      position: relative;
-      user-select: text;
-    }
-    .gratitude-item::before {
-      content: "✨";
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.5rem;
-      opacity: 0.7;
-    }
-
-    /* Responsive */
-    @media (max-width: 700px) {
-      .activity-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    @media (max-width: 480px) {
-      .activity-grid {
-        grid-template-columns: 1fr;
-      }
-      .container {
-        padding: 1.5rem 1.2rem 2.5rem;
-      }
-      .stats-bar {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      .tab-btn {
-        padding: 0.7rem 1rem;
-        font-size: 0.9rem;
-      }
-      .generate-plan-btn {
-        padding: 0.9rem 2rem;
-        font-size: 1.1rem;
-      }
-      .breathing-circle {
-        width: 160px;
-        height: 160px;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <main class="container" role="main" aria-label="Self-Care Toolkit">
-    <header class="header">
-      <h1>🌟 Your Personal Self-Care Toolkit 🌟</h1>
-      <p>Welcome to your sanctuary of wellness. This is your space to nurture your mind, body, and soul. Take a deep breath and remember: you deserve all the love and care in the world.</p>
-      <section class="stats-bar" aria-label="User progress statistics">
-        <div class="stat-item" aria-live="polite">
-          <span class="stat-number" id="activitiesCompleted">0</span>
-          <span>Activities Completed</span>
-        </div>
-        <div class="stat-item" aria-live="polite">
-          <span class="stat-number" id="dayStreak">0</span>
-          <span>Day Streak</span>
-        </div>
-        <div class="stat-item" aria-live="polite">
-          <span class="stat-number" id="moodScore">😊</span>
-          <span>Today's Mood</span>
-        </div>
-      </section>
-    </header>
+<div id="app" role="main" aria-label="Enhanced Grounding Toolkit">
 
-    <!-- Plan Builder -->
-    <section aria-label="Self-care plan builder">
-      <div class="plan-tabs" role="tablist" aria-label="Self-care plan categories">
-        <button role="tab" aria-selected="true" tabindex="0" class="tab-btn active" onclick="showPlanCategory('physical')">🏃‍♀️ Physical</button>
-        <button role="tab" aria-selected="false" tabindex="-1" class="tab-btn" onclick="showPlanCategory('cognitive')">🧠 Cognitive</button>
-        <button role="tab" aria-selected="false" tabindex="-1" class="tab-btn" onclick="showPlanCategory('creative')">🎨 Creative</button>
-        <button role="tab" aria-selected="false" tabindex="-1" class="tab-btn" onclick="showPlanCategory('motivation')">☀️ Motivation</button>
-        <button role="tab" aria-selected="false" tabindex="-1" class="tab-btn" onclick="showPlanCategory('social')">💝 Social</button>
+  <h1>Enhanced Grounding Toolkit</h1>
+
+  <section aria-label="Statistics" style="text-align:center; margin-bottom:1rem;">
+    <p>Total Techniques: <strong id="totalTechniques" aria-live="polite">0</strong> |
+    Used Today: <strong id="usedToday" aria-live="polite">0</strong> |
+    Streak: <strong id="streakCount" aria-live="polite">0</strong> days</p>
+  </section>
+
+  <input
+    type="search"
+    id="searchInput"
+    placeholder="Search techniques..."
+    aria-label="Search grounding techniques"
+  />
+
+  <div class="filter-group" role="list" aria-label="Filter techniques by category">
+    <button class="filter-btn active" data-category="all" role="listitem" aria-pressed="true">All</button>
+    <button class="filter-btn" data-category="breathing" role="listitem" aria-pressed="false">Breathing</button>
+    <button class="filter-btn" data-category="sensory" role="listitem" aria-pressed="false">Sensory</button>
+    <button class="filter-btn" data-category="cognitive" role="listitem" aria-pressed="false">Cognitive</button>
+    <button class="filter-btn" data-category="physical" role="listitem" aria-pressed="false">Physical</button>
+    <button class="filter-btn" data-category="visualization" role="listitem" aria-pressed="false">Visualization</button>
+    <button class="filter-btn" data-category="emergency" role="listitem" aria-pressed="false">Emergency</button>
+  </div>
+
+  <section aria-label="List of grounding techniques">
+    <div id="techniquesList" role="list" aria-live="polite"></div>
+  </section>
+
+  <section aria-label="Grounding checklist">
+    <h2>✅ Grounding Checklist</h2>
+    <div id="groundingChecklist" role="list"></div>
+  </section>
+
+  <section aria-label="Breathing exercise">
+    <h2>🌬️ Guided Breathing Exercise</h2>
+    <div id="breathCircle" aria-live="assertive" aria-atomic="true">Ready</div>
+    <div style="text-align:center;">
+      <button id="startBreathingBtn">Start Breathing</button>
+      <button id="stopBreathingBtn" disabled>Stop</button>
+    </div>
+  </section>
+
+  <section aria-label="Daily challenge">
+    <h2>🎯 Daily Challenge</h2>
+    <button id="dailyChallengeBtn" class="button" aria-live="polite">Get Random Challenge</button>
+    <div id="challengeResult" aria-live="polite"></div>
+  </section>
+
+  <section aria-label="Self-soothe journal">
+    <h2>📝 Self-Soothe Journal</h2>
+    <div id="notesSection">
+      <label for="notesTextarea" id="notesTitle">Your Notes</label>
+      <textarea id="notesTextarea" placeholder="Write your thoughts or reflections here..."></textarea>
+    </div>
+  </section>
+
+  <section aria-label="Preferences and settings" style="margin-top: 3rem;">
+    <h2>⚙️ Settings</h2>
+    <div class="toggle-group">
+      <label for="darkModeToggle">Dark Mode</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="darkModeToggle" aria-checked="false" />
+        <span class="slider"></span>
       </div>
-
-      <!-- Physical -->
-      <div role="tabpanel" tabindex="0" class="plan-category active" id="physical">
-        <h3>🏃‍♀️ Physical Self-Care Activities</h3>
-        <div class="activity-grid">
-          <div class="activity-card" tabindex="0" data-activity="Morning Stretches" data-time="10" data-type="morning" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🧘‍♀️</span>
-            <div class="activity-title">Morning Stretches</div>
-            <div class="activity-desc">Gentle stretching to awaken your body and improve flexibility</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Mindful Walk" data-time="20" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🚶‍♀️</span>
-            <div class="activity-title">Mindful Walk</div>
-            <div class="activity-desc">Fresh air and movement to energize or unwind</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Hydration Ritual" data-time="2" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">💧</span>
-            <div class="activity-title">Hydration Ritual</div>
-            <div class="activity-desc">Drink a full glass of water mindfully</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Exercise Session" data-time="30" data-type="morning" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">💪</span>
-            <div class="activity-title">Exercise Session</div>
-            <div class="activity-desc">Workout, yoga, or physical activity of your choice</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Relaxing Bath" data-time="25" data-type="evening" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🛁</span>
-            <div class="activity-title">Relaxing Bath</div>
-            <div class="activity-desc">Warm bath with essential oils or bath salts</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Skincare Routine" data-time="10" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">✨</span>
-            <div class="activity-title">Skincare Routine</div>
-            <div class="activity-desc">Nourish your skin with loving care</div>
-          </div>
-        </div>
+    </div>
+    <div class="toggle-group">
+      <label for="motionToggle">Enable Animations</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="motionToggle" aria-checked="true" checked />
+        <span class="slider"></span>
       </div>
-
-      <!-- Cognitive -->
-      <div role="tabpanel" tabindex="0" class="plan-category" id="cognitive" hidden>
-        <h3>🧠 Cognitive Tools & Mental Wellness</h3>
-        <div class="activity-grid">
-          <div class="activity-card" tabindex="0" data-activity="Journal Writing" data-time="15" data-type="evening" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">📓</span>
-            <div class="activity-title">Journal Writing</div>
-            <div class="activity-desc">Reflect and process thoughts before sleep</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Daily Affirmations" data-time="5" data-type="morning" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">💬</span>
-            <div class="activity-title">Daily Affirmations</div>
-            <div class="activity-desc">Start the day with empowering thoughts</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Mindful Reading" data-time="20" data-type="evening" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">📖</span>
-            <div class="activity-title">Mindful Reading</div>
-            <div class="activity-desc">Engage with calming or inspiring literature</div>
-          </div>
-        </div>
+    </div>
+    <div class="toggle-group">
+      <label for="bgMusicToggle">Background Music</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="bgMusicToggle" aria-checked="false" />
+        <span class="slider"></span>
       </div>
+    </div>
+  </section>
+</div>
 
-      <!-- Creative -->
-      <div role="tabpanel" tabindex="0" class="plan-category" id="creative" hidden>
-        <h3>🎨 Creative Expression</h3>
-        <div class="activity-grid">
-          <div class="activity-card" tabindex="0" data-activity="Doodling" data-time="10" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🖍️</span>
-            <div class="activity-title">Doodling</div>
-            <div class="activity-desc">Express emotions through art</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Music Time" data-time="15" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🎧</span>
-            <div class="activity-title">Music Time</div>
-            <div class="activity-desc">Listen or create music to shift your energy</div>
-          </div>
-        </div>
-      </div>
+<!-- Floating Action: Add Custom Technique -->
+<div class="floating-action" title="Add New Technique" aria-label="Add new grounding technique" role="button" tabindex="0" id="addTechniqueBtn">+</div>
 
-      <!-- Motivation -->
-      <div role="tabpanel" tabindex="0" class="plan-category" id="motivation" hidden>
-        <h3>☀️ Motivational Boosts</h3>
-        <div class="activity-grid">
-          <div class="activity-card" tabindex="0" data-activity="Set a Goal" data-time="5" data-type="morning" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🎯</span>
-            <div class="activity-title">Set a Goal</div>
-            <div class="activity-desc">Pick one positive goal for today</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Celebrate Wins" data-time="10" data-type="evening" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🏆</span>
-            <div class="activity-title">Celebrate Wins</div>
-            <div class="activity-desc">List 3 things you did well today</div>
-          </div>
-        </div>
-      </div>
+<!-- Modal Overlay -->
+<div id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+  <div id="modalContent">
+    <button id="modalCloseBtn" aria-label="Close modal">&times;</button>
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
+  </div>
+</div>
 
-      <!-- Social -->
-      <div role="tabpanel" tabindex="0" class="plan-category" id="social" hidden>
-        <h3>💝 Social Connection</h3>
-        <div class="activity-grid">
-          <div class="activity-card" tabindex="0" data-activity="Check In" data-time="10" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">📞</span>
-            <div class="activity-title">Check In</div>
-            <div class="activity-desc">Message a friend or loved one</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Kind Act" data-time="10" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🌷</span>
-            <div class="activity-title">Kind Act</div>
-            <div class="activity-desc">Do something kind for someone else</div>
-          </div>
-        </div>
-      </div>
+<!-- Audio Elements -->
+<audio id="inhaleAudio" src="https://actions.google.com/sounds/v1/human_voices/breath_inhale.ogg" preload="auto"></audio>
+<audio id="exhaleAudio" src="https://actions.google.com/sounds/v1/human_voices/breath_exhale.ogg" preload="auto"></audio>
+<audio id="bgMusic" src="https://cdn.pixabay.com/download/audio/2022/03/25/audio_107da62da3.mp3?filename=relaxing-calm-music-7899.mp3" loop preload="auto"></audio>
 
-      <button class="generate-plan-btn" aria-label="Generate personalized self-care plan" id="generatePlanBtn">💡 Generate My Self-Care Plan</button>
-      <div id="generatedPlan" class="generated-plan" aria-live="polite" role="region" aria-label="Generated self-care plan"></div>
-    </section>
+<script>
+(() => {
+  'use strict';
 
-    <!-- Breathing Exercise -->
-    <section class="breathing-exercise" aria-label="Guided breathing exercise">
-      <h2>Breathe with Me</h2>
-      <div class="breathing-circle" role="button" tabindex="0" aria-pressed="false" aria-label="Start or stop breathing exercise" id="breathingCircle"></div>
-      <p class="breathing-instructions">
-        Inhale slowly as the circle expands... exhale gently as it contracts. Repeat for 1–3 minutes.
-      </p>
-    </section>
-
-    <!-- Mood Tracker -->
-    <section class="mood-tracker" aria-label="Mood tracker">
-      <button class="mood-btn" aria-label="Happy mood" role="radio" name="mood" aria-checked="false">😊</button>
-      <button class="mood-btn" aria-label="Neutral mood" role="radio" name="mood" aria-checked="false">😐</button>
-      <button class="mood-btn" aria-label="Sad mood" role="radio" name="mood" aria-checked="false">😢</button>
-      <button class="mood-btn" aria-label="Angry mood" role="radio" name="mood" aria-checked="false">😠</button>
-      <button class="mood-btn" aria-label="Tired mood" role="radio" name="mood" aria-checked="false">😴</button>
-    </section>
-    <div id="moodFeedback" class="mood-feedback" aria-live="polite"></div>
-
-    <!-- Gratitude Journal -->
-    <section class="gratitude-container" aria-label="Gratitude journal">
-      <h2>Gratitude Journal</h2>
-      <textarea class="gratitude-input" id="gratitudeInput" aria-label="Enter three things you are grateful for today" placeholder="What are 3 things you're grateful for today?"></textarea>
-      <button class="add-btn" id="addGratitudeBtn" aria-label="Add gratitude entry">Add</button>
-      <div class="gratitude-list" id="gratitudeList" role="list"></div>
-    </section>
-  </main>
-
-  <footer class="footer" role="contentinfo">
-    <p>Made with 💖 for your daily self-care journey. Keep shining!</p>
-  </footer>
-
-  <script>
-    // Tabs
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const planCategories = document.querySelectorAll('.plan-category');
-
-    function showPlanCategory(categoryId) {
-      tabButtons.forEach(btn => {
-        const isActive = btn.getAttribute('onclick').includes(categoryId);
-        btn.classList.toggle('active', isActive);
-        btn.setAttribute('aria-selected', isActive);
-        btn.tabIndex = isActive ? 0 : -1;
-      });
-
-      planCategories.forEach(category => {
-        if (category.id === categoryId) {
-          category.classList.add('active');
-          category.hidden = false;
-          category.focus();
-        } else {
-          category.classList.remove('active');
-          category.hidden = true;
-        }
-      });
+  // Data for techniques
+  const techniques = [
+    {
+      id: 'breath4-7-8',
+      title: '4-7-8 Breathing',
+      category: 'breathing',
+      emoji: '🌬️',
+      description: 'Inhale for 4 seconds, hold for 7 seconds, then exhale slowly for 8 seconds. Repeat several times to calm the nervous system.'
+    },
+    {
+      id: 'box-breathing',
+      title: 'Box Breathing',
+      category: 'breathing',
+      emoji: '📦',
+      description: 'Inhale for 4 seconds, hold for 4 seconds, exhale for 4 seconds, hold for 4 seconds. Repeat in a "box" pattern.'
+    },
+    {
+      id: '5-4-3-2-1',
+      title: '5-4-3-2-1 Sensory Technique',
+      category: 'sensory',
+      emoji: '👀',
+      description: 'Identify 5 things you can see, 4 things you can touch, 3 things you can hear, 2 things you can smell, and 1 thing you can taste.'
+    },
+    {
+      id: 'cognitive-reframe',
+      title: 'Cognitive Reframing',
+      category: 'cognitive',
+      emoji: '🧠',
+      description: 'Challenge negative thoughts by considering alternative perspectives and more positive interpretations.'
+    },
+    {
+      id: 'physical-ground',
+      title: 'Physical Grounding',
+      category: 'physical',
+      emoji: '🦶',
+      description: 'Press your feet firmly on the ground and notice the sensation of connection with the earth beneath you.'
+    },
+    {
+      id: 'visualize-safe-place',
+      title: 'Visualize a Safe Place',
+      category: 'visualization',
+      emoji: '🏞️',
+      description: 'Close your eyes and imagine a peaceful, safe place. Focus on the details and sensations to calm your mind.'
+    },
+    {
+      id: 'emergency-contact',
+      title: 'Emergency Contact Plan',
+      category: 'emergency',
+      emoji: '🚨',
+      description: 'Have a list of trusted contacts ready to call or text in case of crisis.'
+    },
+    {
+      id: 'counting-backwards',
+      title: 'Counting Backwards',
+      category: 'cognitive',
+      emoji: '🔢',
+      description: 'Slowly count backward from 100 by 7s or 3s to redirect your focus.'
+    },
+    {
+      id: 'stretch',
+      title: 'Stretching',
+      category: 'physical',
+      emoji: '🤸‍♀️',
+      description: 'Perform gentle stretches focusing on your neck, shoulders, and arms to release tension.'
+    },
+    {
+      id: 'nature-sounds',
+      title: 'Listen to Nature Sounds',
+      category: 'sensory',
+      emoji: '🌿',
+      description: 'Play soothing nature sounds such as rain, forest, or ocean waves to help ground yourself.'
+    },
+    {
+      id: 'muscle-relaxation',
+      title: 'Progressive Muscle Relaxation',
+      category: 'physical',
+      emoji: '💪',
+      description: 'Tense and release muscle groups progressively to reduce physical tension.'
     }
+  ];
 
-    // Keyboard navigation for tabs (optional, for accessibility)
-    tabButtons.forEach((btn, index) => {
-      btn.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-          e.preventDefault();
-          let newIndex = (index + (e.key === 'ArrowRight' ? 1 : -1) + tabButtons.length) % tabButtons.length;
-          tabButtons[newIndex].focus();
-          showPlanCategory(tabButtons[newIndex].getAttribute('onclick').match(/'(.+)'/)[1]);
-        }
-      });
+  // Load custom techniques from localStorage
+  function loadCustomTechniques() {
+    try {
+      const saved = localStorage.getItem('egt_customTechniques');
+      if (saved) {
+        const customTechs = JSON.parse(saved);
+        customTechs.forEach(t => {
+          if (!techniques.find(x => x.id === t.id)) {
+            techniques.push(t);
+          }
+        });
+      }
+    } catch {}
+  }
+  loadCustomTechniques();
+
+  // Elements
+  const totalTechniquesEl = document.getElementById('totalTechniques');
+  const usedTodayEl = document.getElementById('usedToday');
+  const streakCountEl = document.getElementById('streakCount');
+  const techniquesList = document.getElementById('techniquesList');
+  const searchInput = document.getElementById('searchInput');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const groundingChecklist = document.getElementById('groundingChecklist');
+  const notesTextarea = document.getElementById('notesTextarea');
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const motionToggle = document.getElementById('motionToggle');
+  const bgMusicToggle = document.getElementById('bgMusicToggle');
+  const breathCircle = document.getElementById('breathCircle');
+  const startBreathingBtn = document.getElementById('startBreathingBtn');
+  const stopBreathingBtn = document.getElementById('stopBreathingBtn');
+  const dailyChallengeBtn = document.getElementById('dailyChallengeBtn');
+  const challengeResult = document.getElementById('challengeResult');
+  const addTechniqueBtn = document.getElementById('addTechniqueBtn');
+  const inhaleAudio = document.getElementById('inhaleAudio');
+  const exhaleAudio = document.getElementById('exhaleAudio');
+  const bgMusic = document.getElementById('bgMusic');
+
+  // LocalStorage keys
+  const STORAGE = {
+    favorites: 'egt_favorites',
+    checklist: 'egt_checklist',
+    notes: 'egt_notes',
+    streak: 'egt_streak',
+    lastUsedDate: 'egt_lastUsedDate',
+    usedTodayCount: 'egt_usedTodayCount',
+    settings: 'egt_settings'
+  };
+
+  // State
+  let favorites = new Set(JSON.parse(localStorage.getItem(STORAGE.favorites) || '[]'));
+  let checklistState = JSON.parse(localStorage.getItem(STORAGE.checklist) || '{}');
+  let notes = localStorage.getItem(STORAGE.notes) || '';
+  let streakData = JSON.parse(localStorage.getItem(STORAGE.streak) || '{"count":0,"lastDate":null}');
+  let usedTodayCount = parseInt(localStorage.getItem(STORAGE.usedTodayCount) || '0', 10) || 0;
+  let currentFilter = 'all';
+  let isBreathing = false;
+  let breathCycleIndex = 0;
+  let breathTimeouts = [];
+  let motionEnabled = true;
+  let bgMusicPlaying = false;
+  let settings = {
+    darkMode: false,
+    motion: true,
+    bgMusic: false,
+  };
+
+  // Daily challenges
+  const dailyChallenges = [
+    'Take 5 deep breaths mindfully.',
+    'Focus on sounds around you for 1 minute.',
+    'Write down 3 things you feel grateful for.',
+    'Do a gentle neck stretch.',
+    'Visualize your safe place for 2 minutes.',
+    'Practice progressive muscle relaxation on your hands.',
+    'Count backwards from 50 by 5s.',
+    'Try 4-7-8 breathing 3 times.',
+    'Reach out to a friend or loved one.',
+    'Sit quietly and notice your heartbeat for 1 minute.'
+  ];
+
+  // Functions
+
+  // Save favorites to LS
+  function saveFavorites() {
+    localStorage.setItem(STORAGE.favorites, JSON.stringify(Array.from(favorites)));
+  }
+
+  // Save checklist to LS
+  function saveChecklist() {
+    localStorage.setItem(STORAGE.checklist, JSON.stringify(checklistState));
+  }
+
+  // Save notes to LS
+  function saveNotes() {
+    localStorage.setItem(STORAGE.notes, notesTextarea.value);
+  }
+
+  // Save settings to LS
+  function saveSettings() {
+    localStorage.setItem(STORAGE.settings, JSON.stringify(settings));
+  }
+
+  // Update stats (total, used today, streak)
+  function updateStats() {
+    totalTechniquesEl.textContent = techniques.length;
+    usedTodayEl.textContent = usedTodayCount;
+    streakCountEl.textContent = streakData.count;
+  }
+
+  // Render techniques list filtered by search and category
+  function renderTechniques() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const filtered = techniques.filter(t => {
+      const matchCategory = currentFilter === 'all' || t.category === currentFilter;
+      const matchSearch = t.title.toLowerCase().includes(searchTerm) || t.description.toLowerCase().includes(searchTerm);
+      return matchCategory && matchSearch;
     });
 
-    // Activity selection
-    let selectedActivities = [];
+    techniquesList.innerHTML = '';
 
-    function toggleActivitySelection(card) {
-      const activityName = card.dataset.activity;
-      if (selectedActivities.includes(activityName)) {
-        selectedActivities = selectedActivities.filter(a => a !== activityName);
-        card.classList.remove('selected');
-        card.setAttribute('aria-pressed', 'false');
-      } else {
-        selectedActivities.push(activityName);
-        card.classList.add('selected');
-        card.setAttribute('aria-pressed', 'true');
-      }
-      saveToLocalStorage();
+    if (filtered.length === 0) {
+      techniquesList.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">No techniques found.</p>';
+      return;
     }
 
-    document.querySelectorAll('.activity-card').forEach(card => {
-      card.addEventListener('click', () => toggleActivitySelection(card));
+    filtered.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'technique-card';
+      card.setAttribute('role', 'listitem');
+      card.setAttribute('tabindex', '0');
+      card.dataset.id = t.id;
+      card.dataset.category = t.category;
+
+      card.innerHTML = `
+        <div class="technique-title" aria-label="Technique title: ${t.title}">
+          <span class="technique-emoji">${t.emoji}</span>
+          ${t.title}
+        </div>
+        <div class="technique-category">${t.category}</div>
+        <div class="favorite-icon" role="button" tabindex="0" aria-pressed="${favorites.has(t.id)}" aria-label="Favorite ${t.title}">
+          ${favorites.has(t.id) ? '❤️' : '🤍'}
+        </div>
+      `;
+
+      // Favorite toggle click
+      card.querySelector('.favorite-icon').addEventListener('click', e => {
+        e.stopPropagation();
+        toggleFavorite(t.id);
+      });
+      card.querySelector('.favorite-icon').addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleFavorite(t.id);
+        }
+      });
+
+      // Show modal with technique info on card click or enter/space key
+      card.addEventListener('click', () => {
+        showTechniqueModal(t);
+        incrementUsedToday();
+      });
       card.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          toggleActivitySelection(card);
+          showTechniqueModal(t);
+          incrementUsedToday();
         }
       });
+
+      techniquesList.appendChild(card);
     });
+  }
 
-    // Generate plan display
-    const generatedPlanEl = document.getElementById('generatedPlan');
-    const activitiesCompletedEl = document.getElementById('activitiesCompleted');
+  // Toggle favorite
+  function toggleFavorite(id) {
+    if (favorites.has(id)) {
+      favorites.delete(id);
+    } else {
+      favorites.add(id);
+    }
+    saveFavorites();
+    renderTechniques();
+  }
 
-    function generatePlan() {
-      if (!selectedActivities.length) {
-        generatedPlanEl.innerHTML = '<p>Please select some activities first.</p>';
-        generatedPlanEl.classList.add('show');
-        return;
+  // Show technique modal
+  function showTechniqueModal(t) {
+    modalTitle.textContent = `${t.emoji} ${t.title}`;
+    modalBody.innerHTML = `<p>${t.description}</p>`;
+    modalOverlay.classList.add('active');
+    modalContentFocusTrap();
+  }
+
+  // Modal close
+  modalCloseBtn.onclick = () => {
+    modalOverlay.classList.remove('active');
+  };
+  modalOverlay.onclick = (e) => {
+    if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+  };
+
+  // Focus trap in modal for accessibility
+  function modalContentFocusTrap() {
+    const focusable = modalOverlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    first.focus();
+
+    modalOverlay.addEventListener('keydown', e => {
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       }
-      let html = '<h3>Your Personalized Plan</h3><ul>';
-      selectedActivities.forEach(a => {
-        html += `<li>${a}</li>`;
+      if (e.key === 'Escape') {
+        modalOverlay.classList.remove('active');
+      }
+    }, {once:true});
+  }
+
+  // Checklist rendering & toggle
+  const checklistItems = [
+    'Take 5 deep breaths',
+    'Focus on your senses',
+    'Ground yourself physically',
+    'Practice cognitive reframing',
+    'Visualize a safe place',
+    'Reach out to support',
+    'Use emergency plan',
+  ];
+  function renderChecklist() {
+    groundingChecklist.innerHTML = '';
+    checklistItems.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'checklist-item';
+      div.textContent = item;
+      div.setAttribute('tabindex', '0');
+      if (checklistState[item]) div.classList.add('active');
+
+      div.addEventListener('click', () => {
+        checklistState[item] = !checklistState[item];
+        saveChecklist();
+        renderChecklist();
       });
-      html += '</ul>';
-      generatedPlanEl.innerHTML = html;
-      generatedPlanEl.classList.add('show');
-
-      updateStats('activitiesCompleted', selectedActivities.length);
-      saveToLocalStorage();
-    }
-
-    document.getElementById('generatePlanBtn').addEventListener('click', generatePlan);
-
-    // Breathing animation toggle
-    const breathingCircle = document.getElementById('breathingCircle');
-    let breathingActive = false;
-
-    function toggleBreathing() {
-      breathingActive = !breathingActive;
-      breathingCircle.classList.toggle('animate', breathingActive);
-      breathingCircle.setAttribute('aria-pressed', breathingActive);
-    }
-
-    breathingCircle.addEventListener('click', toggleBreathing);
-    breathingCircle.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggleBreathing();
-      }
-    });
-
-    // Mood tracker
-    const moodButtons = document.querySelectorAll('.mood-btn');
-    const moodFeedback = document.getElementById('moodFeedback');
-    const moodScoreEl = document.getElementById('moodScore');
-
-    function setMood(mood, btn) {
-      moodButtons.forEach(b => {
-        b.classList.remove('selected');
-        b.setAttribute('aria-checked', 'false');
-      });
-      if (btn) {
-        btn.classList.add('selected');
-        btn.setAttribute('aria-checked', 'true');
-      }
-      moodFeedback.textContent = `Mood logged: ${mood}`;
-      moodFeedback.classList.add('show');
-      moodScoreEl.textContent = mood;
-      localStorage.setItem('mood', mood);
-    }
-
-    moodButtons.forEach(btn => {
-      btn.addEventListener('click', () => setMood(btn.textContent, btn));
-      btn.addEventListener('keydown', e => {
+      div.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          setMood(btn.textContent, btn);
+          checklistState[item] = !checklistState[item];
+          saveChecklist();
+          renderChecklist();
         }
       });
+      groundingChecklist.appendChild(div);
     });
+  }
 
-    // Gratitude journal
-    const gratitudeInput = document.getElementById('gratitudeInput');
-    const gratitudeList = document.getElementById('gratitudeList');
-    const addGratitudeBtn = document.getElementById('addGratitudeBtn');
+  // Load notes
+  function loadNotes() {
+    notesTextarea.value = notes;
+  }
 
-    function addGratitude() {
-      const text = gratitudeInput.value.trim();
-      if (!text) return;
+  // Save notes on input (debounced)
+  let notesTimeout;
+  notesTextarea.addEventListener('input', () => {
+    clearTimeout(notesTimeout);
+    notesTimeout = setTimeout(() => {
+      saveNotes();
+    }, 800);
+  });
 
-      const entry = document.createElement('div');
-      entry.className = 'gratitude-item';
-      entry.textContent = text;
-      entry.setAttribute('role', 'listitem');
-      gratitudeList.prepend(entry);
+  // Dark mode toggle
+  darkModeToggle.addEventListener('change', e => {
+    settings.darkMode = e.target.checked;
+    saveSettings();
+    applySettings();
+  });
 
-      let savedGratitude = JSON.parse(localStorage.getItem('gratitude') || '[]');
-      savedGratitude.push(text);
-      localStorage.setItem('gratitude', JSON.stringify(savedGratitude));
+  // Motion toggle
+  motionToggle.addEventListener('change', e => {
+    settings.motion = e.target.checked;
+    saveSettings();
+    applySettings();
+  });
 
-      gratitudeInput.value = '';
-      updateStats('dayStreak', savedGratitude.length);
+  // Background music toggle
+  bgMusicToggle.addEventListener('change', e => {
+    settings.bgMusic = e.target.checked;
+    saveSettings();
+    if (settings.bgMusic) {
+      bgMusic.play().catch(() => {});
+      bgMusicPlaying = true;
+    } else {
+      bgMusic.pause();
+      bgMusicPlaying = false;
     }
+  });
 
-    addGratitudeBtn.addEventListener('click', addGratitude);
+  // Apply saved settings
+  function applySettings() {
+    document.body.classList.toggle('light', settings.darkMode);
+    darkModeToggle.checked = settings.darkMode;
+    motionToggle.checked = settings.motion;
+    bgMusicToggle.checked = settings.bgMusic;
 
-    gratitudeInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        addGratitude();
-      }
-    });
-
-    // Progress tracking
-    function updateStats(id, value) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.textContent = value;
-      localStorage.setItem(id, value);
+    motionEnabled = settings.motion;
+    if (!motionEnabled) {
+      breathCircle.classList.remove('inhale', 'exhale');
+      breathCircle.style.transform = 'scale(1)';
+      breathCircle.style.boxShadow = 'none';
     }
+  }
 
-    // LocalStorage save/load
-    function saveToLocalStorage() {
-      localStorage.setItem('selectedActivities', JSON.stringify(selectedActivities));
-    }
+  // Breathing animation timings (ms)
+  const breathIntervals = [4000, 7000, 8000]; // inhale, hold, exhale
 
-    function loadFromLocalStorage() {
-      // Load selected activities
-      const savedActivities = JSON.parse(localStorage.getItem('selectedActivities') || '[]');
-      selectedActivities = savedActivities;
-      selectedActivities.forEach(activity => {
-        document.querySelectorAll('.activity-card').forEach(card => {
-          if (card.dataset.activity === activity) {
-            card.classList.add('selected');
-            card.setAttribute('aria-pressed', 'true');
-          }
-        });
-      });
+  // Play breathing cycle with smooth pulse
+  function playBreathingCycle() {
+    if (!isBreathing) return;
 
-      // Load mood
-      const savedMood = localStorage.getItem('mood');
-      if (savedMood) {
-        const moodBtn = Array.from(moodButtons).find(b => b.textContent === savedMood);
-        if (moodBtn) setMood(savedMood, moodBtn);
-      }
-
-      // Load gratitude
-      const savedGratitude = JSON.parse(localStorage.getItem('gratitude') || '[]');
-      savedGratitude.forEach(text => {
-        const entry = document.createElement('div');
-        entry.className = 'gratitude-item';
-        entry.textContent = text;
-        entry.setAttribute('role', 'listitem');
-        gratitudeList.appendChild(entry);
-      });
-
-      // Load stats
-      ['activitiesCompleted', 'dayStreak'].forEach(id => {
-        const val = localStorage.getItem(id);
-        if (val) {
-          const el = document.getElementById(id);
-          if (el) el.textContent = val;
+    switch(breathCycleIndex) {
+      case 0:
+        breathCircle.textContent = 'Inhale';
+        breathCircle.classList.add('inhale');
+        breathCircle.classList.remove('exhale');
+        if (motionEnabled) {
+          breathCircle.style.animationPlayState = 'running';
         }
-      });
+        inhaleAudio.play().catch(() => {});
+        break;
+      case 1:
+        breathCircle.textContent = 'Hold';
+        breathCircle.classList.remove('inhale', 'exhale');
+        if (motionEnabled) {
+          breathCircle.style.animationPlayState = 'paused';
+          breathCircle.style.transform = 'scale(1.1)';
+          breathCircle.style.boxShadow = '0 0 40px 12px rgba(147,197,253,0.8)';
+        }
+        break;
+      case 2:
+        breathCircle.textContent = 'Exhale';
+        breathCircle.classList.remove('inhale');
+        breathCircle.classList.add('exhale');
+        if (motionEnabled) {
+          breathCircle.style.animationPlayState = 'running';
+        }
+        exhaleAudio.play().catch(() => {});
+        break;
     }
 
-    // Initialize
-    window.addEventListener('load', () => {
-      loadFromLocalStorage();
+    const delay = breathIntervals[breathCycleIndex];
+    breathCycleIndex = (breathCycleIndex + 1) % 3;
+    breathTimeouts.push(setTimeout(playBreathingCycle, delay));
+  }
+
+  // Start breathing
+  startBreathingBtn.onclick = () => {
+    if (isBreathing) return;
+    isBreathing = true;
+    breathCycleIndex = 0;
+    playBreathingCycle();
+    startBreathingBtn.disabled = true;
+    stopBreathingBtn.disabled = false;
+  };
+
+  // Stop breathing
+  stopBreathingBtn.onclick = () => {
+    isBreathing = false;
+    breathTimeouts.forEach(t => clearTimeout(t));
+    breathTimeouts = [];
+    breathCircle.textContent = 'Stopped';
+    breathCircle.classList.remove('inhale', 'exhale');
+    breathCircle.style.animationPlayState = 'paused';
+    breathCircle.style.transform = 'scale(1)';
+    breathCircle.style.boxShadow = 'none';
+    startBreathingBtn.disabled = false;
+    stopBreathingBtn.disabled = true;
+  };
+
+  // Increment Used Today count & update streak if date changed
+  function incrementUsedToday() {
+    const todayStr = (new Date()).toISOString().slice(0,10);
+    if (localStorage.getItem(STORAGE.lastUsedDate) !== todayStr) {
+      // New day: reset count
+      usedTodayCount = 1;
+      localStorage.setItem(STORAGE.lastUsedDate, todayStr);
+    } else {
+      usedTodayCount++;
+    }
+    localStorage.setItem(STORAGE.usedTodayCount, usedTodayCount.toString());
+
+    // Update streak count if consecutive days
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+    if (streakData.lastDate === yesterday) {
+      streakData.count++;
+    } else if (streakData.lastDate !== todayStr) {
+      streakData.count = 1;
+    }
+    streakData.lastDate = todayStr;
+    localStorage.setItem(STORAGE.streak, JSON.stringify(streakData));
+    updateStats();
+  }
+
+  // Filter buttons logic
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      currentFilter = btn.dataset.category;
+      renderTechniques();
     });
-  </script>
+  });
+
+  // Search input logic
+  searchInput.addEventListener('input', () => {
+    renderTechniques();
+  });
+
+  // Daily challenge button
+  dailyChallengeBtn.onclick = () => {
+    const idx = Math.floor(Math.random() * dailyChallenges.length);
+    challengeResult.textContent = dailyChallenges[idx];
+  };
+
+  // Add technique modal logic
+  addTechniqueBtn.onclick = () => {
+    modalTitle.textContent = "➕ Add New Grounding Technique";
+    modalBody.innerHTML = `
+      <form id="addTechniqueForm" style="display:flex; flex-direction:column; gap:0.8rem;">
+        <label>
+          Title:
+          <input type="text" name="title" required minlength="3" />
+        </label>
+        <label>
+          Emoji:
+          <input type="text" name="emoji" required maxlength="2" placeholder="e.g. 🌸" />
+        </label>
+        <label>
+          Category:
+          <select name="category" required>
+            <option value="">Select category</option>
+            <option value="breathing">Breathing</option>
+            <option value="sensory">Sensory</option>
+            <option value="cognitive">Cognitive</option>
+            <option value="physical">Physical</option>
+            <option value="visualization">Visualization</option>
+            <option value="emergency">Emergency</option>
+          </select>
+        </label>
+        <label>
+          Description:
+          <textarea name="description" required minlength="10" rows="3"></textarea>
+        </label>
+        <button type="submit" style="background:#2563eb; color:#fff; border:none; padding:0.5rem; border-radius:8px; cursor:pointer;">Add Technique</button>
+      </form>
+    `;
+
+    modalOverlay.classList.add('active');
+    modalContentFocusTrap();
+
+    // Handle form submission
+    const form = document.getElementById('addTechniqueForm');
+    form.onsubmit = e => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const newTechnique = {
+        id: 'custom-' + Date.now(),
+        title: formData.get('title').trim(),
+        emoji: formData.get('emoji').trim() || '✨',
+        category: formData.get('category'),
+        description: formData.get('description').trim()
+      };
+      techniques.push(newTechnique);
+
+      // Save custom technique to localStorage
+      try {
+        let saved = localStorage.getItem('egt_customTechniques');
+        let arr = saved ? JSON.parse(saved) : [];
+        arr.push(newTechnique);
+        localStorage.setItem('egt_customTechniques', JSON.stringify(arr));
+      } catch {}
+
+      modalOverlay.classList.remove('active');
+      renderTechniques();
+      updateStats();
+    };
+  };
+
+  // Accessibility: trap focus in floating action on keyboard nav
+  addTechniqueBtn.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      addTechniqueBtn.click();
+    }
+  });
+
+  // Initialize app
+  function init() {
+    applySettings();
+    updateStats();
+    renderTechniques();
+    renderChecklist();
+    loadNotes();
+
+    // Init usedTodayCount and streak based on last date
+    const todayStr = (new Date()).toISOString().slice(0,10);
+    const lastUsedDate = localStorage.getItem(STORAGE.lastUsedDate);
+    if (lastUsedDate !== todayStr) {
+      usedTodayCount = 0;
+      localStorage.setItem(STORAGE.usedTodayCount, '0');
+      localStorage.setItem(STORAGE.lastUsedDate, todayStr);
+    }
+    updateStats();
+  }
+
+  init();
+
+  // Pause bg music when tab inactive
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      bgMusic.pause();
+    } else if (settings.bgMusic && bgMusic.paused) {
+      bgMusic.play().catch(() => {});
+    }
+  });
+
+})();
+</script>
 </body>
 </html>
