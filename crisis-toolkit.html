@@ -1,700 +1,904 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Crisis Support Toolkit</title>
-  <style>
-    /* --- Reset and base styles --- */
-    body {
-      margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f4f8; color: #2c3e50;
-      padding-top: 60px; /* space for fixed nav */
-      scroll-behavior: smooth;
-    }
-    h1, h2, h3 {
-      margin: 0 0 0.5em 0;
-    }
-    a {
-      color: #2980b9;
-      text-decoration: none;
-    }
-    a:hover, a:focus {
-      text-decoration: underline;
-      outline: none;
-    }
-    button {
-      cursor: pointer;
-      font-family: inherit;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Crisis Support Toolkit</title>
+<style>
+  /* Reset and base */
+  body {
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+    color: #222;
+    scroll-behavior: smooth;
+  }
+  h1, h2, h3 {
+    margin: 0 0 0.5rem 0;
+  }
+  p {
+    margin: 0.25rem 0 1rem 0;
+  }
+  a {
+    color: #2980b9; text-decoration: none;
+  }
+  a:hover, a:focus {
+    text-decoration: underline;
+  }
+  button {
+    cursor: pointer;
+  }
 
-    /* --- Fixed Navigation Bar --- */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      background: #ffffffcc;
-      backdrop-filter: saturate(180%) blur(10px);
-      border-bottom: 1px solid #ddd;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      padding: 0 1rem;
-      height: 60px;
-      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
-    }
-    nav .nav-item {
-      position: relative;
-      margin-right: 1rem;
-    }
-    nav .nav-item:last-child {
-      margin-left: auto; /* Push language toggle to right */
-      margin-right: 0;
-    }
-    nav button.dropbtn {
-      background: none;
-      border: none;
-      font-size: 1rem;
-      color: #2980b9;
-      padding: 0.25rem 0.5rem;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-    nav button.dropbtn:focus {
-      outline: 2px solid #2980b9;
-      outline-offset: 2px;
-    }
-    nav button.dropbtn .arrow {
-      display: inline-block;
-      transition: transform 0.3s ease;
-      font-size: 0.8rem;
-    }
-    nav button.dropbtn[aria-expanded="true"] .arrow {
-      transform: rotate(180deg);
-    }
-    nav .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      min-width: 200px;
-      border: 1px solid #ddd;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.15);
-      border-radius: 4px;
-      padding: 0.5rem 0;
-      z-index: 1100;
-    }
-    nav .dropdown-content a {
-      display: block;
-      padding: 0.5rem 1rem;
-      color: #2980b9;
-      text-decoration: none;
-    }
-    nav .dropdown-content a:hover,
-    nav .dropdown-content a:focus {
-      background-color: #f0f4f8;
-      outline: none;
-    }
+  /* Navigation Bar */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(255 255 255 / 0.9);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    padding: 0.3rem 1rem;
+  }
+  nav > div.left, nav > div.right {
+    display: flex; align-items: center;
+  }
+  nav > div.left {
+    flex-grow: 1;
+  }
+  nav button.dropbtn {
+    background: #2980b9;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    position: relative;
+  }
+  nav button.dropbtn:focus {
+    outline: 2px solid #1abc9c;
+    outline-offset: 2px;
+  }
+  nav button.dropbtn[aria-expanded="true"] {
+    background: #1abc9c;
+  }
 
-    nav .dropdown-content.show {
-      display: block;
-    }
+  .dropdown-content {
+    position: absolute;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-radius: 6px;
+    display: none;
+    flex-direction: column;
+    padding: 0.5rem 0;
+    top: 100%;
+    left: 0;
+    z-index: 10000;
+  }
+  .dropdown-content.show {
+    display: flex;
+  }
+  .dropdown-content a {
+    padding: 0.5rem 1rem;
+    color: #2980b9;
+    font-weight: 500;
+  }
+  .dropdown-content a:hover,
+  .dropdown-content a:focus {
+    background-color: #ecf0f1;
+    outline: none;
+  }
 
-    /* --- Content Sections --- */
-    .container {
-      max-width: 900px;
-      margin: 1rem auto 3rem auto;
-      padding: 0 1rem;
-    }
+  /* Language Toggle Buttons */
+  #language-toggle button {
+    background: none;
+    border: 2px solid #2980b9;
+    color: #2980b9;
+    padding: 0.3rem 0.7rem;
+    margin-left: 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  #language-toggle button.active,
+  #language-toggle button:focus {
+    background: #2980b9;
+    color: white;
+    outline: none;
+  }
 
-    /* Existing content styles simplified for brevity (reuse your own) */
+  /* Container and sections */
+  #container {
+    max-width: 960px;
+    margin: 5rem auto 3rem;
+    padding: 0 1rem;
+    background: rgba(255 255 255 / 0.95);
+    border-radius: 12px;
+    box-shadow: 0 0 16px rgba(0,0,0,0.1);
+  }
+  section {
+    margin-bottom: 3rem;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .subtitle {
+    font-size: 1.1rem;
+    color: #555;
+  }
 
-    /* Language toggle buttons */
-    #language-toggle button {
-      background: #2980b9;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 0.3rem 0.8rem;
-      margin-left: 0.5rem;
-      font-weight: 600;
-    }
-    #language-toggle button.active {
-      background: #1b4f72;
-    }
-    #language-toggle button:focus {
-      outline: 2px solid #1b4f72;
-      outline-offset: 2px;
-    }
+  /* Emergency banner */
+  .emergency-banner {
+    background: #e74c3c;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .emergency-banner h2 {
+    font-size: 1.5rem;
+  }
+  .emergency-numbers {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .emergency-number {
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  .emergency-number .number {
+    font-size: 1.8rem;
+    margin-right: 0.5rem;
+  }
 
-    /* Responsive */
-    @media (max-width: 600px) {
-      nav {
-        flex-wrap: wrap;
-        height: auto;
-        padding: 0.5rem 1rem;
-      }
-      nav .nav-item {
-        margin-bottom: 0.5rem;
-      }
-      nav .dropdown-content {
-        min-width: 150px;
-      }
-    }
+  /* Resource grids and cards */
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 1rem;
+  }
+  .resource-card {
+    background: #f4f8fb;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  .resource-title {
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .resource-description {
+    flex-grow: 1;
+    margin-bottom: 0.8rem;
+  }
+  .contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .contact-method {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+  }
 
-  </style>
+  /* Tips section */
+  .tips-section {
+    margin-top: 2rem;
+  }
+  .tips-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 1rem;
+  }
+  .tip-card {
+    background: #dff0f7;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  .tip-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Safety Plan form */
+  form label {
+    font-weight: 600;
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+  }
+  form textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 70px;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  /* Printable checklist */
+  ul {
+    padding-left: 1rem;
+  }
+  ul li {
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  ul li input[type="checkbox"] {
+    margin-right: 0.7rem;
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Breathing exercise */
+  #breath-circle {
+    cursor: default;
+    user-select: none;
+  }
+  @keyframes expand {
+    0%, 100% { r: 40; }
+    50% { r: 50; }
+  }
+  @keyframes contract {
+    0%, 100% { r: 50; }
+    50% { r: 40; }
+  }
+
+  /* Breathing circle container */
+  #breathing-exercise {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    width: 120px;
+    height: 140px;
+    user-select: none;
+    text-align: center;
+    font-weight: 600;
+    color: #2980b9;
+  }
+
+  /* Panic Exit Button */
+  #panic-exit-btn {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  #panic-exit-btn:focus {
+    outline: 2px solid #c0392b;
+    outline-offset: 2px;
+  }
+
+  /* Language content visibility */
+  .language-content.hidden {
+    display: none;
+  }
+
+  /* Dropdown menu positioning */
+  nav > div.left > .dropdown {
+    position: relative;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 600px) {
+    .emergency-numbers {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+</style>
 </head>
 <body>
 
-  <nav role="navigation" aria-label="Main navigation">
-    <div class="nav-item">
-      <button class="dropbtn" aria-haspopup="true" aria-expanded="false" aria-controls="emergency-menu" id="emergency-btn">
-        Emergency Numbers <span class="arrow">▼</span>
-      </button>
-      <div id="emergency-menu" class="dropdown-content" role="menu" aria-labelledby="emergency-btn">
+<nav role="navigation" aria-label="Main navigation">
+  <div class="left">
+    <div class="dropdown">
+      <button id="resources-btn" class="dropbtn" aria-haspopup="true" aria-expanded="false" aria-controls="resources-menu">Resources ▾</button>
+      <div id="resources-menu" class="dropdown-content" role="menu" aria-label="Resources Menu">
         <a href="#emergency-numbers" role="menuitem" tabindex="-1">Emergency Numbers</a>
-      </div>
-    </div>
-
-    <div class="nav-item">
-      <button class="dropbtn" aria-haspopup="true" aria-expanded="false" aria-controls="resources-menu" id="resources-btn">
-        Resources <span class="arrow">▼</span>
-      </button>
-      <div id="resources-menu" class="dropdown-content" role="menu" aria-labelledby="resources-btn">
         <a href="#canada-resources" role="menuitem" tabindex="-1">Canada Resources</a>
         <a href="#us-resources" role="menuitem" tabindex="-1">US Resources</a>
       </div>
     </div>
 
-    <div class="nav-item">
-      <button class="dropbtn" aria-haspopup="true" aria-expanded="false" aria-controls="tips-menu" id="tips-btn">
-        Crisis Support Tips <span class="arrow">▼</span>
-      </button>
-      <div id="tips-menu" class="dropdown-content" role="menu" aria-labelledby="tips-btn">
-        <a href="#crisis-tips" role="menuitem" tabindex="-1">Tips Section</a>
+    <div class="dropdown">
+      <button id="tips-btn" class="dropbtn" aria-haspopup="true" aria-expanded="false" aria-controls="tips-menu">Tips ▾</button>
+      <div id="tips-menu" class="dropdown-content" role="menu" aria-label="Tips Menu">
+        <a href="#tips-section" role="menuitem" tabindex="-1">Crisis Support Tips</a>
       </div>
     </div>
 
-    <div class="nav-item">
-      <button class="dropbtn" aria-haspopup="true" aria-expanded="false" aria-controls="safetyplan-menu" id="safetyplan-btn">
-        Safety Plan <span class="arrow">▼</span>
-      </button>
-      <div id="safetyplan-menu" class="dropdown-content" role="menu" aria-labelledby="safetyplan-btn">
-        <a href="#safety-plan-generator" role="menuitem" tabindex="-1">Safety Plan Generator</a>
+    <div class="dropdown">
+      <button id="plan-btn" class="dropbtn" aria-haspopup="true" aria-expanded="false" aria-controls="plan-menu">Safety Plan ▾</button>
+      <div id="plan-menu" class="dropdown-content" role="menu" aria-label="Safety Plan Menu">
+        <a href="#safety-plan-generator" role="menuitem" tabindex="-1">Download Safety Plan (EN)</a>
+        <a href="#printable-checklist" role="menuitem" tabindex="-1">Printable Checklist (EN)</a>
       </div>
     </div>
+  </div>
 
-    <div class="nav-item">
-      <button class="dropbtn" aria-haspopup="true" aria-expanded="false" aria-controls="checklist-menu" id="checklist-btn">
-        Checklist <span class="arrow">▼</span>
-      </button>
-      <div id="checklist-menu" class="dropdown-content" role="menu" aria-labelledby="checklist-btn">
-        <a href="#printable-checklist" role="menuitem" tabindex="-1">Printable Checklist</a>
+  <div class="right" id="language-toggle" aria-label="Language selection">
+    <span>Language:</span>
+    <button id="en-btn" aria-pressed="true" class="active" aria-label="Switch to English">English</button>
+    <button id="fr-btn" aria-pressed="false" aria-label="Switch to French">Français</button>
+  </div>
+</nav>
+
+<div id="container" role="main">
+
+  <!-- English Content -->
+  <div id="en-content" class="language-content" lang="en">
+
+    <header class="header" role="banner">
+      <h1>🆘 Crisis Support Toolkit</h1>
+      <p class="subtitle">Immediate help and resources for Canada and the United States</p>
+      <p><strong>You are not alone. Help is available 24/7.</strong></p>
+    </header>
+
+    <section id="emergency-numbers" class="emergency-banner" role="alert" aria-live="assertive" aria-atomic="true">
+      <h2>🚨 EMERGENCY NUMBERS</h2>
+      <p><strong>If you are in immediate danger, call:</strong></p>
+      <div class="emergency-numbers">
+        <div class="emergency-number"><span class="number">911</span> Emergency Canada & USA</div>
+        <div class="emergency-number"><span class="number">988</span> Suicide & Crisis Lifeline (USA)</div>
+        <div class="emergency-number"><span class="number">1-833-456-4566</span> Suicide Prevention Canada</div>
       </div>
-    </div>
+    </section>
 
-    <div class="nav-item" id="language-toggle" role="region" aria-label="Language selection">
-      <button id="en-btn" aria-pressed="true" class="active" onclick="showLanguage('en')">English</button>
-      <button id="fr-btn" aria-pressed="false" onclick="showLanguage('fr')">Français</button>
-    </div>
-  </nav>
+    <section id="canada-resources" class="content-section" aria-label="Crisis Support Resources Canada">
+      <h2 class="section-title"><span class="icon">🇨🇦</span> CANADA - Crisis Support Resources</h2>
+      <div class="resource-grid" role="list">
 
-  <div class="container">
-
-    <!-- English Content -->
-    <div id="en-content" class="language-content" lang="en">
-
-      <header class="header" role="banner">
-        <h1>🆘 Crisis Support Toolkit</h1>
-        <p class="subtitle" style="font-weight: 600;">Immediate help and resources for Canada & the United States</p>
-        <p><strong>You are not alone. Help is available 24/7.</strong></p>
-      </header>
-
-      <section id="emergency-numbers" class="emergency-banner" role="alert" aria-live="assertive" aria-atomic="true">
-        <h2>🚨 Emergency Numbers</h2>
-        <p><strong>If you are in immediate danger, call:</strong></p>
-        <div class="emergency-numbers">
-          <div class="emergency-number"><span class="number">911</span> Emergency Canada & US</div>
-          <div class="emergency-number"><span class="number">988</span> Suicide Crisis Line (US)</div>
-          <div class="emergency-number"><span class="number">1-833-456-4566</span> Suicide Prevention Canada</div>
-        </div>
-      </section>
-
-      <section id="canada-resources" class="content-section" aria-label="Canada crisis resources">
-        <h2 class="section-title"><span class="icon">🇨🇦</span> CANADA - Crisis Support Resources</h2>
-        <div class="resource-grid" role="list">
-          <article class="resource-card" role="listitem" aria-labelledby="can1-title">
-            <h3 id="can1-title" class="resource-title">Canadian Suicide Prevention Service</h3>
-            <p class="resource-description">24/7 bilingual support for anyone with suicidal thoughts or concerned about someone else.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:1-833-456-4566" class="phone-number">1-833-456-4566</a></div>
-              <div class="contact-method"><span class="icon">💬</span> Text: 45645</div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://www.crisisservicescanada.ca/en/" class="website" target="_blank" rel="noopener">crisisservicescanada.ca</a></div>
-            </div>
-          </article>
-
-          <article class="resource-card" role="listitem" aria-labelledby="can2-title">
-            <h3 id="can2-title" class="resource-title">Jeunesse, J'écoute</h3>
-            <p class="resource-description">24/7 support for youth. Professional counseling, information, and referrals.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:1-800-668-6868" class="phone-number">1-800-668-6868</a></div>
-              <div class="contact-method"><span class="icon">💬</span> Text: TALK to 686868</div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://jeunessejecoute.ca" class="website" target="_blank" rel="noopener">jeunessejecoute.ca</a></div>
-            </div>
-          </article>
-
-          <article class="resource-card" role="listitem" aria-labelledby="can3-title">
-            <h3 id="can3-title" class="resource-title">Trans Lifeline Canada</h3>
-            <p class="resource-description">Peer support hotline for transgender people in crisis (Canada).</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:1-877-330-6366" class="phone-number">1-877-330-6366</a></div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://www.translifeline.org" class="website" target="_blank" rel="noopener">translifeline.org</a></div>
-            </div>
-          </article>
-
-          <article class="resource-card" role="listitem" aria-labelledby="can4-title">
-            <h3 id="can4-title" class="resource-title">Canadian Mental Health Association (CMHA)</h3>
-            <p class="resource-description">Local mental health services and support across Canada.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://cmha.ca" class="website" target="_blank" rel="noopener">cmha.ca</a></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section id="us-resources" class="content-section" aria-label="US crisis resources">
-        <h2 class="section-title"><span class="icon">🇺🇸</span> UNITED STATES - Crisis Support Resources</h2>
-        <div class="resource-grid" role="list">
-          <article class="resource-card" role="listitem" aria-labelledby="us1-title">
-            <h3 id="us1-title" class="resource-title">988 Suicide & Crisis Lifeline</h3>
-            <p class="resource-description">Free and confidential support 24/7 for people in distress and their loved ones.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:988" class="phone-number">988</a></div>
-              <div class="contact-method"><span class="icon">💬</span> Text: 988</div>
-              <div class="contact-method"><span class="icon">💻</span> Chat: 988lifeline.org</div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://988lifeline.org" class="website" target="_blank" rel="noopener">988lifeline.org</a></div>
-            </div>
-          </article>
-
-          <article class="resource-card" role="listitem" aria-labelledby="us2-title">
-            <h3 id="us2-title" class="resource-title">National Sexual Assault Hotline</h3>
-            <p class="resource-description">24/7 confidential support for survivors of sexual assault.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:1-800-656-4673" class="phone-number">1-800-656-4673</a></div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://rainn.org" class="website" target="_blank" rel="noopener">rainn.org</a></div>
-            </div>
-          </article>
-
-          <article class="resource-card" role="listitem" aria-labelledby="us3-title">
-            <h3 id="us3-title" class="resource-title">Trans Lifeline</h3>
-            <p class="resource-description">Peer support hotline for transgender people in crisis.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:877-565-8860" class="phone-number">877-565-8860</a></div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://translifeline.org" class="website" target="_blank" rel="noopener">translifeline.org</a></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section id="crisis-tips" class="tips-section" aria-label="Crisis Support Tips">
-        <h2 class="tips-title">💡 Crisis Support Tips</h2>
-        <div class="tips-grid">
-          <div class="tip-card" role="region" aria-labelledby="tip1-title">
-            <h3 id="tip1-title" class="tip-title">If You're in Crisis</h3>
-            <p>• Reach out immediately - don't wait<br>• Stay with trusted friends or family<br>• Remove means of self-harm<br>• Go to the nearest emergency room if needed</p>
+        <article class="resource-card" role="listitem" aria-labelledby="can1-title">
+          <h3 id="can1-title" class="resource-title">Canada Suicide Prevention Service</h3>
+          <p class="resource-description">24/7 bilingual support for anyone experiencing suicidal thoughts or concerned about someone else.</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:1-833-456-4566" class="phone-number">1-833-456-4566</a></div>
+            <div class="contact-method"><span class="icon">💬</span> Text: 45645</div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://crisisservicescanada.ca" class="website" target="_blank" rel="noopener">crisisservicescanada.ca</a></div>
           </div>
-          <div class="tip-card" role="region" aria-labelledby="tip2-title">
-            <h3 id="tip2-title" class="tip-title">Supporting Someone Else</h3>
-            <p>• Listen without judgment<br>• Take all threats seriously<br>• Don't leave them alone<br>• Help them connect with professional support</p>
+        </article>
+
+        <article class="resource-card" role="listitem" aria-labelledby="can2-title">
+          <h3 id="can2-title" class="resource-title">Kids Help Phone</h3>
+          <p class="resource-description">24/7 support for youth. Professional counseling, information, and referrals.</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:1-800-668-6868" class="phone-number">1-800-668-6868</a></div>
+            <div class="contact-method"><span class="icon">💬</span> Text: PARLER to 686868</div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://kidshelpphone.ca" class="website" target="_blank" rel="noopener">kidshelpphone.ca</a></div>
           </div>
-          <div class="tip-card" role="region" aria-labelledby="tip3-title">
-            <h3 id="tip3-title" class="tip-title">Self-Care Strategies</h3>
-            <p>• Practice deep breathing<br>• Stay connected with support systems<br>• Maintain routines when possible<br>• Seek professional help early</p>
+        </article>
+
+        <article class="resource-card" role="listitem" aria-labelledby="can3-title">
+          <h3 id="can3-title" class="resource-title">Trans Lifeline Canada</h3>
+          <p class="resource-description">Peer support hotline for transgender people in crisis (Canada).</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:1-877-330-6366" class="phone-number">1-877-330-6366</a></div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://translifeline.org" class="website" target="_blank" rel="noopener">translifeline.org</a></div>
           </div>
-        </div>
-      </section>
+        </article>
 
-      <section id="safety-plan-generator" aria-label="Safety Plan Generator">
-        <h2 style="text-align:center; margin-bottom: 1rem;">🛡️ Personalized Safety Plan</h2>
-        <form id="safety-plan-form" aria-describedby="safety-plan-desc">
-          <p id="safety-plan-desc" style="font-style:italic; margin-bottom:1rem; text-align:center;">
-            Fill in the sections below to create a downloadable safety plan PDF.
-          </p>
-
-          <label for="warningSigns">Warning Signs (thoughts, feelings, behaviors)</label>
-          <textarea id="warningSigns" rows="4" placeholder="e.g., Feeling hopeless, withdrawing from friends..."></textarea>
-
-          <label for="copingStrategies">Coping Strategies (what helps you feel better)</label>
-          <textarea id="copingStrategies" rows="4" placeholder="e.g., Taking a walk, listening to music..."></textarea>
-
-          <label for="supportContacts">Support Contacts (people or resources you can reach out to)</label>
-          <textarea id="supportContacts" rows="4" placeholder="e.g., Friend: 123-456-7890, Therapist: 987-654-3210"></textarea>
-
-          <div style="text-align:center; margin:1rem 0;">
-            <button type="button" onclick="downloadSafetyPlan('en')" style="background:#2980b9; color:#fff; padding:0.5rem 1rem; border:none; border-radius:4px; font-weight:600;">
-              Download Safety Plan PDF
-            </button>
+        <article class="resource-card" role="listitem" aria-labelledby="can4-title">
+          <h3 id="can4-title" class="resource-title">Canadian Mental Health Association</h3>
+          <p class="resource-description">Local mental health services and support across Canada.</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://cmha.ca" class="website" target="_blank" rel="noopener">cmha.ca</a></div>
           </div>
-        </form>
-      </section>
+        </article>
 
-      <section id="printable-checklist" aria-label="Printable Crisis Checklist">
-        <h2 style="text-align:center; margin-bottom: 1rem;">📝 Printable Crisis Checklist</h2>
-        <ul style="max-width: 600px; margin: 0 auto; list-style: none; padding: 0;">
-          <li><input type="checkbox" id="chk1" /><label for="chk1"> Reach out to someone you trust</label></li>
-          <li><input type="checkbox" id="chk2" /><label for="chk2"> Remove access to means of self-harm</label></li>
-          <li><input type="checkbox" id="chk3" /><label for="chk3"> Practice deep breathing exercises</label></li>
-          <li><input type="checkbox" id="chk4" /><label for="chk4"> Stay with trusted friends or family</label></li>
-          <li><input type="checkbox" id="chk5" /><label for="chk5"> Go to the nearest emergency room if needed</label></li>
-          <li><input type="checkbox" id="chk6" /><label for="chk6"> Use helplines and crisis resources</label></li>
-        </ul>
-        <div style="text-align:center; margin:1rem 0;">
-          <button onclick="window.print()" style="background:#27ae60; color:#fff; padding:0.5rem 1rem; border:none; border-radius:4px; font-weight:600;">
-            Print Checklist
-          </button>
-        </div>
-      </section>
-
-      <!-- Breathing Exercise -->
-      <div aria-label="Breathing exercise" style="position: fixed; bottom: 1rem; left: 1rem; width: 120px; height: 120px; user-select:none;">
-        <svg id="breath-circle" width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="60" cy="60" r="50" stroke="#2980b9" stroke-width="8" fill="none" />
-          <circle cx="60" cy="60" r="40" stroke="#3498db" stroke-width="6" fill="#a9cce3" />
-        </svg>
-        <div id="breath-text" style="text-align:center; font-weight:600; color:#2980b9; margin-top:0.5rem;">Breathe In</div>
       </div>
+    </section>
 
-      <!-- Panic Exit Button -->
-      <button
-        aria-label="Panic exit, redirect to safe page"
-        onclick="panicExit()"
-        style="position: fixed; bottom: 1rem; right: 1rem; background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 700; font-size: 1rem;"
-      >
-        Panic Exit
-      </button>
+    <section id="us-resources" class="content-section" aria-label="Crisis Support Resources USA">
+      <h2 class="section-title"><span class="icon">🇺🇸</span> USA - Crisis Support Resources</h2>
+      <div class="resource-grid" role="list">
 
-    </div>
-
-    <!-- French Content -->
-    <div id="fr-content" class="language-content hidden" lang="fr">
-
-      <header class="header" role="banner">
-        <h1>🆘 Trousse d'aide en situation de crise</h1>
-        <p class="subtitle" style="font-weight: 600;">Aide immédiate et ressources pour le Canada et les États-Unis</p>
-        <p><strong>Vous n'êtes pas seul(e). De l'aide est disponible 24h/24, 7j/7.</strong></p>
-      </header>
-
-      <section id="emergency-numbers-fr" class="emergency-banner" role="alert" aria-live="assertive" aria-atomic="true">
-        <h2>🚨 NUMÉROS D'URGENCE</h2>
-        <p><strong>Si vous êtes en danger immédiat, appelez :</strong></p>
-        <div class="emergency-numbers">
-          <div class="emergency-number"><span class="number">911</span> Urgence Canada et États-Unis</div>
-          <div class="emergency-number"><span class="number">988</span> Ligne de crise suicide (É.-U.)</div>
-          <div class="emergency-number"><span class="number">1-833-456-4566</span> Prévention du suicide Canada</div>
-        </div>
-      </section>
-
-      <section id="canada-resources-fr" class="content-section" aria-label="Ressources d'aide en crise au Canada">
-        <h2 class="section-title"><span class="icon">🇨🇦</span> CANADA - Ressources d'aide en crise</h2>
-        <div class="resource-grid" role="list">
-          <article class="resource-card" role="listitem" aria-labelledby="canfr1-title">
-            <h3 id="canfr1-title" class="resource-title">Service canadien de prévention du suicide</h3>
-            <p class="resource-description">Soutien bilingue 24h/24 pour toute personne ayant des pensées suicidaires ou préoccupée par quelqu'un d'autre.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:1-833-456-4566" class="phone-number">1-833-456-4566</a></div>
-              <div class="contact-method"><span class="icon">💬</span> Texto : 45645</div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://crisisservicescanada.ca" class="website" target="_blank" rel="noopener">crisisservicescanada.ca</a></div>
-            </div>
-          </article>
-
-          <article class="resource-card" role="listitem" aria-labelledby="canfr2-title">
-            <h3 id="canfr2-title" class="resource-title">Jeunesse, J'écoute</h3>
-            <p class="resource-description">Soutien 24h/24 pour les jeunes. Counseling professionnel, information et références.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:1-800-668-6868" class="phone-number">1-800-668-6868</a></div>
-              <div class="contact-method"><span class="icon">💬</span> Texto : PARLER au 686868</div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://jeunessejecoute.ca" class="website" target="_blank" rel="noopener">jeunessejecoute.ca</a></div>
-            </div>
-          </article>
-
-          <article class="resource-card" role="listitem" aria-labelledby="canfr3-title">
-            <h3 id="canfr3-title" class="resource-title">Trans Lifeline Canada</h3>
-            <p class="resource-description">Ligne d’assistance entre pairs pour les personnes transgenres en crise (Canada).</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:1-877-330-6366" class="phone-number">1-877-330-6366</a></div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://translifeline.org" class="website" target="_blank" rel="noopener">translifeline.org</a></div>
-            </div>
-          </article>
-
-          <article class="resource-card" role="listitem" aria-labelledby="canfr4-title">
-            <h3 id="canfr4-title" class="resource-title">Association canadienne pour la santé mentale</h3>
-            <p class="resource-description">Services locaux en santé mentale à travers le Canada.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://acsm.ca" class="website" target="_blank" rel="noopener">acsm.ca</a></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section id="us-resources-fr" class="content-section" aria-label="Ressources d'aide en crise aux États-Unis">
-        <h2 class="section-title"><span class="icon">🇺🇸</span> ÉTATS-UNIS - Ressources d'aide en crise</h2>
-        <div class="resource-grid" role="list">
-          <article class="resource-card" role="listitem" aria-labelledby="usfr1-title">
-            <h3 id="usfr1-title" class="resource-title">988 Ligne de vie suicide et crise</h3>
-            <p class="resource-description">Soutien gratuit et confidentiel 24h/24 pour les personnes en détresse et leurs proches.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:988" class="phone-number">988</a></div>
-              <div class="contact-method"><span class="icon">💬</span> Texto : 988</div>
-              <div class="contact-method"><span class="icon">💻</span> Chat : 988lifeline.org</div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://988lifeline.org" class="website" target="_blank" rel="noopener">988lifeline.org</a></div>
-            </div>
-          </article>
-
-          <article class="resource-card" role="listitem" aria-labelledby="usfr2-title">
-            <h3 id="usfr2-title" class="resource-title">Ligne nationale d'assistance en cas d'agression sexuelle</h3>
-            <p class="resource-description">Soutien confidentiel 24h/24 pour les survivants d'agression sexuelle.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:1-800-656-4673" class="phone-number">1-800-656-4673</a></div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://rainn.org" class="website" target="_blank" rel="noopener">rainn.org</a></div>
-            </div>
-          </article>
-
-          <article class="resource-card" role="listitem" aria-labelledby="usfr3-title">
-            <h3 id="usfr3-title" class="resource-title">Trans Lifeline</h3>
-            <p class="resource-description">Ligne d'assistance entre pairs pour les personnes transgenres en crise.</p>
-            <div class="contact-info">
-              <div class="contact-method"><span class="icon">📞</span><a href="tel:877-565-8860" class="phone-number">877-565-8860</a></div>
-              <div class="contact-method"><span class="icon">🌐</span><a href="https://translifeline.org" class="website" target="_blank" rel="noopener">translifeline.org</a></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section id="safety-plan-generator-fr" aria-label="Générateur de plan de sécurité">
-        <h2 style="text-align:center; margin-bottom: 1rem;">🛡️ Plan de sécurité personnalisé</h2>
-        <form id="safety-plan-form-fr" aria-describedby="safety-plan-desc-fr">
-          <p id="safety-plan-desc-fr" style="font-style:italic; margin-bottom:1rem; text-align:center;">
-            Remplissez les sections ci-dessous pour créer un PDF téléchargeable de votre plan de sécurité.
-          </p>
-
-          <label for="warningSignsFr">Signes avant-coureurs (pensées, sentiments, comportements)</label>
-          <textarea id="warningSignsFr" rows="4" placeholder="ex: Se sentir désespéré, s’isoler..."></textarea>
-
-          <label for="copingStrategiesFr">Stratégies d'adaptation (ce qui vous aide)</label>
-          <textarea id="copingStrategiesFr" rows="4" placeholder="ex: Faire une promenade, écouter de la musique..."></textarea>
-
-          <label for="supportContactsFr">Contacts de soutien (personnes ou ressources)</label>
-          <textarea id="supportContactsFr" rows="4" placeholder="ex: Ami : 123-456-7890, Thérapeute : 987-654-3210"></textarea>
-
-          <div style="text-align:center; margin:1rem 0;">
-            <button type="button" onclick="downloadSafetyPlan('fr')" style="background:#2980b9; color:#fff; padding:0.5rem 1rem; border:none; border-radius:4px; font-weight:600;">
-              Télécharger le plan de sécurité PDF
-            </button>
+        <article class="resource-card" role="listitem" aria-labelledby="us1-title">
+          <h3 id="us1-title" class="resource-title">988 Suicide & Crisis Lifeline</h3>
+          <p class="resource-description">Free confidential 24/7 support for people in distress and their loved ones.</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:988" class="phone-number">988</a></div>
+            <div class="contact-method"><span class="icon">💬</span> Text: 988</div>
+            <div class="contact-method"><span class="icon">💻</span> Chat: 988lifeline.org</div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://988lifeline.org" class="website" target="_blank" rel="noopener">988lifeline.org</a></div>
           </div>
-        </form>
-      </section>
+        </article>
 
-      <section id="printable-checklist-fr" aria-label="Liste de vérification imprimable en cas de crise">
-        <h2 style="text-align:center; margin-bottom: 1rem;">📝 Liste de vérification imprimable en cas de crise</h2>
-        <ul style="max-width: 600px; margin: 0 auto; list-style: none; padding: 0;">
-          <li><input type="checkbox" id="chk1fr" /><label for="chk1fr"> Contactez quelqu'un en qui vous avez confiance</label></li>
-          <li><input type="checkbox" id="chk2fr" /><label for="chk2fr"> Retirez l'accès aux moyens de se faire du mal</label></li>
-          <li><input type="checkbox" id="chk3fr" /><label for="chk3fr"> Pratiquez des exercices de respiration profonde</label></li>
-          <li><input type="checkbox" id="chk4fr" /><label for="chk4fr"> Restez avec des amis ou de la famille en qui vous avez confiance</label></li>
-          <li><input type="checkbox" id="chk5fr" /><label for="chk5fr"> Allez à l'urgence la plus proche si nécessaire</label></li>
-          <li><input type="checkbox" id="chk6fr" /><label for="chk6fr"> Utilisez les lignes d'assistance et ressources de crise</label></li>
-        </ul>
-        <div style="text-align:center; margin:1rem 0;">
-          <button onclick="window.print()" style="background:#27ae60; color:#fff; padding:0.5rem 1rem; border:none; border-radius:4px; font-weight:600;">
-            Imprimer la liste de vérification
-          </button>
-        </div>
-      </section>
+        <article class="resource-card" role="listitem" aria-labelledby="us2-title">
+          <h3 id="us2-title" class="resource-title">National Sexual Assault Hotline</h3>
+          <p class="resource-description">24/7 confidential support for survivors of sexual assault.</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:1-800-656-4673" class="phone-number">1-800-656-4673</a></div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://rainn.org" class="website" target="_blank" rel="noopener">rainn.org</a></div>
+          </div>
+        </article>
 
-    </div>
+        <article class="resource-card" role="listitem" aria-labelledby="us3-title">
+          <h3 id="us3-title" class="resource-title">Trans Lifeline (USA)</h3>
+          <p class="resource-description">Peer support hotline for transgender people in crisis (USA).</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:877-565-8860" class="phone-number">877-565-8860</a></div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://translifeline.org" class="website" target="_blank" rel="noopener">translifeline.org</a></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="tips-section" class="tips-section" aria-label="Crisis Support Tips">
+      <h2 class="tips-title">💡 Crisis Support Tips</h2>
+      <div class="tips-grid">
+
+        <article class="tip-card" aria-labelledby="tip1-title" role="region">
+          <h3 id="tip1-title" class="tip-title">If You're in Crisis</h3>
+          <p>• Reach out immediately - don't wait<br>
+             • Stay with trusted friends or family<br>
+             • Remove means of self-harm<br>
+             • Go to the nearest emergency room if needed</p>
+        </article>
+
+        <article class="tip-card" aria-labelledby="tip2-title" role="region">
+          <h3 id="tip2-title" class="tip-title">Supporting Someone Else</h3>
+          <p>• Listen without judgment<br>
+             • Take all threats seriously<br>
+             • Don't leave them alone<br>
+             • Help them connect with professional support</p>
+        </article>
+
+        <article class="tip-card" aria-labelledby="tip3-title" role="region">
+          <h3 id="tip3-title" class="tip-title">Self-Care Strategies</h3>
+          <p>• Practice deep breathing<br>
+             • Stay connected with support systems<br>
+             • Maintain routines when possible<br>
+             • Seek professional help early</p>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="safety-plan-generator" aria-label="Safety Plan Generator">
+      <h2>📝 Download Your Safety Plan (English)</h2>
+      <form id="safety-plan-form" aria-describedby="safety-plan-desc">
+        <p id="safety-plan-desc">Fill out the sections below and click "Download PDF" to save your personalized safety plan.</p>
+
+        <label for="warning-signs">Warning Signs:</label>
+        <textarea id="warning-signs" name="warningSigns" placeholder="What are your personal warning signs?" required></textarea>
+
+        <label for="coping-strategies">Coping Strategies:</label>
+        <textarea id="coping-strategies" name="copingStrategies" placeholder="What helps you cope?" required></textarea>
+
+        <label for="support-contacts">Support Contacts:</label>
+        <textarea id="support-contacts" name="supportContacts" placeholder="People or resources you can contact for help." required></textarea>
+
+        <button type="submit" aria-label="Download Safety Plan PDF">Download PDF</button>
+      </form>
+    </section>
+
+    <section id="printable-checklist" aria-label="Printable Crisis Checklist">
+      <h2>📋 Printable Crisis Checklist (English)</h2>
+      <p>Check off steps you have completed or want to complete:</p>
+      <ul>
+        <li><input type="checkbox" id="chk1"><label for="chk1">Reach out to a trusted friend or family member</label></li>
+        <li><input type="checkbox" id="chk2"><label for="chk2">Remove access to means of self-harm</label></li>
+        <li><input type="checkbox" id="chk3"><label for="chk3">Practice deep breathing exercises</label></li>
+        <li><input type="checkbox" id="chk4"><label for="chk4">Stay in a safe environment</label></li>
+        <li><input type="checkbox" id="chk5"><label for="chk5">Contact a crisis hotline or professional</label></li>
+      </ul>
+      <button id="print-checklist-btn" aria-label="Print the crisis checklist">Print Checklist</button>
+    </section>
 
   </div>
 
+  <!-- French Content -->
+  <div id="fr-content" class="language-content hidden" lang="fr">
+
+    <header class="header" role="banner">
+      <h1>🆘 Trousse d'aide en situation de crise</h1>
+      <p class="subtitle">Aide immédiate et ressources pour le Canada et les États-Unis</p>
+      <p><strong>Vous n'êtes pas seul(e). De l'aide est disponible 24h/24, 7j/7.</strong></p>
+    </header>
+
+    <section id="emergency-numbers-fr" class="emergency-banner" role="alert" aria-live="assertive" aria-atomic="true">
+      <h2>🚨 NUMÉROS D'URGENCE</h2>
+      <p><strong>Si vous êtes en danger immédiat, appelez :</strong></p>
+      <div class="emergency-numbers">
+        <div class="emergency-number"><span class="number">911</span> Urgence Canada et États-Unis</div>
+        <div class="emergency-number"><span class="number">988</span> Ligne de crise suicide (É.-U.)</div>
+        <div class="emergency-number"><span class="number">1-833-456-4566</span> Prévention du suicide Canada</div>
+      </div>
+    </section>
+
+    <section id="canada-resources-fr" class="content-section" aria-label="Ressources d'aide en crise Canada">
+      <h2 class="section-title"><span class="icon">🇨🇦</span> CANADA - Ressources d'aide en crise</h2>
+      <div class="resource-grid" role="list">
+
+        <article class="resource-card" role="listitem" aria-labelledby="canfr1-title">
+          <h3 id="canfr1-title" class="resource-title">Service canadien de prévention du suicide</h3>
+          <p class="resource-description">Soutien bilingue 24h/24 pour toute personne ayant des pensées suicidaires ou préoccupée par quelqu'un d'autre.</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:1-833-456-4566" class="phone-number">1-833-456-4566</a></div>
+            <div class="contact-method"><span class="icon">💬</span> Texto : 45645</div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://crisisservicescanada.ca" class="website" target="_blank" rel="noopener">crisisservicescanada.ca</a></div>
+          </div>
+        </article>
+
+        <article class="resource-card" role="listitem" aria-labelledby="canfr2-title">
+          <h3 id="canfr2-title" class="resource-title">Jeunesse, J'écoute</h3>
+          <p class="resource-description">Soutien 24h/24 pour les jeunes. Counseling professionnel, information et références.</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:1-800-668-6868" class="phone-number">1-800-668-6868</a></div>
+            <div class="contact-method"><span class="icon">💬</span> Texto : PARLER au 686868</div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://jeunessejecoute.ca" class="website" target="_blank" rel="noopener">jeunessejecoute.ca</a></div>
+          </div>
+        </article>
+
+        <article class="resource-card" role="listitem" aria-labelledby="canfr3-title">
+          <h3 id="canfr3-title" class="resource-title">Trans Lifeline Canada</h3>
+          <p class="resource-description">Ligne d'entraide entre pairs pour les personnes transgenres en crise (Canada).</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:1-877-330-6366" class="phone-number">1-877-330-6366</a></div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://translifeline.org" class="website" target="_blank" rel="noopener">translifeline.org</a></div>
+          </div>
+        </article>
+
+        <article class="resource-card" role="listitem" aria-labelledby="canfr4-title">
+          <h3 id="canfr4-title" class="resource-title">Association canadienne pour la santé mentale</h3>
+          <p class="resource-description">Services et soutien locaux en santé mentale à travers le Canada.</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://cmha.ca" class="website" target="_blank" rel="noopener">cmha.ca</a></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="us-resources-fr" class="content-section" aria-label="Ressources d'aide en crise États-Unis">
+      <h2 class="section-title"><span class="icon">🇺🇸</span> ÉTATS-UNIS - Ressources d'aide en crise</h2>
+      <div class="resource-grid" role="list">
+
+        <article class="resource-card" role="listitem" aria-labelledby="usfr1-title">
+          <h3 id="usfr1-title" class="resource-title">988 Ligne de vie suicide et crise</h3>
+          <p class="resource-description">Soutien gratuit et confidentiel 24h/24 pour les personnes en détresse et leurs proches.</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:988" class="phone-number">988</a></div>
+            <div class="contact-method"><span class="icon">💬</span> Texto : 988</div>
+            <div class="contact-method"><span class="icon">💻</span> Chat : 988lifeline.org</div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://988lifeline.org" class="website" target="_blank" rel="noopener">988lifeline.org</a></div>
+          </div>
+        </article>
+
+        <article class="resource-card" role="listitem" aria-labelledby="usfr2-title">
+          <h3 id="usfr2-title" class="resource-title">Ligne d'assistance nationale pour les agressions sexuelles</h3>
+          <p class="resource-description">Soutien confidentiel 24h/24 pour les survivants d'agressions sexuelles.</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:1-800-656-4673" class="phone-number">1-800-656-4673</a></div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://rainn.org" class="website" target="_blank" rel="noopener">rainn.org</a></div>
+          </div>
+        </article>
+
+        <article class="resource-card" role="listitem" aria-labelledby="usfr3-title">
+          <h3 id="usfr3-title" class="resource-title">Trans Lifeline (États-Unis)</h3>
+          <p class="resource-description">Ligne d'entraide entre pairs pour les personnes transgenres en crise (États-Unis).</p>
+          <div class="contact-info">
+            <div class="contact-method"><span class="icon">📞</span><a href="tel:877-565-8860" class="phone-number">877-565-8860</a></div>
+            <div class="contact-method"><span class="icon">🌐</span><a href="https://translifeline.org" class="website" target="_blank" rel="noopener">translifeline.org</a></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="tips-section-fr" class="tips-section" aria-label="Conseils de soutien en situation de crise">
+      <h2 class="tips-title">💡 Conseils de soutien en situation de crise</h2>
+      <div class="tips-grid">
+
+        <article class="tip-card" aria-labelledby="tipfr1-title" role="region">
+          <h3 id="tipfr1-title" class="tip-title">Si vous êtes en crise</h3>
+          <p>• Contactez immédiatement - ne tardez pas<br>
+             • Restez avec des amis ou de la famille de confiance<br>
+             • Éloignez les moyens de vous faire du mal<br>
+             • Allez au service d'urgence le plus proche si nécessaire</p>
+        </article>
+
+        <article class="tip-card" aria-labelledby="tipfr2-title" role="region">
+          <h3 id="tipfr2-title" class="tip-title">Soutenir quelqu'un d'autre</h3>
+          <p>• Écoutez sans jugement<br>
+             • Prenez toutes les menaces au sérieux<br>
+             • Ne les laissez pas seuls<br>
+             • Aidez-les à contacter un soutien professionnel</p>
+        </article>
+
+        <article class="tip-card" aria-labelledby="tipfr3-title" role="region">
+          <h3 id="tipfr3-title" class="tip-title">Stratégies de soins personnels</h3>
+          <p>• Pratiquez la respiration profonde<br>
+             • Restez connecté aux réseaux de soutien<br>
+             • Maintenez les routines lorsque possible<br>
+             • Cherchez de l'aide professionnelle tôt</p>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="safety-plan-generator-fr" aria-label="Générateur de plan de sécurité">
+      <h2>📝 Téléchargez votre plan de sécurité (Français)</h2>
+      <form id="safety-plan-form-fr" aria-describedby="safety-plan-desc-fr">
+        <p id="safety-plan-desc-fr">Remplissez les sections ci-dessous et cliquez sur "Télécharger le PDF" pour enregistrer votre plan de sécurité personnalisé.</p>
+
+        <label for="warning-signs-fr">Signes avant-coureurs :</label>
+        <textarea id="warning-signs-fr" name="warningSignsFr" placeholder="Quels sont vos signes avant-coureurs personnels ?" required></textarea>
+
+        <label for="coping-strategies-fr">Stratégies d'adaptation :</label>
+        <textarea id="coping-strategies-fr" name="copingStrategiesFr" placeholder="Qu'est-ce qui vous aide à faire face ?" required></textarea>
+
+        <label for="support-contacts-fr">Contacts de soutien :</label>
+        <textarea id="support-contacts-fr" name="supportContactsFr" placeholder="Personnes ou ressources que vous pouvez contacter." required></textarea>
+
+        <button type="submit" aria-label="Télécharger le plan de sécurité PDF">Télécharger le PDF</button>
+      </form>
+    </section>
+
+    <section id="printable-checklist-fr" aria-label="Liste de contrôle imprimable de crise">
+      <h2>📋 Liste de contrôle imprimable de crise (Français)</h2>
+      <p>Cochez les étapes que vous avez complétées ou que vous souhaitez compléter :</p>
+      <ul>
+        <li><input type="checkbox" id="chkfr1"><label for="chkfr1">Contactez un ami ou un membre de la famille de confiance</label></li>
+        <li><input type="checkbox" id="chkfr2"><label for="chkfr2">Éloignez les moyens de vous faire du mal</label></li>
+        <li><input type="checkbox" id="chkfr3"><label for="chkfr3">Pratiquez des exercices de respiration profonde</label></li>
+        <li><input type="checkbox" id="chkfr4"><label for="chkfr4">Restez dans un environnement sûr</label></li>
+        <li><input type="checkbox" id="chkfr5"><label for="chkfr5">Contactez une ligne de crise ou un professionnel</label></li>
+      </ul>
+      <button id="print-checklist-btn-fr" aria-label="Imprimer la liste de contrôle de crise">Imprimer la liste</button>
+    </section>
+
+  </div>
+
+</div>
+
+<!-- Breathing exercise circle -->
+<div id="breathing-exercise" aria-label="Guided breathing exercise" role="img" aria-live="polite">
+  <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+    <circle id="breath-circle" cx="60" cy="60" r="40" fill="#2980b9" opacity="0.7"
+      style="animation: expand 4000ms ease-in-out infinite alternate;"></circle>
+  </svg>
+  <div id="breath-text" style="margin-top:8px; font-size: 1rem;">Breathe In & Out</div>
+</div>
+
+<!-- Panic exit button -->
+<button id="panic-exit-btn" aria-label="Panic exit button to quickly leave site" title="Quick Exit">Exit</button>
+
+<!-- jsPDF library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-k+g59WlwAt3Ey48+H+xCwXkpqcXmmycp8NnQW9UYZj3l2nJ7DKl0vlSje2p8jxvnYvAHPv0r9+0QbQokG4NO2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
-  // Language toggle
-  function showLanguage(lang) {
-    const enContent = document.getElementById('en-content');
-    const frContent = document.getElementById('fr-content');
+  (() => {
+    const { jsPDF } = window.jspdf;
+
+    // Language toggle
     const enBtn = document.getElementById('en-btn');
     const frBtn = document.getElementById('fr-btn');
+    const enContent = document.getElementById('en-content');
+    const frContent = document.getElementById('fr-content');
 
-    if(lang === 'en') {
-      enContent.classList.remove('hidden');
-      frContent.classList.add('hidden');
-      enBtn.classList.add('active');
-      enBtn.setAttribute('aria-pressed', 'true');
-      frBtn.classList.remove('active');
-      frBtn.setAttribute('aria-pressed', 'false');
-    } else {
-      frContent.classList.remove('hidden');
-      enContent.classList.add('hidden');
-      frBtn.classList.add('active');
-      frBtn.setAttribute('aria-pressed', 'true');
-      enBtn.classList.remove('active');
-      enBtn.setAttribute('aria-pressed', 'false');
-    }
-    closeAllDropdowns();
-  }
-
-  // Panic Exit - instantly redirects to google or safe site
-  function panicExit() {
-    window.location.replace('https://www.google.com');
-  }
-
-  // Breathing exercise timing & text animation
-  const breathText = document.getElementById('breath-text');
-  const breathCircle = document.getElementById('breath-circle');
-
-  let breatheIn = true;
-  function breathingCycle() {
-    if (breatheIn) {
-      breathText.textContent = 'Breathe In';
-      breathCircle.style.animation = 'expand 4000ms ease-in-out forwards';
-    } else {
-      breathText.textContent = 'Breathe Out';
-      breathCircle.style.animation = 'contract 4000ms ease-in-out forwards';
-    }
-    breatheIn = !breatheIn;
-  }
-  breathingCycle();
-  setInterval(breathingCycle, 8000);
-
-  // Safety plan PDF generator
-  async function downloadSafetyPlan(lang) {
-    const warningSigns = lang === 'en' ? document.getElementById('warningSigns').value.trim() : document.getElementById('warningSignsFr').value.trim();
-    const copingStrategies = lang === 'en' ? document.getElementById('copingStrategies').value.trim() : document.getElementById('copingStrategiesFr').value.trim();
-    const supportContacts = lang === 'en' ? document.getElementById('supportContacts').value.trim() : document.getElementById('supportContactsFr').value.trim();
-
-    if (!warningSigns && !copingStrategies && !supportContacts) {
-      alert(lang === 'en' ? 'Please fill in at least one section to generate your safety plan.' : 'Veuillez remplir au moins une section pour générer votre plan de sécurité.');
-      return;
-    }
-
-    if (!window.jspdfLoaded) {
-      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
-      window.jspdfLoaded = true;
-    }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    const title = lang === 'en' ? 'Safety Plan' : 'Plan de sécurité';
-    doc.setFontSize(18);
-    doc.text(title, 105, 20, null, null, 'center');
-
-    doc.setFontSize(12);
-    let y = 35;
-    if (warningSigns) {
-      doc.setFont(undefined, 'bold');
-      doc.text(lang === 'en' ? 'Warning Signs:' : 'Signes avant-coureurs :', 15, y);
-      y += 6;
-      doc.setFont(undefined, 'normal');
-      y = addMultilineText(doc, warningSigns, 15, y, 180, 6);
-      y += 4;
-    }
-    if (copingStrategies) {
-      doc.setFont(undefined, 'bold');
-      doc.text(lang === 'en' ? 'Coping Strategies:' : 'Stratégies d\'adaptation :', 15, y);
-      y += 6;
-      doc.setFont(undefined, 'normal');
-      y = addMultilineText(doc, copingStrategies, 15, y, 180, 6);
-      y += 4;
-    }
-    if (supportContacts) {
-      doc.setFont(undefined, 'bold');
-      doc.text(lang === 'en' ? 'Support Contacts:' : 'Contacts de soutien :', 15, y);
-      y += 6;
-      doc.setFont(undefined, 'normal');
-      y = addMultilineText(doc, supportContacts, 15, y, 180, 6);
-    }
-
-    doc.save(lang === 'en' ? 'SafetyPlan.pdf' : 'PlanSecurite.pdf');
-  }
-
-  function addMultilineText(doc, text, x, y, maxWidth, lineHeight) {
-    const lines = doc.splitTextToSize(text, maxWidth);
-    lines.forEach(line => {
-      doc.text(line, x, y);
-      y += lineHeight;
-    });
-    return y;
-  }
-
-  // Utility to load external scripts dynamically
-  function loadScript(src) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-      document.head.appendChild(script);
-    });
-  }
-
-  // Dropdown menus toggle logic
-  const dropButtons = document.querySelectorAll('nav button.dropbtn');
-
-  dropButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-      closeAllDropdowns();
-      if (!expanded) {
-        btn.setAttribute('aria-expanded', 'true');
-        const menu = document.getElementById(btn.getAttribute('aria-controls'));
-        if (menu) menu.classList.add('show');
+    function setLanguage(lang) {
+      if (lang === 'en') {
+        enContent.classList.remove('hidden');
+        frContent.classList.add('hidden');
+        enBtn.classList.add('active');
+        enBtn.setAttribute('aria-pressed', 'true');
+        frBtn.classList.remove('active');
+        frBtn.setAttribute('aria-pressed', 'false');
+      } else {
+        frContent.classList.remove('hidden');
+        enContent.classList.add('hidden');
+        frBtn.classList.add('active');
+        frBtn.setAttribute('aria-pressed', 'true');
+        enBtn.classList.remove('active');
+        enBtn.setAttribute('aria-pressed', 'false');
       }
-    });
-  });
-
-  // Close all dropdowns helper
-  function closeAllDropdowns() {
-    dropButtons.forEach(btn => btn.setAttribute('aria-expanded', 'false'));
-    document.querySelectorAll('.dropdown-content').forEach(menu => menu.classList.remove('show'));
-  }
-
-  // Close dropdowns if clicked outside nav
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('nav')) {
-      closeAllDropdowns();
     }
-  });
 
-  // Accessibility: keyboard navigation support for dropdowns
-  dropButtons.forEach(btn => {
-    btn.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' || e.key === 'Esc') {
+    enBtn.addEventListener('click', () => setLanguage('en'));
+    frBtn.addEventListener('click', () => setLanguage('fr'));
+
+    // Dropdown menus
+    function toggleDropdown(btnId, menuId) {
+      const btn = document.getElementById(btnId);
+      const menu = document.getElementById(menuId);
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
         closeAllDropdowns();
-        btn.focus();
-      }
+        if (!expanded) {
+          btn.setAttribute('aria-expanded', 'true');
+          menu.classList.add('show');
+          menu.querySelector('a').focus();
+        }
+      });
+      // Close dropdown if click outside or focus leaves
+      document.addEventListener('click', (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+          btn.setAttribute('aria-expanded', 'false');
+          menu.classList.remove('show');
+        }
+      });
+      // Keyboard navigation
+      menu.querySelectorAll('a').forEach((link, idx, arr) => {
+        link.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            btn.setAttribute('aria-expanded', 'false');
+            menu.classList.remove('show');
+            btn.focus();
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            const next = arr[(idx + 1) % arr.length];
+            next.focus();
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            const prev = arr[(idx - 1 + arr.length) % arr.length];
+            prev.focus();
+          }
+        });
+      });
+    }
+    function closeAllDropdowns() {
+      document.querySelectorAll('.dropbtn').forEach(btn => {
+        btn.setAttribute('aria-expanded', 'false');
+      });
+      document.querySelectorAll('.dropdown-content').forEach(menu => {
+        menu.classList.remove('show');
+      });
+    }
+    toggleDropdown('resources-btn', 'resources-menu');
+    toggleDropdown('tips-btn', 'tips-menu');
+    toggleDropdown('plan-btn', 'plan-menu');
+
+    // Panic exit button (redirect immediately)
+    const panicExitBtn = document.getElementById('panic-exit-btn');
+    panicExitBtn.addEventListener('click', () => {
+      // Redirect to Google safe page
+      window.location.href = 'https://www.google.com';
     });
-  });
+
+    // Breathing text animation cycle
+    const breathText = document.getElementById('breath-text');
+    let breathCycle = 0;
+    const breathStages = [
+      'Breathe In...',
+      'Hold...',
+      'Breathe Out...',
+      'Hold...'
+    ];
+    setInterval(() => {
+      breathCycle = (breathCycle + 1) % breathStages.length;
+      breathText.textContent = breathStages[breathCycle];
+    }, 4000);
+
+    // Safety Plan PDF Generator EN
+    const safetyForm = document.getElementById('safety-plan-form');
+    safetyForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const warningSigns = document.getElementById('warning-signs').value.trim();
+      const copingStrategies = document.getElementById('coping-strategies').value.trim();
+      const supportContacts = document.getElementById('support-contacts').value.trim();
+
+      if (!warningSigns || !copingStrategies || !supportContacts) {
+        alert('Please fill out all fields.');
+        return;
+      }
+
+      const doc = new jsPDF();
+
+      doc.setFontSize(18);
+      doc.text('Safety Plan', 105, 20, null, null, 'center');
+      doc.setFontSize(12);
+      doc.text('Warning Signs:', 15, 40);
+      doc.setFontSize(11);
+      doc.text(warningSigns, 15, 48, { maxWidth: 180 });
+
+      doc.setFontSize(12);
+      doc.text('Coping Strategies:', 15, 75);
+      doc.setFontSize(11);
+      doc.text(copingStrategies, 15, 83, { maxWidth: 180 });
+
+      doc.setFontSize(12);
+      doc.text('Support Contacts:', 15, 110);
+      doc.setFontSize(11);
+      doc.text(supportContacts, 15, 118, { maxWidth: 180 });
+
+      doc.save('Safety_Plan_EN.pdf');
+    });
+
+    // Safety Plan PDF Generator FR
+    const safetyFormFr = document.getElementById('safety-plan-form-fr');
+    safetyFormFr.addEventListener('submit', e => {
+      e.preventDefault();
+      const warningSignsFr = document.getElementById('warning-signs-fr').value.trim();
+      const copingStrategiesFr = document.getElementById('coping-strategies-fr').value.trim();
+      const supportContactsFr = document.getElementById('support-contacts-fr').value.trim();
+
+      if (!warningSignsFr || !copingStrategiesFr || !supportContactsFr) {
+        alert('Veuillez remplir tous les champs.');
+        return;
+      }
+
+      const doc = new jsPDF();
+
+      doc.setFontSize(18);
+      doc.text('Plan de sécurité', 105, 20, null, null, 'center');
+      doc.setFontSize(12);
+      doc.text('Signes avant-coureurs :', 15, 40);
+      doc.setFontSize(11);
+      doc.text(warningSignsFr, 15, 48, { maxWidth: 180 });
+
+      doc.setFontSize(12);
+      doc.text('Stratégies d\'adaptation :', 15, 75);
+      doc.setFontSize(11);
+      doc.text(copingStrategiesFr, 15, 83, { maxWidth: 180 });
+
+      doc.setFontSize(12);
+      doc.text('Contacts de soutien :', 15, 110);
+      doc.setFontSize(11);
+      doc.text(supportContactsFr, 15, 118, { maxWidth: 180 });
+
+      doc.save('Plan_de_Securite_FR.pdf');
+    });
+
+    // Print checklist buttons EN & FR
+    function printChecklist(sectionId) {
+      const checklistSection = document.getElementById(sectionId);
+      if (!checklistSection) return;
+
+      const printWindow = window.open('', '', 'width=600,height=700');
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Print Checklist</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 1rem; }
+              h2 { text-align: center; }
+              ul { list-style: none; padding: 0; }
+              li { margin-bottom: 1rem; font-size: 1.1rem; }
+            </style>
+          </head>
+          <body>
+            ${checklistSection.innerHTML}
+            <script>
+              window.onload = function() { window.print(); window.close(); }
+            </script>
+          </body>
+        </html>`);
+      printWindow.document.close();
+    }
+
+    document.getElementById('print-checklist-btn').addEventListener('click', () => printChecklist('printable-checklist'));
+    document.getElementById('print-checklist-btn-fr').addEventListener('click', () => printChecklist('printable-checklist-fr'));
+
+  })();
 </script>
-
-<style>
-  /* Breathing circle animations */
-  @keyframes expand {
-    0% { r: 40; }
-    50% { r: 50; }
-    100% { r: 40; }
-  }
-  @keyframes contract {
-    0% { r: 50; }
-    50% { r: 40; }
-    100% { r: 50; }
-  }
-
-  /* Hide language content */
-  .hidden {
-    display: none;
-  }
-</style>
 
 </body>
 </html>
