@@ -2,288 +2,315 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Ultimate Self-Care Toolkit</title>
+<title>🌿 Self‑Care Toolkit</title>
 <style>
-  /* Root Variables */
   :root {
     --primary: #4a90e2;
     --secondary: #f5a623;
     --accent: #50e3c2;
-    --bg-dark: rgba(0,0,0,.6);
+    --bg-overlay: rgba(0,0,0,0.6);
     --text-light: #fff;
-    --card-bg: rgba(255,255,255,.9);
-    --radius:12px;
-    --shadow:0 6px 15px rgba(0,0,0,.3);
-    --font:'Segoe UI',sans-serif;
+    --card-bg: rgba(255,255,255,0.9);
+    --radius: 12px;
+    --shadow: 0 6px 15px rgba(0,0,0,0.3);
+    --font: 'Segoe UI',sans-serif;
   }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:var(--font);background:#f9fbfd;}
-  header{padding:2rem;text-align:center;background:var(--primary);color:var(--text-light);text-shadow:1px 1px 4px #000;}
-  main{max-width:1000px;margin:2rem auto;padding:0 1rem;}
-  section{background:var(--card-bg);margin-bottom:2rem;padding:2rem;border-radius:var(--radius);box-shadow:var(--shadow);}
-  section h2{margin-top:0;color:var(--primary);}
-  button{background:var(--secondary);color:var(--text-light);border:none;padding:.7rem 1.4rem;border-radius:var(--radius);cursor:pointer;font-weight:700;transition:.3s;}
-  button:hover{background:darksalmon;}
-  textarea, input, canvas{width:100%;margin-top:.8rem;padding:.8rem;font-size:1rem;border-radius:var(--radius);border:1px solid #ccc;}
-  .cards-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;}
-  .card{padding:1.5rem;border-radius:var(--radius);box-shadow:0 3px 10px rgba(0,0,0,.2);background:#fff;}
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body {
+    font-family: var(--font);
+    color: #333;
+    background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=2100&q=80') center/cover fixed;
+    position: relative;
+    min-height: 100vh;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset:0;
+    background: var(--bg-overlay);
+    z-index: -1;
+  }
+  header {
+    text-align:center; padding:2rem;
+    color: var(--text-light);
+    text-shadow: 2px 2px 4px #000;
+  }
+  header h1 { font-size:2.4rem; }
+  main { max-width:1000px; margin:2rem auto; padding:0 1rem; }
+  section {
+    background: var(--card-bg); margin-bottom:2rem; padding:2rem;
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    transition: transform .3s, box-shadow .3s;
+  }
+  section:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+  section h2 { margin-bottom:1rem; color: var(--primary); }
+  button {
+    background: var(--secondary); color: var(--text-light);
+    border:none; padding:.7rem 1.4rem;
+    border-radius: var(--radius); font-weight:700;
+    cursor:pointer; transition: background .3s;
+  }
+  button:hover { background: #d48800; }
+  input, textarea, canvas, select {
+    width:100%; padding:.8rem; margin:.5rem 0;
+    border-radius: var(--radius); border:1px solid #ccc;
+    font-size:1rem;
+  }
+  .cards-container {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:1.5rem;
+  }
+  .card {
+    background:#fff; padding:1.5rem; border-radius: var(--radius);
+    box-shadow:0 3px 10px rgba(0,0,0,0.2);
+    transition: transform .3s, box-shadow .3s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 7px 20px rgba(0,0,0,0.2);
+  }
+  footer {
+    text-align:center; padding:1rem; color: var(--text-light);
+    background: transparent; text-shadow: 2px 2px 4px #000;
+  }
+  @media(max-width:480px){
+    header h1 { font-size:2rem; }
+  }
 </style>
 </head>
 <body>
-<header><h1>🌟 Ultimate Self-Care Toolkit</h1></header>
+<header><h1>🌿 Your Complete Self‑Care Toolkit</h1></header>
 <main>
 
-  <!-- Gratitude Log -->
-  <section id="gratitude">
-    <h2>🙏 Gratitude Log</h2>
-    <p>What are 3 things you're grateful for today?</p>
-    <textarea id="gratitude-1" placeholder="1."></textarea>
-    <textarea id="gratitude-2" placeholder="2."></textarea>
-    <textarea id="gratitude-3" placeholder="3."></textarea>
-    <button id="save-gratitude">Save Gratitude</button>
-    <p id="gratitude-msg" style="color:green;display:none">Saved! 🌼</p>
-  </section>
+<section id="gratitude">
+  <h2>🙏 Gratitude Log</h2>
+  <p>What are 3 things you're grateful for today?</p>
+  <textarea id="grat1" placeholder="1."></textarea>
+  <textarea id="grat2" placeholder="2."></textarea>
+  <textarea id="grat3" placeholder="3."></textarea>
+  <button id="save-grat">Save</button>
+  <span id="grat-msg" style="color:green;display:none;">Saved! 🌼</span>
+</section>
 
-  <!-- Daily Affirmation -->
-  <section id="affirmation">
-    <h2>💬 Daily Affirmation</h2>
-    <p id="affirmation-text" style="font-size:1.2rem;"></p>
-    <button id="new-affirmation">New Affirmation</button>
-  </section>
+<section id="affirmation">
+  <h2>💬 Daily Affirmation</h2>
+  <p id="affirm-text" style="font-size:1.2rem;"></p>
+  <button id="new-affirm">New Affirmation</button>
+</section>
 
-  <!-- Emotion Wheel -->
-  <section id="emotion-wheel">
-    <h2>🎡 Emotion Wheel</h2>
-    <select id="emotion-selector">
-      <option disabled selected>Select an emotion...</option>
-      <option>Happy</option><option>Sad</option><option>Anxious</option><option>Angry</option><option>Excited</option><option>Tired</option>
-    </select>
-    <p id="emotion-description" style="margin-top:1rem;font-style:italic;"></p>
-  </section>
+<section id="emotion-wheel">
+  <h2>🎡 Emotion Wheel</h2>
+  <select id="emotion-select">
+    <option disabled selected>Select an emotion…</option>
+    <option>Happy</option><option>Sad</option><option>Anxious</option>
+    <option>Angry</option><option>Excited</option><option>Tired</option>
+  </select>
+  <p id="emotion-desc" style="margin-top:1rem;font-style:italic;"></p>
+</section>
 
-  <!-- What I Need Right Now -->  
-  <section id="needs">
-    <h2>🧩 What I Need Right Now</h2>
-    <div class="cards-container">
-      <div class="card"><button data-need="Comfort">Comfort</button></div>
-      <div class="card"><button data-need="Motivation">Motivation</button></div>
-      <div class="card"><button data-need="Silence">Silence</button></div>
-      <div class="card"><button data-need="Reassurance">Reassurance</button></div>
-    </div>
-    <p id="need-suggestion" style="margin-top:1rem;font-style:italic;"></p>
-  </section>
+<section id="needs">
+  <h2>🧩 What I Need Right Now</h2>
+  <div class="cards-container">
+    <div class="card"><button data-need="Comfort">Comfort</button></div>
+    <div class="card"><button data-need="Motivation">Motivation</button></div>
+    <div class="card"><button data-need="Silence">Silence</button></div>
+    <div class="card"><button data-need="Reassurance">Reassurance</button></div>
+  </div>
+  <p id="need-sug" style="margin-top:1rem;font-style:italic;"></p>
+</section>
 
-  <!-- Stretch Reminder -->
-  <section id="stretch">
-    <h2>🤸 Stretch Reminder</h2>
-    <p id="stretch-text">Stay active! Take a stretch break.</p>
-  </section>
+<section id="stretch">
+  <h2>🤸 Stretch Reminder</h2>
+  <p>Every 2 hours, take a moment to stretch your body.</p>
+</section>
 
-  <!-- Posture Check -->
-  <section id="posture">
-    <h2>🪑 Posture Check</h2>
-    <p>Sit tall, roll shoulders back, align ears over shoulders.</p>
-  </section>
+<section id="posture">
+  <h2>🪑 Posture Check</h2>
+  <p>Sit tall, shoulders back, ears aligned with shoulders.</p>
+</section>
 
-  <!-- Guided Breathing Visual -->
-  <section id="breathing-visual">
-    <h2>🌬️ Guided Breathing</h2>
-    <canvas id="breathing-canvas" width="300" height="300" style="background:#e0f7fa;border-radius:50%;display:block;margin:auto;"></canvas>
-    <button id="start-breathing-visual">Start Breathing</button>
-  </section>
+<section id="breathing-visual">
+  <h2>🌬️ Guided Breathing</h2>
+  <canvas id="breath-canvas" width="300" height="300" style="background:#e0f7fa;border-radius:50%;display:block;margin:1rem auto;"></canvas>
+  <button id="start-breath">Start Breathing</button>
+</section>
 
-  <!-- Doodle Pad -->
-  <section id="doodle">
-    <h2>🎨 Doodle Pad</h2>
-    <canvas id="doodle-pad" width="600" height="400" style="border:1px solid #ccc;"></canvas>
-    <button id="clear-doodle">Clear Drawing</button>
-  </section>
+<section id="doodle">
+  <h2>🎨 Doodle Pad</h2>
+  <canvas id="doodle-pad" width="600" height="400" style="border:1px solid #ccc;"></canvas>
+  <button id="clear-doodle">Clear</button>
+</section>
 
-  <!-- Vision Board -->
-  <section id="vision-board">
-    <h2>📌 Vision Board</h2>
-    <div id="board" style="display:flex;flex-wrap:wrap;border:2px dashed #ccc;padding:1rem;min-height:200px;"></div>
-    <input type="file" id="vision-upload" accept="image/*" multiple />
-    <p style="font-size:.9rem;color:#888;">Drag & drop or select images</p>
-  </section>
+<section id="vision-board">
+  <h2>📌 Vision Board</h2>
+  <div id="board" style="min-height:200px;border:2px dashed #ccc;padding:1rem;display:flex;flex-wrap:wrap;"></div>
+  <input type="file" id="vision-upload" accept="image/*" multiple/>
+</section>
 
-  <!-- Music & Sounds -->
-  <section id="sounds">
-    <h2>🎶 Music & Sounds</h2>
-    <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Your browser does not support audio.</audio>
-  </section>
+<section id="sounds">
+  <h2>🎶 Music & Nature Sounds</h2>
+  <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+</section>
 
-  <!-- Reach Out Button -->
-  <section id="reach-out">
-    <h2>📞 Reach Out to Someone</h2>
-    <button id="reach-out-btn">Reach Out</button>
-    <p id="reach-msg" style="margin-top:1rem;font-style:italic;"></p>
-  </section>
+<section id="reach-out">
+  <h2>📞 Reach Out to Someone</h2>
+  <button id="reach-btn">Reach Out</button>
+  <p id="reach-msg" style="margin-top:1rem;"></p>
+</section>
 
-  <!-- Plan Builder -->
-  <section id="plan-builder">
-    <h2>🧭 Custom Self‑Care Plan</h2>
-    <p>Select up to 5 goals:</p>
-    <input type="checkbox" id="goal-1" value="Mindfulness"> <label for="goal-1">Mindfulness</label><br/>
-    <input type="checkbox" id="goal-2" value="Movement"> <label for="goal-2">Movement</label><br/>
-    <input type="checkbox" id="goal-3" value="Connection"> <label for="goal-3">Connection</label><br/>
-    <input type="checkbox" id="goal-4" value="Creativity"> <label for="goal-4">Creativity</label><br/>
-    <input type="checkbox" id="goal-5" value="Rest"> <label for="goal-5">Rest</label><br/>
-    <button id="build-plan">Build My Plan</button>
-    <p id="plan-output" style="margin-top:1rem;"></p>
-  </section>
+<section id="plan-builder">
+  <h2>🧭 Custom Self‑Care Plan</h2>
+  <p>Select up to 5 goals:</p>
+  <label><input type="checkbox" value="Mindfulness"/> Mindfulness</label><br/>
+  <label><input type="checkbox" value="Movement"/> Movement</label><br/>
+  <label><input type="checkbox" value="Connection"/> Connection</label><br/>
+  <label><input type="checkbox" value="Creativity"/> Creativity</label><br/>
+  <label><input type="checkbox" value="Rest"/> Rest</label><br/>
+  <button id="build-plan">Build Plan</button>
+  <div id="plan-out" style="margin-top:1rem;"></div>
+</section>
 
-  <!-- 30‑Day Challenge -->
-  <section id="challenge">
-    <h2>📆 30‑Day Kindness Challenge</h2>
-    <button id="flip-challenge">Flip Today's Card</button>
-    <p id="challenge-text" style="margin-top:1rem;"></p>
-  </section>
+<section id="challenge">
+  <h2>📆 30‑Day Kindness Challenge</h2>
+  <button id="flip-ch">Flip Today’s Card</button>
+  <p id="challenge-text" style="margin-top:1rem;"></p>
+</section>
 
-  <!-- Journal Prompt Spinner -->
-  <section id="prompt">
-    <h2>✍️ Journal Prompt</h2>
-    <button id="spin-prompt">Get a Prompt</button>
-    <p id="prompt-text" style="margin-top:1rem;font-style:italic;"></p>
-  </section>
+<section id="prompt">
+  <h2>✍️ Journal Prompt</h2>
+  <button id="spin-prompt">Get Prompt</button>
+  <p id="prompt-text" style="margin-top:1rem;font-style:italic;"></p>
+</section>
 
 </main>
-<footer style="text-align:center;padding:1rem;background:var(--primary);color:var(--text-light);">© 2025 Your Name – Self‑Care Toolkit</footer>
+<footer>© 2025 Your Name — Self‑Care Toolkit</footer>
 
 <script>
-  // Utility to save/load JSON
-  const save = (k,v)=>localStorage.setItem(k,JSON.stringify(v)),
-        load = k=>JSON.parse(localStorage.getItem(k));
+// Storage helper
+const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
+      load=k=>JSON.parse(localStorage.getItem(k));
 
-  // Gratitude Log
-  document.getElementById('save-gratitude').onclick = ()=>{
-    const arr = [1,2,3].map(i=>document.getElementById(`gratitude-${i}`).value);
-    save('gratitude',arr);
-    document.getElementById('gratitude-msg').style.display='block';
-    setTimeout(()=>document.getElementById('gratitude-msg').style.display='none',2000);
-  };
-  (()=>{
-    const g=load('gratitude');
-    if(g)g.forEach((v,i)=>document.getElementById(`gratitude-${i+1}`).value=v);
-  })();
+// Gratitude Log
+document.getElementById('save-grat').onclick=()=>{
+  const arr=[1,2,3].map(i=>document.getElementById(`grat${i}`).value);
+  save('gratitude',arr);
+  document.getElementById('grat-msg').style.display='inline';
+  setTimeout(()=>document.getElementById('grat-msg').style.display='none',2000);
+};
+(()=>{const g=load('gratitude'); if(g)g.forEach((v,i)=>document.getElementById(`grat${i+1}`).value=v);})();
 
-  // Daily Affirmations
-  const affirmations=[
-    "You are enough.",
-    "Today is a fresh start.",
-    "Your feelings matter.",
-    "You are capable.",
-    "You deserve good things."
-  ];
-  function displayAff(){
-    document.getElementById('affirmation-text').innerText=affirmations[new Date().getDate() % affirmations.length];
-  }
-  document.getElementById('new-affirmation').onclick=displayAff;
-  displayAff();
+// Affirmations
+const affirmations=[
+  "You are enough.","Today is a fresh start.",
+  "Your feelings matter.","You are capable.",
+  "You deserve good things."
+];
+document.getElementById('new-affirm').onclick=()=>displayAff();
+function displayAff(){
+  const idx=new Date().getDate()%affirmations.length;
+  document.getElementById('affirm-text').innerText=affirmations[idx];
+}
+displayAff();
 
-  // Emotion Wheel
-  const emotionsDesc={
-    Happy:"Feeling joyful and content.",
-    Sad:"Feeling down—it's okay to feel.",
-    Anxious:"Tension or worry—take a breath.",
-    Angry:"Feeling upset—notice it and pause.",
-    Excited:"High-energy happiness!",
-    Tired:"Need rest—honor your limits."
-  };
-  document.getElementById('emotion-selector').onchange=e=>{
-    document.getElementById('emotion-description').innerText=emotionsDesc[e.target.value]||"";
-  };
+// Emotion Wheel
+const descs={
+  Happy:"Feeling joyful and content.",
+  Sad:"It's okay to feel down.",
+  Anxious:"Tension or worry—take a deep breath.",
+  Angry:"Notice the anger and pause.",
+  Excited:"High-energy happiness!",
+  Tired:"Rest is okay—you deserve it."
+};
+document.getElementById('emotion-select').onchange=e=>{
+  document.getElementById('emotion-desc').innerText=descs[e.target.value]||"";
+};
 
-  // what I need
-  const suggestions={
-    Comfort:"Wrap in a blanket or hug yourself.",
-    Motivation:"Set a tiny goal and take one step.",
-    Silence:"Find a quiet space for 5 minutes.",
-    Reassurance:"Say: 'I'm doing the best I can.'"
-  };
-  document.querySelectorAll('#needs [data-need]').forEach(btn=>btn.onclick=e=>{
-    document.getElementById('need-suggestion').innerText=suggestions[e.target.dataset.need];
+// Needs
+const sug={
+  Comfort:"Wrap in a blanket or hug yourself.",
+  Motivation:"Set a tiny goal and take one step.",
+  Silence:"Find a quiet space for 5 minutes.",
+  Reassurance:"Tell yourself, 'I'm doing my best.'"
+};
+document.querySelectorAll('#needs button').forEach(b=>
+  b.onclick=()=>document.getElementById('need-sug').innerText=sug[b.dataset.need]
+);
+
+// Reminders
+setInterval(()=>alert("Time to stretch! 🤸"), 1000*60*60*2);
+setInterval(()=>alert("Posture check: sit tall! 🪑"), 1000*60*60*3);
+
+// Breathing Visual
+const bc=document.getElementById('breath-canvas'), bcx=bc.getContext('2d');
+let brInt;
+document.getElementById('start-breath').onclick=()=>{
+  clearInterval(brInt);
+  let r=30,grow=true;
+  brInt=setInterval(()=>{
+    bcx.clearRect(0,0,bc.width,bc.height);
+    bcx.beginPath();
+    bcx.arc(bc.width/2,bc.height/2,r,0,2*Math.PI);
+    bcx.fillStyle=varAccent; bcx.fill();
+    if(grow) r+=0.5; else r-=0.5;
+    if(r>90||r<30) grow=!grow;
+  },30);
+  setTimeout(()=>clearInterval(brInt),30000);
+};
+
+// Doodle
+const dp=document.getElementById('doodle-pad'), dtx=dp.getContext('2d');
+let drawing=false;
+dp.onmousedown=()=>drawing=true;
+dp.onmouseup=()=>drawing=false;
+dp.onmousemove=e=>drawing&&(dtx.lineWidth=3,dtx.lineCap='round',dtx.lineTo(e.offsetX,e.offsetY),dtx.stroke());
+document.getElementById('clear-doodle').onclick=()=>dtx.clearRect(0,0,dp.width,dp.height);
+
+// Vision Board
+const board=document.getElementById('board');
+document.getElementById('vision-upload').onchange=e=>{
+  [...e.target.files].forEach(f=>{
+    const img=new Image(); img.src=URL.createObjectURL(f);
+    img.style.maxWidth='120px'; img.style.margin='4px';
+    board.appendChild(img);
   });
+};
 
-  // Stretch & Posture (notifications)
-  function remind(msg){alert(msg);}
-  setInterval(()=>remind("Time to stretch!"),1000*60*60*2);  // every 2h
-  setInterval(()=>remind("Posture check: sit tall!"),1000*60*60*3);  // every 3h
+// Reach Out
+const friends=["Alex","Sam","Taylor"];
+document.getElementById('reach-btn').onclick=()=>{
+  const f=friends[Math.floor(Math.random()*friends.length)];
+  document.getElementById('reach-msg').innerHTML=`Ready to connect with <strong>${f}</strong>?`;
+};
 
-  // Guided breathing visual
-  const c=document.getElementById('breathing-canvas'),cx=c.getContext('2d');
-  let br=null;
-  document.getElementById('start-breathing-visual').onclick=()=>{
-    if(br) clearInterval(br);
-    let phase=0,rad=50;
-    br=setInterval(()=>{
-      cx.clearRect(0,0,c.width,c.height);
-      cx.beginPath();
-      cx.arc(c.width/2,c.height/2,rad,0,2*Math.PI);
-      cx.fillStyle="#50e3c2";cx.fill();
-      rad = phase<50 ? rad+1: rad>20 ? rad-1:50;
-      phase=(phase+1)%100;
-    },30);
-    setTimeout(()=>clearInterval(br),30*100); // ~3s
-  };
+// Plan Builder
+document.getElementById('build-plan').onclick=()=>{
+  const goals=[...document.querySelectorAll('#plan-builder input:checked')].map(i=>i.value);
+  let html="<strong>Self-Care Plan:</strong><ul>";
+  goals.forEach(g=>html+=`<li>${g}</li>`);
+  document.getElementById('plan-out').innerHTML=goals.length?html+"</ul>": "Select at least one goal.";
+};
 
-  // Doodle Pad
-  const dp=document.getElementById('doodle-pad'),dctx=dp.getContext('2d');
-  let drawing=false;
-  dp.onmousedown=()=>drawing=true;
-  dp.onmouseup=()=>drawing=false;
-  dp.onmousemove=e=>drawing&&(()=>(dctx.lineWidth=2,dctx.lineCap='round',dctx.lineTo(e.offsetX,e.offsetY),dctx.stroke()))();
-  document.getElementById('clear-doodle').onclick=()=>dctx.clearRect(0,0,dp.width,dp.height);
+// 30-Day Challenge
+const challenges=[
+  "Compliment someone","Take 10 deep breaths","Write a thank-you note",
+  "Go for a mindful walk","Do something creative"
+];
+document.getElementById('flip-ch').onclick=()=>{
+  const t=challenges[new Date().getDate()%challenges.length];
+  document.getElementById('challenge-text').innerText=t+" ✨";
+};
 
-  // Vision Board
-  const board=document.getElementById('board');
-  document.getElementById('vision-upload').onchange=e=>{
-    [...e.target.files].forEach(file=>{
-      let img=document.createElement('img');
-      img.src=URL.createObjectURL(file);
-      img.style.maxWidth="120px";img.style.margin="4px";board.appendChild(img);
-    });
-  };
-
-  // Reach Out
-  const friends=["Alex","Sam","Taylor"];
-  document.getElementById('reach-out-btn').onclick=()=>{
-    const f=friends[Math.floor(Math.random()*friends.length)];
-    document.getElementById('reach-msg').innerHTML=`How about reaching out to <strong>${f}</strong>?`;
-  };
-
-  // Plan builder
-  document.getElementById('build-plan').onclick=()=>{
-    const goals=[...document.querySelectorAll('#plan-builder input:checked')].map(i=>i.value);
-    let plan="Morning: ";
-    plan += goals.map(g=>`• ${g}`).join('<br/>');
-    document.getElementById('plan-output').innerHTML=plan;
-  };
-
-  // 30-day challenge
-  const challenges=[
-    "Compliment someone",
-    "Take 10 deep breaths",
-    "Write a thank-you note",
-    "Go for a mindful walk",
-    "Do something creative"
-  ];
-  document.getElementById('flip-challenge').onclick=()=>{
-    const t=challenges[new Date().getDate()%challenges.length];
-    document.getElementById('challenge-text').innerText=t;
-  };
-
-  // Prompt spinner
-  const prompts=[
-    "What energizes me today?",
-    "When did I feel proud recently?",
-    "What gave me joy today?",
-    "What challenge did I overcome?"
-  ];
-  document.getElementById('spin-prompt').onclick=()=>{
-    const p=prompts[Math.floor(Math.random()*prompts.length)];
-    document.getElementById('prompt-text').innerText=p;
-  };
+// Journal Prompt Spinner
+const prompts=[
+  "What energizes me today?","When did I feel proud recently?",
+  "What brought me joy today?","What challenge did I overcome?"
+];
+document.getElementById('spin-prompt').onclick=()=>{
+  const p=prompts[Math.floor(Math.random()*prompts.length)];
+  document.getElementById('prompt-text').innerText=p;
+};
 </script>
 </body>
 </html>
