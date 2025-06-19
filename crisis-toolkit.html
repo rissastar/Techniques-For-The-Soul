@@ -1,113 +1,352 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <meta name="theme-color" content="#ffffff" />
-  <title>Crisis Support Toolkit</title>
-  <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Crisis%20Support%22,%22short_name%22:%22Support%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23ffffff%22,%22theme_color%22:%22%23ffffff%22,%22icons%22:[{%22src%22:%22https://cdn-icons-png.flaticon.com/512/3064/3064197.png%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]}">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#4c51bf" />
+  <title>🛟 Crisis Support Toolkit</title>
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Crisis%20Support%20Toolkit%22%2C%22short_name%22%3A%22Support%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%234c51bf%22%2C%22theme_color%22%3A%22%234c51bf%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F3064%2F3064197.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Background & Layout */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
-      color: #333;
-      padding: 1rem;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+      position: relative;
+      overflow-x: hidden;
     }
-    h1, h2, h3 {
-      margin-bottom: 0.5rem;
+    /* Animated circles in background */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      border-radius: 50%;
+      opacity: 0.15;
+      filter: blur(90px);
+      animation: floaty 20s ease-in-out infinite alternate;
+      z-index: 0;
     }
+    body::before {
+      width: 400px;
+      height: 400px;
+      background: #90cdf4;
+      top: 20%;
+      left: -10%;
+      animation-delay: 0s;
+    }
+    body::after {
+      width: 600px;
+      height: 600px;
+      background: #d53f8c;
+      top: 60%;
+      right: -15%;
+      animation-delay: 10s;
+    }
+    @keyframes floaty {
+      0% { transform: translateY(0) translateX(0) scale(1); }
+      100% { transform: translateY(20px) translateX(10px) scale(1.05); }
+    }
+    /* Container */
     .container {
-      max-width: 960px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      width: 100%;
+      background: rgba(255 255 255 / 0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+      padding: 2rem 3rem;
+      position: relative;
+      z-index: 1;
+      color: #edf2f7;
     }
-    .dropdown, .section, .assessment, .resource {
+    /* Header */
+    header {
+      text-align: center;
       margin-bottom: 2rem;
+      user-select: none;
+    }
+    header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      letter-spacing: 1.1px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    header p {
+      font-size: 1.2rem;
+      opacity: 0.85;
+      max-width: 600px;
+      margin: 0 auto;
+      font-weight: 500;
+    }
+    /* Dropdown & Buttons */
+    label {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-right: 0.5rem;
     }
     select, button {
-      padding: 0.6rem 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      font-family: inherit;
       font-size: 1rem;
-      margin-right: 1rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+      margin: 0.5rem 0.75rem 1.5rem 0;
+      font-weight: 600;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
     }
+    select {
+      background: #667eea;
+      color: #fff;
+    }
+    select:hover {
+      background: #5a67d8;
+    }
+    button {
+      background: #d53f8c;
+      color: #fff;
+      min-width: 210px;
+      box-shadow: 0 6px 12px rgba(213,63,140,0.6);
+    }
+    button:hover {
+      background: #b83280;
+      box-shadow: 0 8px 18px rgba(184,44,128,0.8);
+    }
+    /* Section Titles */
+    section h2 {
+      font-weight: 700;
+      font-size: 1.9rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    }
+    /* Resource Cards */
     .resource {
-      background: #f0f4f8;
-      padding: 1rem;
-      border-left: 5px solid #3182ce;
-      border-radius: 8px;
+      background: rgba(255 255 255 / 0.15);
+      border-left: 6px solid #d53f8c;
+      border-radius: 14px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+      transition: background-color 0.3s ease;
     }
-    .resource h3 { margin-bottom: 0.25rem; }
-    .resource a {
-      color: #2b6cb0;
-      text-decoration: underline;
+    .resource:hover {
+      background: rgba(255 255 255 / 0.25);
     }
-    .assessment label {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-    .assessment-question {
-      margin-bottom: 1.5rem;
+    .resource h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.25rem;
+      color: #fed7e2;
     }
     .badge {
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
+      background: #fed7e2;
+      color: #702459;
+      font-weight: 700;
       font-size: 0.75rem;
-      background: #edf2f7;
-      color: #2c5282;
-      border-radius: 4px;
-      margin-left: 0.5rem;
-    }
-    .result-box {
-      padding: 1rem;
       border-radius: 8px;
-      background: #fefcbf;
-      border-left: 5px solid #ecc94b;
-      margin-top: 1rem;
+      padding: 0.15rem 0.6rem;
+      margin-left: 8px;
+      vertical-align: middle;
+      user-select: none;
     }
-    footer {
-      text-align: center;
-      font-size: 0.8rem;
-      color: #666;
+    .resource p {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-bottom: 0.5rem;
+    }
+    .resource a {
+      color: #fed7e2;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+    /* Phone number styling */
+    .phone-link {
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #fed7e2;
+      user-select: text;
+    }
+    /* Assessment Form */
+    #assessment {
       margin-top: 2rem;
+      background: rgba(255 255 255 / 0.12);
+      border-radius: 14px;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      user-select: none;
+    }
+    .assessment-question {
+      margin-bottom: 1.8rem;
+    }
+    .assessment-question label {
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+    .assessment-question select {
+      width: 100%;
+      max-width: 400px;
+      background: #667eea;
+      color: #fff;
+      border-radius: 10px;
+      padding: 0.5rem 0.75rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    /* Result Box */
+    #result {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: 14px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      box-shadow: 0 6px 20px rgba(213,63,140,0.5);
+      text-align: center;
+      user-select: text;
+    }
+    #result.low-risk {
+      color: #48bb78;
+      background: rgba(72,187,120,0.15);
+      border: 3px solid #48bb78;
+    }
+    #result.moderate-risk {
+      color: #ed8936;
+      background: rgba(237,137,54,0.15);
+      border: 3px solid #ed8936;
+    }
+    #result.high-risk {
+      color: #f56565;
+      background: rgba(245,101,101,0.15);
+      border: 3px solid #f56565;
+    }
+    /* Section: Self Care Tools */
+    .tools-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap: 1rem;
+    }
+    .tool-card {
+      background: rgba(255 255 255 / 0.12);
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: background-color 0.3s ease;
+    }
+    .tool-card:hover {
+      background: rgba(255 255 255 / 0.2);
+    }
+    .tool-card h3 {
+      margin-bottom: 0.3rem;
+      font-weight: 700;
+      color: #fed7e2;
+    }
+    .tool-card p {
+      font-size: 0.95rem;
+      line-height: 1.3;
+      opacity: 0.9;
+      margin-bottom: 0.25rem;
+    }
+    .tool-meta {
+      font-size: 0.85rem;
+      color: #d6bcfa;
+      font-weight: 600;
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem 1.5rem;
+      }
+      header h1 {
+        font-size: 2.3rem;
+      }
+      select, button {
+        width: 100%;
+        margin: 0.5rem 0;
+      }
+      #assessment {
+        padding: 1.5rem 1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>📞 Crisis Support Toolkit</h1>
-    <p>Select your country to view local mental health and crisis resources.</p>
+  <main class="container" role="main" aria-label="Crisis Support Toolkit">
+    <header>
+      <h1>🛟 Crisis Support Toolkit</h1>
+      <p>Your mental health matters. Access crisis hotlines, self-assessment, and helpful tools anytime.</p>
+    </header>
 
-    <div class="dropdown">
-      <label for="country-select">🌍 Country:</label>
-      <select id="country-select">
+    <!-- Country Selection -->
+    <section aria-label="Select Country" class="country-select">
+      <label for="country-select">🌍 Select Your Country:</label>
+      <select id="country-select" aria-describedby="country-desc">
         <option value="canada" selected>🇨🇦 Canada</option>
         <option value="usa">🇺🇸 United States</option>
       </select>
-    </div>
+      <p id="country-desc" class="visually-hidden">Choose your country to see local crisis resources.</p>
+    </section>
 
-    <div id="resources" class="section">
+    <!-- Crisis Hotlines Section -->
+    <section id="resources" aria-live="polite" aria-label="Crisis Hotlines" class="resources-section">
       <h2>🚨 Crisis Hotlines</h2>
-      <!-- Resources will be injected here -->
-    </div>
+      <!-- Crisis resources injected here -->
+    </section>
 
-    <button onclick="toggleAssessment()">🧠 Take Mental Health Self-Assessment</button>
+    <!-- Self Assessment Toggle -->
+    <section class="assessment-toggle">
+      <button id="toggle-assessment" aria-expanded="false" aria-controls="assessment">
+        🧠 Take Mental Health Self-Assessment
+      </button>
+    </section>
 
-    <div id="assessment" class="assessment" style="display:none;">
+    <!-- Self Assessment Section -->
+    <section id="assessment" aria-live="polite" style="display:none;" tabindex="-1">
       <h2>📝 Self-Assessment</h2>
-      <form id="assessment-form">
+      <form id="assessment-form" aria-describedby="assessment-desc">
+        <p id="assessment-desc" class="visually-hidden">
+          Answer the following questions about your mental health symptoms over the last two weeks.
+        </p>
         <!-- Questions injected here -->
       </form>
-      <button onclick="calculateScore()">✅ Get Results</button>
-      <div id="result"></div>
-    </div>
+      <button id="submit-assessment" type="button" aria-label="Get self assessment results">
+        ✅ Get Results
+      </button>
+      <div id="result" role="alert" aria-live="assertive"></div>
+    </section>
+
+    <!-- Additional Crisis Tools Section -->
+    <section aria-label="Additional Crisis Tools">
+      <h2>💡 Additional Crisis & Self-Care Tools</h2>
+      <div class="tools-list" id="tools-list">
+        <!-- Tools injected here -->
+      </div>
+    </section>
+
+    <footer>
+      <p>❤️ Remember, you are not alone. Help is available 24/7.</p>
+      <p><small>Built as an offline-capable Progressive Web App for quick access.</small></p>
+    </footer>
+  </main>
 
   <script>
-    const resources = {
+    // Crisis Resources Data
+    const crisisResources = {
       canada: [
         {
           name: "9-8-8 Suicide Crisis Helpline",
@@ -140,121 +379,210 @@
         },
         {
           name: "SAMHSA National Helpline",
-          phone: "1-800-662-HELP",
+          phone: "1-800-662-4357",
           description: "Substance abuse and mental health help, 24/7."
         }
       ]
     };
 
-    const questions = [
-      "How often have you felt down, depressed, or hopeless?",
-      "Little interest or pleasure in doing things?",
-      "Trouble falling or staying asleep, or sleeping too much?",
-      "Feeling tired or having little energy?",
-      "Poor appetite or overeating?",
-      "Feeling bad about yourself or that you’re a failure?",
-      "Trouble concentrating on things?",
-      "Moving or speaking slowly or being fidgety?",
-      "Thoughts you would be better off dead?",
-      "Feeling nervous, anxious, or on edge?"
+    // Additional crisis & self-care tools
+    const crisisTools = [
+      {
+        title: "5-4-3-2-1 Grounding Technique",
+        description: "Name 5 things you see, 4 things you can touch, 3 you hear, 2 you smell, and 1 you taste.",
+        time: "2-3 minutes",
+        difficulty: "Easy"
+      },
+      {
+        title: "Box Breathing",
+        description: "Breathe in for 4 seconds, hold for 4, out for 4, hold for 4. Repeat 4-8 times.",
+        time: "3-5 minutes",
+        difficulty: "Easy"
+      },
+      {
+        title: "Progressive Muscle Relaxation",
+        description: "Tense and relax muscle groups from toes to head.",
+        time: "10-15 minutes",
+        difficulty: "Medium"
+      },
+      {
+        title: "Mindful Walking",
+        description: "Focus on each step and your surroundings during a slow walk.",
+        time: "5-20 minutes",
+        difficulty: "Easy"
+      },
+      {
+        title: "Safe Place Visualization",
+        description: "Close your eyes and imagine a place where you feel completely safe.",
+        time: "5-10 minutes",
+        difficulty: "Medium"
+      },
+      {
+        title: "Cold Water Technique",
+        description: "Splash cold water on your face or hold ice cubes to activate calm response.",
+        time: "1-2 minutes",
+        difficulty: "Easy"
+      }
     ];
 
+    // Assessment Questions
+    const assessmentQuestions = [
+      { id: 1, text: "How often have you felt down, depressed, or hopeless?" },
+      { id: 2, text: "Little interest or pleasure in doing things?" },
+      { id: 3, text: "Trouble falling or staying asleep, or sleeping too much?" },
+      { id: 4, text: "Feeling tired or having little energy?" },
+      { id: 5, text: "Poor appetite or overeating?" },
+      { id: 6, text: "Feeling bad about yourself or that you’re a failure?" },
+      { id: 7, text: "Trouble concentrating on things?" },
+      { id: 8, text: "Moving or speaking slowly or being fidgety?" },
+      { id: 9, text: "Thoughts you would be better off dead or hurting yourself?" },
+      { id: 10, text: "Feeling nervous, anxious, or on edge?" }
+    ];
+
+    // Render resources by country
     function renderResources(country) {
       const container = document.getElementById("resources");
       container.innerHTML = "<h2>🚨 Crisis Hotlines</h2>";
-      resources[country].forEach(r => {
-        const div = document.createElement("div");
-        div.className = "resource";
-        div.innerHTML = `
-          <h3>${r.name} ${r.priority ? '<span class="badge">Priority</span>' : ''}</h3>
-          <p>${r.description}</p>
-          <p>📞 <a href="tel:${r.phone}">${r.phone}</a></p>
+      crisisResources[country].forEach(res => {
+        const resourceDiv = document.createElement("div");
+        resourceDiv.className = "resource";
+        resourceDiv.innerHTML = `
+          <h3>${res.name} ${res.priority ? '<span class="badge">Priority</span>' : ''}</h3>
+          <p>${res.description}</p>
+          <p class="phone-link" aria-label="Phone number for ${res.name}">📞 <a href="tel:${res.phone.replace(/-/g,'')}" tabindex="0">${res.phone}</a></p>
         `;
-        container.appendChild(div);
+        container.appendChild(resourceDiv);
       });
     }
 
-    function toggleAssessment() {
-      const section = document.getElementById("assessment");
-      section.style.display = section.style.display === "none" ? "block" : "none";
-      if (section.style.display === "block") renderAssessment();
-    }
-
+    // Render self-assessment questions
     function renderAssessment() {
       const form = document.getElementById("assessment-form");
       form.innerHTML = "";
-      questions.forEach((q, i) => {
-        const div = document.createElement("div");
-        div.className = "assessment-question";
-        div.innerHTML = `
-          <label>${i + 1}. ${q}</label>
-          <select name="q${i}">
+      assessmentQuestions.forEach(q => {
+        const questionDiv = document.createElement("div");
+        questionDiv.className = "assessment-question";
+        questionDiv.innerHTML = `
+          <label for="q${q.id}">${q.id}. ${q.text}</label>
+          <select id="q${q.id}" name="q${q.id}" required aria-required="true" aria-describedby="q${q.id}-desc">
+            <option value="" disabled selected>Select an option</option>
             <option value="0">Not at all</option>
             <option value="1">Several days</option>
             <option value="2">More than half the days</option>
             <option value="3">Nearly every day</option>
           </select>
+          <div id="q${q.id}-desc" class="visually-hidden">Choose frequency for the symptom</div>
         `;
-        form.appendChild(div);
+        form.appendChild(questionDiv);
       });
     }
 
-    function calculateScore() {
+    // Calculate score and show result
+    function calculateAssessment() {
       const form = document.getElementById("assessment-form");
+      let totalScore = 0;
+      let unanswered = false;
+      assessmentQuestions.forEach(q => {
+        const val = form[`q${q.id}`].value;
+        if (val === "") unanswered = true;
+        else totalScore += Number(val);
+      });
       const result = document.getElementById("result");
-      let score = 0;
-      for (let i = 0; i < questions.length; i++) {
-        const val = parseInt(form.elements["q" + i].value);
-        score += val;
+      if (unanswered) {
+        result.className = "";
+        result.textContent = "⚠️ Please answer all questions before submitting.";
+        return;
       }
-      let level = "", message = "";
-      if (score >= 20) {
-        level = "🚨 High Risk";
-        message = "Please reach out to crisis support right away. You're not alone.";
-      } else if (score >= 10) {
-        level = "⚠️ Moderate Risk";
-        message = "Consider talking to a therapist or using self-care strategies.";
+      if (totalScore >= 20) {
+        result.className = "high-risk";
+        result.innerHTML = `<strong>🚨 High Risk</strong><br>Please seek immediate professional help or call a crisis hotline. You're not alone.`;
+      } else if (totalScore >= 10) {
+        result.className = "moderate-risk";
+        result.innerHTML = `<strong>⚠️ Moderate Risk</strong><br>Consider reaching out to a mental health professional and use self-care tools regularly.`;
       } else {
-        level = "✅ Low Risk";
-        message = "You're doing okay, but keep monitoring your feelings.";
+        result.className = "low-risk";
+        result.innerHTML = `<strong>✅ Low Risk</strong><br>Keep monitoring your feelings and practicing healthy coping skills.`;
       }
-      result.innerHTML = `
-        <div class="result-box">
-          <h3>${level}</h3>
-          <p>${message}</p>
-          <p><strong>Total Score:</strong> ${score}</p>
-        </div>
-      `;
     }
 
+    // Render additional crisis tools
+    function renderTools() {
+      const container = document.getElementById("tools-list");
+      crisisTools.forEach(tool => {
+        const card = document.createElement("div");
+        card.className = "tool-card";
+        card.innerHTML = `
+          <h3>✨ ${tool.title}</h3>
+          <p>${tool.description}</p>
+          <p class="tool-meta">⏳ Time: ${tool.time} &nbsp;•&nbsp; ⚙️ Difficulty: ${tool.difficulty}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Toggle assessment visibility & update aria-expanded
+    function toggleAssessmentVisibility() {
+      const section = document.getElementById("assessment");
+      const btn = document.getElementById("toggle-assessment");
+      if (section.style.display === "none" || section.style.display === "") {
+        section.style.display = "block";
+        btn.setAttribute("aria-expanded", "true");
+        section.focus();
+        if (!document.getElementById("assessment-form").hasChildNodes()) {
+          renderAssessment();
+        }
+      } else {
+        section.style.display = "none";
+        btn.setAttribute("aria-expanded", "false");
+      }
+    }
+
+    // Event Listeners
     document.getElementById("country-select").addEventListener("change", (e) => {
       renderResources(e.target.value);
     });
+    document.getElementById("toggle-assessment").addEventListener("click", toggleAssessmentVisibility);
+    document.getElementById("submit-assessment").addEventListener("click", calculateAssessment);
 
-    window.onload = () => {
+    // On page load
+    window.addEventListener("load", () => {
       renderResources("canada");
+      renderTools();
+
+      // Register service worker for offline/PWA
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('data:text/javascript,' + encodeURIComponent(`
-          self.addEventListener('install', e => {
-            e.waitUntil(
-              caches.open('crisis-v1').then(cache => {
+          self.addEventListener('install', event => {
+            event.waitUntil(
+              caches.open('crisis-toolkit-v1').then(cache => {
                 return cache.addAll(['.']);
               })
             );
           });
-          self.addEventListener('fetch', e => {
-            e.respondWith(
-              caches.match(e.request).then(response => response || fetch(e.request))
+          self.addEventListener('fetch', event => {
+            event.respondWith(
+              caches.match(event.request).then(response => {
+                return response || fetch(event.request);
+              })
             );
           });
         `));
       }
-    };
+    });
   </script>
 
-  <footer>
-    <p>❤️ You are not alone. Support is always available.</p>
-    <p><small>Offline capable. Built with love and hope.</small></p>
-  </footer>
+  <style>
+    /* Visually hidden for accessibility */
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0,0,0,0) !important;
+      border: 0 !important;
+    }
+  </style>
 </body>
 </html>
