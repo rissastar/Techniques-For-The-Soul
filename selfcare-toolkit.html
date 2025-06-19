@@ -3,308 +3,412 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🌟 Personal Self‑Care Toolkit 🌟</title>
-
-  <!-- PWA Manifest (inline via blob) -->
+  <title>🌿 Personal Self‑Care Toolkit</title>
   <link rel="manifest" href="#" id="manifest-link">
-
   <style>
-    /* RESET & BASE */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: linear-gradient(135deg, #667eea, #764ba2); color: #333;
-           font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
+    /* ---------- Reset & Base ---------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
     button, textarea { font-family: inherit; }
-
-    /* PRINT STYLES */
-    @media print {
-      body { background: #fff !important; color: #000 !important; }
-      header, .plan-tabs, .breathing-exercise, .mood-tracker, .gratitude-container,
-      .generate-plan-btn, .stats-bar, footer { display: none !important; }
-      .generated-plan { display: block !important; margin: 0; color: #000; }
-      .generated-plan ul { margin-left: 2rem; }
-    }
-
-    /* LAYOUT */
     main.container {
-      max-width: 900px; margin: 2rem auto; background: #fff; border-radius: 25px;
-      padding: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-    header h1 { font-size: 2.5rem; text-align: center; color: #4a47a3; margin-bottom: 1rem; }
-    header p { text-align: center; margin-bottom: 2rem; color: #666; }
-    .stats-bar { display: flex; justify-content: center; gap: 3rem; margin-bottom: 2rem; }
-    .stat-item { text-align: center; }
-    .stat-number { font-size: 2rem; color: #667eea; font-weight: 700; }
-
-    .plan-tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .tab-btn { padding: 0.8rem 1.5rem; border: none; border-radius: 15px; background: #e2e8f0;
-               cursor: pointer; transition: background 0.3s; }
-    .tab-btn.active, .tab-btn:hover { background: #667eea; color: #fff; }
-
-    .activity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
-                     gap: 1.2rem; margin-bottom: 1.5rem; }
-    .activity-card {
-      background: #f9fafc; padding: 1rem; border-radius: 20px; cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.07); transition: transform 0.25s;
-      text-align: center;
+      background: #fff;
+      border-radius: 25px;
+      max-width: 900px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
-    .activity-card:hover { transform: translateY(-5px); }
-    .activity-card.selected { background: #dbe4ff; box-shadow: 0 12px 30px rgba(118,75,162,0.5); }
-    .activity-icon { font-size: 2.5rem; margin-bottom: 0.5rem; color: #667eea; }
+    h1, h2, h3 { text-align: center; margin-bottom: 1rem; }
+    p { text-align: center; margin-bottom: 1.5rem; color: #555; }
+
+    /* ---------- Stats ---------- */
+    .stats-bar {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 2rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-number {
+      font-size: 2rem;
+      color: #667eea;
+      font-weight: 700;
+      display: block;
+    }
+
+    /* ---------- Tabs ---------- */
+    .plan-tabs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+    }
+    .tab-btn {
+      flex: 1 1 18%;
+      padding: 0.8rem;
+      margin: 0 0.25rem;
+      border: none;
+      border-radius: 15px;
+      background: #e2e8f0;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 0.95rem;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    /* ---------- Activity Cards ---------- */
+    .activity-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      margin-bottom: 1.5rem;
+    }
+    .activity-card {
+      background: #f9fafc;
+      border-radius: 20px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .activity-card:hover { transform: translateY(-4px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+    .activity-card.selected {
+      background: #dbe4ff;
+      box-shadow: 0 12px 25px rgba(118,75,162,0.5);
+    }
+    .activity-icon { font-size: 2.2rem; margin-bottom: 0.6rem; color: #667eea; }
     .activity-title { font-weight: 700; margin-bottom: 0.3rem; }
     .activity-desc { font-size: 0.9rem; color: #5a5a7d; }
 
+    /* ---------- Plan Generation ---------- */
     .generate-plan-btn, #downloadPlanBtn {
-      display: block; margin: 1rem auto; padding: 1rem 2.5rem; border: none;
-      border-radius: 25px; color: white; font-size: 1.1rem; cursor: pointer;
-      background: linear-gradient(135deg, #667eea, #764ba2); transition: transform 0.3s;
+      display: inline-block;
+      margin: 0.5rem auto 2rem auto;
+      padding: 0.9rem 2rem;
+      border: none;
+      border-radius: 25px;
+      background: #764ba2;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s;
     }
-    .generate-plan-btn:hover, #downloadPlanBtn:hover {
-      transform: translateY(-3px);
-    }
+    .generate-plan-btn:hover, #downloadPlanBtn:hover { transform: translateY(-2px); }
 
     .generated-plan {
-      display: none; background: #e8ebff; padding: 1.5rem; border-radius: 20px;
-      margin: 1rem 0; font-size: 1rem; }
+      background: #e8ebff;
+      padding: 1.5rem;
+      border-radius: 20px;
+      font-size: 1rem;
+      display: none;
+    }
     .generated-plan.show { display: block; }
 
+    /* ---------- Breathing ---------- */
     .breathing-exercise { text-align: center; margin-bottom: 2rem; }
     .breathing-circle {
-      width: 160px; height: 160px; margin: 0 auto 0.5rem; border-radius: 50%;
-      background: #667eea; animation: none; cursor: pointer; position: relative;
+      width: 180px; height: 180px;
+      margin: 0 auto 1rem;
+      background: #667eea;
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      animation: none;
     }
-    .breathing-circle.animate { animation: breathe 6s ease-in-out infinite; }
+    .breathing-circle.animate {
+      animation: breathe 6s ease-in-out infinite;
+    }
     @keyframes breathe {
       0%,100% { transform: scale(1); }
       50% { transform: scale(1.3); }
     }
     .breathing-circle::after {
-      content: 'Click to Start/Stop'; position: absolute; bottom: -1.5rem;
-      width: 100%; text-align: center; font-size: 0.8rem; color: #555;
+      content: 'Click to breathe';
+      position: absolute; bottom: -1.5rem; width: 100%; text-align: center;
+      font-size: 0.85rem; color: #555;
     }
-    .breathing-instructions { font-size: 1rem; color: #555; margin-bottom: 2rem; }
+    .breathing-instructions { color: #555; font-size: 0.95rem; }
 
+    /* ---------- Mood Tracker ---------- */
     .mood-tracker { text-align: center; margin-bottom: 2rem; }
-    .mood-btn { font-size: 2rem; background: none; border: none; cursor: pointer; margin: 0 0.5rem; }
-    .mood-btn.selected { filter: drop-shadow(0 0 5px #764ba2); transform: scale(1.2); }
-    .mood-feedback { text-align: center; margin-top: 0.5rem; font-weight: bold; color: #4a47a3; opacity: 0; transition: opacity 0.4s; }
+    .mood-btn {
+      font-size: 2rem; margin: 0 0.5rem;
+      background: none; border: none; cursor: pointer;
+      transition: transform 0.25s;
+    }
+    .mood-btn:hover { transform: scale(1.2); }
+    .mood-btn.selected {
+      filter: drop-shadow(0 0 5px #764ba2);
+      transform: scale(1.3);
+    }
+    .mood-feedback {
+      margin-top: 0.5rem; font-weight: 600; color: #4a47a3;
+      opacity: 0; transition: opacity 0.3s;
+    }
     .mood-feedback.show { opacity: 1; }
 
-    .gratitude-container { text-align: center; margin-bottom: 2rem; }
-    .gratitude-input { width: 100%; padding: 1rem; font-size: 1rem; border: 2px solid #e2e8f0; border-radius: 15px; resize: vertical; min-height: 100px; transition: border 0.3s; }
+    /* ---------- Gratitude ---------- */
+    .gratitude-container {
+      text-align: center; margin-bottom: 2rem;
+    }
+    .gratitude-input {
+      width: 100%; padding: 1rem;
+      font-size: 1rem; border: 2px solid #e2e8f0;
+      border-radius: 15px; resize: vertical; min-height: 100px;
+      transition: border-color 0.3s;
+    }
     .gratitude-input:focus { border-color: #667eea; }
-    .add-btn { margin: 1rem auto; display: block;
-      background: linear-gradient(135deg, #667eea, #764ba2); color: #fff;
-      border: none; padding: 1rem 2.5rem; border-radius: 25px; cursor: pointer;
-      transition: transform 0.3s; }
-    .add-btn:hover { transform: translateY(-3px); }
-    .gratitude-list { margin-top: 1rem; max-height: 200px; overflow-y: auto; text-align: left; }
+    .add-btn {
+      margin: 1rem auto;
+      padding: 0.9rem 2rem;
+      background: #667eea; color: white;
+      border: none; border-radius: 25px; cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .add-btn:hover { transform: translateY(-2px); }
+    .gratitude-list {
+      margin-top: 1rem; max-height: 200px;
+      overflow-y: auto; text-align: left;
+    }
     .gratitude-item {
-      background: #dbe4ff; border-radius: 15px; padding: 0.8rem 1rem;
-      margin-bottom: 0.8rem; box-shadow: 0 5px 15px rgba(102,126,234,0.3); position: relative;
+      background: #dbe4ff; border-radius: 15px;
+      margin-bottom: 0.8rem; padding: 0.8rem 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      position: relative;
     }
     .gratitude-item::before {
-      content: "✨"; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+      content: "✨"; position: absolute; right: 1rem;
+      top: 50%; transform: translateY(-50%);
     }
 
-    @media (max-width: 600px) {
-      .activity-grid { grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); }
+    /* ---------- Print Styles ---------- */
+    @media print {
+      body, main { background: #fff; color: #000; }
+      header, .plan-tabs, .breathing-exercise, .mood-tracker, .gratitude-container, .generate-plan-btn, #downloadPlanBtn, footer {
+        display: none !important;
+      }
+      .generated-plan { display: block !important; }
+      .generated-plan ul { margin-left: 2rem; }
     }
   </style>
 </head>
 <body>
-  <main class="container">
-    <header>
-      <h1>🌟 Your Self‑Care Toolkit 🌟</h1>
-      <p>Choose activities, track mood, practice breathing, and reflect—your nurturing space.</p>
-      <div class="stats-bar">
-        <div class="stat-item"><span id="activitiesCompleted" class="stat-number">0</span><span>Activities Done</span></div>
-        <div class="stat-item"><span id="dayStreak" class="stat-number">0</span><span>Gratitude Streak</span></div>
-        <div class="stat-item"><span id="moodScore" class="stat-number">😊</span><span>Today's Mood</span></div>
-      </div>
-    </header>
+<main class="container">
+  <header>
+    <h1>🌿 Your Self‑Care Toolkit</h1>
+    <p>Build routines that nurture your Body, Mind, and Connections.</p>
+    <div class="stats-bar">
+      <div class="stat-item"><span id="activitiesCompleted" class="stat-number">0</span>Activities Done</div>
+      <div class="stat-item"><span id="dayStreak" class="stat-number">0</span>Gratitude Streak</div>
+      <div class="stat-item"><span id="moodScore" class="stat-number">😊</span>Today's Mood</div>
+    </div>
+  </header>
 
-    <section>
-      <div class="plan-tabs">
-        <button class="tab-btn active" onclick="showPlanCategory('physical')">🏃‍♀️ Physical</button>
-        <button class="tab-btn" onclick="showPlanCategory('cognitive')">🧠 Cognitive</button>
-        <button class="tab-btn" onclick="showPlanCategory('creative')">🎨 Creative</button>
-        <button class="tab-btn" onclick="showPlanCategory('motivation')">☀️ Motivation</button>
-        <button class="tab-btn" onclick="showPlanCategory('social')">💝 Social</button>
+  <section aria-label="Create your plan">
+    <div class="plan-tabs">
+      <button class="tab-btn active" onclick="showPlanCategory('physical')">Physical</button>
+      <button class="tab-btn" onclick="showPlanCategory('cognitive')">Cognitive</button>
+      <button class="tab-btn" onclick="showPlanCategory('creative')">Creative</button>
+      <button class="tab-btn" onclick="showPlanCategory('motivation')">Motivation</button>
+      <button class="tab-btn" onclick="showPlanCategory('social')">Social</button>
+    </div>
+    <div id="physical" class="plan-category">
+      <div class="activity-grid">
+        <div class="activity-card" data-activity="Morning Stretch"><span class="activity-icon">🧘‍♀️</span><div class="activity-title">Morning Stretch</div><div class="activity-desc">Wake your body with gentle movement.</div></div>
+        <div class="activity-card" data-activity="Mindful Walk"><span class="activity-icon">🚶‍♀️</span><div class="activity-title">Mindful Walk</div><div class="activity-desc">Connect with nature and refresh.</div></div>
+        <div class="activity-card" data-activity="Hydration Break"><span class="activity-icon">💧</span><div class="activity-title">Hydration Break</div><div class="activity-desc">Sip water mindfully.</div></div>
+        <div class="activity-card" data-activity="Exercise Session"><span class="activity-icon">💪</span><div class="activity-title">Exercise Session</div><div class="activity-desc">Move intentionally today.</div></div>
       </div>
+    </div>
+    <div id="cognitive" class="plan-category" hidden>
+      <div class="activity-grid"> 
+        <div class="activity-card" data-activity="Journal Reflection"><span class="activity-icon">📓</span><div class="activity-title">Journal Reflection</div><div class="activity-desc">Process your thoughts.</div></div>
+        <div class="activity-card" data-activity="Daily Affirmations"><span class="activity-icon">💬</span><div class="activity-title">Daily Affirmations</div><div class="activity-desc">Boost positivity.</div></div>
+        <div class="activity-card" data-activity="Mindful Reading"><span class="activity-icon">📖</span><div class="activity-title">Mindful Reading</div><div class="activity-desc">Relax with calming text.</div></div>
+      </div>
+    </div>
+    <div id="creative" class="plan-category" hidden>
+      <div class="activity-grid">
+        <div class="activity-card" data-activity="Doodling Session"><span class="activity-icon">🖍️</span><div class="activity-title">Doodling Session</div><div class="activity-desc">Express through art.</div></div>
+        <div class="activity-card" data-activity="Music Exploration"><span class="activity-icon">🎧</span><div class="activity-title">Music Exploration</div><div class="activity-desc">Listen or create.</div></div>
+      </div>
+    </div>
+    <div id="motivation" class="plan-category" hidden>
+      <div class="activity-grid">
+        <div class="activity-card" data-activity="Set a Goal"><span class="activity-icon">🎯</span><div class="activity-title">Set a Goal</div><div class="activity-desc">Define a daily intention.</div></div>
+        <div class="activity-card" data-activity="Celebrate Wins"><span class="activity-icon">🏆</span><div class="activity-title">Celebrate Wins</div><div class="activity-desc">Acknowledge progress.</div></div>
+      </div>
+    </div>
+    <div id="social" class="plan-category" hidden>
+      <div class="activity-grid">
+        <div class="activity-card" data-activity="Check In Chat"><span class="activity-icon">📞</span><div class="activity-title">Check In Chat</div><div class="activity-desc">Reach out to someone.</div></div>
+        <div class="activity-card" data-activity="Random Act of Kindness"><span class="activity-icon">🌷</span><div class="activity-title">Random Kindness</div><div class="activity-desc">Brighten someone’s day.</div></div>
+      </div>
+    </div>
 
-      <!-- Plan Categories -->
-      <div id="physical" class="plan-category">
-        <div class="activity-grid">
-          <div class="activity-card" data-activity="Morning Stretches"><span class="activity-icon">🧘‍♀️</span><div class="activity-title">Morning Stretches</div><div class="activity-desc">Start your day gently.</div></div>
-          <div class="activity-card" data-activity="Mindful Walk"><span class="activity-icon">🚶‍♀️</span><div class="activity-title">Mindful Walk</div><div class="activity-desc">Refresh your mind & body.</div></div>
-          <div class="activity-card" data-activity="Hydration Ritual"><span class="activity-icon">💧</span><div class="activity-title">Hydration Ritual</div><div class="activity-desc">Stay nourished.</div></div>
-          <div class="activity-card" data-activity="Exercise Session"><span class="activity-icon">💪</span><div class="activity-title">Exercise Session</div><div class="activity-desc">Move your muscles.</div></div>
-        </div>
-      </div>
-      <div id="cognitive" class="plan-category" hidden>
-        <div class="activity-grid">
-          <div class="activity-card" data-activity="Journal Writing"><span class="activity-icon">📓</span><div class="activity-title">Journal Writing</div><div class="activity-desc">Reflect your thoughts.</div></div>
-          <div class="activity-card" data-activity="Daily Affirmations"><span class="activity-icon">💬</span><div class="activity-title">Daily Affirmations</div><div class="activity-desc">Boost your mind.</div></div>
-          <div class="activity-card" data-activity="Mindful Reading"><span class="activity-icon">📖</span><div class="activity-title">Mindful Reading</div><div class="activity-desc">Relax with words.</div></div>
-        </div>
-      </div>
-      <div id="creative" class="plan-category" hidden>
-        <div class="activity-grid">
-          <div class="activity-card" data-activity="Doodling"><span class="activity-icon">🖍️</span><div class="activity-title">Doodling</div><div class="activity-desc">Draw your feelings.</div></div>
-          <div class="activity-card" data-activity="Music Time"><span class="activity-icon">🎧</span><div class="activity-title">Music Time</div><div class="activity-desc">Play or listen.</div></div>
-        </div>
-      </div>
-      <div id="motivation" class="plan-category" hidden>
-        <div class="activity-grid">
-          <div class="activity-card" data-activity="Set a Goal"><span class="activity-icon">🎯</span><div class="activity-title">Set a Goal</div><div class="activity-desc">Define a win today.</div></div>
-          <div class="activity-card" data-activity="Celebrate Wins"><span class="activity-icon">🏆</span><div class="activity-title">Celebrate Wins</div><div class="activity-desc">Acknowledge achievements.</div></div>
-        </div>
-      </div>
-      <div id="social" class="plan-category" hidden>
-        <div class="activity-grid">
-          <div class="activity-card" data-activity="Check In"><span class="activity-icon">📞</span><div class="activity-title">Check In</div><div class="activity-desc">Reach out to someone.</div></div>
-          <div class="activity-card" data-activity="Kind Act"><span class="activity-icon">🌷</span><div class="activity-title">Kind Act</div><div class="activity-desc">Spread kindness.</div></div>
-        </div>
-      </div>
+    <button class="generate-plan-btn" id="generatePlanBtn">Generate Plan</button>
+    <button id="downloadPlanBtn">Download PDF</button>
+    <div id="generatedPlan" class="generated-plan"></div>
+  </section>
 
-      <button class="generate-plan-btn" id="generatePlanBtn">💡 Generate Plan</button>
-      <button id="downloadPlanBtn">📥 Download PDF</button>
-      <div id="generatedPlan" class="generated-plan"></div>
-    </section>
+  <section class="breathing-exercise">
+    <h2>Breathe with Me</h2>
+    <div class="breathing-circle" id="breathingCircle"></div>
+    <p class="breathing-instructions">Click the circle and follow its breath.</p>
+  </section>
 
-    <section class="breathing-exercise">
-      <div class="breathing-circle" id="breathingCircle"></div>
-      <div class="breathing-instructions">Inhale as it grows, exhale as it shrinks.</div>
-    </section>
-
-    <section class="mood-tracker">
+  <section class="mood-tracker">
+    <h2>How are you feeling?</h2>
+    <div>
       <button class="mood-btn">😊</button>
       <button class="mood-btn">😐</button>
       <button class="mood-btn">😢</button>
       <button class="mood-btn">😠</button>
       <button class="mood-btn">😴</button>
-      <div id="moodFeedback" class="mood-feedback"></div>
-    </section>
+    </div>
+    <div id="moodFeedback" class="mood-feedback"></div>
+  </section>
 
-    <section class="gratitude-container">
-      <textarea id="gratitudeInput" class="gratitude-input" placeholder="What are you grateful for?"></textarea>
-      <button class="add-btn" id="addGratitudeBtn">Add Gratitude</button>
-      <div id="gratitudeList" class="gratitude-list"></div>
-    </section>
-  </main>
+  <section class="gratitude-container">
+    <h2>Gratitude Journal</h2>
+    <textarea id="gratitudeInput" class="gratitude-input" placeholder="Write one thing you're grateful for..."></textarea>
+    <button class="add-btn" id="addGratitudeBtn">Add Entry</button>
+    <div id="gratitudeList" class="gratitude-list"></div>
+  </section>
+</main>
 
-  <footer class="footer">
-    <p>Made with 💖 — stay kind to yourself!</p>
-  </footer>
+<footer>
+  <p style="text-align:center; margin-top:2rem;">Made with 💖 — be kind to yourself.</p>
+</footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script>
-    // Tab logic
-    const tabs = document.querySelectorAll('.tab-btn');
-    const categories = document.querySelectorAll('.plan-category');
-    tabs.forEach(btn => {
-      btn.addEventListener('click', () => showPlanCategory(btn.textContent));
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  // --- Tab Logic ---
+  const tabs = document.querySelectorAll('.tab-btn');
+  const cats = document.querySelectorAll('.plan-category');
+  tabs.forEach(btn => btn.addEventListener('click', () => {
+    tabs.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    cats.forEach(c => c.hidden = c.id !== btn.textContent.toLowerCase());
+  }));
+
+  // --- Activities & Plan ---
+  let selectedActivities = JSON.parse(localStorage.getItem('selectedActivities')||'[]');
+  document.querySelectorAll('.activity-card').forEach(card => {
+    const act = card.dataset.activity;
+    if (selectedActivities.includes(act)) card.classList.add('selected');
+    card.addEventListener('click', () => {
+      card.classList.toggle('selected');
+      selectedActivities = selectedActivities.includes(act)
+        ? selectedActivities.filter(a => a!==act)
+        : [...selectedActivities,act];
+      localStorage.setItem('selectedActivities', JSON.stringify(selectedActivities));
     });
-    function showPlanCategory(name) {
-      tabs.forEach(b => b.classList.toggle('active', b.textContent === name));
-      categories.forEach(c => c.hidden = c.id !== name.toLowerCase());
-    }
+  });
 
-    // Activities selection
-    let selectedActivities = JSON.parse(localStorage.getItem('selectedActivities') || '[]');
-    document.querySelectorAll('.activity-card').forEach(card => {
-      const act = card.dataset.activity;
-      if (selectedActivities.includes(act)) card.classList.add('selected');
-      card.addEventListener('click', () => {
-        card.classList.toggle('selected');
-        act = card.dataset.activity;
-        selectedActivities = card.classList.contains('selected')
-                         ? [...selectedActivities, act]
-                         : selectedActivities.filter(a => a !== act);
-        localStorage.setItem('selectedActivities', JSON.stringify(selectedActivities));
-      });
-    });
-
-    // Generate plan
+  document.getElementById('generatePlanBtn').addEventListener('click', () => {
     const planEl = document.getElementById('generatedPlan');
-    document.getElementById('generatePlanBtn').addEventListener('click', () => {
-      if (!selectedActivities.length) {
-        planEl.innerHTML = '<p>Select activities to generate your plan.</p>';
-      } else {
-        planEl.innerHTML = `<h3>Your Plan</h3><ul>${selectedActivities.map(a=>`<li>${a}</li>`).join('')}</ul>`;
-        document.getElementById('activitiesCompleted').textContent = selectedActivities.length;
-      }
-      planEl.classList.add('show');
-    });
-
-    // PDF download
-    document.getElementById('downloadPlanBtn').addEventListener('click', () => {
-      if (!planEl.classList.contains('show')) return alert('Generate plan first.');
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.setFontSize(18).text('Your Self‑Care Plan', 15, 20);
-      selectedActivities.forEach((a,i) => doc.text(`${i+1}. ${a}`, 15, 30 + i*10));
-      doc.save('self-care-plan.pdf');
-    });
-
-    // Breathing toggle
-    const circle = document.getElementById('breathingCircle');
-    circle.addEventListener('click', () => circle.classList.toggle('animate'));
-
-    // Mood tracker
-    const moodBtns = document.querySelectorAll('.mood-btn');
-    moodBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        moodBtns.forEach(b=>b.classList.remove('selected'));
-        btn.classList.add('selected');
-        document.getElementById('moodFeedback').textContent = `Mood: ${btn.textContent}`;
-        document.getElementById('moodFeedback').classList.add('show');
-        localStorage.setItem('mood', btn.textContent);
-        document.getElementById('moodScore').textContent = btn.textContent;
-      });
-    });
-    const savedMood = localStorage.getItem('mood');
-    if (savedMood) {
-      document.querySelector(`.mood-btn:contains("${savedMood}")`)?.click();
+    if (!selectedActivities.length) {
+      planEl.innerHTML = '<p>Select activities to build your plan.</p>';
+    } else {
+      planEl.innerHTML = `<h3>Your Plan</h3><ul>${selectedActivities.map(a=>`<li>${a}</li>`).join('')}</ul>`;
+      document.getElementById('activitiesCompleted').textContent = selectedActivities.length;
     }
+    planEl.classList.add('show');
+  });
 
-    // Gratitude
-    document.getElementById('addGratitudeBtn').addEventListener('click', () => {
-      const input = document.getElementById('gratitudeInput');
-      if (!input.value.trim()) return;
-      const entry = input.value.trim();
-      const el = document.createElement('div');
-      el.textContent = entry; el.className = 'gratitude-item';
-      document.getElementById('gratitudeList').prepend(el);
-      input.value = '';
-      const saved = JSON.parse(localStorage.getItem('gratitude') || '[]');
-      saved.unshift(entry);
-      localStorage.setItem('gratitude', JSON.stringify(saved));
-      document.getElementById('dayStreak').textContent = saved.length;
-    });
-    JSON.parse(localStorage.getItem('gratitude') || '[]').forEach(entry => {
-      const el = document.createElement('div');
-      el.className = 'gratitude-item'; el.textContent = entry;
-      document.getElementById('gratitudeList').appendChild(el);
-    });
-    document.getElementById('dayStreak').textContent = JSON.parse(localStorage.getItem('gratitude') || '[]').length;
-
-    // PWA manifest and SW
-    const manifest = {
-      name: 'Personal Self‑Care Toolkit', short_name: 'SelfCare',
-      start_url: '.', display: 'standalone', background_color: '#667eea',
-      theme_color: '#764ba2',
-      icons: [{ src: 'data:image/png;base64,...192x192...', sizes:'192x192', type:'image/png' }]
-    };
-    document.getElementById('manifest-link').href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/json' }));
-    if ('serviceWorker' in navigator) {
-      const swCode = `
-        const CACHE = 'scache-v1';
-        self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([location.pathname, '.', '${manifest.icons[0].src}'])).then(()=>self.skipWaiting())));
-        self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-        self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
-      `;
-      navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' })));
+  document.getElementById('downloadPlanBtn').addEventListener('click', () => {
+    const planEl = document.getElementById('generatedPlan');
+    if (!planEl.classList.contains('show')) {
+      alert('Generate a plan first.');
+      return;
     }
-  </script>
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(18).text('Self‑Care Plan',15,20);
+    selectedActivities.forEach((a,i)=>doc.text(`${i+1}. ${a}`,15,30+i*8));
+    doc.save('self-care-plan.pdf');
+  });
+
+  // --- Breathing Guide ---
+  document.getElementById('breathingCircle').addEventListener('click', function(){
+    this.classList.toggle('animate');
+  });
+
+  // --- Mood Tracker ---
+  const moodBtns = document.querySelectorAll('.mood-btn');
+  const moodFb = document.getElementById('moodFeedback');
+  const moodScoreEl = document.getElementById('moodScore');
+  moodBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      moodBtns.forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      const mood = btn.textContent;
+      moodFb.textContent = `Mood logged: ${mood}`;
+      moodFb.classList.add('show');
+      moodScoreEl.textContent = mood;
+      localStorage.setItem('mood', mood);
+    });
+  });
+  const savedMood = localStorage.getItem('mood');
+  if (savedMood) moodBtns.find(b=>b.textContent===savedMood)?.click();
+
+  // --- Gratitude Journal ---
+  document.getElementById('addGratitudeBtn').addEventListener('click', () => {
+    const input = document.getElementById('gratitudeInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const el = document.createElement('div');
+    el.className = 'gratitude-item';
+    el.textContent = text;
+    document.getElementById('gratitudeList').prepend(el);
+    let arr = JSON.parse(localStorage.getItem('gratitude')||'[]');
+    arr.unshift(text);
+    localStorage.setItem('gratitude', JSON.stringify(arr));
+    document.getElementById('gratitudeInput').value = '';
+    document.getElementById('dayStreak').textContent = arr.length;
+  });
+  JSON.parse(localStorage.getItem('gratitude')||'[]').forEach(s => {
+    const el = document.createElement('div');
+    el.className = 'gratitude-item';
+    el.textContent = s;
+    document.getElementById('gratitudeList').appendChild(el);
+  });
+  document.getElementById('dayStreak').textContent = JSON.parse(localStorage.getItem('gratitude')||'[]').length;
+
+  // --- PWA Manifest & Service Worker ---
+  const manifest = {
+    name:'Personal Self‑Care Toolkit',
+    short_name:'SelfCare',
+    start_url:'.',
+    display:'standalone',
+    background_color:'#667eea',
+    theme_color:'#764ba2',
+    icons:[{src:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...',sizes:'192x192',type:'image/png'}]
+  };
+  document.getElementById('manifest-link').href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));
+  if ('serviceWorker' in navigator) {
+    const sw = `
+      const CACHE='scache-v1';
+      self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([location.href,'.','${manifest.icons[0].src}'])).then(()=>self.skipWaiting())));
+      self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
+      self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+    `;
+    navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})));
+  }
+</script>
 </body>
 </html>
