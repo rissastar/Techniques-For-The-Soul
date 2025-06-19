@@ -1,1027 +1,1121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Enhanced Grounding Toolkit</title>
+<title>Grounding Toolkit 🌿</title>
 <style>
-  /* Reset & base */
-  *, *::before, *::after {
-    box-sizing: border-box;
+  /* --- Reset & base --- */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
   }
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0; padding: 0;
-    background: linear-gradient(135deg, #a3cef1 0%, #f7f7f7 100%);
-    color: #222;
+    font-family: 'Inter', sans-serif, sans-serif;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    transition: background-color 0.5s, color 0.5s;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
   body.dark {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    color: #e0e6f0;
+    background: linear-gradient(135deg, #222 0%, #444 100%);
+    color: #ddd;
   }
-
   /* Container */
   .container {
     max-width: 900px;
-    margin: 1rem auto 2rem;
-    padding: 1rem 1.5rem 3rem;
-    background: rgba(255 255 255 / 0.85);
-    border-radius: 1rem;
-    box-shadow:
-      0 4px 6px rgba(0,0,0,0.1),
-      inset 0 0 60px rgba(255 255 255 / 0.4);
-    backdrop-filter: saturate(180%) blur(10px);
-    transition: background 0.5s, color 0.5s;
+    margin: 2rem auto;
+    padding: 1rem 2rem 4rem;
+    position: relative;
+    z-index: 1;
   }
-  body.dark .container {
-    background: rgba(30 41 59 / 0.85);
-    box-shadow:
-      0 4px 12px rgba(0,0,0,0.7),
-      inset 0 0 80px rgba(0 0 0 / 0.6);
-  }
-
-  h1 {
+  /* Header */
+  header {
     text-align: center;
+    margin-bottom: 2rem;
+  }
+  header h1 {
+    font-size: 2.5rem;
     font-weight: 700;
-    font-size: 2.2rem;
-    margin-bottom: 0.25rem;
+    background: linear-gradient(135deg, #fff, #cceeff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.3rem;
   }
   header p {
-    text-align: center;
-    font-weight: 500;
-    color: #4a4a4a;
-    margin-top: 0;
+    font-weight: 300;
+    opacity: 0.85;
+    margin-bottom: 1rem;
   }
-  body.dark header p {
-    color: #a0aec0;
-  }
-
   /* Stats */
   .stats {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
-    margin: 1rem 0 1.5rem;
+    gap: 2rem;
+    font-weight: 600;
   }
   .stat {
     text-align: center;
-    user-select: none;
   }
-  .stat-number {
-    font-size: 1.5rem;
-    font-weight: 600;
+  .stat span.number {
+    font-size: 1.3rem;
     display: block;
   }
-  .stat-label {
-    font-size: 0.85rem;
-    color: #777;
-  }
-  body.dark .stat-label {
-    color: #a0aec0;
-  }
-
-  /* Search */
-  #search-input {
-    width: 100%;
-    font-size: 1rem;
-    padding: 0.6rem 1rem;
-    border-radius: 0.75rem;
-    border: 2px solid #4ecdc4;
-    outline-offset: 2px;
-    transition: border-color 0.3s;
-  }
-  #search-input:focus {
-    border-color: #3aafa9;
-  }
-  body.dark #search-input {
-    background: #1e293b;
-    border-color: #81e6d9;
-    color: #e0e6f0;
-  }
-  body.dark #search-input:focus {
-    border-color: #38b2ac;
-  }
-
-  /* Category filters */
-  .category-filters {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.75rem;
-    margin: 1rem 0 2rem;
-  }
-  .filter-btn {
-    background: #4ecdc4;
-    border: none;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  .filter-btn[aria-pressed="true"],
-  .filter-btn:hover {
-    background: #3aafa9;
-  }
-  body.dark .filter-btn {
-    background: #81e6d9;
-    color: #0f172a;
-  }
-  body.dark .filter-btn[aria-pressed="true"],
-  body.dark .filter-btn:hover {
-    background: #38b2ac;
-    color: #e0e6f0;
-  }
-
-  /* Technique buttons */
-  #accordion {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
-    gap: 1rem;
-  }
-  .card-button {
-    background: #fff;
-    border-radius: 1rem;
-    box-shadow:
-      0 8px 15px rgba(0,0,0,0.1),
-      inset 0 0 12px rgba(255 255 255 / 0.6);
-    padding: 1rem 1.25rem;
-    border: 2px solid transparent;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    transition:
-      box-shadow 0.3s,
-      border-color 0.3s,
-      background-color 0.3s;
-    user-select: none;
-  }
-  .card-button:hover,
-  .card-button:focus-visible {
-    border-color: #4ecdc4;
-    box-shadow:
-      0 12px 20px rgba(0,0,0,0.15),
-      inset 0 0 15px rgba(78 205 196 / 0.8);
-    outline: none;
-  }
-  body.dark .card-button {
-    background: #1e293b;
-    color: #e0e6f0;
-    box-shadow:
-      0 8px 15px rgba(0,0,0,0.4),
-      inset 0 0 12px rgba(129 230 217 / 0.6);
-  }
-  body.dark .card-button:hover,
-  body.dark .card-button:focus-visible {
-    border-color: #38b2ac;
-    box-shadow:
-      0 12px 20px rgba(0,0,0,0.7),
-      inset 0 0 18px rgba(56 178 172 / 0.9);
-    outline: none;
-  }
-  .card-emoji {
-    font-size: 1.7rem;
-    user-select: none;
-  }
-
-  /* Checklist */
-  .checklist {
-    margin: 2rem 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
-    gap: 0.5rem;
-  }
-  .checklist-item {
-    background: #f3f7f9;
-    border-radius: 0.75rem;
-    padding: 0.6rem 1rem;
-    cursor: pointer;
-    user-select: none;
-    border: 2px solid transparent;
-    transition: background-color 0.3s, border-color 0.3s;
-  }
-  .checklist-item.checked {
-    background: #4ecdc4;
-    color: white;
-    border-color: #3aafa9;
-  }
-  .checklist-item:focus-visible {
-    outline: 3px solid #4ecdc4;
-  }
-  body.dark .checklist-item {
-    background: #2a3448;
-    color: #e0e6f0;
-  }
-  body.dark .checklist-item.checked {
-    background: #38b2ac;
-    color: #f0fdfa;
-  }
-
-  /* Notes container */
-  .notes-container {
-    margin-top: 2rem;
-  }
-  .notes-container h2 {
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-  #notes-textarea {
-    width: 100%;
-    min-height: 120px;
-    border-radius: 1rem;
-    border: 2px solid #4ecdc4;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    resize: vertical;
-    transition: border-color 0.3s;
-  }
-  #notes-textarea:focus {
-    border-color: #3aafa9;
-    outline: none;
-  }
-  body.dark #notes-textarea {
-    background: #1e293b;
-    color: #e0e6f0;
-    border-color: #81e6d9;
-  }
-  body.dark #notes-textarea:focus {
-    border-color: #38b2ac;
-  }
-
-  /* Breathing exercise */
-  .breathing-exercise {
-    margin-top: 2.5rem;
+  /* Language toggle */
+  .lang-toggle {
+    margin-bottom: 1rem;
     text-align: center;
   }
-  .breathing-exercise h2 {
-    font-weight: 700;
+  .lang-toggle label {
+    margin: 0 1rem;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  input[type=radio] {
+    margin-right: 0.3rem;
+    cursor: pointer;
+  }
+  /* Search */
+  #searchInput {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    border-radius: 20px;
+    border: none;
     margin-bottom: 1rem;
-  }
-  .breath-circle {
-    margin: 0 auto 1rem;
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    background: #4ecdc4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: rgba(255 255 255 / 0.15);
     color: white;
-    font-weight: 700;
-    font-size: 1.4rem;
-    user-select: none;
-    transition: background-color 0.3s, transform 2.5s ease-in-out;
-    box-shadow:
-      0 0 25px #4ecdc4aa,
-      inset 0 0 15px #4ecdc4cc;
-  }
-  .breath-circle.inhale {
-    animation: pulseInhale 4s ease-in-out infinite;
-    background: #3aafa9;
-    box-shadow:
-      0 0 40px #3aafa9cc,
-      inset 0 0 20px #3aafa9dd;
-  }
-  .breath-circle.exhale {
-    animation: pulseExhale 4s ease-in-out infinite;
-    background: #71e6d1;
-    box-shadow:
-      0 0 40px #71e6d1cc,
-      inset 0 0 20px #71e6d1dd;
-  }
-  @keyframes pulseInhale {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-  }
-  @keyframes pulseExhale {
-    0%, 100% { transform: scale(1.15); }
-    50% { transform: scale(1); }
-  }
-  #breath-text {
-    pointer-events: none;
-  }
-  .button {
-    background: #4ecdc4;
-    border: none;
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border-radius: 9999px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    margin: 0 0.5rem;
-    transition: background-color 0.3s;
-    user-select: none;
-  }
-  .button:disabled {
-    background: #a5e1da;
-    cursor: not-allowed;
-  }
-  .button:hover:not(:disabled),
-  .button:focus-visible:not(:disabled) {
-    background: #3aafa9;
     outline: none;
   }
-  body.dark .button {
-    background: #81e6d9;
-    color: #0f172a;
+  #searchInput::placeholder {
+    color: rgba(255 255 255 / 0.6);
   }
-  body.dark .button:disabled {
-    background: #5bd6c9;
-  }
-  body.dark .button:hover:not(:disabled),
-  body.dark .button:focus-visible:not(:disabled) {
-    background: #38b2ac;
-    color: #f0fdfa;
-  }
-
-  /* Toggles */
-  .toggles {
-    margin-top: 2rem;
+  /* Categories */
+  .categories {
     display: flex;
-    justify-content: center;
-    gap: 2.5rem;
-  }
-  .toggle-label {
-    user-select: none;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     gap: 0.5rem;
-    font-size: 1rem;
-  }
-  .toggle-label input {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-  }
-
-  /* Download PDF */
-  #download-pdf {
-    margin: 2rem auto 0;
-    display: block;
-  }
-
-  /* Floating Add Button */
-  .floating-action {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: #4ecdc4;
-    border: none;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    font-size: 2rem;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-    user-select: none;
-    transition: background-color 0.3s;
-    z-index: 1100;
-  }
-  .floating-action:hover,
-  .floating-action:focus-visible {
-    background: #3aafa9;
-    outline: none;
-  }
-  body.dark .floating-action {
-    background: #81e6d9;
-    color: #0f172a;
-  }
-  body.dark .floating-action:hover,
-  body.dark .floating-action:focus-visible {
-    background: #38b2ac;
-  }
-
-  /* Modal */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    display: flex;
     justify-content: center;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-    z-index: 1200;
+    margin-bottom: 1.5rem;
   }
-  .modal-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
+  .category-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255 255 255 / 0.3);
+    background: rgba(255 255 255 / 0.15);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    user-select: none;
+    color: white;
   }
-  .modal {
-    background: white;
-    border-radius: 1rem;
-    max-width: 450px;
-    width: 90vw;
-    max-height: 85vh;
-    overflow-y: auto;
-    padding: 1.5rem 2rem 2rem;
-    box-shadow:
-      0 10px 20px rgba(0,0,0,0.25);
-    position: relative;
+  .category-btn.active {
+    background: rgba(255 255 255 / 0.4);
     color: #222;
   }
-  body.dark .modal {
-    background: #1e293b;
-    color: #e0e6f0;
-    box-shadow:
-      0 10px 20px rgba(0,0,0,0.7);
+  .category-btn:hover {
+    background: rgba(255 255 255 / 0.3);
   }
-  .modal-close {
+  /* Techniques List */
+  #techniquesList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+    gap: 1rem;
+  }
+  .tech-card {
+    background: rgba(255 255 255 / 0.15);
+    padding: 1rem 1.2rem;
+    border-radius: 18px;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .tech-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+  }
+  .tech-emoji {
+    font-size: 2rem;
+  }
+  .tech-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-grow: 1;
+  }
+  /* Modal */
+  .modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    z-index: 9999;
+  }
+  .modal.active {
+    display: flex;
+  }
+  .modal-content {
+    background: rgba(255 255 255 / 0.1);
+    padding: 1.5rem 2rem;
+    border-radius: 20px;
+    max-width: 650px;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: white;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    position: relative;
+  }
+  .modal-content h2 {
+    margin-bottom: 0.8rem;
+  }
+  .modal-content p, .modal-content ul {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .modal-content ul {
+    padding-left: 1.2rem;
+  }
+  .close-btn {
     position: absolute;
     top: 0.8rem;
     right: 1rem;
-    font-size: 2rem;
-    background: none;
+    background: transparent;
     border: none;
+    font-size: 1.8rem;
+    color: white;
     cursor: pointer;
-    color: #888;
-    transition: color 0.3s;
-  }
-  .modal-close:hover,
-  .modal-close:focus-visible {
-    color: #4ecdc4;
-    outline: none;
-  }
-  body.dark .modal-close {
-    color: #a0aec0;
-  }
-  body.dark .modal-close:hover,
-  body.dark .modal-close:focus-visible {
-    color: #38b2ac;
-  }
-
-  #modal-title {
-    margin: 0 0 0.25rem;
     font-weight: 700;
-    font-size: 1.5rem;
   }
-  #modal-emoji {
-    font-size: 2rem;
-    user-select: none;
+  /* Checklist */
+  #checklist {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(130px,1fr));
+    gap: 0.8rem;
+    margin: 1rem 0 2rem;
   }
-  #modal-category {
+  .check-item {
+    background: rgba(255 255 255 / 0.15);
+    padding: 0.7rem;
+    border-radius: 16px;
+    text-align: center;
+    cursor: pointer;
     font-weight: 600;
-    font-size: 0.9rem;
-    margin: 0.1rem 0 1rem;
-    color: #4ecdc4;
+    user-select: none;
+    transition: background-color 0.3s ease;
   }
-  body.dark #modal-category {
-    color: #38b2ac;
+  .check-item.checked {
+    background: #4ecdc4;
+    color: #222;
   }
-  #modal-content p,
-  #modal-content ul {
-    line-height: 1.4;
+  /* Journal */
+  #journal {
+    width: 100%;
+    min-height: 100px;
+    border-radius: 16px;
+    padding: 1rem;
+    border: none;
+    resize: vertical;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    background: rgba(255 255 255 / 0.15);
+    color: white;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+    margin-bottom: 2rem;
   }
-  #modal-content ul {
-    padding-left: 1.2rem;
+  #journal::placeholder {
+    color: rgba(255 255 255 / 0.6);
   }
-  #modal-content li {
-    margin-bottom: 0.3rem;
+  /* Breathing Circle */
+  #breathCircle {
+    width: 160px;
+    height: 160px;
+    margin: 1.5rem auto;
+    border-radius: 50%;
+    border: 4px solid rgba(255 255 255 / 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    user-select: none;
+    transition: all 3.5s cubic-bezier(0.4,0,0.2,1);
+    color: white;
+    box-shadow: 0 0 40px rgba(255 255 255 / 0.2);
   }
-
-  /* Responsive tweaks */
+  .inhale {
+    transform: scale(1.3);
+    border-color: #4ecdc4;
+    box-shadow: 0 0 60px #4ecdc4;
+    background: rgba(78, 205, 196, 0.15);
+  }
+  .exhale {
+    transform: scale(0.85);
+    border-color: #ff6b6b;
+    box-shadow: 0 0 60px #ff6b6b;
+    background: rgba(255, 107, 107, 0.15);
+  }
+  /* Buttons */
+  button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    margin: 0.5rem 0;
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  button:hover:not(:disabled) {
+    box-shadow: 0 0 12px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+  }
+  /* Floating Add Button */
+  #addTechBtn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #4ecdc4;
+    font-size: 2.5rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #222;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  #addTechBtn:hover {
+    background: #3caea3;
+  }
+  /* Toggles */
+  .toggle-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .toggle-group label {
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+  }
+  .toggle-group input[type=checkbox] {
+    margin-right: 0.4rem;
+    cursor: pointer;
+  }
+  /* Audio Player Hidden */
+  audio {
+    display: none;
+  }
+  /* Responsive */
   @media (max-width: 600px) {
-    #accordion {
-      grid-template-columns: 1fr;
+    .tech-card {
+      grid-column: span 1 !important;
     }
-    .stats {
-      flex-direction: column;
-      gap: 0.75rem;
+    .container {
+      padding: 1rem 1rem 3rem;
     }
-    .toggles {
-      flex-direction: column;
-      gap: 1rem;
-      align-items: center;
+    header h1 {
+      font-size: 2rem;
     }
   }
 </style>
 </head>
 <body>
-<div class="container" role="main" aria-label="Enhanced Grounding Toolkit">
+<div class="container">
+
+  <div class="lang-toggle" aria-label="Select Language">
+    <label><input type="radio" name="lang" value="en" checked> English</label>
+    <label><input type="radio" name="lang" value="fr"> Français</label>
+  </div>
 
   <header>
-    <h1>Enhanced Grounding Toolkit</h1>
-    <p>Your interactive guide to calming techniques</p>
-
-    <div class="stats" aria-label="Toolkit statistics">
-      <div class="stat" aria-live="polite">
-        <span class="stat-number" id="tech-count">0</span>
-        <span class="stat-label">Techniques</span>
-      </div>
-      <div class="stat" aria-live="polite">
-        <span class="stat-number" id="favorites-count">0</span>
-        <span class="stat-label">Favorites</span>
-      </div>
-      <div class="stat" aria-live="polite">
-        <span class="stat-number" id="daily-streak">0</span>
-        <span class="stat-label">Daily Streak</span>
-      </div>
+    <h1 id="appTitle">Enhanced Grounding Toolkit 🌿</h1>
+    <p id="appSubtitle">Your guide to calm & resilience</p>
+    <div class="stats" aria-live="polite">
+      <div class="stat"><span class="number" id="statTotalTechniques">0</span><br><small id="labelTechniques">Techniques</small></div>
+      <div class="stat"><span class="number" id="statFavorites">0</span><br><small id="labelFavorites">Favorites</small></div>
+      <div class="stat"><span class="number" id="statStreak">0</span><br><small id="labelStreak">Daily Streak</small></div>
     </div>
   </header>
 
-  <section aria-label="Search techniques">
-    <input
-      type="search"
-      id="search-input"
-      class="search-input"
-      placeholder="Search techniques..."
-      aria-label="Search techniques"
-      autocomplete="off"
-    />
-  </section>
+  <input id="searchInput" placeholder="Search techniques..." aria-label="Search grounding techniques" />
 
-  <nav class="category-filters" aria-label="Filter techniques by category">
-    <button class="filter-btn active" data-category="all" aria-pressed="true">All</button>
-    <button class="filter-btn" data-category="physical" aria-pressed="false">Physical</button>
-    <button class="filter-btn" data-category="breathing" aria-pressed="false">Breathing</button>
-    <button class="filter-btn" data-category="visualization" aria-pressed="false">Visualization</button>
-    <button class="filter-btn" data-category="mindfulness" aria-pressed="false">Mindfulness</button>
-    <button class="filter-btn" data-category="emotional" aria-pressed="false">Emotional</button>
-    <button class="filter-btn" data-category="creative" aria-pressed="false">Creative</button>
-    <button class="filter-btn" data-category="emergency" aria-pressed="false">Emergency</button>
+  <nav class="categories" role="navigation" aria-label="Filter Techniques by Category">
+    <button class="category-btn active" data-category="all" aria-pressed="true">All</button>
+    <button class="category-btn" data-category="breathing" aria-pressed="false">Breathing</button>
+    <button class="category-btn" data-category="sensory" aria-pressed="false">Sensory</button>
+    <button class="category-btn" data-category="physical" aria-pressed="false">Physical</button>
+    <button class="category-btn" data-category="cognitive" aria-pressed="false">Cognitive</button>
+    <button class="category-btn" data-category="visualization" aria-pressed="false">Visualization</button>
+    <button class="category-btn" data-category="emergency" aria-pressed="false">Emergency</button>
   </nav>
 
-  <section id="accordion" aria-label="Grounding techniques list" tabindex="0">
-    <!-- Technique buttons dynamically inserted here -->
+  <section id="techniquesList" aria-live="polite" aria-label="List of grounding techniques">
+    <!-- Dynamically filled -->
   </section>
 
-  <section aria-label="Grounding checklist">
+  <section aria-label="Daily Checklist">
     <h2>Daily Checklist</h2>
-    <div class="checklist" id="checklist">
-      <!-- Checklist items dynamically inserted here -->
+    <div id="checklist" role="list">
+      <!-- checklist items -->
     </div>
   </section>
 
-  <section class="notes-container" aria-label="Personal notes">
-    <h2>Notes Journal</h2>
-    <textarea
-      id="notes-textarea"
-      aria-label="Your personal notes journal"
-      placeholder="Write your notes here..."
-      spellcheck="true"
-      autocomplete="off"
-    ></textarea>
+  <section aria-label="Journal notes">
+    <h2>Journal Notes</h2>
+    <textarea id="journal" placeholder="Write your thoughts or reflections here..."></textarea>
   </section>
 
-  <section class="breathing-exercise" aria-label="Guided breathing exercise">
+  <section aria-label="Guided breathing exercise" style="text-align:center;">
     <h2>Guided Breathing</h2>
-    <div id="breath-circle" class="breath-circle" aria-live="polite" aria-atomic="true" aria-relevant="text">Ready</div>
-    <div>
-      <button id="start-breathing-btn" class="button" aria-label="Start guided breathing exercise">Start</button>
-      <button id="stop-breathing-btn" class="button" disabled aria-label="Stop guided breathing exercise">Stop</button>
-    </div>
+    <div id="breathCircle">Breathe</div>
+    <button id="startBreathingBtn">Start Breathing Exercise</button>
+    <button id="stopBreathingBtn" disabled>Stop</button>
   </section>
 
-  <section class="toggles" aria-label="Settings toggles">
-    <label class="toggle-label" for="toggle-music">
-      <input type="checkbox" id="toggle-music" />
-      Background Music
-    </label>
-    <label class="toggle-label" for="toggle-darkmode">
-      <input type="checkbox" id="toggle-darkmode" />
-      Dark Mode
-    </label>
+  <section class="toggle-group" aria-label="Settings toggles">
+    <label><input type="checkbox" id="toggleMusic"> Background Music</label>
+    <label><input type="checkbox" id="toggleDarkMode"> Dark Mode</label>
   </section>
 
-  <button id="download-pdf" class="button" aria-label="Download grounding techniques guide">Download Guide PDF</button>
-
-  <button class="floating-action" id="add-tech-btn" title="Add your own technique" aria-label="Add your own technique">+</button>
+  <button id="downloadPDFBtn">Download Guide (PDF)</button>
 </div>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-content" tabindex="-1" hidden>
-  <div class="modal" role="document">
-    <button class="modal-close" id="modal-close" aria-label="Close modal">&times;</button>
-    <h3 id="modal-emoji" aria-hidden="true"></h3>
-    <h2 id="modal-title"></h2>
-    <div id="modal-category"></div>
-    <div id="modal-content"></div>
+<button id="addTechBtn" title="Add Custom Technique">+</button>
+
+<!-- Modal for Technique Detail -->
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+  <div class="modal-content">
+    <button class="close-btn" aria-label="Close modal">&times;</button>
+    <h2 id="modalTitle"></h2>
+    <div id="modalBody"></div>
   </div>
 </div>
 
-<!-- Audio -->
-<audio id="breath-sound-inhale" src="https://actions.google.com/sounds/v1/ambiences/breathing_in.ogg" preload="auto"></audio>
-<audio id="breath-sound-exhale" src="https://actions.google.com/sounds/v1/ambiences/breathing_out.ogg" preload="auto"></audio>
-<audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/03/17/audio_01bf9a165f.mp3?filename=relaxing-ambient-11244.mp3" preload="auto"></audio>
+<!-- Audio for Sounds -->
+<audio id="audioInhale" src="https://actions.google.com/sounds/v1/nature/bird_chirp.ogg" preload="auto"></audio>
+<audio id="audioExhale" src="https://actions.google.com/sounds/v1/nature/wind_chime.ogg" preload="auto"></audio>
+<audio id="backgroundMusic" src="https://actions.google.com/sounds/v1/ambiences/forest_stream.ogg" loop preload="auto"></audio>
+
+<!-- jsPDF for PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 (() => {
-  // Data: techniques
-  let techniques = [
-    {
-      id: 'tech1',
-      title: '5-4-3-2-1 Grounding',
-      category: 'mindfulness',
-      emoji: '🧠',
-      content: `<p>Use your five senses to ground yourself:</p>
-      <ul>
-        <li>5 things you can see</li>
-        <li>4 things you can touch</li>
-        <li>3 things you can hear</li>
-        <li>2 things you can smell</li>
-        <li>1 thing you can taste</li>
-      </ul>`
+  'use strict';
+
+  // ==== Data & translations ====
+  const translations = {
+    en: {
+      appTitle: 'Enhanced Grounding Toolkit 🌿',
+      appSubtitle: 'Your guide to calm & resilience',
+      techniques: 'Techniques',
+      favorites: 'Favorites',
+      dailyStreak: 'Daily Streak',
+      searchPlaceholder: 'Search techniques...',
+      dailyChecklist: 'Daily Checklist',
+      journalNotes: 'Journal Notes',
+      guidedBreathing: 'Guided Breathing',
+      start: 'Start',
+      stop: 'Stop',
+      backgroundMusic: 'Background Music',
+      darkMode: 'Dark Mode',
+      downloadGuide: 'Download Guide (PDF)',
+      addCustomTechnique: 'Add Custom Technique',
+      close: 'Close modal',
+      categories: {
+        all: 'All',
+        breathing: 'Breathing',
+        sensory: 'Sensory',
+        physical: 'Physical',
+        cognitive: 'Cognitive',
+        visualization: 'Visualization',
+        emergency: 'Emergency',
+      },
+      checklistItems: [
+        'Practice a grounding technique',
+        'Take 5 deep breaths',
+        'Write in journal',
+        'Drink water',
+        'Stretch your body',
+        'Connect with nature',
+        'Practice mindfulness',
+      ],
+      customTechPlaceholderTitle: 'Enter technique title',
+      customTechPlaceholderContent: 'Enter technique description',
+      promptAddTitle: 'Add Custom Technique',
+      promptAddDesc: 'Describe your new grounding technique.',
+      errorEmptyTitle: 'Title cannot be empty.',
+      errorEmptyContent: 'Description cannot be empty.',
+      pdfTitle: 'Enhanced Grounding Toolkit Guide',
+      pdfDescription: 'A collection of grounding techniques to support calm and resilience.',
+      pdfFooter: 'Generated by Enhanced Grounding Toolkit',
     },
-    {
-      id: 'tech2',
-      title: 'Box Breathing',
-      category: 'breathing',
-      emoji: '📦',
-      content: `<p>Inhale 4 seconds → Hold 4 seconds → Exhale 4 seconds → Hold 4 seconds → Repeat.</p>`
-    },
-    {
-      id: 'tech3',
-      title: 'Physical Grounding',
-      category: 'physical',
-      emoji: '✋',
-      content: `<p>Press your feet firmly into the ground and notice the feeling.</p>`
-    },
-    {
-      id: 'tech4',
-      title: 'Visualization: Safe Place',
-      category: 'visualization',
-      emoji: '🏝️',
-      content: `<p>Visualize a peaceful, safe place where you feel calm.</p>`
-    },
-    {
-      id: 'tech5',
-      title: 'Mindful Observation',
-      category: 'mindfulness',
-      emoji: '👀',
-      content: `<p>Focus intently on an object nearby, noticing all details.</p>`
-    },
-    {
-      id: 'tech6',
-      title: 'Name Your Emotion',
-      category: 'emotional',
-      emoji: '📝',
-      content: `<p>Label your current feeling to help process it.</p>`
-    },
-    {
-      id: 'tech7',
-      title: 'Creative Expression',
-      category: 'creative',
-      emoji: '🎨',
-      content: `<p>Draw, write, or craft something to express yourself.</p>`
-    },
-    {
-      id: 'tech8',
-      title: 'Emergency Contact Plan',
-      category: 'emergency',
-      emoji: '🚨',
-      content: `<p>Have a list of people or services you can contact in crisis.</p>`
+    fr: {
+      appTitle: 'Trousse d’ancrage améliorée 🌿',
+      appSubtitle: 'Votre guide vers le calme et la résilience',
+      techniques: 'Techniques',
+      favorites: 'Favoris',
+      dailyStreak: 'Série quotidienne',
+      searchPlaceholder: 'Rechercher des techniques...',
+      dailyChecklist: 'Liste quotidienne',
+      journalNotes: 'Journal',
+      guidedBreathing: 'Respiration guidée',
+      start: 'Démarrer',
+      stop: 'Arrêter',
+      backgroundMusic: 'Musique de fond',
+      darkMode: 'Mode sombre',
+      downloadGuide: 'Télécharger le guide (PDF)',
+      addCustomTechnique: 'Ajouter une technique personnalisée',
+      close: 'Fermer la fenêtre',
+      categories: {
+        all: 'Toutes',
+        breathing: 'Respiration',
+        sensory: 'Sensoriel',
+        physical: 'Physique',
+        cognitive: 'Cognitif',
+        visualization: 'Visualisation',
+        emergency: 'Urgence',
+      },
+      checklistItems: [
+        'Pratiquer une technique d’ancrage',
+        'Faire 5 respirations profondes',
+        'Écrire dans le journal',
+        'Boire de l’eau',
+        'S’étirer',
+        'Se connecter à la nature',
+        'Pratiquer la pleine conscience',
+      ],
+      customTechPlaceholderTitle: 'Entrez le titre de la technique',
+      customTechPlaceholderContent: 'Entrez la description de la technique',
+      promptAddTitle: 'Ajouter une technique personnalisée',
+      promptAddDesc: 'Décrivez votre nouvelle technique d’ancrage.',
+      errorEmptyTitle: 'Le titre ne peut pas être vide.',
+      errorEmptyContent: 'La description ne peut pas être vide.',
+      pdfTitle: 'Guide de la trousse d’ancrage améliorée',
+      pdfDescription: 'Une collection de techniques d’ancrage pour soutenir le calme et la résilience.',
+      pdfFooter: 'Généré par la trousse d’ancrage améliorée',
     }
-  ];
+  };
 
-  // Cached DOM
-  const accordion = document.getElementById('accordion');
-  const searchInput = document.getElementById('search-input');
-  const checklist = document.getElementById('checklist');
-  const notesTextarea = document.getElementById('notes-textarea');
-  const breathCircle = document.getElementById('breath-circle');
-  const startBreathingBtn = document.getElementById('start-breathing-btn');
-  const stopBreathingBtn = document.getElementById('stop-breathing-btn');
-  const toggleMusic = document.getElementById('toggle-music');
-  const toggleDarkMode = document.getElementById('toggle-darkmode');
-  const downloadPdfBtn = document.getElementById('download-pdf');
-  const addTechBtn = document.getElementById('add-tech-btn');
-  const modalOverlay = document.getElementById('modal-overlay');
-  const modalCloseBtn = document.getElementById('modal-close');
-  const modalTitle = document.getElementById('modal-title');
-  const modalEmoji = document.getElementById('modal-emoji');
-  const modalCategory = document.getElementById('modal-category');
-  const modalContent = document.getElementById('modal-content');
+  // ==== Elements ====
+  const elements = {
+    langRadios: document.querySelectorAll('input[name="lang"]'),
+    appTitle: document.getElementById('appTitle'),
+    appSubtitle: document.getElementById('appSubtitle'),
+    statTechniques: document.getElementById('statTotalTechniques'),
+    statFavorites: document.getElementById('statFavorites'),
+    statStreak: document.getElementById('statStreak'),
+    labelTechniques: document.getElementById('labelTechniques'),
+    labelFavorites: document.getElementById('labelFavorites'),
+    labelStreak: document.getElementById('labelStreak'),
+    searchInput: document.getElementById('searchInput'),
+    categoriesNav: document.querySelector('.categories'),
+    techniquesList: document.getElementById('techniquesList'),
+    checklistDiv: document.getElementById('checklist'),
+    journalTextarea: document.getElementById('journal'),
+    breathCircle: document.getElementById('breathCircle'),
+    startBreathingBtn: document.getElementById('startBreathingBtn'),
+    stopBreathingBtn: document.getElementById('stopBreathingBtn'),
+    toggleMusic: document.getElementById('toggleMusic'),
+    toggleDarkMode: document.getElementById('toggleDarkMode'),
+    downloadPDFBtn: document.getElementById('downloadPDFBtn'),
+    addTechBtn: document.getElementById('addTechBtn'),
+    modal: document.getElementById('modal'),
+    modalTitle: document.getElementById('modalTitle'),
+    modalBody: document.getElementById('modalBody'),
+    modalCloseBtn: document.querySelector('.close-btn'),
+    audioInhale: document.getElementById('audioInhale'),
+    audioExhale: document.getElementById('audioExhale'),
+    backgroundMusic: document.getElementById('backgroundMusic'),
+  };
 
-  const breathSoundInhale = document.getElementById('breath-sound-inhale');
-  const breathSoundExhale = document.getElementById('breath-sound-exhale');
-  const bgMusic = document.getElementById('bg-music');
-
-  // State
+  // ==== State ====
+  let currentLang = localStorage.getItem('egt-lang') || 'en';
   let currentCategory = 'all';
-  let filteredTechniques = [];
-  let checklistState = JSON.parse(localStorage.getItem('groundingChecklist')) || {};
-  let notes = localStorage.getItem('groundingNotes') || '';
-  let favorites = JSON.parse(localStorage.getItem('groundingFavorites')) || {};
-  let breathingInterval = null;
-  let breathingPhase = 0; // 0: inhale,1: hold1,2: exhale,3: hold2
-  let breathingRunning = false;
-  let dailyStreak = 0;
-  let lastVisitDate = localStorage.getItem('groundingLastVisit');
+  let favorites = JSON.parse(localStorage.getItem('egt-favorites') || '[]');
+  let checklistState = JSON.parse(localStorage.getItem('egt-checklist') || '[]');
+  let journalContent = localStorage.getItem('egt-journal') || '';
+  let dailyStreak = parseInt(localStorage.getItem('egt-streak') || '0', 10);
+  let lastActiveDay = localStorage.getItem('egt-lastDay') || null;
+  let breathingActive = false;
+  let breathingTimeouts = [];
+  let breathingPhase = 0;
+  let techniques = [];
 
-  // Phases timing (ms)
-  const phases = [
-    { name: 'Inhale', duration: 4000 },
-    { name: 'Hold', duration: 4000 },
-    { name: 'Exhale', duration: 4000 },
-    { name: 'Hold', duration: 4000 }
-  ];
-
-  // --- Functions ---
-
-  // Save & load daily streak
-  function updateDailyStreak() {
-    const today = new Date().toDateString();
-    if (!lastVisitDate) {
-      dailyStreak = 1;
-      localStorage.setItem('groundingLastVisit', today);
-      localStorage.setItem('groundingDailyStreak', dailyStreak);
-    } else {
-      const lastDate = new Date(lastVisitDate);
-      const diffDays = Math.floor((new Date(today) - lastDate) / (1000 * 60 * 60 * 24));
-      if (diffDays === 1) {
-        dailyStreak = (parseInt(localStorage.getItem('groundingDailyStreak')) || 0) + 1;
-        localStorage.setItem('groundingDailyStreak', dailyStreak);
-        localStorage.setItem('groundingLastVisit', today);
-      } else if (diffDays > 1) {
-        dailyStreak = 1;
-        localStorage.setItem('groundingDailyStreak', dailyStreak);
-        localStorage.setItem('groundingLastVisit', today);
-      } else {
-        dailyStreak = parseInt(localStorage.getItem('groundingDailyStreak')) || 1;
+  // ---- Techniques data (with English and French) ----
+  function baseTechniques() {
+    return [
+      {
+        id: '54321',
+        emoji: '🌟',
+        category: 'sensory',
+        en: {
+          title: '5-4-3-2-1 Grounding',
+          content: `Identify 5 things you can see, 4 things you can touch, 3 things you can hear, 2 things you can smell, and 1 thing you can taste or feel.`
+        },
+        fr: {
+          title: 'Technique 5‑4‑3‑2‑1',
+          content: `Identifiez 5 choses que vous voyez, 4 que vous touchez, 3 que vous entendez, 2 que vous sentez, et 1 que vous goûtez ou ressentez.`
+        }
+      },
+      {
+        id: 'box-breathing',
+        emoji: '🟦',
+        category: 'breathing',
+        en: {
+          title: 'Box Breathing',
+          content: `Breathe in for 4 seconds, hold for 4 seconds, breathe out for 4 seconds, hold for 4 seconds. Repeat.`
+        },
+        fr: {
+          title: 'Respiration en boîte',
+          content: `Inspirez 4 secondes, retenez 4 secondes, expirez 4 secondes, retenez 4 secondes. Répétez.`
+        }
+      },
+      {
+        id: 'pmr',
+        emoji: '💪',
+        category: 'physical',
+        en: {
+          title: 'Progressive Muscle Relaxation',
+          content: `Tense and release muscle groups one at a time, starting from your toes up to your head.`
+        },
+        fr: {
+          title: 'Relaxation musculaire progressive',
+          content: `Contractez et relâchez les groupes musculaires un par un, des orteils jusqu’à la tête.`
+        }
+      },
+      {
+        id: 'nature-sounds',
+        emoji: '🌿',
+        category: 'sensory',
+        en: {
+          title: 'Nature Sounds Focus',
+          content: `Listen closely to nature sounds around you or play calming nature audio to ground your senses.`
+        },
+        fr: {
+          title: 'Focus sur les sons de la nature',
+          content: `Écoutez attentivement les sons de la nature autour de vous ou diffusez un son apaisant de la nature pour vous ancrer.`
+        }
+      },
+      {
+        id: 'self-compassion',
+        emoji: '❤️',
+        category: 'cognitive',
+        en: {
+          title: 'Self-Compassion Break',
+          content: `Acknowledge your suffering, remind yourself that pain is universal, and offer yourself kindness.`
+        },
+        fr: {
+          title: 'Pause compassion envers soi',
+          content: `Reconnaissez votre souffrance, rappelez-vous que la douleur est universelle, et offrez-vous de la bienveillance.`
+        }
+      },
+      {
+        id: 'tapping',
+        emoji: '👐',
+        category: 'physical',
+        en: {
+          title: 'Tapping Technique (EFT)',
+          content: `Tap gently on specific points on your face and body while focusing on your feelings to reduce stress.`
+        },
+        fr: {
+          title: 'Technique de tapotement (EFT)',
+          content: `Tapotez doucement certains points du visage et du corps en vous concentrant sur vos émotions pour réduire le stress.`
+        }
+      },
+      {
+        id: 'journaling-prompt',
+        emoji: '✍️',
+        category: 'cognitive',
+        en: {
+          title: 'Journaling Prompt',
+          content: `Write for 5 minutes about something you’re grateful for or a positive memory.`
+        },
+        fr: {
+          title: 'Suggestion d’écriture',
+          content: `Écrivez pendant 5 minutes sur quelque chose pour lequel vous êtes reconnaissant·e ou un souvenir positif.`
+        }
+      },
+      {
+        id: 'safe-place',
+        emoji: '🏝️',
+        category: 'visualization',
+        en: {
+          title: 'Safe Place Visualization',
+          content: `Close your eyes and imagine a peaceful, safe place in detail to soothe your mind.`
+        },
+        fr: {
+          title: 'Visualisation d’un lieu sûr',
+          content: `Fermez les yeux et imaginez en détail un endroit paisible et sûr pour apaiser votre esprit.`
+        }
+      },
+      {
+        id: 'cold-water',
+        emoji: '❄️',
+        category: 'physical',
+        en: {
+          title: 'Cold Water Reset',
+          content: `Splash cold water on your face or hold a cold compress to interrupt overwhelming feelings.`
+        },
+        fr: {
+          title: 'Réinitialisation à l’eau froide',
+          content: `Éclaboussez votre visage avec de l’eau froide ou appliquez une compresse froide pour interrompre les sensations accablantes.`
+        }
+      },
+      {
+        id: 'shaking',
+        emoji: '💃',
+        category: 'physical',
+        en: {
+          title: 'Body Shaking',
+          content: `Shake out your hands, arms, and legs to release tension and stress.`
+        },
+        fr: {
+          title: 'Secouer le corps',
+          content: `Secouez vos mains, bras et jambes pour libérer la tension et le stress.`
+        }
       }
-    }
-    document.getElementById('daily-streak').textContent = dailyStreak;
+    ];
   }
 
-  // Render techniques filtered by category and search
-  function renderTechniques() {
-    const searchTerm = searchInput.value.trim().toLowerCase();
-    filteredTechniques = techniques.filter(t => {
-      const matchCategory = currentCategory === 'all' || t.category === currentCategory;
-      const matchSearch = t.title.toLowerCase().includes(searchTerm) || t.content.toLowerCase().includes(searchTerm);
-      return matchCategory && matchSearch;
+  // ==== Load or init techniques (include saved custom) ====
+  function loadTechniques() {
+    let saved = localStorage.getItem('egt-custom-techniques');
+    let customs = saved ? JSON.parse(saved) : [];
+    techniques = baseTechniques().concat(customs);
+  }
+
+  // ==== Save custom techniques ====
+  function saveCustomTechniques(customs) {
+    localStorage.setItem('egt-custom-techniques', JSON.stringify(customs));
+  }
+
+  // ==== Helpers ====
+  function t(key) {
+    const keys = key.split('.');
+    let val = translations[currentLang];
+    for (const k of keys) {
+      if (!val) break;
+      val = val[k];
+    }
+    return val || key;
+  }
+
+  // ==== Update UI text content based on language ====
+  function updateStaticTexts() {
+    elements.appTitle.textContent = t('appTitle');
+    elements.appSubtitle.textContent = t('appSubtitle');
+    elements.labelTechniques.textContent = t('techniques');
+    elements.labelFavorites.textContent = t('favorites');
+    elements.labelStreak.textContent = t('dailyStreak');
+    elements.searchInput.placeholder = t('searchPlaceholder');
+    elements.downloadPDFBtn.textContent = t('downloadGuide');
+    elements.startBreathingBtn.textContent = t('start');
+    elements.stopBreathingBtn.textContent = t('stop');
+
+    // Update categories buttons text
+    const catBtns = elements.categoriesNav.querySelectorAll('button');
+    catBtns.forEach(btn => {
+      const cat = btn.getAttribute('data-category');
+      btn.textContent = t(`categories.${cat}`) || btn.textContent;
     });
-    accordion.innerHTML = '';
-    if(filteredTechniques.length === 0){
-      accordion.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#888;">No techniques found.</p>`;
-      document.getElementById('tech-count').textContent = '0';
+
+    // Update checklist items
+    renderChecklist();
+
+    // Update modal close btn aria-label
+    elements.modalCloseBtn.setAttribute('aria-label', t('close'));
+  }
+
+  // ==== Render Techniques list based on filters and search ====
+  function renderTechniques() {
+    const searchTerm = elements.searchInput.value.trim().toLowerCase();
+    elements.techniquesList.innerHTML = '';
+
+    let filtered = techniques.filter(tech => {
+      if (currentCategory !== 'all' && tech.category !== currentCategory) return false;
+      if (searchTerm && !tech.en.title.toLowerCase().includes(searchTerm) && !tech.fr.title.toLowerCase().includes(searchTerm)) return false;
+      return true;
+    });
+
+    elements.statTechniques.textContent = filtered.length;
+
+    if (filtered.length === 0) {
+      elements.techniquesList.innerHTML = `<p style="grid-column:1/-1; text-align:center;opacity:0.7;">${currentLang === 'en' ? 'No techniques found.' : 'Aucune technique trouvée.'}</p>`;
       return;
     }
-    filteredTechniques.forEach(t => {
-      const btn = document.createElement('button');
-      btn.className = 'card-button';
-      btn.setAttribute('aria-haspopup', 'dialog');
-      btn.setAttribute('aria-expanded', 'false');
-      btn.type = 'button';
-      btn.dataset.id = t.id;
-      btn.innerHTML = `<span class="card-emoji" aria-hidden="true">${t.emoji}</span> ${t.title}`;
-      btn.addEventListener('click', () => openModal(t));
-      accordion.appendChild(btn);
+
+    filtered.forEach(tech => {
+      const card = document.createElement('button');
+      card.className = 'tech-card';
+      card.type = 'button';
+      card.setAttribute('aria-describedby', `desc-${tech.id}`);
+      card.title = currentLang === 'en' ? tech.en.title : tech.fr.title;
+
+      card.innerHTML = `
+        <div class="tech-emoji" aria-hidden="true">${tech.emoji}</div>
+        <div class="tech-title">${currentLang === 'en' ? tech.en.title : tech.fr.title}</div>
+      `;
+
+      card.addEventListener('click', () => openModal(tech));
+
+      elements.techniquesList.appendChild(card);
     });
-    document.getElementById('tech-count').textContent = filteredTechniques.length;
   }
 
-  // Render checklist items for filtered techniques
+  // ==== Open modal with technique detail ====
+  function openModal(tech) {
+    elements.modalTitle.textContent = currentLang === 'en' ? tech.en.title : tech.fr.title;
+    elements.modalBody.textContent = currentLang === 'en' ? tech.en.content : tech.fr.content;
+    elements.modal.classList.add('active');
+    elements.modal.focus();
+  }
+
+  // ==== Close modal ====
+  function closeModal() {
+    elements.modal.classList.remove('active');
+  }
+
+  // ==== Checklist rendering ====
   function renderChecklist() {
-    checklist.innerHTML = '';
-    filteredTechniques.forEach(t => {
+    elements.checklistDiv.innerHTML = '';
+    const items = t('checklistItems');
+    checklistState = checklistState.length === items.length ? checklistState : new Array(items.length).fill(false);
+    items.forEach((text, i) => {
       const div = document.createElement('div');
-      div.className = 'checklist-item' + (checklistState[t.id] ? ' checked' : '');
-      div.tabIndex = 0;
-      div.role = 'checkbox';
-      div.ariaChecked = checklistState[t.id] ? 'true' : 'false';
-      div.textContent = t.title;
-      div.addEventListener('click', () => toggleChecklistItem(t.id));
-      div.addEventListener('keydown', e => {
-        if(e.key === ' ' || e.key === 'Enter'){
+      div.className = 'check-item' + (checklistState[i] ? ' checked' : '');
+      div.setAttribute('role', 'listitem');
+      div.setAttribute('tabindex', '0');
+      div.textContent = text;
+      div.addEventListener('click', () => toggleChecklistItem(i));
+      div.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          toggleChecklistItem(t.id);
+          toggleChecklistItem(i);
         }
       });
-      checklist.appendChild(div);
+      elements.checklistDiv.appendChild(div);
     });
+    saveChecklist();
   }
 
-  // Toggle checklist item state
-  function toggleChecklistItem(id) {
-    checklistState[id] = !checklistState[id];
-    localStorage.setItem('groundingChecklist', JSON.stringify(checklistState));
+  function toggleChecklistItem(i) {
+    checklistState[i] = !checklistState[i];
     renderChecklist();
   }
 
-  // Update favorites count display
-  function updateStats() {
-    const favCount = Object.values(favorites).filter(Boolean).length;
-    document.getElementById('favorites-count').textContent = favCount;
+  function saveChecklist() {
+    localStorage.setItem('egt-checklist', JSON.stringify(checklistState));
   }
 
-  // Modal open
-  function openModal(tech) {
-    modalTitle.textContent = tech.title;
-    modalEmoji.textContent = tech.emoji;
-    modalCategory.textContent = `Category: ${capitalize(tech.category)}`;
-    modalContent.innerHTML = tech.content;
-    modalOverlay.classList.add('active');
-    modalOverlay.removeAttribute('hidden');
-    modalCloseBtn.focus();
-    // Update aria-expanded on the button
-    const btn = accordion.querySelector(`button[data-id="${tech.id}"]`);
-    if(btn) btn.setAttribute('aria-expanded', 'true');
+  // ==== Journal Load/Save ====
+  function loadJournal() {
+    elements.journalTextarea.value = journalContent;
+  }
+  function saveJournal() {
+    journalContent = elements.journalTextarea.value;
+    localStorage.setItem('egt-journal', journalContent);
   }
 
-  // Modal close
-  function closeModal() {
-    modalOverlay.classList.remove('active');
-    modalOverlay.setAttribute('hidden', '');
-    // Reset aria-expanded for all buttons
-    accordion.querySelectorAll('button[aria-expanded="true"]').forEach(btn => {
-      btn.setAttribute('aria-expanded', 'false');
-    });
+  // ==== Favorite (not implemented in UI but placeholder) ====
+  // could add heart buttons on technique cards and track favorites.
+
+  // ==== Daily Streak Tracking ====
+  function updateDailyStreak() {
+    const today = new Date().toISOString().slice(0,10);
+    if (lastActiveDay === today) {
+      // same day, no change
+      return;
+    }
+    if (lastActiveDay) {
+      const lastDate = new Date(lastActiveDay);
+      const todayDate = new Date(today);
+      const diff = (todayDate - lastDate) / (1000*3600*24);
+      if (diff === 1) {
+        dailyStreak++;
+      } else {
+        dailyStreak = 1;
+      }
+    } else {
+      dailyStreak = 1;
+    }
+    lastActiveDay = today;
+    localStorage.setItem('egt-streak', dailyStreak);
+    localStorage.setItem('egt-lastDay', lastActiveDay);
+    elements.statStreak.textContent = dailyStreak;
   }
 
-  // Capitalize first letter helper
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  // Search input handler
-  searchInput.addEventListener('input', () => {
-    renderTechniques();
-    renderChecklist();
-  });
-
-  // Category filter handlers
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
-      currentCategory = btn.dataset.category;
-      renderTechniques();
-      renderChecklist();
-    });
-  });
-
-  // Notes saving and loading
-  notesTextarea.value = notes;
-  notesTextarea.addEventListener('input', () => {
-    localStorage.setItem('groundingNotes', notesTextarea.value);
-  });
-
-  // Breathing animation phases handler
+  // ==== Breathing Animation & Sounds ====
+  let breathingInterval;
   function startBreathing() {
-    if (breathingRunning) return;
-    breathingRunning = true;
+    if (breathingActive) return;
+    breathingActive = true;
+    elements.startBreathingBtn.disabled = true;
+    elements.stopBreathingBtn.disabled = false;
     breathingPhase = 0;
-    startBreathingBtn.disabled = true;
-    stopBreathingBtn.disabled = false;
-    runBreathingPhase();
+    breatheCycle();
   }
   function stopBreathing() {
-    breathingRunning = false;
-    clearTimeout(breathingInterval);
-    breathCircle.textContent = 'Stopped';
-    breathCircle.className = 'breath-circle';
-    startBreathingBtn.disabled = false;
-    stopBreathingBtn.disabled = true;
+    breathingActive = false;
+    elements.startBreathingBtn.disabled = false;
+    elements.stopBreathingBtn.disabled = true;
+    clearTimeouts();
+    elements.breathCircle.className = '';
+    elements.breathCircle.textContent = t('guidedBreathing');
   }
-
-  // Run each breathing phase sequentially with animation & sound
-  function runBreathingPhase() {
-    if (!breathingRunning) return;
-
+  function clearTimeouts() {
+    breathingTimeouts.forEach(t => clearTimeout(t));
+    breathingTimeouts = [];
+  }
+  function breatheCycle() {
+    if (!breathingActive) return;
+    const phases = [
+      {text: 'Inhale', className: 'inhale', sound: elements.audioInhale},
+      {text: 'Hold', className: '', sound: null},
+      {text: 'Exhale', className: 'exhale', sound: elements.audioExhale},
+      {text: 'Hold', className: '', sound: null},
+    ];
     const phase = phases[breathingPhase];
-    breathCircle.textContent = phase.name;
-
-    // Reset classes & set according to phase for pulse animation
-    breathCircle.className = 'breath-circle ' + (phase.name.toLowerCase());
-
-    // Play sound on inhale/exhale
-    if(phase.name.toLowerCase() === 'inhale'){
-      breathSoundInhale.currentTime = 0;
-      breathSoundInhale.play().catch(()=>{});
+    elements.breathCircle.textContent = t(phase.text.toLowerCase()) || phase.text;
+    elements.breathCircle.className = phase.className;
+    if (phase.sound && elements.toggleMusic.checked) {
+      phase.sound.currentTime = 0;
+      phase.sound.play().catch(() => {});
     }
-    else if(phase.name.toLowerCase() === 'exhale'){
-      breathSoundExhale.currentTime = 0;
-      breathSoundExhale.play().catch(()=>{});
-    }
-
-    breathingInterval = setTimeout(() => {
-      breathingPhase = (breathingPhase + 1) % phases.length;
-      runBreathingPhase();
-    }, phase.duration);
+    breathingPhase = (breathingPhase + 1) % phases.length;
+    breathingTimeouts.push(setTimeout(breatheCycle, 4000));
   }
 
-  startBreathingBtn.addEventListener('click', startBreathing);
-  stopBreathingBtn.addEventListener('click', stopBreathing);
-
-  // Dark mode toggle
-  function applyDarkMode(enabled) {
-    if(enabled){
+  // ==== Dark Mode toggle ====
+  function setDarkMode(enabled) {
+    if (enabled) {
       document.body.classList.add('dark');
-      toggleDarkMode.checked = true;
     } else {
       document.body.classList.remove('dark');
-      toggleDarkMode.checked = false;
     }
-    localStorage.setItem('groundingDarkMode', enabled ? 'true' : 'false');
+    localStorage.setItem('egt-darkmode', enabled);
   }
-  toggleDarkMode.addEventListener('change', e => {
-    applyDarkMode(e.target.checked);
-  });
-  // Load dark mode state
-  applyDarkMode(localStorage.getItem('groundingDarkMode') === 'true');
 
-  // Background music toggle
-  function applyMusic(enabled) {
-    if(enabled){
-      bgMusic.play().catch(()=>{});
-      toggleMusic.checked = true;
+  // ==== Background Music Toggle ====
+  function setBackgroundMusic(enabled) {
+    if (enabled) {
+      elements.backgroundMusic.play().catch(() => {});
     } else {
-      bgMusic.pause();
-      toggleMusic.checked = false;
+      elements.backgroundMusic.pause();
+      elements.backgroundMusic.currentTime = 0;
     }
-    localStorage.setItem('groundingBgMusic', enabled ? 'true' : 'false');
+    localStorage.setItem('egt-music', enabled);
   }
-  toggleMusic.addEventListener('change', e => {
-    applyMusic(e.target.checked);
-  });
-  // Load music state
-  applyMusic(localStorage.getItem('groundingBgMusic') === 'true');
 
-  // Download grounding guide PDF (simple text version)
-  downloadPdfBtn.addEventListener('click', () => {
-    let docContent = 'Grounding Techniques Guide\n\n';
-    techniques.forEach(t => {
-      docContent += `${t.emoji} ${t.title.toUpperCase()}\nCategory: ${capitalize(t.category)}\n\n${stripHtml(t.content)}\n\n---\n\n`;
+  // ==== Add Custom Technique ====
+  function addCustomTechnique() {
+    const title = prompt(t('promptAddTitle'));
+    if (!title || !title.trim()) {
+      alert(t('errorEmptyTitle'));
+      return;
+    }
+    const desc = prompt(t('promptAddDesc'));
+    if (!desc || !desc.trim()) {
+      alert(t('errorEmptyContent'));
+      return;
+    }
+    const newTech = {
+      id: `custom-${Date.now()}`,
+      emoji: '✨',
+      category: 'cognitive',
+      en: {title: title.trim(), content: desc.trim()},
+      fr: {title: title.trim(), content: desc.trim()},
+    };
+    techniques.push(newTech);
+    // Save custom techniques only
+    const customs = techniques.filter(t => t.id.startsWith('custom-'));
+    saveCustomTechniques(customs);
+    renderTechniques();
+  }
+
+  // ==== Download PDF Guide ====
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text(t('pdfTitle'), 14, 22);
+    doc.setFontSize(12);
+    doc.setTextColor(80);
+    doc.text(t('pdfDescription'), 14, 32);
+
+    let y = 45;
+    doc.setTextColor(0);
+
+    // List techniques (only current lang)
+    techniques.forEach((tech, i) => {
+      const title = currentLang === 'en' ? tech.en.title : tech.fr.title;
+      const content = currentLang === 'en' ? tech.en.content : tech.fr.content;
+
+      if (y > 260) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.setFont(undefined, 'bold');
+      doc.text(`${i + 1}. ${title}`, 14, y);
+      y += 6;
+      doc.setFont(undefined, 'normal');
+      const splitText = doc.splitTextToSize(content, 180);
+      doc.text(splitText, 14, y);
+      y += splitText.length * 6 + 4;
     });
 
-    const blob = new Blob([docContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Grounding_Techniques_Guide.txt';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    }, 0);
-  });
+    doc.setFontSize(10);
+    doc.setTextColor(120);
+    doc.text(t('pdfFooter'), 14, 290);
 
-  // Strip HTML tags helper
-  function stripHtml(html) {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
+    doc.save('Grounding_Toolkit_Guide.pdf');
   }
 
-  // Add new technique prompt flow
-  addTechBtn.addEventListener('click', () => {
-    const title = prompt('Enter the technique title:').trim();
-    if (!title) return alert('Title cannot be empty.');
+  // ==== Service Worker Registration for PWA offline support ====
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js')
+      .then(reg => console.log('Service Worker Registered'))
+      .catch(err => console.warn('Service Worker registration failed:', err));
+    });
+  }
 
-    const category = prompt('Enter the category (physical, breathing, visualization, mindfulness, emotional, creative, emergency):').toLowerCase().trim();
-    const validCategories = ['physical','breathing','visualization','mindfulness','emotional','creative','emergency'];
-    if (!validCategories.includes(category)) return alert('Invalid category.');
+  // ==== Service Worker code (inline as Blob) for offline cache ====
+  // We'll inject this script as a Blob URL to service-worker.js dynamically:
+  const swCode = `
+  const CACHE_NAME = 'egt-cache-v1';
+  const urlsToCache = [
+    '/',
+    location.pathname,
+  ];
 
-    const emoji = prompt('Choose an emoji for the technique:').trim() || '🧘';
-    const content = prompt('Describe the technique:').trim() || '<p>No details provided.</p>';
+  self.addEventListener('install', event => {
+    event.waitUntil(
+      caches.open(CACHE_NAME)
+        .then(cache => cache.addAll(urlsToCache))
+    );
+  });
+  self.addEventListener('fetch', event => {
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => response || fetch(event.request))
+    );
+  });
+  `;
+  const swBlob = new Blob([swCode], {type: 'application/javascript'});
+  const swUrl = URL.createObjectURL(swBlob);
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(swUrl).catch(console.error);
+  }
 
-    const id = `user-${Date.now()}`;
-    techniques.push({ id, title, category, emoji, content });
-    localStorage.setItem('groundingCustomTechniques', JSON.stringify(techniques.filter(t => t.id.startsWith('user-'))));
+  // ==== Initialization ====
+  function init() {
+    // Language set
+    elements.langRadios.forEach(radio => {
+      radio.checked = radio.value === currentLang;
+      radio.addEventListener('change', () => {
+        currentLang = radio.value;
+        localStorage.setItem('egt-lang', currentLang);
+        updateStaticTexts();
+        renderTechniques();
+        renderChecklist();
+        loadJournal();
+      });
+    });
+
+    // Load data
+    loadTechniques();
+
+    // UI texts
+    updateStaticTexts();
+
+    // Render techniques list
     renderTechniques();
+
+    // Render checklist
     renderChecklist();
-  });
 
-  // Modal close handlers
-  modalCloseBtn.addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', e => {
-    if(e.target === modalOverlay) closeModal();
-  });
-  window.addEventListener('keydown', e => {
-    if(e.key === 'Escape') closeModal();
-  });
+    // Load journal
+    loadJournal();
 
-  // Load custom techniques from localStorage
-  const savedCustom = JSON.parse(localStorage.getItem('groundingCustomTechniques') || '[]');
-  if(savedCustom.length){
-    techniques.push(...savedCustom);
+    // Update daily streak
+    updateDailyStreak();
+
+    // Set dark mode from storage
+    const darkStored = localStorage.getItem('egt-darkmode') === 'true';
+    elements.toggleDarkMode.checked = darkStored;
+    setDarkMode(darkStored);
+
+    // Set music toggle
+    const musicStored = localStorage.getItem('egt-music') === 'true';
+    elements.toggleMusic.checked = musicStored;
+    setBackgroundMusic(musicStored);
+
+    // Event listeners
+    elements.searchInput.addEventListener('input', renderTechniques);
+
+    elements.categoriesNav.addEventListener('click', e => {
+      if (e.target.classList.contains('category-btn')) {
+        currentCategory = e.target.getAttribute('data-category');
+        // Update aria-pressed and active class
+        elements.categoriesNav.querySelectorAll('.category-btn').forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-pressed', 'false');
+        });
+        e.target.classList.add('active');
+        e.target.setAttribute('aria-pressed', 'true');
+        renderTechniques();
+      }
+    });
+
+    elements.journalTextarea.addEventListener('input', () => {
+      saveJournal();
+    });
+
+    elements.modalCloseBtn.addEventListener('click', closeModal);
+    elements.modal.addEventListener('click', (e) => {
+      if (e.target === elements.modal) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && elements.modal.classList.contains('active')) closeModal();
+    });
+
+    elements.startBreathingBtn.addEventListener('click', startBreathing);
+    elements.stopBreathingBtn.addEventListener('click', stopBreathing);
+
+    elements.toggleDarkMode.addEventListener('change', e => {
+      setDarkMode(e.target.checked);
+    });
+    elements.toggleMusic.addEventListener('change', e => {
+      setBackgroundMusic(e.target.checked);
+    });
+
+    elements.downloadPDFBtn.addEventListener('click', downloadPDF);
+
+    elements.addTechBtn.addEventListener('click', addCustomTechnique);
   }
 
-  // Init
-  renderTechniques();
-  renderChecklist();
-  updateStats();
-  updateDailyStreak();
+  // Start the app
+  init();
+
 })();
 </script>
 </body>
