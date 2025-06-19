@@ -1,87 +1,402 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Crisis Support Toolkit</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#667eea">
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#5a6cb2" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    /* Base styles */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#667eea,#764ba2); color:#333; min-height:100vh; padding-bottom:60px; scroll-behavior:smooth; }
-    a { color:#3498db; text-decoration:none; }
-    a:hover { text-decoration:underline; }
-    button { cursor:pointer; border:none; border-radius:5px; transition:background .3s ease; }
-    button:focus { outline:2px solid #3498db; }
+    /* Reset & base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      min-height: 100vh;
+      padding: 20px 10px 80px;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a {
+      color: #5a6cb2;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover,
+    a:focus {
+      color: #423e9a;
+      outline: none;
+      text-decoration: underline;
+    }
+    button {
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, box-shadow 0.2s ease;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    button:focus-visible {
+      outline: 3px solid #a7b1f9;
+      outline-offset: 2px;
+    }
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255 255 255 / 0.98);
+      border-radius: 16px;
+      padding: 2rem 2.5rem 3rem;
+      box-shadow: 0 12px 32px rgb(0 0 0 / 0.15);
+      position: relative;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      font-size: 2.6rem;
+      color: #423e9a;
+      margin-bottom: 0.3rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    header .subtitle {
+      font-size: 1.1rem;
+      color: #6c6f85;
+      margin-bottom: 0.7rem;
+    }
+    header strong {
+      font-weight: 600;
+      color: #37415a;
+      font-size: 1rem;
+    }
 
-    /* Containers */
-    .container { max-width:900px; margin:1rem auto; background:rgba(255,255,255,0.9); border-radius:12px; padding:1rem; box-shadow:0 0 20px rgba(0,0,0,0.2); }
-    header { text-align:center; margin-bottom:1rem; }
-    h1 { font-size:2.2rem; }
-    .subtitle { color:#555; }
+    /* Section Titles */
+    section h2 {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #4b4e7c;
+      margin-bottom: 0.7rem;
+      border-left: 6px solid #5a6cb2;
+      padding-left: 12px;
+      user-select: none;
+    }
 
     /* Starter prompts */
-    .starter-prompts { background:#eef; padding:1rem; border-radius:8px; margin-top:1rem; font-size:0.9rem; }
-    .starter-prompts ul { list-style:disc; padding-left:1.2rem; }
+    .starter-prompts {
+      background-color: #f4f7ff;
+      border-left: 5px solid #667eea;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      color: #4a5178;
+      margin-bottom: 1.4rem;
+      box-shadow: inset 0 0 8px rgb(102 126 234 / 0.3);
+      user-select: text;
+    }
+    .starter-prompts ul {
+      margin-top: 0.3rem;
+      padding-left: 1.2rem;
+      line-height: 1.5;
+    }
+    .starter-prompts ul li {
+      margin-bottom: 0.35rem;
+    }
 
-    /* Scroll buttons */
-    .scroll-btns { position:fixed; bottom:80px; right:20px; display:flex; flex-direction:column; gap:10px; z-index:1000; }
-    .scroll-btns button { width:48px;height:48px;border-radius:50%;background:#3498db;color:#fff; display:flex;align-items:center;justify-content:center; font-size:1.5rem; box-shadow:0 4px 8px rgba(0,0,0,0.2); }
-    .scroll-btns button:hover { background:#2a80c7; }
+    /* Textarea */
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      padding: 1rem 1.2rem;
+      border-radius: 14px;
+      border: 2px solid #5a6cb2;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 1rem;
+      color: #222;
+      background: #fdfdff;
+      resize: vertical;
+      box-shadow: inset 1px 2px 8px rgb(102 110 240 / 0.15);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: text;
+    }
+    textarea:focus {
+      border-color: #423e9a;
+      box-shadow: 0 0 10px #7a7edc;
+      outline: none;
+    }
 
-    /* Modals */
-    .modal-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; padding:15px; z-index:1500; }
-    .modal-overlay.active { display:flex; }
-    .modal { background:#fff; border-radius:10px; max-width:600px;width:100%; max-height:90vh; overflow-y:auto; padding:2rem; position:relative; }
-    .modal h2 { margin-bottom:1rem; }
-    .close-btn { position:absolute; top:12px; right:12px; background:transparent; font-size:1.4rem; cursor:pointer; color:#666; }
-    .close-btn:hover { color:#3498db; }
-
-    /* Safety plan form */
-    label { display:block; margin-top:1rem; font-weight:600; }
-    textarea { width:100%; min-height:80px; margin-top:0.4rem; padding:0.6rem; border-radius:6px; border:1px solid #3498db; font-family:inherit; font-size:1rem; resize:vertical; }
-    .form-buttons { margin-top:1.5rem; display:flex; gap:10px; flex-wrap:wrap; }
-    .primary-btn { background:#3498db; color:white; padding:0.8rem 1.4rem; border-radius:6px; }
-    .secondary-btn { background:#aaa; color:white; padding:0.8rem 1.4rem; border-radius:6px; }
+    /* Form buttons */
+    .form-buttons {
+      margin-top: 1.6rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .primary-btn {
+      background-color: #5a6cb2;
+      color: white;
+      padding: 0.75rem 1.8rem;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 5px 15px rgb(90 108 178 / 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.2s ease;
+      user-select: none;
+      flex: 1 1 auto;
+      min-width: 140px;
+    }
+    .primary-btn:hover,
+    .primary-btn:focus-visible {
+      background-color: #423e9a;
+      box-shadow: 0 8px 20px rgb(66 62 154 / 0.65);
+      outline: none;
+    }
+    .secondary-btn {
+      background-color: #bbb;
+      color: #333;
+      padding: 0.75rem 1.8rem;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 3px 12px rgb(170 170 170 / 0.5);
+      user-select: none;
+      flex: 1 1 auto;
+      min-width: 140px;
+      border-radius: 12px;
+      transition: background-color 0.3s ease;
+    }
+    .secondary-btn:hover,
+    .secondary-btn:focus-visible {
+      background-color: #999;
+      outline: none;
+    }
 
     /* Checklist */
-    .checklist ul { list-style:none; padding-left:0; }
-    .checklist li { margin:0.5rem 0; align-items:center; display:flex; gap:0.5rem; }
-    .checklist input[type="checkbox"] { transform:scale(1.2); }
+    .checklist ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 1rem;
+    }
+    .checklist li {
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 1rem;
+      user-select: none;
+      color: #3a3f66;
+    }
+    .checklist input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      border-radius: 5px;
+      accent-color: #5a6cb2;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
+      transition: box-shadow 0.25s ease;
+    }
+    .checklist input[type="checkbox"]:focus-visible {
+      outline: 2px solid #7a7edc;
+      outline-offset: 2px;
+    }
 
-    /* Mobile styles */
-    @media (max-width:600px){
-      h1 { font-size:1.8rem; }
-      .scroll-btns { bottom:60px; right:10px; }
+    /* Scroll buttons */
+    .scroll-btns {
+      position: fixed;
+      bottom: 85px;
+      right: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 1100;
+      user-select: none;
+    }
+    .scroll-btns button {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #5a6cb2;
+      color: #fff;
+      font-size: 1.7rem;
+      box-shadow: 0 6px 16px rgb(90 108 178 / 0.4);
+      position: relative;
+      transition: background-color 0.3s ease, transform 0.25s ease;
+    }
+    .scroll-btns button:hover,
+    .scroll-btns button:focus-visible {
+      background-color: #423e9a;
+      transform: scale(1.12);
+      outline: none;
+      box-shadow: 0 10px 22px rgb(66 62 154 / 0.7);
+      cursor: pointer;
+    }
+    /* Tooltips */
+    .scroll-btns button::after {
+      content: attr(title);
+      position: absolute;
+      right: 110%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #423e9a;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      user-select: none;
+    }
+    .scroll-btns button:hover::after,
+    .scroll-btns button:focus-visible::after {
+      opacity: 1;
+    }
+
+    /* Modal overlay & content */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 25, 50, 0.82);
+      backdrop-filter: blur(6px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      z-index: 1600;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal {
+      background: white;
+      border-radius: 16px;
+      max-width: 650px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2.3rem 2.7rem;
+      position: relative;
+      box-shadow: 0 20px 40px rgb(0 0 0 / 0.3);
+      user-select: text;
+    }
+    .modal h2 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      color: #423e9a;
+      user-select: none;
+    }
+    .close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 1.6rem;
+      background: transparent;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      user-select: none;
+    }
+    .close-btn:hover,
+    .close-btn:focus-visible {
+      color: #5a6cb2;
+      outline: none;
+    }
+
+    /* Modal textarea */
+    #safety-input-fr {
+      width: 100%;
+      min-height: 160px;
+      padding: 1.1rem 1.3rem;
+      border-radius: 14px;
+      border: 2px solid #5a6cb2;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 1rem;
+      color: #222;
+      background: #fdfdff;
+      resize: vertical;
+      box-shadow: inset 1px 2px 8px rgb(102 110 240 / 0.15);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: text;
+    }
+    #safety-input-fr:focus {
+      border-color: #423e9a;
+      box-shadow: 0 0 10px #7a7edc;
+      outline: none;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #d2d4e7;
+      user-select: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem 1.5rem 2.5rem;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+      section h2 {
+        font-size: 1.5rem;
+      }
+      .scroll-btns {
+        bottom: 60px;
+        right: 12px;
+      }
+      .scroll-btns button {
+        width: 46px;
+        height: 46px;
+        font-size: 1.4rem;
+      }
+      .form-buttons {
+        flex-direction: column;
+      }
+      .form-buttons button {
+        min-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Language toggle -->
+  <div style="position:fixed;top:20px;right:20px;z-index:1200;">
+    <button id="en-btn" class="primary-btn" aria-pressed="true" onclick="setLanguage('en')" aria-label="Switch to English">English</button>
+    <button id="fr-btn" class="secondary-btn" aria-pressed="false" onclick="setLanguage('fr')" aria-label="Switch to French">Français</button>
+  </div>
 
   <!-- Scroll buttons -->
-  <div class="scroll-btns">
-    <button onclick="document.getElementById('safety-section').scrollIntoView()" title="Go to Safety Plan">🛡️</button>
-    <button onclick="document.getElementById('checklist-section').scrollIntoView()" title="Go to Checklist">📋</button>
-  </div>
+  <nav aria-label="Scroll to sections" class="scroll-btns">
+    <button onclick="document.getElementById('safety-section').scrollIntoView({behavior:'smooth'})" title="Go to Safety Plan" aria-label="Scroll to Safety Plan section">🛡️</button>
+    <button onclick="document.getElementById('checklist-section').scrollIntoView({behavior:'smooth'})" title="Go to Checklist" aria-label="Scroll to Crisis Checklist section">📋</button>
+  </nav>
 
-  <!-- Language toggle -->
-  <div style="position:fixed;top:20px;right:20px;z-index:1000;">
-    <button id="en-btn" class="primary-btn" onclick="setLanguage('en')">English</button>
-    <button id="fr-btn" class="secondary-btn" onclick="setLanguage('fr')">Français</button>
-  </div>
-
-  <div class="container">
+  <main class="container" role="main" tabindex="-1">
     <header>
-      <h1 id="page-title">🆘 Crisis Support Toolkit</h1>
+      <h1 id="page-title" tabindex="0">🆘 Crisis Support Toolkit</h1>
       <p class="subtitle" id="page-subtitle">Immediate help and resources for Canada & USA</p>
       <p><strong id="page-strong">You are not alone. Help is available 24/7.</strong></p>
     </header>
 
-    <section id="safety-section">
+    <section id="safety-section" tabindex="-1">
       <h2>🛡️ Personalized Safety Plan</h2>
-      <div class="starter-prompts">
+      <div class="starter-prompts" aria-label="Safety plan starter prompts">
         <p><em>Use these prompts:</em></p>
         <ul>
           <li>What are early warning signs? (e.g. racing thoughts)</li>
@@ -91,61 +406,67 @@
           <li>What steps keep my environment safe?</li>
         </ul>
       </div>
-      <textarea id="safety-input" placeholder="Write your safety plan here..."></textarea>
+      <textarea id="safety-input" aria-label="Enter your personalized safety plan" placeholder="Write your safety plan here..."></textarea>
       <div class="form-buttons">
-        <button class="primary-btn" onclick="downloadPDF('safety-input','Safety_Plan.pdf')">Download PDF</button>
-        <button class="secondary-btn" onclick="openModal('modal-safetyplan-fr')" title="Ouvrir le plan en français">FR Plan</button>
+        <button class="primary-btn" onclick="downloadPDF('safety-input','Safety_Plan.pdf')" aria-label="Download your safety plan as PDF">Download PDF</button>
+        <button class="secondary-btn" onclick="openModal('modal-safetyplan-fr')" aria-haspopup="dialog" aria-expanded="false" aria-controls="modal-safetyplan-fr">Voir le plan en français</button>
       </div>
     </section>
 
-    <section id="checklist-section" style="margin-top:2rem;">
+    <section id="checklist-section" tabindex="-1" style="margin-top:3rem;">
       <h2>📋 Crisis Checklist</h2>
-      <div class="checklist">
+      <div class="checklist" aria-label="Crisis checklist items">
         <ul>
-          <li><input type="checkbox"> Call a trusted friend or support line</li>
-          <li><input type="checkbox"> Use deep-breathing techniques</li>
-          <li><input type="checkbox"> Take medications (if prescribed)</li>
-          <li><input type="checkbox"> Remove dangerous objects nearby</li>
-          <li><input type="checkbox"> Remember emergency numbers</li>
-          <li><input type="checkbox"> Go to hospital or call 911 if needed</li>
+          <li><input type="checkbox" id="check1" /><label for="check1">Call a trusted friend or support line</label></li>
+          <li><input type="checkbox" id="check2" /><label for="check2">Use deep-breathing techniques</label></li>
+          <li><input type="checkbox" id="check3" /><label for="check3">Take medications (if prescribed)</label></li>
+          <li><input type="checkbox" id="check4" /><label for="check4">Remove dangerous objects nearby</label></li>
+          <li><input type="checkbox" id="check5" /><label for="check5">Remember emergency numbers</label></li>
+          <li><input type="checkbox" id="check6" /><label for="check6">Go to hospital or call 911 if needed</label></li>
         </ul>
       </div>
-      <button onclick="window.print()" class="secondary-btn">Print Checklist</button>
+      <button onclick="window.print()" class="secondary-btn" aria-label="Print checklist">Print Checklist</button>
     </section>
-  </div>
+  </main>
 
-  <footer style="text-align:center;margin-top:2rem;color:#fff;">
+  <footer>
     © 2025 Crisis Support Toolkit
   </footer>
 
   <!-- French Safety Plan Modal -->
-  <div id="modal-safetyplan-fr" class="modal-overlay">
+  <div id="modal-safetyplan-fr" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-safetyplan-fr-title" tabindex="-1" aria-hidden="true">
     <div class="modal">
-      <button class="close-btn" onclick="closeModal('modal-safetyplan-fr')">&times;</button>
-      <h2>🛡️ Mon plan de sécurité</h2>
-      <textarea id="safety-input-fr" placeholder="Écrivez votre plan de sécurité ici..."></textarea>
-      <div class="form-buttons">
-        <button class="primary-btn" onclick="downloadPDF('safety-input-fr','Plan_de_securite.pdf')">Télécharger PDF</button>
+      <button class="close-btn" aria-label="Close French safety plan modal" onclick="closeModal('modal-safetyplan-fr')">&times;</button>
+      <h2 id="modal-safetyplan-fr-title">🛡️ Mon plan de sécurité</h2>
+      <textarea id="safety-input-fr" aria-label="Écrivez votre plan de sécurité ici" placeholder="Écrivez votre plan de sécurité ici..."></textarea>
+      <div class="form-buttons" style="margin-top:1.6rem;">
+        <button class="primary-btn" onclick="downloadPDF('safety-input-fr','Plan_de_securite.pdf')" aria-label="Télécharger le plan de sécurité en PDF">Télécharger PDF</button>
       </div>
     </div>
   </div>
 
   <script>
+    // Language toggle
     function setLanguage(lang) {
       const enBtn = document.getElementById('en-btn');
       const frBtn = document.getElementById('fr-btn');
       const title = document.getElementById('page-title');
       const subtitle = document.getElementById('page-subtitle');
       const strong = document.getElementById('page-strong');
+
       if (lang === 'fr') {
-        enBtn.classList.replace('primary-btn','secondary-btn');
-        frBtn.classList.replace('secondary-btn','primary-btn');
+        enBtn.classList.replace('primary-btn', 'secondary-btn');
+        frBtn.classList.replace('secondary-btn', 'primary-btn');
+        enBtn.setAttribute('aria-pressed', 'false');
+        frBtn.setAttribute('aria-pressed', 'true');
         title.textContent = "🆘 Trousse d'aide en situation de crise";
         subtitle.textContent = "Aide immédiate et ressources pour le Canada et les États-Unis";
         strong.textContent = "Vous n'êtes pas seul(e). De l'aide est disponible 24h/24, 7j/7.";
       } else {
-        frBtn.classList.replace('primary-btn','secondary-btn');
-        enBtn.classList.replace('secondary-btn','primary-btn');
+        frBtn.classList.replace('primary-btn', 'secondary-btn');
+        enBtn.classList.replace('secondary-btn', 'primary-btn');
+        frBtn.setAttribute('aria-pressed', 'false');
+        enBtn.setAttribute('aria-pressed', 'true');
         title.textContent = "🆘 Crisis Support Toolkit";
         subtitle.textContent = "Immediate help and resources for Canada & USA";
         strong.textContent = "You are not alone. Help is available 24/7.";
@@ -153,28 +474,44 @@
     }
     setLanguage('en');
 
+    // Modal control
     function openModal(id) {
-      document.getElementById(id).classList.add('active');
+      const modal = document.getElementById(id);
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      modal.querySelector('textarea').focus();
+      // Prevent background scrolling when modal open
+      document.body.style.overflow = 'hidden';
     }
     function closeModal(id) {
-      document.getElementById(id).classList.remove('active');
+      const modal = document.getElementById(id);
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+      // Restore background scrolling
+      document.body.style.overflow = '';
     }
 
+    // PDF generation
     async function downloadPDF(inputId, filename) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      const text = document.getElementById(inputId).value || '(No content entered)';
-      doc.setFontSize(14);
-      doc.text(filename.replace(/_/g, ' ').replace('.pdf',''), 14, 20);
-      doc.setFontSize(11);
-      const lines = doc.splitTextToSize(text, 180);
-      doc.text(lines, 14, 30);
+      const text = document.getElementById(inputId).value.trim() || '(No content entered)';
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.text(filename.replace(/_/g, ' ').replace('.pdf', ''), 14, 20);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(12);
+      const splitText = doc.splitTextToSize(text, 180);
+      doc.text(splitText, 14, 30);
       doc.save(filename);
     }
 
+    // Register service worker for PWA offline support
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .catch(err => console.warn('SW failed', err));
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .catch((err) => console.warn('ServiceWorker registration failed:', err));
+      });
     }
   </script>
 </body>
