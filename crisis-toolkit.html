@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crisis Support Toolkit</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.6s ease-out both; }
+
+    /* Calming animated banner gradient wave */
+    @keyframes waveShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    header.calming-banner {
+      height: 140px;
+      background: linear-gradient(270deg, #a1c4fd, #c2e9fb, #a1c4fd, #c2e9fb);
+      background-size: 600% 600%;
+      animation: waveShift 20s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1e3a8a; /* Tailwind's blue-900 */
+      font-weight: 700;
+      font-size: 1.75rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-shadow: 1px 1px 3px rgba(255,255,255,0.7);
+      user-select: none;
+    }
+
+    /* Push content below banner */
+    #content {
+      padding-top: 1.5rem;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 text-gray-800 font-sans">
+
+  <header class="calming-banner">
+    🌊 You Are Not Alone — Help is Here 🌊
+  </header>
+
+  <div id="content" class="max-w-3xl mx-auto p-6 space-y-6">
+
+    <!-- Daily Support Message -->
+    <div id="dailyMessage" class="text-center italic text-purple-700 text-lg fade-in">
+      💌 You are loved. You matter.
+    </div>
+
+    <!-- Shuffle Self-Care -->
+    <div class="text-center fade-in">
+      <button onclick="shuffleStrategy()" class="mt-4 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
+        🎲 Self-Care Tip
+      </button>
+      <div id="strategyDisplay" class="mt-2 text-purple-700 font-medium"></div>
+    </div>
+
+    <!-- Hotlines -->
+    <div class="fade-in">
+      <h2 class="text-xl font-bold mb-2">📞 Emergency Hotlines</h2>
+      <div id="hotlines" class="space-y-4"></div>
+    </div>
+
+    <!-- Saved Resources -->
+    <div class="fade-in">
+      <h2 class="text-xl font-bold mb-2">❤️ Saved Resources</h2>
+      <ul id="savedResources" class="list-disc list-inside text-sm space-y-1"></ul>
+      <button onclick="clearSaved()" class="text-red-600 text-sm mt-2">Clear All</button>
+    </div>
+
+    <!-- Community Encouragement Notes -->
+    <div class="fade-in">
+      <h2 class="text-xl font-bold mb-2">🌻 Encouragement Board</h2>
+      <textarea id="newNote" class="w-full p-2 border rounded" placeholder="Leave a kind anonymous message..."></textarea>
+      <button onclick="addNote()" class="mt-2 px-3 py-1 bg-blue-500 text-white rounded">Share</button>
+      <ul id="communityNotes" class="mt-4 list-disc list-inside space-y-1 text-sm text-gray-700"></ul>
+    </div>
+  </div>
+
+  <script>
+    const hotlines = [
+      { id: 1, name: "Talk Suicide Canada", phone: "1-833-456-4566", description: "24/7 crisis support (Canada)" },
+      { id: 2, name: "988 Suicide & Crisis Lifeline", phone: "988", description: "24/7 national support (USA)" },
+      { id: 3, name: "Kids Help Phone", phone: "1-800-668-6868", description: "Youth support in Canada" },
+      { id: 4, name: "Crisis Text Line", phone: "Text HOME to 741741", description: "Text-based support (USA)" }
+    ];
+
+    const selfCareTips = [
+      "Name 5 things you can see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste.",
+      "Take 5 deep box breaths: In 4s, hold 4s, out 4s, hold 4s.",
+      "Splash cold water on your face to reset your system.",
+      "Close your eyes and visualize your safe place for 30 seconds.",
+      "Take a slow walk and focus on your footsteps."
+    ];
+
+    const supportMessages = [
+      "You are not a burden. You are loved.",
+      "You don’t need to go through this alone.",
+      "One step at a time. You're doing your best.",
+      "It's okay to rest. Healing is not linear.",
+      "You are worthy of peace and kindness."
+    ];
+
+    document.getElementById("dailyMessage").textContent = "💌 " + supportMessages[Math.floor(Math.random() * supportMessages.length)];
+
+    function shuffleStrategy() {
+      const pick = selfCareTips[Math.floor(Math.random() * selfCareTips.length)];
+      document.getElementById("strategyDisplay").textContent = pick;
+    }
+
+    // Render hotlines
+    const saved = JSON.parse(localStorage.getItem("saved") || "[]");
+    const hotlineContainer = document.getElementById("hotlines");
+    hotlines.forEach(h => {
+      const div = document.createElement("div");
+      div.className = "p-4 bg-white rounded shadow border";
+      div.innerHTML = `
+        <div class="flex justify-between items-center">
+          <strong>${h.name}</strong>
+          <button onclick="toggleSave(${h.id})" class="text-${saved.includes(h.id) ? 'red' : 'gray'}-500 text-sm">
+            ${saved.includes(h.id) ? '❤️' : '🤍'}
+          </button>
+        </div>
+        <p class="text-sm">${h.description}</p>
+        <p class="mt-1 text-purple-700 font-medium">${h.phone}</p>
+      `;
+      hotlineContainer.appendChild(div);
+    });
+
+    function toggleSave(id) {
+      let saved = JSON.parse(localStorage.getItem("saved") || "[]");
+      if (saved.includes(id)) {
+        saved = saved.filter(x => x !== id);
+      } else {
+        saved.push(id);
+      }
+      localStorage.setItem("saved", JSON.stringify(saved));
+      location.reload();
+    }
+
+    function showSaved() {
+      const list = document.getElementById("savedResources");
+      list.innerHTML = "";
+      const saved = JSON.parse(localStorage.getItem("saved") || "[]");
+      hotlines.forEach(h => {
+        if (saved.includes(h.id)) {
+          const li = document.createElement("li");
+          li.textContent = h.name + " (" + h.phone + ")";
+          list.appendChild(li);
+        }
+      });
+    }
+
+    function clearSaved() {
+      localStorage.removeItem("saved");
+      showSaved();
+    }
+
+    function addNote() {
+      const text = document.getElementById("newNote").value.trim();
+      if (text) {
+        const notes = JSON.parse(localStorage.getItem("notes") || "[]");
+        notes.push(text);
+        localStorage.setItem("notes", JSON.stringify(notes));
+        document.getElementById("newNote").value = "";
+        renderNotes();
+      }
+    }
+
+    function renderNotes() {
+      const notes = JSON.parse(localStorage.getItem("notes") || "[]");
+      const list = document.getElementById("communityNotes");
+      list.innerHTML = "";
+      notes.forEach(n => {
+        const li = document.createElement("li");
+        li.textContent = n;
+        list.appendChild(li);
+      });
+    }
+
+    // Initialize
+    showSaved();
+    renderNotes();
+  </script>
+
+</body>
+</html>
