@@ -1,414 +1,721 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🌿 Personal Self‑Care Toolkit</title>
-  <link rel="manifest" href="#" id="manifest-link">
-  <style>
-    /* ---------- Reset & Base ---------- */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 2rem;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Self-Care Toolkit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Comfortaa', cursive, Arial, sans-serif;
+    background: linear-gradient(135deg, #f7f8fc, #d7e1ec);
+    color: #2a2f45;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: #6c9ee5;
+    color: #fff;
+    padding: 1.2rem 1.5rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.8rem;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  }
+  main {
+    flex: 1 0 auto;
+    padding: 1rem 1.5rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h2 {
+    margin-top: 2.4rem;
+    color: #3a4a78;
+    border-bottom: 2px solid #a2b5ff;
+    padding-bottom: 0.3rem;
+  }
+  section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.4rem 1.8rem 2rem;
+    box-shadow: 0 8px 16px rgba(108,158,229,0.15);
+    margin-top: 1.5rem;
+    transition: box-shadow 0.3s ease;
+  }
+  section:hover {
+    box-shadow: 0 12px 24px rgba(108,158,229,0.3);
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-top: 1rem;
+  }
+  input[type="text"], textarea, select {
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0.5rem 0.7rem;
+    border: 1.8px solid #a3b0d8;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #5577f5;
+    background-color: #f0f3ff;
+  }
+  button {
+    margin-top: 1.2rem;
+    background: #5577f5;
+    border: none;
+    color: #fff;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(85,119,245,0.4);
+    transition: background-color 0.3s ease;
+  }
+  button:hover, button:focus {
+    background: #3a5eda;
+  }
+  .small-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+  }
+  /* Gratitude Log */
+  #gratitude-list {
+    list-style: decimal inside;
+    margin-top: 0.7rem;
+    color: #4661a0;
+    font-weight: 600;
+  }
+  /* Affirmation */
+  #affirmation-text {
+    font-style: italic;
+    font-size: 1.15rem;
+    margin: 1rem 0 0;
+    color: #4a5678;
+    min-height: 48px;
+  }
+  /* Emotion Wheel */
+  #emotion-wheel {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    justify-content: center;
+  }
+  .emotion {
+    background: #a9b9f6;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+    color: #21325e;
+    transition: background-color 0.25s ease;
+  }
+  .emotion:hover, .emotion.selected {
+    background: #5577f5;
+    color: #fff;
+  }
+  /* Need Right Now Picker */
+  #need-buttons {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+  }
+  #need-response {
+    margin-top: 0.8rem;
+    font-weight: 600;
+    color: #3f4e8c;
+    min-height: 38px;
+    text-align: center;
+  }
+  /* Reminders */
+  .reminder-toggle {
+    display: flex;
+    align-items: center;
+    margin-top: 0.8rem;
+  }
+  .reminder-toggle input[type=checkbox] {
+    margin-right: 0.5rem;
+    transform: scale(1.3);
+    cursor: pointer;
+  }
+  /* Breathing animation */
+  #breathing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1.2rem;
+  }
+  #breath-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #6c9ee5;
+    animation: breathPulse 6s infinite ease-in-out;
+    box-shadow: 0 0 25px rgba(108,158,229,0.6);
+  }
+  #breath-text {
+    margin-top: 1rem;
+    font-weight: 700;
+    color: #334a8f;
+    font-size: 1.1rem;
+    user-select: none;
+  }
+  @keyframes breathPulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.85;
+      box-shadow: 0 0 25px rgba(108,158,229,0.6);
     }
-    button, textarea { font-family: inherit; }
-    main.container {
-      background: #fff;
-      border-radius: 25px;
-      max-width: 900px;
-      width: 100%;
-      padding: 2rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-    h1, h2, h3 { text-align: center; margin-bottom: 1rem; }
-    p { text-align: center; margin-bottom: 1.5rem; color: #555; }
-
-    /* ---------- Stats ---------- */
-    .stats-bar {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 2rem;
-    }
-    .stat-item { text-align: center; }
-    .stat-number {
-      font-size: 2rem;
-      color: #667eea;
-      font-weight: 700;
-      display: block;
-    }
-
-    /* ---------- Tabs ---------- */
-    .plan-tabs {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-      overflow-x: auto;
-      padding-bottom: 1rem;
-    }
-    .tab-btn {
-      flex: 1 1 18%;
-      padding: 0.8rem;
-      margin: 0 0.25rem;
-      border: none;
-      border-radius: 15px;
-      background: #e2e8f0;
-      cursor: pointer;
-      transition: background 0.3s;
-      font-size: 0.95rem;
-    }
-    .tab-btn.active, .tab-btn:hover {
-      background: #667eea;
-      color: white;
-    }
-
-    /* ---------- Activity Cards ---------- */
-    .activity-grid {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      margin-bottom: 1.5rem;
-    }
-    .activity-card {
-      background: #f9fafc;
-      border-radius: 20px;
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.25s, box-shadow 0.25s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      position: relative;
-    }
-    .activity-card:hover { transform: translateY(-4px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
-    .activity-card.selected {
-      background: #dbe4ff;
-      box-shadow: 0 12px 25px rgba(118,75,162,0.5);
-    }
-    .activity-icon { font-size: 2.2rem; margin-bottom: 0.6rem; color: #667eea; }
-    .activity-title { font-weight: 700; margin-bottom: 0.3rem; }
-    .activity-desc { font-size: 0.9rem; color: #5a5a7d; }
-
-    /* ---------- Plan Generation ---------- */
-    .generate-plan-btn, #downloadPlanBtn {
-      display: inline-block;
-      margin: 0.5rem auto 2rem auto;
-      padding: 0.9rem 2rem;
-      border: none;
-      border-radius: 25px;
-      background: #764ba2;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-    .generate-plan-btn:hover, #downloadPlanBtn:hover { transform: translateY(-2px); }
-
-    .generated-plan {
-      background: #e8ebff;
-      padding: 1.5rem;
-      border-radius: 20px;
-      font-size: 1rem;
-      display: none;
-    }
-    .generated-plan.show { display: block; }
-
-    /* ---------- Breathing ---------- */
-    .breathing-exercise { text-align: center; margin-bottom: 2rem; }
-    .breathing-circle {
-      width: 180px; height: 180px;
-      margin: 0 auto 1rem;
-      background: #667eea;
-      border-radius: 50%;
-      cursor: pointer;
-      position: relative;
-      animation: none;
-    }
-    .breathing-circle.animate {
-      animation: breathe 6s ease-in-out infinite;
-    }
-    @keyframes breathe {
-      0%,100% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-    }
-    .breathing-circle::after {
-      content: 'Click to breathe';
-      position: absolute; bottom: -1.5rem; width: 100%; text-align: center;
-      font-size: 0.85rem; color: #555;
-    }
-    .breathing-instructions { color: #555; font-size: 0.95rem; }
-
-    /* ---------- Mood Tracker ---------- */
-    .mood-tracker { text-align: center; margin-bottom: 2rem; }
-    .mood-btn {
-      font-size: 2rem; margin: 0 0.5rem;
-      background: none; border: none; cursor: pointer;
-      transition: transform 0.25s;
-    }
-    .mood-btn:hover { transform: scale(1.2); }
-    .mood-btn.selected {
-      filter: drop-shadow(0 0 5px #764ba2);
+    50% {
       transform: scale(1.3);
+      opacity: 1;
+      box-shadow: 0 0 45px rgba(85,119,245,0.8);
     }
-    .mood-feedback {
-      margin-top: 0.5rem; font-weight: 600; color: #4a47a3;
-      opacity: 0; transition: opacity 0.3s;
+  }
+  /* Doodle pad */
+  #doodle-canvas {
+    border: 2px solid #5577f5;
+    border-radius: 12px;
+    background: #f5f7ff;
+    margin-top: 1rem;
+    touch-action: none;
+    width: 100%;
+    max-width: 500px;
+    height: 320px;
+    cursor: crosshair;
+  }
+  #clear-doodle-btn {
+    margin-top: 0.8rem;
+    background: #e05858;
+    box-shadow: 0 5px 15px rgba(224,88,88,0.4);
+  }
+  #clear-doodle-btn:hover {
+    background: #bf4545;
+  }
+  /* Music */
+  #music-links {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  #music-links a {
+    color: #3a4a78;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1.5px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+  #music-links a:hover, #music-links a:focus {
+    border-color: #5577f5;
+  }
+  /* Reach Out */
+  #reachout-template {
+    margin-top: 1rem;
+    font-family: monospace;
+    background: #eaf0ff;
+    border-left: 4px solid #5577f5;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    color: #2b375f;
+  }
+  /* Plan Builder */
+  #plan-builder {
+    margin-top: 1rem;
+  }
+  #plan-builder select {
+    max-width: 240px;
+  }
+  #routine-output {
+    margin-top: 1rem;
+    background: #e4eaff;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    color: #2e3a6f;
+    font-weight: 600;
+    min-height: 80px;
+  }
+  /* Responsive */
+  @media (max-width: 600px) {
+    body {
+      font-size: 16px;
     }
-    .mood-feedback.show { opacity: 1; }
-
-    /* ---------- Gratitude ---------- */
-    .gratitude-container {
-      text-align: center; margin-bottom: 2rem;
+    main {
+      padding: 1rem 1rem 2rem;
+      max-width: 100%;
     }
-    .gratitude-input {
-      width: 100%; padding: 1rem;
-      font-size: 1rem; border: 2px solid #e2e8f0;
-      border-radius: 15px; resize: vertical; min-height: 100px;
-      transition: border-color 0.3s;
+    #doodle-canvas {
+      height: 220px;
     }
-    .gratitude-input:focus { border-color: #667eea; }
-    .add-btn {
-      margin: 1rem auto;
-      padding: 0.9rem 2rem;
-      background: #667eea; color: white;
-      border: none; border-radius: 25px; cursor: pointer;
-      transition: transform 0.3s;
+    header {
+      font-size: 1.5rem;
+      padding: 1rem;
     }
-    .add-btn:hover { transform: translateY(-2px); }
-    .gratitude-list {
-      margin-top: 1rem; max-height: 200px;
-      overflow-y: auto; text-align: left;
-    }
-    .gratitude-item {
-      background: #dbe4ff; border-radius: 15px;
-      margin-bottom: 0.8rem; padding: 0.8rem 1rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      position: relative;
-    }
-    .gratitude-item::before {
-      content: "✨"; position: absolute; right: 1rem;
-      top: 50%; transform: translateY(-50%);
-    }
-
-    /* ---------- Print Styles ---------- */
-    @media print {
-      body, main { background: #fff; color: #000; }
-      header, .plan-tabs, .breathing-exercise, .mood-tracker, .gratitude-container, .generate-plan-btn, #downloadPlanBtn, footer {
-        display: none !important;
-      }
-      .generated-plan { display: block !important; }
-      .generated-plan ul { margin-left: 2rem; }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-<main class="container">
-  <header>
-    <h1>🌿 Your Self‑Care Toolkit</h1>
-    <p>Build routines that nurture your Body, Mind, and Connections.</p>
-    <div class="stats-bar">
-      <div class="stat-item"><span id="activitiesCompleted" class="stat-number">0</span>Activities Done</div>
-      <div class="stat-item"><span id="dayStreak" class="stat-number">0</span>Gratitude Streak</div>
-      <div class="stat-item"><span id="moodScore" class="stat-number">😊</span>Today's Mood</div>
-    </div>
-  </header>
+<header>🧘‍♀️ Self-Care Toolkit</header>
+<main>
 
-  <section aria-label="Create your plan">
-    <div class="plan-tabs">
-      <button class="tab-btn active" onclick="showPlanCategory('physical')">Physical</button>
-      <button class="tab-btn" onclick="showPlanCategory('cognitive')">Cognitive</button>
-      <button class="tab-btn" onclick="showPlanCategory('creative')">Creative</button>
-      <button class="tab-btn" onclick="showPlanCategory('motivation')">Motivation</button>
-      <button class="tab-btn" onclick="showPlanCategory('social')">Social</button>
-    </div>
-    <div id="physical" class="plan-category">
-      <div class="activity-grid">
-        <div class="activity-card" data-activity="Morning Stretch"><span class="activity-icon">🧘‍♀️</span><div class="activity-title">Morning Stretch</div><div class="activity-desc">Wake your body with gentle movement.</div></div>
-        <div class="activity-card" data-activity="Mindful Walk"><span class="activity-icon">🚶‍♀️</span><div class="activity-title">Mindful Walk</div><div class="activity-desc">Connect with nature and refresh.</div></div>
-        <div class="activity-card" data-activity="Hydration Break"><span class="activity-icon">💧</span><div class="activity-title">Hydration Break</div><div class="activity-desc">Sip water mindfully.</div></div>
-        <div class="activity-card" data-activity="Exercise Session"><span class="activity-icon">💪</span><div class="activity-title">Exercise Session</div><div class="activity-desc">Move intentionally today.</div></div>
-      </div>
-    </div>
-    <div id="cognitive" class="plan-category" hidden>
-      <div class="activity-grid"> 
-        <div class="activity-card" data-activity="Journal Reflection"><span class="activity-icon">📓</span><div class="activity-title">Journal Reflection</div><div class="activity-desc">Process your thoughts.</div></div>
-        <div class="activity-card" data-activity="Daily Affirmations"><span class="activity-icon">💬</span><div class="activity-title">Daily Affirmations</div><div class="activity-desc">Boost positivity.</div></div>
-        <div class="activity-card" data-activity="Mindful Reading"><span class="activity-icon">📖</span><div class="activity-title">Mindful Reading</div><div class="activity-desc">Relax with calming text.</div></div>
-      </div>
-    </div>
-    <div id="creative" class="plan-category" hidden>
-      <div class="activity-grid">
-        <div class="activity-card" data-activity="Doodling Session"><span class="activity-icon">🖍️</span><div class="activity-title">Doodling Session</div><div class="activity-desc">Express through art.</div></div>
-        <div class="activity-card" data-activity="Music Exploration"><span class="activity-icon">🎧</span><div class="activity-title">Music Exploration</div><div class="activity-desc">Listen or create.</div></div>
-      </div>
-    </div>
-    <div id="motivation" class="plan-category" hidden>
-      <div class="activity-grid">
-        <div class="activity-card" data-activity="Set a Goal"><span class="activity-icon">🎯</span><div class="activity-title">Set a Goal</div><div class="activity-desc">Define a daily intention.</div></div>
-        <div class="activity-card" data-activity="Celebrate Wins"><span class="activity-icon">🏆</span><div class="activity-title">Celebrate Wins</div><div class="activity-desc">Acknowledge progress.</div></div>
-      </div>
-    </div>
-    <div id="social" class="plan-category" hidden>
-      <div class="activity-grid">
-        <div class="activity-card" data-activity="Check In Chat"><span class="activity-icon">📞</span><div class="activity-title">Check In Chat</div><div class="activity-desc">Reach out to someone.</div></div>
-        <div class="activity-card" data-activity="Random Act of Kindness"><span class="activity-icon">🌷</span><div class="activity-title">Random Kindness</div><div class="activity-desc">Brighten someone’s day.</div></div>
-      </div>
-    </div>
+<!-- Gratitude Log -->
+<section id="gratitude-section" aria-label="Gratitude Log">
+  <h2>Gratitude Log</h2>
+  <p>What are 3 things you’re grateful for today?</p>
+  <form id="gratitude-form">
+    <input type="text" id="gratitude1" name="gratitude1" placeholder="1." maxlength="50" required autocomplete="off" />
+    <input type="text" id="gratitude2" name="gratitude2" placeholder="2." maxlength="50" required autocomplete="off" />
+    <input type="text" id="gratitude3" name="gratitude3" placeholder="3." maxlength="50" required autocomplete="off" />
+    <button type="submit" aria-label="Save Gratitude Entries">Save Gratitude</button>
+  </form>
+  <ul id="gratitude-list" aria-live="polite" aria-relevant="additions"></ul>
+</section>
 
-    <button class="generate-plan-btn" id="generatePlanBtn">Generate Plan</button>
-    <button id="downloadPlanBtn">Download PDF</button>
-    <div id="generatedPlan" class="generated-plan"></div>
-  </section>
+<!-- Daily Affirmation -->
+<section id="affirmation-section" aria-label="Daily Affirmation">
+  <h2>Daily Affirmation</h2>
+  <p id="affirmation-text" aria-live="polite" aria-atomic="true"></p>
+  <button id="new-affirmation-btn" aria-label="Generate New Affirmation">New Affirmation</button>
+</section>
 
-  <section class="breathing-exercise">
-    <h2>Breathe with Me</h2>
-    <div class="breathing-circle" id="breathingCircle"></div>
-    <p class="breathing-instructions">Click the circle and follow its breath.</p>
-  </section>
+<!-- Emotion Wheel -->
+<section id="emotion-section" aria-label="Emotion Wheel">
+  <h2>Emotion Wheel</h2>
+  <p>Tap an emotion to help identify how you feel:</p>
+  <div id="emotion-wheel" role="list" aria-label="Emotion options">
+    <!-- Emotions inserted by JS -->
+  </div>
+  <p id="selected-emotion" aria-live="polite" style="margin-top:1rem; font-weight:700; color:#5577f5;"></p>
+</section>
 
-  <section class="mood-tracker">
-    <h2>How are you feeling?</h2>
-    <div>
-      <button class="mood-btn">😊</button>
-      <button class="mood-btn">😐</button>
-      <button class="mood-btn">😢</button>
-      <button class="mood-btn">😠</button>
-      <button class="mood-btn">😴</button>
-    </div>
-    <div id="moodFeedback" class="mood-feedback"></div>
-  </section>
+<!-- What I Need Right Now Picker -->
+<section id="need-section" aria-label="What I Need Right Now">
+  <h2>What I Need Right Now</h2>
+  <div id="need-buttons" role="group" aria-label="Self-care needs">
+    <button type="button" data-need="Comfort">Comfort</button>
+    <button type="button" data-need="Motivation">Motivation</button>
+    <button type="button" data-need="Distraction">Distraction</button>
+    <button type="button" data-need="Relaxation">Relaxation</button>
+  </div>
+  <p id="need-response" aria-live="polite"></p>
+</section>
 
-  <section class="gratitude-container">
-    <h2>Gratitude Journal</h2>
-    <textarea id="gratitudeInput" class="gratitude-input" placeholder="Write one thing you're grateful for..."></textarea>
-    <button class="add-btn" id="addGratitudeBtn">Add Entry</button>
-    <div id="gratitudeList" class="gratitude-list"></div>
-  </section>
+<!-- Reminders -->
+<section id="reminder-section" aria-label="Self-Care Reminders">
+  <h2>Reminders</h2>
+  <div class="reminder-toggle">
+    <input type="checkbox" id="stretch-toggle" />
+    <label for="stretch-toggle">Stretch Reminder (every 2 hours)</label>
+  </div>
+  <div class="reminder-toggle">
+    <input type="checkbox" id="posture-toggle" />
+    <label for="posture-toggle">Posture Check Reminder (every 3 hours)</label>
+  </div>
+  <p id="reminder-msg" aria-live="polite" style="margin-top:0.8rem; font-weight:600; color:#3a4a78;"></p>
+</section>
+
+<!-- Guided Breathing -->
+<section id="breathing-section" aria-label="Guided Breathing">
+  <h2>Guided Breathing</h2>
+  <div id="breathing-container">
+    <div id="breath-circle" aria-hidden="true"></div>
+    <div id="breath-text" aria-live="polite" aria-atomic="true">Breathe In...</div>
+  </div>
+</section>
+
+<!-- Doodle Pad -->
+<section id="doodle-section" aria-label="Doodle Pad">
+  <h2>Doodle Pad</h2>
+  <canvas id="doodle-canvas" aria-label="Drawing pad"></canvas>
+  <button id="clear-doodle-btn" type="button" aria-label="Clear doodle pad">Clear Doodle</button>
+</section>
+
+<!-- Music & Sound Suggestions -->
+<section id="music-section" aria-label="Music and Sound Suggestions">
+  <h2>Music & Sound Suggestions</h2>
+  <div id="music-links">
+    <a href="https://www.youtube.com/watch?v=2OEL4P1Rz04" target="_blank" rel="noopener noreferrer">Calm Nature Sounds 🌿 (YouTube)</a>
+    <a href="https://open.spotify.com/playlist/37i9dQZF1DX3Ogo9pFvBkY" target="_blank" rel="noopener noreferrer">Relaxing Acoustic (Spotify)</a>
+    <a href="https://open.spotify.com/playlist/37i9dQZF1DWVV27DiNWxkR" target="_blank" rel="noopener noreferrer">Peaceful Piano (Spotify)</a>
+  </div>
+</section>
+
+<!-- Reach Out to Someone -->
+<section id="reachout-section" aria-label="Reach Out to Someone">
+  <h2>Reach Out to Someone</h2>
+  <button id="reachout-btn" aria-label="Generate reach out message">Generate Message Template</button>
+  <pre id="reachout-template" aria-live="polite" hidden></pre>
+</section>
+
+<!-- Self-Care Plan Builder -->
+<section id="plan-section" aria-label="Custom Self-Care Plan Builder">
+  <h2>Custom Self-Care Plan Builder</h2>
+  <p>Choose your focus:</p>
+  <select id="goal-select" aria-label="Select a self-care goal">
+    <option value="" disabled selected>-- Select a Goal --</option>
+    <option value="Physical">Physical Health</option>
+    <option value="Mental">Mental Well-being</option>
+    <option value="Creative">Creative Expression</option>
+    <option value="Social">Social Connection</option>
+    <option value="Motivation">Motivation & Productivity</option>
+  </select>
+  <button id="generate-plan-btn" aria-label="Generate self-care routine">Generate Routine</button>
+  <div id="routine-output" aria-live="polite" aria-atomic="true"></div>
+</section>
+
 </main>
 
-<footer>
-  <p style="text-align:center; margin-top:2rem;">Made with 💖 — be kind to yourself.</p>
-</footer>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-  // --- Tab Logic ---
-  const tabs = document.querySelectorAll('.tab-btn');
-  const cats = document.querySelectorAll('.plan-category');
-  tabs.forEach(btn => btn.addEventListener('click', () => {
-    tabs.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    cats.forEach(c => c.hidden = c.id !== btn.textContent.toLowerCase());
-  }));
+(() => {
+  // Gratitude Log
+  const gratitudeForm = document.getElementById('gratitude-form');
+  const gratitudeList = document.getElementById('gratitude-list');
 
-  // --- Activities & Plan ---
-  let selectedActivities = JSON.parse(localStorage.getItem('selectedActivities')||'[]');
-  document.querySelectorAll('.activity-card').forEach(card => {
-    const act = card.dataset.activity;
-    if (selectedActivities.includes(act)) card.classList.add('selected');
-    card.addEventListener('click', () => {
-      card.classList.toggle('selected');
-      selectedActivities = selectedActivities.includes(act)
-        ? selectedActivities.filter(a => a!==act)
-        : [...selectedActivities,act];
-      localStorage.setItem('selectedActivities', JSON.stringify(selectedActivities));
-    });
-  });
-
-  document.getElementById('generatePlanBtn').addEventListener('click', () => {
-    const planEl = document.getElementById('generatedPlan');
-    if (!selectedActivities.length) {
-      planEl.innerHTML = '<p>Select activities to build your plan.</p>';
-    } else {
-      planEl.innerHTML = `<h3>Your Plan</h3><ul>${selectedActivities.map(a=>`<li>${a}</li>`).join('')}</ul>`;
-      document.getElementById('activitiesCompleted').textContent = selectedActivities.length;
+  function loadGratitude() {
+    const saved = JSON.parse(localStorage.getItem('gratitudeEntries')) || [];
+    gratitudeList.innerHTML = '';
+    if(saved.length){
+      saved.forEach((item,i) => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        gratitudeList.appendChild(li);
+      });
     }
-    planEl.classList.add('show');
-  });
-
-  document.getElementById('downloadPlanBtn').addEventListener('click', () => {
-    const planEl = document.getElementById('generatedPlan');
-    if (!planEl.classList.contains('show')) {
-      alert('Generate a plan first.');
+  }
+  gratitudeForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const vals = [
+      gratitudeForm.gratitude1.value.trim(),
+      gratitudeForm.gratitude2.value.trim(),
+      gratitudeForm.gratitude3.value.trim(),
+    ];
+    if(vals.some(v => v.length === 0)){
+      alert('Please fill all 3 gratitude entries.');
       return;
     }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.setFontSize(18).text('Self‑Care Plan',15,20);
-    selectedActivities.forEach((a,i)=>doc.text(`${i+1}. ${a}`,15,30+i*8));
-    doc.save('self-care-plan.pdf');
+    localStorage.setItem('gratitudeEntries', JSON.stringify(vals));
+    loadGratitude();
+    gratitudeForm.reset();
   });
+  loadGratitude();
 
-  // --- Breathing Guide ---
-  document.getElementById('breathingCircle').addEventListener('click', function(){
-    this.classList.toggle('animate');
+  // Daily Affirmation
+  const affirmations = [
+    "You are enough just as you are.",
+    "Take one step at a time, progress is progress.",
+    "Your feelings are valid and important.",
+    "You have the strength to overcome challenges.",
+    "Today is a new opportunity for growth.",
+    "Be kind to yourself; you deserve it.",
+    "Breathe deeply and let go of stress.",
+    "You matter, and you make a difference.",
+    "Every small act of self-care counts.",
+    "You are worthy of love and happiness."
+  ];
+  const affirmationText = document.getElementById('affirmation-text');
+  const affirmationBtn = document.getElementById('new-affirmation-btn');
+
+  function showAffirmation() {
+    // rotate by date or random
+    const storedIndex = localStorage.getItem('affirmationIndex');
+    const storedDate = localStorage.getItem('affirmationDate');
+    const today = new Date().toDateString();
+    let index;
+    if(storedDate === today && storedIndex !== null){
+      index = parseInt(storedIndex,10);
+    } else {
+      index = Math.floor(Math.random()*affirmations.length);
+      localStorage.setItem('affirmationIndex', index);
+      localStorage.setItem('affirmationDate', today);
+    }
+    affirmationText.textContent = affirmations[index];
+  }
+  affirmationBtn.addEventListener('click', () => {
+    localStorage.removeItem('affirmationDate');
+    showAffirmation();
   });
+  showAffirmation();
 
-  // --- Mood Tracker ---
-  const moodBtns = document.querySelectorAll('.mood-btn');
-  const moodFb = document.getElementById('moodFeedback');
-  const moodScoreEl = document.getElementById('moodScore');
-  moodBtns.forEach(btn => {
+  // Emotion Wheel
+  const emotions = [
+    "Happy", "Calm", "Anxious", "Sad", "Excited",
+    "Frustrated", "Hopeful", "Tired", "Grateful", "Lonely",
+    "Confident", "Overwhelmed"
+  ];
+  const emotionWheel = document.getElementById('emotion-wheel');
+  const selectedEmotionDisplay = document.getElementById('selected-emotion');
+  let selectedEmotion = null;
+
+  function renderEmotions() {
+    emotions.forEach(em => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'emotion';
+      btn.textContent = em;
+      btn.setAttribute('aria-pressed', 'false');
+      btn.addEventListener('click', () => {
+        if(selectedEmotion) {
+          selectedEmotion.classList.remove('selected');
+          selectedEmotion.setAttribute('aria-pressed', 'false');
+        }
+        btn.classList.add('selected');
+        btn.setAttribute('aria-pressed', 'true');
+        selectedEmotion = btn;
+        selectedEmotionDisplay.textContent = `You selected: ${em}`;
+      });
+      emotionWheel.appendChild(btn);
+    });
+  }
+  renderEmotions();
+
+  // What I Need Right Now Picker
+  const needButtons = document.querySelectorAll('#need-buttons button');
+  const needResponse = document.getElementById('need-response');
+  const needMessages = {
+    Comfort: [
+      "Wrap yourself in a cozy blanket or hug someone you trust.",
+      "Take a moment to breathe and remind yourself it's okay to rest."
+    ],
+    Motivation: [
+      "Remember your why and take one small step forward.",
+      "Set a tiny goal you can achieve now to build momentum."
+    ],
+    Distraction: [
+      "Try watching a favorite funny video or read a light story.",
+      "Engage in a quick creative activity like doodling or coloring."
+    ],
+    Relaxation: [
+      "Close your eyes and listen to calm music or nature sounds.",
+      "Try progressive muscle relaxation, tensing and releasing each muscle."
+    ]
+  };
+  needButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-      moodBtns.forEach(b=>b.classList.remove('selected'));
-      btn.classList.add('selected');
-      const mood = btn.textContent;
-      moodFb.textContent = `Mood logged: ${mood}`;
-      moodFb.classList.add('show');
-      moodScoreEl.textContent = mood;
-      localStorage.setItem('mood', mood);
+      const need = btn.dataset.need;
+      const msgs = needMessages[need];
+      if(!msgs) return;
+      const msg = msgs[Math.floor(Math.random()*msgs.length)];
+      needResponse.textContent = msg;
     });
   });
-  const savedMood = localStorage.getItem('mood');
-  if (savedMood) moodBtns.find(b=>b.textContent===savedMood)?.click();
 
-  // --- Gratitude Journal ---
-  document.getElementById('addGratitudeBtn').addEventListener('click', () => {
-    const input = document.getElementById('gratitudeInput');
-    const text = input.value.trim();
-    if (!text) return;
-    const el = document.createElement('div');
-    el.className = 'gratitude-item';
-    el.textContent = text;
-    document.getElementById('gratitudeList').prepend(el);
-    let arr = JSON.parse(localStorage.getItem('gratitude')||'[]');
-    arr.unshift(text);
-    localStorage.setItem('gratitude', JSON.stringify(arr));
-    document.getElementById('gratitudeInput').value = '';
-    document.getElementById('dayStreak').textContent = arr.length;
-  });
-  JSON.parse(localStorage.getItem('gratitude')||'[]').forEach(s => {
-    const el = document.createElement('div');
-    el.className = 'gratitude-item';
-    el.textContent = s;
-    document.getElementById('gratitudeList').appendChild(el);
-  });
-  document.getElementById('dayStreak').textContent = JSON.parse(localStorage.getItem('gratitude')||'[]').length;
+  // Reminders
+  const stretchToggle = document.getElementById('stretch-toggle');
+  const postureToggle = document.getElementById('posture-toggle');
+  const reminderMsg = document.getElementById('reminder-msg');
 
-  // --- PWA Manifest & Service Worker ---
-  const manifest = {
-    name:'Personal Self‑Care Toolkit',
-    short_name:'SelfCare',
-    start_url:'.',
-    display:'standalone',
-    background_color:'#667eea',
-    theme_color:'#764ba2',
-    icons:[{src:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...',sizes:'192x192',type:'image/png'}]
-  };
-  document.getElementById('manifest-link').href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));
-  if ('serviceWorker' in navigator) {
-    const sw = `
-      const CACHE='scache-v1';
-      self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([location.href,'.','${manifest.icons[0].src}'])).then(()=>self.skipWaiting())));
-      self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
-      self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
-    `;
-    navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})));
+  let stretchIntervalId = null;
+  let postureIntervalId = null;
+
+  function showNotification(message) {
+    if(!("Notification" in window)) {
+      alert(message);
+      return;
+    }
+    if(Notification.permission === "granted") {
+      new Notification(message);
+    } else if(Notification.permission !== "denied") {
+      Notification.requestPermission().then(permission => {
+        if(permission === "granted") {
+          new Notification(message);
+        } else {
+          alert(message);
+        }
+      });
+    } else {
+      alert(message);
+    }
   }
+
+  function startStretchReminder() {
+    if(stretchIntervalId) clearInterval(stretchIntervalId);
+    showNotification("Time to stretch! Take a moment to move your body.");
+    stretchIntervalId = setInterval(() => {
+      showNotification("Stretch Reminder: Take a moment to stretch your body.");
+    }, 2 * 60 * 60 * 1000); // every 2 hours
+    reminderMsg.textContent = "Stretch reminders are ON.";
+  }
+  function stopStretchReminder() {
+    clearInterval(stretchIntervalId);
+    stretchIntervalId = null;
+    reminderMsg.textContent = "Stretch reminders are OFF.";
+  }
+  function startPostureReminder() {
+    if(postureIntervalId) clearInterval(postureIntervalId);
+    showNotification("Posture check! Sit up straight and relax your shoulders.");
+    postureIntervalId = setInterval(() => {
+      showNotification("Posture Check Reminder: Adjust your posture gently.");
+    }, 3 * 60 * 60 * 1000); // every 3 hours
+    reminderMsg.textContent = "Posture check reminders are ON.";
+  }
+  function stopPostureReminder() {
+    clearInterval(postureIntervalId);
+    postureIntervalId = null;
+    reminderMsg.textContent = "Posture check reminders are OFF.";
+  }
+
+  stretchToggle.addEventListener('change', () => {
+    if(stretchToggle.checked) {
+      startStretchReminder();
+    } else {
+      stopStretchReminder();
+    }
+  });
+  postureToggle.addEventListener('change', () => {
+    if(postureToggle.checked) {
+      startPostureReminder();
+    } else {
+      stopPostureReminder();
+    }
+  });
+
+  // Breathing animation text cycle
+  const breathText = document.getElementById('breath-text');
+  const breathCycle = ['Breathe In...', 'Hold...', 'Breathe Out...', 'Hold...'];
+  let breathIndex = 0;
+  setInterval(() => {
+    breathIndex = (breathIndex + 1) % breathCycle.length;
+    breathText.textContent = breathCycle[breathIndex];
+  }, 1500);
+
+  // Doodle Pad
+  const canvas = document.getElementById('doodle-canvas');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  function resizeCanvas() {
+    // Save drawing
+    const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    ctx.putImageData(imageData,0,0);
+  }
+  window.addEventListener('resize', () => {
+    // To keep simple, clear on resize
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  });
+  // Initial sizing
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+
+  function startDraw(e) {
+    drawing = true;
+    [lastX, lastY] = getXY(e);
+  }
+  function stopDraw() {
+    drawing = false;
+  }
+  function draw(e) {
+    if(!drawing) return;
+    const [x,y] = getXY(e);
+    ctx.strokeStyle = '#5577f5';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(lastX,lastY);
+    ctx.lineTo(x,y);
+    ctx.stroke();
+    [lastX,lastY] = [x,y];
+  }
+  function getXY(e) {
+    if(e.touches && e.touches.length > 0){
+      const rect = canvas.getBoundingClientRect();
+      return [e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top];
+    } else {
+      return [e.offsetX, e.offsetY];
+    }
+  }
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('touchstart', startDraw, {passive:true});
+  canvas.addEventListener('mouseup', stopDraw);
+  canvas.addEventListener('mouseleave', stopDraw);
+  canvas.addEventListener('touchend', stopDraw);
+  canvas.addEventListener('touchcancel', stopDraw);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('touchmove', draw, {passive:true});
+  document.getElementById('clear-doodle-btn').addEventListener('click', () => {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  });
+
+  // Reach Out To Someone
+  const reachoutBtn = document.getElementById('reachout-btn');
+  const reachoutTemplate = document.getElementById('reachout-template');
+  reachoutBtn.addEventListener('click', () => {
+    const template = 
+`Hi [Name],
+
+I just wanted to check in and see how you’re doing. If you need someone to talk to or just want to hang out, I’m here.
+
+Take care,
+[Your Name]`;
+    reachoutTemplate.textContent = template;
+    reachoutTemplate.hidden = false;
+  });
+
+  // Plan Builder
+  const goalSelect = document.getElementById('goal-select');
+  const generatePlanBtn = document.getElementById('generate-plan-btn');
+  const routineOutput = document.getElementById('routine-output');
+
+  const routines = {
+    Physical: [
+      "Take a 30-minute walk outside or do light stretching.",
+      "Drink a glass of water every hour to stay hydrated.",
+      "Try a short home workout or yoga session."
+    ],
+    Mental: [
+      "Practice 5 minutes of mindfulness meditation.",
+      "Write down 3 positive things about your day.",
+      "Read a few pages of a book you enjoy."
+    ],
+    Creative: [
+      "Spend 20 minutes drawing, painting, or crafting.",
+      "Try free writing your thoughts in a journal.",
+      "Listen to inspiring music while brainstorming new ideas."
+    ],
+    Social: [
+      "Call or message a friend or family member.",
+      "Plan a small get-together or online hangout.",
+      "Write a thank-you note or compliment to someone."
+    ],
+    Motivation: [
+      "Set 3 achievable goals for the day.",
+      "Break a large task into smaller steps and start the first.",
+      "Celebrate one small win you had recently."
+    ]
+  };
+
+  generatePlanBtn.addEventListener('click', () => {
+    const selectedGoal = goalSelect.value;
+    if(!selectedGoal) {
+      alert('Please select a self-care goal.');
+      return;
+    }
+    const plan = routines[selectedGoal] || [];
+    routineOutput.innerHTML = `<ul>${plan.map(item => `<li>${item}</li>`).join('')}</ul>`;
+  });
+
+})();
 </script>
+
 </body>
 </html>
