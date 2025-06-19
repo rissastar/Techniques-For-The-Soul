@@ -1,404 +1,470 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Self-Care Toolkit</title>
-<style>
-  :root {
-    --main-color: #6a8d92;
-    --accent-color: #f2a365;
-    --bg-color: #f4f4f9;
-    --text-color: #333;
-    --card-bg: #fff;
-    --shadow-color: rgba(0, 0, 0, 0.1);
-  }
-
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0; padding: 0;
-    background: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.5;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  header {
-    background-color: var(--main-color);
-    color: white;
-    padding: 1.5rem;
-    text-align: center;
-    box-shadow: 0 2px 5px var(--shadow-color);
-  }
-
-  header h1 {
-    margin: 0;
-    font-weight: 700;
-  }
-
-  main {
-    flex: 1;
-    max-width: 900px;
-    margin: 1.5rem auto;
-    padding: 0 1rem;
-  }
-
-  section {
-    background: var(--card-bg);
-    padding: 1.2rem 1.5rem;
-    margin-bottom: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px var(--shadow-color);
-  }
-
-  section h2 {
-    margin-top: 0;
-    color: var(--main-color);
-  }
-
-  /* Checklist styles */
-  ul.checklist {
-    list-style: none;
-    padding-left: 0;
-  }
-
-  ul.checklist li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.6rem;
-  }
-
-  ul.checklist li input[type="checkbox"] {
-    margin-right: 0.8rem;
-    width: 20px; height: 20px;
-    cursor: pointer;
-  }
-
-  /* Buttons */
-  button {
-    background-color: var(--accent-color);
-    border: none;
-    padding: 0.6rem 1.1rem;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.25s ease;
-  }
-
-  button:hover {
-    background-color: #d17f36;
-  }
-
-  /* Grounding exercises */
-  .exercise {
-    margin-bottom: 1rem;
-  }
-
-  .exercise p {
-    margin: 0.3rem 0 0.7rem 0;
-  }
-
-  /* Textarea for journal */
-  textarea {
-    width: 100%;
-    min-height: 100px;
-    font-family: inherit;
-    font-size: 1rem;
-    padding: 0.8rem;
-    border: 1.5px solid #ccc;
-    border-radius: 6px;
-    resize: vertical;
-  }
-
-  /* Mood tracker */
-  .mood-options {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 0.7rem;
-  }
-
-  .mood-options label {
-    cursor: pointer;
-    font-size: 1.5rem;
-    user-select: none;
-  }
-
-  .mood-options input[type="radio"] {
-    display: none;
-  }
-
-  .mood-options input[type="radio"]:checked + label {
-    color: var(--accent-color);
-    font-weight: bold;
-    transform: scale(1.3);
-    transition: transform 0.25s ease;
-  }
-
-  /* Responsive */
-  @media (max-width: 600px) {
-    main {
-      padding: 0 0.5rem;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Self‑Care Toolkit</title>
+  <style>
+    /* ───────────────────────────────── root & global ───────────────────────────────── */
+    :root {
+      --primary: #4a90e2;
+      --secondary: #f5a623;
+      --accent: #50e3c2;
+      --bg-dark: rgba(0, 0, 0, 0.6);
+      --text: #fff;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --transition: 0.3s;
+      --radius: 12px;
+      --shadow: rgba(0, 0, 0, 0.3);
+      --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-  }
 
-  /* Footer */
-  footer {
-    text-align: center;
-    padding: 1rem 0;
-    background: var(--main-color);
-    color: white;
-    font-size: 0.9rem;
-  }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
 
-</style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font);
+      color: #333;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* ─────────────────────────── Background Visual ─────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=2100&q=80') no-repeat center/cover;
+      filter: brightness(0.6);
+      z-index: -2;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: var(--bg-dark);
+      z-index: -1;
+    }
+
+    /* ───────────────────────────── Header ───────────────────────────── */
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text);
+      background: transparent;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+    /* ───────────────────────────── Main & Sections ───────────────────────────── */
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem 4rem;
+    }
+
+    section {
+      background: var(--card-bg);
+      margin-bottom: 2rem;
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: 0 6px 15px var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    section:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px var(--shadow);
+    }
+
+    section h2 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    /* ───────────────────────────── Checklist ───────────────────────────── */
+    ul.checklist {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 1rem;
+    }
+
+    ul.checklist li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    ul.checklist li input[type='checkbox'] {
+      margin-right: 1rem;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      accent-color: var(--secondary);
+    }
+
+    /* ───────────────────────────── Buttons ───────────────────────────── */
+    button {
+      background-color: var(--secondary);
+      color: var(--text);
+      border: none;
+      padding: 0.7rem 1.4rem;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color var(--transition);
+      user-select: none;
+    }
+
+    button:hover {
+      background-color: #d48800;
+    }
+
+    /* ─────────────────────────── Grounding & breathing ─────────────────────────── */
+    .exercise {
+      margin-bottom: 1.5rem;
+    }
+
+    .exercise h3 {
+      margin-bottom: 0.4rem;
+      color: var(--accent);
+    }
+
+    #grounding-output,
+    #breathing-output {
+      min-height: 3rem;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--primary);
+    }
+
+    /* ─────────────────────────── Mood Tracker ─────────────────────────── */
+    .mood-options {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .mood-options label {
+      cursor: pointer;
+      font-size: 2.5rem;
+      transition: transform var(--transition), color var(--transition);
+      user-select: none;
+    }
+
+    .mood-options input[type='radio'] {
+      display: none;
+    }
+
+    .mood-options input[type='radio']:checked+label {
+      color: var(--secondary);
+      transform: scale(1.4);
+    }
+
+    #mood-saved-msg {
+      margin-top: 1rem;
+      font-weight: 700;
+      color: #3c763d;
+    }
+
+    /* ─────────────────────────── Journal ─────────────────────────── */
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      padding: 1rem;
+      border: 2px solid #ddd;
+      border-radius: var(--radius);
+      box-shadow: inset 0 3px 6px #eee;
+      transition: border-color var(--transition);
+      resize: vertical;
+    }
+
+    textarea:focus {
+      border-color: var(--secondary);
+      outline: none;
+    }
+
+    /* ─────────────────────────── Tips & Resources ─────────────────────────── */
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 3px 10px var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: default;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 7px 20px var(--shadow);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 0.6rem;
+      color: var(--accent);
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      margin: 0.3rem 0;
+      font-size: 1rem;
+    }
+
+    .card a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+      transition: color var(--transition);
+    }
+
+    .card a:hover {
+      color: var(--secondary);
+    }
+
+    /* ───────────────────────────── Footer ───────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 1rem 0;
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      background: transparent;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+    /* ─────────────────────────── Responsive tweaks ─────────────────────────── */
+    @media (max-width: 480px) {
+      .mood-options {
+        gap: 1rem;
+      }
+
+      .mood-options label {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
+
   <header>
-    <h1>🌿 Your Self-Care Toolkit 🌿</h1>
+    <h1>🌿 Self‑Care Toolkit</h1>
   </header>
 
   <main>
     <!-- Daily Checklist -->
     <section id="daily-checklist">
-      <h2>🗓️ Daily Self-Care Checklist</h2>
+      <h2>🗓 Daily Checklist</h2>
       <ul class="checklist">
-        <li><input type="checkbox" id="check-water" /> <label for="check-water">Drink water</label></li>
-        <li><input type="checkbox" id="check-food" /> <label for="check-food">Eat nourishing food</label></li>
-        <li><input type="checkbox" id="check-sunlight" /> <label for="check-sunlight">Get some sunlight</label></li>
-        <li><input type="checkbox" id="check-breathing" /> <label for="check-breathing">Practice deep breathing</label></li>
-        <li><input type="checkbox" id="check-kindness" /> <label for="check-kindness">Speak kindly to yourself</label></li>
-        <li><input type="checkbox" id="check-gratitude" /> <label for="check-gratitude">Write down one thing you're grateful for</label></li>
+        <li><input type="checkbox" id="check-water"><label for="check-water">Drink water</label></li>
+        <li><input type="checkbox" id="check-food"><label for="check-food">Eat nourishing food</label></li>
+        <li><input type="checkbox" id="check-sunlight"><label for="check-sunlight">Get sunlight</label></li>
+        <li><input type="checkbox" id="check-breathing"><label for="check-breathing">Deep breathing</label></li>
       </ul>
-      <button id="clear-checklist">Clear Checklist</button>
+      <button id="clear-checklist">Clear</button>
     </section>
 
-    <!-- Emergency Self-Care Plan -->
+    <!-- Emergency Plan -->
     <section id="emergency-plan">
-      <h2>🚨 Emergency Self-Care Plan</h2>
-      <p>If you feel overwhelmed, try one or more of these steps:</p>
+      <h2>🚨 Emergency Plan</h2>
+      <p>If overwhelmed, try:</p>
       <ul>
-        <li>Call or text a crisis line: <a href="tel:988" target="_blank" rel="noopener">988 (US/Canada Suicide & Crisis Lifeline)</a></li>
-        <li>Practice the <strong>5-4-3-2-1 Grounding</strong> exercise below</li>
-        <li>Use a sensory tool: hold an ice cube, sniff essential oils, or wrap yourself in a soft blanket</li>
-        <li>Go to a safe and comfortable space</li>
-        <li>Listen to calming music or sounds</li>
-        <li>Reach out to someone you trust</li>
-        <li>Repeat to yourself: <em>"This moment will pass."</em></li>
+        <li>📞 Call/Text: <a href="tel:988">988 Lifeline</a></li>
+        <li>🧘 Ground (5-4-3-2-1 below)</li>
+        <li>🎧 Soothing music or nature sounds</li>
+        <li>🤗 Call someone supportive</li>
       </ul>
     </section>
 
-    <!-- Grounding Exercises -->
+    <!-- Grounding -->
     <section id="grounding-exercises">
-      <h2>🧘 Grounding Exercises</h2>
-
+      <h2>🧘 Grounding & Breathing</h2>
       <div class="exercise">
-        <h3>5-4-3-2-1 Exercise</h3>
-        <button id="start-grounding">Start Grounding</button>
-        <div id="grounding-output" style="margin-top: 1rem; font-weight: bold; min-height: 2.5rem;"></div>
+        <h3>5-4-3-2-1 Grounding</h3>
+        <button id="start-grounding">Start</button>
+        <div id="grounding-output"></div>
       </div>
-
       <div class="exercise">
-        <h3>Deep Belly Breathing</h3>
-        <button id="start-breathing">Start 4-7-8 Breathing</button>
-        <div id="breathing-output" style="margin-top: 1rem; font-weight: bold; min-height: 2.5rem;"></div>
+        <h3>4-7-8 Breathing</h3>
+        <button id="start-breathing">Start</button>
+        <div id="breathing-output"></div>
       </div>
     </section>
 
     <!-- Mood Tracker -->
     <section id="mood-tracker">
-      <h2>😊 How Are You Feeling Today?</h2>
-      <form id="mood-form" aria-label="Mood tracker">
+      <h2>😊 How are you feeling?</h2>
+      <form id="mood-form">
         <div class="mood-options">
-          <input type="radio" id="mood-happy" name="mood" value="Happy" />
-          <label for="mood-happy" title="Happy">😀</label>
-
-          <input type="radio" id="mood-ok" name="mood" value="Okay" />
-          <label for="mood-ok" title="Okay">😐</label>
-
-          <input type="radio" id="mood-sad" name="mood" value="Sad" />
-          <label for="mood-sad" title="Sad">☹️</label>
-
-          <input type="radio" id="mood-anxious" name="mood" value="Anxious" />
-          <label for="mood-anxious" title="Anxious">😰</label>
-
-          <input type="radio" id="mood-angry" name="mood" value="Angry" />
-          <label for="mood-angry" title="Angry">😠</label>
+          <input type="radio" id="mood-happy" name="mood" value="Happy"><label for="mood-happy">😀</label>
+          <input type="radio" id="mood-ok" name="mood" value="Okay"><label for="mood-ok">😐</label>
+          <input type="radio" id="mood-sad" name="mood" value="Sad"><label for="mood-sad">☹️</label>
+          <input type="radio" id="mood-anxious" name="mood" value="Anxious"><label for="mood-anxious">😰</label>
         </div>
-        <button type="submit" style="margin-top: 1rem;">Save Mood</button>
+        <button type="submit">Save Mood</button>
       </form>
-      <p id="mood-saved-msg" style="color: green; font-weight: 600; display: none; margin-top: 0.5rem;">Mood saved! Thank you for checking in.</p>
+      <p id="mood-saved-msg" style="display:none;">Mood saved!</p>
     </section>
 
-    <!-- Self-Reflection Journal -->
+    <!-- Journal -->
     <section id="journal">
-      <h2>📝 Self-Reflection Journal</h2>
-      <p>Write whatever you'd like below. Your entry will be saved automatically.</p>
-      <textarea id="journal-text" placeholder="Today I felt..."></textarea>
-      <button id="clear-journal" style="margin-top: 0.5rem; background: #cc6666;">Clear Journal</button>
-      <p id="journal-saved-msg" style="color: green; font-weight: 600; display: none; margin-top: 0.5rem;">Journal saved!</p>
+      <h2>📝 Journal</h2>
+      <p>Write thoughts—auto-saved:</p>
+      <textarea id="journal-text" placeholder="How do you feel today?"></textarea>
+      <button id="clear-journal" style="background:#cc6666;">Clear Journal</button>
+      <p id="journal-saved-msg" style="display:none;">Saved!</p>
+    </section>
+
+    <!-- Tips -->
+    <section id="tips">
+      <h2>💡 Tips</h2>
+      <div class="cards-container">
+        <div class="card"><h3>Mindfulness</h3><p>Spend 5 min focusing on breath or senses.</p></div>
+        <div class="card"><h3>Hydrate</h3><p>Water supports both mind and body health.</p></div>
+        <div class="card"><h3>Connect</h3><p>Chat with someone you trust today.</p></div>
+        <div class="card"><h3>Move</h3><p>Walk/stretch to boost mood & energy.</p></div>
+      </div>
+    </section>
+
+    <!-- Resources -->
+    <section id="resources">
+      <h2>📚 Resources</h2>
+      <div class="cards-container">
+        <div class="card"><h3><a href="https://988lifeline.org/" target="_blank">988 Lifeline</a></h3><p>24/7 US/Canada crisis support.</p></div>
+        <div class="card"><h3><a href="https://www.betterhelp.com/" target="_blank">BetterHelp</a></h3><p>Online therapy with licensed counsellors.</p></div>
+        <div class="card"><h3><a href="https://www.calm.com/" target="_blank">Calm App</a></h3><p>Meditation & sleep stories at home.</p></div>
+        <div class="card"><h3><a href="https://www.7cups.com/" target="_blank">7 Cups</a></h3><p>Free peer support chats anytime.</p></div>
+      </div>
     </section>
   </main>
 
-  <footer>
-    &copy; 2025 Your Name - Self-Care Toolkit
-  </footer>
+  <footer>&copy; 2025 Your Name — Self‑Care Toolkit</footer>
 
-<script>
-  // LocalStorage keys
-  const CHECKLIST_KEY = 'selfCareChecklist';
-  const MOOD_KEY = 'selfCareMood';
-  const JOURNAL_KEY = 'selfCareJournal';
+  <script>
+    /* LocalStorage keys */
+    const CK = 'scChecklist', MK = 'scMood', JK = 'scJournal';
 
-  // --- Checklist ---
-  const checklistItems = document.querySelectorAll('#daily-checklist input[type="checkbox"]');
-  const clearChecklistBtn = document.getElementById('clear-checklist');
-
-  // Load checklist state
-  function loadChecklist() {
-    const saved = JSON.parse(localStorage.getItem(CHECKLIST_KEY));
-    if (saved) {
-      checklistItems.forEach(item => {
-        item.checked = saved[item.id] || false;
-      });
-    }
-  }
-
-  // Save checklist state
-  function saveChecklist() {
-    const state = {};
-    checklistItems.forEach(item => {
-      state[item.id] = item.checked;
+    /* Checklist logic */
+    const checks = document.querySelectorAll('ul.checklist input[type="checkbox"]');
+    document.getElementById('clear-checklist').onclick = () => {
+      checks.forEach(c => (c.checked = false));
+      localStorage.removeItem(CK);
+    };
+    checks.forEach(c => c.onchange = () => {
+      const s = {};
+      checks.forEach(cb => s[cb.id] = cb.checked);
+      localStorage.setItem(CK, JSON.stringify(s));
     });
-    localStorage.setItem(CHECKLIST_KEY, JSON.stringify(state));
-  }
+    (function loadC() {
+      const saved = JSON.parse(localStorage.getItem(CK));
+      if (saved) checks.forEach(cb => cb.checked = !!saved[cb.id]);
+    })();
 
-  checklistItems.forEach(item => {
-    item.addEventListener('change', () => {
-      saveChecklist();
-    });
-  });
-
-  clearChecklistBtn.addEventListener('click', () => {
-    checklistItems.forEach(item => (item.checked = false));
-    localStorage.removeItem(CHECKLIST_KEY);
-  });
-
-  // Initialize
-  loadChecklist();
-
-  // --- Mood Tracker ---
-  const moodForm = document.getElementById('mood-form');
-  const moodSavedMsg = document.getElementById('mood-saved-msg');
-
-  // Load mood
-  function loadMood() {
-    const savedMood = localStorage.getItem(MOOD_KEY);
-    if (savedMood) {
-      const moodInput = document.querySelector(`#mood-form input[value="${savedMood}"]`);
-      if (moodInput) moodInput.checked = true;
-    }
-  }
-
-  moodForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const selectedMood = moodForm.mood.value;
-    if (selectedMood) {
-      localStorage.setItem(MOOD_KEY, selectedMood);
-      moodSavedMsg.style.display = 'block';
-      setTimeout(() => (moodSavedMsg.style.display = 'none'), 3000);
-    }
-  });
-
-  loadMood();
-
-  // --- Journal ---
-  const journalTextarea = document.getElementById('journal-text');
-  const journalSavedMsg = document.getElementById('journal-saved-msg');
-  const clearJournalBtn = document.getElementById('clear-journal');
-
-  // Load journal
-  function loadJournal() {
-    const savedJournal = localStorage.getItem(JOURNAL_KEY);
-    if (savedJournal) {
-      journalTextarea.value = savedJournal;
-    }
-  }
-
-  // Save journal after delay (debounce)
-  let journalTimeout;
-  journalTextarea.addEventListener('input', () => {
-    clearTimeout(journalTimeout);
-    journalTimeout = setTimeout(() => {
-      localStorage.setItem(JOURNAL_KEY, journalTextarea.value);
-      journalSavedMsg.style.display = 'block';
-      setTimeout(() => (journalSavedMsg.style.display = 'none'), 1500);
-    }, 1000);
-  });
-
-  clearJournalBtn.addEventListener('click', () => {
-    journalTextarea.value = '';
-    localStorage.removeItem(JOURNAL_KEY);
-  });
-
-  loadJournal();
-
-  // --- Grounding Exercises ---
-
-  // 5-4-3-2-1 Grounding
-  const groundingSteps = [
-    'Name 5 things you can see.',
-    'Name 4 things you can touch.',
-    'Name 3 things you can hear.',
-    'Name 2 things you can smell.',
-    'Name 1 thing you can taste.'
-  ];
-  const groundingBtn = document.getElementById('start-grounding');
-  const groundingOutput = document.getElementById('grounding-output');
-
-  groundingBtn.addEventListener('click', () => {
-    groundingBtn.disabled = true;
-    let stepIndex = 0;
-    groundingOutput.textContent = groundingSteps[stepIndex];
-    const interval = setInterval(() => {
-      stepIndex++;
-      if (stepIndex < groundingSteps.length) {
-        groundingOutput.textContent = groundingSteps[stepIndex];
-      } else {
-        groundingOutput.textContent = 'Great job grounding yourself! 🌟';
-        groundingBtn.disabled = false;
-        clearInterval(interval);
+    /* Mood form */
+    const mf = document.getElementById('mood-form'),
+      mm = document.getElementById('mood-saved-msg');
+    mf.onsubmit = e => {
+      e.preventDefault();
+      const v = mf.mood.value;
+      if (v) {
+        localStorage.setItem(MK, v);
+        mm.style.display = 'block';
+        setTimeout(() => mm.style.display = 'none', 2000);
       }
-    }, 6000);
-  });
-
-  // 4-7-8 Breathing
-  const breathingBtn = document.getElementById('start-breathing');
-  const breathingOutput = document.getElementById('breathing-output');
-
-  breathingBtn.addEventListener('click', () => {
-    breathingBtn.disabled = true;
-    let stage = 0;
-    // stages: 0 - inhale (4s), 1 - hold (7s), 2 - exhale (8s)
-    const stagesText = ['Inhale slowly (4s)', 'Hold breath (7s)', 'Exhale slowly (8s)'];
-    breathingOutput.textContent = stagesText[stage];
-
-    const times = [4000, 7000, 8000];
-    let interval;
-    function nextStage() {
-      stage++;
-      if (stage < stagesText.length) {
-        breathingOutput.textContent = stagesText[stage];
-        interval = setTimeout(nextStage, times[stage]);
-      } else {
-        breathingOutput.textContent = 'Breathing exercise complete. Feel calmer? 🌬️';
-        breathingBtn.disabled = false;
+    };
+    (function loadM() {
+      const v = localStorage.getItem(MK);
+      if (v) {
+        const el = document.querySelector(`#mood-form input[value="${v}"]`);
+        if (el) el.checked = true;
       }
-    }
-    interval = setTimeout(nextStage, times[stage]);
-  });
-</script>
+    })();
+
+    /* Journal logic */
+    const jt = document.getElementById('journal-text'),
+      jm = document.getElementById('journal-saved-msg');
+    let timer;
+    jt.oninput = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        localStorage.setItem(JK, jt.value);
+        jm.style.display = 'block';
+        setTimeout(() => jm.style.display = 'none', 1500);
+      }, 500);
+    };
+    document.getElementById('clear-journal').onclick = () => {
+      jt.value = '';
+      localStorage.removeItem(JK);
+    };
+    (function loadJ() {
+      const v = localStorage.getItem(JK);
+      if (v) jt.value = v;
+    })();
+
+    /* Grounding & Breathing */
+    const gs = ['Name 5 things you can see.', '4 things you can touch.', '3 things you can hear.', '2 things you can smell.', '1 thing you can taste.'];
+    document.getElementById('start-grounding').onclick = function () {
+      const out = document.getElementById('grounding-output');
+      let i = 0;
+      this.disabled = true;
+      out.textContent = gs[0];
+      const intr = setInterval(() => {
+        i++;
+        if (i < gs.length) out.textContent = gs[i];
+        else {
+          out.textContent = 'Well done grounding yourself! 🌟';
+          this.disabled = false;
+          clearInterval(intr);
+        }
+      }, 6000);
+    };
+    document.getElementById('start-breathing').onclick = function () {
+      const out = document.getElementById('breathing-output'),
+        stages = ['Inhale 4s', 'Hold 7s', 'Exhale 8s'],
+        times = [4000, 7000, 8000];
+      let s = 0;
+      this.disabled = true;
+      out.textContent = stages[0];
+      const next = () => {
+        s++;
+        if (s < stages.length) {
+          out.textContent = stages[s];
+          setTimeout(next, times[s]);
+        } else {
+          out.textContent = 'Feeling calmer? 🌬️';
+          this.disabled = false;
+        }
+      };
+      setTimeout(next, times[0]);
+    };
+  </script>
 </body>
+
 </html>
