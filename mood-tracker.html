@@ -1,806 +1,238 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Community Mood Tracker</title>
-  <meta name="description" content="Track your mood and receive supportive resources and encouragement from the community." />
-  <meta name="author" content="Your Name" />
-  <meta name="theme-color" content="#3182ce" />
-  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="description" content="Track your mood and receive uplifting tips, resources, and quotes." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* Reset and base */
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
+    /* Base styles and typography */
+    body, html {
       margin: 0; padding: 0;
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       background: linear-gradient(-45deg, #90caf9, #f48fb1, #a5d6a7, #ffcc80);
       background-size: 400% 400%;
       animation: bgAnimation 15s ease infinite;
+      display: flex; justify-content: center; align-items: center;
       color: #1a202c;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-y: auto;
-      scroll-padding-top: 3rem;
+      overflow: auto;
     }
-
-    /* Background animation */
     @keyframes bgAnimation {
-      0%, 100% { background-position: 0% 50%; }
+      0%,100% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
     }
-
-    /* Container */
     .container {
-      background: rgba(255 255 255 / 0.95);
+      background: rgba(255,255,255,0.95);
       border-radius: 1rem;
-      max-width: 720px;
-      width: 100%;
-      box-shadow: 0 12px 28px rgb(0 0 0 / 0.12);
-      padding: 2.5rem 3rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.75rem;
-      outline-offset: 4px;
-      position: relative;
-      min-height: 520px;
-    }
-
-    /* Header */
-    h1#main-title {
-      font-size: 3rem;
-      font-weight: 700;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+      max-width: 700px;
+      width: 90%;
+      padding: 2.5rem 2rem;
       text-align: center;
-      color: #2d3748;
-      margin: 0;
-      user-select: none;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      letter-spacing: -0.03em;
     }
+    h1 { font-size: 2.8rem; margin-bottom: 1.5rem; }
 
-    /* Mood button grid */
     .mood-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
-      gap: 1.25rem;
-      justify-items: center;
-      align-items: stretch;
-      opacity: 1;
-      transition: opacity 0.5s ease;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
     }
-    .mood-grid.hidden {
-      opacity: 0;
-      pointer-events: none;
-      user-select: none;
-      height: 0;
-      overflow: hidden;
-    }
-
     .mood-btn {
-      background: white;
+      padding: 1.5rem;
       border-radius: 1rem;
-      padding: 1.75rem 1.5rem;
-      box-shadow: 0 4px 8px rgb(0 0 0 / 0.06);
+      background: #fff;
       border: 3px solid transparent;
       cursor: pointer;
-      width: 100%;
-      max-width: 180px;
-      font-weight: 600;
-      color: #2d3748;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease,
-        border-color 0.3s ease,
-        background-color 0.3s ease;
-      user-select: none;
-      will-change: transform;
-      animation: btnPopIn 0.6s ease forwards;
-      outline-offset: 4px;
-    }
-    .mood-btn:hover,
-    .mood-btn:focus-visible {
-      outline: none;
-      transform: translateY(-6px) scale(1.04);
-      box-shadow: 0 14px 36px rgb(0 0 0 / 0.2);
-      border-color: var(--mood-color);
-      color: var(--mood-color);
-      font-weight: 700;
-      z-index: 1;
-      background-color: #fff8f6;
-    }
-    @keyframes btnPopIn {
-      0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .mood-btn .emoji {
-      font-size: 3.5rem;
-      margin-bottom: 0.6rem;
-      line-height: 1;
+      transition: transform .3s, box-shadow .3s;
       user-select: none;
     }
+    .mood-btn:hover, .mood-btn:focus {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .mood-btn span.emoji { font-size: 3rem; display:block; margin-bottom: .5rem; }
+    .mood-btn span.label { font-weight: 600; }
 
-    /* Dynamic mood colors */
-    .mood-btn[data-mood="overwhelmed"] { --mood-color: #fda085; }
-    .mood-btn[data-mood="struggling"] { --mood-color: #e53e3e; }
-    .mood-btn[data-mood="managing"] { --mood-color: #d69e2e; }
-    .mood-btn[data-mood="neutral"] { --mood-color: #718096; }
-    .mood-btn[data-mood="good"] { --mood-color: #38a169; }
-    .mood-btn[data-mood="thriving"] { --mood-color: #3182ce; }
-
-    /* Thank you section */
-    #thank-you-section {
+    #thankyou {
       display: none;
-      text-align: center;
-      outline: none;
-      opacity: 0;
-      transition: opacity 0.6s ease;
-      position: relative;
+      animation: fadeIn 0.6s ease;
     }
-    #thank-you-section[aria-hidden="false"] {
-      display: block;
-      opacity: 1;
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1; } }
+
+    #icon-visual { width: 120px; height: 120px; margin: 1.5rem auto; }
+    #quote-text {
+      font-size:1.1rem; font-style:italic;
+      margin-top:1rem; color:#4a5568;
+    }
+    .section { margin-top: 1.75rem; padding: 1.25rem; background: #f9fafb; border-radius: .8rem; text-align: left; }
+    .section h3 { margin-bottom: .8rem; font-size:1.3rem; }
+
+    #resources-list a {
+      display: block; margin-bottom: .5rem;
+      color: #2c5282; text-decoration: underline;
     }
 
-    #thank-you-section h2 {
-      font-size: 2.75rem;
-      font-weight: 700;
-      margin: 0 0 0.6rem 0;
-      color: var(--mood-color);
-      user-select: none;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.12);
-    }
+    .affirmation { margin-top: 1.25rem; font-weight: 600; font-style: italic; }
 
-    #thank-you-section p.support-text {
-      font-size: 1.2rem;
-      margin: 0.5rem 0 1rem 0;
-      color: #4a5568;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      user-select: text;
-      line-height: 1.4;
-    }
+    #retry { margin-top: 2rem; padding: 1rem 1.6rem; background:#2c5282; color:white; border:none; border-radius:.8rem; cursor: pointer; }
+    #retry:hover { background:#1a365d; }
 
-    /* Sections wrapper */
-    .section-wrapper {
-      margin-top: 1.75rem;
-      padding: 1.5rem 2rem;
-      border-radius: 1.2rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 6px 18px rgb(0 0 0 / 0.07);
-      background: #f9fafb;
-      color: #2d3748;
-      text-align: left;
-      position: relative;
-      user-select: text;
-      min-height: 90px;
-    }
-    .section-wrapper h3 {
-      margin-top: 0; margin-bottom: 0.75rem;
-      font-weight: 700;
-      font-size: 1.35rem;
-      color: var(--mood-color);
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      user-select: none;
-    }
-    .section-wrapper h3::before {
-      content: '💡';
-      font-size: 1.4rem;
-      line-height: 1;
-      user-select: none;
-    }
-    .section-wrapper.resources h3::before {
-      content: '📚';
-    }
-    .section-wrapper p, .section-wrapper ul {
-      font-size: 1.05rem;
-      line-height: 1.5;
-      margin: 0;
-    }
-
-    /* Tip text */
-    .tip-text {
-      font-style: italic;
-      color: #4a5568;
-    }
-
-    /* Resources list styling */
-    .resources-list {
-      margin-top: 0.3rem;
-      padding-left: 1.25rem;
-      list-style: none;
-    }
-    .resources-list li {
-      margin-bottom: 0.65rem;
-      line-height: 1.3;
-    }
-    .resources-list a {
-      color: var(--mood-color);
-      font-weight: 600;
-      text-decoration: underline;
-      transition: color 0.25s ease;
-      user-select: text;
-    }
-    .resources-list a:hover,
-    .resources-list a:focus-visible {
-      color: #2c5282;
-      outline-offset: 3px;
-    }
-
-    /* Affirmation */
-    .affirmation {
-      font-style: italic;
-      color: #718096;
-      font-weight: 600;
-      margin-top: 1.25rem;
-      user-select: text;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      font-size: 1.15rem;
-      line-height: 1.4;
-    }
-
-    /* Check in again button */
-    #checkin-again-btn {
-      margin-top: 3rem;
-      background-color: var(--mood-color);
-      border: none;
-      color: white;
-      font-size: 1.35rem;
-      font-weight: 700;
-      padding: 1rem 2.5rem;
-      border-radius: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgb(0 0 0 / 0.18);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      user-select: none;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 280px;
-      width: 100%;
-      outline-offset: 4px;
-    }
-    #checkin-again-btn:hover,
-    #checkin-again-btn:focus-visible {
-      background-color: #2c5282;
-      box-shadow: 0 12px 28px rgb(0 0 0 / 0.25);
-      outline: none;
-    }
-
-    /* Anonymous messages container */
-    .anonymous-messages {
-      margin-top: 3rem;
-      background: #edf2f7;
-      padding: 1.5rem 2rem;
-      border-radius: 1.5rem;
-      max-height: 180px;
-      overflow-y: auto;
-      font-weight: 600;
-      color: #2d3748;
-      box-shadow: inset 0 0 10px rgb(0 0 0 / 0.1);
-      user-select: none;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
-      scrollbar-width: thin;
-      scrollbar-color: #cbd5e0 transparent;
-    }
-    .anonymous-messages::-webkit-scrollbar {
-      width: 6px;
-    }
-    .anonymous-messages::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .anonymous-messages::-webkit-scrollbar-thumb {
-      background-color: #cbd5e0;
-      border-radius: 3px;
-    }
-    .anonymous-messages h4 {
-      margin: 0 0 1rem 0;
-      font-weight: 700;
-      color: var(--mood-color);
-      text-align: center;
-      user-select: none;
-    }
-    .anonymous-messages ul {
-      list-style-type: none;
-      margin: 0; padding: 0;
-    }
-    .anonymous-messages ul li {
-      margin-bottom: 0.65rem;
-      font-style: italic;
-      font-size: 1.05rem;
-      line-height: 1.4;
-    }
-
-    /* Toast */
-    #toast {
-      position: fixed;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #48bb78;
-      color: white;
-      font-weight: 700;
-      padding: 1rem 1.5rem;
-      border-radius: 1rem;
-      box-shadow: 0 6px 16px rgb(0 0 0 / 0.25);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 9999;
-      max-width: 90vw;
-      text-align: center;
-      user-select: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      font-size: 1rem;
-    }
-    #toast.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    #toast button {
-      background: transparent;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 1.2rem;
-      line-height: 1;
-      user-select: none;
-      padding: 0;
-      margin: 0;
-      transition: color 0.2s ease;
-    }
-    #toast button:hover,
-    #toast button:focus-visible {
-      color: #e6fffa;
-      outline: none;
-    }
-
-    /* Back to Top Button */
-    #back-to-top {
-      position: fixed;
-      bottom: 5rem;
-      right: 1.5rem;
-      background-color: var(--mood-color, #3182ce);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 3.5rem;
-      height: 3.5rem;
-      font-size: 2rem;
-      cursor: pointer;
-      box-shadow: 0 6px 18px rgb(0 0 0 / 0.3);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9998;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    #back-to-top:focus-visible,
-    #back-to-top:hover {
-      background-color: #2c5282;
-      outline: none;
-    }
-
-    /* Responsive */
-    @media (max-width: 480px) {
-      h1#main-title {
-        font-size: 2.25rem;
-      }
-      .mood-btn {
-        max-width: none;
-      }
-      #thank-you-section h2 {
-        font-size: 2rem;
-      }
-      #checkin-again-btn {
-        width: 100%;
-        padding: 1rem 0;
-      }
-      .section-wrapper {
-        max-width: 100%;
-        padding: 1.25rem 1.5rem;
-      }
-      .anonymous-messages {
-        max-width: 100%;
-        padding: 1rem 1.25rem;
-      }
-      #back-to-top {
-        width: 3rem;
-        height: 3rem;
-        font-size: 1.5rem;
-        bottom: 4rem;
-        right: 1rem;
-      }
+    @media (max-width:500px){
+      h1 { font-size:2.2rem; }
+      .mood-btn span.emoji { font-size:2.5rem; }
     }
   </style>
 </head>
 <body>
-  <main class="container" role="main" aria-live="polite">
-    <h1 id="main-title">Community Mood Tracker</h1>
+  <div class="container">
+    <h1>Community Mood Tracker</h1>
+    <div id="grid" class="mood-grid"></div>
 
-    <section id="mood-grid" class="mood-grid" role="list" aria-label="Select your current mood" tabindex="-1"></section>
+    <div id="thankyou">
+      <div id="icon-visual"></div>
+      <p id="quote-text"></p>
 
-    <section id="thank-you-section" aria-hidden="true" tabindex="-1" aria-label="Your mood check-in summary" role="region" >
-      <h2 id="mood-label"></h2>
-      <p class="support-text" id="mood-support-text"></p>
-
-      <section class="section-wrapper tip" aria-label="Tip to help you today">
+      <div class="section">
         <h3>💡 Tip</h3>
-        <p class="tip-text" id="mood-tip"></p>
-      </section>
-
-      <section class="section-wrapper resources" aria-label="Recommended resources to support you">
-        <h3>📚 Recommended Resources</h3>
-        <ul class="resources-list" aria-live="polite"></ul>
-      </section>
-
-      <p class="affirmation" id="mood-affirmation"></p>
-
-      <button id="checkin-again-btn" aria-label="Check in again">Check In Again</button>
-
-      <div class="anonymous-messages" aria-label="Anonymous community support messages" tabindex="0">
-        <h4>Community Support Messages</h4>
-        <ul id="anonymous-messages-list" role="list"></ul>
+        <p id="tip"></p>
       </div>
-    </section>
-  </main>
-
-  <button id="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
-
-  <div id="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <span id="toast-message"></span>
-    <button id="toast-close" aria-label="Close notification" title="Close notification">&times;</button>
+      <div class="section">
+        <h3>📚 Resources</h3>
+        <div id="resources-list"></div>
+      </div>
+      <p class="affirmation" id="affirm"></p>
+      <button id="retry">Check In Again</button>
+    </div>
   </div>
 
   <script>
-    // Mood data
     const moods = [
       {
         id: 'overwhelmed',
         emoji: '😵‍💫',
         label: 'Overwhelmed',
-        bg: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
-        supportPrompt: 'It’s okay to feel overwhelmed sometimes. Take a moment to breathe and reset.',
-        tip: 'Try a simple 5-minute breathing exercise: inhale slowly for 4 seconds, hold for 4, exhale for 6.',
-        affirmation: '“I am doing my best, and that is enough.”',
+        bg: 'linear-gradient(135deg,#f6d365,#fda085)',
+        icon: '☁️',
+        quote: '“This too shall pass.”',
+        tip: 'Take five deep breaths, feeling each inhale and exhale.',
+        affirmation: 'I give myself grace through this moment.',
         resources: [
-          { text: 'Free guided meditation PDF', url: 'https://www.mindful.org/wp-content/uploads/2019/03/Mindful-Breathing.pdf' },
-          { text: 'Stress management tips (PDF)', url: 'https://www.verywellmind.com/stress-management-strategies-3145195' },
-          { text: 'Calm app (free resources)', url: 'https://www.calm.com/blog/free-meditations' }
+          { text: 'Guided Breathing PDF', url: 'https://www.mindful.org/wp-content/uploads/2019/03/Mindful-Breathing.pdf' }
         ]
       },
       {
         id: 'struggling',
         emoji: '🔴',
         label: 'Struggling',
-        bg: 'linear-gradient(135deg, #f44336 0%, #e57373 100%)',
-        supportPrompt: 'You’re not alone. Seeking help is a sign of courage and strength.',
-        tip: 'Reach out to a trusted friend, counselor, or support group.',
-        affirmation: '“I am not my struggles; I am stronger than my challenges.”',
+        bg: 'linear-gradient(135deg,#f44336,#e57373)',
+        icon: '💪',
+        quote: '“Strength grows in the moments you challenge yourself.”',
+        tip: 'Try the 5-4-3-2-1 grounding exercise.',
+        affirmation: 'I am stronger than I think.',
         resources: [
-          { text: 'National Suicide Prevention Lifeline (US)', url: 'https://suicidepreventionlifeline.org/' },
-          { text: 'Crisis Text Line (US)', url: 'https://www.crisistextline.org/' },
-          { text: 'Find a therapist near you', url: 'https://www.psychologytoday.com/us/therapists' }
+          { text: 'Anxiety Worksheet', url: 'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf' }
         ]
       },
       {
         id: 'managing',
         emoji: '🟡',
         label: 'Managing',
-        bg: 'linear-gradient(135deg, #f6e05e 0%, #faf089 100%)',
-        supportPrompt: 'Taking it one day at a time is progress. Celebrate small victories.',
-        tip: 'Keep a daily journal to track your mood and accomplishments.',
-        affirmation: '“I am making progress, even if it’s small.”',
+        bg: 'linear-gradient(135deg,#f6e05e,#faf089)',
+        icon: '🌿',
+        quote: '“Progress is progress, no matter how small.”',
+        tip: 'Write down three things you did well today.',
+        affirmation: 'I honor my progress.',
         resources: [
-          { text: 'Daily journaling prompts (PDF)', url: 'https://positivepsychology.com/wp-content/uploads/2019/07/journal-prompts.pdf' },
-          { text: 'Self-care toolkit', url: 'https://www.verywellmind.com/self-care-strategies-overview-3144720' },
-          { text: 'Mindfulness exercises', url: 'https://palousemindfulness.com/' }
+          { text: 'Gratitude Journal PDF', url: 'https://positivepsychology.com/wp-content/uploads/2015/05/gratitude-journal.pdf' }
         ]
       },
       {
         id: 'neutral',
-        emoji: '⚪',
+        emoji: '⚪️',
         label: 'Neutral',
-        bg: 'linear-gradient(135deg, #a0aec0 0%, #cbd5e0 100%)',
-        supportPrompt: 'It’s okay to feel neutral. Sometimes rest is the best medicine.',
-        tip: 'Take a break and spend time outdoors or in nature.',
-        affirmation: '“I honor my feelings and give myself permission to rest.”',
+        bg: 'linear-gradient(135deg,#a0aec0,#cbd5e0)',
+        icon: '🧘',
+        quote: '“In stillness, we find clarity.”',
+        tip: 'Take a moment to be present — notice your breath.',
+        affirmation: 'I am centered.',
         resources: [
-          { text: 'Nature and mental health benefits', url: 'https://www.nami.org/Blogs/NAMI-Blog/October-2019/The-Healing-Power-of-Nature' },
-          { text: 'Guided nature meditation (audio)', url: 'https://www.mindful.org/meditation/mindfulness-getting-started/' },
-          { text: 'Relaxation techniques', url: 'https://www.helpguide.org/articles/stress/relaxation-techniques-for-stress-relief.htm' }
+          { text: 'Mindfulness Guide', url: 'https://www.mindful.org/meditation/mindfulness-getting-started/' }
         ]
       },
       {
         id: 'good',
         emoji: '🟢',
         label: 'Doing Well',
-        bg: 'linear-gradient(135deg, #48bb78 0%, #9ae6b4 100%)',
-        supportPrompt: 'It’s great to see you feeling positive! Keep nurturing your wellbeing.',
-        tip: 'Practice gratitude daily to enhance your mood.',
-        affirmation: '“I am grateful for the good in my life.”',
+        bg: 'linear-gradient(135deg,#48bb78,#9ae6b4)',
+        icon: '😊',
+        quote: '“Joy is not in things; it is in us.”',
+        tip: 'List three things you’re grateful for today.',
+        affirmation: 'I welcome joy today.',
         resources: [
-          { text: 'Gratitude journal template (PDF)', url: 'https://positivepsychology.com/wp-content/uploads/2015/05/gratitude-journal.pdf' },
-          { text: 'Connection activities', url: 'https://www.psychologytoday.com/us/blog/the-healing-crowd/201712/the-importance-connection-in-mental-health' },
-          { text: 'How to support others', url: 'https://www.mentalhealth.org.uk/publications/how-support-someone-mental-health-problem' }
+          { text: 'Gratitude Journal PDF', url: 'https://positivepsychology.com/wp-content/uploads/2015/05/gratitude-journal.pdf' }
         ]
       },
       {
         id: 'thriving',
         emoji: '🔵',
         label: 'Thriving',
-        bg: 'linear-gradient(135deg, #3182ce 0%, #63b3ed 100%)',
-        supportPrompt: 'Your strength inspires others. Keep shining your light.',
-        tip: 'Consider mentoring or volunteering in your community.',
-        affirmation: '“I have the power to uplift myself and others.”',
+        bg: 'linear-gradient(135deg,#3182ce,#63b3ed)',
+        icon: '🌟',
+        quote: '“Your energy inspires others.”',
+        tip: 'Consider mentoring or creative expression.',
+        affirmation: 'I am a beacon of hope.',
         resources: [
-          { text: 'Leadership opportunities', url: 'https://www.leadershipfreak.com/' },
-          { text: 'Mentor matching programs', url: 'https://mentoring.org/' },
-          { text: 'Creative expression tools', url: 'https://www.creativitypost.com/' }
-        ]
-      },
-      {
-        id: 'joyful',
-        emoji: '🌟',
-        label: 'Joyful',
-        bg: 'linear-gradient(135deg, #fbcfe8 0%, #f472b6 100%)',
-        supportPrompt: 'Your joy is contagious! Spread that positive energy.',
-        tip: 'Share your happiness with others by volunteering or creative projects.',
-        affirmation: '“I embrace joy and share it freely.”',
-        resources: [
-          { text: 'How to cultivate joy', url: 'https://www.psychologytoday.com/us/blog/prescriptions-life/201610/how-cultivate-joy' },
-          { text: 'Community art projects', url: 'https://www.creativityexplored.org/' },
-          { text: 'Volunteering opportunities', url: 'https://www.volunteermatch.org/' }
+          { text: 'Creative Expression Guide', url: 'https://www.creativitypost.com/' }
         ]
       }
     ];
 
-    // Anonymous messages - rotate and show randomly
-    const anonymousMessages = [
-      "You are not alone. Keep going!",
-      "Every step forward is progress.",
-      "Sending you strength and hope today.",
-      "Your feelings are valid and important.",
-      "Keep shining your light, even on tough days.",
-      "Remember, this too shall pass.",
-      "Your courage inspires others.",
-      "It’s okay to take time for yourself.",
-      "Small self-care acts add up to big change.",
-      "The community is here for you, always."
-    ];
+    const grid = document.getElementById('grid');
+    const thankyou = document.getElementById('thankyou');
+    const iconVisual = document.getElementById('icon-visual');
+    const quoteText = document.getElementById('quote-text');
+    const tipEl = document.getElementById('tip');
+    const resList = document.getElementById('resources-list');
+    const affirmEl = document.getElementById('affirm');
+    const retryBtn = document.getElementById('retry');
 
-    const MKEY = 'community-mood-selected';
+    // Create mood buttons
+    moods.forEach(m => {
+      const btn = document.createElement('button');
+      btn.className = 'mood-btn';
+      btn.innerHTML = `<span class="emoji">${m.emoji}</span><span class="label">${m.label}</span>`;
+      btn.addEventListener('click', () => selectMood(m));
+      grid.appendChild(btn);
+    });
 
-    // Elements
-    const moodGrid = document.getElementById('mood-grid');
-    const thankYouSection = document.getElementById('thank-you-section');
-    const moodLabel = document.getElementById('mood-label');
-    const moodSupportText = document.getElementById('mood-support-text');
-    const moodTip = document.getElementById('mood-tip');
-    const moodAff = document.getElementById('mood-affirmation');
-    const recLinks = thankYouSection.querySelector('.resources-list');
-    const checkinAgainBtn = document.getElementById('checkin-again-btn');
-    const anonymousMessagesList = document.getElementById('anonymous-messages-list');
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toast-message');
-    const toastCloseBtn = document.getElementById('toast-close');
-    const backToTopBtn = document.getElementById('back-to-top');
+    function selectMood(m) {
+      document.body.style.background = m.bg;
+      grid.style.display = 'none';
+      thankyou.style.display = 'block';
+      iconVisual.textContent = m.icon;
+      quoteText.textContent = m.quote;
+      tipEl.textContent = m.tip;
+      affirmEl.textContent = m.affirmation;
 
-    // Render mood buttons
-    function renderButtons() {
-      moodGrid.innerHTML = '';
-      moods.forEach((mood, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'mood-btn';
-        btn.setAttribute('data-mood', mood.id);
-        btn.setAttribute('aria-label', `${mood.label} mood`);
-        btn.type = 'button';
-        btn.innerHTML = `<span class="emoji">${mood.emoji}</span><span>${mood.label}</span>`;
-        btn.style.animationDelay = `${i * 120}ms`; // stagger animation
-        btn.addEventListener('click', () => selectMood(mood));
-        moodGrid.appendChild(btn);
-      });
-    }
-
-    // Select mood handler
-    function selectMood(mood) {
-      localStorage.setItem(MKEY, mood.id);
-      document.documentElement.style.setProperty('--mood-color', getMoodColor(mood.id));
-      document.body.style.background = mood.bg;
-
-      moodLabel.textContent = `${mood.emoji} ${mood.label}`;
-      moodSupportText.textContent = mood.supportPrompt;
-      moodTip.textContent = mood.tip;
-      moodAff.textContent = mood.affirmation;
-
-      recLinks.innerHTML = '';
-      mood.resources.forEach(res => {
-        const li = document.createElement('li');
+      resList.innerHTML = '';
+      m.resources.forEach(r => {
         const a = document.createElement('a');
-        a.href = res.url;
+        a.href = r.url;
         a.target = '_blank';
-        a.rel = 'noopener noreferrer nofollow';
-        a.textContent = res.text;
-        li.appendChild(a);
-        recLinks.appendChild(li);
-      });
-
-      showAnonymousMessages();
-
-      // Transition UI
-      fadeOut(moodGrid, () => {
-        moodGrid.setAttribute('aria-hidden', 'true');
-        moodGrid.style.display = 'none';
-        thankYouSection.style.display = 'block';
-        thankYouSection.setAttribute('aria-hidden', 'false');
-        fadeIn(thankYouSection);
-        thankYouSection.focus();
-        showBackToTop();
-      });
-
-      showToast(`Thank you for checking in as "${mood.label}"`);
-    }
-
-    // Get mood color hex
-    function getMoodColor(id) {
-      const mood = moods.find(m => m.id === id);
-      if (!mood) return '#718096';
-      // Extract hex from bg gradient (last color)
-      const bg = mood.bg;
-      const match = bg.match(/#([0-9a-fA-F]{6})/g);
-      return match ? match[match.length-1] : '#718096';
-    }
-
-    // Show random anonymous messages (5)
-    function showAnonymousMessages() {
-      anonymousMessagesList.innerHTML = '';
-      const shuffled = anonymousMessages
-        .map(value => ({ value, sort: Math.random() }))
-        .sort((a,b) => a.sort - b.sort)
-        .map(({value}) => value)
-        .slice(0, 5);
-      shuffled.forEach(msg => {
-        const li = document.createElement('li');
-        li.textContent = msg;
-        anonymousMessagesList.appendChild(li);
+        a.textContent = r.text;
+        resList.appendChild(a);
       });
     }
 
-    // Toast logic
-    let toastTimeout;
-    function showToast(msg) {
-      toastMessage.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove('show');
-      }, 4000);
-    }
-    toastCloseBtn.addEventListener('click', () => {
-      toast.classList.remove('show');
-      clearTimeout(toastTimeout);
+    retryBtn.addEventListener('click', () => {
+      thankyou.style.display = 'none';
+      grid.style.display = 'grid';
+      document.body.style.background = '';
     });
 
-    // Check in again
-    checkinAgainBtn.addEventListener('click', () => {
-      localStorage.removeItem(MKEY);
-      thankYouSection.setAttribute('aria-hidden', 'true');
-      fadeOut(thankYouSection, () => {
-        thankYouSection.style.display = 'none';
-        moodGrid.style.display = 'grid';
-        moodGrid.setAttribute('aria-hidden', 'false');
-        fadeIn(moodGrid);
-        document.body.style.background = 'linear-gradient(-45deg, #90caf9, #f48fb1, #a5d6a7, #ffcc80)';
-        document.documentElement.style.removeProperty('--mood-color');
-        hideBackToTop();
-        const firstBtn = moodGrid.querySelector('button');
-        if (firstBtn) firstBtn.focus();
-      });
-    });
-
-    // Fade helpers
-    function fadeOut(el, cb) {
-      el.style.transition = 'opacity 0.5s ease';
-      el.style.opacity = 0;
-      setTimeout(() => {
-        if(cb) cb();
-      }, 500);
-    }
-    function fadeIn(el) {
-      el.style.opacity = 0;
-      el.style.display = '';
-      requestAnimationFrame(() => {
-        el.style.transition = 'opacity 0.5s ease';
-        el.style.opacity = 1;
-      });
-    }
-
-    // Back to top button logic
-    backToTopBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      backToTopBtn.blur();
-    });
-    function showBackToTop() {
-      backToTopBtn.style.display = 'flex';
-    }
-    function hideBackToTop() {
-      backToTopBtn.style.display = 'none';
-    }
-
-    // Accessibility: trap focus inside thank you section when visible
-    document.addEventListener('keydown', e => {
-      if (thankYouSection.getAttribute('aria-hidden') === 'false') {
-        const focusable = thankYouSection.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        if (e.key === 'Tab') {
-          if (e.shiftKey) { // shift + tab
-            if (document.activeElement === first) {
-              e.preventDefault();
-              last.focus();
-            }
-          } else { // tab
-            if (document.activeElement === last) {
-              e.preventDefault();
-              first.focus();
-            }
-          }
-        }
-        if (e.key === 'Escape') {
-          checkinAgainBtn.click();
-        }
-      }
-    });
-
-    // Initialization on load
-    function init() {
-      renderButtons();
-      const savedMood = localStorage.getItem(MKEY);
-      if (savedMood) {
-        const mood = moods.find(m => m.id === savedMood);
-        if (mood) {
-          selectMood(mood);
-          return;
-        }
-      }
-      moodGrid.style.display = 'grid';
-      moodGrid.setAttribute('aria-hidden', 'false');
-      thankYouSection.style.display = 'none';
-      thankYouSection.setAttribute('aria-hidden', 'true');
-      hideBackToTop();
-    }
-
-    window.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
