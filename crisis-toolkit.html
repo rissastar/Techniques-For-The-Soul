@@ -2,292 +2,248 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crisis Support Toolkit</title>
-  <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/build/lucide.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/feather-icons"></script>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #fce4ec);
-      color: #333;
-      overflow-x: hidden;
-    }
-
-    header {
-      text-align: center;
-      padding: 2rem 1rem 1rem;
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
-      color: white;
-    }
-
-    header h1 {
-      font-size: 2.5rem;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.4);
-    }
-
-    main {
-      max-width: 1000px;
-      margin: auto;
-      padding: 2rem 1rem;
-    }
-
-    .section {
-      background: white;
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-
-    .hotline {
-      border-left: 4px solid #1976d2;
-      padding-left: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .high-priority {
-      border-color: #d32f2f;
-      background-color: #ffebee;
-    }
-
-    .hotline h3 {
-      margin: 0.5rem 0;
-    }
-
-    .country-btn, .category-btn, .save-btn {
-      padding: 0.6rem 1rem;
-      border: none;
-      border-radius: 6px;
-      margin: 0.25rem;
-      cursor: pointer;
-    }
-
-    .country-btn.active {
-      background-color: #0288d1;
-      color: white;
-    }
-
-    .category-btn.active {
-      background-color: #f06292;
-      color: white;
-    }
-
-    .save-btn.active {
-      background-color: #d32f2f;
-      color: white;
-    }
-
-    .assessment-question {
-      margin-bottom: 1rem;
-    }
-
-    .self-care {
-      margin-top: 1rem;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #666;
-      margin: 2rem 0;
-    }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #e0f7fa, #fce4ec); color: #333; min-height: 100vh; }
+    header { position: relative; height: 300px; background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat; }
+    header:before { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.3); }
+    header h1 { position:relative; color:white; text-align:center; font-size:2.8rem; font-weight:900; padding-top:4rem; text-shadow:2px 2px 8px rgba(0,0,0,0.6); }
+    main { max-width:900px; margin:auto; padding:2rem 1rem; }
+    .section { background:white; border-radius:10px; box-shadow:0 5px 10px rgba(0,0,0,0.1); margin-bottom:2.5rem; padding:1.5rem 2rem; }
+    .hotline { border-left:4px solid #1976d2; padding:1rem; margin-bottom:1rem; position:relative; }
+    .high-priority { border-left-color:#d32f2f; background:#ffebee; box-shadow:0 0 8px rgba(255,0,0,0.2); }
+    .hotline h3 { margin:0; display:flex; align-items:center; gap:0.5rem; font-weight:bold; }
+    .hotline p { margin:0.3rem 0; color:#555; font-size:0.95rem; display:flex; align-items:center; gap:0.5rem; }
+    .save-btn { position:absolute; top:1rem; right:1rem; background:transparent; border:none; font-size:1.4rem; cursor:pointer; color:#aaa; transition:color 0.3s; }
+    .save-btn.saved { color:#e53e3e; }
+    .toggle-btn { background:#5a67d8; color:white; padding:0.6rem 1.2rem; border:none; border-radius:8px; cursor:pointer; transition:background 0.3s; display:flex; align-items:center; gap:0.5rem; }
+    .toggle-btn:hover { background:#434190; }
+    .assessment-modal { position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; justify-content:center; align-items:center; padding:1rem; }
+    .modal-content { background:white; border-radius:10px; width:100%; max-width:500px; padding:1.5rem; max-height:90vh; overflow-y:auto; }
+    .close-btn { position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.2rem; cursor:pointer; }
+    footer { text-align:center; padding:1rem; font-size:0.9rem; color:#666; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>🆘 Crisis Support Toolkit</h1>
-    <p>Your guide to urgent mental health help & self-care (Canada & USA)</p>
-  </header>
+<header><h1>🌿 Crisis Support Toolkit</h1></header>
 
-  <main>
-    <div class="section" id="hotlines">
-      <h2>📞 Hotlines</h2>
-      <div id="countrySelect">
-        <button class="country-btn active" onclick="setCountry('canada')">🇨🇦 Canada</button>
-        <button class="country-btn" onclick="setCountry('usa')">🇺🇸 USA</button>
-      </div>
-      <div id="categorySelect">
-        <button class="category-btn active" onclick="setCategory('immediate')">Crisis</button>
-        <button class="category-btn" onclick="setCategory('mental')">Mental Health</button>
-        <button class="category-btn" onclick="setCategory('specialized')">Specialized</button>
-        <button class="category-btn" onclick="setCategory('addiction')">Addiction</button>
-      </div>
-      <div id="hotlineList"></div>
+<main>
+  <!-- Toggle Buttons -->
+  <div class="flex justify-center gap-4 mb-6">
+    <button id="showHotlinesBtn" class="toggle-btn"><i data-feather="phone"></i> Hotlines</button>
+    <button id="showAssessmentBtn" class="toggle-btn"><i data-feather="clipboard"></i> Self-Assessment</button>
+  </div>
+  
+  <!-- Hotlines Section -->
+  <section id="hotlinesSection" class="section">
+    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><i data-feather="phone-call"></i> Crisis Hotlines</h2>
+    <div class="mb-4 flex gap-2 flex-wrap">
+      <button onclick="setCountry('canada')" class="btn-country px-3 py-1 border rounded" data-c="canada">🇨🇦 Canada</button>
+      <button onclick="setCountry('usa')" class="btn-country px-3 py-1 border rounded" data-c="usa">🇺🇸 USA</button>
     </div>
+    <div class="mb-4 flex gap-2 flex-wrap">
+      <button onclick="setCategory('immediate')" class="btn-cat px-3 py-1 border rounded" data-cat="immediate">⚠️ Crisis</button>
+      <button onclick="setCategory('mental')" class="btn-cat px-3 py-1 border rounded" data-cat="mental">🧠 Mental</button>
+      <button onclick="setCategory('specialized')" class="btn-cat px-3 py-1 border rounded" data-cat="specialized">👥 Specialized</button>
+      <button onclick="setCategory('addiction')" class="btn-cat px-3 py-1 border rounded" data-cat="addiction">💊 Addiction</button>
+    </div>
+    <div id="hotlineList"></div>
+  </section>
 
-    <div class="section" id="assessment">
-      <h2>🧠 Self-Assessment</h2>
-      <p>Answer to see how you're doing emotionally.</p>
+  <!-- Self-Assessment Modal -->
+  <div id="assessmentModal" class="assessment-modal">
+    <div class="modal-content relative">
+      <button id="closeModalBtn" class="close-btn">&times;</button>
+      <h2 class="text-2xl font-bold mb-4"><i data-feather="clipboard"></i> Mental Health Self-Assessment</h2>
       <div id="questions"></div>
-      <button onclick="showResults()">Get Results</button>
-      <div id="results" style="margin-top: 1rem;"></div>
+      <button onclick="showAssessmentResult()" class="toggle-btn mt-4"><i data-feather="check-circle"></i> Get Results</button>
+      <div id="assessmentResult" class="mt-4 text-center font-semibold"></div>
     </div>
+  </section>
 
-    <div class="section self-care">
-      <h2>💖 Self-Care Strategies</h2>
-      <ul id="selfCareList"></ul>
-    </div>
+  <!-- Self-Care -->
+  <section id="selfCare" class="section">
+    <h2 class="text-2xl font-bold mb-4"><i data-feather="life-buoy"></i> Self‑Care Strategies</h2>
+    <ul id="selfCareList" class="list-disc list-inside text-lg"></ul>
+  </section>
 
-    <div class="section" id="saved">
-      <h2>❤️ Saved Resources</h2>
-      <ul id="savedList"></ul>
-    </div>
-  </main>
+  <!-- Encouragement Board -->
+  <section id="encouragementBoard" class="section">
+    <h2 class="text-2xl font-bold mb-4"><i data-feather="message-square"></i> Encouragement Board</h2>
+    <textarea id="newMessage" placeholder="Leave a kind message..." class="w-full p-2 border rounded mb-3"></textarea>
+    <button onclick="postMessage()" class="toggle-btn mb-4"><i data-feather="send"></i> Post Message</button>
+    <ul id="messagesList" class="list-disc list-inside space-y-2"></ul>
+  </section>
 
-  <footer>
-    You are not alone. This site is not a substitute for professional help. Dial 911 in an emergency.
-  </footer>
+  <!-- Saved Resources -->
+  <section id="savedResources" class="section">
+    <h2 class="text-2xl font-bold mb-4"><i data-feather="heart"></i> Saved Resources</h2>
+    <ul id="resourcesList" class="list-disc list-inside mb-4"></ul>
+    <button onclick="clearSaved()" class="toggle-btn bg-red-600"><i data-feather="trash-2"></i> Clear All Saved</button>
+  </section>
+</main>
 
-  <script>
-    const hotlines = {
-      canada: {
-        immediate: [
-          { name: '9-8-8: Suicide Crisis Helpline', phone: '9-8-8', text: '9-8-8', desc: '24/7 suicide crisis support', priority: true },
-          { name: 'Kids Help Phone', phone: '1-800-668-6868', text: '686868', desc: 'Support for youth under 29', priority: false }
-        ],
-        mental: [
-          { name: 'CAMH Health Line', phone: '1-800-463-2338', desc: 'Mental health referrals' }
-        ],
-        specialized: [
-          { name: "Women's Helpline", phone: '1-866-863-0511', desc: 'Support for women in danger', priority: true }
-        ],
-        addiction: [
-          { name: 'Drug Rehab Services', phone: '1-877-254-3348', desc: '24/7 addiction help' }
-        ]
-      },
-      usa: {
-        immediate: [
-          { name: '988 Suicide & Crisis Lifeline', phone: '988', desc: '24/7 suicide & crisis support', priority: true },
-          { name: 'Crisis Text Line', text: '741741', desc: 'Text HOME to 741741', priority: false }
-        ],
-        mental: [
-          { name: 'NAMI Helpline', phone: '1-800-950-6264', desc: 'Mental health help' }
-        ],
-        specialized: [
-          { name: 'RAINN Hotline', phone: '1-800-656-4673', desc: 'Sexual assault support' }
-        ],
-        addiction: [
-          { name: 'SAMHSA Helpline', phone: '1-800-662-4357', desc: 'Substance abuse support' }
-        ]
+<footer>🤝 Help is available — you are not alone.</footer>
+
+<script>
+  feather.replace();
+
+  // Data
+  const hotlinesData = {
+    canada: {
+      immediate: [
+        {id:'ca-988',name:'9-8-8 Crisis Helpline',phone:'988',text:'988',desc:'24/7 suicide crisis help',languages:'English/French',priority:true},
+        {id:'ca-kids',name:'Kids Help Phone',phone:'18006686868',text:'686868',desc:'Youth support under 29',languages:'English/French'}
+      ],
+      mental: [
+        {id:'ca-camh',name:'CAMH Health Line',phone:'18004632338',desc:'Mental health referrals'}
+      ],
+      specialized: [
+        {id:'ca-trans',name:'Trans Lifeline CA',phone:'18773306366',desc:'Peer support for trans individuals'}
+      ],
+      addiction: [
+        {id:'ca-drug',name:'Drug Rehab Services',phone:'18772543348',desc:'Addiction support & referrals'}
+      ]
+    },
+    usa: {
+      immediate: [
+        {id:'us-988',name:'988 Suicide & Crisis Lifeline',phone:'988',desc:'24/7 support',languages:'English/Spanish',priority:true},
+        {id:'us-text',name:'Crisis Text Line',text:'741741',desc:'Text HOME to 741741'}
+      ],
+      mental: [
+        {id:'us-nami',name:'NAMI Helpline',phone:'18009506264',desc:'Mental health support'}
+      ],
+      specialized: [
+        {id:'us-trevor',name:'The Trevor Project',phone:'18664887386',desc:'LGBTQ+ youth support'}
+      ],
+      addiction: [
+        {id:'us-samhsa',name:'SAMHSA Helpline',phone:'18006624357',desc:'Substance abuse referral'}
+      ]
+    }
+  };
+  const selfCare = [
+    '5‑4‑3‑2‑1 Grounding Exercise',
+    'Box Breathing – 4‑4‑4‑4',
+    'Progressive Muscle Relaxation',
+    'Mindful Walking',
+    'Cold Water Face Splash',
+    'Safe Place Visualization'
+  ];
+  const questions = [
+    { id:1, q:'Felt down, depressed, or hopeless?', weights:[0,1,2,3] },
+    { id:2, q:'Little interest or pleasure in activities?', weights:[0,1,2,3] },
+    { id:3, q:'Thoughts you’d be better off dead?', weights:[0,2,4,6] },
+    { id:4, q:'Felt nervous or anxious?', weights:[0,1,2,3] },
+    { id:5, q:'Worried too much?', weights:[0,1,2,3] }
+  ];
+
+  let country = 'canada', category = 'immediate';
+  const saved = new Set(JSON.parse(localStorage.getItem('savedResources')) || []);
+  let messages = JSON.parse(localStorage.getItem('encourageMessages') || '[]');
+
+  // Rendering
+  function setCountry(c) { country = c; document.querySelectorAll('.btn-country').forEach(b=>b.classList.toggle('bg-indigo-500', b.dataset.c===c)); renderHotlines(); }
+  function setCategory(c) { category = c; document.querySelectorAll('.btn-cat').forEach(b=>b.classList.toggle('bg-indigo-500', b.dataset.cat===c)); renderHotlines(); }
+
+  function renderHotlines() {
+    const container = document.getElementById('hotlineList'); container.innerHTML='';
+    hotlinesData[country][category].forEach(h=>{
+      const div = document.createElement('div');
+      div.className = 'hotline' + (h.priority ? ' high-priority':'');
+      let html = `<h3><i data-feather="phone-call"></i> ${h.name}</h3>
+        <p><i data-feather="info"></i> ${h.desc}</p>`;
+      if(h.phone) html += `<p><i data-feather="phone"></i> <a href="tel:${h.phone}">${h.phone}</a></p>`;
+      if(h.text) html += `<p><i data-feather="message-circle"></i> <a href="sms:${h.text}">${h.text}</a></p>`;
+      if(h.languages) html += `<p><i data-feather="globe"></i> ${h.languages}</p>`;
+      html += `<button class="save-btn ${saved.has(h.id)?'saved':''}" onclick="toggleSave('${h.id}')">${saved.has(h.id)?'❤️':'🤍'}</button>`;
+      div.innerHTML = html;
+      container.appendChild(div);
+    });
+    feather.replace();
+  }
+
+  function toggleSave(id) {
+    if(saved.has(id)) saved.delete(id);
+    else saved.add(id);
+    localStorage.setItem('savedResources', JSON.stringify([...saved]));
+    renderHotlines(); renderSaved();
+  }
+
+  function showAssessment() { document.getElementById('assessmentModal').style.display = 'flex'; }
+  function hideAssessment() { document.getElementById('assessmentModal').style.display = 'none'; }
+  document.getElementById('showHotlinesBtn').addEventListener('click', ()=>{hideAssessment();});
+  document.getElementById('showAssessmentBtn').addEventListener('click', showAssessment);
+  document.getElementById('closeModalBtn').addEventListener('click', hideAssessment);
+
+  function renderQuestions() {
+    const qcontainer = document.getElementById('questions'); qcontainer.innerHTML='';
+    questions.forEach(q=>{
+      const div = document.createElement('div'); div.classList.add('mb-4');
+      div.innerHTML = `<p class="font-semibold mb-2">${q.q}</p>` + q.weights.map((_,i)=>`
+        <label><input type="radio" name="q${q.id}" value="${i}" /> ${['Not at all','Several days','More than half the days','Nearly every day'][i]}</label><br>
+      `).join('');
+      qcontainer.appendChild(div);
+    });
+  }
+
+  function showAssessmentResult() {
+    let score=0;
+    questions.forEach(q=>{
+      const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
+      if(sel) score += q.weights[sel.value];
+    });
+    let level='Low risk'; let rec='Keep using helpful strategies.';
+    if(score>=15){level='High Risk'; rec='Consider calling a crisis line immediately.'}
+    else if(score>=10){level='Moderate Risk'; rec='Talking to a professional may help.'}
+    else if(score>=5){level='Mild Concerns'; rec='Self‑care & support can help.'}
+    document.getElementById('assessmentResult').innerHTML = `<p><strong>Score: ${score}</strong> – ${level}</p><p>${rec}</p>`;
+  }
+
+  function postMessage() {
+    const txt = document.getElementById('newMessage').value.trim();
+    if(!txt) return alert('Write a message!');
+    messages.push(txt);
+    localStorage.setItem('encourageMessages', JSON.stringify(messages));
+    document.getElementById('newMessage').value='';
+    renderMessages();
+  }
+  function renderMessages() {
+    const ul = document.getElementById('messagesList'); ul.innerHTML='';
+    messages.forEach(msg=>{const li=document.createElement('li'); li.textContent=msg; ul.appendChild(li)});
+  }
+
+  function renderSelfCare() {
+    const ul=document.getElementById('selfCareList');
+    selfCare.forEach(s=>{const li=document.createElement('li'); li.textContent = s; ul.appendChild(li)});
+  }
+
+  function renderSaved() {
+    const ul = document.getElementById('resourcesList'); ul.innerHTML='';
+    if(saved.size===0) { ul.innerHTML='<li>No saved resources yet.</li>'; return; }
+    saved.forEach(id=>{
+      const h = Object.values(hotlinesData).flatMap(cs=>[].concat(...Object.values(cs))).find(x=>x.id===id);
+      if(h){
+        const li = document.createElement('li');
+        li.innerHTML = `${h.name} <button onclick="toggleSave('${id}')">Remove</button>`;
+        ul.appendChild(li);
       }
-    };
+    });
+  }
 
-    const selfCare = [
-      '🖐️ 5-4-3-2-1 Grounding',
-      '🧊 Cold Water Splash',
-      '🚶 Mindful Walking',
-      '🧘 Progressive Muscle Relaxation',
-      '🎧 Listen to calming music'
-    ];
+  function clearSaved(){
+    saved.clear(); localStorage.removeItem('savedResources');
+    renderHotlines(); renderSaved();
+  }
 
-    const questions = [
-      { q: 'How often have you felt down or hopeless?', weights: [0,1,2,3] },
-      { q: 'Little interest or pleasure in doing things?', weights: [0,1,2,3] },
-      { q: 'Thoughts of hurting yourself?', weights: [0,2,4,6] },
-    ];
-
-    let currentCountry = 'canada';
-    let currentCategory = 'immediate';
-    const saved = new Set();
-
-    function setCountry(c) {
-      currentCountry = c;
-      document.querySelectorAll('.country-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      renderHotlines();
-    }
-
-    function setCategory(cat) {
-      currentCategory = cat;
-      document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      renderHotlines();
-    }
-
-    function renderHotlines() {
-      const container = document.getElementById('hotlineList');
-      container.innerHTML = '';
-      const list = hotlines[currentCountry][currentCategory] || [];
-      list.forEach(h => {
-        const div = document.createElement('div');
-        div.className = 'hotline' + (h.priority ? ' high-priority' : '');
-        div.innerHTML = `<h3>${h.name}</h3>
-          <p>${h.desc}</p>
-          ${h.phone ? `<p>📞 ${h.phone}</p>` : ''}
-          ${h.text ? `<p>💬 Text: ${h.text}</p>` : ''}
-          <button class="save-btn ${saved.has(h.name) ? 'active' : ''}" onclick="toggleSave('${h.name}')">
-            ${saved.has(h.name) ? '❤️ Saved' : '♡ Save'}
-          </button>`;
-        container.appendChild(div);
-      });
-      renderSaved();
-    }
-
-    function toggleSave(name) {
-      saved.has(name) ? saved.delete(name) : saved.add(name);
-      localStorage.setItem('savedResources', JSON.stringify([...saved]));
-      renderHotlines();
-    }
-
-    function renderSaved() {
-      const ul = document.getElementById('savedList');
-      ul.innerHTML = '';
-      saved.forEach(name => {
-        const li = document.createElement('li');
-        li.textContent = name;
-        ul.appendChild(li);
-      });
-    }
-
-    function renderQuestions() {
-      const container = document.getElementById('questions');
-      questions.forEach((q, idx) => {
-        const div = document.createElement('div');
-        div.className = 'assessment-question';
-        div.innerHTML = `<p>${q.q}</p>
-          ${q.weights.map((_, i) => `
-            <label>
-              <input type="radio" name="q${idx}" value="${i}" />
-              ${['Not at all','Several days','>Half the days','Nearly every day'][i]}
-            </label><br/>`).join('')}`;
-        container.appendChild(div);
-      });
-    }
-
-    function showResults() {
-      let score = 0;
-      questions.forEach((q, i) => {
-        const val = document.querySelector(`input[name="q${i}"]:checked`);
-        if (val) score += q.weights[val.value];
-      });
-
-      let message = '✅ You seem to be managing well.';
-      if (score >= 10) message = '⚠️ You may benefit from support. Consider calling a hotline.';
-      else if (score >= 5) message = '💛 Mild concerns. Try self-care and support.';
-
-      document.getElementById('results').textContent = `Your score: ${score}. ${message}`;
-    }
-
-    function renderSelfCare() {
-      const ul = document.getElementById('selfCareList');
-      selfCare.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item;
-        ul.appendChild(li);
-      });
-    }
-
-    // Load saved
-    try {
-      JSON.parse(localStorage.getItem('savedResources') || '[]').forEach(r => saved.add(r));
-    } catch {}
-
-    renderHotlines();
-    renderQuestions();
-    renderSelfCare();
-    renderSaved();
-  </script>
+  setCountry('canada'); setCategory('immediate');
+  renderQuestions();
+  renderSelfCare();
+  renderMessages();
+  renderSaved();
+</script>
 </body>
 </html>
