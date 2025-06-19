@@ -1,470 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Self‑Care Toolkit</title>
-  <style>
-    /* ───────────────────────────────── root & global ───────────────────────────────── */
-    :root {
-      --primary: #4a90e2;
-      --secondary: #f5a623;
-      --accent: #50e3c2;
-      --bg-dark: rgba(0, 0, 0, 0.6);
-      --text: #fff;
-      --card-bg: rgba(255, 255, 255, 0.85);
-      --transition: 0.3s;
-      --radius: 12px;
-      --shadow: rgba(0, 0, 0, 0.3);
-      --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: var(--font);
-      color: #333;
-      overflow-x: hidden;
-      min-height: 100vh;
-      position: relative;
-    }
-
-    /* ─────────────────────────── Background Visual ─────────────────────────── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=2100&q=80') no-repeat center/cover;
-      filter: brightness(0.6);
-      z-index: -2;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: var(--bg-dark);
-      z-index: -1;
-    }
-
-    /* ───────────────────────────── Header ───────────────────────────── */
-    header {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--text);
-      background: transparent;
-      box-shadow: 0 4px 12px var(--shadow);
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.4rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-shadow: 2px 2px 4px #000;
-    }
-
-    /* ───────────────────────────── Main & Sections ───────────────────────────── */
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1rem 4rem;
-    }
-
-    section {
-      background: var(--card-bg);
-      margin-bottom: 2rem;
-      padding: 2rem;
-      border-radius: var(--radius);
-      box-shadow: 0 6px 15px var(--shadow);
-      transition: transform var(--transition), box-shadow var(--transition);
-    }
-
-    section:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 25px var(--shadow);
-    }
-
-    section h2 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      color: var(--primary);
-      font-size: 1.8rem;
-    }
-
-    /* ───────────────────────────── Checklist ───────────────────────────── */
-    ul.checklist {
-      list-style: none;
-      padding-left: 0;
-      margin-bottom: 1rem;
-    }
-
-    ul.checklist li {
-      display: flex;
-      align-items: center;
-      margin-bottom: 0.75rem;
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-
-    ul.checklist li input[type='checkbox'] {
-      margin-right: 1rem;
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-      accent-color: var(--secondary);
-    }
-
-    /* ───────────────────────────── Buttons ───────────────────────────── */
-    button {
-      background-color: var(--secondary);
-      color: var(--text);
-      border: none;
-      padding: 0.7rem 1.4rem;
-      font-weight: 700;
-      font-size: 1rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: background-color var(--transition);
-      user-select: none;
-    }
-
-    button:hover {
-      background-color: #d48800;
-    }
-
-    /* ─────────────────────────── Grounding & breathing ─────────────────────────── */
-    .exercise {
-      margin-bottom: 1.5rem;
-    }
-
-    .exercise h3 {
-      margin-bottom: 0.4rem;
-      color: var(--accent);
-    }
-
-    #grounding-output,
-    #breathing-output {
-      min-height: 3rem;
-      font-weight: 700;
-      font-size: 1.15rem;
-      color: var(--primary);
-    }
-
-    /* ─────────────────────────── Mood Tracker ─────────────────────────── */
-    .mood-options {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-    }
-
-    .mood-options label {
-      cursor: pointer;
-      font-size: 2.5rem;
-      transition: transform var(--transition), color var(--transition);
-      user-select: none;
-    }
-
-    .mood-options input[type='radio'] {
-      display: none;
-    }
-
-    .mood-options input[type='radio']:checked+label {
-      color: var(--secondary);
-      transform: scale(1.4);
-    }
-
-    #mood-saved-msg {
-      margin-top: 1rem;
-      font-weight: 700;
-      color: #3c763d;
-    }
-
-    /* ─────────────────────────── Journal ─────────────────────────── */
-    textarea {
-      width: 100%;
-      min-height: 140px;
-      font-family: inherit;
-      font-size: 1.05rem;
-      padding: 1rem;
-      border: 2px solid #ddd;
-      border-radius: var(--radius);
-      box-shadow: inset 0 3px 6px #eee;
-      transition: border-color var(--transition);
-      resize: vertical;
-    }
-
-    textarea:focus {
-      border-color: var(--secondary);
-      outline: none;
-    }
-
-    /* ─────────────────────────── Tips & Resources ─────────────────────────── */
-    .cards-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: 0 3px 10px var(--shadow);
-      transition: transform var(--transition), box-shadow var(--transition);
-      cursor: default;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 7px 20px var(--shadow);
-    }
-
-    .card h3 {
-      margin-top: 0;
-      margin-bottom: 0.6rem;
-      color: var(--accent);
-      font-size: 1.3rem;
-    }
-
-    .card p {
-      margin: 0.3rem 0;
-      font-size: 1rem;
-    }
-
-    .card a {
-      text-decoration: none;
-      color: var(--primary);
-      font-weight: 600;
-      transition: color var(--transition);
-    }
-
-    .card a:hover {
-      color: var(--secondary);
-    }
-
-    /* ───────────────────────────── Footer ───────────────────────────── */
-    footer {
-      text-align: center;
-      padding: 1rem 0;
-      color: var(--text);
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      background: transparent;
-      text-shadow: 2px 2px 4px #000;
-    }
-
-    /* ─────────────────────────── Responsive tweaks ─────────────────────────── */
-    @media (max-width: 480px) {
-      .mood-options {
-        gap: 1rem;
-      }
-
-      .mood-options label {
-        font-size: 2rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ultimate Self-Care Toolkit</title>
+<style>
+  /* Root Variables */
+  :root {
+    --primary: #4a90e2;
+    --secondary: #f5a623;
+    --accent: #50e3c2;
+    --bg-dark: rgba(0,0,0,.6);
+    --text-light: #fff;
+    --card-bg: rgba(255,255,255,.9);
+    --radius:12px;
+    --shadow:0 6px 15px rgba(0,0,0,.3);
+    --font:'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--font);background:#f9fbfd;}
+  header{padding:2rem;text-align:center;background:var(--primary);color:var(--text-light);text-shadow:1px 1px 4px #000;}
+  main{max-width:1000px;margin:2rem auto;padding:0 1rem;}
+  section{background:var(--card-bg);margin-bottom:2rem;padding:2rem;border-radius:var(--radius);box-shadow:var(--shadow);}
+  section h2{margin-top:0;color:var(--primary);}
+  button{background:var(--secondary);color:var(--text-light);border:none;padding:.7rem 1.4rem;border-radius:var(--radius);cursor:pointer;font-weight:700;transition:.3s;}
+  button:hover{background:darksalmon;}
+  textarea, input, canvas{width:100%;margin-top:.8rem;padding:.8rem;font-size:1rem;border-radius:var(--radius);border:1px solid #ccc;}
+  .cards-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;}
+  .card{padding:1.5rem;border-radius:var(--radius);box-shadow:0 3px 10px rgba(0,0,0,.2);background:#fff;}
+</style>
 </head>
-
 <body>
+<header><h1>🌟 Ultimate Self-Care Toolkit</h1></header>
+<main>
 
-  <header>
-    <h1>🌿 Self‑Care Toolkit</h1>
-  </header>
+  <!-- Gratitude Log -->
+  <section id="gratitude">
+    <h2>🙏 Gratitude Log</h2>
+    <p>What are 3 things you're grateful for today?</p>
+    <textarea id="gratitude-1" placeholder="1."></textarea>
+    <textarea id="gratitude-2" placeholder="2."></textarea>
+    <textarea id="gratitude-3" placeholder="3."></textarea>
+    <button id="save-gratitude">Save Gratitude</button>
+    <p id="gratitude-msg" style="color:green;display:none">Saved! 🌼</p>
+  </section>
 
-  <main>
-    <!-- Daily Checklist -->
-    <section id="daily-checklist">
-      <h2>🗓 Daily Checklist</h2>
-      <ul class="checklist">
-        <li><input type="checkbox" id="check-water"><label for="check-water">Drink water</label></li>
-        <li><input type="checkbox" id="check-food"><label for="check-food">Eat nourishing food</label></li>
-        <li><input type="checkbox" id="check-sunlight"><label for="check-sunlight">Get sunlight</label></li>
-        <li><input type="checkbox" id="check-breathing"><label for="check-breathing">Deep breathing</label></li>
-      </ul>
-      <button id="clear-checklist">Clear</button>
-    </section>
+  <!-- Daily Affirmation -->
+  <section id="affirmation">
+    <h2>💬 Daily Affirmation</h2>
+    <p id="affirmation-text" style="font-size:1.2rem;"></p>
+    <button id="new-affirmation">New Affirmation</button>
+  </section>
 
-    <!-- Emergency Plan -->
-    <section id="emergency-plan">
-      <h2>🚨 Emergency Plan</h2>
-      <p>If overwhelmed, try:</p>
-      <ul>
-        <li>📞 Call/Text: <a href="tel:988">988 Lifeline</a></li>
-        <li>🧘 Ground (5-4-3-2-1 below)</li>
-        <li>🎧 Soothing music or nature sounds</li>
-        <li>🤗 Call someone supportive</li>
-      </ul>
-    </section>
+  <!-- Emotion Wheel -->
+  <section id="emotion-wheel">
+    <h2>🎡 Emotion Wheel</h2>
+    <select id="emotion-selector">
+      <option disabled selected>Select an emotion...</option>
+      <option>Happy</option><option>Sad</option><option>Anxious</option><option>Angry</option><option>Excited</option><option>Tired</option>
+    </select>
+    <p id="emotion-description" style="margin-top:1rem;font-style:italic;"></p>
+  </section>
 
-    <!-- Grounding -->
-    <section id="grounding-exercises">
-      <h2>🧘 Grounding & Breathing</h2>
-      <div class="exercise">
-        <h3>5-4-3-2-1 Grounding</h3>
-        <button id="start-grounding">Start</button>
-        <div id="grounding-output"></div>
-      </div>
-      <div class="exercise">
-        <h3>4-7-8 Breathing</h3>
-        <button id="start-breathing">Start</button>
-        <div id="breathing-output"></div>
-      </div>
-    </section>
+  <!-- What I Need Right Now -->  
+  <section id="needs">
+    <h2>🧩 What I Need Right Now</h2>
+    <div class="cards-container">
+      <div class="card"><button data-need="Comfort">Comfort</button></div>
+      <div class="card"><button data-need="Motivation">Motivation</button></div>
+      <div class="card"><button data-need="Silence">Silence</button></div>
+      <div class="card"><button data-need="Reassurance">Reassurance</button></div>
+    </div>
+    <p id="need-suggestion" style="margin-top:1rem;font-style:italic;"></p>
+  </section>
 
-    <!-- Mood Tracker -->
-    <section id="mood-tracker">
-      <h2>😊 How are you feeling?</h2>
-      <form id="mood-form">
-        <div class="mood-options">
-          <input type="radio" id="mood-happy" name="mood" value="Happy"><label for="mood-happy">😀</label>
-          <input type="radio" id="mood-ok" name="mood" value="Okay"><label for="mood-ok">😐</label>
-          <input type="radio" id="mood-sad" name="mood" value="Sad"><label for="mood-sad">☹️</label>
-          <input type="radio" id="mood-anxious" name="mood" value="Anxious"><label for="mood-anxious">😰</label>
-        </div>
-        <button type="submit">Save Mood</button>
-      </form>
-      <p id="mood-saved-msg" style="display:none;">Mood saved!</p>
-    </section>
+  <!-- Stretch Reminder -->
+  <section id="stretch">
+    <h2>🤸 Stretch Reminder</h2>
+    <p id="stretch-text">Stay active! Take a stretch break.</p>
+  </section>
 
-    <!-- Journal -->
-    <section id="journal">
-      <h2>📝 Journal</h2>
-      <p>Write thoughts—auto-saved:</p>
-      <textarea id="journal-text" placeholder="How do you feel today?"></textarea>
-      <button id="clear-journal" style="background:#cc6666;">Clear Journal</button>
-      <p id="journal-saved-msg" style="display:none;">Saved!</p>
-    </section>
+  <!-- Posture Check -->
+  <section id="posture">
+    <h2>🪑 Posture Check</h2>
+    <p>Sit tall, roll shoulders back, align ears over shoulders.</p>
+  </section>
 
-    <!-- Tips -->
-    <section id="tips">
-      <h2>💡 Tips</h2>
-      <div class="cards-container">
-        <div class="card"><h3>Mindfulness</h3><p>Spend 5 min focusing on breath or senses.</p></div>
-        <div class="card"><h3>Hydrate</h3><p>Water supports both mind and body health.</p></div>
-        <div class="card"><h3>Connect</h3><p>Chat with someone you trust today.</p></div>
-        <div class="card"><h3>Move</h3><p>Walk/stretch to boost mood & energy.</p></div>
-      </div>
-    </section>
+  <!-- Guided Breathing Visual -->
+  <section id="breathing-visual">
+    <h2>🌬️ Guided Breathing</h2>
+    <canvas id="breathing-canvas" width="300" height="300" style="background:#e0f7fa;border-radius:50%;display:block;margin:auto;"></canvas>
+    <button id="start-breathing-visual">Start Breathing</button>
+  </section>
 
-    <!-- Resources -->
-    <section id="resources">
-      <h2>📚 Resources</h2>
-      <div class="cards-container">
-        <div class="card"><h3><a href="https://988lifeline.org/" target="_blank">988 Lifeline</a></h3><p>24/7 US/Canada crisis support.</p></div>
-        <div class="card"><h3><a href="https://www.betterhelp.com/" target="_blank">BetterHelp</a></h3><p>Online therapy with licensed counsellors.</p></div>
-        <div class="card"><h3><a href="https://www.calm.com/" target="_blank">Calm App</a></h3><p>Meditation & sleep stories at home.</p></div>
-        <div class="card"><h3><a href="https://www.7cups.com/" target="_blank">7 Cups</a></h3><p>Free peer support chats anytime.</p></div>
-      </div>
-    </section>
-  </main>
+  <!-- Doodle Pad -->
+  <section id="doodle">
+    <h2>🎨 Doodle Pad</h2>
+    <canvas id="doodle-pad" width="600" height="400" style="border:1px solid #ccc;"></canvas>
+    <button id="clear-doodle">Clear Drawing</button>
+  </section>
 
-  <footer>&copy; 2025 Your Name — Self‑Care Toolkit</footer>
+  <!-- Vision Board -->
+  <section id="vision-board">
+    <h2>📌 Vision Board</h2>
+    <div id="board" style="display:flex;flex-wrap:wrap;border:2px dashed #ccc;padding:1rem;min-height:200px;"></div>
+    <input type="file" id="vision-upload" accept="image/*" multiple />
+    <p style="font-size:.9rem;color:#888;">Drag & drop or select images</p>
+  </section>
 
-  <script>
-    /* LocalStorage keys */
-    const CK = 'scChecklist', MK = 'scMood', JK = 'scJournal';
+  <!-- Music & Sounds -->
+  <section id="sounds">
+    <h2>🎶 Music & Sounds</h2>
+    <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Your browser does not support audio.</audio>
+  </section>
 
-    /* Checklist logic */
-    const checks = document.querySelectorAll('ul.checklist input[type="checkbox"]');
-    document.getElementById('clear-checklist').onclick = () => {
-      checks.forEach(c => (c.checked = false));
-      localStorage.removeItem(CK);
-    };
-    checks.forEach(c => c.onchange = () => {
-      const s = {};
-      checks.forEach(cb => s[cb.id] = cb.checked);
-      localStorage.setItem(CK, JSON.stringify(s));
+  <!-- Reach Out Button -->
+  <section id="reach-out">
+    <h2>📞 Reach Out to Someone</h2>
+    <button id="reach-out-btn">Reach Out</button>
+    <p id="reach-msg" style="margin-top:1rem;font-style:italic;"></p>
+  </section>
+
+  <!-- Plan Builder -->
+  <section id="plan-builder">
+    <h2>🧭 Custom Self‑Care Plan</h2>
+    <p>Select up to 5 goals:</p>
+    <input type="checkbox" id="goal-1" value="Mindfulness"> <label for="goal-1">Mindfulness</label><br/>
+    <input type="checkbox" id="goal-2" value="Movement"> <label for="goal-2">Movement</label><br/>
+    <input type="checkbox" id="goal-3" value="Connection"> <label for="goal-3">Connection</label><br/>
+    <input type="checkbox" id="goal-4" value="Creativity"> <label for="goal-4">Creativity</label><br/>
+    <input type="checkbox" id="goal-5" value="Rest"> <label for="goal-5">Rest</label><br/>
+    <button id="build-plan">Build My Plan</button>
+    <p id="plan-output" style="margin-top:1rem;"></p>
+  </section>
+
+  <!-- 30‑Day Challenge -->
+  <section id="challenge">
+    <h2>📆 30‑Day Kindness Challenge</h2>
+    <button id="flip-challenge">Flip Today's Card</button>
+    <p id="challenge-text" style="margin-top:1rem;"></p>
+  </section>
+
+  <!-- Journal Prompt Spinner -->
+  <section id="prompt">
+    <h2>✍️ Journal Prompt</h2>
+    <button id="spin-prompt">Get a Prompt</button>
+    <p id="prompt-text" style="margin-top:1rem;font-style:italic;"></p>
+  </section>
+
+</main>
+<footer style="text-align:center;padding:1rem;background:var(--primary);color:var(--text-light);">© 2025 Your Name – Self‑Care Toolkit</footer>
+
+<script>
+  // Utility to save/load JSON
+  const save = (k,v)=>localStorage.setItem(k,JSON.stringify(v)),
+        load = k=>JSON.parse(localStorage.getItem(k));
+
+  // Gratitude Log
+  document.getElementById('save-gratitude').onclick = ()=>{
+    const arr = [1,2,3].map(i=>document.getElementById(`gratitude-${i}`).value);
+    save('gratitude',arr);
+    document.getElementById('gratitude-msg').style.display='block';
+    setTimeout(()=>document.getElementById('gratitude-msg').style.display='none',2000);
+  };
+  (()=>{
+    const g=load('gratitude');
+    if(g)g.forEach((v,i)=>document.getElementById(`gratitude-${i+1}`).value=v);
+  })();
+
+  // Daily Affirmations
+  const affirmations=[
+    "You are enough.",
+    "Today is a fresh start.",
+    "Your feelings matter.",
+    "You are capable.",
+    "You deserve good things."
+  ];
+  function displayAff(){
+    document.getElementById('affirmation-text').innerText=affirmations[new Date().getDate() % affirmations.length];
+  }
+  document.getElementById('new-affirmation').onclick=displayAff;
+  displayAff();
+
+  // Emotion Wheel
+  const emotionsDesc={
+    Happy:"Feeling joyful and content.",
+    Sad:"Feeling down—it's okay to feel.",
+    Anxious:"Tension or worry—take a breath.",
+    Angry:"Feeling upset—notice it and pause.",
+    Excited:"High-energy happiness!",
+    Tired:"Need rest—honor your limits."
+  };
+  document.getElementById('emotion-selector').onchange=e=>{
+    document.getElementById('emotion-description').innerText=emotionsDesc[e.target.value]||"";
+  };
+
+  // what I need
+  const suggestions={
+    Comfort:"Wrap in a blanket or hug yourself.",
+    Motivation:"Set a tiny goal and take one step.",
+    Silence:"Find a quiet space for 5 minutes.",
+    Reassurance:"Say: 'I'm doing the best I can.'"
+  };
+  document.querySelectorAll('#needs [data-need]').forEach(btn=>btn.onclick=e=>{
+    document.getElementById('need-suggestion').innerText=suggestions[e.target.dataset.need];
+  });
+
+  // Stretch & Posture (notifications)
+  function remind(msg){alert(msg);}
+  setInterval(()=>remind("Time to stretch!"),1000*60*60*2);  // every 2h
+  setInterval(()=>remind("Posture check: sit tall!"),1000*60*60*3);  // every 3h
+
+  // Guided breathing visual
+  const c=document.getElementById('breathing-canvas'),cx=c.getContext('2d');
+  let br=null;
+  document.getElementById('start-breathing-visual').onclick=()=>{
+    if(br) clearInterval(br);
+    let phase=0,rad=50;
+    br=setInterval(()=>{
+      cx.clearRect(0,0,c.width,c.height);
+      cx.beginPath();
+      cx.arc(c.width/2,c.height/2,rad,0,2*Math.PI);
+      cx.fillStyle="#50e3c2";cx.fill();
+      rad = phase<50 ? rad+1: rad>20 ? rad-1:50;
+      phase=(phase+1)%100;
+    },30);
+    setTimeout(()=>clearInterval(br),30*100); // ~3s
+  };
+
+  // Doodle Pad
+  const dp=document.getElementById('doodle-pad'),dctx=dp.getContext('2d');
+  let drawing=false;
+  dp.onmousedown=()=>drawing=true;
+  dp.onmouseup=()=>drawing=false;
+  dp.onmousemove=e=>drawing&&(()=>(dctx.lineWidth=2,dctx.lineCap='round',dctx.lineTo(e.offsetX,e.offsetY),dctx.stroke()))();
+  document.getElementById('clear-doodle').onclick=()=>dctx.clearRect(0,0,dp.width,dp.height);
+
+  // Vision Board
+  const board=document.getElementById('board');
+  document.getElementById('vision-upload').onchange=e=>{
+    [...e.target.files].forEach(file=>{
+      let img=document.createElement('img');
+      img.src=URL.createObjectURL(file);
+      img.style.maxWidth="120px";img.style.margin="4px";board.appendChild(img);
     });
-    (function loadC() {
-      const saved = JSON.parse(localStorage.getItem(CK));
-      if (saved) checks.forEach(cb => cb.checked = !!saved[cb.id]);
-    })();
+  };
 
-    /* Mood form */
-    const mf = document.getElementById('mood-form'),
-      mm = document.getElementById('mood-saved-msg');
-    mf.onsubmit = e => {
-      e.preventDefault();
-      const v = mf.mood.value;
-      if (v) {
-        localStorage.setItem(MK, v);
-        mm.style.display = 'block';
-        setTimeout(() => mm.style.display = 'none', 2000);
-      }
-    };
-    (function loadM() {
-      const v = localStorage.getItem(MK);
-      if (v) {
-        const el = document.querySelector(`#mood-form input[value="${v}"]`);
-        if (el) el.checked = true;
-      }
-    })();
+  // Reach Out
+  const friends=["Alex","Sam","Taylor"];
+  document.getElementById('reach-out-btn').onclick=()=>{
+    const f=friends[Math.floor(Math.random()*friends.length)];
+    document.getElementById('reach-msg').innerHTML=`How about reaching out to <strong>${f}</strong>?`;
+  };
 
-    /* Journal logic */
-    const jt = document.getElementById('journal-text'),
-      jm = document.getElementById('journal-saved-msg');
-    let timer;
-    jt.oninput = () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        localStorage.setItem(JK, jt.value);
-        jm.style.display = 'block';
-        setTimeout(() => jm.style.display = 'none', 1500);
-      }, 500);
-    };
-    document.getElementById('clear-journal').onclick = () => {
-      jt.value = '';
-      localStorage.removeItem(JK);
-    };
-    (function loadJ() {
-      const v = localStorage.getItem(JK);
-      if (v) jt.value = v;
-    })();
+  // Plan builder
+  document.getElementById('build-plan').onclick=()=>{
+    const goals=[...document.querySelectorAll('#plan-builder input:checked')].map(i=>i.value);
+    let plan="Morning: ";
+    plan += goals.map(g=>`• ${g}`).join('<br/>');
+    document.getElementById('plan-output').innerHTML=plan;
+  };
 
-    /* Grounding & Breathing */
-    const gs = ['Name 5 things you can see.', '4 things you can touch.', '3 things you can hear.', '2 things you can smell.', '1 thing you can taste.'];
-    document.getElementById('start-grounding').onclick = function () {
-      const out = document.getElementById('grounding-output');
-      let i = 0;
-      this.disabled = true;
-      out.textContent = gs[0];
-      const intr = setInterval(() => {
-        i++;
-        if (i < gs.length) out.textContent = gs[i];
-        else {
-          out.textContent = 'Well done grounding yourself! 🌟';
-          this.disabled = false;
-          clearInterval(intr);
-        }
-      }, 6000);
-    };
-    document.getElementById('start-breathing').onclick = function () {
-      const out = document.getElementById('breathing-output'),
-        stages = ['Inhale 4s', 'Hold 7s', 'Exhale 8s'],
-        times = [4000, 7000, 8000];
-      let s = 0;
-      this.disabled = true;
-      out.textContent = stages[0];
-      const next = () => {
-        s++;
-        if (s < stages.length) {
-          out.textContent = stages[s];
-          setTimeout(next, times[s]);
-        } else {
-          out.textContent = 'Feeling calmer? 🌬️';
-          this.disabled = false;
-        }
-      };
-      setTimeout(next, times[0]);
-    };
-  </script>
+  // 30-day challenge
+  const challenges=[
+    "Compliment someone",
+    "Take 10 deep breaths",
+    "Write a thank-you note",
+    "Go for a mindful walk",
+    "Do something creative"
+  ];
+  document.getElementById('flip-challenge').onclick=()=>{
+    const t=challenges[new Date().getDate()%challenges.length];
+    document.getElementById('challenge-text').innerText=t;
+  };
+
+  // Prompt spinner
+  const prompts=[
+    "What energizes me today?",
+    "When did I feel proud recently?",
+    "What gave me joy today?",
+    "What challenge did I overcome?"
+  ];
+  document.getElementById('spin-prompt').onclick=()=>{
+    const p=prompts[Math.floor(Math.random()*prompts.length)];
+    document.getElementById('prompt-text').innerText=p;
+  };
+</script>
 </body>
-
 </html>
