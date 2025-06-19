@@ -2,216 +2,819 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Grounding Toolkit</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
     body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to right, #dbeafe, #ede9fe);
-      color: #333;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
     }
     .container {
-      max-width: 900px;
-      margin: auto;
+      max-width: 1000px;
+      margin: 0 auto;
       padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
     h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    .stat {
       text-align: center;
-      margin-bottom: 1rem;
-      font-size: 2rem;
-      color: #1e3a8a;
+      color: rgba(255, 255, 255, 0.9);
     }
-    .accordion {
-      margin-top: 1rem;
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: block;
     }
-    .card {
-      background: white;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      margin-bottom: 1rem;
-      overflow: hidden;
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .search-container {
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       transition: all 0.3s ease;
     }
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .search-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    .category-filters {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.9);
+      padding: 0.7rem 1.2rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      user-select: none;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .accordion {
+      display: grid;
+      gap: 1rem;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      animation: fadeInUp 0.6s ease forwards;
+      cursor: default;
+      user-select: none;
+    }
+    .card:nth-child(even) {
+      animation-delay: 0.1s;
+    }
+    .card:nth-child(3n) {
+      animation-delay: 0.2s;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .card:hover::before,
+    .card.active::before {
+      opacity: 1;
+    }
+    .card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
     .card.active {
-      border-color: #2563eb;
-      box-shadow: 0 0 12px rgba(37, 99, 235, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: scale(1.02);
     }
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem;
+      padding: 1.5rem;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
     }
-    .card-header:hover {
-      background: #f0f9ff;
+    .card-header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s ease;
+      pointer-events: none;
     }
-    .card-header h3 {
+    .card-header:hover::before {
+      left: 100%;
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: white;
+    }
+    .card-title h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
       margin: 0;
-      font-size: 1.1rem;
-      color: #1e293b;
+      color: inherit;
+      user-select: text;
+    }
+    .card-emoji {
+      font-size: 1.5rem;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+      user-select: none;
+    }
+    .card-category {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+      user-select: none;
+    }
+    .card-toggle {
+      font-size: 1.5rem;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+      transform-origin: center;
+      user-select: none;
+    }
+    .card.active .card-toggle {
+      transform: rotate(45deg);
+      color: white;
     }
     .card-content {
-      display: none;
-      padding: 1rem;
-      animation: fadein 0.5s;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0 1.5rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 400;
+      line-height: 1.6;
     }
     .card-content.active {
-      display: block;
+      max-height: 1000px;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
     .card-content p {
-      margin: 0.5rem 0;
+      margin-bottom: 1rem;
+      user-select: text;
+    }
+    .card-content ul {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+      user-select: text;
+    }
+    .card-content li {
+      margin-bottom: 0.5rem;
     }
     .button {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      background: #3b82f6;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
-      border-radius: 5px;
+      padding: 0.8rem 1.5rem;
+      border-radius: 12px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      user-select: none;
     }
     .button:hover {
-      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     }
     .checklist {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem;
+      margin: 1rem 0;
+      user-select: none;
+    }
+    .checklist-item {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 0.75rem 1rem;
+      border-radius: 15px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      cursor: default;
+      user-select: none;
+    }
+    .timer-display {
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      margin: 1rem 0;
+      font-family: 'Monaco', monospace;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      user-select: none;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+      user-select: none;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4ecdc4, #44a08d);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    .meditation-guide {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      margin: 1rem 0;
+      user-select: none;
+    }
+    .breath-circle {
+      width: 150px;
+      height: 150px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      margin: 1rem auto;
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      transition: all 4s ease-in-out;
+      user-select: none;
     }
-    .checklist div {
-      background: #e0f2fe;
-      padding: 0.5rem 1rem;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      color: #1e40af;
+    .breath-circle.inhale {
+      transform: scale(1.3);
+      border-color: #4ecdc4;
+      background: rgba(78, 205, 196, 0.1);
     }
-    @keyframes fadein {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
+    .breath-circle.exhale {
+      transform: scale(0.8);
+      border-color: #ff6b6b;
+      background: rgba(255, 107, 107, 0.1);
+    }
+    .floating-action {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      user-select: none;
+    }
+    .floating-action:hover {
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+    }
+    .emergency-message {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin: 1rem 0;
+      text-align: center;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+      user-select: text;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      .stats {
+        gap: 1rem;
+      }
+      .category-filters {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
+      .checklist {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      }
+      .floating-action {
+        bottom: 1rem;
+        right: 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🌿 Grounding Toolkit</h1>
-    <div id="accordion" class="accordion"></div>
+    <header class="header">
+      <h1>🌿 Grounding Toolkit</h1>
+      <p class="subtitle">Your personal collection of mindfulness and grounding techniques</p>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-number" id="totalTechniques">0</span>
+          <span class="stat-label">Techniques</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" id="usedToday">0</span>
+          <span class="stat-label">Used Today</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" id="streak">0</span>
+          <span class="stat-label">Day Streak</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="search-container">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search techniques..." autocomplete="off" />
+    </div>
+
+    <div class="category-filters" id="categoryFilters">
+      <button class="filter-btn active" data-category="all">All</button>
+      <button class="filter-btn" data-category="breathing">Breathing</button>
+      <button class="filter-btn" data-category="sensory">Sensory</button>
+      <button class="filter-btn" data-category="cognitive">Cognitive</button>
+      <button class="filter-btn" data-category="physical">Physical</button>
+      <button class="filter-btn" data-category="visualization">Visualization</button>
+      <button class="filter-btn" data-category="emergency">Emergency</button>
+    </div>
+
+    <div id="accordion" class="accordion" role="region" aria-live="polite" aria-atomic="true"></div>
   </div>
 
+  <div class="floating-action" title="Random Technique" aria-label="Show Random Technique" role="button" tabindex="0">🎲</div>
+
   <script>
-    const toolkit = [
-      { id: '54321', title: '5-4-3-2-1 Senses', content: `
-        <p>🌟 Look around and find:</p>
-        <ul>
-          <li>5 things you can see</li>
-          <li>4 things you can touch</li>
-          <li>3 things you can hear</li>
-          <li>2 things you can smell</li>
-          <li>1 thing you can taste</li>
-        </ul>
-      `},
-      { id: 'box-breathing', title: 'Box Breathing (4-4-4-4)', content: `
-        <p>🟩 Inhale 4s → Hold 4s → Exhale 4s → Hold 4s.</p>
-        <p>Repeat 3–5 rounds to feel calm and steady.</p>
-      `},
-      { id: 'muscle-relaxation', title: 'Progressive Muscle Relaxation', content: `
-        <p>💪 Tense and release each muscle group starting from toes up to your face.</p>
-      `},
-      { id: '4-6-breathing', title: '4-6 Calming Breath', content: `
-        <p>🫁 Inhale for 4 seconds, exhale for 6. Repeat slowly.</p>
-      `},
-      { id: 'safe-3', title: 'Name 3 Safe Things', content: `
-        <p>Think of 3 people, places, or things that make you feel safe.</p>
-      `},
-      { id: 'cold', title: 'Temperature Reset', content: `
-        <p>Try holding an ice cube, splashing cold water, or using a cold pack to bring your mind to the present.</p>
-      `},
-      { id: 'shake', title: 'Movement Shake-Out', content: `
-        <p>Shake your arms, legs, and head gently for 10 seconds to release tension.</p>
-      `},
-      { id: 'mantra', title: 'Safe Phrase Repetition', content: `
-        <p>Repeat slowly: “I am safe. I am grounded. I am okay.”</p>
-      `},
-      { id: 'object', title: 'Grounding Object', content: `
-        <p>Grab an object near you. Describe its texture, color, and weight out loud or in your head.</p>
-      `},
-      { id: 'visualize', title: 'Visualization Escape', content: `
-        <p>Close your eyes. Imagine a peaceful place: beach, forest, or room. What do you see, smell, and hear?</p>
-      `},
-      { id: 'rainbow', title: 'Color Hunt Game', content: `
-        <p>Find something around you for each color:</p>
-        <div class="checklist">
-          <div>🔴 Red</div><div>🟠 Orange</div><div>🟡 Yellow</div>
-          <div>🟢 Green</div><div>🔵 Blue</div><div>🟣 Purple</div>
-        </div>
-      `},
-      { id: 'self-hug', title: 'Self-Holding Exercise', content: `
-        <p>Wrap your arms around yourself or cross arms and tap shoulders gently. Breathe deeply.</p>
-      `},
-      { id: 'affirm', title: 'Affirmation Spinner', content: `
-        <button class="button" onclick="showAffirmation()">Spin Affirmation</button>
-        <p id="affirm-result" style="margin-top: 1rem;"></p>
-      `},
-      { id: 'heartbeat', title: 'Heartbeat Sync', content: `
-        <p>Place your hand on your heart. Breathe with your heartbeat. Inhale slowly, exhale slowly.</p>
-      `}
-    ];
+    (() => {
+      const toolkit = [
+        {
+          id: "breath-box",
+          emoji: "🌬️",
+          title: "Box Breathing",
+          category: "breathing",
+          content: `
+            <p>A simple breathing technique: inhale 4s, hold 4s, exhale 4s, hold 4s. Repeat.</p>
+            <button class="button" id="startBoxBreathingBtn" aria-label="Start Box Breathing Exercise">Start Box Breathing</button>
+            <div class="meditation-guide" aria-live="polite" id="breathingGuideBox"></div>
+          `
+        },
+        {
+          id: "breath-478",
+          emoji: "🧘‍♂️",
+          title: "4-7-8 Breathing",
+          category: "breathing",
+          content: `
+            <p>Breathe in for 4s, hold for 7s, exhale for 8s. Repeat for calm.</p>
+            <button class="button" id="start478BreathingBtn" aria-label="Start 4-7-8 Breathing Exercise">Start 4-7-8 Breathing</button>
+            <div class="meditation-guide" aria-live="polite" id="breathingGuide478"></div>
+          `
+        },
+        {
+          id: "5-4-3-2-1",
+          emoji: "👀",
+          title: "5-4-3-2-1 Sensory Technique",
+          category: "sensory",
+          content: `
+            <p>Engage your senses to ground yourself:</p>
+            <ul>
+              <li>5 things you can see</li>
+              <li>4 things you can touch</li>
+              <li>3 things you can hear</li>
+              <li>2 things you can smell</li>
+              <li>1 thing you can taste</li>
+            </ul>
+          `
+        },
+        {
+          id: "grounding-objects",
+          emoji: "🪨",
+          title: "Hold a Grounding Object",
+          category: "physical",
+          content: `
+            <p>Hold a familiar object (like a stone or a stress ball). Focus on its texture, weight, and temperature.</p>
+          `
+        },
+        {
+          id: "positive-affirmations",
+          emoji: "💬",
+          title: "Positive Affirmations",
+          category: "cognitive",
+          content: `
+            <p>Repeat affirmations to yourself to boost calm and confidence.</p>
+            <button class="button" id="showAffirmationBtn" aria-label="Show a Random Affirmation">Show Affirmation</button>
+            <p id="affirmationResult" style="margin-top: 1rem; font-weight: 600; color: #d6f0ff;" aria-live="polite"></p>
+          `
+        },
+        {
+          id: "emergency-contacts",
+          emoji: "🚨",
+          title: "Emergency Resources",
+          category: "emergency",
+          content: `
+            <div class="emergency-message">
+              <p>If you are in crisis, reach out immediately:</p>
+              <ul>
+                <li>National Suicide Prevention Lifeline (US): <a href="tel:988" style="color: #ffd6d6;">988</a></li>
+                <li>Crisis Text Line: Text HOME to <a href="sms:741741" style="color: #ffd6d6;">741741</a></li>
+                <li>Emergency Services: <a href="tel:911" style="color: #ffd6d6;">911</a></li>
+              </ul>
+            </div>
+          `
+        },
+        {
+          id: "visualization-safe-place",
+          emoji: "🏞️",
+          title: "Safe Place Visualization",
+          category: "visualization",
+          content: `
+            <p>Close your eyes and picture a safe, calm place. Imagine the sounds, sights, and smells.</p>
+          `
+        },
+        {
+          id: "progressive-muscle-relax",
+          emoji: "💪",
+          title: "Progressive Muscle Relaxation",
+          category: "physical",
+          content: `
+            <p>Tense and relax muscle groups progressively to release tension.</p>
+          `
+        },
+        {
+          id: "grounding-countdown",
+          emoji: "🔢",
+          title: "Countdown Grounding",
+          category: "cognitive",
+          content: `
+            <p>Count backward from 100 by 7s or 3s slowly to distract your mind and ground yourself.</p>
+          `
+        }
+      ];
 
-    const affirmations = [
-      "You are safe.",
-      "You are grounded.",
-      "This moment will pass.",
-      "You are enough.",
-      "You are doing your best.",
-      "You are not your thoughts."
-    ];
+      // LocalStorage keys & streak logic
+      const todayKey = new Date().toDateString();
+      let usedToday = JSON.parse(localStorage.getItem(todayKey)) || [];
+      let streak = parseInt(localStorage.getItem('streak') || '0');
+      let lastUsedDate = localStorage.getItem('lastUsedDate');
 
-    const usedToday = JSON.parse(localStorage.getItem("grounding-used")) || [];
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayKey = yesterday.toDateString();
 
-    const accordion = document.getElementById("accordion");
+      if (lastUsedDate !== todayKey) {
+        if (lastUsedDate === yesterdayKey) {
+          streak++;
+        } else {
+          streak = usedToday.length ? 1 : 0;
+        }
+        localStorage.setItem('streak', streak);
+        localStorage.setItem('lastUsedDate', todayKey);
+        usedToday = [];
+        localStorage.setItem(todayKey, JSON.stringify(usedToday));
+      }
 
-    toolkit.forEach(tool => {
-      const used = usedToday.includes(tool.id);
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <div class="card-header" onclick="toggleCard('${tool.id}')">
-          <h3>${tool.title}</h3>
-          <span>${used ? "✅" : "➕"}</span>
-        </div>
-        <div class="card-content" id="content-${tool.id}">
-          ${tool.content}
-        </div>
-      `;
-      accordion.appendChild(card);
-    });
+      const totalTechniquesEl = document.getElementById('totalTechniques');
+      const usedTodayEl = document.getElementById('usedToday');
+      const streakEl = document.getElementById('streak');
+      const accordionEl = document.getElementById('accordion');
 
-    function toggleCard(id) {
-      document.querySelectorAll(".card-content").forEach(content => {
-        content.classList.remove("active");
-        content.parentElement.classList.remove("active");
+      // Render stats
+      function updateStats() {
+        totalTechniquesEl.textContent = toolkit.length;
+        usedTodayEl.textContent = usedToday.length;
+        streakEl.textContent = streak;
+        localStorage.setItem(todayKey, JSON.stringify(usedToday));
+      }
+
+      // Render toolkit accordion cards
+      function renderToolkit() {
+        accordionEl.innerHTML = '';
+        toolkit.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.setAttribute('data-id', item.id);
+          card.setAttribute('tabindex', '0');
+          card.setAttribute('role', 'button');
+          card.setAttribute('aria-expanded', 'false');
+          card.setAttribute('aria-controls', item.id + '-content');
+
+          card.innerHTML = `
+            <div class="card-header" aria-describedby="${item.id}-desc">
+              <div class="card-title">
+                <span class="card-emoji" aria-hidden="true">${item.emoji}</span>
+                <h3 id="${item.id}-desc">${item.title}</h3>
+              </div>
+              <div class="card-toggle" aria-hidden="true">＋</div>
+            </div>
+            <div class="card-content" id="${item.id}-content" role="region" aria-live="polite">${item.content}</div>
+          `;
+          accordionEl.appendChild(card);
+        });
+      }
+
+      // Accordion toggle handler
+      accordionEl.addEventListener('click', e => {
+        const card = e.target.closest('.card');
+        if (!card) return;
+
+        toggleCard(card);
       });
-      const el = document.getElementById(`content-${id}`);
-      if (el) {
-        el.classList.add("active");
-        el.parentElement.classList.add("active");
 
-        const current = JSON.parse(localStorage.getItem("grounding-used")) || [];
-        if (!current.includes(id)) {
-          current.push(id);
-          localStorage.setItem("grounding-used", JSON.stringify(current));
+      // Keyboard accessibility (Enter / Space to toggle)
+      accordionEl.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const card = e.target.closest('.card');
+          if (!card) return;
+          e.preventDefault();
+          toggleCard(card);
+        }
+      });
+
+      function toggleCard(card) {
+        const content = card.querySelector('.card-content');
+        const isActive = content.classList.contains('active');
+        // Close all others
+        document.querySelectorAll('.card-content.active').forEach(el => {
+          el.classList.remove('active');
+          el.parentElement.classList.remove('active');
+          el.parentElement.setAttribute('aria-expanded', 'false');
+          el.parentElement.querySelector('.card-toggle').textContent = '＋';
+        });
+        if (!isActive) {
+          content.classList.add('active');
+          card.classList.add('active');
+          card.setAttribute('aria-expanded', 'true');
+          card.querySelector('.card-toggle').textContent = '–';
+
+          // Track usage
+          const id = card.getAttribute('data-id');
+          if (!usedToday.includes(id)) {
+            usedToday.push(id);
+            updateStats();
+          }
+
+          // After render, attach special button listeners if needed
+          attachSpecialListeners();
         }
       }
-    }
 
-    function showAffirmation() {
-      const text = affirmations[Math.floor(Math.random() * affirmations.length)];
-      document.getElementById("affirm-result").textContent = `💬 ${text}`;
-    }
+      // Search & Filter
+      const searchInput = document.getElementById('searchInput');
+      const categoryFilters = document.getElementById('categoryFilters');
+
+      searchInput.addEventListener('input', filterToolkit);
+      categoryFilters.addEventListener('click', e => {
+        if (!e.target.classList.contains('filter-btn')) return;
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        e.target.classList.add('active');
+        filterToolkit();
+      });
+
+      function filterToolkit() {
+        const q = searchInput.value.trim().toLowerCase();
+        const selectedCat = document.querySelector('.filter-btn.active').dataset.category;
+
+        toolkit.forEach(item => {
+          const card = accordionEl.querySelector(`.card[data-id="${item.id}"]`);
+          const matchesSearch = item.title.toLowerCase().includes(q) || item.content.toLowerCase().includes(q);
+          const matchesCat = selectedCat === 'all' || item.category === selectedCat;
+
+          if (matchesSearch && matchesCat) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      // Random Technique button
+      const randomBtn = document.querySelector('.floating-action');
+      randomBtn.addEventListener('click', () => {
+        const visibleCards = Array.from(document.querySelectorAll('.card')).filter(c => c.style.display !== 'none');
+        if (visibleCards.length === 0) return;
+        const randomCard = visibleCards[Math.floor(Math.random() * visibleCards.length)];
+        toggleCard(randomCard);
+        randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+
+      // Special button listeners inside card content
+      function attachSpecialListeners() {
+        // Box Breathing
+        const boxBtn = document.getElementById('startBoxBreathingBtn');
+        if (boxBtn && !boxBtn.dataset.listener) {
+          boxBtn.addEventListener('click', () => startBreathingExercise([4,4,4,4], 'breathingGuideBox'));
+          boxBtn.dataset.listener = 'true';
+        }
+        // 4-7-8 Breathing
+        const b478Btn = document.getElementById('start478BreathingBtn');
+        if (b478Btn && !b478Btn.dataset.listener) {
+          b478Btn.addEventListener('click', () => startBreathingExercise([4,7,8], 'breathingGuide478'));
+          b478Btn.dataset.listener = 'true';
+        }
+        // Affirmation
+        const affBtn = document.getElementById('showAffirmationBtn');
+        if (affBtn && !affBtn.dataset.listener) {
+          affBtn.addEventListener('click', showAffirmation);
+          affBtn.dataset.listener = 'true';
+        }
+      }
+
+      // Breathing Exercise Logic
+      function startBreathingExercise(pattern, guideId) {
+        const guideEl = document.getElementById(guideId);
+        if (!guideEl) return;
+        guideEl.textContent = 'Get ready...';
+
+        let phaseNames;
+        if (pattern.length === 4) {
+          phaseNames = ['Inhale', 'Hold', 'Exhale', 'Hold'];
+        } else if (pattern.length === 3) {
+          phaseNames = ['Inhale', 'Hold', 'Exhale'];
+        } else {
+          phaseNames = [];
+        }
+
+        let phaseIndex = 0;
+        let cycles = 0;
+        const maxCycles = 4;
+
+        function nextPhase() {
+          if (cycles >= maxCycles) {
+            guideEl.textContent = 'Exercise complete. Well done!';
+            return;
+          }
+          const phaseName = phaseNames[phaseIndex];
+          const duration = pattern[phaseIndex];
+          guideEl.textContent = `${phaseName} for ${duration} seconds`;
+
+          phaseIndex++;
+          if (phaseIndex >= pattern.length) {
+            phaseIndex = 0;
+            cycles++;
+          }
+          setTimeout(nextPhase, duration * 1000);
+        }
+        nextPhase();
+      }
+
+      // Affirmations
+      const affirmations = [
+        "I am safe and grounded.",
+        "I trust my inner strength.",
+        "I am capable of handling this.",
+        "I choose calm over chaos.",
+        "My breath anchors me."
+      ];
+      function showAffirmation() {
+        const affRes = document.getElementById('affirmationResult');
+        if (!affRes) return;
+        const randomAff = affirmations[Math.floor(Math.random() * affirmations.length)];
+        affRes.textContent = randomAff;
+
+        if (!usedToday.includes('positive-affirmations')) {
+          usedToday.push('positive-affirmations');
+          updateStats();
+        }
+      }
+
+      // Initial render
+      renderToolkit();
+      updateStats();
+
+      // Accessibility: focus outlines on keyboard tab
+      document.body.addEventListener('keydown', e => {
+        if (e.key === 'Tab') {
+          document.body.classList.add('show-focus-outline');
+        }
+      });
+      document.body.addEventListener('mousedown', e => {
+        document.body.classList.remove('show-focus-outline');
+      });
+    })();
   </script>
 </body>
 </html>
