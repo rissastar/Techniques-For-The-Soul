@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>🌿 Self‑Care Toolkit</title>
+<title>🌿 Local Self-Care Toolkit</title>
 <style>
   :root {
     --primary: #4a90e2;
@@ -81,7 +81,7 @@
 </style>
 </head>
 <body>
-<header><h1>🌿 Your Complete Self‑Care Toolkit</h1></header>
+<header><h1>🌿 Your Local Self-Care Toolkit</h1></header>
 <main>
 
 <section id="gratitude">
@@ -188,129 +188,162 @@
 <footer>© 2025 Your Name — Self‑Care Toolkit</footer>
 
 <script>
-// Storage helper
-const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
-      load=k=>JSON.parse(localStorage.getItem(k));
+  // localStorage helpers
+  const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+  const load = key => JSON.parse(localStorage.getItem(key));
 
-// Gratitude Log
-document.getElementById('save-grat').onclick=()=>{
-  const arr=[1,2,3].map(i=>document.getElementById(`grat${i}`).value);
-  save('gratitude',arr);
-  document.getElementById('grat-msg').style.display='inline';
-  setTimeout(()=>document.getElementById('grat-msg').style.display='none',2000);
-};
-(()=>{const g=load('gratitude'); if(g)g.forEach((v,i)=>document.getElementById(`grat${i+1}`).value=v);})();
+  // Gratitude Log
+  document.getElementById('save-grat').onclick = () => {
+    const entries = [1, 2, 3].map(i => document.getElementById(`grat${i}`).value);
+    save('gratitude', entries);
+    document.getElementById('grat-msg').style.display = 'inline';
+    setTimeout(() => document.getElementById('grat-msg').style.display = 'none', 2000);
+  };
+  (() => {
+    const saved = load('gratitude');
+    if (saved) saved.forEach((v, i) => document.getElementById(`grat${i + 1}`).value = v);
+  })();
 
-// Affirmations
-const affirmations=[
-  "You are enough.","Today is a fresh start.",
-  "Your feelings matter.","You are capable.",
-  "You deserve good things."
-];
-document.getElementById('new-affirm').onclick=()=>displayAff();
-function displayAff(){
-  const idx=new Date().getDate()%affirmations.length;
-  document.getElementById('affirm-text').innerText=affirmations[idx];
-}
-displayAff();
+  // Affirmations
+  const affirmations = [
+    "You are enough.",
+    "Today is a fresh start.",
+    "Your feelings matter.",
+    "You are capable.",
+    "You deserve good things."
+  ];
+  const displayAffirmation = () => {
+    const idx = new Date().getDate() % affirmations.length;
+    document.getElementById('affirm-text').textContent = affirmations[idx];
+  };
+  document.getElementById('new-affirm').onclick = displayAffirmation;
+  displayAffirmation();
 
-// Emotion Wheel
-const descs={
-  Happy:"Feeling joyful and content.",
-  Sad:"It's okay to feel down.",
-  Anxious:"Tension or worry—take a deep breath.",
-  Angry:"Notice the anger and pause.",
-  Excited:"High-energy happiness!",
-  Tired:"Rest is okay—you deserve it."
-};
-document.getElementById('emotion-select').onchange=e=>{
-  document.getElementById('emotion-desc').innerText=descs[e.target.value]||"";
-};
+  // Emotion Wheel
+  const emotionDescriptions = {
+    Happy: "Feeling joyful and content.",
+    Sad: "It's okay to feel down.",
+    Anxious: "Tension or worry—take a deep breath.",
+    Angry: "Notice the anger and pause.",
+    Excited: "High-energy happiness!",
+    Tired: "Rest is okay—you deserve it."
+  };
+  document.getElementById('emotion-select').onchange = e => {
+    document.getElementById('emotion-desc').textContent = emotionDescriptions[e.target.value] || "";
+  };
 
-// Needs
-const sug={
-  Comfort:"Wrap in a blanket or hug yourself.",
-  Motivation:"Set a tiny goal and take one step.",
-  Silence:"Find a quiet space for 5 minutes.",
-  Reassurance:"Tell yourself, 'I'm doing my best.'"
-};
-document.querySelectorAll('#needs button').forEach(b=>
-  b.onclick=()=>document.getElementById('need-sug').innerText=sug[b.dataset.need]
-);
-
-// Reminders
-setInterval(()=>alert("Time to stretch! 🤸"), 1000*60*60*2);
-setInterval(()=>alert("Posture check: sit tall! 🪑"), 1000*60*60*3);
-
-// Breathing Visual
-const bc=document.getElementById('breath-canvas'), bcx=bc.getContext('2d');
-let brInt;
-document.getElementById('start-breath').onclick=()=>{
-  clearInterval(brInt);
-  let r=30,grow=true;
-  brInt=setInterval(()=>{
-    bcx.clearRect(0,0,bc.width,bc.height);
-    bcx.beginPath();
-    bcx.arc(bc.width/2,bc.height/2,r,0,2*Math.PI);
-    bcx.fillStyle=varAccent; bcx.fill();
-    if(grow) r+=0.5; else r-=0.5;
-    if(r>90||r<30) grow=!grow;
-  },30);
-  setTimeout(()=>clearInterval(brInt),30000);
-};
-
-// Doodle
-const dp=document.getElementById('doodle-pad'), dtx=dp.getContext('2d');
-let drawing=false;
-dp.onmousedown=()=>drawing=true;
-dp.onmouseup=()=>drawing=false;
-dp.onmousemove=e=>drawing&&(dtx.lineWidth=3,dtx.lineCap='round',dtx.lineTo(e.offsetX,e.offsetY),dtx.stroke());
-document.getElementById('clear-doodle').onclick=()=>dtx.clearRect(0,0,dp.width,dp.height);
-
-// Vision Board
-const board=document.getElementById('board');
-document.getElementById('vision-upload').onchange=e=>{
-  [...e.target.files].forEach(f=>{
-    const img=new Image(); img.src=URL.createObjectURL(f);
-    img.style.maxWidth='120px'; img.style.margin='4px';
-    board.appendChild(img);
+  // What I Need Right Now
+  const needsSuggestions = {
+    Comfort: "Wrap in a blanket or hug yourself.",
+    Motivation: "Set a tiny goal and take one step.",
+    Silence: "Find a quiet space for 5 minutes.",
+    Reassurance: "Tell yourself, 'I'm doing my best.'"
+  };
+  document.querySelectorAll('#needs button').forEach(btn => {
+    btn.onclick = () => {
+      document.getElementById('need-sug').textContent = needsSuggestions[btn.dataset.need];
+    };
   });
-};
 
-// Reach Out
-const friends=["Alex","Sam","Taylor"];
-document.getElementById('reach-btn').onclick=()=>{
-  const f=friends[Math.floor(Math.random()*friends.length)];
-  document.getElementById('reach-msg').innerHTML=`Ready to connect with <strong>${f}</strong>?`;
-};
+  // Stretch & Posture reminders (alerts)
+  setInterval(() => alert("Time to stretch! 🤸"), 1000 * 60 * 60 * 2); // every 2 hours
+  setInterval(() => alert("Posture check: sit tall! 🪑"), 1000 * 60 * 60 * 3); // every 3 hours
 
-// Plan Builder
-document.getElementById('build-plan').onclick=()=>{
-  const goals=[...document.querySelectorAll('#plan-builder input:checked')].map(i=>i.value);
-  let html="<strong>Self-Care Plan:</strong><ul>";
-  goals.forEach(g=>html+=`<li>${g}</li>`);
-  document.getElementById('plan-out').innerHTML=goals.length?html+"</ul>": "Select at least one goal.";
-};
+  // Guided Breathing Visual
+  const canvas = document.getElementById('breath-canvas');
+  const ctx = canvas.getContext('2d');
+  let breathInterval;
+  document.getElementById('start-breath').onclick = () => {
+    clearInterval(breathInterval);
+    let radius = 30;
+    let growing = true;
+    breathInterval = setInterval(() => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, 2 * Math.PI);
+      ctx.fillStyle = 'var(--accent)';
+      ctx.fill();
+      if (growing) radius += 0.5;
+      else radius -= 0.5;
+      if (radius > 90 || radius < 30) growing = !growing;
+    }, 30);
+    setTimeout(() => clearInterval(breathInterval), 30000); // 30 seconds breathing session
+  };
 
-// 30-Day Challenge
-const challenges=[
-  "Compliment someone","Take 10 deep breaths","Write a thank-you note",
-  "Go for a mindful walk","Do something creative"
-];
-document.getElementById('flip-ch').onclick=()=>{
-  const t=challenges[new Date().getDate()%challenges.length];
-  document.getElementById('challenge-text').innerText=t+" ✨";
-};
+  // Doodle Pad
+  const doodle = document.getElementById('doodle-pad');
+  const dctx = doodle.getContext('2d');
+  let drawing = false;
+  doodle.onmousedown = () => { drawing = true; dctx.beginPath(); };
+  doodle.onmouseup = () => { drawing = false; };
+  doodle.onmouseleave = () => { drawing = false; };
+  doodle.onmousemove = e => {
+    if (!drawing) return;
+    dctx.lineWidth = 3;
+    dctx.lineCap = 'round';
+    dctx.lineTo(e.offsetX, e.offsetY);
+    dctx.stroke();
+  };
+  document.getElementById('clear-doodle').onclick = () => {
+    dctx.clearRect(0, 0, doodle.width, doodle.height);
+  };
 
-// Journal Prompt Spinner
-const prompts=[
-  "What energizes me today?","When did I feel proud recently?",
-  "What brought me joy today?","What challenge did I overcome?"
-];
-document.getElementById('spin-prompt').onclick=()=>{
-  const p=prompts[Math.floor(Math.random()*prompts.length)];
-  document.getElementById('prompt-text').innerText=p;
-};
+  // Vision Board (images uploaded only stored temporarily in DOM)
+  const board = document.getElementById('board');
+  document.getElementById('vision-upload').onchange = e => {
+    [...e.target.files].forEach(file => {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.style.maxWidth = '120px';
+      img.style.margin = '4px';
+      board.appendChild(img);
+    });
+  };
+
+  // Reach Out to Someone
+  const friends = ["Alex", "Sam", "Taylor"];
+  document.getElementById('reach-btn').onclick = () => {
+    const friend = friends[Math.floor(Math.random() * friends.length)];
+    document.getElementById('reach-msg').innerHTML = `How about reaching out to <strong>${friend}</strong>?`;
+  };
+
+  // Custom Self-Care Plan Builder
+  document.getElementById('build-plan').onclick = () => {
+    const selectedGoals = [...document.querySelectorAll('#plan-builder input:checked')].map(i => i.value);
+    if (selectedGoals.length === 0) {
+      document.getElementById('plan-out').textContent = "Please select at least one goal.";
+      return;
+    }
+    let html = "<strong>Your Self-Care Plan:</strong><ul>";
+    selectedGoals.forEach(goal => html += `<li>${goal}</li>`);
+    html += "</ul>";
+    document.getElementById('plan-out').innerHTML = html;
+  };
+
+  // 30-Day Kindness Challenge Spinner
+  const challenges = [
+    "Compliment someone",
+    "Take 10 deep breaths",
+    "Write a thank-you note",
+    "Go for a mindful walk",
+    "Do something creative"
+  ];
+  document.getElementById('flip-ch').onclick = () => {
+    const index = new Date().getDate() % challenges.length;
+    document.getElementById('challenge-text').textContent = challenges[index] + " ✨";
+  };
+
+  // Journal Prompt Spinner
+  const prompts = [
+    "What energizes me today?",
+    "When did I feel proud recently?",
+    "What brought me joy today?",
+    "What challenge did I overcome?"
+  ];
+  document.getElementById('spin-prompt').onclick = () => {
+    const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+    document.getElementById('prompt-text').textContent = randomPrompt;
+  };
 </script>
 </body>
 </html>
