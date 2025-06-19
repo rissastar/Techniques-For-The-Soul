@@ -2,350 +2,259 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Crisis Support Toolkit with Dashboard & Widget</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Crisis Support Toolkit</title>
+  <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Crisis%20Support%22,%22short_name%22:%22Support%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23ffffff%22,%22theme_color%22:%22%23ffffff%22,%22icons%22:[{%22src%22:%22https://cdn-icons-png.flaticon.com/512/3064/3064197.png%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]}">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f5f3ff, #e0e7ff);
-      color: #1e293b;
-      min-height: 100vh;
-      padding-bottom: 4rem;
-    }
-    .card {
-      background: white;
-      border-radius: 0.75rem;
-      box-shadow: 0 2px 10px rgb(0 0 0 / 0.05);
-      padding: 1.5rem;
-    }
-    .progress-bar {
-      background: #e0e7ff;
-      border-radius: 9999px;
-      height: 12px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 12px;
-      background: #6366f1; /* Indigo-500 */
-      border-radius: 9999px;
-      transition: width 0.3s ease;
-    }
-    /* Widget styling */
-    #crisis-widget {
-      position: fixed;
-      bottom: 1rem;
-      right: 1rem;
-      width: 320px;
-      max-width: 90vw;
-      background: white;
-      border-radius: 1rem;
-      box-shadow: 0 8px 24px rgb(0 0 0 / 0.15);
-      font-size: 0.875rem;
-      z-index: 9999;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-    #crisis-widget.closed {
-      transform: translateX(110%);
-      opacity: 0;
-      pointer-events: none;
-    }
-    #crisis-widget-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #6366f1;
-      color: white;
-      padding: 0.75rem 1rem;
-      border-top-left-radius: 1rem;
-      border-top-right-radius: 1rem;
-      cursor: pointer;
-      user-select: none;
-    }
-    #crisis-widget-body {
-      max-height: 400px;
-      overflow-y: auto;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
+      color: #333;
       padding: 1rem;
     }
-    #crisis-widget-body a {
-      color: #4338ca; /* Indigo-700 */
+    h1, h2, h3 {
+      margin-bottom: 0.5rem;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    .dropdown, .section, .assessment, .resource {
+      margin-bottom: 2rem;
+    }
+    select, button {
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      margin-right: 1rem;
+    }
+    .resource {
+      background: #f0f4f8;
+      padding: 1rem;
+      border-left: 5px solid #3182ce;
+      border-radius: 8px;
+    }
+    .resource h3 { margin-bottom: 0.25rem; }
+    .resource a {
+      color: #2b6cb0;
       text-decoration: underline;
     }
-    /* Scrollbar for widget */
-    #crisis-widget-body::-webkit-scrollbar {
-      width: 6px;
+    .assessment label {
+      display: block;
+      margin-bottom: 0.5rem;
     }
-    #crisis-widget-body::-webkit-scrollbar-thumb {
-      background: #a5b4fc;
-      border-radius: 3px;
+    .assessment-question {
+      margin-bottom: 1.5rem;
     }
-    /* Responsive fixes */
-    @media (max-width: 480px) {
-      #crisis-widget {
-        width: 100vw;
-        border-radius: 0;
-        bottom: 0;
-        right: 0;
-      }
-      #crisis-widget-header {
-        border-radius: 0;
-      }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.75rem;
+      background: #edf2f7;
+      color: #2c5282;
+      border-radius: 4px;
+      margin-left: 0.5rem;
+    }
+    .result-box {
+      padding: 1rem;
+      border-radius: 8px;
+      background: #fefcbf;
+      border-left: 5px solid #ecc94b;
+      margin-top: 1rem;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>📞 Crisis Support Toolkit</h1>
+    <p>Select your country to view local mental health and crisis resources.</p>
 
-<div class="max-w-4xl mx-auto p-6">
-
-  <header class="mb-10 text-center">
-    <h1 class="text-4xl font-bold text-indigo-600 mb-2">💜 Crisis Support Toolkit</h1>
-    <p class="text-lg text-gray-600">Mental Health Self-Assessment & Support Resources</p>
-  </header>
-
-  <!-- Self-Assessment Section -->
-  <section class="card mb-10" aria-label="Self-Assessment Section">
-    <h2 class="text-2xl font-semibold text-indigo-700 mb-4 flex items-center gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-activity" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3l3 8 4-16 3 8h4"/></svg>
-      Mental Health Self-Assessment
-    </h2>
-
-    <form id="assessmentForm" class="space-y-6" aria-describedby="assessmentInstructions">
-      <p id="assessmentInstructions" class="text-gray-600 mb-4">
-        Select the option that best describes your feelings over the past 2 weeks.
-      </p>
-
-      <div>
-        <label class="block font-medium mb-2" for="q1">1. Feeling down, depressed, or hopeless?</label>
-        <select id="q1" name="q1" class="w-full border border-gray-300 rounded p-2" required>
-          <option value="">Select one</option>
-          <option value="0">Not at all</option>
-          <option value="1">Several days</option>
-          <option value="2">More than half the days</option>
-          <option value="3">Nearly every day</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block font-medium mb-2" for="q2">2. Little interest or pleasure in doing things?</label>
-        <select id="q2" name="q2" class="w-full border border-gray-300 rounded p-2" required>
-          <option value="">Select one</option>
-          <option value="0">Not at all</option>
-          <option value="1">Several days</option>
-          <option value="2">More than half the days</option>
-          <option value="3">Nearly every day</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block font-medium mb-2" for="q3">3. Feeling nervous, anxious, or on edge?</label>
-        <select id="q3" name="q3" class="w-full border border-gray-300 rounded p-2" required>
-          <option value="">Select one</option>
-          <option value="0">Not at all</option>
-          <option value="1">Several days</option>
-          <option value="2">More than half the days</option>
-          <option value="3">Nearly every day</option>
-        </select>
-      </div>
-
-      <div class="text-center">
-        <button type="submit" class="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition">Get Results</button>
-      </div>
-    </form>
-
-    <!-- Assessment Result -->
-    <div id="assessmentResult" class="mt-6 p-4 rounded hidden"></div>
-
-  </section>
-
-  <!-- Progress Dashboard -->
-  <section class="card mb-10" aria-label="Progress Tracking Dashboard">
-    <h2 class="text-2xl font-semibold text-indigo-700 mb-4 flex items-center gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-bar-chart-2" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      Your Progress
-    </h2>
-    <p class="mb-4 text-gray-600">Track your self-assessment scores over time:</p>
-
-    <div id="progressList" class="space-y-4 max-h-72 overflow-y-auto">
-      <p class="text-gray-500">No data yet. Complete the self-assessment to see progress here.</p>
+    <div class="dropdown">
+      <label for="country-select">🌍 Country:</label>
+      <select id="country-select">
+        <option value="canada" selected>🇨🇦 Canada</option>
+        <option value="usa">🇺🇸 United States</option>
+      </select>
     </div>
 
-    <button id="clearProgress" class="mt-6 bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600 transition" aria-label="Clear progress data">Clear Progress</button>
-  </section>
+    <div id="resources" class="section">
+      <h2>🚨 Crisis Hotlines</h2>
+      <!-- Resources will be injected here -->
+    </div>
 
-</div>
+    <button onclick="toggleAssessment()">🧠 Take Mental Health Self-Assessment</button>
 
-<!-- Crisis Toolkit Widget -->
-<div id="crisis-widget" class="closed" aria-label="Crisis Toolkit Widget">
-  <div id="crisis-widget-header" tabindex="0" role="button" aria-expanded="false" aria-controls="crisis-widget-body">
-    <span class="font-semibold text-white flex items-center gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-heart" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-4-6-7-6-10a3 3 0 0 1 6 0 3 3 0 0 1 6 0c0 3-2 6-6 10z"/></svg>
-      Crisis Support
-    </span>
-    <button aria-label="Toggle widget" id="widgetToggleBtn" class="text-white focus:outline-none">
-      <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-x" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></svg>
-    </button>
-  </div>
-  <div id="crisis-widget-body" class="p-4">
-    <p class="font-semibold mb-3">Immediate Hotlines:</p>
-    <ul class="space-y-2 text-sm">
-      <li>
-        <a href="tel:988" class="text-indigo-600 underline">988 Suicide & Crisis Lifeline (USA)</a>
-      </li>
-      <li>
-        <a href="tel:911" class="text-indigo-600 underline">911 Emergency Services (USA & Canada)</a>
-      </li>
-      <li>
-        <a href="tel:1-800-273-8255" class="text-indigo-600 underline">National Suicide Prevention Lifeline (USA)</a>
-      </li>
-      <li>
-        <a href="tel:1-833-456-4566" class="text-indigo-600 underline">Crisis Services Canada</a>
-      </li>
-      <li>
-        <a href="tel:1-800-668-6868" class="text-indigo-600 underline">Kids Help Phone (Canada)</a>
-      </li>
-    </ul>
+    <div id="assessment" class="assessment" style="display:none;">
+      <h2>📝 Self-Assessment</h2>
+      <form id="assessment-form">
+        <!-- Questions injected here -->
+      </form>
+      <button onclick="calculateScore()">✅ Get Results</button>
+      <div id="result"></div>
+    </div>
 
-    <p class="font-semibold mt-6 mb-2">Support Resources:</p>
-    <ul class="space-y-2 text-sm">
-      <li><a href="https://suicidepreventionlifeline.org/" target="_blank" class="text-indigo-600 underline" rel="noopener noreferrer">Suicide Prevention Lifeline</a></li>
-      <li><a href="https://cmha.ca/" target="_blank" class="text-indigo-600 underline" rel="noopener noreferrer">Canadian Mental Health Association</a></li>
-      <li><a href="https://mhanational.org/" target="_blank" class="text-indigo-600 underline" rel="noopener noreferrer">Mental Health America</a></li>
-    </ul>
-  </div>
-</div>
+  <script>
+    const resources = {
+      canada: [
+        {
+          name: "9-8-8 Suicide Crisis Helpline",
+          phone: "988",
+          description: "Free 24/7 suicide prevention support. Call or text.",
+          priority: true
+        },
+        {
+          name: "Kids Help Phone",
+          phone: "1-800-668-6868",
+          description: "Support for youth in Canada. Call or text 686868."
+        },
+        {
+          name: "Crisis Services Canada",
+          phone: "1-833-456-4566",
+          description: "24/7 phone support for mental health crises."
+        }
+      ],
+      usa: [
+        {
+          name: "988 Suicide & Crisis Lifeline",
+          phone: "988",
+          description: "24/7 confidential support for people in distress.",
+          priority: true
+        },
+        {
+          name: "Crisis Text Line",
+          phone: "741741",
+          description: "Text HOME to 741741 from anywhere in the U.S."
+        },
+        {
+          name: "SAMHSA National Helpline",
+          phone: "1-800-662-HELP",
+          description: "Substance abuse and mental health help, 24/7."
+        }
+      ]
+    };
 
-<!-- Widget toggle button (floating) -->
-<button id="openWidgetBtn" class="fixed bottom-4 right-4 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition z-50" aria-label="Open crisis support widget" title="Open Crisis Support Widget">
-  <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-heart" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-4-6-7-6-10a3 3 0 0 1 6 0 3 3 0 0 1 6 0c0 3-2 6-6 10z"/></svg>
-</button>
+    const questions = [
+      "How often have you felt down, depressed, or hopeless?",
+      "Little interest or pleasure in doing things?",
+      "Trouble falling or staying asleep, or sleeping too much?",
+      "Feeling tired or having little energy?",
+      "Poor appetite or overeating?",
+      "Feeling bad about yourself or that you’re a failure?",
+      "Trouble concentrating on things?",
+      "Moving or speaking slowly or being fidgety?",
+      "Thoughts you would be better off dead?",
+      "Feeling nervous, anxious, or on edge?"
+    ];
 
-<script>
-  // Assessment + Progress tracking with localStorage
-
-  const assessmentForm = document.getElementById('assessmentForm');
-  const resultBox = document.getElementById('assessmentResult');
-  const progressList = document.getElementById('progressList');
-  const clearProgressBtn = document.getElementById('clearProgress');
-
-  // Load and show progress on page load
-  function loadProgress() {
-    const data = JSON.parse(localStorage.getItem('assessmentProgress')) || [];
-    progressList.innerHTML = '';
-    if (data.length === 0) {
-      progressList.innerHTML = '<p class="text-gray-500">No data yet. Complete the self-assessment to see progress here.</p>';
-      return;
+    function renderResources(country) {
+      const container = document.getElementById("resources");
+      container.innerHTML = "<h2>🚨 Crisis Hotlines</h2>";
+      resources[country].forEach(r => {
+        const div = document.createElement("div");
+        div.className = "resource";
+        div.innerHTML = `
+          <h3>${r.name} ${r.priority ? '<span class="badge">Priority</span>' : ''}</h3>
+          <p>${r.description}</p>
+          <p>📞 <a href="tel:${r.phone}">${r.phone}</a></p>
+        `;
+        container.appendChild(div);
+      });
     }
 
-    data.forEach(entry => {
-      const date = new Date(entry.date);
-      const dateStr = date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-      const colorClass = entry.score >= 7 ? 'bg-red-100 text-red-800' :
-                         entry.score >= 4 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800';
+    function toggleAssessment() {
+      const section = document.getElementById("assessment");
+      section.style.display = section.style.display === "none" ? "block" : "none";
+      if (section.style.display === "block") renderAssessment();
+    }
 
-      const div = document.createElement('div');
-      div.className = `p-3 rounded flex flex-col md:flex-row md:items-center md:justify-between ${colorClass}`;
-      div.innerHTML = `
-        <div><strong>${dateStr}</strong></div>
-        <div>Score: <strong>${entry.score}</strong></div>
-        <div class="w-full md:w-48 progress-bar mt-2 md:mt-0">
-          <div class="progress-bar-fill" style="width: ${entry.score / 9 * 100}%"></div>
+    function renderAssessment() {
+      const form = document.getElementById("assessment-form");
+      form.innerHTML = "";
+      questions.forEach((q, i) => {
+        const div = document.createElement("div");
+        div.className = "assessment-question";
+        div.innerHTML = `
+          <label>${i + 1}. ${q}</label>
+          <select name="q${i}">
+            <option value="0">Not at all</option>
+            <option value="1">Several days</option>
+            <option value="2">More than half the days</option>
+            <option value="3">Nearly every day</option>
+          </select>
+        `;
+        form.appendChild(div);
+      });
+    }
+
+    function calculateScore() {
+      const form = document.getElementById("assessment-form");
+      const result = document.getElementById("result");
+      let score = 0;
+      for (let i = 0; i < questions.length; i++) {
+        const val = parseInt(form.elements["q" + i].value);
+        score += val;
+      }
+      let level = "", message = "";
+      if (score >= 20) {
+        level = "🚨 High Risk";
+        message = "Please reach out to crisis support right away. You're not alone.";
+      } else if (score >= 10) {
+        level = "⚠️ Moderate Risk";
+        message = "Consider talking to a therapist or using self-care strategies.";
+      } else {
+        level = "✅ Low Risk";
+        message = "You're doing okay, but keep monitoring your feelings.";
+      }
+      result.innerHTML = `
+        <div class="result-box">
+          <h3>${level}</h3>
+          <p>${message}</p>
+          <p><strong>Total Score:</strong> ${score}</p>
         </div>
       `;
-      progressList.appendChild(div);
+    }
+
+    document.getElementById("country-select").addEventListener("change", (e) => {
+      renderResources(e.target.value);
     });
-  }
 
-  loadProgress();
-
-  // Handle form submit
-  assessmentForm.addEventListener('submit', e => {
-    e.preventDefault();
-
-    const formData = new FormData(assessmentForm);
-    let score = 0;
-    for (let i = 1; i <= 3; i++) {
-      const val = formData.get('q' + i);
-      if (val === null || val === '') {
-        alert('Please answer all questions.');
-        return;
+    window.onload = () => {
+      renderResources("canada");
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('data:text/javascript,' + encodeURIComponent(`
+          self.addEventListener('install', e => {
+            e.waitUntil(
+              caches.open('crisis-v1').then(cache => {
+                return cache.addAll(['.']);
+              })
+            );
+          });
+          self.addEventListener('fetch', e => {
+            e.respondWith(
+              caches.match(e.request).then(response => response || fetch(e.request))
+            );
+          });
+        `));
       }
-      score += parseInt(val, 10);
-    }
+    };
+  </script>
 
-    // Show assessment result
-    let message = '';
-    let colorClass = '';
-    if (score >= 7) {
-      message = '⚠️ High distress detected. Please seek immediate help.';
-      colorClass = 'bg-red-100 text-red-800';
-    } else if (score >= 4) {
-      message = '🟠 Moderate stress. Consider self-care and support.';
-      colorClass = 'bg-yellow-100 text-yellow-800';
-    } else {
-      message = '🟢 Low distress. Keep up your good self-care!';
-      colorClass = 'bg-green-100 text-green-800';
-    }
-
-    resultBox.textContent = message;
-    resultBox.className = `mt-6 p-4 rounded ${colorClass}`;
-    resultBox.focus();
-
-    // Save to localStorage
-    const progressData = JSON.parse(localStorage.getItem('assessmentProgress')) || [];
-    progressData.push({ date: new Date().toISOString(), score });
-    localStorage.setItem('assessmentProgress', JSON.stringify(progressData));
-
-    loadProgress();
-
-    // Reset form for ease of new input
-    assessmentForm.reset();
-  });
-
-  // Clear progress button
-  clearProgressBtn.addEventListener('click', () => {
-    if (confirm('Are you sure you want to clear your progress data?')) {
-      localStorage.removeItem('assessmentProgress');
-      loadProgress();
-      resultBox.classList.add('hidden');
-      resultBox.textContent = '';
-    }
-  });
-
-  // Crisis Widget toggle logic
-  const crisisWidget = document.getElementById('crisis-widget');
-  const openWidgetBtn = document.getElementById('openWidgetBtn');
-  const widgetToggleBtn = document.getElementById('widgetToggleBtn');
-  const crisisWidgetHeader = document.getElementById('crisis-widget-header');
-
-  function openWidget() {
-    crisisWidget.classList.remove('closed');
-    crisisWidgetHeader.setAttribute('aria-expanded', 'true');
-    openWidgetBtn.style.display = 'none';
-  }
-  function closeWidget() {
-    crisisWidget.classList.add('closed');
-    crisisWidgetHeader.setAttribute('aria-expanded', 'false');
-    openWidgetBtn.style.display = 'block';
-    openWidgetBtn.focus();
-  }
-
-  openWidgetBtn.addEventListener('click', openWidget);
-  widgetToggleBtn.addEventListener('click', closeWidget);
-  crisisWidgetHeader.addEventListener('click', () => {
-    if (crisisWidget.classList.contains('closed')) openWidget();
-    else closeWidget();
-  });
-
-  // Accessibility: allow Enter/Space toggle on header
-  crisisWidgetHeader.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      if (crisisWidget.classList.contains('closed')) openWidget();
-      else closeWidget();
-    }
-  });
-</script>
-
+  <footer>
+    <p>❤️ You are not alone. Support is always available.</p>
+    <p><small>Offline capable. Built with love and hope.</small></p>
+  </footer>
 </body>
 </html>
