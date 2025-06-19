@@ -1,500 +1,238 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🛟 Crisis Support Toolkit</title>
+  <title>Mood Tracker</title>
+  <meta name="description" content="Track your mood and receive uplifting tips, resources, and quotes." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* Fonts & Resets */
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
+    /* Base styles and typography */
     body, html {
       margin: 0; padding: 0;
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-      color: #edf2f7;
-      overflow-x: hidden;
-    }
-    /* Background with animated wave gradient */
-    body {
-      background: linear-gradient(270deg, #667eea, #764ba2, #6b8dd6, #9a69d9);
-      background-size: 800% 800%;
-      animation: gradientShift 20s ease infinite;
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 2rem 1rem 4rem;
+      background: linear-gradient(-45deg, #90caf9, #f48fb1, #a5d6a7, #ffcc80);
+      background-size: 400% 400%;
+      animation: bgAnimation 15s ease infinite;
+      display: flex; justify-content: center; align-items: center;
+      color: #1a202c;
+      overflow: auto;
     }
-    @keyframes gradientShift {
-      0%{background-position:0% 50%;}
-      50%{background-position:100% 50%;}
-      100%{background-position:0% 50%;}
+    @keyframes bgAnimation {
+      0%,100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
-
-    /* Container */
     .container {
-      background: rgba(255 255 255 / 0.12);
-      backdrop-filter: blur(14px);
-      border-radius: 16px;
-      max-width: 900px;
-      width: 100%;
-      padding: 2rem 3rem;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
-      position: relative;
-      z-index: 1;
-    }
-
-    header {
+      background: rgba(255,255,255,0.95);
+      border-radius: 1rem;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+      max-width: 700px;
+      width: 90%;
+      padding: 2.5rem 2rem;
       text-align: center;
-      margin-bottom: 2rem;
-      user-select: none;
     }
-    header h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
-      letter-spacing: 1.2px;
-    }
-    header p {
-      font-size: 1.2rem;
-      opacity: 0.85;
-      max-width: 600px;
-      margin: 0 auto;
-      font-weight: 500;
-    }
+    h1 { font-size: 2.8rem; margin-bottom: 1.5rem; }
 
-    /* Form styles */
-    label {
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin-right: 0.5rem;
-    }
-    select, button {
-      font-family: inherit;
-      font-size: 1rem;
-      padding: 0.6rem 1.2rem;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      user-select: none;
-      margin: 0.5rem 0.75rem 1.5rem 0;
-      font-weight: 600;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-      color: #fff;
-    }
-    select {
-      background: #667eea;
-    }
-    select:hover, select:focus {
-      background: #5a67d8;
-      outline: none;
-    }
-    button {
-      background: #d53f8c;
-      min-width: 210px;
-      box-shadow: 0 6px 12px rgba(213,63,140,0.6);
-    }
-    button:hover, button:focus {
-      background: #b83280;
-      box-shadow: 0 8px 18px rgba(184,44,128,0.8);
-      outline: none;
-    }
-
-    /* Crisis resources */
-    section h2 {
-      font-weight: 700;
-      font-size: 1.9rem;
-      margin-bottom: 1rem;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-    }
-    .resource {
-      background: rgba(255 255 255 / 0.15);
-      border-left: 6px solid #d53f8c;
-      border-radius: 14px;
-      padding: 1rem 1.5rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.15);
-      transition: background-color 0.3s ease;
-    }
-    .resource:hover {
-      background: rgba(255 255 255 / 0.25);
-    }
-    .resource h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.25rem;
-      color: #fed7e2;
-      user-select: text;
-    }
-    .resource p {
-      font-size: 1rem;
-      opacity: 0.9;
-      margin-bottom: 0.5rem;
-      user-select: text;
-    }
-    .resource a {
-      color: #fed7e2;
-      font-weight: 600;
-      text-decoration: underline;
-      user-select: text;
-    }
-    .phone-link {
-      font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: 0.5px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: #fed7e2;
-      user-select: text;
-    }
-
-    /* Mental Health Assessment */
-    #assessment {
-      margin-top: 2rem;
-      background: rgba(255 255 255 / 0.12);
-      border-radius: 14px;
-      padding: 2rem 2.5rem;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-      user-select: none;
-    }
-    .assessment-question {
-      margin-bottom: 1.8rem;
-    }
-    .assessment-question label {
-      font-weight: 600;
-      font-size: 1.1rem;
-      display: block;
-      margin-bottom: 0.6rem;
-    }
-    .assessment-question select {
-      width: 100%;
-      max-width: 400px;
-      background: #667eea;
-      color: #fff;
-      border-radius: 10px;
-      padding: 0.5rem 0.75rem;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-      font-weight: 600;
-      cursor: pointer;
-    }
-    #result {
-      margin-top: 1.5rem;
-      padding: 1.5rem;
-      border-radius: 14px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      box-shadow: 0 6px 20px rgba(213,63,140,0.5);
-      text-align: center;
-      user-select: text;
-    }
-    #result.low-risk {
-      color: #48bb78;
-      background: rgba(72,187,120,0.15);
-      border: 3px solid #48bb78;
-    }
-    #result.moderate-risk {
-      color: #ed8936;
-      background: rgba(237,137,54,0.15);
-      border: 3px solid #ed8936;
-    }
-    #result.high-risk {
-      color: #f56565;
-      background: rgba(245,101,101,0.15);
-      border: 3px solid #f56565;
-    }
-
-    /* Additional tools */
-    .tools-list {
+    .mood-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-      gap: 1rem;
-      margin-top: 2rem;
+      grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
     }
-    .tool-card {
-      background: rgba(255 255 255 / 0.12);
-      padding: 1rem 1.25rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      transition: background-color 0.3s ease;
+    .mood-btn {
+      padding: 1.5rem;
+      border-radius: 1rem;
+      background: #fff;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: transform .3s, box-shadow .3s;
       user-select: none;
     }
-    .tool-card:hover {
-      background: rgba(255 255 255 / 0.2);
+    .mood-btn:hover, .mood-btn:focus {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     }
-    .tool-card h3 {
-      margin-bottom: 0.3rem;
-      font-weight: 700;
-      color: #fed7e2;
-      user-select: text;
+    .mood-btn span.emoji { font-size: 3rem; display:block; margin-bottom: .5rem; }
+    .mood-btn span.label { font-weight: 600; }
+
+    #thankyou {
+      display: none;
+      animation: fadeIn 0.6s ease;
     }
-    .tool-card p {
-      font-size: 0.95rem;
-      line-height: 1.3;
-      opacity: 0.9;
-      margin-bottom: 0.25rem;
-      user-select: text;
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1; } }
+
+    #icon-visual { width: 120px; height: 120px; margin: 1.5rem auto; }
+    #quote-text {
+      font-size:1.1rem; font-style:italic;
+      margin-top:1rem; color:#4a5568;
+    }
+    .section { margin-top: 1.75rem; padding: 1.25rem; background: #f9fafb; border-radius: .8rem; text-align: left; }
+    .section h3 { margin-bottom: .8rem; font-size:1.3rem; }
+
+    #resources-list a {
+      display: block; margin-bottom: .5rem;
+      color: #2c5282; text-decoration: underline;
     }
 
-    /* Responsive */
-    @media (max-width: 600px) {
-      .container {
-        padding: 1.5rem 1.5rem;
-      }
-      header h1 {
-        font-size: 2.3rem;
-      }
-      select, button {
-        width: 100%;
-        margin: 0.5rem 0;
-      }
-      #assessment {
-        padding: 1.5rem 1rem;
-      }
-    }
+    .affirmation { margin-top: 1.25rem; font-weight: 600; font-style: italic; }
 
+    #retry { margin-top: 2rem; padding: 1rem 1.6rem; background:#2c5282; color:white; border:none; border-radius:.8rem; cursor: pointer; }
+    #retry:hover { background:#1a365d; }
+
+    @media (max-width:500px){
+      h1 { font-size:2.2rem; }
+      .mood-btn span.emoji { font-size:2.5rem; }
+    }
   </style>
 </head>
 <body>
-  <main class="container" role="main" aria-label="Crisis Support Toolkit">
-    <header>
-      <h1>🛟 Crisis Support Toolkit</h1>
-      <p>Your mental health matters. Access crisis hotlines, self-assessment, and helpful tools anytime.</p>
-    </header>
+  <div class="container">
+    <h1>Community Mood Tracker</h1>
+    <div id="grid" class="mood-grid"></div>
 
-    <section aria-label="Select Country">
-      <label for="country-select">🌍 Select Your Country:</label>
-      <select id="country-select" aria-describedby="country-desc">
-        <option value="usa" selected>🇺🇸 USA</option>
-        <option value="canada">🇨🇦 Canada</option>
-        <option value="uk">🇬🇧 United Kingdom</option>
-        <option value="australia">🇦🇺 Australia</option>
-        <option value="india">🇮🇳 India</option>
-      </select>
-      <p id="country-desc" style="opacity: 0.85; max-width: 400px; margin-top: -1rem; margin-bottom: 1.5rem; user-select:none;">
-        Choose your country to view tailored crisis resources.
-      </p>
-    </section>
+    <div id="thankyou">
+      <div id="icon-visual"></div>
+      <p id="quote-text"></p>
 
-    <section aria-label="Crisis Resources" id="resources">
-      <!-- Resources will populate here -->
-    </section>
-
-    <section id="assessment" aria-label="Mental Health Self-Assessment">
-      <h2>📝 Mental Health Self-Assessment</h2>
-      <form id="assessment-form" aria-describedby="assessment-instructions">
-        <p id="assessment-instructions" style="opacity: 0.85; max-width: 400px; margin-bottom: 1.5rem; user-select:none;">
-          Please answer the following questions to help assess your current mental health status.
-        </p>
-
-        <div class="assessment-question">
-          <label for="q1">1. Over the past two weeks, how often have you felt down, depressed, or hopeless?</label>
-          <select id="q1" required aria-required="true">
-            <option value="" disabled selected>Select one</option>
-            <option value="0">Not at all</option>
-            <option value="1">Several days</option>
-            <option value="2">More than half the days</option>
-            <option value="3">Nearly every day</option>
-          </select>
-        </div>
-
-        <div class="assessment-question">
-          <label for="q2">2. Over the past two weeks, how often have you had little interest or pleasure in doing things?</label>
-          <select id="q2" required aria-required="true">
-            <option value="" disabled selected>Select one</option>
-            <option value="0">Not at all</option>
-            <option value="1">Several days</option>
-            <option value="2">More than half the days</option>
-            <option value="3">Nearly every day</option>
-          </select>
-        </div>
-
-        <div class="assessment-question">
-          <label for="q3">3. How often have you felt nervous, anxious, or on edge?</label>
-          <select id="q3" required aria-required="true">
-            <option value="" disabled selected>Select one</option>
-            <option value="0">Not at all</option>
-            <option value="1">Several days</option>
-            <option value="2">More than half the days</option>
-            <option value="3">Nearly every day</option>
-          </select>
-        </div>
-
-        <div class="assessment-question">
-          <label for="q4">4. How difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?</label>
-          <select id="q4" required aria-required="true">
-            <option value="" disabled selected>Select one</option>
-            <option value="0">Not difficult at all</option>
-            <option value="1">Somewhat difficult</option>
-            <option value="2">Very difficult</option>
-            <option value="3">Extremely difficult</option>
-          </select>
-        </div>
-
-        <button type="submit" aria-label="Submit assessment">Get My Assessment Result</button>
-      </form>
-      <div id="result" role="region" aria-live="polite" aria-atomic="true"></div>
-    </section>
-
-    <section aria-label="Additional Crisis Tools" class="tools-list">
-      <h2>🧰 Additional Crisis Tools</h2>
-      <div class="tool-card" tabindex="0">
-        <h3>📱 Text or Chat Support</h3>
-        <p>Use confidential text or chat services if you prefer not to speak on the phone.</p>
-        <p><a href="https://suicidepreventionlifeline.org/chat/" target="_blank" rel="noopener noreferrer">USA Chat Support</a></p>
-        <p><a href="https://www.crisistextline.org/" target="_blank" rel="noopener noreferrer">Crisis Text Line</a></p>
+      <div class="section">
+        <h3>💡 Tip</h3>
+        <p id="tip"></p>
       </div>
-      <div class="tool-card" tabindex="0">
-        <h3>🌿 Grounding Techniques</h3>
-        <p>Practice grounding exercises to calm your mind and body during distress.</p>
-        <p><a href="https://psychcentral.com/lib/grounding-techniques-for-anxiety/" target="_blank" rel="noopener noreferrer">Learn More</a></p>
+      <div class="section">
+        <h3>📚 Resources</h3>
+        <div id="resources-list"></div>
       </div>
-      <div class="tool-card" tabindex="0">
-        <h3>🧘 Mindfulness & Breathing</h3>
-        <p>Try guided breathing or mindfulness to reduce stress and anxiety.</p>
-        <p><a href="https://www.headspace.com/meditation/breathing-exercises" target="_blank" rel="noopener noreferrer">Headspace Breathing Exercises</a></p>
-      </div>
-    </section>
-  </main>
+      <p class="affirmation" id="affirm"></p>
+      <button id="retry">Check In Again</button>
+    </div>
+  </div>
 
   <script>
-    // Crisis resources data keyed by country code
-    const crisisResources = {
-      usa: [
-        {
-          name: "National Suicide Prevention Lifeline",
-          phone: "988",
-          url: "https://988lifeline.org/",
-          description: "Free, confidential support 24/7."
-        },
-        {
-          name: "Crisis Text Line",
-          phone: "Text HOME to 741741",
-          url: "https://www.crisistextline.org/",
-          description: "Text-based crisis support 24/7."
-        },
-        {
-          name: "SAMHSA National Helpline",
-          phone: "1-800-662-HELP (4357)",
-          url: "https://www.samhsa.gov/find-help/national-helpline",
-          description: "Substance abuse and mental health treatment referrals."
-        }
-      ],
-      canada: [
-        {
-          name: "Canada Suicide Prevention Service",
-          phone: "1-833-456-4566",
-          url: "https://www.crisisservicescanada.ca/",
-          description: "24/7 confidential support."
-        },
-        {
-          name: "Kids Help Phone",
-          phone: "1-800-668-6868",
-          url: "https://kidshelpphone.ca/",
-          description: "Free, confidential support for youth."
-        }
-      ],
-      uk: [
-        {
-          name: "Samaritans",
-          phone: "116 123",
-          url: "https://www.samaritans.org/",
-          description: "Confidential emotional support 24/7."
-        }
-      ],
-      australia: [
-        {
-          name: "Lifeline Australia",
-          phone: "13 11 14",
-          url: "https://www.lifeline.org.au/",
-          description: "24/7 crisis support and suicide prevention."
-        }
-      ],
-      india: [
-        {
-          name: "AASRA Foundation",
-          phone: "+91-22-2754-6669",
-          url: "http://www.aasra.info/",
-          description: "Suicide prevention helpline."
-        }
-      ]
-    };
+    const moods = [
+      {
+        id: 'overwhelmed',
+        emoji: '😵‍💫',
+        label: 'Overwhelmed',
+        bg: 'linear-gradient(135deg,#f6d365,#fda085)',
+        icon: '☁️',
+        quote: '“This too shall pass.”',
+        tip: 'Take five deep breaths, feeling each inhale and exhale.',
+        affirmation: 'I give myself grace through this moment.',
+        resources: [
+          { text: 'Guided Breathing PDF', url: 'https://www.mindful.org/wp-content/uploads/2019/03/Mindful-Breathing.pdf' }
+        ]
+      },
+      {
+        id: 'struggling',
+        emoji: '🔴',
+        label: 'Struggling',
+        bg: 'linear-gradient(135deg,#f44336,#e57373)',
+        icon: '💪',
+        quote: '“Strength grows in the moments you challenge yourself.”',
+        tip: 'Try the 5-4-3-2-1 grounding exercise.',
+        affirmation: 'I am stronger than I think.',
+        resources: [
+          { text: 'Anxiety Worksheet', url: 'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf' }
+        ]
+      },
+      {
+        id: 'managing',
+        emoji: '🟡',
+        label: 'Managing',
+        bg: 'linear-gradient(135deg,#f6e05e,#faf089)',
+        icon: '🌿',
+        quote: '“Progress is progress, no matter how small.”',
+        tip: 'Write down three things you did well today.',
+        affirmation: 'I honor my progress.',
+        resources: [
+          { text: 'Gratitude Journal PDF', url: 'https://positivepsychology.com/wp-content/uploads/2015/05/gratitude-journal.pdf' }
+        ]
+      },
+      {
+        id: 'neutral',
+        emoji: '⚪️',
+        label: 'Neutral',
+        bg: 'linear-gradient(135deg,#a0aec0,#cbd5e0)',
+        icon: '🧘',
+        quote: '“In stillness, we find clarity.”',
+        tip: 'Take a moment to be present — notice your breath.',
+        affirmation: 'I am centered.',
+        resources: [
+          { text: 'Mindfulness Guide', url: 'https://www.mindful.org/meditation/mindfulness-getting-started/' }
+        ]
+      },
+      {
+        id: 'good',
+        emoji: '🟢',
+        label: 'Doing Well',
+        bg: 'linear-gradient(135deg,#48bb78,#9ae6b4)',
+        icon: '😊',
+        quote: '“Joy is not in things; it is in us.”',
+        tip: 'List three things you’re grateful for today.',
+        affirmation: 'I welcome joy today.',
+        resources: [
+          { text: 'Gratitude Journal PDF', url: 'https://positivepsychology.com/wp-content/uploads/2015/05/gratitude-journal.pdf' }
+        ]
+      },
+      {
+        id: 'thriving',
+        emoji: '🔵',
+        label: 'Thriving',
+        bg: 'linear-gradient(135deg,#3182ce,#63b3ed)',
+        icon: '🌟',
+        quote: '“Your energy inspires others.”',
+        tip: 'Consider mentoring or creative expression.',
+        affirmation: 'I am a beacon of hope.',
+        resources: [
+          { text: 'Creative Expression Guide', url: 'https://www.creativitypost.com/' }
+        ]
+      }
+    ];
 
-    const resourcesContainer = document.getElementById('resources');
-    const countrySelect = document.getElementById('country-select');
+    const grid = document.getElementById('grid');
+    const thankyou = document.getElementById('thankyou');
+    const iconVisual = document.getElementById('icon-visual');
+    const quoteText = document.getElementById('quote-text');
+    const tipEl = document.getElementById('tip');
+    const resList = document.getElementById('resources-list');
+    const affirmEl = document.getElementById('affirm');
+    const retryBtn = document.getElementById('retry');
 
-    // Render resources for selected country
-    function renderResources(country) {
-      const resources = crisisResources[country] || [];
-      resourcesContainer.innerHTML = `<h2>📞 Crisis Resources - ${countrySelect.options[countrySelect.selectedIndex].text}</h2>` +
-        resources.map(res => `
-          <article class="resource" tabindex="0" aria-label="${res.name} crisis resource">
-            <h3>${res.name}</h3>
-            <p>${res.description}</p>
-            <p class="phone-link">
-              <svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 24 24" fill="#fed7e2" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 6px;">
-                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21c1.21.49 2.53.76 3.88.76a1 1 0 011 1v3.5a1 1 0 01-1 1C10.07 21.91 2.09 13.93 2.09 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.35.27 2.67.76 3.88a1 1 0 01-.21 1.11l-2.52 2.52z"/>
-              </svg>
-              <a href="tel:${res.phone.replace(/[^\d+]/g, '')}" aria-label="Call ${res.name}">${res.phone}</a>
-            </p>
-            <p><a href="${res.url}" target="_blank" rel="noopener noreferrer" aria-label="Visit ${res.name} website">Learn more</a></p>
-          </article>
-        `).join('');
-    }
-
-    // Initial render
-    renderResources(countrySelect.value);
-
-    countrySelect.addEventListener('change', () => {
-      renderResources(countrySelect.value);
-      clearAssessment();
+    // Create mood buttons
+    moods.forEach(m => {
+      const btn = document.createElement('button');
+      btn.className = 'mood-btn';
+      btn.innerHTML = `<span class="emoji">${m.emoji}</span><span class="label">${m.label}</span>`;
+      btn.addEventListener('click', () => selectMood(m));
+      grid.appendChild(btn);
     });
 
-    // Assessment logic
-    const form = document.getElementById('assessment-form');
-    const resultDiv = document.getElementById('result');
+    function selectMood(m) {
+      document.body.style.background = m.bg;
+      grid.style.display = 'none';
+      thankyou.style.display = 'block';
+      iconVisual.textContent = m.icon;
+      quoteText.textContent = m.quote;
+      tipEl.textContent = m.tip;
+      affirmEl.textContent = m.affirmation;
 
-    function clearAssessment() {
-      form.reset();
-      resultDiv.textContent = '';
-      resultDiv.className = '';
+      resList.innerHTML = '';
+      m.resources.forEach(r => {
+        const a = document.createElement('a');
+        a.href = r.url;
+        a.target = '_blank';
+        a.textContent = r.text;
+        resList.appendChild(a);
+      });
     }
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const q1 = parseInt(form.q1.value);
-      const q2 = parseInt(form.q2.value);
-      const q3 = parseInt(form.q3.value);
-      const q4 = parseInt(form.q4.value);
-      if ([q1,q2,q3,q4].some(isNaN)) {
-        alert("Please answer all questions.");
-        return;
-      }
-
-      // Simple scoring: sum responses (max 12 for Q1-3, max 3 for Q4 difficulty)
-      const score = q1 + q2 + q3 + q4;
-
-      let message = '';
-      let riskClass = '';
-      if (score <= 4) {
-        message = "Low risk: You're doing okay, but keep monitoring your feelings and seek support if needed.";
-        riskClass = "low-risk";
-      } else if (score <= 8) {
-        message = "Moderate risk: Consider reaching out to trusted people or professionals for support.";
-        riskClass = "moderate-risk";
-      } else {
-        message = "High risk: Please contact a crisis hotline or mental health professional immediately.";
-        riskClass = "high-risk";
-      }
-
-      resultDiv.textContent = message;
-      resultDiv.className = riskClass;
-      resultDiv.focus();
+    retryBtn.addEventListener('click', () => {
+      thankyou.style.display = 'none';
+      grid.style.display = 'grid';
+      document.body.style.background = '';
     });
+
   </script>
 </body>
 </html>
