@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Community Mood Tracker</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -10,88 +11,146 @@
       50% { background-position:100% 50%; }
       100% { background-position:0% 50%; }
     }
-    html, body { margin:0; padding:0; height:100%; }
-    body {
+    html, body {
+      margin:0; padding:0; height:100%;
       font-family:'Inter',sans-serif;
-      background:linear-gradient(-45deg,#90caf9,#f48fb1,#a5d6a7,#ffcc80);
-      background-size:400% 400%;
-      animation:bg-animation 15s ease infinite;
-      display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(-45deg, #90caf9, #f48fb1, #a5d6a7, #ffcc80);
+      background-size: 400% 400%;
+      animation: bg-animation 15s ease infinite;
       color:#1a202c;
-      transition: background 0.5s;
+      display:flex; align-items:center; justify-content:center;
     }
-    .bg-struggling { background-image: url(''); }
-    /* (We'll inject inline style for backgrounds) */
     .container {
-      background:rgba(255,255,255,0.9);
-      border-radius:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.12);
-      padding:2.5rem; max-width:800px; width:100%; margin:1rem;
+      background: rgba(255,255,255,0.9);
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      padding: 2.5rem;
+      max-width: 800px;
+      width: 100%;
+      margin: 1rem;
     }
     h1#main-title {
-      font-size:3rem; font-weight:700; text-align:center;
-      margin-bottom:1.5rem; color:#2d3748;
+      font-size: 3rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #2d3748;
     }
-    .mood-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
+    .mood-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
     .mood-btn {
-      flex:1; padding:1.75rem; background:white; border:none;
-      border-radius:0.75rem; cursor:pointer; transition:.2s;
-      font-weight:600; min-width:150px;
+      flex: 1;
+      padding: 1.75rem;
+      background: white;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: 0.2s;
+      font-weight: 600;
+      min-width: 150px;
+      text-align: center;
     }
-    .mood-btn:hover, .mood-btn:focus {
-      transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,0.15); outline:none;
+    .mood-btn:hover,
+    .mood-btn:focus {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      outline: none;
     }
-    .mood-btn .emoji { font-size:2.5rem; margin-bottom:0.5rem; display:block; }
+    .mood-btn .emoji {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
     .btn-primary {
-      background:#4c51bf; color:white; padding:1rem 2rem;
-      font-size:1.125rem; border:none; border-radius:0.75rem;
-      cursor:pointer; margin:1rem auto 0; display:block; max-width:300px;
-      transition:.2s;
+      background: #4c51bf;
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1.125rem;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      margin: 1rem auto 0;
+      display: block;
+      max-width: 300px;
+      transition: 0.2s;
+      text-align: center;
     }
-    .btn-primary:hover, .btn-primary:focus { background:#434190; outline:none; }
-    #thank-you-section { display:none; }
-    .recommended-links h3 { margin-top:1.5rem; }
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: #434190;
+      outline: none;
+    }
+    #thank-you-section {
+      display: none;
+    }
+    .recommended-links h3 {
+      margin-top: 1.5rem;
+    }
     .recommended-links a {
-      display:block; margin-bottom:0.5rem;
-      color:#4c51bf; text-decoration:underline;
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #4c51bf;
+      text-decoration: underline;
     }
-    .affirmation, .tip {
-      font-style:italic; margin-top:0.5rem; color:#4a5568;
+    .affirmation,
+    .tip {
+      font-style: italic;
+      margin-top: 0.5rem;
+      color: #4a5568;
     }
     .anonymous-messages {
-      margin-top:2rem; background:#edf2f7; padding:1rem;
-      border-radius:0.75rem; max-height:150px; overflow-y:auto;
+      margin-top: 2rem;
+      background: #edf2f7;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      max-height: 150px;
+      overflow-y: auto;
+      font-style: italic;
+      color: #2d3748;
+      font-weight: 600;
     }
-    #support-form textarea {
-      width:100%; padding:.75rem; border:1px solid #cbd5e0;
-      border-radius:.5rem; font-size:1rem; margin:0.5rem 0; resize:vertical;
+    .anonymous-messages h4 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      color: #4c51bf;
+      text-align: center;
     }
-    #support-form .btn-send {
-      padding:.75rem 1.5rem; background:#48bb78; color:white;
-      border:none; border-radius:.5rem; font-weight:600;
-    }
-    #support-form .btn-cancel {
-      padding:.75rem 1.5rem; background:#a0aec0; color:white;
-      border:none; border-radius:.5rem; font-weight:600;
-    }
-    #support-form button:hover, #support-form button:focus { opacity:0.9; outline:none; }
     .toast {
-      display:none; position:fixed; bottom:1.5rem; left:50%;
-      transform:translateX(-50%); background:#48bb78;
-      color:white; padding:1rem 1.5rem; border-radius:.75rem;
-      box-shadow:0 4px 12px rgba(0,0,0,0.15); font-weight:600; z-index:1000;
+      display: none;
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #48bb78;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-weight: 600;
+      z-index: 1000;
     }
-    @media (max-width:600px) {
-      .mood-btn { width:100%; min-width:auto; }
-      .btn-primary { max-width:100%; }
+    @media (max-width: 600px) {
+      .mood-btn {
+        width: 100%;
+        min-width: auto;
+      }
+      .btn-primary {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" role="main">
     <h1 id="main-title">Community Mood Tracker</h1>
-    <div id="mood-grid" class="mood-grid"></div>
+    <div id="mood-grid" class="mood-grid" role="list"></div>
 
-    <div id="thank-you-section">
+    <section id="thank-you-section" aria-live="polite" tabindex="-1">
       <h2 id="mood-label"></h2>
       <p id="mood-support-text"></p>
       <p class="tip" id="mood-tip"></p>
@@ -99,118 +158,199 @@
 
       <div class="recommended-links" id="recommended-links"></div>
 
-      <button id="show-support-btn" class="btn-primary">Send Support Message</button>
-      <form id="support-form" style="display:none;">
-        <textarea id="support-message" placeholder="Your anonymous support..." required></textarea>
-        <div>
-          <button type="submit" class="btn-send">Send</button>
-          <button type="button" id="cancel-support-btn" class="btn-cancel">Cancel</button>
-        </div>
-      </form>
+      <button id="checkin-again-btn" class="btn-primary" aria-label="Check in again">Check-In Again</button>
 
-      <div class="anonymous-messages">
+      <div class="anonymous-messages" aria-label="Anonymous support messages">
         <h4>Community Support Messages</h4>
-        <ul id="anonymous-messages-list"></ul>
+        <ul id="anonymous-messages-list" role="list"></ul>
       </div>
-
-      <button id="checkin-again-btn" class="btn-primary">Check-In Again</button>
-    </div>
+    </section>
   </div>
 
-  <div id="toast" class="toast" role="alert"></div>
+  <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
 
   <script>
     const moods = [
-      { id:'overwhelmed', emoji:'😵‍💫', label:'Overwhelmed', bg:'url("${turn0image1}")', supportPrompt:'It’s okay to feel this way — pause and breathe.', tip:'Try progressive muscle relaxation.', affirmation:'I give myself permission to pause.', resources:[
-          {text:'Grounding Worksheet (PDF)',url:'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf'},
-          {text:'TF‑CBT Teen Workbook (PDF)',url:'https://tfcbt.org/wp-content/uploads/2019/02/Revised-Dealing-with-Trauma-TF-CBTWorkbook-for-Teens-.pdf'}
-      ]},
-      { id:'struggling', emoji:'🔴', label:'Struggling', bg:'url("${turn0image2}")', supportPrompt:'Your courage matters.', tip:'Try the 5‑4‑3‑2‑1 grounding technique.', affirmation:'I am safe in this moment.', resources:[
-          {text:'Grounding Worksheet (PDF)',url:'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf'},
-          {text:'Anxiety & Depression Workbook (PDF)',url:'https://health.uark.edu/mental-health/resources/caps-resources-anxiety-depression-reduction-workbook.pdf'}
-      ]},
-      { id:'managing', emoji:'🟡', label:'Managing', bg:'url("${turn0image9}")', supportPrompt:'You’re doing the best you can.', tip:'Practice square breathing: inhale/exhale for 4 counts.', affirmation:'I am doing well enough.', resources:[
-          {text:'Grounding Worksheet (PDF)',url:'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf'},
-          {text:'Anxiety & Depression Workbook (PDF)',url:'https://health.uark.edu/mental-health/resources/caps-resources-anxiety-depression-reduction-workbook.pdf'}
-      ]},
-      { id:'neutral', emoji:'⚪️', label:'Neutral', bg:'url("${turn0image4}")', supportPrompt:'Staying steady can be powerful.', tip:'Try a guided mindfulness for 5 mins.', affirmation:'I am centered.', resources:[
-          {text:'Grounding Worksheet (PDF)',url:'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf'}
-      ]},
-      { id:'good', emoji:'🟢', label:'Doing Well', bg:'url("${turn0image8}")', supportPrompt:'You’re bringing light — thank you!', tip:'Spend time reflecting on what feels good.', affirmation:'I choose to notice joy.', resources:[
-          {text:'Anxiety & Depression Workbook (PDF)',url:'https://health.uark.edu/mental-health/resources/caps-resources-anxiety-depression-reduction-workbook.pdf'}
-      ]},
-      { id:'thriving', emoji:'🔵', label:'Thriving', bg:'url("${turn0image3}")', supportPrompt:'Your energy inspires — shine on!', tip:'Set a small goal and celebrate it.', affirmation:'I am thriving.', resources:[
-          {text:'TF‑CBT Teen Workbook (PDF)',url:'https://tfcbt.org/wp-content/uploads/2019/02/Revised-Dealing-with-Trauma-TF-CBTWorkbook-for-Teens-.pdf'}
-      ]}
+      {
+        id: 'overwhelmed',
+        emoji: '😵‍💫',
+        label: 'Overwhelmed',
+        bg: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
+        supportPrompt: 'It’s okay to feel this way — pause and breathe.',
+        tip: 'Try progressive muscle relaxation.',
+        affirmation: 'I give myself permission to pause.',
+        resources: [
+          { text: 'Grounding Worksheet (PDF)', url: 'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf' },
+          { text: 'TF‑CBT Teen Workbook (PDF)', url: 'https://tfcbt.org/wp-content/uploads/2019/02/Revised-Dealing-with-Trauma-TF-CBTWorkbook-for-Teens-.pdf' }
+        ]
+      },
+      {
+        id: 'struggling',
+        emoji: '🔴',
+        label: 'Struggling',
+        bg: 'linear-gradient(135deg, #f44336 0%, #e57373 100%)',
+        supportPrompt: 'Your courage matters.',
+        tip: 'Try the 5‑4‑3‑2‑1 grounding technique.',
+        affirmation: 'I am safe in this moment.',
+        resources: [
+          { text: 'Grounding Worksheet (PDF)', url: 'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf' },
+          { text: 'Anxiety & Depression Workbook (PDF)', url: 'https://health.uark.edu/mental-health/resources/caps-resources-anxiety-depression-reduction-workbook.pdf' }
+        ]
+      },
+      {
+        id: 'managing',
+        emoji: '🟡',
+        label: 'Managing',
+        bg: 'linear-gradient(135deg, #fff176 0%, #ffeb3b 100%)',
+        supportPrompt: 'You’re doing the best you can.',
+        tip: 'Practice square breathing: inhale/exhale for 4 counts.',
+        affirmation: 'I am doing well enough.',
+        resources: [
+          { text: 'Grounding Worksheet (PDF)', url: 'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf' },
+          { text: 'Anxiety & Depression Workbook (PDF)', url: 'https://health.uark.edu/mental-health/resources/caps-resources-anxiety-depression-reduction-workbook.pdf' }
+        ]
+      },
+      {
+        id: 'neutral',
+        emoji: '⚪️',
+        label: 'Neutral',
+        bg: 'linear-gradient(135deg, #cfd8dc 0%, #eceff1 100%)',
+        supportPrompt: 'Staying steady can be powerful.',
+        tip: 'Try a guided mindfulness for 5 mins.',
+        affirmation: 'I am centered.',
+        resources: [
+          { text: 'Grounding Worksheet (PDF)', url: 'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf' }
+        ]
+      },
+      {
+        id: 'good',
+        emoji: '🟢',
+        label: 'Doing Well',
+        bg: 'linear-gradient(135deg, #81c784 0%, #66bb6a 100%)',
+        supportPrompt: 'You’re bringing light — thank you!',
+        tip: 'Spend time reflecting on what feels good.',
+        affirmation: 'I choose to notice joy.',
+        resources: [
+          { text: 'Anxiety & Depression Workbook (PDF)', url: 'https://health.uark.edu/mental-health/resources/caps-resources-anxiety-depression-reduction-workbook.pdf' }
+        ]
+      },
+      {
+        id: 'thriving',
+        emoji: '🔵',
+        label: 'Thriving',
+        bg: 'linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%)',
+        supportPrompt: 'Your energy inspires — shine on!',
+        tip: 'Set a small goal and celebrate it.',
+        affirmation: 'I am thriving.',
+        resources: [
+          { text: 'TF‑CBT Teen Workbook (PDF)', url: 'https://tfcbt.org/wp-content/uploads/2019/02/Revised-Dealing-with-Trauma-TF-CBTWorkbook-for-Teens-.pdf' }
+        ]
+      }
     ];
-    const MKEY='communityMood', SMKEY='supportMessages';
-    const moodGrid=document.getElementById('mood-grid'),
-          thankYou=document.getElementById('thank-you-section'),
-          moodLabel=document.getElementById('mood-label'),
-          moodSupport=document.getElementById('mood-support-text'),
-          moodTip=document.getElementById('mood-tip'),
-          moodAff=document.getElementById('mood-affirmation'),
-          recLinks=document.getElementById('recommended-links'),
-          showSupport=document.getElementById('show-support-btn'),
-          supportForm=document.getElementById('support-form'),
-          supportMsg=document.getElementById('support-message'),
-          cancelSupport=document.getElementById('cancel-support-btn'),
-          messagesList=document.getElementById('anonymous-messages-list'),
-          checkinAgain=document.getElementById('checkin-again-btn'),
-          toast=document.getElementById('toast');
-    function renderButtons(){
-      moods.forEach(m=>{
-        const btn=document.createElement('button');
-        btn.className='mood-btn';
-        btn.innerHTML=`<span class="emoji">${m.emoji}</span>${m.label}`;
-        btn.addEventListener('click',()=> selectMood(m));
+
+    // Random anonymous messages
+    const anonymousMessages = [
+      "You're doing great — keep going!",
+      "Every day is a new chance to heal.",
+      "You are not alone in this.",
+      "Small steps are still progress.",
+      "You matter more than you know.",
+      "Take a deep breath — you've got this.",
+      "Your feelings are valid and important.",
+      "Strength grows in moments of challenge.",
+      "Hope is alive within you.",
+      "You are stronger than your struggles."
+    ];
+
+    const MKEY = 'communityMood';
+
+    const moodGrid = document.getElementById('mood-grid'),
+          thankYou = document.getElementById('thank-you-section'),
+          moodLabel = document.getElementById('mood-label'),
+          moodSupport = document.getElementById('mood-support-text'),
+          moodTip = document.getElementById('mood-tip'),
+          moodAff = document.getElementById('mood-affirmation'),
+          recLinks = document.getElementById('recommended-links'),
+          messagesList = document.getElementById('anonymous-messages-list'),
+          checkinAgain = document.getElementById('checkin-again-btn'),
+          toast = document.getElementById('toast');
+
+    function renderButtons() {
+      moods.forEach(m => {
+        const btn = document.createElement('button');
+        btn.className = 'mood-btn';
+        btn.setAttribute('role', 'listitem');
+        btn.innerHTML = `<span class="emoji" aria-hidden="true">${m.emoji}</span><span>${m.label}</span>`;
+        btn.addEventListener('click', () => selectMood(m));
         moodGrid.appendChild(btn);
       });
     }
-    function selectMood(m){
-      localStorage.setItem(MKEY,m.id);
+
+    function selectMood(m) {
+      localStorage.setItem(MKEY, m.id);
       document.body.style.background = m.bg;
-      moodGrid.style.display='none'; thankYou.style.display='block';
-      moodLabel.textContent=`${m.emoji} ${m.label}`; moodSupport.textContent=m.supportPrompt;
-      moodTip.textContent='Tip: '+m.tip; moodAff.textContent='Affirmation: "'+m.affirmation+'"';
-      recLinks.innerHTML='';
-      m.resources.forEach(link=>{
-        const a=document.createElement('a');
-        a.href=link.url; a.target='_blank'; a.rel='noopener noreferrer';
-        a.textContent=link.text;
+      moodGrid.style.display = 'none';
+      thankYou.style.display = 'block';
+      moodLabel.textContent = `${m.emoji} ${m.label}`;
+      moodSupport.textContent = m.supportPrompt;
+      moodTip.textContent = 'Tip: ' + m.tip;
+      moodAff.textContent = 'Affirmation: "' + m.affirmation + '"';
+
+      recLinks.innerHTML = '';
+      m.resources.forEach(link => {
+        const a = document.createElement('a');
+        a.href = link.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = link.text;
         recLinks.appendChild(a);
       });
-      loadMessages();
+
+      displayAnonymousMessages();
+      showToast('Thanks for checking in!');
+      thankYou.focus();
     }
-    function showToast(msg){
-      toast.textContent=msg; toast.style.display='block';
-      setTimeout(()=>toast.style.display='none',4000);
+
+    function displayAnonymousMessages() {
+      messagesList.innerHTML = '';
+      // Show 5 random messages
+      let shuffled = anonymousMessages
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+        .slice(0, 5);
+      shuffled.forEach(msg => {
+        const li = document.createElement('li');
+        li.textContent = msg;
+        messagesList.appendChild(li);
+      });
     }
-    function loadMessages(){
-      const arr=JSON.parse(localStorage.getItem(SMKEY)||'[]');
-      messagesList.innerHTML='';
-      arr.forEach(txt=>{ const li=document.createElement('li'); li.textContent=txt; messagesList.appendChild(li);});
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
     }
-    showSupport.addEventListener('click',()=>{
-      supportForm.style.display='block'; showSupport.style.display='none';
+
+    checkinAgain.addEventListener('click', () => {
+      localStorage.removeItem(MKEY);
+      thankYou.style.display = 'none';
+      moodGrid.style.display = 'flex';
+      document.body.style.background = '';
+      toast.textContent = '';
     });
-    cancelSupport.addEventListener('click',()=>{
-      supportForm.style.display='none'; showSupport.style.display='block'; supportMsg.value='';
-    });
-    supportForm.addEventListener('submit',e=>{
-      e.preventDefault(); const txt=supportMsg.value.trim(); if(!txt)return;
-      const arr=JSON.parse(localStorage.getItem(SMKEY)||'[]');
-      arr.unshift(txt); localStorage.setItem(SMKEY,JSON.stringify(arr.slice(0,20)));
-      supportMsg.value=''; supportForm.style.display='none'; showSupport.style.display='block'; loadMessages(); showToast('Support sent!');
-    });
-    checkinAgain.addEventListener('click',()=>{
-      localStorage.removeItem(MKEY); thankYou.style.display='none'; moodGrid.style.display='flex';
-      document.body.style.background='';
-    });
-    function init(){
-      renderButtons(); const saved=localStorage.getItem(MKEY);
-      if(saved){ const m=moods.find(x=>x.id===saved); if(m) selectMood(m);}
+
+    function init() {
+      renderButtons();
+      const saved = localStorage.getItem(MKEY);
+      if (saved) {
+        const m = moods.find(x => x.id === saved);
+        if (m) selectMood(m);
+      }
     }
+
     document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
