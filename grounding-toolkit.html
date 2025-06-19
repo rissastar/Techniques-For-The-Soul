@@ -4,73 +4,72 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Enhanced Grounding Toolkit</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-  /* Reset & base styles */
-  * {
-    margin: 0; padding: 0; box-sizing: border-box;
+  /* Reset & base */
+  *, *::before, *::after {
+    box-sizing: border-box;
   }
   body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 0;
+    background: linear-gradient(135deg, #a3cef1 0%, #f7f7f7 100%);
+    color: #222;
     min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-    color: white;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.5s, color 0.5s;
   }
-  body::before {
-    content: '';
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background:
-      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.2) 0%, transparent 50%);
-    pointer-events: none; z-index: -1;
-    transition: background-color 0.3s ease;
+  body.dark {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #e0e6f0;
   }
+
+  /* Container */
   .container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem;
-    position: relative;
-    z-index: 1;
+    max-width: 900px;
+    margin: 1rem auto 2rem;
+    padding: 1rem 1.5rem 3rem;
+    background: rgba(255 255 255 / 0.85);
+    border-radius: 1rem;
+    box-shadow:
+      0 4px 6px rgba(0,0,0,0.1),
+      inset 0 0 60px rgba(255 255 255 / 0.4);
+    backdrop-filter: saturate(180%) blur(10px);
+    transition: background 0.5s, color 0.5s;
   }
-  .header {
-    text-align: center;
-    margin-bottom: 3rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border-radius: 24px;
-    padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  body.dark .container {
+    background: rgba(30 41 59 / 0.85);
+    box-shadow:
+      0 4px 12px rgba(0,0,0,0.7),
+      inset 0 0 80px rgba(0 0 0 / 0.6);
   }
+
   h1 {
-    font-size: 3rem;
+    text-align: center;
     font-weight: 700;
-    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 2.2rem;
+    margin-bottom: 0.25rem;
   }
-  .subtitle {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.1rem;
-    font-weight: 300;
-    margin-bottom: 1rem;
+  header p {
+    text-align: center;
+    font-weight: 500;
+    color: #4a4a4a;
+    margin-top: 0;
   }
+  body.dark header p {
+    color: #a0aec0;
+  }
+
+  /* Stats */
   .stats {
     display: flex;
     justify-content: center;
-    gap: 2rem;
-    margin-top: 1.5rem;
+    gap: 1.5rem;
+    margin: 1rem 0 1.5rem;
   }
   .stat {
     text-align: center;
-    color: rgba(255, 255, 255, 0.9);
+    user-select: none;
   }
   .stat-number {
     font-size: 1.5rem;
@@ -78,377 +77,446 @@
     display: block;
   }
   .stat-label {
-    font-size: 0.9rem;
-    opacity: 0.8;
+    font-size: 0.85rem;
+    color: #777;
   }
-  .search-container {
-    margin-bottom: 2rem;
-    position: relative;
+  body.dark .stat-label {
+    color: #a0aec0;
   }
-  .search-input {
+
+  /* Search */
+  #search-input {
     width: 100%;
-    padding: 1rem 1.5rem;
     font-size: 1rem;
-    border: none;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
+    padding: 0.6rem 1rem;
+    border-radius: 0.75rem;
+    border: 2px solid #4ecdc4;
+    outline-offset: 2px;
+    transition: border-color 0.3s;
   }
-  .search-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+  #search-input:focus {
+    border-color: #3aafa9;
   }
-  .search-input:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  body.dark #search-input {
+    background: #1e293b;
+    border-color: #81e6d9;
+    color: #e0e6f0;
   }
+  body.dark #search-input:focus {
+    border-color: #38b2ac;
+  }
+
+  /* Category filters */
   .category-filters {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
     flex-wrap: wrap;
     justify-content: center;
+    gap: 0.75rem;
+    margin: 1rem 0 2rem;
   }
   .filter-btn {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.9);
-    padding: 0.7rem 1.2rem;
-    border-radius: 25px;
+    background: #4ecdc4;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    user-select: none;
+    transition: background-color 0.3s;
   }
-  .filter-btn:hover, .filter-btn.active {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  .filter-btn[aria-pressed="true"],
+  .filter-btn:hover {
+    background: #3aafa9;
   }
+  body.dark .filter-btn {
+    background: #81e6d9;
+    color: #0f172a;
+  }
+  body.dark .filter-btn[aria-pressed="true"],
+  body.dark .filter-btn:hover {
+    background: #38b2ac;
+    color: #e0e6f0;
+  }
+
+  /* Technique buttons */
   #accordion {
     display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
     gap: 1rem;
   }
-  .floating-action {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  .card-button {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow:
+      0 8px 15px rgba(0,0,0,0.1),
+      inset 0 0 12px rgba(255 255 255 / 0.6);
+    padding: 1rem 1.25rem;
+    border: 2px solid transparent;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    transition:
+      box-shadow 0.3s,
+      border-color 0.3s,
+      background-color 0.3s;
+    user-select: none;
+  }
+  .card-button:hover,
+  .card-button:focus-visible {
+    border-color: #4ecdc4;
+    box-shadow:
+      0 12px 20px rgba(0,0,0,0.15),
+      inset 0 0 15px rgba(78 205 196 / 0.8);
+    outline: none;
+  }
+  body.dark .card-button {
+    background: #1e293b;
+    color: #e0e6f0;
+    box-shadow:
+      0 8px 15px rgba(0,0,0,0.4),
+      inset 0 0 12px rgba(129 230 217 / 0.6);
+  }
+  body.dark .card-button:hover,
+  body.dark .card-button:focus-visible {
+    border-color: #38b2ac;
+    box-shadow:
+      0 12px 20px rgba(0,0,0,0.7),
+      inset 0 0 18px rgba(56 178 172 / 0.9);
+    outline: none;
+  }
+  .card-emoji {
+    font-size: 1.7rem;
+    user-select: none;
+  }
+
+  /* Checklist */
+  .checklist {
+    margin: 2rem 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    gap: 0.5rem;
+  }
+  .checklist-item {
+    background: #f3f7f9;
+    border-radius: 0.75rem;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    user-select: none;
+    border: 2px solid transparent;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  .checklist-item.checked {
+    background: #4ecdc4;
+    color: white;
+    border-color: #3aafa9;
+  }
+  .checklist-item:focus-visible {
+    outline: 3px solid #4ecdc4;
+  }
+  body.dark .checklist-item {
+    background: #2a3448;
+    color: #e0e6f0;
+  }
+  body.dark .checklist-item.checked {
+    background: #38b2ac;
+    color: #f0fdfa;
+  }
+
+  /* Notes container */
+  .notes-container {
+    margin-top: 2rem;
+  }
+  .notes-container h2 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  #notes-textarea {
+    width: 100%;
+    min-height: 120px;
+    border-radius: 1rem;
+    border: 2px solid #4ecdc4;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border-color 0.3s;
+  }
+  #notes-textarea:focus {
+    border-color: #3aafa9;
+    outline: none;
+  }
+  body.dark #notes-textarea {
+    background: #1e293b;
+    color: #e0e6f0;
+    border-color: #81e6d9;
+  }
+  body.dark #notes-textarea:focus {
+    border-color: #38b2ac;
+  }
+
+  /* Breathing exercise */
+  .breathing-exercise {
+    margin-top: 2.5rem;
+    text-align: center;
+  }
+  .breathing-exercise h2 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .breath-circle {
+    margin: 0 auto 1rem;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
+    background: #4ecdc4;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 1.5rem;
+    font-weight: 700;
+    font-size: 1.4rem;
+    user-select: none;
+    transition: background-color 0.3s, transform 2.5s ease-in-out;
+    box-shadow:
+      0 0 25px #4ecdc4aa,
+      inset 0 0 15px #4ecdc4cc;
+  }
+  .breath-circle.inhale {
+    animation: pulseInhale 4s ease-in-out infinite;
+    background: #3aafa9;
+    box-shadow:
+      0 0 40px #3aafa9cc,
+      inset 0 0 20px #3aafa9dd;
+  }
+  .breath-circle.exhale {
+    animation: pulseExhale 4s ease-in-out infinite;
+    background: #71e6d1;
+    box-shadow:
+      0 0 40px #71e6d1cc,
+      inset 0 0 20px #71e6d1dd;
+  }
+  @keyframes pulseInhale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  @keyframes pulseExhale {
+    0%, 100% { transform: scale(1.15); }
+    50% { transform: scale(1); }
+  }
+  #breath-text {
+    pointer-events: none;
+  }
+  .button {
+    background: #4ecdc4;
+    border: none;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 1rem;
     cursor: pointer;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    z-index: 1001;
+    margin: 0 0.5rem;
+    transition: background-color 0.3s;
+    user-select: none;
   }
-  .floating-action:hover {
-    transform: scale(1.1) translateY(-2px);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+  .button:disabled {
+    background: #a5e1da;
+    cursor: not-allowed;
   }
-  /* Modal styles */
+  .button:hover:not(:disabled),
+  .button:focus-visible:not(:disabled) {
+    background: #3aafa9;
+    outline: none;
+  }
+  body.dark .button {
+    background: #81e6d9;
+    color: #0f172a;
+  }
+  body.dark .button:disabled {
+    background: #5bd6c9;
+  }
+  body.dark .button:hover:not(:disabled),
+  body.dark .button:focus-visible:not(:disabled) {
+    background: #38b2ac;
+    color: #f0fdfa;
+  }
+
+  /* Toggles */
+  .toggles {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+  .toggle-label {
+    user-select: none;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+  }
+  .toggle-label input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  /* Download PDF */
+  #download-pdf {
+    margin: 2rem auto 0;
+    display: block;
+  }
+
+  /* Floating Add Button */
+  .floating-action {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #4ecdc4;
+    border: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    user-select: none;
+    transition: background-color 0.3s;
+    z-index: 1100;
+  }
+  .floating-action:hover,
+  .floating-action:focus-visible {
+    background: #3aafa9;
+    outline: none;
+  }
+  body.dark .floating-action {
+    background: #81e6d9;
+    color: #0f172a;
+  }
+  body.dark .floating-action:hover,
+  body.dark .floating-action:focus-visible {
+    background: #38b2ac;
+  }
+
+  /* Modal */
   .modal-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.7);
+    inset: 0;
+    background: rgba(0,0,0,0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1100;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.25s ease;
+    z-index: 1200;
   }
   .modal-overlay.active {
     opacity: 1;
     pointer-events: auto;
   }
   .modal {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(25px);
-    border-radius: 20px;
-    max-width: 600px;
-    width: 90%;
+    background: white;
+    border-radius: 1rem;
+    max-width: 450px;
+    width: 90vw;
     max-height: 85vh;
     overflow-y: auto;
     padding: 1.5rem 2rem 2rem;
-    color: white;
+    box-shadow:
+      0 10px 20px rgba(0,0,0,0.25);
     position: relative;
+    color: #222;
   }
-  .modal h2 {
-    margin-bottom: 0.5rem;
-    font-size: 2rem;
-    font-weight: 700;
-  }
-  .modal .modal-emoji {
-    font-size: 2.5rem;
-    margin-left: 0.5rem;
-  }
-  .modal .modal-category {
-    text-transform: uppercase;
-    font-weight: 600;
-    color: rgba(255,255,255,0.7);
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
-  }
-  .modal .modal-content p,
-  .modal .modal-content ul {
-    margin-bottom: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-  }
-  .modal .modal-content ul {
-    padding-left: 1.5rem;
-  }
-  .modal .modal-content li {
-    margin-bottom: 0.5rem;
+  body.dark .modal {
+    background: #1e293b;
+    color: #e0e6f0;
+    box-shadow:
+      0 10px 20px rgba(0,0,0,0.7);
   }
   .modal-close {
     position: absolute;
-    top: 1rem; right: 1rem;
+    top: 0.8rem;
+    right: 1rem;
     font-size: 2rem;
-    color: white;
-    cursor: pointer;
-    user-select: none;
-  }
-  /* Card style replaced with clickable cards disabled, replaced with popups */
-  .card-button {
-    width: 100%;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 18px;
-    padding: 1rem 1.5rem;
-    color: white;
-    font-weight: 600;
-    font-size: 1.1rem;
-    cursor: pointer;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
-    user-select: none;
-  }
-  .card-button:hover {
-    background: rgba(255,255,255,0.3);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-  }
-  .card-emoji {
-    font-size: 1.7rem;
-    flex-shrink: 0;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
-  }
-  /* Checklist */
-  .checklist {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 0.75rem;
-    margin: 1rem 0;
-  }
-  .checklist-item {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    padding: 0.75rem 1rem;
-    border-radius: 15px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    user-select: none;
-  }
-  .checklist-item.checked {
-    background: rgba(78, 205, 196, 0.4);
-    border-color: #4ecdc4;
-    color: #e0f7f7;
-  }
-  /* Notes journal */
-  .notes-container {
-    margin: 2rem 0;
-  }
-  .notes-container textarea {
-    width: 100%;
-    min-height: 120px;
-    border-radius: 15px;
+    background: none;
     border: none;
-    padding: 1rem;
-    font-size: 1rem;
-    resize: vertical;
-    font-family: 'Inter', sans-serif;
-    background: rgba(255,255,255,0.15);
-    color: white;
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.2);
-    transition: border-color 0.3s ease;
+    cursor: pointer;
+    color: #888;
+    transition: color 0.3s;
   }
-  .notes-container textarea:focus {
+  .modal-close:hover,
+  .modal-close:focus-visible {
+    color: #4ecdc4;
     outline: none;
-    border-color: #4ecdc4;
-    background: rgba(78, 205, 196, 0.3);
   }
-  /* Buttons */
-  .button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    cursor: pointer;
+  body.dark .modal-close {
+    color: #a0aec0;
+  }
+  body.dark .modal-close:hover,
+  body.dark .modal-close:focus-visible {
+    color: #38b2ac;
+  }
+
+  #modal-title {
+    margin: 0 0 0.25rem;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  #modal-emoji {
+    font-size: 2rem;
+    user-select: none;
+  }
+  #modal-category {
     font-weight: 600;
     font-size: 0.9rem;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    user-select: none;
-    margin: 0.5rem 0;
+    margin: 0.1rem 0 1rem;
+    color: #4ecdc4;
   }
-  .button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  body.dark #modal-category {
+    color: #38b2ac;
   }
-  /* Breathing animation */
-  .breath-circle {
-    width: 150px;
-    height: 150px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    margin: 1rem auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 600;
-    font-size: 1.3rem;
-    transition: transform 4s ease-in-out, border-color 4s ease-in-out, background-color 4s ease-in-out;
-    user-select: none;
+  #modal-content p,
+  #modal-content ul {
+    line-height: 1.4;
   }
-  .breath-circle.inhale {
-    transform: scale(1.3);
-    border-color: #4ecdc4;
-    background: rgba(78, 205, 196, 0.1);
+  #modal-content ul {
+    padding-left: 1.2rem;
   }
-  .breath-circle.exhale {
-    transform: scale(0.8);
-    border-color: #ff6b6b;
-    background: rgba(255, 107, 107, 0.1);
+  #modal-content li {
+    margin-bottom: 0.3rem;
   }
-  /* Toggle switches */
-  .toggles {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    margin: 2rem 0 1rem;
-    flex-wrap: wrap;
-  }
-  .toggle-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-    user-select: none;
-    cursor: pointer;
-  }
-  .toggle-label input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-  }
-  /* Responsive */
-  @media (max-width: 768px) {
-    .container {
-      padding: 1rem;
-    }
-    h1 {
-      font-size: 2rem;
+
+  /* Responsive tweaks */
+  @media (max-width: 600px) {
+    #accordion {
+      grid-template-columns: 1fr;
     }
     .stats {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .toggles {
+      flex-direction: column;
       gap: 1rem;
+      align-items: center;
     }
-    .category-filters {
-      justify-content: flex-start;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-    }
-    .checklist {
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    }
-    .floating-action {
-      bottom: 1rem;
-      right: 1rem;
-    }
-  }
-  /* Dark mode */
-  body.dark {
-    background: linear-gradient(135deg, #1e1e2f 0%, #29294a 100%);
-    color: #ddd;
-  }
-  body.dark::before {
-    background:
-      radial-gradient(circle at 20% 80%, rgba(60, 60, 120, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(120, 60, 90, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(60, 120, 120, 0.2) 0%, transparent 50%);
-  }
-  body.dark .header {
-    background: rgba(30, 30, 50, 0.5);
-    border-color: rgba(100, 100, 150, 0.5);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  }
-  body.dark .filter-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-    color: #ccc;
-  }
-  body.dark .filter-btn.active, body.dark .filter-btn:hover {
-    background: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-  }
-  body.dark .card-button {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  body.dark .card-button:hover {
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-  }
-  body.dark .checklist-item {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-    color: #ccc;
-  }
-  body.dark .checklist-item.checked {
-    background: rgba(78, 205, 196, 0.6);
-    border-color: #4ecdc4;
-    color: #e0f7f7;
-  }
-  body.dark .notes-container textarea {
-    background: rgba(255,255,255,0.07);
-    color: #ddd;
-    border-color: rgba(100, 100, 150, 0.4);
   }
 </style>
 </head>
 <body>
-<div class="container">
-  <header class="header" role="banner">
-    <h1>🌿 Grounding Toolkit</h1>
-    <p class="subtitle">Your personal collection of mindfulness and grounding techniques</p>
+<div class="container" role="main" aria-label="Enhanced Grounding Toolkit">
+
+  <header>
+    <h1>Enhanced Grounding Toolkit</h1>
+    <p>Your interactive guide to calming techniques</p>
+
     <div class="stats" aria-label="Toolkit statistics">
       <div class="stat" aria-live="polite">
         <span class="stat-number" id="tech-count">0</span>
@@ -487,81 +555,85 @@
     <button class="filter-btn" data-category="emergency" aria-pressed="false">Emergency</button>
   </nav>
 
-  <main id="accordion" aria-live="polite" aria-relevant="additions removals" role="region" tabindex="0" aria-label="Grounding techniques list">
-    <!-- Technique buttons inserted here dynamically -->
-  </main>
+  <section id="accordion" aria-label="Grounding techniques list" tabindex="0">
+    <!-- Technique buttons dynamically inserted here -->
+  </section>
 
-  <div class="checklist" aria-label="Daily grounding checklist" role="list">
-    <!-- checklist items inserted dynamically -->
-  </div>
+  <section aria-label="Grounding checklist">
+    <h2>Daily Checklist</h2>
+    <div class="checklist" id="checklist">
+      <!-- Checklist items dynamically inserted here -->
+    </div>
+  </section>
 
-  <section class="notes-container" aria-label="Personal notes and journal">
-    <h2>Journal / Notes</h2>
-    <textarea id="notes-textarea" placeholder="Write your grounding thoughts here..."></textarea>
+  <section class="notes-container" aria-label="Personal notes">
+    <h2>Notes Journal</h2>
+    <textarea
+      id="notes-textarea"
+      aria-label="Your personal notes journal"
+      placeholder="Write your notes here..."
+      spellcheck="true"
+      autocomplete="off"
+    ></textarea>
   </section>
 
   <section class="breathing-exercise" aria-label="Guided breathing exercise">
     <h2>Guided Breathing</h2>
-    <div class="breath-circle" aria-live="polite" aria-atomic="true" aria-label="Breathing animation circle" role="img">
-      <span id="breath-text">Breathe In</span>
+    <div id="breath-circle" class="breath-circle" aria-live="polite" aria-atomic="true" aria-relevant="text">Ready</div>
+    <div>
+      <button id="start-breathing-btn" class="button" aria-label="Start guided breathing exercise">Start</button>
+      <button id="stop-breathing-btn" class="button" disabled aria-label="Stop guided breathing exercise">Stop</button>
     </div>
-    <button class="button" id="start-breathing">Start Breathing Exercise</button>
-    <button class="button" id="stop-breathing" disabled>Stop Breathing Exercise</button>
   </section>
 
   <section class="toggles" aria-label="Settings toggles">
-    <label class="toggle-label" for="toggle-darkmode">
-      <input type="checkbox" id="toggle-darkmode" /> Dark Mode
-    </label>
     <label class="toggle-label" for="toggle-music">
-      <input type="checkbox" id="toggle-music" /> Background Music
+      <input type="checkbox" id="toggle-music" />
+      Background Music
+    </label>
+    <label class="toggle-label" for="toggle-darkmode">
+      <input type="checkbox" id="toggle-darkmode" />
+      Dark Mode
     </label>
   </section>
 
-  <button class="button" id="download-pdf" aria-label="Download grounding techniques guide PDF">Download PDF Guide</button>
+  <button id="download-pdf" class="button" aria-label="Download grounding techniques guide">Download Guide PDF</button>
 
-  <button class="floating-action" id="add-technique" aria-label="Add new grounding technique">+</button>
+  <button class="floating-action" id="add-tech-btn" title="Add your own technique" aria-label="Add your own technique">+</button>
 </div>
 
 <!-- Modal -->
-<div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1" id="modal-overlay" hidden>
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-content" tabindex="-1" hidden>
   <div class="modal" role="document">
-    <button class="modal-close" aria-label="Close modal" id="modal-close">&times;</button>
+    <button class="modal-close" id="modal-close" aria-label="Close modal">&times;</button>
+    <h3 id="modal-emoji" aria-hidden="true"></h3>
     <h2 id="modal-title"></h2>
-    <span class="modal-emoji" id="modal-emoji"></span>
-    <div class="modal-category" id="modal-category"></div>
-    <div class="modal-content" id="modal-content"></div>
+    <div id="modal-category"></div>
+    <div id="modal-content"></div>
   </div>
 </div>
 
-<!-- Audio for background music -->
-<audio id="bg-music" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_63a139e99b.mp3?filename=relaxing-meditation-ambient-11206.mp3" type="audio/mpeg" />
-  Your browser does not support the audio element.
-</audio>
-
-<!-- Audio for breathing cues -->
-<audio id="breath-in-sound" src="https://actions.google.com/sounds/v1/human_voices/breath_in.ogg"></audio>
-<audio id="breath-out-sound" src="https://actions.google.com/sounds/v1/human_voices/breath_out.ogg"></audio>
+<!-- Audio -->
+<audio id="breath-sound-inhale" src="https://actions.google.com/sounds/v1/ambiences/breathing_in.ogg" preload="auto"></audio>
+<audio id="breath-sound-exhale" src="https://actions.google.com/sounds/v1/ambiences/breathing_out.ogg" preload="auto"></audio>
+<audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/03/17/audio_01bf9a165f.mp3?filename=relaxing-ambient-11244.mp3" preload="auto"></audio>
 
 <script>
 (() => {
-  'use strict';
-
-  // ======== Data ========
-  const techniques = [
+  // Data: techniques
+  let techniques = [
     {
       id: 'tech1',
       title: '5-4-3-2-1 Grounding',
       category: 'mindfulness',
       emoji: '🧠',
-      content: `<p>This classic grounding exercise helps you focus on your senses:</p>
+      content: `<p>Use your five senses to ground yourself:</p>
       <ul>
-        <li><strong>5</strong> things you can see</li>
-        <li><strong>4</strong> things you can touch</li>
-        <li><strong>3</strong> things you can hear</li>
-        <li><strong>2</strong> things you can smell</li>
-        <li><strong>1</strong> thing you can taste</li>
+        <li>5 things you can see</li>
+        <li>4 things you can touch</li>
+        <li>3 things you can hear</li>
+        <li>2 things you can smell</li>
+        <li>1 thing you can taste</li>
       </ul>`
     },
     {
@@ -569,353 +641,326 @@
       title: 'Box Breathing',
       category: 'breathing',
       emoji: '📦',
-      content: `<p>Box breathing is a simple technique that involves breathing in 4 counts, holding for 4, breathing out for 4, and holding for 4:</p>
-      <ul>
-        <li>Breathe in for 4 seconds</li>
-        <li>Hold your breath for 4 seconds</li>
-        <li>Breathe out for 4 seconds</li>
-        <li>Hold your breath for 4 seconds</li>
-      </ul>`
+      content: `<p>Inhale 4 seconds → Hold 4 seconds → Exhale 4 seconds → Hold 4 seconds → Repeat.</p>`
     },
     {
       id: 'tech3',
       title: 'Physical Grounding',
       category: 'physical',
-      emoji: '🦶',
-      content: `<p>Feel your feet on the ground. Press firmly on the floor and notice the sensation. Wiggle your toes.</p>`
+      emoji: '✋',
+      content: `<p>Press your feet firmly into the ground and notice the feeling.</p>`
     },
     {
       id: 'tech4',
       title: 'Visualization: Safe Place',
       category: 'visualization',
-      emoji: '🏞️',
-      content: `<p>Imagine a safe, calm place where you feel completely at peace. Visualize all the details, colors, sounds, and smells.</p>`
+      emoji: '🏝️',
+      content: `<p>Visualize a peaceful, safe place where you feel calm.</p>`
     },
     {
       id: 'tech5',
-      title: 'Emotion Naming',
-      category: 'emotional',
-      emoji: '📝',
-      content: `<p>Identify and name your emotions clearly. Saying them out loud or writing them down can reduce their intensity.</p>`
+      title: 'Mindful Observation',
+      category: 'mindfulness',
+      emoji: '👀',
+      content: `<p>Focus intently on an object nearby, noticing all details.</p>`
     },
     {
       id: 'tech6',
-      title: 'Creative Expression',
-      category: 'creative',
-      emoji: '🎨',
-      content: `<p>Use drawing, writing, or music to express how you feel.</p>`
+      title: 'Name Your Emotion',
+      category: 'emotional',
+      emoji: '📝',
+      content: `<p>Label your current feeling to help process it.</p>`
     },
     {
       id: 'tech7',
-      title: 'Emergency: Call a Support Person',
+      title: 'Creative Expression',
+      category: 'creative',
+      emoji: '🎨',
+      content: `<p>Draw, write, or craft something to express yourself.</p>`
+    },
+    {
+      id: 'tech8',
+      title: 'Emergency Contact Plan',
       category: 'emergency',
-      emoji: '📞',
-      content: `<p>If you are overwhelmed, call a trusted friend, family member, or crisis line immediately.</p>
-      <p><a href="tel:911" style="color:#4ecdc4;">Call 911 (Emergency Services)</a></p>`
+      emoji: '🚨',
+      content: `<p>Have a list of people or services you can contact in crisis.</p>`
     }
   ];
 
-  // ======== DOM Elements ========
+  // Cached DOM
   const accordion = document.getElementById('accordion');
   const searchInput = document.getElementById('search-input');
-  const filterButtons = document.querySelectorAll('.filter-btn');
+  const checklist = document.getElementById('checklist');
+  const notesTextarea = document.getElementById('notes-textarea');
+  const breathCircle = document.getElementById('breath-circle');
+  const startBreathingBtn = document.getElementById('start-breathing-btn');
+  const stopBreathingBtn = document.getElementById('stop-breathing-btn');
+  const toggleMusic = document.getElementById('toggle-music');
+  const toggleDarkMode = document.getElementById('toggle-darkmode');
+  const downloadPdfBtn = document.getElementById('download-pdf');
+  const addTechBtn = document.getElementById('add-tech-btn');
   const modalOverlay = document.getElementById('modal-overlay');
-  const modalClose = document.getElementById('modal-close');
+  const modalCloseBtn = document.getElementById('modal-close');
   const modalTitle = document.getElementById('modal-title');
   const modalEmoji = document.getElementById('modal-emoji');
   const modalCategory = document.getElementById('modal-category');
   const modalContent = document.getElementById('modal-content');
-  const techCountEl = document.getElementById('tech-count');
-  const favoritesCountEl = document.getElementById('favorites-count');
-  const dailyStreakEl = document.getElementById('daily-streak');
-  const checklistContainer = document.querySelector('.checklist');
-  const notesTextarea = document.getElementById('notes-textarea');
-  const startBreathingBtn = document.getElementById('start-breathing');
-  const stopBreathingBtn = document.getElementById('stop-breathing');
-  const breathCircle = document.querySelector('.breath-circle');
-  const breathText = document.getElementById('breath-text');
-  const toggleDarkmode = document.getElementById('toggle-darkmode');
-  const toggleMusic = document.getElementById('toggle-music');
+
+  const breathSoundInhale = document.getElementById('breath-sound-inhale');
+  const breathSoundExhale = document.getElementById('breath-sound-exhale');
   const bgMusic = document.getElementById('bg-music');
-  const addTechniqueBtn = document.getElementById('add-technique');
-  const downloadPdfBtn = document.getElementById('download-pdf');
 
-  // ======== State ========
-  let filteredCategory = 'all';
-  let favorites = new Set(JSON.parse(localStorage.getItem('favorites')) || []);
-  let checklist = JSON.parse(localStorage.getItem('checklist')) || {};
-  let notes = localStorage.getItem('notes') || '';
-  let dailyStreak = parseInt(localStorage.getItem('dailyStreak')) || 0;
-  let lastVisitDate = localStorage.getItem('lastVisitDate');
+  // State
+  let currentCategory = 'all';
+  let filteredTechniques = [];
+  let checklistState = JSON.parse(localStorage.getItem('groundingChecklist')) || {};
+  let notes = localStorage.getItem('groundingNotes') || '';
+  let favorites = JSON.parse(localStorage.getItem('groundingFavorites')) || {};
   let breathingInterval = null;
-  let breathingPhase = 0; // 0: inhale, 1: hold, 2: exhale, 3: hold
-  let breathingStepDuration = 4000; // milliseconds
+  let breathingPhase = 0; // 0: inhale,1: hold1,2: exhale,3: hold2
   let breathingRunning = false;
+  let dailyStreak = 0;
+  let lastVisitDate = localStorage.getItem('groundingLastVisit');
 
-  // ======== Functions ========
+  // Phases timing (ms)
+  const phases = [
+    { name: 'Inhale', duration: 4000 },
+    { name: 'Hold', duration: 4000 },
+    { name: 'Exhale', duration: 4000 },
+    { name: 'Hold', duration: 4000 }
+  ];
 
-  // Save favorites & checklist & notes & streak
-  function saveState() {
-    localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
-    localStorage.setItem('checklist', JSON.stringify(checklist));
-    localStorage.setItem('notes', notesTextarea.value);
-    localStorage.setItem('dailyStreak', dailyStreak.toString());
-  }
+  // --- Functions ---
 
-  // Update stats display
-  function updateStats() {
-    techCountEl.textContent = techniques.length.toString();
-    favoritesCountEl.textContent = favorites.size.toString();
-    dailyStreakEl.textContent = dailyStreak.toString();
-  }
-
-  // Render techniques filtered by search and category
-  function renderTechniques() {
-    const searchTerm = searchInput.value.toLowerCase();
-    accordion.innerHTML = '';
-    let count = 0;
-
-    techniques.forEach(tech => {
-      const matchCategory = filteredCategory === 'all' || tech.category === filteredCategory;
-      const matchSearch = tech.title.toLowerCase().includes(searchTerm) || tech.content.toLowerCase().includes(searchTerm);
-      if (matchCategory && matchSearch) {
-        count++;
-        const btn = document.createElement('button');
-        btn.className = 'card-button';
-        btn.setAttribute('aria-expanded', 'false');
-        btn.setAttribute('aria-controls', `content-${tech.id}`);
-        btn.type = 'button';
-        btn.dataset.id = tech.id;
-        btn.innerHTML = `<span class="card-emoji" aria-hidden="true">${tech.emoji}</span> ${tech.title}`;
-        btn.addEventListener('click', () => openModal(tech.id));
-        accordion.appendChild(btn);
+  // Save & load daily streak
+  function updateDailyStreak() {
+    const today = new Date().toDateString();
+    if (!lastVisitDate) {
+      dailyStreak = 1;
+      localStorage.setItem('groundingLastVisit', today);
+      localStorage.setItem('groundingDailyStreak', dailyStreak);
+    } else {
+      const lastDate = new Date(lastVisitDate);
+      const diffDays = Math.floor((new Date(today) - lastDate) / (1000 * 60 * 60 * 24));
+      if (diffDays === 1) {
+        dailyStreak = (parseInt(localStorage.getItem('groundingDailyStreak')) || 0) + 1;
+        localStorage.setItem('groundingDailyStreak', dailyStreak);
+        localStorage.setItem('groundingLastVisit', today);
+      } else if (diffDays > 1) {
+        dailyStreak = 1;
+        localStorage.setItem('groundingDailyStreak', dailyStreak);
+        localStorage.setItem('groundingLastVisit', today);
+      } else {
+        dailyStreak = parseInt(localStorage.getItem('groundingDailyStreak')) || 1;
       }
-    });
-
-    if (count === 0) {
-      accordion.innerHTML = `<p>No techniques found.</p>`;
     }
+    document.getElementById('daily-streak').textContent = dailyStreak;
   }
 
-  // Render checklist items
+  // Render techniques filtered by category and search
+  function renderTechniques() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    filteredTechniques = techniques.filter(t => {
+      const matchCategory = currentCategory === 'all' || t.category === currentCategory;
+      const matchSearch = t.title.toLowerCase().includes(searchTerm) || t.content.toLowerCase().includes(searchTerm);
+      return matchCategory && matchSearch;
+    });
+    accordion.innerHTML = '';
+    if(filteredTechniques.length === 0){
+      accordion.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#888;">No techniques found.</p>`;
+      document.getElementById('tech-count').textContent = '0';
+      return;
+    }
+    filteredTechniques.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'card-button';
+      btn.setAttribute('aria-haspopup', 'dialog');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.type = 'button';
+      btn.dataset.id = t.id;
+      btn.innerHTML = `<span class="card-emoji" aria-hidden="true">${t.emoji}</span> ${t.title}`;
+      btn.addEventListener('click', () => openModal(t));
+      accordion.appendChild(btn);
+    });
+    document.getElementById('tech-count').textContent = filteredTechniques.length;
+  }
+
+  // Render checklist items for filtered techniques
   function renderChecklist() {
-    checklistContainer.innerHTML = '';
-    techniques.forEach(tech => {
-      const item = document.createElement('div');
-      item.className = 'checklist-item';
-      if (checklist[tech.id]) item.classList.add('checked');
-      item.setAttribute('role', 'listitem');
-      item.setAttribute('tabindex', '0');
-      item.textContent = tech.title;
-      item.addEventListener('click', () => toggleChecklistItem(tech.id, item));
-      item.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
+    checklist.innerHTML = '';
+    filteredTechniques.forEach(t => {
+      const div = document.createElement('div');
+      div.className = 'checklist-item' + (checklistState[t.id] ? ' checked' : '');
+      div.tabIndex = 0;
+      div.role = 'checkbox';
+      div.ariaChecked = checklistState[t.id] ? 'true' : 'false';
+      div.textContent = t.title;
+      div.addEventListener('click', () => toggleChecklistItem(t.id));
+      div.addEventListener('keydown', e => {
+        if(e.key === ' ' || e.key === 'Enter'){
           e.preventDefault();
-          toggleChecklistItem(tech.id, item);
+          toggleChecklistItem(t.id);
         }
       });
-      checklistContainer.appendChild(item);
+      checklist.appendChild(div);
     });
   }
 
-  function toggleChecklistItem(id, elem) {
-    if (checklist[id]) {
-      delete checklist[id];
-      elem.classList.remove('checked');
-    } else {
-      checklist[id] = true;
-      elem.classList.add('checked');
-    }
-    saveState();
+  // Toggle checklist item state
+  function toggleChecklistItem(id) {
+    checklistState[id] = !checklistState[id];
+    localStorage.setItem('groundingChecklist', JSON.stringify(checklistState));
+    renderChecklist();
   }
 
-  // Open modal with technique details
-  function openModal(id) {
-    const tech = techniques.find(t => t.id === id);
-    if (!tech) return;
+  // Update favorites count display
+  function updateStats() {
+    const favCount = Object.values(favorites).filter(Boolean).length;
+    document.getElementById('favorites-count').textContent = favCount;
+  }
+
+  // Modal open
+  function openModal(tech) {
     modalTitle.textContent = tech.title;
     modalEmoji.textContent = tech.emoji;
-    modalCategory.textContent = tech.category.toUpperCase();
+    modalCategory.textContent = `Category: ${capitalize(tech.category)}`;
     modalContent.innerHTML = tech.content;
-    modalOverlay.hidden = false;
     modalOverlay.classList.add('active');
-    modalClose.focus();
+    modalOverlay.removeAttribute('hidden');
+    modalCloseBtn.focus();
+    // Update aria-expanded on the button
+    const btn = accordion.querySelector(`button[data-id="${tech.id}"]`);
+    if(btn) btn.setAttribute('aria-expanded', 'true');
   }
 
-  // Close modal
+  // Modal close
   function closeModal() {
     modalOverlay.classList.remove('active');
-    setTimeout(() => {
-      modalOverlay.hidden = true;
-      searchInput.focus();
-    }, 300);
+    modalOverlay.setAttribute('hidden', '');
+    // Reset aria-expanded for all buttons
+    accordion.querySelectorAll('button[aria-expanded="true"]').forEach(btn => {
+      btn.setAttribute('aria-expanded', 'false');
+    });
   }
 
-  // Breathing animation cycle
+  // Capitalize first letter helper
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  // Search input handler
+  searchInput.addEventListener('input', () => {
+    renderTechniques();
+    renderChecklist();
+  });
+
+  // Category filter handlers
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      currentCategory = btn.dataset.category;
+      renderTechniques();
+      renderChecklist();
+    });
+  });
+
+  // Notes saving and loading
+  notesTextarea.value = notes;
+  notesTextarea.addEventListener('input', () => {
+    localStorage.setItem('groundingNotes', notesTextarea.value);
+  });
+
+  // Breathing animation phases handler
   function startBreathing() {
     if (breathingRunning) return;
     breathingRunning = true;
     breathingPhase = 0;
     startBreathingBtn.disabled = true;
     stopBreathingBtn.disabled = false;
-    breathCycle();
+    runBreathingPhase();
   }
-
   function stopBreathing() {
     breathingRunning = false;
     clearTimeout(breathingInterval);
+    breathCircle.textContent = 'Stopped';
+    breathCircle.className = 'breath-circle';
     startBreathingBtn.disabled = false;
     stopBreathingBtn.disabled = true;
-    breathCircle.classList.remove('inhale', 'exhale');
-    breathText.textContent = 'Breathe In';
   }
 
-  function breathCycle() {
+  // Run each breathing phase sequentially with animation & sound
+  function runBreathingPhase() {
     if (!breathingRunning) return;
 
-    switch (breathingPhase) {
-      case 0:
-        breathCircle.classList.add('inhale');
-        breathCircle.classList.remove('exhale');
-        breathText.textContent = 'Breathe In';
-        document.getElementById('breath-in-sound').play().catch(() => {});
-        breathingPhase++;
-        breathingInterval = setTimeout(breathCycle, breathingStepDuration);
-        break;
-      case 1:
-        breathText.textContent = 'Hold';
-        breathingPhase++;
-        breathingInterval = setTimeout(breathCycle, breathingStepDuration);
-        break;
-      case 2:
-        breathCircle.classList.remove('inhale');
-        breathCircle.classList.add('exhale');
-        breathText.textContent = 'Breathe Out';
-        document.getElementById('breath-out-sound').play().catch(() => {});
-        breathingPhase++;
-        breathingInterval = setTimeout(breathCycle, breathingStepDuration);
-        break;
-      case 3:
-        breathText.textContent = 'Hold';
-        breathingPhase = 0;
-        breathingInterval = setTimeout(breathCycle, breathingStepDuration);
-        break;
+    const phase = phases[breathingPhase];
+    breathCircle.textContent = phase.name;
+
+    // Reset classes & set according to phase for pulse animation
+    breathCircle.className = 'breath-circle ' + (phase.name.toLowerCase());
+
+    // Play sound on inhale/exhale
+    if(phase.name.toLowerCase() === 'inhale'){
+      breathSoundInhale.currentTime = 0;
+      breathSoundInhale.play().catch(()=>{});
     }
+    else if(phase.name.toLowerCase() === 'exhale'){
+      breathSoundExhale.currentTime = 0;
+      breathSoundExhale.play().catch(()=>{});
+    }
+
+    breathingInterval = setTimeout(() => {
+      breathingPhase = (breathingPhase + 1) % phases.length;
+      runBreathingPhase();
+    }, phase.duration);
   }
 
-  // Filter button click handler
-  filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterButtons.forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
-      filteredCategory = btn.dataset.category;
-      renderTechniques();
-    });
-  });
-
-  // Search input handler
-  searchInput.addEventListener('input', () => {
-    renderTechniques();
-  });
-
-  // Modal close handlers
-  modalClose.addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', e => {
-    if (e.target === modalOverlay) closeModal();
-  });
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !modalOverlay.hidden) closeModal();
-  });
-
-  // Notes textarea autosave
-  notesTextarea.value = notes;
-  notesTextarea.addEventListener('input', e => {
-    notes = e.target.value;
-    saveState();
-  });
+  startBreathingBtn.addEventListener('click', startBreathing);
+  stopBreathingBtn.addEventListener('click', stopBreathing);
 
   // Dark mode toggle
-  toggleDarkmode.checked = localStorage.getItem('darkmode') === 'true';
-  if (toggleDarkmode.checked) document.body.classList.add('dark');
-  toggleDarkmode.addEventListener('change', e => {
-    if (e.target.checked) {
+  function applyDarkMode(enabled) {
+    if(enabled){
       document.body.classList.add('dark');
-      localStorage.setItem('darkmode', 'true');
+      toggleDarkMode.checked = true;
     } else {
       document.body.classList.remove('dark');
-      localStorage.setItem('darkmode', 'false');
+      toggleDarkMode.checked = false;
     }
+    localStorage.setItem('groundingDarkMode', enabled ? 'true' : 'false');
+  }
+  toggleDarkMode.addEventListener('change', e => {
+    applyDarkMode(e.target.checked);
   });
+  // Load dark mode state
+  applyDarkMode(localStorage.getItem('groundingDarkMode') === 'true');
 
   // Background music toggle
-  toggleMusic.checked = localStorage.getItem('bgMusic') === 'true';
-  if (toggleMusic.checked) {
-    bgMusic.volume = 0.15;
-    bgMusic.play().catch(() => {});
-  }
-  toggleMusic.addEventListener('change', e => {
-    if (e.target.checked) {
-      bgMusic.volume = 0.15;
-      bgMusic.play().catch(() => {});
-      localStorage.setItem('bgMusic', 'true');
+  function applyMusic(enabled) {
+    if(enabled){
+      bgMusic.play().catch(()=>{});
+      toggleMusic.checked = true;
     } else {
       bgMusic.pause();
-      localStorage.setItem('bgMusic', 'false');
+      toggleMusic.checked = false;
     }
-  });
-
-  // Daily streak update
-  function updateDailyStreak() {
-    const today = new Date().toISOString().slice(0, 10);
-    if (lastVisitDate !== today) {
-      // Check if yesterday was last visit
-      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-      if (lastVisitDate === yesterday) {
-        dailyStreak++;
-      } else {
-        dailyStreak = 1;
-      }
-      localStorage.setItem('lastVisitDate', today);
-      localStorage.setItem('dailyStreak', dailyStreak.toString());
-      lastVisitDate = today;
-    }
+    localStorage.setItem('groundingBgMusic', enabled ? 'true' : 'false');
   }
-
-  // Add new technique (prompt form)
-  addTechniqueBtn.addEventListener('click', () => {
-    const title = prompt('Enter technique title:').trim();
-    if (!title) return alert('Title cannot be empty.');
-    const category = prompt('Enter category (physical, breathing, visualization, mindfulness, emotional, creative, emergency):').trim().toLowerCase();
-    if (!category || !['physical', 'breathing', 'visualization', 'mindfulness', 'emotional', 'creative', 'emergency'].includes(category)) {
-      return alert('Invalid category.');
-    }
-    const emoji = prompt('Enter an emoji for the technique:').trim() || '✨';
-    const content = prompt('Enter technique description (HTML allowed):').trim();
-    if (!content) return alert('Description cannot be empty.');
-
-    const newTech = {
-      id: 'tech' + (techniques.length + 1),
-      title,
-      category,
-      emoji,
-      content,
-    };
-    techniques.push(newTech);
-    renderTechniques();
-    renderChecklist();
-    updateStats();
-    alert('New technique added!');
+  toggleMusic.addEventListener('change', e => {
+    applyMusic(e.target.checked);
   });
+  // Load music state
+  applyMusic(localStorage.getItem('groundingBgMusic') === 'true');
 
-  // PDF download (simple text/pdf generation)
+  // Download grounding guide PDF (simple text version)
   downloadPdfBtn.addEventListener('click', () => {
     let docContent = 'Grounding Techniques Guide\n\n';
-    techniques.forEach(tech => {
-      docContent += `${tech.emoji} ${tech.title.toUpperCase()}\nCategory: ${tech.category}\n\n${stripHtml(tech.content)}\n\n---\n\n`;
+    techniques.forEach(t => {
+      docContent += `${t.emoji} ${t.title.toUpperCase()}\nCategory: ${capitalize(t.category)}\n\n${stripHtml(t.content)}\n\n---\n\n`;
     });
 
     const blob = new Blob([docContent], { type: 'text/plain' });
@@ -931,43 +976,52 @@
     }, 0);
   });
 
-  // Utility: strip HTML tags for PDF content
+  // Strip HTML tags helper
   function stripHtml(html) {
     const tmp = document.createElement('div');
     tmp.innerHTML = html;
     return tmp.textContent || tmp.innerText || '';
   }
 
-  // Initial rendering & setup
-  updateDailyStreak();
-  updateStats();
+  // Add new technique prompt flow
+  addTechBtn.addEventListener('click', () => {
+    const title = prompt('Enter the technique title:').trim();
+    if (!title) return alert('Title cannot be empty.');
+
+    const category = prompt('Enter the category (physical, breathing, visualization, mindfulness, emotional, creative, emergency):').toLowerCase().trim();
+    const validCategories = ['physical','breathing','visualization','mindfulness','emotional','creative','emergency'];
+    if (!validCategories.includes(category)) return alert('Invalid category.');
+
+    const emoji = prompt('Choose an emoji for the technique:').trim() || '🧘';
+    const content = prompt('Describe the technique:').trim() || '<p>No details provided.</p>';
+
+    const id = `user-${Date.now()}`;
+    techniques.push({ id, title, category, emoji, content });
+    localStorage.setItem('groundingCustomTechniques', JSON.stringify(techniques.filter(t => t.id.startsWith('user-'))));
+    renderTechniques();
+    renderChecklist();
+  });
+
+  // Modal close handlers
+  modalCloseBtn.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => {
+    if(e.target === modalOverlay) closeModal();
+  });
+  window.addEventListener('keydown', e => {
+    if(e.key === 'Escape') closeModal();
+  });
+
+  // Load custom techniques from localStorage
+  const savedCustom = JSON.parse(localStorage.getItem('groundingCustomTechniques') || '[]');
+  if(savedCustom.length){
+    techniques.push(...savedCustom);
+  }
+
+  // Init
   renderTechniques();
   renderChecklist();
-
-  // Breathing buttons
-  startBreathingBtn.addEventListener('click', startBreathing);
-  stopBreathingBtn.addEventListener('click', stopBreathing);
-
-  // Accessibility: trap focus in modal
-  modalOverlay.addEventListener('keydown', e => {
-    if (e.key === 'Tab') {
-      const focusable = modalOverlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    }
-  });
+  updateStats();
+  updateDailyStreak();
 })();
 </script>
 </body>
