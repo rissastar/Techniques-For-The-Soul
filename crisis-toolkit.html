@@ -6,20 +6,20 @@
   <title>Crisis Support Toolkit</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    /* Reset & base */
-    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    /* Reset & base styles */
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
     body {
-      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background:linear-gradient(135deg,#667eea,#764ba2);
+      font-family:'Segoe UI', sans-serif;
+      background: linear-gradient(135deg,#667eea,#764ba2);
       color:#333; min-height:100vh; padding:20px 10px 80px;
       scroll-behavior:smooth; overflow-x:hidden;
     }
-    a { color:#5a6cb2; text-decoration:none; transition:color 0.3s; }
-    a:hover, a:focus { color:#423e9a; text-decoration:underline; outline:none; }
+    a { color:#5a6cb2; text-decoration:none; transition:color .3s; }
+    a:hover, a:focus { color:#423e9a; text-decoration:underline; }
     button {
       font-family:inherit; border:none; cursor:pointer; border-radius:8px;
-      transition:all .3s ease; user-select:none; display:inline-flex;
-      align-items:center; justify-content:center;
+      transition:all .3s ease; display:inline-flex; align-items:center;
+      justify-content:center;
     }
     button:focus-visible { outline:3px solid #a7b1f9; outline-offset:2px; }
     button:hover { transform:translateY(-3px); }
@@ -41,60 +41,64 @@
     }
     @keyframes fadeIn { to { opacity:1; } }
     header h1 {
-      font-size:2.6rem; color:#423e9a; margin-bottom:0.3rem;
-      font-weight:700; letter-spacing:0.05em;
+      font-size:2.6rem; color:#423e9a; margin-bottom:.3rem;
+      font-weight:700; letter-spacing:.05em;
     }
-    header .subtitle { font-size:1.1rem; color:#6c6f85; margin-bottom:0.7rem; }
+    header .subtitle { font-size:1.1rem; color:#6c6f85; margin-bottom:.7rem; }
     header strong { font-weight:600; color:#37415a; font-size:1rem; }
 
-    /* Sections */
+    /* Section headings */
     section h2 {
-      font-size:1.8rem; color:#4b4e7c; margin-bottom:0.7rem;
+      font-size:1.8rem; color:#4b4e7c; margin-bottom:.7rem;
       border-left:6px solid #5a6cb2; padding-left:12px;
       opacity:0; transform:translateX(-30px);
       animation:fadeInLeft .8s forwards;
     }
     @keyframes fadeInLeft { to { opacity:1; transform:translateX(0); } }
 
-    /* Prompts box */
+    /* Starter prompts */
     .starter-prompts {
       background:#f4f7ff; border-left:5px solid #667eea;
-      border-radius:12px; padding:1rem 1.5rem;
-      font-size:0.95rem; color:#4a5178;
-      margin-bottom:1.4rem;
-      opacity:0; animation:fadeIn .9s forwards;
+      border-radius:12px; padding:1rem 1.5rem; color:#4a5178;
+      margin-bottom:1.4rem; opacity:0; animation:fadeIn .9s forwards;
     }
-    .starter-prompts ul { margin-top:0.3rem; padding-left:1.2rem; line-height:1.5; }
-    .starter-prompts li { margin-bottom:0.35rem; }
+    .starter-prompts ul { margin-top:.3rem; padding-left:1.2rem; line-height:1.5; }
+    .starter-prompts li { margin-bottom:.35rem; }
 
+    /* Textareas */
     textarea {
       width:100%; min-height:140px; padding:1rem 1.2rem;
       border:2px solid #5a6cb2; border-radius:14px;
       background:#fdfdff; font-size:1rem; color:#222;
-      resize:vertical; box-shadow:inset 1px 2px 8px rgba(102,110,240,0.15);
-      transition:border-color .3s,box-shadow .3s;
+      resize:vertical; box-shadow:inset 1px 2px 8px rgba(102,110,240,.15);
+      transition:border-color .3s, box-shadow .3s;
       opacity:0; animation:fadeIn 1.1s forwards;
     }
-    textarea:focus { border-color:#423e9a; box-shadow:0 0 12px #7a7edc; }
+    textarea:focus {
+      border-color:#423e9a;
+      box-shadow:0 0 12px #7a7edc;
+    }
 
+    /* Form buttons */
     .form-buttons {
       margin-top:1.6rem; display:flex; gap:1rem; flex-wrap:wrap;
       opacity:0; animation:fadeIn 1.2s forwards;
     }
     .primary-btn {
-      background-color:#5a6cb2; color:#fff; padding:.75rem 1.8rem;
-      font-size:1rem; font-weight:600;
+      background-color:#5a6cb2; color:#fff;
+      padding:.75rem 1.8rem; font-size:1rem; font-weight:600;
     }
     .secondary-btn {
-      background-color:#bbb; color:#333; padding:.75rem 1.8rem;
-      font-size:1rem; font-weight:600;
+      background-color:#bbb; color:#333;
+      padding:.75rem 1.8rem; font-size:1rem; font-weight:600;
     }
 
+    /* Checklist items */
     .checklist ul {
       margin-top:1rem; opacity:0; animation:fadeIn 1.3s forwards;
     }
     .checklist li {
-      margin-bottom:0.8rem; display:flex; align-items:center; gap:0.7rem;
+      margin-bottom:.8rem; display:flex; align-items:center; gap:.7rem;
       color:#3a3f66;
     }
     .checklist input {
@@ -102,10 +106,10 @@
       border-radius:5px; cursor:pointer;
     }
 
-    /* Scroll buttons */
+    /* Scroll-to buttons */
     .scroll-btns {
-      position:fixed; bottom:85px; right:18px; gap:14px;
-      display:flex; flex-direction:column; z-index:1100;
+      position:fixed; bottom:85px; right:18px; display:flex;
+      flex-direction:column; gap:14px; z-index:1100;
     }
     .scroll-btns button {
       width:54px; height:54px; border-radius:50%;
@@ -116,46 +120,50 @@
       background:#423e9a; transform:scale(1.12);
     }
     .scroll-btns button::after {
-      content:attr(title); position:absolute; right:110%; top:50%;
-      transform:translateY(-50%); background:#423e9a; color:#fff;
-      padding:6px 12px; border-radius:6px; font-size:0.85rem;
+      content:attr(title); position:absolute;
+      right:110%; top:50%; transform:translateY(-50%);
+      background:#423e9a; color:#fff; padding:6px 12px;
+      border-radius:6px; font-size:.85rem;
       opacity:0; pointer-events:none;
       transition:opacity .3s;
     }
     .scroll-btns button:hover::after { opacity:1; }
 
-    /* Modal styling */
+    /* Modal */
     .modal-overlay {
-      position:fixed; inset:0; background:rgba(20,25,50,0.85);
-      backdrop-filter:blur(7px); display:none;
-      align-items:center; justify-content:center;
-      opacity:0; pointer-events:none;
-      transition:opacity .35s ease;
-      z-index:1600;
+      position:fixed; inset:0; background:rgba(20,25,50,.85);
+      backdrop-filter:blur(7px); display:none; align-items:center;
+      justify-content:center; opacity:0; pointer-events:none;
+      transition:opacity .35s; z-index:1600;
     }
-    .modal-overlay.active { display:flex; opacity:1; pointer-events:auto; }
+    .modal-overlay.active {
+      display:flex; opacity:1; pointer-events:auto;
+    }
     .modal {
       background:#fff; border-radius:16px; padding:2.3rem 2.7rem;
-      box-shadow:0 20px 40px rgba(0,0,0,0.3);
+      box-shadow:0 20px 40px rgba(0,0,0,.3);
       transform:translateY(40px); opacity:0;
       animation:slideUpFade .4s forwards;
-      max-width:650px; width:100%; max-height:90vh; overflow-y:auto;
+      max-width:650px; width:100%; max-height:90vh;
+      overflow-y:auto;
     }
     @keyframes slideUpFade { to { transform:translateY(0); opacity:1; } }
     .modal h2 { color:#423e9a; font-size:1.9rem; margin-bottom:1.2rem; }
     .close-btn {
-      position:absolute; top:14px; right:14px; background:transparent;
-      font-size:1.6rem; color:#888;
+      position:absolute; top:14px; right:14px;
+      font-size:1.6rem; background:transparent; color:#888;
     }
     .close-btn:hover { color:#5a6cb2; }
 
     #safety-input-fr {
       width:100%; min-height:160px; padding:1.1rem 1.3rem;
       border:2px solid #5a6cb2; border-radius:14px;
-      box-shadow:inset 1px 2px 8px rgba(102,110,240,0.15);
-      transition:border-color .3s,box-shadow .3s;
+      box-shadow:inset 1px 2px 8px rgba(102,110,240,.15);
+      transition:border-color .3s, box-shadow .3s;
     }
-    #safety-input-fr:focus { border-color:#423e9a; box-shadow:0 0 12px #7a7edc; }
+    #safety-input-fr:focus {
+      border-color:#423e9a; box-shadow:0 0 12px #7a7edc;
+    }
 
     footer {
       text-align:center; margin-top:3rem; color:#d2d4e7;
@@ -163,11 +171,15 @@
     }
 
     @media (max-width:600px) {
-      .container { padding:1.5rem 1.5rem 2.5rem; }
+      .container { padding:1.5rem; }
       header h1 { font-size:2rem; }
       section h2 { font-size:1.5rem; }
-      .scroll-btns { bottom:60px; right:12px; }
-      .scroll-btns button { width:46px; height:46px; font-size:1.4rem; }
+      .scroll-btns {
+        bottom:60px; right:12px;
+      }
+      .scroll-btns button {
+        width:46px; height:46px; font-size:1.4rem;
+      }
       .form-buttons { flex-direction:column; }
       .form-buttons button { min-width:100%; }
     }
@@ -177,14 +189,14 @@
 
   <!-- Language toggle -->
   <div style="position:fixed;top:20px;right:20px;z-index:1200;">
-    <button id="en-btn" class="primary-btn" aria-pressed="true" onclick="setLang('en')">English</button>
-    <button id="fr-btn" class="secondary-btn" aria-pressed="false" onclick="setLang('fr')">Français</button>
+    <button id="en-btn" class="primary-btn" onclick="setLang('en')">English</button>
+    <button id="fr-btn" class="secondary-btn" onclick="setLang('fr')">Français</button>
   </div>
 
-  <!-- Scroll buttons -->
+  <!-- Scroll-to-section buttons -->
   <nav class="scroll-btns" aria-label="Scroll">
-    <button onclick="scrollTo('safety-section')" title="Go to Safety Plan">🛡️</button>
-    <button onclick="scrollTo('checklist-section')" title="Go to Checklist">📋</button>
+    <button onclick="scrollToSection('safety-section')" title="Go to Safety Plan">🛡️</button>
+    <button onclick="scrollToSection('checklist-section')" title="Go to Checklist">📋</button>
   </nav>
 
   <main class="container" tabindex="-1">
@@ -194,6 +206,7 @@
       <p><strong id="tagline">You are not alone. Help is available 24/7.</strong></p>
     </header>
 
+    <!-- Safety Plan -->
     <section id="safety-section" tabindex="-1">
       <h2>🛡️ Personalized Safety Plan</h2>
       <div class="starter-prompts">
@@ -213,9 +226,10 @@
       </div>
     </section>
 
+    <!-- Checklist & Resources -->
     <section id="checklist-section" tabindex="-1" style="margin-top:3rem;">
       <h2>📋 Crisis Checklist & Numbers</h2>
-      <div class="checklist" aria-label="Checklist">
+      <div class="checklist">
         <ul>
           <li><input type="checkbox" id="c1"><label for="c1">Call a trusted person or crisis number</label></li>
           <li><input type="checkbox" id="c2"><label for="c2">Use breathing or grounding techniques</label></li>
@@ -228,18 +242,18 @@
 
       <h3 style="margin-top:2rem; color:#4b4e7c;">🇨🇦 Canada Crisis Resources</h3>
       <ul style="line-height:1.5; margin-bottom:1.5rem;">
-        <li>🔹 <strong>988</strong> – Call/Text. Suicide Crisis Helpline</li>
-        <li>🔹 <strong>1-800-668-6868 / 686868 (text)</strong> – Kids Help Phone (ages 5–29)</li>
-        <li>🔹 <strong>1-833-456-4566 / 45645 (text)</strong> – Crisis Services Canada</li>
-        <li>🔹 <strong>1-855-242-3310</strong> – Hope for Wellness Help Line (Indigenous)</li>
+        <li>🔹 <strong>988</strong> – Call/Text suicide crisis helpline</li>
+        <li>🔹 <strong>1‑800‑668‑6868 / 686868 (text)</strong> – Kids Help Phone</li>
+        <li>🔹 <strong>1‑833‑456‑4566 / 45645 (text)</strong> – Crisis Services Canada</li>
+        <li>🔹 <strong>1‑855‑242‑3310</strong> – Hope for Wellness Help Line (Indigenous)</li>
       </ul>
 
       <h3 style="color:#4b4e7c;">🇺🇸 US Crisis Resources</h3>
       <ul style="line-height:1.5;">
-        <li>🔹 <strong>988</strong> – Call/Text. Suicide & Crisis Lifeline</li>
+        <li>🔹 <strong>988</strong> – Suicide & Crisis Lifeline (Call/Text)</li>
         <li>🔹 <strong>HOME → 741741</strong> – Crisis Text Line</li>
-        <li>🔹 <strong>1-800-662-HELP (4357)</strong> – SAMHSA National Helpline</li>
-        <li>🔹 <strong>1-800-985-5990</strong> – Disaster Distress Helpline</li>
+        <li>🔹 <strong>1‑800‑662‑HELP (4357)</strong> – SAMHSA National Helpline</li>
+        <li>🔹 <strong>1‑800‑985‑5990</strong> – Disaster Distress Helpline</li>
       </ul>
     </section>
   </main>
@@ -251,7 +265,7 @@
   <!-- French Safety Plan Modal -->
   <div id="modal-safetyplan-fr" class="modal-overlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
-      <button class="close-btn" aria-label="Close modal" onclick="closeModal('modal-safetyplan-fr')">&times;</button>
+      <button class="close-btn" aria-label="Close" onclick="closeModal('modal-safetyplan-fr')">×</button>
       <h2>🛡️ Plan de sécurité personnalisé</h2>
       <textarea id="safety-input-fr" placeholder="Écrivez votre plan ici..."></textarea>
       <div style="text-align:right; margin-top:1rem;">
@@ -262,53 +276,58 @@
   </div>
 
   <script>
-    function scrollTo(id) {
-      document.getElementById(id).scrollIntoView({ behavior:'smooth' });
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
     }
     function setLang(lang) {
       const enBtn = document.getElementById('en-btn');
       const frBtn = document.getElementById('fr-btn');
-      const t = document.getElementById('title'), s = document.getElementById('subtitle'), st = document.getElementById('tagline');
-      if (lang==='fr') {
-        enBtn.classList.replace('primary-btn','secondary-btn');
-        frBtn.classList.replace('secondary-btn','primary-btn');
-        t.textContent="🆘 Trousse d'aide en situation de crise";
-        s.textContent="Aide immédiate et ressources pour le Canada et les États‑Unis";
-        st.textContent="Vous n'êtes pas seul(e). De l'aide est disponible 24 h/24, 7 j/7.";
+      const t = document.getElementById('title');
+      const s = document.getElementById('subtitle');
+      const st = document.getElementById('tagline');
+
+      if (lang === 'fr') {
+        enBtn.classList.replace('primary-btn', 'secondary-btn');
+        frBtn.classList.replace('secondary-btn', 'primary-btn');
+        t.textContent = "🆘 Trousse d'aide en situation de crise";
+        s.textContent = "Aide immédiate et ressources pour le Canada et les États‑Unis";
+        st.textContent = "Vous n'êtes pas seul(e). De l'aide est disponible 24 h/24, 7 j/7.";
       } else {
-        frBtn.classList.replace('primary-btn','secondary-btn');
-        enBtn.classList.replace('secondary-btn','primary-btn');
-        t.textContent="🆘 Crisis Support Toolkit";
-        s.textContent="Immediate help and resources for Canada & USA";
-        st.textContent="You are not alone. Help is available 24/7.";
+        frBtn.classList.replace('primary-btn', 'secondary-btn');
+        enBtn.classList.replace('secondary-btn', 'primary-btn');
+        t.textContent = "🆘 Crisis Support Toolkit";
+        s.textContent = "Immediate help and resources for Canada & USA";
+        st.textContent = "You are not alone. Help is available 24/7.";
       }
     }
     setLang('en');
 
     function openModal(id) {
-      const m = document.getElementById(id);
-      m.classList.add('active');
-      m.style.display='flex';
-      m.setAttribute('aria-hidden','false');
-      m.querySelector('textarea').focus();
-      document.body.style.overflow='hidden';
+      const md = document.getElementById(id);
+      md.classList.add('active');
+      md.style.display = 'flex';
+      md.setAttribute('aria-hidden', 'false');
+      md.querySelector('textarea').focus();
+      document.body.style.overflow = 'hidden';
     }
     function closeModal(id) {
-      const m = document.getElementById(id);
-      m.classList.remove('active');
-      m.style.display='none';
-      m.setAttribute('aria-hidden','true');
-      document.body.style.overflow='';
+      const md = document.getElementById(id);
+      md.classList.remove('active');
+      md.style.display = 'none';
+      md.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
     }
     async function downloadPDF(inputId, filename) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      const txt = document.getElementById(inputId).value.trim() || '(No content entered)';
-      doc.setFont('helvetica','bold'); doc.setFontSize(18);
+      const text = document.getElementById(inputId).value.trim() || '(No content entered)';
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(18);
       doc.text(filename.replace(/_/g,' ').replace('.pdf',''),14,20);
-      doc.setFont('helvetica','normal'); doc.setFontSize(12);
-      const lines = doc.splitTextToSize(txt,180);
-      doc.text(lines,14,30);
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(12);
+      const lines = doc.splitTextToSize(text, 180);
+      doc.text(lines, 14, 30);
       doc.save(filename);
     }
   </script>
