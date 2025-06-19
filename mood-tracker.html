@@ -14,16 +14,22 @@
     body {
       font-family:'Inter',sans-serif;
       background:linear-gradient(-45deg,#90caf9,#f48fb1,#a5d6a7,#ffcc80);
-      background-size:400% 400%; animation:bg-animation 15s ease infinite;
-      display:flex; align-items:center; justify-content:center; color:#1a202c;
+      background-size:400% 400%;
+      animation:bg-animation 15s ease infinite;
+      display:flex; align-items:center; justify-content:center;
+      color:#1a202c;
+      transition: background 0.5s;
     }
+    .bg-struggling { background-image: url(''); }
+    /* (We'll inject inline style for backgrounds) */
     .container {
       background:rgba(255,255,255,0.9);
       border-radius:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.12);
       padding:2.5rem; max-width:800px; width:100%; margin:1rem;
     }
     h1#main-title {
-      font-size:3rem; font-weight:700; text-align:center; margin-bottom:1.5rem; color:#2d3748;
+      font-size:3rem; font-weight:700; text-align:center;
+      margin-bottom:1.5rem; color:#2d3748;
     }
     .mood-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
     .mood-btn {
@@ -43,9 +49,13 @@
     }
     .btn-primary:hover, .btn-primary:focus { background:#434190; outline:none; }
     #thank-you-section { display:none; }
+    .recommended-links h3 { margin-top:1.5rem; }
     .recommended-links a {
       display:block; margin-bottom:0.5rem;
       color:#4c51bf; text-decoration:underline;
+    }
+    .affirmation, .tip {
+      font-style:italic; margin-top:0.5rem; color:#4a5568;
     }
     .anonymous-messages {
       margin-top:2rem; background:#edf2f7; padding:1rem;
@@ -84,12 +94,12 @@
     <div id="thank-you-section">
       <h2 id="mood-label"></h2>
       <p id="mood-support-text"></p>
+      <p class="tip" id="mood-tip"></p>
+      <p class="affirmation" id="mood-affirmation"></p>
 
-      <h3>Recommended for You Today:</h3>
       <div class="recommended-links" id="recommended-links"></div>
 
       <button id="show-support-btn" class="btn-primary">Send Support Message</button>
-
       <form id="support-form" style="display:none;">
         <textarea id="support-message" placeholder="Your anonymous support..." required></textarea>
         <div>
@@ -111,125 +121,97 @@
 
   <script>
     const moods = [
-      { id:'struggling', emoji:'🔴', label:'Struggling', supportPrompt:"You’re not alone—your courage matters.", resources:[
+      { id:'overwhelmed', emoji:'😵‍💫', label:'Overwhelmed', bg:'url("${turn0image1}")', supportPrompt:'It’s okay to feel this way — pause and breathe.', tip:'Try progressive muscle relaxation.', affirmation:'I give myself permission to pause.', resources:[
           {text:'Grounding Worksheet (PDF)',url:'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf'},
-          {text:'Self-Care Toolkit (PDF)',url:'https://studentaffairs.psu.edu/sites/default/files/HPW_SelfCareToolkit_06_20.pdf'}
+          {text:'TF‑CBT Teen Workbook (PDF)',url:'https://tfcbt.org/wp-content/uploads/2019/02/Revised-Dealing-with-Trauma-TF-CBTWorkbook-for-Teens-.pdf'}
       ]},
-      { id:'managing', emoji:'🟡', label:'Managing', supportPrompt:"You're doing the best you can—keep going.", resources:[
+      { id:'struggling', emoji:'🔴', label:'Struggling', bg:'url("${turn0image2}")', supportPrompt:'Your courage matters.', tip:'Try the 5‑4‑3‑2‑1 grounding technique.', affirmation:'I am safe in this moment.', resources:[
           {text:'Grounding Worksheet (PDF)',url:'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf'},
-          {text:'Self-Care Toolkit (PDF)',url:'https://studentaffairs.psu.edu/sites/default/files/HPW_SelfCareToolkit_06_20.pdf'}
+          {text:'Anxiety & Depression Workbook (PDF)',url:'https://health.uark.edu/mental-health/resources/caps-resources-anxiety-depression-reduction-workbook.pdf'}
       ]},
-      { id:'good', emoji:'🟢', label:'Doing Well', supportPrompt:"You’re bringing light—thank you!", resources:[
+      { id:'managing', emoji:'🟡', label:'Managing', bg:'url("${turn0image9}")', supportPrompt:'You’re doing the best you can.', tip:'Practice square breathing: inhale/exhale for 4 counts.', affirmation:'I am doing well enough.', resources:[
           {text:'Grounding Worksheet (PDF)',url:'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf'},
-          {text:'Self-Care Toolkit (PDF)',url:'https://studentaffairs.psu.edu/sites/default/files/HPW_SelfCareToolkit_06_20.pdf'}
+          {text:'Anxiety & Depression Workbook (PDF)',url:'https://health.uark.edu/mental-health/resources/caps-resources-anxiety-depression-reduction-workbook.pdf'}
       ]},
-      { id:'thriving', emoji:'🔵', label:'Thriving', supportPrompt:"Your energy inspires—shine on!", resources:[
-          {text:'Grounding Worksheet (PDF)',url:'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf'},
-          {text:'Self-Care Toolkit (PDF)',url:'https://studentaffairs.psu.edu/sites/default/files/HPW_SelfCareToolkit_06_20.pdf'}
+      { id:'neutral', emoji:'⚪️', label:'Neutral', bg:'url("${turn0image4}")', supportPrompt:'Staying steady can be powerful.', tip:'Try a guided mindfulness for 5 mins.', affirmation:'I am centered.', resources:[
+          {text:'Grounding Worksheet (PDF)',url:'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf'}
+      ]},
+      { id:'good', emoji:'🟢', label:'Doing Well', bg:'url("${turn0image8}")', supportPrompt:'You’re bringing light — thank you!', tip:'Spend time reflecting on what feels good.', affirmation:'I choose to notice joy.', resources:[
+          {text:'Anxiety & Depression Workbook (PDF)',url:'https://health.uark.edu/mental-health/resources/caps-resources-anxiety-depression-reduction-workbook.pdf'}
+      ]},
+      { id:'thriving', emoji:'🔵', label:'Thriving', bg:'url("${turn0image3}")', supportPrompt:'Your energy inspires — shine on!', tip:'Set a small goal and celebrate it.', affirmation:'I am thriving.', resources:[
+          {text:'TF‑CBT Teen Workbook (PDF)',url:'https://tfcbt.org/wp-content/uploads/2019/02/Revised-Dealing-with-Trauma-TF-CBTWorkbook-for-Teens-.pdf'}
       ]}
     ];
-
-    const STORAGE_MOOD = 'communityMood';
-    const STORAGE_MESSAGES = 'supportMessages';
-
-    const moodGrid = document.getElementById('mood-grid'),
-          thankYou = document.getElementById('thank-you-section'),
-          moodLabel = document.getElementById('mood-label'),
-          moodSupport = document.getElementById('mood-support-text'),
-          recLinks = document.getElementById('recommended-links'),
-          showSupport = document.getElementById('show-support-btn'),
-          supportForm = document.getElementById('support-form'),
-          supportMsg = document.getElementById('support-message'),
-          cancelSupport = document.getElementById('cancel-support-btn'),
-          messagesList = document.getElementById('anonymous-messages-list'),
-          checkinAgain = document.getElementById('checkin-again-btn'),
-          toast = document.getElementById('toast');
-
+    const MKEY='communityMood', SMKEY='supportMessages';
+    const moodGrid=document.getElementById('mood-grid'),
+          thankYou=document.getElementById('thank-you-section'),
+          moodLabel=document.getElementById('mood-label'),
+          moodSupport=document.getElementById('mood-support-text'),
+          moodTip=document.getElementById('mood-tip'),
+          moodAff=document.getElementById('mood-affirmation'),
+          recLinks=document.getElementById('recommended-links'),
+          showSupport=document.getElementById('show-support-btn'),
+          supportForm=document.getElementById('support-form'),
+          supportMsg=document.getElementById('support-message'),
+          cancelSupport=document.getElementById('cancel-support-btn'),
+          messagesList=document.getElementById('anonymous-messages-list'),
+          checkinAgain=document.getElementById('checkin-again-btn'),
+          toast=document.getElementById('toast');
     function renderButtons(){
       moods.forEach(m=>{
         const btn=document.createElement('button');
         btn.className='mood-btn';
         btn.innerHTML=`<span class="emoji">${m.emoji}</span>${m.label}`;
-        btn.addEventListener('click',()=>selectMood(m));
+        btn.addEventListener('click',()=> selectMood(m));
         moodGrid.appendChild(btn);
       });
     }
-
     function selectMood(m){
-      localStorage.setItem(STORAGE_MOOD,m.id);
-      moodGrid.style.display='none';
-      thankYou.style.display='block';
-      moodLabel.textContent=`${m.emoji} ${m.label}`;
-      moodSupport.textContent=m.supportPrompt;
+      localStorage.setItem(MKEY,m.id);
+      document.body.style.background = m.bg;
+      moodGrid.style.display='none'; thankYou.style.display='block';
+      moodLabel.textContent=`${m.emoji} ${m.label}`; moodSupport.textContent=m.supportPrompt;
+      moodTip.textContent='Tip: '+m.tip; moodAff.textContent='Affirmation: "'+m.affirmation+'"';
       recLinks.innerHTML='';
       m.resources.forEach(link=>{
         const a=document.createElement('a');
-        a.href=link.url;
-        a.target='_blank';
-        a.rel='noopener noreferrer';
+        a.href=link.url; a.target='_blank'; a.rel='noopener noreferrer';
         a.textContent=link.text;
         recLinks.appendChild(a);
       });
       loadMessages();
     }
-
     function showToast(msg){
-      toast.textContent=msg;
-      toast.style.display='block';
+      toast.textContent=msg; toast.style.display='block';
       setTimeout(()=>toast.style.display='none',4000);
     }
-
     function loadMessages(){
-      const arr=JSON.parse(localStorage.getItem(STORAGE_MESSAGES)||'[]');
+      const arr=JSON.parse(localStorage.getItem(SMKEY)||'[]');
       messagesList.innerHTML='';
-      arr.forEach(text=>{
-        const li=document.createElement('li');
-        li.textContent=text;
-        messagesList.appendChild(li);
-      });
+      arr.forEach(txt=>{ const li=document.createElement('li'); li.textContent=txt; messagesList.appendChild(li);});
     }
-
     showSupport.addEventListener('click',()=>{
-      supportForm.style.display='block';
-      showSupport.style.display='none';
+      supportForm.style.display='block'; showSupport.style.display='none';
     });
-
     cancelSupport.addEventListener('click',()=>{
-      supportForm.style.display='none';
-      showSupport.style.display='block';
-      supportMsg.value='';
+      supportForm.style.display='none'; showSupport.style.display='block'; supportMsg.value='';
     });
-
     supportForm.addEventListener('submit',e=>{
-      e.preventDefault();
-      const text=supportMsg.value.trim();
-      if(!text)return;
-      const arr=JSON.parse(localStorage.getItem(STORAGE_MESSAGES)||'[]');
-      arr.unshift(text);
-      localStorage.setItem(STORAGE_MESSAGES,JSON.stringify(arr.slice(0,10)));
-      supportMsg.value='';
-      supportForm.style.display='none';
-      showSupport.style.display='block';
-      loadMessages();
-      showToast('Support message sent!');
+      e.preventDefault(); const txt=supportMsg.value.trim(); if(!txt)return;
+      const arr=JSON.parse(localStorage.getItem(SMKEY)||'[]');
+      arr.unshift(txt); localStorage.setItem(SMKEY,JSON.stringify(arr.slice(0,20)));
+      supportMsg.value=''; supportForm.style.display='none'; showSupport.style.display='block'; loadMessages(); showToast('Support sent!');
     });
-
     checkinAgain.addEventListener('click',()=>{
-      localStorage.removeItem(STORAGE_MOOD);
-      thankYou.style.display='none';
-      moodGrid.style.display='flex';
+      localStorage.removeItem(MKEY); thankYou.style.display='none'; moodGrid.style.display='flex';
+      document.body.style.background='';
     });
-
     function init(){
-      renderButtons();
-      const saved=localStorage.getItem(STORAGE_MOOD);
-      if(saved){
-        const m=moods.find(x=>x.id===saved);
-        if(m) selectMood(m);
-      }
+      renderButtons(); const saved=localStorage.getItem(MKEY);
+      if(saved){ const m=moods.find(x=>x.id===saved); if(m) selectMood(m);}
     }
-
-    document.addEventListener('DOMContentLoaded',init);
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
