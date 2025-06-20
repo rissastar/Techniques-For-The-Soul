@@ -1,66 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
   <title>💖 Community Memorial Wall</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body data-theme="dark">
-  <!-- Soft ambient track -->
   <audio id="ambience" src="https://cdn.pixabay.com/audio/2021/08/08/audio_ae9b5d1cf7.mp3" loop></audio>
-
-  <!-- Floating hearts & bubbles -->
   <div class="floaters"></div>
 
-  <!-- Language & Theme toggles -->
+  <!-- Sticky toggle controls -->
   <div class="controls">
-    <select id="langSelector">
+    <select id="langSelector" aria-label="Language switcher">
       <option value="en">English</option>
       <option value="fr">Français</option>
     </select>
-    <button id="themeToggle">🌙</button>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
   </div>
 
   <div class="container">
     <header class="section ribbon">
       <h1 id="header">Community Memorial Wall</h1>
-      <p id="subheader">Share love, light a candle, and cherish memories.</p>
-      <p id="candleCount">Candle lit: <span id="count">0</span> ✨</p>
+      <p id="subheader">Share love, light a candle, cherish memories</p>
+      <button class="candle" id="candleBtn">🕯️ Light a Candle</button>
+      <p id="candleCount">Candle lit: <span id="count">0</span></p>
     </header>
 
-    <!-- Loved One Profile with Carousel -->
     <section class="section ribbon">
       <h2 id="profileTitle">📅 Remembered Loved One</h2>
       <div class="profile-form">
-        <input type="text" id="profileName" placeholder="Name / Nom"/>
-        <input type="date" id="profileBirth"/>
-        <input type="date" id="profileDeath"/>
-        <textarea id="profileTribute" placeholder="Short tribute…"></textarea>
-        <input type="file" id="profilePhoto" accept="image/*"/>
+        <input type="text" id="profileName" placeholder="Name / Nom" />
+        <input type="date" id="profileBirth" />
+        <input type="date" id="profileDeath" />
+        <textarea id="profileTribute" rows="3" placeholder="Short tribute…" ></textarea>
+        <input type="file" id="profilePhoto" accept="image/*" />
         <button id="profileBtn">Save Profile</button>
       </div>
       <div id="profilesCarousel" class="carousel"></div>
     </section>
 
-    <!-- Light Candle -->
-    <section class="section ribbon">
-      <h2 id="lightCandleTitle">🕯️ Light a Candle</h2>
-      <div class="candle" id="candleBtn">🕯️</div>
-    </section>
-
-    <!-- Send Message -->
     <section class="section ribbon">
       <h2 id="sendMsgTitle">💬 Send a Message</h2>
-      <input type="text" id="nameField" placeholder="Name / Nom"/>
-      <select id="profileLink"><option value="">Tag Loved One</option></select>
-      <textarea id="messageText" placeholder="Your message…"></textarea>
-      <input type="file" id="messagePhoto" accept="image/*"/>
-      <input type="file" id="messageAudio" accept="audio/*"/>
-      <button id="sendBtn">Send</button>
+      <div class="msg-form">
+        <input type="text" id="nameField" placeholder="Name / Nom" />
+        <select id="profileLink"><option value="">Tag Loved One</option></select>
+        <textarea id="messageText" rows="3" placeholder="Your message…" ></textarea>
+        <input type="file" id="messagePhoto" accept="image/*" />
+        <input type="file" id="messageAudio" accept="audio/*" />
+        <button id="sendBtn">Send</button>
+      </div>
     </section>
 
-    <!-- Messages Feed -->
     <section class="section ribbon">
       <h2 id="communityTitle">🌐 Messages</h2>
       <div id="messages"></div>
