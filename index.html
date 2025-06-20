@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Techniques For The Soul ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset & base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Quicksand', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      background-size: cover;
+      position: relative;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 3em;
+      color: #ffffff;
+      text-shadow: 0 0 10px #a3c6ff;
+    }
+    h2 {
+      color: #a3c6ff;
+      margin-bottom: 15px;
+      text-align: center;
+      text-shadow: 0 0 8px #769de6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    }
+    .toolkit-list,
+    .resources-list {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 40px;
+    }
+    .toolkit-list li,
+    .resources-list li {
+      margin: 15px 0;
+    }
+    .toolkit-list a,
+    .resources-list a {
+      display: block;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.2em;
+      transition: 0.3s;
+      text-align: center;
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.05);
+    }
+    .toolkit-list a:hover,
+    .resources-list a:hover {
+      background: rgba(255, 255, 255, 0.2);
+      text-shadow: 0 0 8px #a3c6ff;
+    }
+
+    /* Subject Info Cards */
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 50px;
+    }
+    .subject-card {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(163, 198, 255, 0.1);
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+      text-align: center;
+      font-weight: 600;
+      color: #d3dfff;
+      user-select: none;
+      outline-offset: 3px;
+    }
+    .subject-card:hover,
+    .subject-card:focus-visible {
+      background: rgba(163, 198, 255, 0.25);
+      box-shadow: 0 0 25px #a3c6ff;
+      color: #fff;
+      outline: none;
+    }
+
+    footer {
+      text-align: center;
+      margin: 60px auto 20px;
+      font-size: 0.9em;
+      color: #ccc;
+    }
+    footer a {
+      color: #a3c6ff;
+      text-decoration: none;
+      margin: 0 6px;
+      transition: color 0.3s;
+    }
+    footer a:hover,
+    footer a:focus-visible {
+      color: #769de6;
+      outline: none;
+    }
+
+    /* Star animation */
+    #stars,
+    #stars2,
+    #stars3 {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: -1;
+      pointer-events: none;
+    }
+    #stars {
+      background: url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars.png') repeat;
+      animation: moveStars 200s linear infinite;
+    }
+    #stars2 {
+      background: url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars2.png') repeat;
+      animation: moveStars 400s linear infinite;
+      opacity: 0.5;
+    }
+    #stars3 {
+      background: url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars3.png') repeat;
+      animation: moveStars 600s linear infinite;
+      opacity: 0.3;
+    }
+    @keyframes moveStars {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(-10000px);
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+      .toolkit-list a,
+      .resources-list a {
+        font-size: 1em;
+        padding: 12px 16px;
+      }
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal {
+      background: rgba(20, 30, 60, 0.95);
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      border-radius: 12px;
+      padding: 25px 30px;
+      box-shadow: 0 0 30px #a3c6ff;
+      position: relative;
+      color: #e2eaff;
+    }
+    .modal h3 {
+      margin-bottom: 15px;
+      color: #a3c6ff;
+      font-weight: 700;
+      text-shadow: 0 0 6px #769de6;
+    }
+    .modal p {
+      margin-bottom: 15px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .modal ul {
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+    .modal ul li {
+      margin-bottom: 10px;
+    }
+    .modal ul li a {
+      color: #a3c6ff;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .modal ul li a:hover,
+    .modal ul li a:focus-visible {
+      color: #769de6;
+      outline: none;
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      font-size: 28px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #a3c6ff;
+      transition: color 0.3s;
+      user-select: none;
+    }
+    .modal-close:hover,
+    .modal-close:focus-visible {
+      color: #769de6;
+      outline: none;
+    }
+
+    /* Language toggle */
+    #lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(163, 198, 255, 0.2);
+      border: 2px solid #a3c6ff;
+      border-radius: 25px;
+      padding: 8px 16px;
+      color: #a3c6ff;
+      cursor: pointer;
+      font-weight: 600;
+      user-select: none;
+      transition: background 0.3s, color 0.3s;
+      z-index: 20;
+      min-width: 90px;
+      text-align: center;
+    }
+    #lang-toggle:hover,
+    #lang-toggle:focus-visible {
+      background: #a3c6ff;
+      color: #0b1538;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="stars"></div>
+  <div id="stars2"></div>
+  <div id="stars3"></div>
+
+  <button id="lang-toggle" aria-label="Switch language">Français</button>
+
+  <h1 data-en="✨ Techniques For The Soul ✨" data-fr="✨ Techniques Pour L’Âme ✨">✨ Techniques For The Soul ✨</h1>
+
+  <div class="container" aria-label="Toolkits">
+    <h2 data-en="Toolkits" data-fr="Boîtes à outils">Toolkits</h2>
+    <ul class="toolkit-list">
+      <li>
+        <a href="https://rissastar.github.io/Techniques-For-The-Soul/emotional-expression-toolkit.html" target="_blank" rel="noopener noreferrer" data-en="💬 Emotional Expression Toolkit" data-fr="💬 Boîte à outils d'expression émotionnelle">💬 Emotional Expression Toolkit</a>
+      </li>
+      <li>
+        <a href="https://rissastar.github.io/Techniques-For-The-Soul/self-care-toolkit.html" target="_blank" rel="noopener noreferrer" data-en="🧘 Self-Care Toolkit" data-fr="🧘 Boîte à outils de soins personnels">🧘 Self-Care Toolkit</a>
+      </li>
+      <li>
+        <a href="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html" target="_blank" rel="noopener noreferrer" data-en="🌍 Grounding Toolkit" data-fr="🌍 Boîte à outils d’ancrage">🌍 Grounding Toolkit</a>
+      </li>
+      <li>
+        <a href="https://rissastar.github.io/Techniques-For-The-Soul/mood-tracker.html" target="_blank" rel="noopener noreferrer" data-en="🎨 Mood Tracker" data-fr="🎨 Suivi d’humeur">🎨 Mood Tracker</a>
+      </li>
+      <li>
+        <a href="https://rissastar.github.io/Techniques-For-The-Soul/crisis-support-toolkit.html" target="_blank" rel="noopener noreferrer" data-en="🚨 Crisis Support Toolkit" data-fr="🚨 Boîte à outils de soutien en crise">🚨 Crisis Support Toolkit</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="container" aria-label="Resources">
+    <h2 data-en="Resources - Canada & US 🇨🇦 🇺🇸" data-fr="Ressources - Canada & États-Unis 🇨🇦 🇺🇸">Resources - Canada & US 🇨🇦 🇺🇸</h2>
+    <ul class="resources-list">
+      <li><a href="https://www.crisisservicescanada.ca/en/" target="_blank" rel="noopener noreferrer" data-en="Crisis Services Canada" data-fr="Services de crise Canada">Crisis Services Canada</a></li>
+      <li><a href="https://www.cmha.ca/" target="_blank" rel="noopener noreferrer" data-en="Canadian Mental Health Association (CMHA)" data-fr="Association canadienne pour la santé mentale (ACSM)">Canadian Mental Health Association (CMHA)</a></li>
+      <li><a href="https://kidshelpphone.ca/" target="_blank" rel="noopener noreferrer" data-en="Kids Help Phone (Canada)" data-fr="Téléphone d’aide aux jeunes (Canada)">Kids Help Phone (Canada)</a></li>
+      <li><a href="https://suicidepreventionlifeline.org/" target="_blank" rel="noopener noreferrer" data-en="National Suicide Prevention Lifeline (US)" data-fr="Ligne nationale de prévention du suicide (États-Unis)">National Suicide Prevention Lifeline (US)</a></li>
+      <li><a href="https://www.nimh.nih.gov/" target="_blank" rel="noopener noreferrer" data-en="National Institute of Mental Health (NIMH, US)" data-fr="Institut national de la santé mentale (NIMH, États-Unis)">National Institute of Mental Health (NIMH, US)</a></li>
+      <li><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank" rel="noopener noreferrer" data-en="SAMHSA National Helpline (US)" data-fr="Ligne d’assistance nationale SAMHSA (États-Unis)">SAMHSA National Helpline (US)</a></li>
+      <li><a href="https://www.veterans.gc.ca/eng" target="_blank" rel="noopener noreferrer" data-en="Veterans Affairs Canada" data-fr="Anciens combattants Canada">Veterans Affairs Canada</a></li>
+      <li><a href="https://www.mentalhealth.gov/" target="_blank" rel="noopener noreferrer" data-en="MentalHealth.gov (US)" data-fr="MentalHealth.gov (États-Unis)">MentalHealth.gov (US)</a></li>
+    </ul>
+  </div>
+
+  <div class="container" aria-label="Information by Subject">
+    <h2 data-en="Information by Subject" data-fr="Informations par sujet">Information by Subject</h2>
+    <div class="subject-grid" role="list" aria-label="Information subjects">
+      <!-- Each card has a data-key attribute to identify the modal content -->
+      <div
+        class="subject-card"
+        role="listitem"
+        tabindex="0"
+        data-key="mentalHealth"
+      >
+        🧠 <span data-en="Mental Health Conditions & Disorders" data-fr="Conditions et troubles de santé mentale">Mental Health Conditions & Disorders</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="addiction">
+        🍃 <span data-en="Addiction & Recovery" data-fr="Addiction et rétablissement">Addiction & Recovery</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="trauma">
+        💔 <span data-en="Trauma & Abuse" data-fr="Traumatisme et abus">Trauma & Abuse</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="fosterChildren">
+        👶 <span data-en="Support for Foster Children" data-fr="Soutien pour les enfants placés">Support for Foster Children</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="lgbtq">
+        🏳️‍🌈 <span data-en="LGBTQ+ Community" data-fr="Communauté LGBTQ+">LGBTQ+ Community</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="veterans">
+        🎖️ <span data-en="Veterans & Military Families" data-fr="Anciens combattants et familles militaires">Veterans & Military Families</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="youth">
+        🧒 <span data-en="Youth & Adolescents" data-fr="Jeunes et adolescents">Youth & Adolescents</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="elderly">
+        👵 <span data-en="Elderly" data-fr="Personnes âgées">Elderly</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="intersectionality">
+        🌍 <span data-en="Intersectionality & Marginalized Groups" data-fr="Intersectionnalité et groupes marginalisés">Intersectionality & Marginalized Groups</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="grief">
+        🌿 <span data-en="Grief & Loss" data-fr="Deuil et perte">Grief & Loss</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="chronicConditions">
+        ♿ <span data-en="Chronic Conditions & Disabilities" data-fr="Conditions chroniques et handicaps">Chronic Conditions & Disabilities</span>
+      </div>
+      <div class="subject-card" role="listitem" tabindex="0" data-key="wellness">
+        🧘 <span data-en="Wellness & Coping Strategies" data-fr="Bien-être et stratégies d'adaptation">Wellness & Coping Strategies</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p data-en="Built with care by Rissastar 💫 | Connect:" data-fr="Créé avec soin par Rissastar 💫 | Connectez-vous :"></p>
+    <p>
+      <a
+        href="https://www.facebook.com/share/g/1HXykHjt5v/?mibextid=wwXIfr"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-en="Facebook Group"
+        data-fr="Groupe Facebook"
+        >Facebook Group</a
+      >
+      |
+      <a
+        href="https://www.facebook.com/share/1CC9xoafaV/?mibextid=wwXIfr"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-en="Facebook Page"
+        data-fr="Page Facebook"
+        >Facebook Page</a
+      >
+      |
+      <a
+        href="https://linktr.ee/rissa.star?fbclid=IwQ0xDSwLBxGdleHRuA2FlbQIxMAABHomqGh-8y5PCSU4UfuWDso87OajQlity9OWwgz6m1aqgK3bWGT-gREnsOdIR_aem_jJgL3GWrmjgciWDsyjNAFQ"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-en="Linktree"
+        data-fr="Linktree"
+        >Linktree</a
+      >
+    </p>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
+    <div class="modal" tabindex="0">
+      <button class="modal-close" aria-label="Close modal" id="modal-close">&times;</button>
+      <h3 id="modal-title"></h3>
+      <div id="modal-desc"></div>
+    </div>
+  </div>
+
+  <script>
+    // Data for modals in English and French
+    const modalData = {
+      mentalHealth: {
+        en: {
+          title: "Mental Health Conditions & Disorders",
+          description: `
+          <p>Mental health conditions affect thoughts, feelings, and behaviors. Common conditions include depression, anxiety, bipolar disorder, and schizophrenia.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.nimh.nih.gov/health/topics" target="_blank" rel="noopener noreferrer">NIMH - Mental Health Topics</a></li>
+            <li><a href="https://www.cmha.ca/mental-health/understanding-mental-illness" target="_blank" rel="noopener noreferrer">CMHA - Understanding Mental Illness</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Conditions et troubles de santé mentale",
+          description: `
+          <p>Les troubles de santé mentale affectent les pensées, les sentiments et les comportements. Les troubles courants incluent la dépression, l’anxiété, le trouble bipolaire et la schizophrénie.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.nimh.nih.gov/health/topics" target="_blank" rel="noopener noreferrer">NIMH - Sujets de santé mentale</a></li>
+            <li><a href="https://www.cmha.ca/mental-health/understanding-mental-illness" target="_blank" rel="noopener noreferrer">ACSM - Comprendre la maladie mentale</a></li>
+          </ul>
+          `
+        }
+      },
+      addiction: {
+        en: {
+          title: "Addiction & Recovery",
+          description: `
+          <p>Addiction involves compulsive substance use despite harmful consequences. Recovery is a lifelong process with support and treatment.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank" rel="noopener noreferrer">SAMHSA National Helpline</a></li>
+            <li><a href="https://www.recovery.org/" target="_blank" rel="noopener noreferrer">Recovery.org</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Addiction et rétablissement",
+          description: `
+          <p>L'addiction implique une consommation compulsive de substances malgré des conséquences néfastes. Le rétablissement est un processus à vie avec soutien et traitement.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank" rel="noopener noreferrer">Ligne d’assistance nationale SAMHSA</a></li>
+            <li><a href="https://www.recovery.org/" target="_blank" rel="noopener noreferrer">Recovery.org</a></li>
+          </ul>
+          `
+        }
+      },
+      trauma: {
+        en: {
+          title: "Trauma & Abuse",
+          description: `
+          <p>Trauma results from distressing or harmful events. Abuse can be physical, emotional, or psychological.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.traumainformedcare.chcs.org/" target="_blank" rel="noopener noreferrer">Trauma Informed Care</a></li>
+            <li><a href="https://www.childwelfare.gov/topics/responding/trauma/" target="_blank" rel="noopener noreferrer">Child Welfare Trauma Resources</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Traumatisme et abus",
+          description: `
+          <p>Le traumatisme résulte d'événements pénibles ou nuisibles. L'abus peut être physique, émotionnel ou psychologique.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.traumainformedcare.chcs.org/" target="_blank" rel="noopener noreferrer">Soins informés sur le traumatisme</a></li>
+            <li><a href="https://www.childwelfare.gov/topics/responding/trauma/" target="_blank" rel="noopener noreferrer">Ressources de protection de l'enfance sur le traumatisme</a></li>
+          </ul>
+          `
+        }
+      },
+      fosterChildren: {
+        en: {
+          title: "Support for Foster Children",
+          description: `
+          <p>Foster children need specialized support to address trauma, attachment, and stability issues.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.childwelfare.gov/topics/outofhome/foster-care/" target="_blank" rel="noopener noreferrer">Child Welfare Foster Care Info</a></li>
+            <li><a href="https://fostercaremonth.org/" target="_blank" rel="noopener noreferrer">National Foster Care Month</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Soutien pour les enfants placés",
+          description: `
+          <p>Les enfants placés ont besoin d'un soutien spécialisé pour traiter le traumatisme, l'attachement et la stabilité.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.childwelfare.gov/topics/outofhome/foster-care/" target="_blank" rel="noopener noreferrer">Protection de l'enfance - Infos sur le placement</a></li>
+            <li><a href="https://fostercaremonth.org/" target="_blank" rel="noopener noreferrer">Mois national du placement familial</a></li>
+          </ul>
+          `
+        }
+      },
+      lgbtq: {
+        en: {
+          title: "LGBTQ+ Community",
+          description: `
+          <p>Support and resources tailored to the needs of LGBTQ+ individuals and communities.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.thetrevorproject.org/" target="_blank" rel="noopener noreferrer">The Trevor Project</a></li>
+            <li><a href="https://www.lgbtqhealth.ca/" target="_blank" rel="noopener noreferrer">LGBTQ+ Health in Canada</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Communauté LGBTQ+",
+          description: `
+          <p>Soutien et ressources adaptés aux besoins des personnes et communautés LGBTQ+.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.thetrevorproject.org/" target="_blank" rel="noopener noreferrer">The Trevor Project</a></li>
+            <li><a href="https://www.lgbtqhealth.ca/" target="_blank" rel="noopener noreferrer">Santé LGBTQ+ au Canada</a></li>
+          </ul>
+          `
+        }
+      },
+      veterans: {
+        en: {
+          title: "Veterans & Military Families",
+          description: `
+          <p>Resources and support for veterans and their families addressing unique mental health needs.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.veterans.gc.ca/eng" target="_blank" rel="noopener noreferrer">Veterans Affairs Canada</a></li>
+            <li><a href="https://www.mentalhealth.va.gov/" target="_blank" rel="noopener noreferrer">US Department of Veterans Affairs Mental Health</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Anciens combattants et familles militaires",
+          description: `
+          <p>Ressources et soutien pour les anciens combattants et leurs familles pour répondre aux besoins uniques en santé mentale.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.veterans.gc.ca/eng" target="_blank" rel="noopener noreferrer">Anciens combattants Canada</a></li>
+            <li><a href="https://www.mentalhealth.va.gov/" target="_blank" rel="noopener noreferrer">Santé mentale - Département des Anciens Combattants des États-Unis</a></li>
+          </ul>
+          `
+        }
+      },
+      youth: {
+        en: {
+          title: "Youth & Adolescents",
+          description: `
+          <p>Support and resources for young people navigating mental health challenges and development.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.kidshelpphone.ca/" target="_blank" rel="noopener noreferrer">Kids Help Phone (Canada)</a></li>
+            <li><a href="https://www.nimh.nih.gov/health/topics/child-and-adolescent-mental-health" target="_blank" rel="noopener noreferrer">NIMH - Child & Adolescent Mental Health</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Jeunes et adolescents",
+          description: `
+          <p>Soutien et ressources pour les jeunes qui font face à des défis de santé mentale et de développement.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.kidshelpphone.ca/" target="_blank" rel="noopener noreferrer">Téléphone d’aide aux jeunes (Canada)</a></li>
+            <li><a href="https://www.nimh.nih.gov/health/topics/child-and-adolescent-mental-health" target="_blank" rel="noopener noreferrer">NIMH - Santé mentale des enfants et adolescents</a></li>
+          </ul>
+          `
+        }
+      },
+      elderly: {
+        en: {
+          title: "Elderly",
+          description: `
+          <p>Resources focused on mental health and well-being for elderly populations.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.nia.nih.gov/health/mental-health" target="_blank" rel="noopener noreferrer">National Institute on Aging - Mental Health</a></li>
+            <li><a href="https://www.cmha.ca/mental-health-for-older-adults" target="_blank" rel="noopener noreferrer">CMHA - Mental Health for Older Adults</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Personnes âgées",
+          description: `
+          <p>Ressources axées sur la santé mentale et le bien-être des personnes âgées.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.nia.nih.gov/health/mental-health" target="_blank" rel="noopener noreferrer">Institut national du vieillissement - Santé mentale</a></li>
+            <li><a href="https://www.cmha.ca/mental-health-for-older-adults" target="_blank" rel="noopener noreferrer">ACSM - Santé mentale des personnes âgées</a></li>
+          </ul>
+          `
+        }
+      },
+      intersectionality: {
+        en: {
+          title: "Intersectionality & Marginalized Groups",
+          description: `
+          <p>Understanding overlapping social identities and related mental health impacts on marginalized communities.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.apa.org/pi/oema/resources/ethnicity-health/psychological-effects" target="_blank" rel="noopener noreferrer">APA - Psychological Effects of Intersectionality</a></li>
+            <li><a href="https://www.who.int/health-topics/social-determinants-of-health" target="_blank" rel="noopener noreferrer">WHO - Social Determinants of Health</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Intersectionnalité et groupes marginalisés",
+          description: `
+          <p>Comprendre les identités sociales croisées et les impacts associés sur la santé mentale des communautés marginalisées.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.apa.org/pi/oema/resources/ethnicity-health/psychological-effects" target="_blank" rel="noopener noreferrer">APA - Effets psychologiques de l’intersectionnalité</a></li>
+            <li><a href="https://www.who.int/health-topics/social-determinants-of-health" target="_blank" rel="noopener noreferrer">OMS - Déterminants sociaux de la santé</a></li>
+          </ul>
+          `
+        }
+      },
+      grief: {
+        en: {
+          title: "Grief & Loss",
+          description: `
+          <p>Support and coping strategies for grief and loss, including bereavement resources.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.grief.com/" target="_blank" rel="noopener noreferrer">Grief.com</a></li>
+            <li><a href="https://www.hospicefoundation.org/Grief-Center" target="_blank" rel="noopener noreferrer">Hospice Foundation - Grief Center</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Deuil et perte",
+          description: `
+          <p>Soutien et stratégies d'adaptation pour le deuil et la perte, y compris des ressources pour le deuil.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.grief.com/" target="_blank" rel="noopener noreferrer">Grief.com</a></li>
+            <li><a href="https://www.hospicefoundation.org/Grief-Center" target="_blank" rel="noopener noreferrer">Fondation Hospice - Centre du deuil</a></li>
+          </ul>
+          `
+        }
+      },
+      chronicConditions: {
+        en: {
+          title: "Chronic Conditions & Disabilities",
+          description: `
+          <p>Information and resources to support mental health for those with chronic conditions and disabilities.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.chronicdisease.org/" target="_blank" rel="noopener noreferrer">Chronic Disease Coalition</a></li>
+            <li><a href="https://www.cdc.gov/mentalhealth/learn/index.htm" target="_blank" rel="noopener noreferrer">CDC - Mental Health & Chronic Disease</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Conditions chroniques et handicaps",
+          description: `
+          <p>Informations et ressources pour soutenir la santé mentale des personnes atteintes de maladies chroniques et de handicaps.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.chronicdisease.org/" target="_blank" rel="noopener noreferrer">Coalition des maladies chroniques</a></li>
+            <li><a href="https://www.cdc.gov/mentalhealth/learn/index.htm" target="_blank" rel="noopener noreferrer">CDC - Santé mentale et maladies chroniques</a></li>
+          </ul>
+          `
+        }
+      },
+      wellness: {
+        en: {
+          title: "Wellness & Coping Strategies",
+          description: `
+          <p>Techniques and strategies to improve overall well-being and manage stress.</p>
+          <p><strong>Resources:</strong></p>
+          <ul>
+            <li><a href="https://www.mentalhealth.gov/talk/need-to-know" target="_blank" rel="noopener noreferrer">MentalHealth.gov - Wellness</a></li>
+            <li><a href="https://www.psychologytoday.com/us/basics/coping-skills" target="_blank" rel="noopener noreferrer">Psychology Today - Coping Skills</a></li>
+          </ul>
+          `
+        },
+        fr: {
+          title: "Bien-être et stratégies d'adaptation",
+          description: `
+          <p>Techniques et stratégies pour améliorer le bien-être global et gérer le stress.</p>
+          <p><strong>Ressources :</strong></p>
+          <ul>
+            <li><a href="https://www.mentalhealth.gov/talk/need-to-know" target="_blank" rel="noopener noreferrer">MentalHealth.gov - Bien-être</a></li>
+            <li><a href="https://www.psychologytoday.com/us/basics/coping-skills" target="_blank" rel="noopener noreferrer">Psychology Today - Compétences d’adaptation</a></li>
+          </ul>
+          `
+        }
+      }
+    };
+
+    // Language toggling
+    const langToggleBtn = document.getElementById('lang-toggle');
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      // Update all elements with data-en / data-fr attributes
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+      // Update footer text
+      document.querySelector('footer p:first-child').textContent =
+        lang === 'en' ? 'Built with care by Rissastar 💫 | Connect:' : 'Créé avec soin par Rissastar 💫 | Connectez-vous :';
+      // Update toggle button text
+      langToggleBtn.textContent = lang === 'en' ? 'Français' : 'English';
+    }
+
+    langToggleBtn.addEventListener('click', () => {
+      setLanguage(currentLang === 'en' ? 'fr' : 'en');
+    });
+
+    // Modal elements
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalCloseBtn = document.getElementById('modal-close');
+
+    // Show modal with content
+    function showModal(key) {
+      const content = modalData[key];
+      if (!content) return;
+      modalTitle.innerHTML = content[currentLang].title;
+      modalDesc.innerHTML = content[currentLang].description;
+      modal.classList.add('active');
+      // Focus on modal for accessibility
+      modal.querySelector('.modal').focus();
+    }
+
+    // Hide modal
+    function hideModal() {
+      modal.classList.remove('active');
+    }
+
+    // Event delegation for subject cards
+    document.querySelector('.subject-grid').addEventListener('click', (e) => {
+      let card = e.target.closest('.subject-card');
+      if (card) {
+        const key = card.getAttribute('data-key');
+        showModal(key);
+      }
+    });
+
+    // Keyboard accessibility: open modal on Enter or Space
+    document.querySelectorAll('.subject-card').forEach(card => {
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showModal(card.getAttribute('data-key'));
+        }
+      });
+    });
+
+    // Close modal button
+    modalCloseBtn.addEventListener('click', hideModal);
+
+    // Close modal on clicking outside modal content
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        hideModal();
+      }
+    });
+
+    // Close modal on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        hideModal();
+      }
+    });
+
+    // Set initial language
+    setLanguage('en');
+  </script>
+</body>
+</html>
