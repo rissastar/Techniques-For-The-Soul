@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title id="title">Community Memorial Wall</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <title>💖 Community Memorial Wall</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body data-theme="dark">
-  <!-- Starfield Canvas -->
-  <canvas id="starfield"></canvas>
+  <!-- Soft ambient track -->
+  <audio id="ambience" src="https://cdn.pixabay.com/audio/2021/08/08/audio_ae9b5d1cf7.mp3" loop></audio>
 
-  <!-- Language & Theme Switches -->
-  <div class="switches">
+  <!-- Floating hearts & bubbles -->
+  <div class="floaters"></div>
+
+  <!-- Language & Theme toggles -->
+  <div class="controls">
     <select id="langSelector">
       <option value="en">English</option>
       <option value="fr">Français</option>
@@ -20,48 +23,50 @@
   </div>
 
   <div class="container">
-    <header class="section">
+    <header class="section ribbon">
       <h1 id="header">Community Memorial Wall</h1>
-      <p id="subheader">Light a candle, honor a loved one, and share…</p>
-      <p id="candleCount">Candle lit: <span id="count">0</span> times</p>
+      <p id="subheader">Share love, light a candle, and cherish memories.</p>
+      <p id="candleCount">Candle lit: <span id="count">0</span> ✨</p>
     </header>
 
-    <!-- Remembered Loved One Profile -->
-    <section class="section">
-      <h2 id="profileTitle">📅 Remembered Loved One Profile</h2>
-      <input type="text" id="profileName" placeholder="Name / Nom"/>
-      <input type="date" id="profileBirth"/>
-      <input type="date" id="profileDeath"/>
-      <textarea id="profileTribute" placeholder="Tribute / Hommage"></textarea>
-      <input type="file" id="profilePhoto" accept="image/*"/>
-      <button id="profileBtn">Save Profile</button>
-      <div id="profiles"></div>
+    <!-- Loved One Profile with Carousel -->
+    <section class="section ribbon">
+      <h2 id="profileTitle">📅 Remembered Loved One</h2>
+      <div class="profile-form">
+        <input type="text" id="profileName" placeholder="Name / Nom"/>
+        <input type="date" id="profileBirth"/>
+        <input type="date" id="profileDeath"/>
+        <textarea id="profileTribute" placeholder="Short tribute…"></textarea>
+        <input type="file" id="profilePhoto" accept="image/*"/>
+        <button id="profileBtn">Save Profile</button>
+      </div>
+      <div id="profilesCarousel" class="carousel"></div>
     </section>
 
-    <!-- Light a Candle -->
-    <section class="section">
+    <!-- Light Candle -->
+    <section class="section ribbon">
       <h2 id="lightCandleTitle">🕯️ Light a Candle</h2>
       <div class="candle" id="candleBtn">🕯️</div>
     </section>
 
     <!-- Send Message -->
-    <section class="section">
-      <h2 id="sendMsgTitle">💬 Send Message</h2>
+    <section class="section ribbon">
+      <h2 id="sendMsgTitle">💬 Send a Message</h2>
       <input type="text" id="nameField" placeholder="Name / Nom"/>
-      <select id="profileLink"><option value="">—Tag Loved One—</option></select>
+      <select id="profileLink"><option value="">Tag Loved One</option></select>
       <textarea id="messageText" placeholder="Your message…"></textarea>
       <input type="file" id="messagePhoto" accept="image/*"/>
       <input type="file" id="messageAudio" accept="audio/*"/>
       <button id="sendBtn">Send</button>
     </section>
 
-    <!-- Community Messages -->
-    <section class="section">
-      <h2 id="communityTitle">🌐 Community Messages</h2>
+    <!-- Messages Feed -->
+    <section class="section ribbon">
+      <h2 id="communityTitle">🌐 Messages</h2>
       <div id="messages"></div>
     </section>
   </div>
 
-  <script type="module" src="app.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
