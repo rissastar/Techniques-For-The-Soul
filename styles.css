@@ -1,36 +1,172 @@
 :root {
-  --bg-light: #f5f5f5;
-  --bg-dark: #0f2027;
-  --text-light: #222;
-  --text-dark: #fff;
-  --accent: #f0c420;
+  /* Theme colors */
+  --bg-light: #fafafa;
+  --bg-dark: #0b132b;
+  --text-light: #111;
+  --text-dark: #f0f0f0;
+
+  /* Accent palette */
+  --accent-primary: #ff6b6b;
+  --accent-secondary: #4ecdc4;
+  --accent-tertiary: #f7b733;
+
+  /* Section gradient stops */
+  --sec1-start: rgba(255, 107, 107, 0.15);
+  --sec1-end:   rgba(255, 107, 107, 0.05);
+  --sec2-start: rgba(78, 205, 196, 0.15);
+  --sec2-end:   rgba(78, 205, 196, 0.05);
+  --sec3-start: rgba(247, 183, 51, 0.15);
+  --sec3-end:   rgba(247, 183, 51, 0.05);
 }
-[data-theme="light"] { background: var(--bg-light); color: var(--text-light); }
-[data-theme="dark"]  { background: var(--bg-dark);  color: var(--text-dark);  }
-body, html { margin:0; padding:0; height:100%; overflow:hidden; font-family:sans-serif; }
-#starfield { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; }
+
+[data-theme="light"] {
+  background: var(--bg-light);
+  color: var(--text-light);
+}
+[data-theme="dark"] {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+body, html {
+  margin: 0; padding: 0;
+  height: 100%; overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background .3s, color .3s;
+}
+
+#starfield {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
 
 /* Top-right switches */
-.switches { position:fixed; top:1rem; right:1rem; z-index:2; display:flex; gap:.5rem; }
-.switches select, .switches button { padding:.5rem; border:none; border-radius:6px; }
+.switches {
+  position: fixed; top: 1rem; right: 1rem;
+  z-index: 2; display: flex; gap: .5rem;
+}
+.switches select,
+.switches button {
+  padding: .5rem; border: none; border-radius: 6px;
+  background: rgba(255,255,255,0.2); color: inherit;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+.switches button:hover {
+  background: var(--accent-primary);
+  color: #fff;
+}
 
 /* Container */
-.container { position:relative; z-index:1; max-width:900px; margin:auto; padding:2rem; overflow-y:auto; height:100%; }
-.section { background:rgba(255,255,255,0.05); margin-bottom:2rem; padding:1.5rem; border-radius:12px; box-shadow:0 0 12px rgba(0,0,0,0.2); }
-.section h2 { margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:.5rem; }
-input, textarea, select, button { width:100%; margin:.5rem 0; padding:.7rem; border:none; border-radius:8px; font-size:1rem; }
-button { background:var(--accent); color:#222; cursor:pointer; font-weight:bold; }
+.container {
+  position: relative; z-index: 1;
+  max-width: 900px; height: 100%; padding: 2rem;
+  overflow-y: auto;
+}
 
-/* Candle flicker */
-.candle { font-size:3rem; text-align:center; cursor:pointer; animation:flicker 1s infinite alternate; }
-@keyframes flicker { from { text-shadow:0 0 5px #ffc107,0 0 10px #ffa000; } to { text-shadow:0 0 15px #ffc107,0 0 20px #ff9800; } }
+/* Section base style */
+.section {
+  position: relative;
+  margin-bottom: 2rem; padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  backdrop-filter: blur(6px);
+}
+
+/* Section-specific gradients */
+.section:nth-child(1) {
+  background: linear-gradient(135deg, var(--sec1-start), var(--sec1-end));
+}
+.section:nth-child(2) {
+  background: linear-gradient(135deg, var(--sec2-start), var(--sec2-end));
+}
+.section:nth-child(3) {
+  background: linear-gradient(135deg, var(--sec3-start), var(--sec3-end));
+}
+.section:nth-child(4) {
+  /* alternate back to primary */
+  background: linear-gradient(135deg, var(--sec1-start), var(--sec1-end));
+}
+
+/* Headings */
+.section h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  border-bottom: 2px solid var(--accent-primary);
+  padding-bottom: .5rem;
+}
+
+/* Forms */
+input, textarea, select {
+  width: 100%; margin: .5rem 0;
+  padding: .7rem; border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 8px; background: rgba(255,255,255,0.1);
+  color: inherit; transition: border .2s;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--accent-secondary);
+}
+
+/* Buttons */
+button {
+  display: inline-block;
+  margin-top: .5rem; padding: .7rem 1.2rem;
+  background: var(--accent-primary); color: #fff;
+  border: none; border-radius: 8px;
+  font-weight: bold; cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+button:hover {
+  background: var(--accent-tertiary);
+  transform: translateY(-2px);
+}
+button:active {
+  transform: translateY(0);
+}
+
+/* Candle */
+.candle {
+  font-size: 3rem; cursor: pointer;
+  animation: flicker 1s infinite alternate;
+  text-align: center;
+  color: var(--accent-secondary);
+}
+@keyframes flicker {
+  0% { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-secondary); }
+  100% { text-shadow: 0 0 15px #fff, 0 0 20px var(--accent-tertiary); }
+}
 
 /* Profiles & messages */
-.profile, .message { position:relative; background:rgba(255,255,255,0.1); margin-bottom:1rem; padding:1rem; border-radius:8px; opacity:0; transform:translateY(20px); animation:fadeUp .5s forwards; }
-.reply { margin-left:2rem; border-left:2px solid rgba(255,255,255,0.2); padding-left:1rem; }
-.pin { position:absolute; top:1rem; right:1rem; cursor:pointer; }
-.love { color:#f88; }
-img { max-width:100px; border-radius:6px; margin-top:.5rem; }
-audio { width:100%; margin-top:.5rem; }
+.profile, .message {
+  position: relative;
+  margin-bottom: 1rem; padding: 1rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.15);
+  opacity: 0; transform: translateY(20px);
+  animation: fadeUp .5s forwards;
+}
+.reply {
+  margin-left: 2rem; padding-left: 1rem;
+  border-left: 3px solid var(--accent-secondary);
+}
+.pin {
+  position: absolute; top: 1rem; right: 1rem;
+  cursor: pointer; font-size: 1.2rem;
+}
+.love {
+  color: var(--accent-primary);
+}
 
-@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+img {
+  max-width: 100px; border-radius: 6px; margin-top: .5rem;
+}
+audio {
+  width: 100%; margin-top: .5rem;
+}
+
+/* Fade-in animation */
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
