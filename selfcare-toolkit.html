@@ -5,404 +5,565 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Self-Care Toolkit</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    /* RESET & BASE */
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0 }
     html, body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #ffe4e1, #f0f8ff);
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
       color: #333;
       min-height: 100vh;
       display: flex; flex-direction: column;
     }
     header, footer {
       background: linear-gradient(90deg, #6c5b7b, #355c7d);
-      color: #fff; text-align: center;
+      color: #fff;
+      text-align: center;
       padding: 1rem 1.5rem;
       font-family: 'Poppins', sans-serif;
       font-weight: 700;
     }
-    h1 { font-size: 2rem; letter-spacing: .05em; }
-    h2 {
-      font-size: 1.5rem;
+    h1 { font-size: 1.8rem; letter-spacing: .05em; }
+    h2, h3 {
+      margin-top: 1.5rem;
+      font-family: 'Poppins', sans-serif;
       font-weight: 600;
       color: #5a476b;
-      margin-top: 1.5rem;
     }
+    h2 { font-size: 1.4rem; border-bottom: 2px solid #5a476b; padding-bottom: .3rem; }
+    h3 { font-size: 1.2rem; margin-bottom: .5rem; }
     main {
       flex: 1;
-      width: 100%;
       max-width: 960px;
+      width: 100%;
       margin: 1rem auto;
-      padding: 0 1rem 3rem;
+      padding: 0 1rem 2rem;
     }
     button {
       background: linear-gradient(135deg, #f67280, #c06c84);
       border: none;
-      border-radius: 20px;
-      padding: 0.6rem 1.2rem;
-      color: white;
-      font-size: 1rem;
-      font-weight: bold;
+      border-radius: 6px;
+      padding: 0.5rem 1.2rem;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: opacity .2s ease;
     }
-    button:hover {
-      background: linear-gradient(135deg, #c06c84, #f67280);
-    }
+    button:hover { opacity: .9 }
     .section {
-      background: #ffffffdd;
-      padding: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-      margin-bottom: 1.5rem;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
     }
     #lang-toggle {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      background: #f67280;
-      border-radius: 20px;
-      font-size: 1.4rem;
-      z-index: 1000;
+      position: fixed; top:1rem; right:1rem;
+      background: #f67280; font-size:1.4rem;
+      border:none; border-radius:20px;
+      padding:.3rem .8rem; color:#fff;
+      box-shadow:0 4px 8px rgba(0,0,0,0.2);
+      cursor:pointer; z-index:1000;
     }
+    /* Guided Breathing */
     #breath-circle {
-      width: 120px;
-      height: 120px;
-      margin: 1rem auto;
-      border: 6px solid #6c5b7b;
-      border-radius: 50%;
+      width: 120px; height:120px; margin:1rem auto;
+      border: 6px solid #6c5b7b; border-radius:50%;
       animation: breathe 8s ease-in-out infinite;
+      box-shadow:0 0 12px rgba(108,91,123,0.3);
     }
     @keyframes breathe {
-      0%, 100% { transform: scale(1); }
+      0%,100% { transform: scale(1); }
       50% { transform: scale(1.3); }
     }
-    canvas {
-      border: 2px solid #ccc;
-      border-radius: 6px;
-      width: 100%;
-      max-width: 100%;
-      height: 250px;
-      display: block;
-      margin: 0 auto;
-      touch-action: none;
+    /* Flip Card */
+    .card { perspective:1000px; width:100%; max-width:400px; margin:1rem auto; height:140px; cursor:pointer; }
+    .inner {
+      position:relative; width:100%; height:100%;
+      transform-style:preserve-3d; transition:transform .6s ease;
+      border-radius:8px; box-shadow:0 5px 15px rgba(0,0,0,0.1);
     }
-    select, input[type="text"] {
-      width: 100%;
-      max-width: 300px;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+    .card.flipped .inner { transform:rotateY(180deg); }
+    .front, .back {
+      position:absolute; width:100%; height:100%;
+      backface-visibility:hidden; display:flex;
+      align-items:center; justify-content:center;
+      font-size:1.1rem; font-weight:600; text-align:center;
+      padding:1rem; border-radius:8px;
     }
-    ul.plan-list {
-      list-style: disc;
-      margin-left: 1.5rem;
+    .front { background:#f8b500; color:#333 }
+    .back { background:#355c7d; color:#fff; transform:rotateY(180deg); }
+    /* Doodle Pad */
+    #canvas {
+      width:100%; max-width:100%; height:250px;
+      border:2px solid #ccc; border-radius:6px;
+      display:block; margin:1rem auto; touch-action:none;
     }
-    @media (max-width: 480px) {
-      h1 { font-size: 1.6rem; }
-      h2 { font-size: 1.2rem; }
-      #breath-circle { width: 100px; height: 100px; }
+    /* Gratitude */
+    .gratitude-input {
+      width:100%; max-width:300px; padding:.5rem;
+      border:1px solid #ccc; border-radius:6px;
+      margin-top:.5rem; margin-bottom:1rem;
+    }
+    /* Needs Picker */
+    #np-select {
+      width:100%; max-width:300px; padding:.5rem;
+      border:1px solid #ccc; border-radius:6px;
+      margin-top:.5rem; margin-bottom:.5rem;
+    }
+    #np-suggestion { font-style:italic; color:#5a476b; }
+    /* Notes */
+    .notes-section { margin-top: .5rem; }
+    .notes-section label { display:block; font-weight:600; margin-bottom:.3rem; }
+    .notes-section textarea {
+      width:100%; height:80px; padding:.5rem; border:1px solid #ccc;
+      border-radius:6px; resize:vertical; font-family:inherit; margin-top:.3rem;
+    }
+    .btns { display:flex; gap:1rem; margin-top:1rem; flex-wrap:wrap; }
+    @media (max-width:600px) {
+      h1 { font-size:1.6rem; }
+      h2 { font-size:1.3rem; }
+      button { padding:.4rem 1rem; font-size:.9rem; }
+      #breath-circle { width:100px; height:100px; border-width:5px; }
     }
   </style>
 </head>
 <body>
 
-<button id="lang-toggle" aria-label="Toggle Language">🇫🇷</button>
+  <button id="lang-toggle" aria-label="Toggle Language">🇫🇷</button>
+  <header><h1 id="title">Self-Care Toolkit</h1></header>
 
-<header>
-  <h1 id="title">Self-Care Toolkit</h1>
-</header>
+  <main>
 
-<main>
-  <!-- Guided Breathing -->
-  <section class="section" aria-label="Guided Breathing">
-    <h2 id="br-title">Guided Breathing</h2>
-    <div id="breath-circle" aria-hidden="true"></div>
-    <p id="br-text" aria-live="polite">Inhale... Exhale...</p>
-  </section>
+    <!-- Guided Breathing -->
+    <section class="section" aria-label="Guided Breathing">
+      <h2 id="br-title">Guided Breathing</h2>
+      <div id="breath-circle" aria-hidden="true"></div>
+      <p id="br-text" aria-live="polite">Inhale... Exhale...</p>
+    </section>
 
-  <!-- Daily Affirmation -->
-  <section class="section" aria-label="Daily Affirmation">
-    <h2 id="af-title">Daily Affirmation</h2>
-    <p id="af-display">You are capable of great things.</p>
-    <button id="af-btn">New Affirmation</button>
-  </section>
+    <!-- Daily Affirmation -->
+    <section class="section" aria-label="Daily Affirmation">
+      <h2 id="af-title">Daily Affirmation</h2>
+      <p id="af-display">You are enough.</p>
+      <button id="af-btn">New Affirmation</button>
+    </section>
 
-  <!-- 30-Day Challenge -->
-  <section class="section" aria-label="30-Day Challenge">
-    <h2 id="ch-title">30-Day Self-Care Challenge</h2>
-    <button id="ch-btn">Next Challenge</button>
-    <p id="ch-text" style="margin-top: 0.5rem;">Tap to start the challenge!</p>
-  </section>
+    <!-- 30-Day Challenge -->
+    <section class="section" aria-label="30-Day Challenge">
+      <h2 id="ch-title">30-Day Self-Care Challenge</h2>
+      <div class="card" id="challenge-card" tabindex="0" role="button" aria-pressed="false">
+        <div class="inner">
+          <div class="front" id="ch-front">Tap to see your challenge</div>
+          <div class="back" id="ch-back"></div>
+        </div>
+      </div>
+      <small id="ch-day">Day 1 of 30</small>
+    </section>
 
-  <!-- Doodle Pad -->
-  <section class="section" aria-label="Doodle Pad">
-    <h2 id="dd-title">Doodle Pad</h2>
-    <canvas id="canvas" width="400" height="250"></canvas>
-    <div style="margin-top:0.5rem;">
-      <button id="dd-clear">Clear</button>
-      <button id="dd-save">Save Drawing</button>
-    </div>
-  </section>
+    <!-- Doodle Pad -->
+    <section class="section" aria-label="Doodle Pad">
+      <h2 id="dd-title">Doodle Pad</h2>
+      <canvas id="canvas"></canvas>
+      <div class="btns">
+        <button id="dd-clear">Clear</button>
+        <button id="dd-save">Download PNG</button>
+      </div>
+    </section>
 
-  <!-- Gratitude Log -->
-  <section class="section" aria-label="Gratitude Log">
-    <h2 id="gr-title">Gratitude Log</h2>
-    <input type="text" id="gr1" placeholder="Gratitude 1" />
-    <input type="text" id="gr2" placeholder="Gratitude 2" />
-    <input type="text" id="gr3" placeholder="Gratitude 3" />
-    <button id="gr-save">Save Gratitudes</button>
-  </section>
+    <!-- Gratitude Log -->
+    <section class="section" aria-label="Gratitude Log">
+      <h2 id="gr-title">Gratitude Log</h2>
+      <input type="text" id="gr1" class="gratitude-input" placeholder="Gratitude 1" />
+      <input type="text" id="gr2" class="gratitude-input" placeholder="Gratitude 2" />
+      <input type="text" id="gr3" class="gratitude-input" placeholder="Gratitude 3" />
+      <button id="gr-save">Save Gratitudes</button>
+    </section>
 
-  <!-- Needs Picker -->
-  <section class="section" aria-label="Needs Picker">
-    <h2 id="np-title">What Do I Need Right Now?</h2>
-    <select id="np-select">
-      <option value="">Select...</option>
-    </select>
-    <p id="np-suggestion"></p>
-  </section>
+    <!-- Needs Picker -->
+    <section class="section" aria-label="Needs Picker">
+      <h2 id="np-title">What Do I Need Right Now?</h2>
+      <select id="np-select"></select>
+      <p id="np-suggestion"></p>
+    </section>
 
-  <!-- Self-Care Plan Builder -->
-  <section class="section" aria-label="Self-Care Plan Builder">
-    <h2 id="pb-title">Build Your Self-Care Plan</h2>
-    <select id="pb-goals" multiple size="5">
-      <option value="morning">Morning Routine</option>
-      <option value="evening">Evening Routine</option>
-      <option value="stress">Stress Relief</option>
-      <option value="focus">Focus & Energy</option>
-      <option value="sleep">Better Sleep</option>
-    </select>
-    <button id="pb-build">Generate Plan</button>
-    <ul id="pb-output" class="plan-list"></ul>
-    <button id="pb-export">Download Plan (PDF)</button>
-  </section>
-  
+    <!-- Plan Builder -->
+    <section class="section" aria-label="Plan Builder">
+      <h2 id="pb-title">Build Your Self-Care Plan</h2>
+      <select id="pb-goals" multiple size="5"></select>
+      <button id="pb-build">Generate Plan</button>
+      <ul id="pb-output" class="plan-list"></ul>
+      <button id="pb-export">Download Plan (PDF)</button>
+    </section>
+
+    <!-- Self-Care Notes -->
+    <section id="notes" class="section" aria-label="Self-Care Notes">
+      <h2 id="notes-title">Self-Care Notes</h2>
+      <!-- Physical -->
+      <section aria-label="Physical Self-Care Notes">
+        <h3>Physical Self-Care</h3>
+        <details>
+          <summary>Take a Short Walk</summary>
+          <p>Getting outside for a 10–15 minute walk can boost your mood and energy.</p>
+          <div class="notes-section">
+            <label for="notes-physical-walk">Your notes:</label>
+            <textarea id="notes-physical-walk" placeholder="Write how you felt..."></textarea>
+          </div>
+        </details>
+        <details>
+          <summary>Stretch or Do Yoga</summary>
+          <p>Simple stretches or yoga poses help release tension and improve flexibility.</p>
+          <div class="notes-section">
+            <label for="notes-physical-stretch">Your notes:</label>
+            <textarea id="notes-physical-stretch" placeholder="Write your experience..."></textarea>
+          </div>
+        </details>
+      </section>
+      <!-- Mental -->
+      <section aria-label="Mental Self-Care Notes">
+        <h3>Mental Self-Care</h3>
+        <details>
+          <summary>Practice Mindfulness Meditation</summary>
+          <p>Spend 5–10 minutes focusing on your breath or a guided meditation.</p>
+          <div class="notes-section">
+            <label for="notes-mental-meditation">Your notes:</label>
+            <textarea id="notes-mental-meditation" placeholder="How was your meditation?"></textarea>
+          </div>
+        </details>
+        <details>
+          <summary>Read Something Inspirational</summary>
+          <p>Choose something uplifting—a quote, article, or book excerpt.</p>
+          <div class="notes-section">
+            <label for="notes-mental-reading">Your notes:</label>
+            <textarea id="notes-mental-reading" placeholder="What inspired you?"></textarea>
+          </div>
+        </details>
+      </section>
+      <!-- Emotional -->
+      <section aria-label="Emotional Self-Care Notes">
+        <h3>Emotional Self-Care</h3>
+        <details>
+          <summary>Journaling Your Feelings</summary>
+          <p>Write freely about your emotions to process and understand them.</p>
+          <div class="notes-section">
+            <label for="notes-emotional-journaling">Your notes:</label>
+            <textarea id="notes-emotional-journaling" placeholder="Express yourself..."></textarea>
+          </div>
+        </details>
+        <details>
+          <summary>Connect with a Loved One</summary>
+          <p>Reach out to a friend or family member to share how you’re feeling.</p>
+          <div class="notes-section">
+            <label for="notes-emotional-connection">Your notes:</label>
+            <textarea id="notes-emotional-connection" placeholder="How did it go?"></textarea>
+          </div>
+        </details>
+      </section>
+      <!-- Social -->
+      <section aria-label="Social Self-Care Notes">
+        <h3>Social Self-Care</h3>
+        <details>
+          <summary>Join a Community Group</summary>
+          <p>Find an online or in-person group that shares your interests.</p>
+          <div class="notes-section">
+            <label for="notes-social-group">Your notes:</label>
+            <textarea id="notes-social-group" placeholder="Which group?"></textarea>
+          </div>
+        </details>
+        <details>
+          <summary>Schedule Time for Fun</summary>
+          <p>Plan an activity that you enjoy doing with others.</p>
+          <div class="notes-section">
+            <label for="notes-social-fun">Your notes:</label>
+            <textarea id="notes-social-fun" placeholder="What did you do?"></textarea>
+          </div>
+        </details>
+      </section>
+      <!-- Creative -->
+      <section aria-label="Creative Self-Care Notes">
+        <h3>Creative Self-Care</h3>
+        <details>
+          <summary>Draw or Paint</summary>
+          <p>Use art as a way to express your inner thoughts.</p>
+          <div class="notes-section">
+            <label for="notes-creative-art">Your notes:</label>
+            <textarea id="notes-creative-art" placeholder="What did you create?"></textarea>
+          </div>
+        </details>
+        <details>
+          <summary>Write a Poem or Story</summary>
+          <p>Try writing creatively to explore your imagination.</p>
+          <div class="notes-section">
+            <label for="notes-creative-writing">Your notes:</label>
+            <textarea id="notes-creative-writing" placeholder="Write here..."></textarea>
+          </div>
+        </details>
+      </section>
+
+      <div class="btns">
+        <button id="saveNotes">Save Notes</button>
+        <button id="clearNotes">Clear All Notes</button>
+        <button id="downloadNotes">Download Notes PDF</button>
+      </div>
+    </section>
+
   </main>
 
-<footer id="footer-text">© 2025 Self-Care Toolkit</footer>
+  <footer id="footer-text">© 2025 Self-Care Toolkit</footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-(() => {
-  const $ = id => document.getElementById(id);
-  let lang = localStorage.getItem('lang') || 'en';
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+  (() => {
+    const $ = id => document.getElementById(id);
+    let lang = localStorage.getItem('sc_lang') || 'en';
 
-  const texts = {
-    en: {
-      langBtn: "🇫🇷",
-      title: "Self-Care Toolkit",
-      brTitle: "Guided Breathing",
-      brText: "Inhale... Exhale...",
-      afTitle: "Daily Affirmation",
-      affirmations: [
-        "You are enough.", "Take it one moment at a time.",
-        "You are safe right now.", "Your feelings are valid.",
-        "You have overcome 100% of your hard days."
-      ],
-      chTitle: "30-Day Self-Care Challenge",
-      challenges: [
-        "Drink a glass of water", "Go for a 10-minute walk",
-        "Write one thing you’re proud of", "Call someone you love"
-      ],
-      ddTitle: "Doodle Pad",
-      grTitle: "Gratitude Log",
-      grSave: "Save Gratitudes",
-      npTitle: "What Do I Need Right Now?",
-      needs: {
-        support: "Support", rest: "Rest", fun: "Fun", quiet: "Quiet"
+    const texts = {
+      en: {
+        langBtn: '🇫🇷',
+        title: 'Self-Care Toolkit',
+        brTitle: 'Guided Breathing', brText: 'Inhale... Exhale...',
+        afTitle: 'Daily Affirmation', affirmations: [
+          'You are enough.', 'Take it one moment at a time.',
+          'Your feelings are valid.', 'You deserve care and kindness.'
+        ],
+        chTitle: '30-Day Challenge', challenges: [
+          'Drink a glass of water','Take a 10-minute walk',
+          'Write down 3 things you’re grateful for','Call a friend'
+        ],
+        ddTitle: 'Doodle Pad',
+        grTitle: 'Gratitude Log', grSave: 'Save Gratitudes',
+        npTitle: 'What Do I Need Right Now?',
+        needs: { Support: 'Support', Rest: 'Rest', Fun: 'Fun', Quiet: 'Quiet' },
+        needsSug: {
+          Support: 'Reach out to a friend or support line.',
+          Rest: 'Take a short nap or stretch.',
+          Fun: 'Watch a funny video or doodle.',
+          Quiet: 'Sit in silence and breathe deeply.'
+        },
+        pbTitle: 'Build Your Plan', pbBuild: 'Generate Plan', pbExport: 'Download Plan (PDF)',
+        planItems: {
+          morning:['Stretch 5 min','Drink water','Write a gratitude'],
+          evening:['Unplug 30 min','Journal','Breathe deeply'],
+          stress:['3 deep breaths','Listen to calm music','Take a walk'],
+          focus:['Turn off notifications','Pomodoro 25/5','List 3 tasks'],
+          sleep:['No screens','Warm bath','Relaxation']
+        },
+        footer: '© 2025 Self-Care Toolkit'
       },
-      needsSug: {
-        Support: "Reach out to a friend or support line.",
-        Rest: "Take a nap or close your eyes for a moment.",
-        Fun: "Watch a short funny video or draw something silly.",
-        Quiet: "Sit in silence for a minute and breathe."
-      },
-      pbTitle: "Build Your Self-Care Plan",
-      pbBuild: "Generate Plan",
-      pbExport: "Download Plan (PDF)",
-      planItems: {
-        morning: ["Stretch for 5 minutes", "Drink a full glass of water", "Write one thing you're grateful for"],
-        evening: ["Unplug 30 minutes before bed", "Write in your journal", "Do a breathing exercise"],
-        stress: ["Name 3 things around you", "Take 3 deep breaths", "Drink water slowly"],
-        focus: ["Turn off notifications", "Write 1 task down", "Set a 10-minute timer"],
-        sleep: ["Limit screens", "Take a warm shower", "Listen to calming sounds"]
-      },
-      footer: "© 2025 Self-Care Toolkit"
-    },
-    fr: {
-      langBtn: "🇬🇧",
-      title: "Trousse de soins personnels",
-      brTitle: "Respiration guidée",
-      brText: "Inspirez... Expirez...",
-      afTitle: "Affirmation quotidienne",
-      affirmations: [
-        "Tu es suffisant·e.", "Prends un moment à la fois.",
-        "Tu es en sécurité en ce moment.", "Tes sentiments sont valides.",
-        "Tu as survécu à 100 % de tes jours difficiles."
-      ],
-      chTitle: "Défi de soins sur 30 jours",
-      challenges: [
-        "Bois un verre d'eau", "Fais une marche de 10 minutes",
-        "Écris une chose dont tu es fier·e", "Appelle quelqu’un que tu aimes"
-      ],
-      ddTitle: "Bloc à dessin",
-      grTitle: "Journal de gratitude",
-      grSave: "Enregistrer",
-      npTitle: "De quoi ai-je besoin maintenant?",
-      needs: {
-        support: "Soutien", rest: "Repos", fun: "Amusement", quiet: "Calme"
-      },
-      needsSug: {
-        Soutien: "Contacte un ami ou une ligne d’écoute.",
-        Repos: "Fais une sieste ou repose tes yeux.",
-        Amusement: "Regarde une vidéo drôle ou dessine quelque chose.",
-        Calme: "Reste en silence une minute et respire profondément."
-      },
-      pbTitle: "Plan de soins personnels",
-      pbBuild: "Générer le plan",
-      pbExport: "Télécharger (PDF)",
-      planItems: {
-        morning: ["S'étirer 5 minutes", "Boire un grand verre d’eau", "Écrire une gratitude"],
-        evening: ["Débrancher 30 min avant de dormir", "Écrire dans ton journal", "Faire un exercice de respiration"],
-        stress: ["Nommer 3 choses autour de toi", "Prendre 3 grandes respirations", "Boire lentement de l’eau"],
-        focus: ["Désactiver les notifications", "Écrire 1 tâche", "Minuterie de 10 min"],
-        sleep: ["Éviter les écrans", "Prendre une douche chaude", "Écouter des sons apaisants"]
-      },
-      footer: "© 2025 Trousse de soins personnels"
-    }
-  };
+      fr: {
+        langBtn: '🇬🇧',
+        title: 'Trousse de soins personnels',
+        brTitle: 'Respiration guidée', brText: 'Inspirez... Expirez...',
+        afTitle: 'Affirmation quotidienne', affirmations:[
+          'Tu es suffisant·e.', 'Prends un moment à la fois.',
+          'Tes sentiments sont valides.', 'Tu mérites douceur et care.'
+        ],
+        chTitle: 'Défi 30 Jours', challenges:[
+          'Bois un verre d’eau','Fais une marche de 10 minutes',
+          'Écris 3 gratitudes','Appelle un ami'
+        ],
+        ddTitle: 'Bloc à dessin',
+        grTitle: 'Journal de gratitude', grSave: 'Enregistrer',
+        npTitle: 'De quoi ai-je besoin ?',
+        needs:{Support:'Soutien',Rest:'Repos',Fun:'Amusement',Quiet:'Calme'},
+        needsSug:{
+          Soutien:'Contacte un ami ou ligne d’écoute.',
+          Repos:'Fais une sieste ou étirements.',
+          Amusement:'Regarde une vidéo drôle.',
+          Calme:'Assieds-toi en silence, respire.'
+        },
+        pbTitle:'Crée ton plan', pbBuild:'Générer le plan', pbExport:'Télécharger (PDF)',
+        planItems:{
+          morning:['Étirements 5 min','Bois de l’eau','Écris une gratitude'],
+          evening:['Débranche 30 min','Journal','Respiration'],
+          stress:['3 grandes respirations','Musique apaisante','Promenade'],
+          focus:['Notifications off','Pomodoro 25/5','3 tâches'],
+          sleep:['Pas d’écrans','Bain chaud','Relaxation']
+        },
+        footer:'© 2025 Trousse de soins personnels'
+      }
+    };
 
-  function applyLang() {
-    const t = texts[lang];
-    $('lang-toggle').textContent = t.langBtn;
-    $('title').textContent = t.title;
-    $('br-title').textContent = t.brTitle;
-    $('br-text').textContent = t.brText;
-    $('af-title').textContent = t.afTitle;
-    $('ch-title').textContent = t.chTitle;
-    $('dd-title').textContent = t.ddTitle;
-    $('gr-title').textContent = t.grTitle;
-    $('gr-save').textContent = t.grSave;
-    $('np-title').textContent = t.npTitle;
-    $('pb-title').textContent = t.pbTitle;
-    $('pb-build').textContent = t.pbBuild;
-    $('pb-export').textContent = t.pbExport;
-    $('footer-text').textContent = t.footer;
+    function applyLang() {
+      const t = texts[lang];
+      $('lang-toggle').textContent = t.langBtn;
+      $('title').textContent = t.title;
+      $('br-title').textContent = t.brTitle;
+      $('br-text').textContent = t.brText;
+      $('af-title').textContent = t.afTitle;
+      $('ch-title').textContent = t.chTitle;
+      $('dd-title').textContent = t.ddTitle;
+      $('gr-title').textContent = t.grTitle;
+      $('gr-save').textContent = t.grSave;
+      $('np-title').textContent = t.npTitle;
+      $('pb-title').textContent = t.pbTitle;
+      $('pb-build').textContent = t.pbBuild;
+      $('pb-export').textContent = t.pbExport;
+      $('footer-text').textContent = t.footer;
 
-    // Populate Needs
-    const np = $('np-select');
-    np.innerHTML = '<option value="">Select...</option>';
-    for (let key in t.needs) {
-      const opt = document.createElement('option');
-      opt.value = t.needs[key];
-      opt.textContent = t.needs[key];
-      np.appendChild(opt);
-    }
-
-    // Initial affirm
-    $('af-display').textContent = t.affirmations[0];
-  }
-
-  $('lang-toggle').addEventListener('click', () => {
-    lang = lang === 'en' ? 'fr' : 'en';
-    localStorage.setItem('lang', lang);
-    applyLang();
-  });
-
-  $('af-btn').addEventListener('click', () => {
-    const a = texts[lang].affirmations;
-    $('af-display').textContent = a[Math.floor(Math.random() * a.length)];
-  });
-
-  let challengeDay = 0;
-  $('ch-btn').addEventListener('click', () => {
-    const ch = texts[lang].challenges;
-    $('ch-text').textContent = ch[challengeDay % ch.length];
-    challengeDay++;
-  });
-
-  const canvas = $('canvas'), ctx = canvas.getContext('2d');
-  let painting = false;
-  function draw(e) {
-    if (!painting) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-  }
-  canvas.addEventListener('mousedown', () => painting = true);
-  canvas.addEventListener('mouseup', () => { painting = false; ctx.beginPath(); });
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('touchstart', () => painting = true);
-  canvas.addEventListener('touchend', () => { painting = false; ctx.beginPath(); });
-  canvas.addEventListener('touchmove', draw);
-
-  $('dd-clear').addEventListener('click', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
-  $('dd-save').addEventListener('click', () => {
-    const link = document.createElement('a');
-    link.download = 'doodle.png';
-    link.href = canvas.toDataURL();
-    link.click();
-  });
-
-  $('gr-save').addEventListener('click', () => {
-    localStorage.setItem('gr1', $('gr1').value);
-    localStorage.setItem('gr2', $('gr2').value);
-    localStorage.setItem('gr3', $('gr3').value);
-    alert(lang === 'en' ? "Saved!" : "Enregistré !");
-  });
-
-  $('np-select').addEventListener('change', () => {
-    const val = $('np-select').value;
-    $('np-suggestion').textContent = texts[lang].needsSug[val] || "";
-  });
-
-  $('pb-build').addEventListener('click', () => {
-    const goals = [...$('pb-goals').selectedOptions].map(o => o.value);
-    const out = $('pb-output');
-    out.innerHTML = '';
-    if (!goals.length) return;
-    goals.forEach(g => {
-      const items = texts[lang].planItems[g];
-      items.forEach(i => {
-        const li = document.createElement('li');
-        li.textContent = i;
-        out.appendChild(li);
+      // populate needs
+      const np = $('np-select');
+      np.innerHTML = '<option value="">—</option>';
+      Object.values(t.needs).forEach(n => {
+        const o = document.createElement('option');
+        o.value = n; o.textContent = n;
+        np.appendChild(o);
       });
-    });
-  });
 
-  $('pb-export').addEventListener('click', () => {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text(texts[lang].pbTitle, 14, 15);
-    const items = [...$('pb-output').children].map(li => li.textContent);
-    let y = 25;
-    doc.setFontSize(12);
-    items.forEach((i, idx) => {
-      if (y > 270) { doc.addPage(); y = 15; }
-      doc.text(`${idx + 1}. ${i}`, 14, y);
-      y += 8;
-    });
-    doc.save("self-care-plan.pdf");
-  });
+      // populate plan goals labels
+      const pb = $('pb-goals');
+      pb.innerHTML = '';
+      const labels = { morning:t.planItems.morning, evening:t.planItems.evening,
+                       stress:t.planItems.stress, focus:t.planItems.focus, sleep:t.planItems.sleep };
+      Object.keys(labels).forEach(key => {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+        pb.appendChild(opt);
+      });
 
-  window.addEventListener('load', () => {
-    applyLang();
-    ['gr1','gr2','gr3'].forEach(id => {
-      const saved = localStorage.getItem(id);
-      if (saved) $(id).value = saved;
+      // initial affirm & challenge front
+      $('af-display').textContent = t.affirmations[0];
+      $('ch-front').textContent = lang==='en'
+        ? 'Tap to see your challenge' : 'Appuyez pour voir votre défi';
+    }
+
+    // language toggle
+    $('lang-toggle').addEventListener('click', () => {
+      lang = lang==='en'?'fr':'en';
+      localStorage.setItem('sc_lang', lang);
+      applyLang();
     });
-  });
-})();
-</script>
+
+    // affirmations
+    $('af-btn').addEventListener('click', () => {
+      const arr = texts[lang].affirmations;
+      $('af-display').textContent = arr[Math.floor(Math.random()*arr.length)];
+    });
+
+    // challenge
+    let idx = 0;
+    function showChallenge() {
+      const arr = texts[lang].challenges;
+      $('ch-back').textContent = arr[idx % arr.length];
+      $('ch-day').textContent = lang==='en'
+        ? `Day ${idx+1} of ${arr.length}`
+        : `Jour ${idx+1} sur ${arr.length}`;
+    }
+    $('challenge-card').addEventListener('click', () => {
+      const c = $('challenge-card');
+      if (!c.classList.contains('flipped')) {
+        c.classList.add('flipped');
+        showChallenge();
+      } else {
+        c.classList.remove('flipped');
+        idx++;
+      }
+    });
+
+    // doodle
+    const canvas = $('canvas'), ctx=canvas.getContext('2d');
+    let painting=false;
+    function draw(e) {
+      if(!painting) return;
+      const rect=canvas.getBoundingClientRect();
+      const x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+      const y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;
+      ctx.lineWidth=2; ctx.lineCap='round';
+      ctx.lineTo(x,y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x,y);
+    }
+    ['mousedown','touchstart'].forEach(e=>canvas.addEventListener(e,()=>painting=true));
+    ['mouseup','touchend','mouseout','touchcancel'].forEach(e=>canvas.addEventListener(e,()=>{painting=false;ctx.beginPath();}));
+    ['mousemove','touchmove'].forEach(e=>canvas.addEventListener(e,draw));
+    $('dd-clear').onclick=()=>ctx.clearRect(0,0,canvas.width,canvas.height);
+    $('dd-save').onclick=()=>{
+      const a=document.createElement('a');
+      a.download='doodle.png'; a.href=canvas.toDataURL();
+      a.click();
+    };
+
+    // gratitude
+    $('gr-save').onclick=()=>{
+      ['gr1','gr2','gr3'].forEach(id=>localStorage.setItem(id,$(id).value.trim()));
+      alert(lang==='en'?'Saved!':'Enregistré !');
+    };
+    // Needs picker
+    $('np-select').onchange=()=>{
+      $('np-suggestion').textContent = texts[lang].needsSug[$('np-select').value]||'';
+    };
+
+    // plan builder
+    $('pb-build').onclick=()=>{
+      const sel=[...$('pb-goals').selectedOptions].map(o=>o.value);
+      const out=$('pb-output'); out.innerHTML='';
+      sel.forEach(g=>{
+        texts[lang].planItems[g].forEach(item=>{
+          const li=document.createElement('li');
+          li.textContent=item; out.appendChild(li);
+        });
+      });
+    };
+    $('pb-export').onclick=()=>{
+      const { jsPDF } = window.jspdf; const doc=new jsPDF();
+      doc.setFontSize(16); doc.text(texts[lang].pbTitle,14,15);
+      doc.setFontSize(12); let y=25;
+      [...$('pb-output').children].forEach((li,i)=>{
+        if(y>270){doc.addPage();y=15;}
+        doc.text(`${i+1}. ${li.textContent}`,14,y); y+=8;
+      });
+      doc.save('self-care-plan.pdf');
+    };
+
+    // notes section
+    const notesT = [...document.querySelectorAll('#notes textarea')];
+    function loadNotes(){
+      notesT.forEach(ta=>{
+        const v=localStorage.getItem(ta.id);
+        if(v) ta.value=v;
+      });
+    }
+    function saveNotes() {
+      notesT.forEach(ta=>localStorage.setItem(ta.id, ta.value));
+      alert(lang==='en'?'Notes saved!':'Notes enregistrées !');
+    }
+    function clearNotes(){
+      if(confirm(lang==='en'?'Clear all notes?':'Effacer toutes les notes ?')){
+        notesT.forEach(ta=>{ta.value='';localStorage.removeItem(ta.id);});
+      }
+    }
+    async function downloadNotes(){
+      const { jsPDF } = window.jspdf; const doc=new jsPDF();
+      doc.setFontSize(18);
+      doc.text(lang==='en'?'Self-Care Notes':'Notes de soins',105,10,{align:'center'});
+      doc.setFontSize(12); let y=20;
+      notesT.forEach(ta=>{
+        const label=ta.previousElementSibling.textContent;
+        const txt=ta.value.trim()|| (lang==='fr'?'[Pas de notes]':'[No notes]');
+        if(y>270){doc.addPage(); y=10;}
+        doc.setFont(undefined,'bold');
+        doc.text(label,10,y); y+=6;
+        doc.setFont(undefined,'normal');
+        const lines=doc.splitTextToSize(txt,180);
+        doc.text(lines,10,y); y+=lines.length*6+6;
+      });
+      doc.save(lang==='en'?'Notes.pdf':'Notes.pdf');
+    }
+    document.getElementById('saveNotes').onclick=saveNotes;
+    document.getElementById('clearNotes').onclick=clearNotes;
+    document.getElementById('downloadNotes').onclick=downloadNotes;
+
+    // load on start
+    window.addEventListener('load',()=>{
+      applyLang();
+      ['gr1','gr2','gr3'].forEach(id=>{
+        const v=localStorage.getItem(id);
+        if(v) $(id).value=v;
+      });
+      loadNotes();
+    });
+  })();
+  </script>
 </body>
 </html>
