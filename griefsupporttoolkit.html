@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grief Support Toolkit</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      color: #4a5568;
+      margin-bottom: 15px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .toolkit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .toolkit-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .toolkit-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toolkit-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 24px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      color: #4a5568;
+      font-weight: 600;
+    }
+
+    .card-content {
+      color: #666;
+      line-height: 1.7;
+    }
+
+    .stages-list {
+      list-style: none;
+      margin-top: 15px;
+    }
+
+    .stages-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+    }
+
+    .stages-list li:last-child {
+      border-bottom: none;
+    }
+
+    .stage-number {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+
+    .coping-strategies {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .strategy-item {
+      background: linear-gradient(45deg, #f8f9ff, #e6f3ff);
+      padding: 15px;
+      border-radius: 12px;
+      border-left: 4px solid #667eea;
+      transition: all 0.3s ease;
+    }
+
+    .strategy-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .resource-links {
+      margin-top: 20px;
+    }
+
+    .resource-link {
+      display: inline-block;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      margin: 5px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .resource-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .emergency-section {
+      background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+      color: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      margin-top: 40px;
+      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+    }
+
+    .emergency-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    .emergency-number {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 10px 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .breathing-exercise {
+      background: linear-gradient(45deg, #4ecdc4, #44a08d);
+      color: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .breathing-circle {
+      width: 150px;
+      height: 150px;
+      border: 4px solid white;
+      border-radius: 50%;
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 4s ease;
+      user-select: none;
+    }
+
+    .breathing-circle.active {
+      transform: scale(1.3);
+    }
+
+    .quote-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      margin-top: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .quote {
+      font-size: 1.3rem;
+      font-style: italic;
+      color: #4a5568;
+      margin-bottom: 15px;
+      line-height: 1.8;
+    }
+
+    .quote-author {
+      color: #666;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .toolkit-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🤗 Grief Support Toolkit</h1>
+      <p>
+        A comprehensive resource to help you navigate through grief with
+        compassion, understanding, and practical support.
+      </p>
+    </div>
+
+    <div class="toolkit-grid">
+      <div class="toolkit-card">
+        <div class="card-header">
+          <div class="card-icon">💙</div>
+          <h2 class="card-title">Understanding Grief</h2>
+        </div>
+        <div class="card-content">
+          <p>
+            Grief is a natural response to loss. It's important to know that
+            there's no "right" way to grieve, and everyone's journey is unique.
+          </p>
+          <ul class="stages-list">
+            <li>
+              <span class="stage-number">1</span
+              ><strong>Denial:</strong> "This can't be happening"
+            </li>
+            <li>
+              <span class="stage-number">2</span
+              ><strong>Anger:</strong> Feeling frustrated or upset
+            </li>
+            <li>
+              <span class="stage-number">3</span
+              ><strong>Bargaining:</strong> "What if..." thoughts
+            </li>
+            <li>
+              <span class="stage-number">4</span
+              ><strong>Depression:</strong> Deep sadness and withdrawal
+            </li>
+            <li>
+              <span class="stage-number">5</span
+              ><strong>Acceptance:</strong> Finding peace with the loss
+            </li>
+          </ul>
+          <p style="margin-top: 15px; font-style: italic; color: #888;">
+            Remember: These stages don't happen in order, and you may experience
+            them multiple times.
+          </p>
+        </div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="card-header">
+          <div class="card-icon">🛠️</div>
+          <h2 class="card-title">Coping Strategies</h2>
+        </div>
+        <div class="card-content">
+          <p>Practical ways to help you through difficult moments:</p>
+          <div class="coping-strategies">
+            <div class="strategy-item">
+              <strong>🌱 Self-Care</strong><br />
+              Maintain basic needs: sleep, nutrition, hygiene
+            </div>
+            <div class="strategy-item">
+              <strong>📝 Journaling</strong><br />
+              Write down your thoughts and feelings
+            </div>
+            <div class="strategy-item">
+              <strong>🚶‍♀️ Gentle Exercise</strong><br />
+              Walking, yoga, or light movement
+            </div>
+            <div class="strategy-item">
+              <strong>🎨 Creative Expression</strong><br />
+              Art, music, or crafts as outlets
+            </div>
+            <div class="strategy-item">
+              <strong>🤝 Social Support</strong><br />
+              Connect with friends, family, or support groups
+            </div>
+            <div class="strategy-item">
+              <strong>🧘‍♀️ Mindfulness</strong><br />
+              Meditation and breathing exercises
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="card-header">
+          <div class="card-icon">🌟</div>
+          <h2 class="card-title">Memory Keeping</h2>
+        </div>
+        <div class="card-content">
+          <p>Ways to honor and remember your loved one:</p>
+          <ul style="margin-top: 15px; list-style-type: none;">
+            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+              📸 Create a photo album or memory book
+            </li>
+            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+              🕯️ Light a candle on special occasions
+            </li>
+            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+              🌳 Plant a tree or garden in their memory
+            </li>
+            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+              💝 Donate to a cause they cared about
+            </li>
+            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+              📖 Write letters to them
+            </li>
+            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+              🎵 Create a playlist of meaningful songs
+            </li>
+            <li style="padding: 8px 0;">🌟 Continue traditions they loved</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="toolkit-card">
+        <div class="card-header">
+          <div class="card-icon">📞</div>
+          <h2 class="card-title">Support Resources</h2>
+        </div>
+        <div class="card-content">
+          <p>Professional support and helplines:</p>
+          <div class="resource-links">
+            <a href="#" class="resource-link">Crisis Text Line</a>
+            <a href="#" class="resource-link">GriefShare</a>
+            <a href="#" class="resource-link">National Suicide Prevention Lifeline</a>
+            <a href="#" class="resource-link">Psychology Today Therapist Finder</a>
+            <a href="#" class="resource-link">SAMHSA Treatment Locator</a>
+          </div>
+          <p style="margin-top: 20px; font-style: italic;">
+            Consider reaching out to a grief counselor, therapist, or joining a
+            support group in your area.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="breathing-exercise">
+      <h3>🌬️ Breathing Exercise</h3>
+      <p>Click the circle and breathe with the animation</p>
+      <div class="breathing-circle" id="breathingCircle" onclick="startBreathing()">
+        Click to Start
+      </div>
+      <p id="breathingText">Inhale for 4 counts, hold for 4 counts, exhale for 4 counts</p>
+    </div>
+
+    <div class="emergency-section">
+      <h3>🚨 If You're in Crisis</h3>
+      <p>If you're having thoughts of self-harm or suicide, please reach out immediately:</p>
+      <div class="emergency-number">988</div>
+      <p>Suicide & Crisis Lifeline (US)</p>
+      <p style="margin-top: 15px;">
+        You can also text "HELLO" to 741741 for the Crisis Text Line
+      </p>
+      <p><strong>Remember: You are not alone, and help is available 24/7.</strong></p>
+    </div>
+
+    <div class="quote-section">
+      <div class="quote">
+        "Grief is the price we pay for love. It is also the source of our greatest
+        hope."
+      </div>
+      <div class="quote-author">— Anonymous</div>
+    </div>
+  </div>
+
+  <script>
+    let breathingActive = false;
+    let breathingInterval;
+
+    function startBreathing() {
+      const circle = document.getElementById('breathingCircle');
+      const text = document.getElementById('breathingText');
+
+      if (breathingActive) {
+        clearInterval(breathingInterval);
+        circle.classList.remove('active');
+        circle.textContent = 'Click to Start';
+        text.textContent = 'Inhale for 4 counts, hold for 4 counts, exhale for 4 counts';
+        breathingActive = false;
+        return;
+      }
+
+      breathingActive = true;
+      let phase = 0; // 0: inhale, 1: hold, 2: exhale, 3: hold
+      let count = 0;
+
+      const phases = ['Inhale', 'Hold', 'Exhale', 'Hold'];
+      const durations = [4, 4, 4, 4];
+
+      breathingInterval = setInterval(() => {
+        if (count === 0) {
+          text.textContent = `${phases[phase]}...`;
+          if (phase === 0) {
+            circle.classList.add('active');
+          } else if (phase === 2) {
+            circle.classList.remove('active');
+          }
+        }
+
+        circle.textContent = durations[phase] - count;
+        count++;
+
+        if (count >= durations[phase]) {
+          count = 0;
+          phase = (phase + 1) % 4;
+        }
+      }, 1000);
+    }
+
+    // Smooth scroll for anchor links (if any)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+          });
+        }
+      });
+    });
+
+    // Fade-in on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.toolkit-card').forEach((card) => {
+      observer.observe(card);
+    });
+  </script>
+</body>
+</html>
