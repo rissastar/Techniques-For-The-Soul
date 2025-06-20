@@ -1,154 +1,756 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mood Snapshot</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #cce5ff, #e6f0ff);
-      color: #333;
-      display: flex;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mood Tracker Toolkit / Suivi d'Humeur</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+  :root {
+    --color-happy: #fff1c1;
+    --color-sad: #a0c4ff;
+    --color-angry: #ffadad;
+    --color-relaxed: #bde0fe;
+    --color-anxious: #ffc6ff;
+    --color-neutral: #d3d3d3;
+    --color-text-dark: #222;
+    --color-text-light: #fff;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--color-neutral);
+    color: var(--color-text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    transition: background-color 0.5s ease;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+  }
+  header button.lang-toggle {
+    background: #222;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+  }
+  main {
+    max-width: 600px;
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem 1.5rem 2rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+  .mood-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .mood-btn {
+    background: var(--color-neutral);
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    font-size: 1.5rem;
+    user-select: none;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+  }
+  .mood-btn.selected {
+    border-color: #444;
+    background: #f0f0f0;
+  }
+  .mood-emoji {
+    font-size: 2.5rem;
+  }
+  .mood-name {
+    font-weight: 600;
+    margin-top: 0.25rem;
+    font-size: 1rem;
+    text-align: center;
+  }
+  .quote {
+    margin: 1rem 0 1.5rem;
+    font-style: italic;
+    font-size: 1.1rem;
+    text-align: center;
+    min-height: 60px;
+    color: #555;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1.5px solid #ccc;
+    transition: border-color 0.3s ease;
+  }
+  textarea:focus {
+    outline: none;
+    border-color: #666;
+  }
+  button.add-entry, button#clearEntriesBtn, button#downloadPdfBtn {
+    background: #007bff;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 0.6rem 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    margin-top: 0.4rem;
+  }
+  button.add-entry:hover, button#clearEntriesBtn:hover, button#downloadPdfBtn:hover {
+    background: #0056b3;
+  }
+  .buttons-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  .entries {
+    margin-top: 2rem;
+    max-height: 320px;
+    overflow-y: auto;
+    border-top: 2px solid #eee;
+    padding-top: 1rem;
+  }
+  .entry {
+    background: #f9f9f9;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.05);
+  }
+  .entry-header {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .entry-mood {
+    font-size: 1.4rem;
+  }
+  .entry-note {
+    white-space: pre-wrap;
+    font-size: 0.95rem;
+    color: #333;
+  }
+  footer {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: #999;
+  }
+
+  /* Mood backgrounds */
+  body.mood-happy {
+    background: var(--color-happy);
+    color: #444;
+  }
+  body.mood-sad {
+    background: var(--color-sad);
+    color: #222;
+  }
+  body.mood-angry {
+    background: var(--color-angry);
+    color: #222;
+  }
+  body.mood-relaxed {
+    background: var(--color-relaxed);
+    color: #222;
+  }
+  body.mood-anxious {
+    background: var(--color-anxious);
+    color: #222;
+  }
+  body.mood-neutral {
+    background: var(--color-neutral);
+    color: var(--color-text-dark);
+  }
+
+  /* Scrollbar for entries */
+  .entries::-webkit-scrollbar {
+    width: 8px;
+  }
+  .entries::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.15);
+    border-radius: 4px;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .mood-btn {
+      width: 60px;
+      font-size: 1.2rem;
+    }
+    .mood-emoji {
+      font-size: 2rem;
+    }
+    .buttons-row {
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
     }
-
-    h1 {
-      margin-top: 20px;
-      font-size: 2em;
-      color: #444;
-    }
-
-    .mood-wheel-container {
-      position: relative;
-      width: 300px;
-      height: 300px;
-      margin: 20px auto;
-    }
-
-    .mood-wheel {
+    button#clearEntriesBtn, button#downloadPdfBtn {
       width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: conic-gradient(
-        #FF9AA2 0% 16.6%,
-        #FFB7B2 16.6% 33.3%,
-        #FFDAC1 33.3% 50%,
-        #E2F0CB 50% 66.6%,
-        #B5EAD7 66.6% 83.3%,
-        #C7CEEA 83.3% 100%
-      );
-      border: 6px solid white;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
     }
-
-    .pointer {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 8px;
-      height: 120px;
-      background: #333;
-      transform-origin: bottom center;
-      border-radius: 4px;
-      z-index: 10;
-      transition: transform 0.5s ease;
-    }
-
-    .mood-label {
-      margin-top: 20px;
-      font-size: 1.5em;
-      font-weight: bold;
-      color: #555;
-    }
-
-    .affirmation {
-      font-size: 1.2em;
-      margin-top: 10px;
-      max-width: 80%;
-      color: #444;
-    }
-
-    .selector {
-      margin-top: 30px;
-    }
-
-    label[for="mood"] {
-      font-weight: 600;
-      margin-right: 10px;
-    }
-
-    select {
-      padding: 10px 15px;
-      font-size: 1em;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      cursor: pointer;
-    }
-
-    @media (max-width: 500px) {
-      .mood-wheel-container {
-        width: 220px;
-        height: 220px;
-      }
-      .pointer {
-        height: 90px;
-      }
-    }
-  </style>
+  }
+  /* Reminder input */
+  .reminder-section {
+    margin-top: 1rem;
+    border-top: 2px solid #eee;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  label {
+    font-weight: 600;
+  }
+  input[type="time"] {
+    padding: 0.3rem 0.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1.5px solid #ccc;
+    max-width: 140px;
+  }
+  button#setReminderBtn {
+    margin-top: 0.5rem;
+    background: #28a745;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button#setReminderBtn:hover {
+    background: #1e7e34;
+  }
+  .reminder-message {
+    font-size: 0.9rem;
+    color: #444;
+    min-height: 1.2rem;
+  }
+</style>
 </head>
-<body>
-  <h1>🎨 Mood Snapshot</h1>
+<body class="mood-neutral">
 
-  <div class="mood-wheel-container">
-    <div class="pointer" id="pointer"></div>
-    <div class="mood-wheel"></div>
+<header>
+  <h1 id="title">Mood Tracker Toolkit</h1>
+  <button class="lang-toggle" id="langToggle">Français</button>
+</header>
+
+<main>
+  <section class="mood-selection" aria-label="Select your mood / Sélectionnez votre humeur">
+    <!-- Mood buttons inserted by JS -->
+  </section>
+
+  <div class="quote" id="quoteArea">Select a mood to see an inspirational quote.</div>
+
+  <form id="entryForm" aria-label="Add mood entry / Ajouter une entrée d'humeur">
+    <textarea id="noteInput" placeholder="Add notes about your mood..."></textarea>
+    <button type="submit" class="add-entry" disabled>Add Entry</button>
+  </form>
+
+  <div class="buttons-row">
+    <button id="downloadPdfBtn" title="Download PDF of all entries">Download PDF</button>
+    <button id="clearEntriesBtn" title="Clear all mood entries">Clear All Entries</button>
   </div>
 
-  <div class="mood-label" id="moodLabel">Feeling: Calm</div>
-  <div class="affirmation" id="affirmation">"I am centered and at peace."</div>
+  <section class="reminder-section" aria-label="Daily mood reminder setting / Réglage du rappel quotidien">
+    <label for="reminderTimeInput">Set daily mood reminder time:</label>
+    <input type="time" id="reminderTimeInput" aria-describedby="reminderMessage" />
+    <button id="setReminderBtn">Set Reminder</button>
+    <div class="reminder-message" id="reminderMessage"></div>
+  </section>
 
-  <div class="selector">
-    <label for="mood">Choose Your Mood:</label>
-    <select id="mood" onchange="updateMood(this.value)">
-      <option value="0">Anxious</option>
-      <option value="60">Overwhelmed</option>
-      <option value="120">Sad</option>
-      <option value="180" selected>Calm</option>
-      <option value="240">Hopeful</option>
-      <option value="300">Motivated</option>
-    </select>
-  </div>
+  <section class="entries" id="entriesList" aria-live="polite" aria-label="Mood entries / Entrées d'humeur">
+    <!-- Mood entries will appear here -->
+  </section>
+</main>
 
-  <script>
-    const pointer = document.getElementById('pointer');
-    const label = document.getElementById('moodLabel');
-    const affirmation = document.getElementById('affirmation');
+<footer>
+  &copy; 2025 Mood Tracker Toolkit | Outil de suivi d'humeur
+</footer>
 
-    const moodMap = {
-      0: { text: "Anxious", affirmation: "I breathe in calm and let go of tension." },
-      60: { text: "Overwhelmed", affirmation: "I am doing the best I can, and that is enough." },
-      120: { text: "Sad", affirmation: "It's okay to feel this way. I honor my emotions." },
-      180: { text: "Calm", affirmation: "I am centered and at peace." },
-      240: { text: "Hopeful", affirmation: "I trust that good things are coming." },
-      300: { text: "Motivated", affirmation: "I have what it takes to succeed." },
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  (function(){
+    const moods = [
+      {
+        id: 'happy',
+        emoji: '😊',
+        name_en: 'Happy',
+        name_fr: 'Heureux/Heureuse',
+        quote_en: 'Happiness is not by chance, but by choice.',
+        quote_fr: "Le bonheur n'est pas un hasard, mais un choix."
+      },
+      {
+        id: 'sad',
+        emoji: '😢',
+        name_en: 'Sad',
+        name_fr: 'Triste',
+        quote_en: 'Every sadness will fade with time.',
+        quote_fr: "Toute tristesse s'estompe avec le temps."
+      },
+      {
+        id: 'angry',
+        emoji: '😠',
+        name_en: 'Angry',
+        name_fr: 'En colère',
+        quote_en: 'Anger is a valid emotion, but control is key.',
+        quote_fr: "La colère est une émotion valide, mais le contrôle est la clé."
+      },
+      {
+        id: 'relaxed',
+        emoji: '😌',
+        name_en: 'Relaxed',
+        name_fr: 'Détendu/Détendue',
+        quote_en: 'Peace comes from within, not from without.',
+        quote_fr: "La paix vient de l'intérieur, pas de l'extérieur."
+      },
+      {
+        id: 'anxious',
+        emoji: '😰',
+        name_en: 'Anxious',
+        name_fr: 'Anxieux/Anxieuse',
+        quote_en: 'This too shall pass, breathe deeply.',
+        quote_fr: "Cela aussi passera, respirez profondément."
+      },
+      {
+        id: 'neutral',
+        emoji: '😐',
+        name_en: 'Neutral',
+        name_fr: 'Neutre',
+        quote_en: 'Every mood is valid and part of the journey.',
+        quote_fr: "Chaque humeur est valide et fait partie du chemin."
+      }
+    ];
+
+    // DOM elements
+    const moodSelectionEl = document.querySelector('.mood-selection');
+    const quoteEl = document.getElementById('quoteArea');
+    const noteInput = document.getElementById('noteInput');
+    const entryForm = document.getElementById('entryForm');
+    const addEntryBtn = entryForm.querySelector('button');
+    const entriesList = document.getElementById('entriesList');
+    const langToggleBtn = document.getElementById('langToggle');
+    const titleEl = document.getElementById('title');
+    const clearEntriesBtn = document.getElementById('clearEntriesBtn');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+    const reminderTimeInput = document.getElementById('reminderTimeInput');
+    const setReminderBtn = document.getElementById('setReminderBtn');
+    const reminderMessage = document.getElementById('reminderMessage');
+
+    // State
+    let selectedMood = null;
+    let language = localStorage.getItem('moodTrackerLang') || 'en'; // default English
+    let entries = JSON.parse(localStorage.getItem('moodEntries')) || [];
+    let reminderTime = localStorage.getItem('moodReminderTime') || '';
+
+    // Texts per language
+    const texts = {
+      en: {
+        title: 'Mood Tracker Toolkit',
+        addEntry: 'Add Entry',
+        notePlaceholder: 'Add notes about your mood...',
+        quoteDefault: 'Select a mood to see an inspirational quote.',
+        langToggle: 'Français',
+        ariaMoodSelection: 'Select your mood',
+        ariaAddEntry: 'Add mood entry',
+        ariaEntries: 'Mood entries',
+        noEntries: 'No mood entries yet.',
+        entryAddedAlert: 'Mood entry added!',
+        clearConfirm: 'Are you sure you want to clear all mood entries?',
+        clearSuccess: 'All entries cleared.',
+        downloadTitle: 'Mood Tracker Entries',
+        reminderLabel: 'Set daily mood reminder time:',
+        reminderSet: 'Reminder set for',
+        reminderUnset: 'Reminder cleared.',
+        reminderUnsupported: 'Notification permission denied or unsupported.',
+        reminderPrompt: 'Time for your daily mood check-in!'
+      },
+      fr: {
+        title: "Outil de suivi d'humeur",
+        addEntry: "Ajouter l'entrée",
+        notePlaceholder: "Ajoutez des notes sur votre humeur...",
+        quoteDefault: "Sélectionnez une humeur pour voir une citation inspirante.",
+        langToggle: "English",
+        ariaMoodSelection: "Sélectionnez votre humeur",
+        ariaAddEntry: "Ajouter une entrée d'humeur",
+        ariaEntries: "Entrées d'humeur",
+        noEntries: "Aucune entrée d'humeur pour le moment.",
+        entryAddedAlert: "Entrée d'humeur ajoutée !",
+        clearConfirm: "Voulez-vous vraiment effacer toutes les entrées d'humeur ?",
+        clearSuccess: "Toutes les entrées ont été effacées.",
+        downloadTitle: "Entrées du suivi d'humeur",
+        reminderLabel: "Réglez l'heure du rappel quotidien :",
+        reminderSet: "Rappel réglé pour",
+        reminderUnset: "Rappel effacé.",
+        reminderUnsupported: "Permission de notification refusée ou non prise en charge.",
+        reminderPrompt: "Il est temps de vérifier votre humeur quotidienne !"
+      }
     };
 
-    function updateMood(angle) {
-      const numAngle = Number(angle);
-      pointer.style.transform = `rotate(${numAngle}deg)`;
-      const mood = moodMap[numAngle];
-      label.textContent = `Feeling: ${mood.text}`;
-      affirmation.textContent = `"${mood.affirmation}"`;
+    // Initialize language text
+    function updateLanguageText() {
+      const t = texts[language];
+      titleEl.textContent = t.title;
+      addEntryBtn.textContent = t.addEntry;
+      noteInput.placeholder = t.notePlaceholder;
+      quoteEl.textContent = t.quoteDefault;
+      langToggleBtn.textContent = t.langToggle;
+      moodSelectionEl.setAttribute('aria-label', t.ariaMoodSelection);
+      entryForm.setAttribute('aria-label', t.ariaAddEntry);
+      entriesList.setAttribute('aria-label', t.ariaEntries);
+      reminderMessage.textContent = reminderTime ? `${t.reminderSet} ${reminderTime}` : t.reminderUnset;
+      document.querySelector('.reminder-section label').textContent = t.reminderLabel;
     }
 
-    // Initialize default mood
-    updateMood("180");
-  </script>
+    // Render moods
+    function renderMoods() {
+      moodSelectionEl.innerHTML = '';
+      moods.forEach(m => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'mood-btn';
+        if(selectedMood === m.id) btn.classList.add('selected');
+        btn.setAttribute('data-id', m.id);
+        btn.setAttribute('aria-pressed', selectedMood === m.id ? 'true' : 'false');
+        btn.innerHTML = `
+          <div class="mood-emoji">${m.emoji}</div>
+          <div class="mood-name">${language === 'en' ? m.name_en : m.name_fr}</div>
+        `;
+        moodSelectionEl.appendChild(btn);
+      });
+    }
+
+    // Update background based on mood
+    function updateBackground() {
+      document.body.className = ''; // reset all mood classes
+      if(selectedMood) {
+        document.body.classList.add(`mood-${selectedMood}`);
+      } else {
+        document.body.classList.add('mood-neutral');
+      }
+    }
+
+    // Update quote based on selected mood
+    function updateQuote() {
+      if(selectedMood) {
+        const mood = moods.find(m => m.id === selectedMood);
+        quoteEl.textContent = language === 'en' ? mood.quote_en : mood.quote_fr;
+      } else {
+        quoteEl.textContent = texts[language].quoteDefault;
+      }
+    }
+
+    // Enable/disable Add Entry button based on mood and note input
+    function updateAddEntryBtn() {
+      addEntryBtn.disabled = !(selectedMood && noteInput.value.trim().length > 0);
+    }
+
+    // Render saved entries
+    function renderEntries() {
+      if(entries.length === 0) {
+        entriesList.innerHTML = `<p>${texts[language].noEntries}</p>`;
+        return;
+      }
+      entriesList.innerHTML = '';
+      entries.slice().reverse().forEach(entry => {
+        const mood = moods.find(m => m.id === entry.mood);
+        const date = new Date(entry.timestamp);
+        const dateStr = date.toLocaleString(language === 'en' ? 'en-CA' : 'fr-CA', {
+          year: 'numeric', month: 'short', day: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        });
+
+        const entryEl = document.createElement('article');
+        entryEl.className = 'entry';
+        entryEl.innerHTML = `
+          <div class="entry-header">
+            <span class="entry-mood" aria-label="${language === 'en' ? mood.name_en : mood.name_fr}">${mood.emoji} ${language === 'en' ? mood.name_en : mood.name_fr}</span>
+            <time datetime="${entry.timestamp}">${dateStr}</time>
+          </div>
+          <div class="entry-note">${escapeHtml(entry.note)}</div>
+        `;
+        entriesList.appendChild(entryEl);
+      });
+    }
+
+    // Escape HTML in user input (simple)
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Save entries to localStorage
+    function saveEntries() {
+      localStorage.setItem('moodEntries', JSON.stringify(entries));
+    }
+
+    // Save language selection
+    function saveLanguage() {
+      localStorage.setItem('moodTrackerLang', language);
+    }
+
+    // Save selected mood
+    function saveSelectedMood() {
+      localStorage.setItem('moodSelected', selectedMood);
+    }
+
+    // Save reminder time
+    function saveReminderTime(time) {
+      if(time) {
+        localStorage.setItem('moodReminderTime', time);
+      } else {
+        localStorage.removeItem('moodReminderTime');
+      }
+      reminderTime = time;
+      reminderMessage.textContent = time ? `${texts[language].reminderSet} ${time}` : texts[language].reminderUnset;
+    }
+
+    // Load selected mood
+    function loadSelectedMood() {
+      const savedMood = localStorage.getItem('moodSelected');
+      if(savedMood && moods.some(m => m.id === savedMood)) {
+        selectedMood = savedMood;
+      }
+    }
+
+    // Initialize everything
+    function init() {
+      loadSelectedMood();
+      updateLanguageText();
+      renderMoods();
+      updateBackground();
+      updateQuote();
+      renderEntries();
+      updateAddEntryBtn();
+
+      // Restore reminder time input value
+      reminderTimeInput.value = reminderTime || '';
+      noteInput.value = '';
+    }
+
+    // Event handlers
+    moodSelectionEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button.mood-btn');
+      if(!btn) return;
+      const moodId = btn.getAttribute('data-id');
+      if(moodId === selectedMood) {
+        // Deselect if clicked again
+        selectedMood = null;
+      } else {
+        selectedMood = moodId;
+      }
+      saveSelectedMood();
+      renderMoods();
+      updateBackground();
+      updateQuote();
+      updateAddEntryBtn();
+    });
+
+    noteInput.addEventListener('input', updateAddEntryBtn);
+
+    entryForm.addEventListener('submit', e => {
+      e.preventDefault();
+      if(!selectedMood) return;
+      const note = noteInput.value.trim();
+      if(note.length === 0) return;
+      const newEntry = {
+        id: Date.now(),
+        mood: selectedMood,
+        note: note,
+        timestamp: new Date().toISOString()
+      };
+      entries.push(newEntry);
+      saveEntries();
+      renderEntries();
+      noteInput.value = '';
+      updateAddEntryBtn();
+      alert(language === 'en' ? texts.en.entryAddedAlert : texts.fr.entryAddedAlert);
+    });
+
+    langToggleBtn.addEventListener('click', () => {
+      language = language === 'en' ? 'fr' : 'en';
+      saveLanguage();
+      updateLanguageText();
+      renderMoods();
+      updateQuote();
+      renderEntries();
+      updateAddEntryBtn();
+    });
+
+    clearEntriesBtn.addEventListener('click', () => {
+      if(confirm(language === 'en' ? texts.en.clearConfirm : texts.fr.clearConfirm)) {
+        entries = [];
+        saveEntries();
+        renderEntries();
+        alert(language === 'en' ? texts.en.clearSuccess : texts.fr.clearSuccess);
+      }
+    });
+
+    downloadPdfBtn.addEventListener('click', () => {
+      if(entries.length === 0){
+        alert(language === 'en' ? texts.en.noEntries : texts.fr.noEntries);
+        return;
+      }
+      generatePdf();
+    });
+
+    setReminderBtn.addEventListener('click', () => {
+      const time = reminderTimeInput.value;
+      if(!time){
+        saveReminderTime('');
+        alert(language === 'en' ? texts.en.reminderUnset : texts.fr.reminderUnset);
+        clearTimeout(reminderTimeout);
+        return;
+      }
+      saveReminderTime(time);
+      alert(`${language === 'en' ? texts.en.reminderSet : texts.fr.reminderSet} ${time}`);
+      scheduleReminder();
+    });
+
+    // PDF Generation using jsPDF
+    async function generatePdf() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const title = language === 'en' ? texts.en.downloadTitle : texts.fr.downloadTitle;
+      doc.setFontSize(16);
+      doc.text(title, 14, 20);
+
+      doc.setFontSize(12);
+
+      // For vertical spacing
+      let y = 30;
+
+      entries.slice().reverse().forEach((entry, i) => {
+        if(y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+        const mood = moods.find(m => m.id === entry.mood);
+        const date = new Date(entry.timestamp);
+        const dateStr = date.toLocaleString(language === 'en' ? 'en-CA' : 'fr-CA', {
+          year: 'numeric', month: 'short', day: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        });
+
+        doc.setFont(undefined, 'bold');
+        doc.text(`${mood.emoji} ${language === 'en' ? mood.name_en : mood.name_fr} — ${dateStr}`, 14, y);
+        y += 8;
+        doc.setFont(undefined, 'normal');
+
+        // Split long notes to fit page width (~180 width)
+        const splitNote = doc.splitTextToSize(entry.note, 180);
+        doc.text(splitNote, 14, y);
+        y += splitNote.length * 7 + 5;
+      });
+
+      doc.save('mood-tracker-entries.pdf');
+    }
+
+    // Reminder scheduling
+    let reminderTimeout = null;
+    function scheduleReminder(){
+      clearTimeout(reminderTimeout);
+      if(!reminderTime) return;
+
+      // Calculate time to next reminder (today or tomorrow)
+      const [hours, minutes] = reminderTime.split(':').map(Number);
+      const now = new Date();
+      let nextReminder = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
+
+      if(nextReminder <= now) {
+        // If time already passed today, set for tomorrow
+        nextReminder.setDate(nextReminder.getDate() + 1);
+      }
+
+      const delay = nextReminder.getTime() - now.getTime();
+
+      reminderTimeout = setTimeout(() => {
+        showReminderNotification();
+        scheduleReminder(); // schedule next day
+      }, delay);
+    }
+
+    function showReminderNotification(){
+      if(!('Notification' in window)){
+        fallbackReminderAlert();
+        return;
+      }
+
+      if(Notification.permission === 'granted'){
+        const options = {
+          body: language === 'en' ? texts.en.reminderPrompt : texts.fr.reminderPrompt,
+          icon: 'https://cdn-icons-png.flaticon.com/512/888/888879.png',
+          badge: 'https://cdn-icons-png.flaticon.com/512/888/888879.png',
+        };
+        new Notification(titleEl.textContent, options);
+      }
+      else if(Notification.permission !== 'denied'){
+        Notification.requestPermission().then(permission => {
+          if(permission === 'granted'){
+            showReminderNotification();
+          } else {
+            fallbackReminderAlert();
+          }
+        });
+      } else {
+        fallbackReminderAlert();
+      }
+    }
+
+    function fallbackReminderAlert(){
+      alert(language === 'en' ? texts.en.reminderPrompt : texts.fr.reminderPrompt);
+    }
+
+    // Initialize on load
+    init();
+    scheduleReminder();
+
+  })();
+</script>
+
 </body>
 </html>
