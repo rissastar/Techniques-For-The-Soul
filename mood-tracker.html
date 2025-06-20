@@ -193,7 +193,7 @@
     border-radius: 18px;
     box-shadow: 0 14px 35px rgba(0,0,0,0.15);
   }
-  .flip-card:hover .flip-inner {
+  .flip-card.flipped .flip-inner {
     transform: rotateY(180deg);
   }
   .flip-front, .flip-back {
@@ -280,33 +280,6 @@
     transform: scale(1.25);
     z-index: 10;
   }
-  /* Animations containers */
-  .anim-container {
-    pointer-events: none;
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    overflow: hidden;
-    z-index: 1;
-    border-radius: 22px;
-  }
-  .anim-item {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.7;
-    animation: fall infinite linear;
-    background: #ffffffcc;
-  }
-  @keyframes fall {
-    0% {
-      transform: translateY(-15vh) scale(0.5);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(110vh) scale(1);
-      opacity: 0;
-    }
-  }
   /* Mood gradients */
   body.mood-happy {background: linear-gradient(135deg, #f6d365, #fda085);}
   body.mood-sad {background: linear-gradient(135deg, #667eea, #764ba2);}
@@ -365,7 +338,6 @@
   </form>
 
   <div id="mood-display">
-    <div class="anim-container" id="anim-bg"></div>
     <div class="mood-avatar"></div>
     <p data-en="Select a mood to get support below." data-fr="Choisissez une humeur pour obtenir du soutien ci-dessous.">
       Select a mood to get support below.
@@ -386,221 +358,246 @@
 
   <div id="word-cloud" aria-label="Word Cloud"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script>
-    (function(){
-      // Language toggle
-      const langToggle = document.getElementById('lang-toggle'),
-            texts = document.querySelectorAll('[data-en]');
-      let lang = localStorage.lang || 'en';
-      const setLang = () => {
-        texts.forEach(el => el.textContent = el.dataset[lang]);
-        langToggle.textContent = lang==='en'?'FR':'EN';
-        localStorage.lang = lang;
-      };
-      langToggle.onclick = () => { lang = lang==='en'?'fr':'en'; setLang(); };
-      setLang();
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  (function(){
+    // Language toggle
+    const langToggle = document.getElementById('lang-toggle'),
+          texts = document.querySelectorAll('[data-en]'),
+          moodSelect = document.getElementById('mood-select'),
+          notesInput = document.getElementById('notes'),
+          display = document.getElementById('mood-display'),
+          avatarEl = display.querySelector('.mood-avatar'),
+          entriesList = document.getElementById('entries-list'),
+          downloadBtn = document.getElementById('download-pdf'),
+          clearBtn = document.getElementById('clear-entries'),
+          copyBtn = document.getElementById('copy-share'),
+          wordCloud = document.getElementById('word-cloud'),
+          form = document.getElementById('mood-form');
 
-      // Mood data
-      const moodData = {
-        happy:     { avatar:'😊', anima:'sunburst', en:{coping:'Share a smile or dive into a fun hobby.',reflect:'What made you happy today?',tip:'Keep the joy going!'}, fr:{coping:'Partagez votre sourire ou plongez dans un passe-temps amusant.',reflect:'Qu’est-ce qui vous a rendu heureux aujourd’hui?',tip:'Continuez à cultiver la joie !'} },
-        sad:       { avatar:'😢', anima:'raindrop', en:{coping:'Talk with someone or write about it.',reflect:'What helped or hurt you today?',tip:'Allow yourself to feel and heal.'}, fr:{coping:'Parlez à quelqu’un ou écrivez à ce sujet.',reflect:'Qu’est-ce qui vous a aidé ou blessé aujourd’hui?',tip:'Autorisez-vous à ressentir et guérir.'} },
-        angry:     { avatar:'😠', anima:'ripple', en:{coping:'Try deep breaths or a brisk walk.',reflect:'What triggered your anger?',tip:'Channel it into something positive.'}, fr:{coping:'Essayez la respiration profonde ou une marche rapide.',reflect:'Qu’est-ce qui a déclenché votre colère?',tip:'Canalisez-la en quelque chose de positif.'} },
-        anxious:   { avatar:'😟', anima:'shaky', en:{coping:'Use grounding: name 5 things you see.',reflect:'What exactly worries you?',tip:'Return to the present moment.'}, fr:{coping:'Utilisez l’ancrage : nommez 5 choses que vous voyez.',reflect:'Qu’est-ce qui vous inquiète exactement?',tip:'Revenez au moment présent.'} },
-        excited:   { avatar:'🤩', anima:'firework', en:{coping:'Channel energy: plan something creative.',reflect:'What are you excited about?',tip:'Use it to fuel productivity.'}, fr:{coping:'Canalisez l’énergie : planifiez quelque chose de créatif.',reflect:'Qu’est-ce qui vous enthousiasme?',tip:'Utilisez-le pour stimuler votre productivité.'} },
-        calm:      { avatar:'😌', anima:'bubble', en:{coping:'Enjoy nature or meditate.',reflect:'What helps you stay calm?',tip:'Savor this peace.'}, fr:{coping:'Profitez de la nature ou méditer.',reflect:'Qu’est-ce qui vous aide à rester calme?',tip:'Savourez cette paix.'} },
-        anguished: { avatar:'💔', anima:'shatter', en:{coping:'Reach out for help—this sounds serious.',reflect:'When did you feel this way first?',tip:'You do not have to face this alone.'}, fr:{coping:'Demandez de l’aide – cela semble sérieux.',reflect:'Quand avez-vous ressenti cela pour la première fois?',tip:'Vous n’êtes pas seul.'} },
-        depressed: { avatar:'😞', anima:'mist', en:{coping:'Consider talking to a professional.',reflect:'What is one small step you can take?',tip:'Start with something gentle.'}, fr:{coping:'Envisagez de parler à un professionnel.',reflect:'Quelle est la petite étape que vous pouvez faire?',tip:'Commencez par quelque chose de doux.'} }
-      };
+    let lang = localStorage.lang || 'en';
+    let entries = JSON.parse(localStorage.getItem('moodEntries')) || [];
 
-      // Elements
-      const form = document.getElementById('mood-form'),
-            moodSelect = document.getElementById('mood-select'),
-            notesInput = document.getElementById('notes'),
-            display = document.getElementById('mood-display'),
-            animBg = document.getElementById('anim-bg'),
-            avatarEl = document.querySelector('.mood-avatar'),
-            list = document.getElementById('entries-list'),
-            dlPDF = document.getElementById('download-pdf'),
-            clrBtn = document.getElementById('clear-entries'),
-            copyBtn = document.getElementById('copy-share'),
-            wordCloud = document.getElementById('word-cloud');
+    const moodData = {
+      happy:     { avatar:'😊', en:{coping:'Share a smile or dive into a fun hobby.',reflect:'What made you happy today?',tip:'Keep the joy going!'}, fr:{coping:'Partagez votre sourire ou plongez dans un passe-temps amusant.',reflect:'Qu’est-ce qui vous a rendu heureux aujourd’hui?',tip:'Continuez à cultiver la joie !'} },
+      sad:       { avatar:'😢', en:{coping:'Talk with someone or write about it.',reflect:'What helped or hurt you today?',tip:'Allow yourself to feel and heal.'}, fr:{coping:'Parlez à quelqu’un ou écrivez à ce sujet.',reflect:'Qu’est-ce qui vous a aidé ou blessé aujourd’hui?',tip:'Autorisez-vous à ressentir et guérir.'} },
+      angry:     { avatar:'😠', en:{coping:'Try deep breaths or a brisk walk.',reflect:'What triggered your anger?',tip:'Channel it into something positive.'}, fr:{coping:'Essayez la respiration profonde ou une marche rapide.',reflect:'Qu’est-ce qui a déclenché votre colère?',tip:'Canalisez-la en quelque chose de positif.'} },
+      anxious:   { avatar:'😟', en:{coping:'Use grounding: name 5 things you see.',reflect:'What exactly worries you?',tip:'Return to the present moment.'}, fr:{coping:'Utilisez l’ancrage : nommez 5 choses que vous voyez.',reflect:'Qu’est-ce qui vous inquiète exactement?',tip:'Revenez au moment présent.'} },
+      excited:   { avatar:'🤩', en:{coping:'Channel energy: plan something creative.',reflect:'What are you excited about?',tip:'Use it to fuel productivity.'}, fr:{coping:'Canalisez l’énergie : planifiez quelque chose de créatif.',reflect:'Qu’est-ce qui vous enthousiasme?',tip:'Utilisez-le pour stimuler votre productivité.'} },
+      calm:      { avatar:'😌', en:{coping:'Enjoy nature or meditate.',reflect:'What helps you stay calm?',tip:'Savor this peace.'}, fr:{coping:'Profitez de la nature ou méditez.',reflect:'Qu’est-ce qui vous aide à rester calme?',tip:'Savourez cette paix.'} },
+      anguished: { avatar:'💔', en:{coping:'Reach out for help—this sounds serious.',reflect:'When did you feel this way first?',tip:'You do not have to face this alone.'}, fr:{coping:'Demandez de l’aide – cela semble sérieux.',reflect:'Quand avez-vous ressenti cela pour la première fois?',tip:'Vous n’êtes pas seul.'} },
+      depressed: { avatar:'😞', en:{coping:'Consider talking to a professional.',reflect:'What is one small step you can take?',tip:'Start with something gentle.'}, fr:{coping:'Envisagez de parler à un professionnel.',reflect:'Quelle est la petite étape que vous pouvez faire?',tip:'Commencez par quelque chose de doux.'} }
+    };
 
-      let entries = JSON.parse(localStorage.getItem('moodEntries')) || [];
+    // Update all text content based on lang
+    function updateTexts() {
+      texts.forEach(el => {
+        el.textContent = el.dataset[lang];
+      });
+      // Update option texts
+      [...moodSelect.options].forEach(opt => {
+        if(opt.dataset[lang]) opt.textContent = opt.dataset[lang];
+      });
+      // Update buttons labels
+      downloadBtn.textContent = downloadBtn.dataset[lang];
+      clearBtn.textContent = clearBtn.dataset[lang];
+      copyBtn.textContent = copyBtn.dataset[lang];
+      form.querySelector('label[for="mood-select"]')?.setAttribute('data-en', form.querySelector('label[for="mood-select"]')?.dataset.en);
+      langToggle.textContent = lang === 'en' ? 'FR' : 'EN';
+    }
 
-      // Helpers
-      const clearAnim = () => { animBg.innerHTML = ''; };
-      const createAnim = (type) => {
-        clearAnim();
-        const count = 30;
-        for(let i=0; i<count; i++){
-          const el = document.createElement('div');
-          el.className = 'anim-item';
-          const size = Math.random()*8+6;
-          el.style.width = el.style.height = size + 'px';
-          el.style.left = (Math.random()*100) + '%';
-          el.style.background = '#fff';
-          el.style.animationDuration = (Math.random()*3+3) + 's';
-          el.style.animationDelay = (Math.random()*5) + 's';
-          animBg.appendChild(el);
-        }
-      };
-      const crisisCheck = m => ['anguished','depressed'].includes(m);
-      const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1);
+    // Capitalize first letter helper
+    const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-      // Display update
-      function updateDisplay(key){
-        document.body.className = key ? ('mood-'+key) : '';
-        clearAnim();
-        display.querySelectorAll('.mood-section, .flip-card, .crisis-alert, p').forEach(el => el.remove());
+    // Update mood display
+    function updateDisplay(moodKey) {
+      document.body.className = moodKey ? `mood-${moodKey}` : '';
+      avatarEl.textContent = '';
+      // Clear previous content except avatar
+      display.querySelectorAll('p, .mood-section, .flip-card, .crisis-alert').forEach(el => el.remove());
+      if(!moodKey){
         avatarEl.textContent = '';
-        if(!key){
-          avatarEl.textContent = '';
-          const p = document.createElement('p');
-          p.textContent = document.querySelector('[data-en="Select a mood to get support below."]').dataset[lang];
-          display.appendChild(p);
-          return;
-        }
-        const md = moodData[key], txt = md[lang];
-        // Animation
-        createAnim(md.anima);
-        // Crisis alert
-        if(crisisCheck(key)){
-          const ca = document.createElement('div');
-          ca.className='crisis-alert';
-          ca.textContent = lang==='en' ? 'Urgent support suggested' : 'Un soutien urgent est suggéré';
-          display.appendChild(ca);
-        }
-        // Avatar with mood color glow
-        avatarEl.textContent = md.avatar;
-        avatarEl.style.filter = 'drop-shadow(0 0 15px rgba(116,235,213,0.9))';
-        // Coping section
-        const cope = document.createElement('div');
-        cope.className = 'mood-section';
-        cope.textContent = txt.coping;
-        display.appendChild(cope);
-        // Flip cards for Reflection and Tip
-        ['reflect','tip'].forEach(fld=>{
-          const card = document.createElement('div');
-          const inner = document.createElement('div');
-          const front = document.createElement('div');
-          const back = document.createElement('div');
-          card.className = 'flip-card';
-          inner.className = 'flip-inner';
-          front.className = 'flip-front';
-          back.className = 'flip-back';
-          front.textContent = fld === 'reflect' ? (lang === 'en' ? 'Reflection' : 'Réflexion') : (lang === 'en' ? 'Tip' : 'Conseil');
-          back.textContent = txt[fld];
-          inner.append(front, back);
-          card.appendChild(inner);
-          display.appendChild(card);
-        });
+        const p = document.createElement('p');
+        p.textContent = lang === 'en' ? 'Select a mood to get support below.' : 'Choisissez une humeur pour obtenir du soutien ci-dessous.';
+        display.appendChild(p);
+        return;
+      }
+      const mood = moodData[moodKey];
+      avatarEl.textContent = mood.avatar;
+
+      // Crisis alert for anguished or depressed
+      if(['anguished','depressed'].includes(moodKey)){
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'crisis-alert';
+        alertDiv.textContent = lang === 'en' ? 'Urgent support suggested' : 'Un soutien urgent est suggéré';
+        display.appendChild(alertDiv);
       }
 
-      // Render past entries list
-      function renderEntries(){
-        list.innerHTML = '';
-        if(!entries.length){
-          const li = document.createElement('li');
-          li.textContent = document.querySelector('[data-en="No entries yet."]').dataset[lang];
-          list.appendChild(li);
-          return;
-        }
-        entries.forEach(e=>{
-          const li = document.createElement('li');
-          const md = moodData[e.mood];
-          li.innerHTML = `<strong>${md.avatar} ${capitalize(e.mood)} – ${new Date(e.date).toLocaleString()}</strong>
-                          <p>${e.notes || '-'}</p>
-                          <p><em>${lang === 'en' ? 'Reflection' : 'Réflexion'}: ${e.reflect || '-'}</em></p>`;
-          list.appendChild(li);
-        });
-      }
+      // Coping
+      const copingDiv = document.createElement('div');
+      copingDiv.className = 'mood-section';
+      copingDiv.textContent = mood[lang].coping;
+      display.appendChild(copingDiv);
 
-      // Word cloud generator
-      function updateWordCloud(){
-        wordCloud.innerHTML = '';
-        const text = entries.map(e => e.notes).join(' ');
-        const words = text.split(/\W+/).filter(w => w.length > 3);
-        if(words.length === 0) return;
-        const freq = {};
-        words.forEach(w => freq[w] = (freq[w] || 0) + 1);
-        Object.entries(freq).sort((a,b) => b[1] - a[1]).slice(0, 30).forEach(([w,c]) => {
-          const span = document.createElement('span');
-          const size = 12 + c * 4;
-          span.className = 'word';
-          span.textContent = w;
-          span.style.fontSize = size + 'px';
-          span.style.left = Math.random() * 85 + '%';
-          span.style.top = Math.random() * 75 + '%';
-          span.style.color = `rgba(0, 0, 0, ${0.15 + c * 0.06})`;
-          wordCloud.appendChild(span);
-        });
-      }
+      // Flip cards for reflection and tip
+      ['reflect', 'tip'].forEach(type => {
+        const card = document.createElement('div');
+        card.className = 'flip-card';
+        const inner = document.createElement('div');
+        inner.className = 'flip-inner';
+        card.appendChild(inner);
+        const front = document.createElement('div');
+        front.className = 'flip-front';
+        front.textContent = type === 'reflect' ? (lang === 'en' ? 'Reflection' : 'Réflexion') : (lang === 'en' ? 'Tip' : 'Conseil');
+        const back = document.createElement('div');
+        back.className = 'flip-back';
+        back.textContent = mood[lang][type];
+        inner.appendChild(front);
+        inner.appendChild(back);
 
-      // Form submit
-      form.onsubmit = e => {
-        e.preventDefault();
-        const m = moodSelect.value, n = notesInput.value.trim();
-        if(!m) return;
-        const reflectTxt = display.querySelector('.flip-back')?.textContent || '';
-        entries.unshift({mood:m,notes:n,date:new Date().toISOString(),reflect:reflectTxt});
-        localStorage.moodEntries = JSON.stringify(entries);
-        notesInput.value = '';
-        moodSelect.value = '';
-        updateDisplay(m);
+        // Toggle flip on click
+        card.onclick = () => {
+          card.classList.toggle('flipped');
+        };
+        display.appendChild(card);
+      });
+    }
+
+    // Render past entries list
+    function renderEntries() {
+      entriesList.innerHTML = '';
+      if(entries.length === 0){
+        const li = document.createElement('li');
+        li.textContent = lang === 'en' ? 'No entries yet.' : 'Aucune entrée pour le moment.';
+        entriesList.appendChild(li);
+        return;
+      }
+      entries.forEach(e => {
+        const li = document.createElement('li');
+        const md = moodData[e.mood];
+        li.innerHTML = `<strong>${md.avatar} ${capitalize(e.mood)} – ${new Date(e.date).toLocaleString()}</strong>
+                        <p>${e.notes || '-'}</p>
+                        <p><em>${lang === 'en' ? 'Reflection' : 'Réflexion'}: ${e.reflect || '-'}</em></p>`;
+        entriesList.appendChild(li);
+      });
+    }
+
+    // Update word cloud
+    function updateWordCloud(){
+      wordCloud.innerHTML = '';
+      const allNotes = entries.map(e => e.notes).join(' ');
+      if(!allNotes) return;
+      const words = allNotes.split(/\W+/).filter(w => w.length > 3);
+      if(words.length === 0) return;
+      const freq = {};
+      words.forEach(w => freq[w.toLowerCase()] = (freq[w.toLowerCase()] || 0) + 1);
+      const sorted = Object.entries(freq).sort((a,b) => b[1] - a[1]).slice(0, 30);
+      sorted.forEach(([word,count]) => {
+        const span = document.createElement('span');
+        span.className = 'word';
+        span.textContent = word;
+        span.style.fontSize = `${12 + count * 4}px`;
+        span.style.left = `${Math.random() * 85}%`;
+        span.style.top = `${Math.random() * 75}%`;
+        span.style.color = `rgba(0,0,0,${0.15 + count * 0.07})`;
+        wordCloud.appendChild(span);
+      });
+    }
+
+    // Form submit handler
+    form.onsubmit = e => {
+      e.preventDefault();
+      const moodVal = moodSelect.value;
+      if(!moodVal) return;
+      const notesVal = notesInput.value.trim();
+      const reflectTxt = moodData[moodVal][lang].reflect;
+
+      entries.unshift({
+        mood: moodVal,
+        notes: notesVal,
+        date: new Date().toISOString(),
+        reflect: reflectTxt
+      });
+
+      localStorage.setItem('moodEntries', JSON.stringify(entries));
+      notesInput.value = '';
+      moodSelect.value = '';
+
+      updateDisplay(moodVal);
+      renderEntries();
+      updateWordCloud();
+    };
+
+    // Clear entries
+    clearBtn.onclick = () => {
+      if(confirm(lang === 'en' ? 'Clear all entries?' : 'Tout effacer ?')){
+        entries = [];
+        localStorage.setItem('moodEntries', JSON.stringify(entries));
         renderEntries();
+        updateDisplay(null);
         updateWordCloud();
-      };
+      }
+    };
 
-      // Clear all entries
-      clrBtn.onclick = () => {
-        if(confirm(lang === 'en' ? 'Clear all entries?' : 'Tout effacer ?')){
-          entries = [];
-          localStorage.moodEntries = '[]';
-          renderEntries();
-          updateDisplay(null);
-          updateWordCloud();
+    // Download PDF
+    downloadBtn.onclick = () => {
+      if(entries.length === 0){
+        alert(lang === 'en' ? 'No entries to download' : 'Aucune entrée à télécharger');
+        return;
+      }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      let y = 20;
+      doc.setFontSize(20);
+      doc.text(lang === 'en' ? 'Mood Journal' : 'Journal Humeur', 105, y, {align:'center'});
+      y += 14;
+      doc.setFontSize(12);
+
+      entries.forEach((e,i) => {
+        if(y > 270){
+          doc.addPage();
+          y = 20;
         }
-      };
+        const md = moodData[e.mood];
+        doc.text(`${md.avatar} ${capitalize(e.mood)} – ${new Date(e.date).toLocaleString()}`, 14, y);
+        y += 8;
+        doc.text(`${lang === 'en' ? 'Notes' : 'Notes'}: ${e.notes || '-'}`, 14, y);
+        y += 8;
+        doc.text(`${lang === 'en' ? 'Reflection' : 'Réflexion'}: ${e.reflect || '-'}`, 14, y);
+        y += 14;
+      });
+      doc.save('mood-journal.pdf');
+    };
 
-      // Download PDF using jsPDF
-      dlPDF.onclick = () => {
-        if(!entries.length) return alert(lang === 'en' ? 'No entries to download' : 'Aucune entrée à télécharger');
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        let y = 25;
-        doc.setFontSize(20);
-        doc.text(lang === 'en' ? 'Mood Journal' : 'Journal Humeur', 105, 15, {align: 'center'});
-        doc.setFontSize(12);
-        entries.forEach(e => {
-          if(y > 275){
-            doc.addPage();
-            y = 25;
-          }
-          const md = moodData[e.mood];
-          doc.text(`${md.avatar} ${capitalize(e.mood)} – ${new Date(e.date).toLocaleString()}`, 14, y);
-          y += 9;
-          doc.text((lang === 'en' ? 'Notes' : 'Notes') + ': ' + (e.notes || '-'), 14, y);
-          y += 9;
-          doc.text((lang === 'en' ? 'Reflection' : 'Réflexion') + ': ' + (e.reflect || '-'), 14, y);
-          y += 14;
-        });
-        doc.save('mood-journal.pdf');
-      };
+    // Copy last entry summary
+    copyBtn.onclick = () => {
+      if(entries.length === 0){
+        alert(lang === 'en' ? 'No entries to copy' : 'Rien à copier');
+        return;
+      }
+      const last = entries[0];
+      const summary = `${capitalize(last.mood)} • ${new Date(last.date).toLocaleDateString()}\n${last.notes || ''}`;
+      navigator.clipboard.writeText(summary).then(() => {
+        alert(lang === 'en' ? 'Copied!' : 'Copié !');
+      });
+    };
 
-      // Copy last mood summary to clipboard
-      copyBtn.onclick = () => {
-        if(!entries.length) return alert(lang === 'en' ? 'No entries to copy' : 'Rien à copier');
-        const last = entries[0];
-        const summary = `${capitalize(last.mood)} • ${new Date(last.date).toLocaleDateString()}\n${last.notes || ''}`;
-        navigator.clipboard.writeText(summary).then(() => alert(lang === 'en' ? 'Copied!' : 'Copié !'));
-      };
-
-      // Initialize
+    // Toggle language
+    langToggle.onclick = () => {
+      lang = lang === 'en' ? 'fr' : 'en';
+      localStorage.lang = lang;
+      updateTexts();
       updateDisplay(null);
       renderEntries();
       updateWordCloud();
-    })();
-  </script>
+    };
+
+    // Initialize texts and display
+    updateTexts();
+    renderEntries();
+    updateWordCloud();
+    updateDisplay(null);
+  })();
+</script>
 </body>
 </html>
