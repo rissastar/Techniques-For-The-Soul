@@ -4,81 +4,219 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Memorial Wall</title>
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Basic reset and styling */
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at bottom, #1b2735 0%, #090a0f 100%);
+      color: #eee;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    [data-theme="light"] {
+      background: #f9f9f9;
+      color: #222;
+    }
+    header, footer {
+      text-align: center;
+      padding: 1rem;
+      user-select: none;
+    }
+    h1, h2 {
+      margin: 0.5rem 0;
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    section {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+    input, textarea, button {
+      width: 100%;
+      margin-top: 0.5rem;
+      padding: 0.6rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.15);
+      color: inherit;
+      box-sizing: border-box;
+      transition: background 0.3s ease;
+    }
+    input::placeholder, textarea::placeholder {
+      color: #ccc;
+    }
+    input:focus, textarea:focus {
+      background: rgba(255,255,255,0.3);
+      outline: none;
+    }
+    button {
+      background-color: #ffae42;
+      color: #222;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background-color 0.25s ease;
+    }
+    button:hover {
+      background-color: #ffcc66;
+    }
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin-top: 1rem;
+    }
+    .item {
+      background: rgba(255,255,255,0.2);
+      padding: 0.8rem;
+      border-radius: 8px;
+      word-wrap: break-word;
+      box-shadow: 0 0 6px rgba(255,255,255,0.15);
+    }
+    .item img {
+      max-width: 100%;
+      border-radius: 6px;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .toggles {
+      user-select: none;
+    }
+    .toggles button {
+      background: none;
+      border: none;
+      color: inherit;
+      font-size: 1.3rem;
+      margin: 0 0.4rem;
+      cursor: pointer;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+    }
+    .toggles button:hover {
+      background: rgba(255,255,255,0.15);
+    }
+    #cloud-container {
+      position: relative;
+      height: 140px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      margin-top: 0.5rem;
+    }
+    .cloud-msg {
+      position: absolute;
+      white-space: nowrap;
+      background: rgba(255,255,255,0.15);
+      padding: 0.4rem 1rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      user-select: none;
+      color: #111;
+      animation-timing-function: linear;
+      animation-fill-mode: forwards;
+      opacity: 0.9;
+    }
+    .stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://raw.githubusercontent.com/JulianLaval/canvas-stars/master/stars.png') repeat;
+      z-index: -1;
+      animation: starScroll 200s linear infinite;
+    }
+    .shooting-stars::after {
+      content: '';
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      width: 2px;
+      height: 80px;
+      background: white;
+      animation: shoot 3s linear infinite;
+      z-index: -1;
+    }
+    @keyframes shoot {
+      0% { transform: translate(0, 0); opacity: 1; }
+      100% { transform: translate(500px, 500px); opacity: 0; }
+    }
+    @keyframes starScroll {
+      100% {
+        background-position: -10000px 5000px;
+      }
+    }
+    @media (max-width: 600px) {
+      main {
+        padding: 0.5rem 1rem;
+      }
+      input, textarea, button {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Starry background layers -->
   <div class="stars"></div>
   <div class="shooting-stars"></div>
 
-  <!-- Header with toggles -->
   <header>
     <h1 class="site-title">Memorial Wall</h1>
-    <div class="toggles">
-      <button id="theme-toggle" aria-label="Toggle theme">🌙/☀️</button>
-      <button id="lang-toggle" aria-label="Toggle language">EN/FR</button>
-      <button id="music-toggle" aria-label="Toggle ambient music">🔈</button>
+    <div class="toggles" aria-label="Settings toggles">
+      <button id="theme-toggle" aria-label="Toggle Light/Dark Theme">🌙</button>
+      <button id="lang-toggle" aria-label="Toggle English/French Language">EN</button>
+      <button id="music-toggle" aria-label="Toggle Ambient Music">🔈</button>
     </div>
   </header>
 
   <main>
-    <!-- Hero -->
-    <section id="hero" class="fade-in">
-      <h2 data-en="Remember & Honor" data-fr="Se souvenir & Honorer"></h2>
-      <p data-en="Share memories, light candles, and support each other." 
-         data-fr="Partagez des souvenirs, allumez des bougies et soutenez-vous."></p>
-    </section>
-
-    <!-- Candle Lighting -->
-    <section id="candles" class="fade-in delay-1">
-      <h3 data-en="Light a Candle" data-fr="Allumer une bougie"></h3>
+    <section aria-label="Light a Candle Section">
+      <h2 data-en="Light a Candle" data-fr="Allumer une bougie"></h2>
       <div class="prompt" data-en="Who are you remembering today?" data-fr="Qui commémorez-vous aujourd'hui ?"></div>
       <input type="text" id="candle-name" placeholder="Name…" autocomplete="off" />
-      <button id="submit-candle" data-en="Light" data-fr="Allumer"></button>
-      <div id="candle-list" class="grid"></div>
+      <button id="submit-candle">Light</button>
+      <div id="candle-list" class="grid" aria-live="polite" aria-atomic="true"></div>
     </section>
 
-    <!-- Tributes -->
-    <section id="tributes" class="fade-in delay-2">
-      <h3 data-en="Write a Tribute" data-fr="Écrire un hommage"></h3>
-      <div class="prompt" data-en="Tell us about a memory that brings you joy." 
-           data-fr="Racontez-nous un souvenir qui vous rend heureux ?"></div>
-      <textarea id="tribute-text" placeholder="" autocomplete="off"></textarea>
+    <section aria-label="Write a Tribute Section">
+      <h2 data-en="Write a Tribute" data-fr="Écrire un hommage"></h2>
+      <div class="prompt" data-en="Share a loving memory or message." data-fr="Partagez un souvenir ou un message d’amour."></div>
+      <textarea id="tribute-text" rows="3" placeholder="Your tribute…" autocomplete="off"></textarea>
       <input type="text" id="tribute-name" placeholder="Name (optional)" autocomplete="off" />
-      <button id="submit-tribute" data-en="Post Tribute" data-fr="Publier"></button>
-      <div id="tribute-list" class="grid"></div>
+      <button id="submit-tribute">Post Tribute</button>
+      <div id="tribute-list" class="grid" aria-live="polite" aria-atomic="true"></div>
     </section>
 
-    <!-- Photo Gallery -->
-    <section id="photos" class="fade-in delay-3">
-      <h3 data-en="Share a Photo" data-fr="Partager une photo"></h3>
-      <div class="prompt" data-en="Upload a moment that captures their spirit." 
-           data-fr="Téléchargez un moment qui capture leur esprit."></div>
+    <section aria-label="Upload a Photo Section">
+      <h2 data-en="Upload a Photo" data-fr="Télécharger une photo"></h2>
+      <div class="prompt" data-en="Upload a photo that captures their spirit." data-fr="Téléchargez une photo qui capture leur esprit."></div>
       <input type="file" id="photo-input" accept="image/*" />
-      <button id="submit-photo" data-en="Upload" data-fr="Télécharger"></button>
-      <div id="photo-gallery" class="grid"></div>
+      <button id="submit-photo">Upload</button>
+      <div id="photo-gallery" class="grid" aria-live="polite" aria-atomic="true"></div>
     </section>
 
-    <!-- Cloud Messages -->
-    <section id="clouds" class="fade-in delay-4">
-      <h3 data-en="Message to the Clouds" data-fr="Message aux nuages"></h3>
-      <div class="prompt" data-en="Send a thought into the sky." 
-           data-fr="Envoyez une pensée dans le ciel."></div>
-      <input type="text" id="cloud-text" placeholder="" autocomplete="off" />
-      <button id="submit-cloud" data-en="Send" data-fr="Envoyer"></button>
+    <section aria-label="Message to the Clouds Section">
+      <h2 data-en="Message to the Clouds" data-fr="Message aux nuages"></h2>
+      <div class="prompt" data-en="Send a thought into the sky." data-fr="Envoyez une pensée dans le ciel."></div>
+      <input type="text" id="cloud-text" placeholder="Your message…" autocomplete="off" />
+      <button id="submit-cloud">Send</button>
       <div id="cloud-container" aria-live="polite" aria-atomic="true"></div>
     </section>
 
-    <!-- Grief Support -->
-    <section id="grief-support" class="fade-in delay-5">
-      <h3 data-en="You’re Not Alone" data-fr="Vous n'êtes pas seul·e"></h3>
-      <div class="prompt" data-en="Share a comforting message, ritual, or quote." 
-           data-fr="Partagez un message réconfortant, un rituel ou une citation."></div>
-      <textarea id="support-text" placeholder="" autocomplete="off"></textarea>
+    <section aria-label="Grief Support Section">
+      <h2 data-en="Grief Support" data-fr="Soutien au deuil"></h2>
+      <div class="prompt" data-en="Share a quote, message, or ritual that helps you." data-fr="Partagez un message, une citation ou un rituel qui vous aide."></div>
+      <textarea id="support-text" rows="3" placeholder="Your supportive message…" autocomplete="off"></textarea>
       <input type="text" id="support-name" placeholder="Name (optional)" autocomplete="off" />
-      <button id="submit-support" data-en="Share" data-fr="Partager"></button>
-      <div id="daily-prompt" class="daily-prompt"></div>
-      <div id="support-list" class="grid"></div>
+      <button id="submit-support">Share</button>
+      <div id="support-list" class="grid" aria-live="polite" aria-atomic="true"></div>
     </section>
   </main>
 
@@ -86,8 +224,214 @@
     <p>&copy; 2025 Memorial Wall</p>
   </footer>
 
-  <!-- Supabase + App Logic -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script src="app.js"></script>
+  <!-- Supabase and JS logic -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // === Setup Supabase ===
+    const SUPABASE_URL = 'https://ytgrzhtntwzefwjmhgjj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
+    const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const htmlEl = document.documentElement;
+
+    // === Language and theme toggles ===
+    const placeholders = {
+      'candle-name': { en: 'Name…', fr: 'Nom…' },
+      'tribute-text': { en: 'Your tribute…', fr: 'Votre hommage…' },
+      'tribute-name': { en: 'Name (optional)', fr: 'Nom (facultatif)' },
+      'cloud-text': { en: 'Your message…', fr: 'Votre message…' },
+      'support-text': { en: 'Your supportive message…', fr: 'Votre message de soutien…' },
+      'support-name': { en: 'Name (optional)', fr: 'Nom (facultatif)' }
+    };
+
+    function updateLanguageTexts() {
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = el.dataset[htmlEl.dataset.lang];
+      });
+      document.querySelectorAll('input, textarea').forEach(el => {
+        if (placeholders[el.id]) el.placeholder = placeholders[el.id][htmlEl.dataset.lang];
+      });
+      // Update toggle buttons text
+      document.getElementById('lang-toggle').textContent = htmlEl.dataset.lang.toUpperCase();
+      document.getElementById('theme-toggle').textContent = htmlEl.dataset.theme === 'dark' ? '🌙' : '☀️';
+    }
+
+    document.getElementById('lang-toggle').onclick = () => {
+      htmlEl.dataset.lang = htmlEl.dataset.lang === 'en' ? 'fr' : 'en';
+      updateLanguageTexts();
+    };
+
+    document.getElementById('theme-toggle').onclick = () => {
+      htmlEl.dataset.theme = htmlEl.dataset.theme === 'dark' ? 'light' : 'dark';
+      updateLanguageTexts();
+    };
+
+    // Ambient music toggle
+    document.getElementById('music-toggle').onclick = e => {
+      if (!window.ambientMusic) {
+        window.ambientMusic = new Audio('https://cdn.pixabay.com/download/audio/2022/02/28/audio_3e6f4f8407.mp3?filename=calm-piano-music-11168.mp3');
+        window.ambientMusic.loop = true;
+        window.ambientMusic.volume = 0.25;
+      }
+      if (window.ambientMusic.paused) {
+        window.ambientMusic.play();
+        e.target.textContent = '🔊';
+      } else {
+        window.ambientMusic.pause();
+        e.target.textContent = '🔈';
+      }
+    };
+
+    updateLanguageTexts();
+
+    // === Utility: render grid items ===
+    function renderGrid(containerId, data, callback) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = data.map(callback).join('');
+    }
+
+    // === Candles ===
+    async function loadCandles() {
+      const { data, error } = await supabase.from('candles').select('*').order('created_at', { ascending: false });
+      if (error) return console.error('Load candles error:', error);
+      renderGrid('candle-list', data || [], c => `
+        <div class="item" title="${c.name || (htmlEl.dataset.lang === 'fr' ? 'Anonyme' : 'Anonymous')}">
+          <p>🕯️ ${c.name}</p>
+        </div>
+      `);
+    }
+    document.getElementById('submit-candle').onclick = async () => {
+      const nameInput = document.getElementById('candle-name');
+      const name = nameInput.value.trim();
+      if (!name) return alert(htmlEl.dataset.lang === 'fr' ? "Entrez un nom" : "Please enter a name");
+      const { error } = await supabase.from('candles').insert([{ name }]);
+      if (error) return alert('Error saving candle');
+      nameInput.value = '';
+      loadCandles();
+    };
+    loadCandles();
+
+    // === Tributes ===
+    async function loadTributes() {
+      const { data, error } = await supabase.from('tributes').select('*').order('created_at', { ascending: false });
+      if (error) return console.error('Load tributes error:', error);
+      renderGrid('tribute-list', data || [], t => `
+        <div class="item" title="${t.name || (htmlEl.dataset.lang === 'fr' ? 'Anonyme' : 'Anonymous')}">
+          <p>"${t.content}"</p>
+          <p style="text-align:right; font-style:italic;">– ${t.name || (htmlEl.dataset.lang === 'fr' ? 'Anonyme' : 'Anonymous')}</p>
+        </div>
+      `);
+    }
+    document.getElementById('submit-tribute').onclick = async () => {
+      const textInput = document.getElementById('tribute-text');
+      const nameInput = document.getElementById('tribute-name');
+      const content = textInput.value.trim();
+      if (!content) return alert(htmlEl.dataset.lang === 'fr' ? "Écrivez votre hommage" : "Write your tribute");
+      const { error } = await supabase.from('tributes').insert([{ content, name: nameInput.value.trim() || null }]);
+      if (error) return alert('Error saving tribute');
+      textInput.value = '';
+      nameInput.value = '';
+      loadTributes();
+    };
+    loadTributes();
+
+    // === Photos ===
+    async function loadPhotos() {
+      const { data, error } = await supabase.from('photos').select('*').order('created_at', { ascending: false });
+      if (error) return console.error('Load photos error:', error);
+      renderGrid('photo-gallery', data || [], p => `
+        <div class="item">
+          <img src="${p.url}" alt="Photo tribute" />
+          <p style="text-align:right; font-style:italic;">– ${p.name || ''}</p>
+        </div>
+      `);
+    }
+    document.getElementById('submit-photo').onclick = async () => {
+      const input = document.getElementById('photo-input');
+      const file = input.files[0];
+      if (!file) return alert(htmlEl.dataset.lang === 'fr' ? "Choisissez une image" : "Choose an image file");
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+
+      // Upload photo to Supabase Storage
+      const { error: uploadError } = await supabase.storage.from('photos').upload(fileName, file);
+
+      if(uploadError){
+        alert(htmlEl.dataset.lang === 'fr' ? "Erreur de téléchargement" : "Upload error");
+        return console.error(uploadError);
+      }
+
+      const { publicUrl, error: urlError } = supabase.storage.from('photos').getPublicUrl(fileName);
+      if(urlError) {
+        alert('Error getting photo URL');
+        return console.error(urlError);
+      }
+
+      // Insert photo record in DB
+      const { error: dbError } = await supabase.from('photos').insert([{ url: publicUrl, name: null }]);
+      if(dbError) {
+        alert('Error saving photo info');
+        return console.error(dbError);
+      }
+
+      input.value = '';
+      loadPhotos();
+    };
+    loadPhotos();
+
+    // === Cloud Messages ===
+    async function loadClouds() {
+      const { data, error } = await supabase.from('clouds').select('*').order('created_at', { ascending: false });
+      if (error) return console.error('Load clouds error:', error);
+      const container = document.getElementById('cloud-container');
+      container.innerHTML = '';
+      data.forEach(c => createCloudMessage(c.message));
+    }
+    document.getElementById('submit-cloud').onclick = async () => {
+      const input = document.getElementById('cloud-text');
+      const message = input.value.trim();
+      if (!message) return alert(htmlEl.dataset.lang === 'fr' ? "Écrivez un message" : "Write a message");
+      const { error } = await supabase.from('clouds').insert([{ message }]);
+      if (error) return alert('Error saving cloud message');
+      input.value = '';
+      createCloudMessage(message);
+    };
+
+    function createCloudMessage(text) {
+      const msg = document.createElement('div');
+      msg.className = 'cloud-msg';
+      msg.textContent = text;
+      msg.style.top = `${Math.random() * 80}%`;
+      msg.style.animationDuration = `${12 + Math.random() * 8}s`;
+      document.getElementById('cloud-container').appendChild(msg);
+      setTimeout(() => msg.remove(), 20000);
+    }
+    loadClouds();
+
+    // === Grief Support ===
+    async function loadSupport() {
+      const { data, error } = await supabase.from('grief_support').select('*').order('created_at', { ascending: false });
+      if (error) return console.error('Load grief support error:', error);
+      renderGrid('support-list', data || [], s => `
+        <div class="item" title="${s.name || (htmlEl.dataset.lang === 'fr' ? 'Anonyme' : 'Anonymous')}">
+          <p>"${s.message}"</p>
+          <p style="text-align:right; font-style:italic;">– ${s.name || (htmlEl.dataset.lang === 'fr' ? 'Anonyme' : 'Anonymous')}</p>
+        </div>
+      `);
+    }
+    document.getElementById('submit-support').onclick = async () => {
+      const messageInput = document.getElementById('support-text');
+      const nameInput = document.getElementById('support-name');
+      const message = messageInput.value.trim();
+      if (!message) return alert(htmlEl.dataset.lang === 'fr' ? "Écrivez un message" : "Write a message");
+      const { error } = await supabase.from('grief_support').insert([{ message, name: nameInput.value.trim() || null }]);
+      if (error) return alert('Error saving grief support');
+      messageInput.value = '';
+      nameInput.value = '';
+      loadSupport();
+    };
+    loadSupport();
+  </script>
 </body>
 </html>
