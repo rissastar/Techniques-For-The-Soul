@@ -13,168 +13,261 @@
     margin: 0; padding: 0;
     height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #f0f0f5;
+    color: #e0e8ff;
+    background: #0a001f;
     overflow-x: hidden;
-    background: #000010;
     position: relative;
   }
-  /* Starry background */
+  /* Starry backgrounds with shimmer */
   #stars, #stars2, #stars3 {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    display: block;
     pointer-events: none;
-    z-index: -1;
+    z-index: -2;
+    opacity: 0.7;
   }
   #stars {
     background: transparent url('https://raw.githubusercontent.com/joshbuchea/planet-css/master/stars.svg') repeat top center;
-    animation: moveStars 200s linear infinite;
+    animation: moveStars 220s linear infinite;
+    filter: drop-shadow(0 0 1.2px #5af);
   }
   #stars2 {
     background: transparent url('https://raw.githubusercontent.com/joshbuchea/planet-css/master/stars2.svg') repeat top center;
-    animation: moveStarsBack 150s linear infinite;
+    animation: moveStarsBack 180s linear infinite;
+    filter: drop-shadow(0 0 1.5px #6bf);
   }
   #stars3 {
     background: transparent url('https://raw.githubusercontent.com/joshbuchea/planet-css/master/stars3.svg') repeat top center;
-    animation: moveStars 100s linear infinite;
+    animation: moveStars 110s linear infinite;
+    filter: drop-shadow(0 0 2px #8ef);
   }
   @keyframes moveStars {
     from {background-position: 0 0;}
-    to {background-position: -10000px 5000px;}
+    to {background-position: -12000px 6000px;}
   }
   @keyframes moveStarsBack {
     from {background-position: 0 0;}
-    to {background-position: 10000px -5000px;}
+    to {background-position: 12000px -6000px;}
+  }
+
+  /* Glow & fade animations */
+  @keyframes fadeInUp {
+    0% {opacity: 0; transform: translateY(10px);}
+    100% {opacity: 1; transform: translateY(0);}
+  }
+  @keyframes glowPulse {
+    0%, 100% {text-shadow: 0 0 8px #7ebcff, 0 0 20px #5ab0ff;}
+    50% {text-shadow: 0 0 15px #a4d4ff, 0 0 35px #7ab7ff;}
   }
 
   header {
     text-align: center;
-    padding: 2rem 1rem 1rem;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(5px);
+    padding: 2.5rem 1rem 1.5rem;
+    background: linear-gradient(135deg, #00102fcc, #0035a9cc);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid #7ebcff88;
+    animation: fadeInUp 1.2s ease forwards;
   }
   h1 {
-    font-size: 2.8rem;
-    margin: 0.2rem 0;
-    font-weight: 800;
-    text-shadow: 0 0 8px #a4d4ffaa;
+    font-size: 3.2rem;
+    margin: 0.2rem 0 0.3rem;
+    font-weight: 900;
+    color: #a4d4ff;
+    animation: glowPulse 4s ease-in-out infinite;
   }
   p {
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-top: 0.1rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #c6dcffcc;
+    letter-spacing: 0.04em;
   }
+
+  /* Language toggle with sliding highlight */
   .lang-toggle {
-    margin-top: 1rem;
+    margin-top: 1.3rem;
+    display: inline-flex;
+    background: #00295c;
+    border-radius: 30px;
+    padding: 3px;
+    box-shadow: 0 0 12px #1f57ff77;
+    user-select: none;
+    position: relative;
+    width: 180px;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1rem;
   }
   .lang-toggle button {
-    background: #222;
+    background: transparent;
     border: none;
-    padding: 0.5rem 1.2rem;
-    color: #ccc;
-    font-weight: 600;
-    border-radius: 20px;
-    margin: 0 0.3rem;
+    padding: 0.6rem 1.3rem;
+    color: #a0bbf7cc;
+    border-radius: 25px;
     cursor: pointer;
-    transition: background 0.3s, color 0.3s;
+    position: relative;
+    z-index: 2;
+    transition: color 0.3s ease;
+    flex: 1 1 50%;
+  }
+  .lang-toggle button:hover:not(.active) {
+    color: #d0e4ff;
   }
   .lang-toggle button.active {
-    background: #7ebcff;
-    color: #002244;
+    color: #00142e;
+    font-weight: 800;
+  }
+  /* Sliding highlight */
+  .lang-toggle::before {
+    content: '';
+    position: absolute;
+    top: 3px; bottom: 3px;
+    width: 50%;
+    background: linear-gradient(135deg, #71b8ff, #3669ff);
+    border-radius: 25px;
+    box-shadow: 0 0 14px #3b6affcc;
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    left: 3px;
+    z-index: 1;
+  }
+  .lang-toggle[data-lang="fr"]::before {
+    left: calc(50% + 3px);
   }
 
   main {
-    padding: 2rem 1.5rem 3rem;
-    max-width: 900px;
-    margin: auto;
+    max-width: 940px;
+    margin: 2.5rem auto 4rem;
+    padding: 0 1.25rem;
+    animation: fadeInUp 1.8s ease forwards;
   }
   section {
-    background: rgba(0, 0, 20, 0.6);
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    border-radius: 15px;
-    box-shadow: 0 0 10px #3377ff44;
+    background: linear-gradient(145deg, #001a3ccc, #00337fcc);
+    margin-bottom: 2.8rem;
+    padding: 2rem 2.2rem;
+    border-radius: 18px;
+    box-shadow:
+      0 0 20px 1px #0f59ff77,
+      inset 0 0 30px 2px #3069ffaa;
+    transition: box-shadow 0.3s ease;
+  }
+  section:hover {
+    box-shadow:
+      0 0 40px 2px #6a9effaa,
+      inset 0 0 50px 4px #70a1ffcc;
   }
   section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid #7ebcff;
-    padding-bottom: 0.3rem;
+    font-size: 2rem;
+    margin-bottom: 1.3rem;
+    border-bottom: 3px solid #71b8ffaa;
+    padding-bottom: 0.45rem;
+    color: #cdf0ff;
+    letter-spacing: 0.02em;
   }
+
   ul {
     list-style: none;
     padding-left: 0;
   }
   li {
-    margin-bottom: 0.7rem;
-  }
-  a.toolkit-link {
-    color: #7ebcff;
+    margin-bottom: 1rem;
     font-weight: 600;
-    text-decoration: none;
+    color: #bfdcffcc;
+    font-size: 1.15rem;
     transition: color 0.3s ease;
   }
-  a.toolkit-link:hover,
-  a.toolkit-link:focus {
-    color: #c0dbff;
+  li a.toolkit-link {
+    color: #8ac6ff;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 2px 4px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px #5a8cff88;
+    transition: color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  li a.toolkit-link:hover,
+  li a.toolkit-link:focus {
+    color: #c6e2ff;
+    box-shadow: 0 0 14px #92b8ffdd;
     text-decoration: underline;
+    transform: scale(1.05);
+    outline: none;
   }
 
   /* Informational topics buttons */
   #topics-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 14px;
+    justify-content: center;
   }
   #topics-list button {
-    background: #144277;
+    background: linear-gradient(145deg, #004080, #0077ff);
     border: none;
-    padding: 0.75rem 1.2rem;
-    border-radius: 25px;
-    color: #a4d4ff;
-    font-weight: 600;
+    padding: 0.85rem 1.4rem;
+    border-radius: 30px;
+    color: #cde6ff;
+    font-weight: 700;
     cursor: pointer;
-    flex: 1 1 45%;
-    min-width: 140px;
-    transition: background-color 0.3s, color 0.3s;
+    flex: 1 1 42%;
+    min-width: 150px;
+    box-shadow:
+      0 0 10px 0 #3c7effcc,
+      inset 0 0 8px 1px #0e4e9a;
+    transition: background 0.4s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+    text-align: center;
+    font-size: 1.1rem;
   }
   #topics-list button:hover,
   #topics-list button:focus {
-    background: #3377ff;
-    color: #fff;
+    background: linear-gradient(145deg, #0091ff, #4fc1ff);
+    color: #002144;
     outline: none;
+    transform: scale(1.08);
+    box-shadow:
+      0 0 20px 3px #7cc4ffdd,
+      inset 0 0 15px 3px #3ca6ffcc;
   }
 
   footer {
     text-align: center;
-    padding: 1.5rem 1rem;
-    background: rgba(0, 0, 30, 0.75);
-    color: #a0c8ff;
+    padding: 1.7rem 1rem;
+    background: linear-gradient(135deg, #00122fcc, #003a82cc);
+    color: #a0c8ffdd;
     font-size: 0.9rem;
+    box-shadow: inset 0 0 15px #2e72ffcc;
   }
   footer a {
-    color: #a4d4ff;
-    margin: 0 0.5rem;
-    font-weight: 600;
+    color: #7ebcffdd;
+    margin: 0 0.6rem;
+    font-weight: 700;
     text-decoration: none;
+    transition: color 0.3s ease;
   }
   footer a:hover,
   footer a:focus {
+    color: #d0e6ff;
     text-decoration: underline;
     outline: none;
   }
 
+  /* Responsive tweaks */
   @media (max-width: 600px) {
     h1 {
-      font-size: 2rem;
+      font-size: 2.4rem;
     }
     section h2 {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
     }
     #topics-list button {
       flex: 1 1 100%;
       min-width: unset;
+      font-size: 1.05rem;
+      padding: 0.75rem 1.1rem;
+    }
+    .lang-toggle {
+      width: 140px;
+      font-size: 0.9rem;
     }
   }
 </style>
@@ -189,7 +282,7 @@
 <header role="banner" aria-label="Site header">
   <h1 id="site-title">Speak Louder, Love Harder</h1>
   <p id="site-subtitle">Your Mental Health & Wellness Toolkit / Votre boîte à outils santé mentale</p>
-  <nav class="lang-toggle" aria-label="Language toggle">
+  <nav class="lang-toggle" aria-label="Language toggle" data-lang="en">
     <button id="btn-en" class="active" aria-pressed="true">English</button>
     <button id="btn-fr" aria-pressed="false">Français</button>
   </nav>
@@ -275,6 +368,7 @@
 
   const btnEn = document.getElementById("btn-en");
   const btnFr = document.getElementById("btn-fr");
+  const langToggle = document.querySelector('.lang-toggle');
 
   btnEn.addEventListener("click", () => switchLang("en"));
   btnFr.addEventListener("click", () => switchLang("fr"));
@@ -293,8 +387,8 @@
       const btn = document.createElement("button");
       btn.textContent = topic.text;
       btn.setAttribute("type", "button");
+      btn.setAttribute('aria-label', topic.text + (lang === "en" ? ', Opens in new tab' : ', Ouvre dans un nouvel onglet'));
       btn.onclick = () => {
-        // Replace '#' with actual links when you create pages
         if (topic.href === "#") {
           alert(lang === "en"
             ? "Page coming soon: " + topic.text
@@ -312,10 +406,18 @@
     btnFr.classList.toggle("active", lang === "fr");
     btnEn.setAttribute("aria-pressed", lang === "en");
     btnFr.setAttribute("aria-pressed", lang === "fr");
+
+    // Update sliding highlight
+    langToggle.setAttribute('data-lang', lang);
   }
 
-  // Default language
-  switchLang("en");
+  // Load saved language preference or default to English
+  const savedLang = localStorage.getItem('preferredLang');
+  switchLang(savedLang || 'en');
+
+  // Save language on change
+  btnEn.addEventListener('click', () => localStorage.setItem('preferredLang', 'en'));
+  btnFr.addEventListener('click', () => localStorage.setItem('preferredLang', 'fr'));
 </script>
 
 </body>
