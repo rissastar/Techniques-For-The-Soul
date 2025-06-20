@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title id="title">Community Memorial Wall</title>
+  <style>
+    :root {
+      --bg-light: #f5f5f5;
+      --bg-dark: #0f2027;
+      --text-light: #222;
+      --text-dark: #fff;
+      --cloud-opacity: 0.08;
+    }
+    [data-theme="light"] {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+    [data-theme="dark"] {
+      background: linear-gradient(to top, #0f2027,#203a43,#2c5364);
+      color: var(--text-dark);
+    }
+    /* Common */
+    body, html {margin:0;padding:0;height:100%;}
+    body {overflow-x:hidden;font-family:sans-serif;transition:background .3s,color .3s;}
+    .clouds, .float-clouds {
+      position:absolute;top:0;left:0;width:200%;height:100%;
+      background:url('https://www.transparenttextures.com/patterns/clouds.png') repeat-x;
+      animation:moveClouds 60s linear infinite;
+      opacity:var(--cloud-opacity);
+      pointer-events:none; z-index:0;
+    }
+    @keyframes moveClouds {from{transform:translateX(0);}to{transform:translateX(-50%);}}
+    .container{position:relative;z-index:1;max-width:900px;margin:auto;padding:2rem;}
+    .section{background:rgba(255,255,255,0.05);padding:1.5rem;margin-bottom:2rem;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,0.1);}
+    .section h2{margin-bottom:1rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:0.5rem;}
+    input,textarea,select,button{font-size:1rem;padding:0.7rem;border:none;border-radius:6px;width:100%;margin:.5rem 0;}
+    .btn-small{width:auto;padding:.5rem 1rem;}
+    .candle{font-size:3rem;animation:flicker 1s infinite alternate;text-align:center;cursor:pointer;}
+    @keyframes flicker {from{text-shadow:0 0 5px #ffc107,0 0 10px #ffa000;}to{text-shadow:0 0 15px #ffc107,0 0 20px #ff9800;}}
+    .message, .profile{
+      position:relative;padding:1rem;border-radius:8px;background:rgba(255,255,255,0.1);margin-bottom:1rem;
+      opacity:0;transform:translateY(20px);animation:fadeUp .5s forwards;
+    }
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+    .reply{margin-left:2rem;border-left:2px solid rgba(255,255,255,0.2);padding-left:1rem;}
+    .love{color:#f88;}
+    .pin{position:absolute;top:1rem;right:1rem;cursor:pointer;}
+    .float-clouds span{position:absolute;font-size:1.2rem;opacity:0;animation:floatUp 8s forwards;}
+    @keyframes floatUp{to{transform:translateY(-200px);opacity:1;}}
+    audio{width:100%;margin-top:.5rem;}
+    .theme-switch,.lang-switch{position:fixed;top:1rem;z-index:2;}
+    .lang-switch{right:4rem;} .theme-switch{right:1rem;}
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="clouds"></div><div class="float-clouds"></div>
+  <div class="lang-switch">
+    <select id="langSelector"><option value="en">English</option><option value="fr">Français</option></select>
+  </div>
+  <div class="theme-switch">
+    <button id="themeToggle" class="btn-small">🌙</button>
+  </div>
+  <div class="container">
+    <header class="section">
+      <h1 id="header">Community Memorial Wall</h1>
+      <p id="subheader">Light a candle, honor a loved one, and share...</p>
+      <p id="candleCount">Candle lit: <span id="count">0</span> times this visit.</p>
+    </header>
+
+    <!-- Loved One Profiles -->
+    <div class="section">
+      <h2 id="profileTitle">📅 Remembered Loved One Profile</h2>
+      <input type="text" id="profileName" placeholder="Name / Nom"/>
+      <input type="date" id="profileBirth" placeholder="Born"/>
+      <input type="date" id="profileDeath" placeholder="Passed"/>
+      <textarea id="profileTribute" placeholder="Tribute / Hommage"></textarea>
+      <input type="file" id="profilePhoto" accept="image/*"/>
+      <button onclick="saveProfile()" id="profileBtn">Save Profile</button>
+      <div id="profiles"></div>
+    </div>
+
+    <!-- Candle -->
+    <div class="section">
+      <h2 id="lightCandleTitle">🕯️ Light a Candle</h2>
+      <div class="candle" onclick="lightCandle()">🕯️</div>
+    </div>
+
+    <!-- Send Message -->
+    <div class="section">
+      <h2 id="sendMsgTitle">💬 Send Message / Envoyer message</h2>
+      <input type="text" id="nameField" placeholder="Name / Nom"/>
+      <select id="profileLink"><option value="">—Tag Loved One—</option></select>
+      <textarea id="messageText" placeholder="Your message…"></textarea>
+      <input type="file" id="messagePhoto" accept="image/*"/>
+      <input type="file" id="messageAudio" accept="audio/*"/>
+      <button onclick="sendMessage()" id="sendBtn">Send / Envoyer</button>
+    </div>
+
+    <!-- Community Messages -->
+    <div class="section">
+      <h2 id="communityTitle">🌐 Community Messages</h2>
+      <div id="messages"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const URL='https://ytgrzhtntwzefwjmhgjj.supabase.co', KEY='<YOUR_SUPA_KEY>';
+    const supabase = createClient(URL,KEY);
+
+    // State
+    let lang=localStorage.getItem('lang')||'en';
+    let theme=localStorage.getItem('theme')||'dark';
+    let candleCount=parseInt(localStorage.getItem('candleCount'))||0;
+    let profiles=[], messages=[];
+
+    // Translations (EN/FR)
+    const texts = {
+      en:{header:"Community Memorial Wall",subheader:"Light a candle, honor a loved one, and share...",profileTitle:"Remembered Loved One Profile",lightCandleTitle:"Light a Candle",sendMsgTitle:"Send Message",communityTitle:"Community Messages"},
+      fr:{header:"Mur Commémoratif Communautaire",subheader:"Allumez une bougie, honorez un être cher, et partagez...",profileTitle:"Profil de l’être cher",lightCandleTitle:"Allumer une bougie",sendMsgTitle:"Envoyer un message",communityTitle:"Messages de la communauté"}
+    };
+
+    // Init UI
+    document.body.setAttribute('data-theme', theme);
+    document.getElementById('themeToggle').innerText = theme==='light'?'🌙':'☀️';
+    document.getElementById('langSelector').value = lang;
+    document.getElementById('count').innerText = candleCount;
+    updateLang();
+
+    // Events
+    document.getElementById('themeToggle').onclick = ()=>{
+      theme = (theme==='light'?'dark':'light');
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem('theme',theme);
+      document.getElementById('themeToggle').innerText = theme==='light'?'🌙':'☀️';
+    };
+    document.getElementById('langSelector').onchange = ()=>{lang=document.getElementById('langSelector').value; localStorage.setItem('lang',lang);updateLang();};
+
+    function updateLang(){
+      const t=texts[lang];
+      document.getElementById('header').innerText = t.header;
+      document.getElementById('subheader').innerText = t.subheader;
+      document.getElementById('profileTitle').innerText = "📅 "+t.profileTitle;
+      document.getElementById('lightCandleTitle').innerText = "🕯️ "+t.lightCandleTitle;
+      document.getElementById('sendMsgTitle').innerText = "💬 "+t.sendMsgTitle;
+      document.getElementById('communityTitle').innerText = "🌐 "+t.communityTitle;
+      document.getElementById('profileBtn').innerText = lang==='en'?"Save Profile":"Enregistrer";
+      document.getElementById('sendBtn').innerText = lang==='en'?"Send":"Envoyer";
+    }
+
+    // Candle
+    function lightCandle() {
+      candleCount++; localStorage.setItem('candleCount',candleCount);
+      document.getElementById('count').innerText = candleCount;
+    }
+
+    // Fetch/display
+    async function refreshProfiles(){
+      const { data } = await supabase.from('loved_ones').select('*').order('created_at',{ascending:false});
+      profiles = data;
+      const sel = document.getElementById('profileLink');
+      sel.innerHTML = '<option value="">—Tag Loved One—</option>';
+      profiles.forEach(p => {
+        const h=`${p.name} (${p.birth}–${p.death})`;
+        const o=document.createElement('option');o.value=p.id;o.innerText=h;sel.appendChild(o);
+      });
+      const div = document.getElementById('profiles');
+      div.innerHTML = '';
+      profiles.forEach(p=>{
+        const d=document.createElement('div');d.className='profile';
+        d.innerHTML=`
+          <strong>${p.name} (${p.birth}–${p.death})</strong>
+          <p>${p.tribute}</p>
+          ${p.photo_url?`<img src="${p.photo_url}" style="max-width:150px;border-radius:6px;display:block;margin-top:.5rem;">`:''}
+          <span class="pin" onclick="togglePin('loved_ones',${p.id})">📌</span>
+        `;
+        div.appendChild(d);
+      });
+    }
+
+    async function refreshMessages(){
+      const { data } = await supabase.from('messages').select('*').order('created_at',{ascending:true});
+      messages = data;
+      const div = document.getElementById('messages'); div.innerHTML='';
+      messages.forEach(m=>renderMessage(m,div));
+    }
+
+    function renderMessage(m,container,parentId=null){
+      if(parentId && m.parent_id !== parentId) return;
+      if(!parentId && m.parent_id) return;
+      const d=document.createElement('div'); d.className='message'+(parentId?' reply':'');
+      const dt=new Date(m.created_at).toLocaleString(lang==='fr'?'fr-FR':'en-CA');
+      d.innerHTML=`
+        <strong>${m.name||"Anonymous"}</strong> (${dt})
+        <p>${m.text}</p>
+        ${m.photo_url?`<img src="${m.photo_url}" style="max-width:100px;margin-top:.5rem;">`:''}
+        ${m.audio_url?`<audio controls src="${m.audio_url}"></audio>`:''}
+        <span class="pin" onclick="togglePin('messages',${m.id})">📌</span>
+        <button class="btn-small" onclick="showReply(${m.id})">↩ Reply</button>
+        <div id="replyBox${m.id}"></div>
+      `;
+      container.appendChild(d);
+      messages.forEach(child => renderMessage(child,container,m.id));
+    }
+
+    async function saveProfile(){
+      const name=document.getElementById('profileName').value.trim();
+      const birth=document.getElementById('profileBirth').value;
+      const death=document.getElementById('profileDeath').value;
+      const tribute=document.getElementById('profileTribute').value.trim();
+      const photo=document.getElementById('profilePhoto').files[0];
+      if(!name||!birth||!death) return alert("Name, birth & death required");
+      let photo_url=null;
+      if(photo){
+        const path=`profiles_${Date.now()}_${photo.name}`;
+        await supabase.storage.from('photos').upload(path,photo);
+        photo_url=`${URL}/storage/v1/object/public/photos/${path}`;
+      }
+      await supabase.from('loved_ones').insert({name,birth,death,tribute,photo_url, is_pinned:false});
+      refreshProfiles();
+    }
+
+    async function sendMessage(){
+      const name=document.getElementById('nameField').value.trim()||null;
+      const profile_id=document.getElementById('profileLink').value||null;
+      const text=document.getElementById('messageText').value.trim();
+      const photo=document.getElementById('messagePhoto').files[0];
+      const audio=document.getElementById('messageAudio').files[0];
+      if(!text) return;
+      let photo_url=null,audio_url=null;
+      if(photo){
+        const path=`msgp_${Date.now()}_${photo.name}`;
+        await supabase.storage.from('photos').upload(path,photo);
+        photo_url=`${URL}/storage/v1/object/public/photos/${path}`;
+      }
+      if(audio){
+        const path=`msga_${Date.now()}_${audio.name}`;
+        await supabase.storage.from('photos').upload(path,audio);
+        audio_url=`${URL}/storage/v1/object/public/photos/${path}`;
+      }
+      await supabase.from('messages').insert({ name, profile_id, text, photo_url, audio_url, parent_id:null, is_pinned:false });
+      refreshMessages();
+    }
+
+    function showReply(mid){
+      const box=document.getElementById(`replyBox${mid}`);
+      if(box.innerHTML) return box.innerHTML="";
+      box.innerHTML = `<textarea id="replyTxt${mid}" placeholder="Reply..."></textarea>
+                       <button class="btn-small" onclick="postReply(${mid})">Send</button>`;
+    }
+
+    async function postReply(mid){
+      const txt=document.getElementById(`replyTxt${mid}`).value.trim();
+      if(!txt) return;
+      await supabase.from('messages').insert({ name:null,profile_id:null,text:txt,photo_url:null,audio_url:null,parent_id:mid,is_pinned:false });
+      refreshMessages();
+    }
+
+    async function togglePin(table,id){
+      await supabase.from(table).update({ is_pinned: true }).eq('id',id);
+      if(table==='loved_ones') refreshProfiles(); else refreshMessages();
+    }
+
+    function spawnFloatCloud(text){
+      const el=document.createElement('span');
+      el.innerText=text; el.style.left = Math.random()*90 + 'vw';
+      document.querySelector('.float-clouds').appendChild(el);
+      setTimeout(()=>el.remove(), 9000);
+    }
+
+    // share link
+    window.onload = async ()=> {
+      refreshProfiles(); refreshMessages();
+      const params=new URLSearchParams(location.search);
+      if(params.has('message')){
+        const mid=params.get('message');
+        const m=(await supabase.from('messages').select('*').eq('id',mid)).data[0];
+        if(m) spawnFloatCloud(m.text);
+      }
+    };
+  </script>
+</body>
+</html>
