@@ -10,15 +10,12 @@
       height: 100%; background: #000010; color: #f0f0f5;
       font-family: 'Segoe UI', Tahoma, sans-serif; overflow-x: hidden;
     }
-
     body::before {
       content: "";
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
       z-index: -3; opacity: 0.2;
     }
-
     header {
       text-align: center; padding: 2rem 1rem 1rem;
       background-color: rgba(0, 0, 0, 0.6);
@@ -28,7 +25,6 @@
       color: #a4d4ff; text-shadow: 0 0 12px #7ebcff;
     }
     p { font-size: 1.1rem; font-weight: 500; }
-
     .lang-toggle {
       margin-top: 1rem;
     }
@@ -37,9 +33,7 @@
       color: #ccc; border-radius: 20px; cursor: pointer;
       margin: 0 0.3rem; font-weight: 600;
     }
-    .lang-toggle button.active {
-      background: #7ebcff; color: #002244;
-    }
+    .lang-toggle button.active { background: #7ebcff; color: #002244; }
 
     main {
       max-width: 900px; margin: auto;
@@ -59,15 +53,11 @@
       padding-bottom: 0.3rem;
     }
     ul { list-style: none; padding-left: 0; }
-    li { margin-bottom: 0.7rem; }
+    li { margin-bottom: 0.7rem; display: flex; align-items: center; }
+    li svg { width: 24px; height: 24px; margin-right: 0.6rem; fill: #7ebcff; }
 
-    a.toolkit-link {
-      color: #7ebcff; font-weight: 600;
-      text-decoration: none;
-    }
-    a.toolkit-link:hover {
-      text-decoration: underline;
-    }
+    a.toolkit-link { color: #7ebcff; font-weight: 600; text-decoration: none; }
+    a.toolkit-link:hover { text-decoration: underline; }
 
     #topics-list {
       display: flex; flex-wrap: wrap; gap: 12px;
@@ -78,10 +68,13 @@
       color: #a4d4ff; font-weight: 600;
       cursor: pointer; flex: 1 1 45%;
       min-width: 140px;
+      display: flex; align-items: center; justify-content: center;
     }
-    #topics-list button:hover {
-      background: #3377ff; color: #fff;
+    #topics-list button svg {
+      width: 20px; height: 20px; margin-right: 0.4rem; fill: #a4d4ff;
     }
+    #topics-list button:hover { background: #3377ff; color: #fff; }
+    #topics-list button:hover svg { fill: #fff; }
 
     #save-pdf-btn {
       display: block; margin: 2rem auto 0;
@@ -125,20 +118,44 @@
   <section>
     <h2 id="toolkits-title">Toolkits</h2>
     <ul>
-      <li><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/bedtime-checklist.html" target="_blank">Bedtime Checklist</a></li>
-      <li><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html" target="_blank">Crisis Toolkit</a></li>
-      <li><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html" target="_blank">Grounding Toolkit</a></li>
-      <li><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/emotional-expression-toolkit.html" target="_blank">Emotional Expression Toolkit</a></li>
-      <li><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/mood-tracker.html" target="_blank">Mood Tracker</a></li>
-      <li><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/selfcare-toolkit.html" target="_blank">Self-Care Toolkit</a></li>
+      <li>
+        <svg viewBox="0 0 24 24"><path d="M12 2l1.545 4.754H18l-3.964 2.88L15.09 15 12 11.968 8.909 15l.99-5.366L6 6.754h4.455z"/></svg>
+        <a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/bedtime-checklist.html" target="_blank">Bedtime Checklist</a>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24"><path d="M12 2l1.545 4.754H18l-3.964 2.88L15.09 15 12 11.968 8.909 15l.99-5.366L6 6.754h4.455z"/></svg>
+        <a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html" target="_blank">Crisis Toolkit</a>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24"><path d="M12 2l1.545 4.754H18l-3.964 2.88L15.09 15 12 11.968 8.909 15l.99-5.366L6 6.754h4.455z"/></svg>
+        <a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html" target="_blank">Grounding Toolkit</a>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24"><path d="M12 2l1.545 4.754H18l-3.964 2.88L15.09 15 12 11.968 8.909 15l.99-5.366L6 6.754h4.455z"/></svg>
+        <a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/emotional-expression-toolkit.html" target="_blank">Emotional Expression Toolkit</a>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24"><path d="M12 2l1.545 4.754H18l-3.964 2.88L15.09 15 12 11.968 8.909 15l.99-5.366L6 6.754h4.455z"/></svg>
+        <a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/mood-tracker.html" target="_blank">Mood Tracker</a>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24"><path d="M12 2l1.545 4.754H18l-3.964 2.88L15.09 15 12 11.968 8.909 15l.99-5.366L6 6.754h4.455z"/></svg>
+        <a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/selfcare-toolkit.html" target="_blank">Self-Care Toolkit</a>
+      </li>
     </ul>
   </section>
 
   <section>
     <h2 id="resources-title">Resources</h2>
     <ul>
-      <li><a href="https://www.crisisservicescanada.ca/en/" target="_blank">Canada – Crisis Services</a></li>
-      <li><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">USA – SAMHSA Helpline</a></li>
+      <li>
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 110 20 10 10 0 010-20zm0 2a8 8 0 100 16 8 8 0 000-16z"/></svg>
+        <a href="https://www.crisisservicescanada.ca/en/" target="_blank">Canada – Crisis Services</a>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 110 20 10 10 0 010-20zm0 2a8 8 0 100 16 8 8 0 000-16z"/></svg>
+        <a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">USA – SAMHSA Helpline</a>
+      </li>
     </ul>
   </section>
 
@@ -147,9 +164,7 @@
     <div id="topics-list"></div>
   </section>
 
-  <section>
-    <button id="save-pdf-btn">Save Page as PDF</button>
-  </section>
+  <button id="save-pdf-btn">Save Page as PDF</button>
 </main>
 
 <footer>
@@ -159,7 +174,6 @@
   <a href="https://linktr.ee/rissa.star" target="_blank">Linktree</a>
 </footer>
 
-<!-- Save to PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -173,13 +187,13 @@
       resources: "Resources",
       info: "Informational Topics",
       topics: [
-        "Mental Health Conditions & Disorders",
-        "Addiction and Recovery",
-        "Trauma and Abuse",
-        "Support for Specific Populations",
-        "Grief and Loss",
-        "Chronic Conditions & Disabilities",
-        "Wellness & Coping Strategies"
+        "🧠 Mental Health Conditions & Disorders",
+        "🔗 Addiction and Recovery",
+        "🌙 Trauma and Abuse",
+        "👥 Support for Specific Populations",
+        "💔 Grief and Loss",
+        "♿ Chronic Conditions & Disabilities",
+        "✨ Wellness & Coping Strategies"
       ],
       connect: "Connect with us:"
     },
@@ -190,13 +204,13 @@
       resources: "Ressources",
       info: "Sujets d’information",
       topics: [
-        "Conditions et troubles de santé mentale",
-        "Toxicomanie et rétablissement",
-        "Traumatismes et abus",
-        "Soutien pour les populations spécifiques",
-        "Deuil et perte",
-        "Maladies chroniques et handicaps",
-        "Bien-être et stratégies d’adaptation"
+        "🧠 Conditions et troubles de santé mentale",
+        "🔗 Toxicomanie et rétablissement",
+        "🌙 Traumatismes et abus",
+        "👥 Soutien pour les populations spécifiques",
+        "💔 Deuil et perte",
+        "♿ Maladies chroniques et handicaps",
+        "✨ Bien-être et stratégies d’adaptation"
       ],
       connect: "Connectez-vous avec nous :"
     }
@@ -211,22 +225,25 @@
     document.getElementById("informational-title").textContent = c.info;
     document.getElementById("footer-text").textContent = c.connect;
 
-    const topicsList = document.getElementById("topics-list");
-    topicsList.innerHTML = "";
-    c.topics.forEach(topic => {
+    const topicsDiv = document.getElementById("topics-list");
+    topicsDiv.innerHTML = "";
+    c.topics.forEach(text => {
       const btn = document.createElement("button");
-      btn.textContent = topic;
-      btn.onclick = () => alert((lang === "en" ? "Page coming soon: " : "Page à venir : ") + topic);
-      topicsList.appendChild(btn);
+      const iconSpan = document.createElement("span");
+      iconSpan.textContent = text.split(" ")[0];
+      btn.textContent = text.replace(text.split(" ")[0] + " ", "");
+      btn.prepend(iconSpan);
+      btn.onclick = () => alert((lang==="en" ? "Coming soon: " : "Page à venir : ") + btn.textContent);
+      topicsDiv.appendChild(btn);
     });
 
-    document.getElementById("btn-en").classList.toggle("active", lang === "en");
-    document.getElementById("btn-fr").classList.toggle("active", lang === "fr");
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.classList.toggle('active', btn.id === 'btn-' + lang);
+    });
   }
 
   document.getElementById("btn-en").onclick = () => switchLang("en");
   document.getElementById("btn-fr").onclick = () => switchLang("fr");
-
   switchLang("en");
 
   document.getElementById("save-pdf-btn").addEventListener("click", () => {
@@ -240,6 +257,5 @@
     });
   });
 </script>
-
 </body>
 </html>
