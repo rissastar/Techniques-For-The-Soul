@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Self-Compassion Tips</title>
+    <title>Self-Compassion Toolkit</title>
     <style>
         * {
             margin: 0;
@@ -14,295 +14,656 @@
 
 ```
     body {
-        font-family: 'Georgia', serif;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
+        padding: 20px;
+        color: #333;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        overflow: hidden;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        padding: 40px 30px;
+        text-align: center;
+        color: white;
+    }
+
+    .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+    }
+
+    .content {
+        padding: 30px;
+    }
+
+    .toolkit-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .tool-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .tool-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        border-color: #ff9a9e;
+    }
+
+    .tool-card h3 {
+        color: #764ba2;
+        margin-bottom: 15px;
+        font-size: 1.4em;
+    }
+
+    .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: all 0.3s ease;
+        margin: 10px 5px;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .gentle-reminder {
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        border-radius: 15px;
+        padding: 25px;
+        margin: 20px 0;
+        text-align: center;
+        color: #5d4e75;
+        font-size: 1.1em;
+        line-height: 1.6;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .practice-area {
+        background: #f8f9ff;
+        border-radius: 15px;
+        padding: 25px;
+        margin: 20px 0;
+        border-left: 5px solid #667eea;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .breathing-circle {
+        width: 200px;
+        height: 200px;
+        border: 3px solid #667eea;
+        border-radius: 50%;
+        margin: 20px auto;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 20px;
+        font-size: 1.2em;
+        color: #667eea;
+        transition: all 4s ease-in-out;
     }
-    
-    .infographic {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 24px;
-        padding: 40px;
-        max-width: 600px;
-        width: 100%;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        animation: fadeInUp 0.8s ease-out;
+
+    .breathing-circle.expand {
+        transform: scale(1.3);
+        background: rgba(102, 126, 234, 0.1);
     }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .header {
+
+    .affirmation-box {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        border-radius: 15px;
+        padding: 30px;
         text-align: center;
-        margin-bottom: 40px;
-    }
-    
-    .main-title {
-        font-size: 2.5rem;
-        color: #4a5568;
-        margin-bottom: 12px;
-        font-weight: 300;
-        letter-spacing: -0.5px;
-    }
-    
-    .subtitle {
-        font-size: 1.1rem;
-        color: #718096;
-        font-style: italic;
-        opacity: 0.8;
-    }
-    
-    .decorative-line {
-        width: 80px;
-        height: 3px;
-        background: linear-gradient(90deg, #fbb6ce, #d6bcfa, #a7f3d0);
-        margin: 20px auto;
-        border-radius: 2px;
-    }
-    
-    .tips-container {
+        font-size: 1.3em;
+        color: #5d4e75;
+        margin: 20px 0;
+        min-height: 120px;
         display: flex;
-        flex-direction: column;
-        gap: 24px;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.5;
     }
-    
-    .tip-card {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
-        border-radius: 16px;
-        padding: 28px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .tip-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    }
-    
-    .tip-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
+
+    .journal-area {
         width: 100%;
-        height: 4px;
-        border-radius: 16px 16px 0 0;
+        min-height: 150px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 1em;
+        font-family: inherit;
+        resize: vertical;
+        transition: border-color 0.3s ease;
     }
-    
-    .tip-card:nth-child(1)::before {
-        background: linear-gradient(90deg, #fbb6ce, #f687b3);
+
+    .journal-area:focus {
+        outline: none;
+        border-color: #667eea;
     }
-    
-    .tip-card:nth-child(2)::before {
-        background: linear-gradient(90deg, #d6bcfa, #b794f6);
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 15px 0;
     }
-    
-    .tip-card:nth-child(4)::before {
-        background: linear-gradient(90deg, #fbb9d3, #f6a6cd);
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        width: 0%;
+        transition: width 0.3s ease;
     }
-    
-    .tip-card:nth-child(5)::before {
-        background: linear-gradient(90deg, #b8e6ff, #87ceeb);
+
+    .tab-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
     }
-    
-    .tip-card:nth-child(6)::before {
-        background: linear-gradient(90deg, #ffcccb, #ffa07a);
+
+    .tab-btn {
+        background: transparent;
+        border: 2px solid #667eea;
+        color: #667eea;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
-    
-    .tip-card:nth-child(7)::before {
-        background: linear-gradient(90deg, #e6e6fa, #dda0dd);
-    }
-    
-    .tip-card:nth-child(8)::before {
-        background: linear-gradient(90deg, #f0e68c, #daa520);
-    }
-    
-    .tip-number {
-        display: inline-block;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        font-size: 0.9rem;
-        font-weight: 600;
+
+    .tab-btn.active {
+        background: #667eea;
         color: white;
-        text-align: center;
-        line-height: 32px;
-        margin-bottom: 16px;
     }
-    
-    .tip-card:nth-child(1) .tip-number {
-        background: linear-gradient(135deg, #fbb6ce, #f687b3);
+
+    .floating-hearts {
+        position: fixed;
+        pointer-events: none;
+        font-size: 20px;
+        color: #ff9a9e;
+        animation: float-up 3s ease-out forwards;
+        z-index: 1000;
     }
-    
-    .tip-card:nth-child(2) .tip-number {
-        background: linear-gradient(135deg, #d6bcfa, #b794f6);
+
+    @keyframes float-up {
+        0% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-100px) scale(1.5);
+        }
     }
-    
-    .tip-card:nth-child(3) .tip-number {
-        background: linear-gradient(135deg, #a7f3d0, #68d391);
+
+    .gentle-pulse {
+        animation: gentle-pulse 2s ease-in-out infinite;
     }
-    
-    .tip-card:nth-child(4) .tip-number {
-        background: linear-gradient(135deg, #fbb9d3, #f6a6cd);
-    }
-    
-    .tip-card:nth-child(5) .tip-number {
-        background: linear-gradient(135deg, #b8e6ff, #87ceeb);
-    }
-    
-    .tip-card:nth-child(6) .tip-number {
-        background: linear-gradient(135deg, #ffcccb, #ffa07a);
-    }
-    
-    .tip-card:nth-child(7) .tip-number {
-        background: linear-gradient(135deg, #e6e6fa, #dda0dd);
-    }
-    
-    .tip-card:nth-child(8) .tip-number {
-        background: linear-gradient(135deg, #f0e68c, #daa520);
-    }
-    
-    .tip-title {
-        font-size: 1.4rem;
-        color: #2d3748;
-        margin-bottom: 12px;
-        font-weight: 400;
-        line-height: 1.3;
-    }
-    
-    .tip-description {
-        color: #4a5568;
-        font-size: 1rem;
-        line-height: 1.6;
-        opacity: 0.9;
-    }
-    
-    .footer {
-        text-align: center;
-        margin-top: 40px;
-        padding-top: 24px;
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    
-    .footer-text {
-        color: #718096;
-        font-size: 0.9rem;
-        font-style: italic;
-    }
-    
-    .heart {
-        color: #f687b3;
-        font-size: 1.1rem;
-        margin: 0 4px;
-        animation: pulse 2s ease-in-out infinite;
-    }
-    
-    @keyframes pulse {
+
+    @keyframes gentle-pulse {
         0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
+        50% { transform: scale(1.05); }
     }
-    
-    @media (max-width: 480px) {
-        .infographic {
-            padding: 24px;
-            margin: 10px;
-        }
-        
-        .main-title {
-            font-size: 2rem;
-        }
-        
-        .tip-card {
-            padding: 20px;
-        }
-        
-        .tip-title {
-            font-size: 1.2rem;
-        }
+
+    @media (max-width: 600px) {
+        .header h1 { font-size: 2em; }
+        .header p { font-size: 1em; }
+        .content { padding: 20px; }
+        .toolkit-grid { grid-template-columns: 1fr; }
     }
 </style>
 ```
 
 </head>
 <body>
-    <div class="infographic">
+    <div class="container">
         <div class="header">
-            <h1 class="main-title">Self-Compassion Tips</h1>
-            <p class="subtitle">Gentle reminders for your journey</p>
-            <div class="decorative-line"></div>
+            <h1>✨ Self-Compassion Toolkit ✨</h1>
+            <p>Gentle practices and caring reminders for your journey</p>
         </div>
 
 ```
-    <div class="tips-container">
-        <div class="tip-card">
-            <div class="tip-number">1</div>
-            <h2 class="tip-title">Speak Kindly to Yourself</h2>
-            <p class="tip-description">Replace harsh inner criticism with the same gentle words you'd offer a dear friend. Your inner voice has the power to heal or harm—choose kindness.</p>
+    <div class="content">
+        <div class="gentle-reminder gentle-pulse">
+            💝 Remember: You deserve the same kindness you give to others 💝
         </div>
-        
-        <div class="tip-card">
-            <div class="tip-number">2</div>
-            <h2 class="tip-title">Give Yourself Permission to Rest</h2>
-            <p class="tip-description">Rest isn't earned through productivity—it's a fundamental need. Honor your body and mind by taking breaks without guilt or justification.</p>
+
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="showTab('daily')">Daily Practices</button>
+            <button class="tab-btn" onclick="showTab('moments')">Difficult Moments</button>
+            <button class="tab-btn" onclick="showTab('journal')">Compassion Journal</button>
+            <button class="tab-btn" onclick="showTab('affirmations')">Kind Words</button>
         </div>
-        
-        <div class="tip-card">
-            <div class="tip-number">3</div>
-            <h2 class="tip-title">Celebrate Small Wins</h2>
-            <p class="tip-description">Every step forward matters, no matter how small. Acknowledge your efforts and progress—you're doing better than you think you are.</p>
+
+        <div id="daily-tab" class="tab-content">
+            <div class="toolkit-grid">
+                <div class="tool-card">
+                    <h3>🌸 Gentle Morning Check-in</h3>
+                    <p>Start your day with kindness towards yourself</p>
+                    <button class="btn" onclick="morningCheckin()">Begin Check-in</button>
+                    <div id="morning-practice" class="practice-area hidden">
+                        <p><strong>Take a deep breath and ask yourself:</strong></p>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li>How am I feeling right now?</li>
+                            <li>What do I need today?</li>
+                            <li>What would I say to a dear friend feeling this way?</li>
+                        </ul>
+                        <p><em>Remember: Whatever you're feeling is valid and okay.</em></p>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h3>🫁 Compassionate Breathing</h3>
+                    <p>A gentle breathing exercise to center yourself</p>
+                    <button class="btn" onclick="startBreathing()">Start Breathing</button>
+                    <div id="breathing-practice" class="practice-area hidden">
+                        <div class="breathing-circle" id="breathingCircle">Breathe</div>
+                        <p id="breathingText" style="text-align: center; margin-top: 20px;">Click start to begin</p>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h3>🤗 Self-Hug Practice</h3>
+                    <p>Physical comfort when you need it most</p>
+                    <button class="btn" onclick="selfHugPractice()">Guide Me</button>
+                    <div id="hug-practice" class="practice-area hidden">
+                        <p><strong>Try this gentle self-hug:</strong></p>
+                        <ol style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                            <li>Cross your arms over your chest</li>
+                            <li>Gently squeeze yourself in a warm hug</li>
+                            <li>Take three deep breaths</li>
+                            <li>Say: "I am here for myself"</li>
+                        </ol>
+                        <p><em>You deserve comfort and care, especially from yourself.</em></p>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h3>🌱 Growth Mindset Reminder</h3>
+                    <p>Reframe challenges as opportunities to learn</p>
+                    <button class="btn" onclick="growthMindset()">Reframe My Thoughts</button>
+                    <div id="growth-practice" class="practice-area hidden">
+                        <p><strong>Instead of:</strong> "I'm not good at this"</p>
+                        <p><strong>Try:</strong> "I'm learning and growing"</p>
+                        <br>
+                        <p><strong>Instead of:</strong> "I made a mistake"</p>
+                        <p><strong>Try:</strong> "Mistakes help me learn"</p>
+                        <br>
+                        <p><strong>Instead of:</strong> "This is too hard"</p>
+                        <p><strong>Try:</strong> "This is challenging, and that's okay"</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="tip-card">
-            <div class="tip-number">4</div>
-            <h2 class="tip-title">Practice Mindful Breathing</h2>
-            <p class="tip-description">When overwhelmed, return to your breath. Take three deep, slow breaths and remind yourself: "This moment is temporary, and I am safe right now."</p>
+
+        <div id="moments-tab" class="tab-content hidden">
+            <div class="toolkit-grid">
+                <div class="tool-card">
+                    <h3>⭐ STOP Technique</h3>
+                    <p>For overwhelming moments</p>
+                    <button class="btn" onclick="stopTechnique()">Use STOP</button>
+                    <div id="stop-practice" class="practice-area hidden">
+                        <h4>S - Stop what you're doing</h4>
+                        <p>Pause and notice this moment</p>
+                        <h4>T - Take a breath</h4>
+                        <p>Breathe deeply and slowly</p>
+                        <h4>O - Observe</h4>
+                        <p>What am I thinking? What am I feeling?</p>
+                        <h4>P - Proceed with kindness</h4>
+                        <p>What would be most helpful right now?</p>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h3>💙 Self-Compassion Break</h3>
+                    <p>Three steps to ease suffering</p>
+                    <button class="btn" onclick="compassionBreak()">Take a Break</button>
+                    <div id="compassion-practice" class="practice-area hidden">
+                        <p><strong>Step 1 - Mindfulness:</strong></p>
+                        <p>"This is a moment of suffering"</p>
+                        <br>
+                        <p><strong>Step 2 - Common Humanity:</strong></p>
+                        <p>"Suffering is part of human experience"</p>
+                        <br>
+                        <p><strong>Step 3 - Self-Kindness:</strong></p>
+                        <p>"May I be kind to myself in this moment"</p>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h3>🌈 Emotion Validation</h3>
+                    <p>Acknowledge and accept your feelings</p>
+                    <button class="btn" onclick="validateEmotions()">Validate My Feelings</button>
+                    <div id="emotion-practice" class="practice-area hidden">
+                        <p><strong>Remember:</strong></p>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li>All emotions are valid</li>
+                            <li>Feelings are temporary</li>
+                            <li>You don't have to fix everything right now</li>
+                            <li>It's okay to not be okay</li>
+                            <li>You're doing the best you can</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="tip-card">
-            <div class="tip-number">5</div>
-            <h2 class="tip-title">Embrace Your Imperfections</h2>
-            <p class="tip-description">Perfectionism is the enemy of self-compassion. Remember that being human means being beautifully, wonderfully imperfect—and that's exactly as it should be.</p>
+
+        <div id="journal-tab" class="tab-content hidden">
+            <div class="tool-card">
+                <h3>📝 Compassion Journal</h3>
+                <p>Write with kindness to yourself</p>
+                <div class="practice-area">
+                    <p><strong>Prompt:</strong> What would I say to a dear friend going through what I'm experiencing?</p>
+                    <textarea class="journal-area" id="journalText" placeholder="Write your compassionate thoughts here..."></textarea>
+                    <button class="btn" onclick="saveJournalEntry()">Save Entry</button>
+                    <button class="btn" onclick="clearJournal()">Clear</button>
+                    <div id="journalSaved" class="gentle-reminder hidden">
+                        ✨ Your compassionate words have been noted ✨
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <h3>📋 Compassion Prompts</h3>
+                <p>Writing prompts for self-reflection</p>
+                <button class="btn" onclick="getJournalPrompt()">Get New Prompt</button>
+                <div id="journal-prompt" class="practice-area hidden">
+                    <p id="promptText"></p>
+                </div>
+            </div>
         </div>
-        
-        <div class="tip-card">
-            <div class="tip-number">6</div>
-            <h2 class="tip-title">Set Gentle Boundaries</h2>
-            <p class="tip-description">Saying "no" to others sometimes means saying "yes" to yourself. Protect your energy and well-being without apologizing for your limits.</p>
+
+        <div id="affirmations-tab" class="tab-content hidden">
+            <div class="tool-card">
+                <h3>💕 Daily Affirmations</h3>
+                <p>Kind words to nurture your soul</p>
+                <button class="btn" onclick="getAffirmation()">Give Me Kindness</button>
+                <div class="affirmation-box" id="affirmationBox">
+                    Click above to receive a gentle affirmation 🌸
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <h3>🎯 Personalized Affirmation Creator</h3>
+                <p>Create affirmations that speak to you</p>
+                <input type="text" id="nameInput" placeholder="Your name (optional)" style="width: 100%; padding: 10px; margin: 10px 0; border: 2px solid #e0e0e0; border-radius: 5px;">
+                <button class="btn" onclick="createPersonalAffirmation()">Create My Affirmation</button>
+                <div id="personalAffirmation" class="affirmation-box hidden"></div>
+            </div>
         </div>
-        
-        <div class="tip-card">
-            <div class="tip-number">7</div>
-            <h2 class="tip-title">Treat Mistakes as Learning</h2>
-            <p class="tip-description">Instead of beating yourself up over errors, ask "What can I learn from this?" Mistakes are stepping stones, not roadblocks to your growth.</p>
+
+        <div class="gentle-reminder">
+            🌟 Progress isn't about perfection - it's about showing up for yourself with kindness 🌟
         </div>
-        
-        <div class="tip-card">
-            <div class="tip-number">8</div>
-            <h2 class="tip-title">Create a Self-Care Ritual</h2>
-            <p class="tip-description">Dedicate time each day to something that nourishes your soul—whether it's a warm bath, reading, or simply sitting quietly with your favorite tea.</p>
-        </div>
-    </div>
-    
-    <div class="footer">
-        <p class="footer-text">Be gentle with yourself <span class="heart">♡</span> You deserve compassion</p>
     </div>
 </div>
+
+<script>
+    let breathingInterval;
+    let breathingActive = false;
+
+    const affirmations = [
+        "I am worthy of love and kindness, especially from myself",
+        "I choose to treat myself with the same compassion I show others",
+        "My feelings are valid and I honor them without judgment",
+        "I am learning and growing at my own pace",
+        "I deserve patience and understanding from myself",
+        "I am doing the best I can with what I have right now",
+        "My worth is not determined by my productivity or achievements",
+        "I choose to speak to myself with gentleness and care",
+        "I am allowed to rest and take breaks when I need them",
+        "I embrace my imperfections as part of my human experience",
+        "I trust in my ability to navigate life's challenges",
+        "I give myself permission to feel all of my emotions",
+        "I am resilient and have overcome difficulties before",
+        "I choose self-compassion over self-criticism",
+        "I am enough, exactly as I am in this moment"
+    ];
+
+    const journalPrompts = [
+        "What would I say to my best friend if they were going through what I'm experiencing right now?",
+        "What are three things I can appreciate about myself today?",
+        "How can I show myself extra kindness this week?",
+        "What would unconditional self-acceptance look like for me?",
+        "What challenges have I overcome that I can feel proud of?",
+        "How can I honor my feelings without being overwhelmed by them?",
+        "What does my inner critic say, and how can I respond with compassion?",
+        "What would I do today if I truly believed I deserved love and care?",
+        "How can I celebrate small victories and progress in my life?",
+        "What boundaries do I need to set to protect my peace of mind?"
+    ];
+
+    function showTab(tabName) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.add('hidden');
+        });
+        
+        // Remove active class from all buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab
+        document.getElementById(tabName + '-tab').classList.remove('hidden');
+        
+        // Add active class to clicked button
+        event.target.classList.add('active');
+    }
+
+    function morningCheckin() {
+        const practice = document.getElementById('morning-practice');
+        practice.classList.toggle('hidden');
+        createFloatingHeart();
+    }
+
+    function startBreathing() {
+        const practice = document.getElementById('breathing-practice');
+        const circle = document.getElementById('breathingCircle');
+        const text = document.getElementById('breathingText');
+        
+        practice.classList.remove('hidden');
+        
+        if (!breathingActive) {
+            breathingActive = true;
+            let phase = 0; // 0: breathe in, 1: hold, 2: breathe out
+            let count = 0;
+            
+            text.textContent = "Breathe in slowly...";
+            
+            breathingInterval = setInterval(() => {
+                if (phase === 0) { // Breathe in
+                    circle.classList.add('expand');
+                    text.textContent = "Breathe in slowly... " + (4 - count);
+                    count++;
+                    if (count >= 4) {
+                        phase = 1;
+                        count = 0;
+                    }
+                } else if (phase === 1) { // Hold
+                    text.textContent = "Hold... " + (2 - count);
+                    count++;
+                    if (count >= 2) {
+                        phase = 2;
+                        count = 0;
+                    }
+                } else { // Breathe out
+                    circle.classList.remove('expand');
+                    text.textContent = "Breathe out gently... " + (4 - count);
+                    count++;
+                    if (count >= 4) {
+                        phase = 0;
+                        count = 0;
+                    }
+                }
+            }, 1000);
+            
+            // Auto-stop after 2 minutes
+            setTimeout(() => {
+                if (breathingActive) {
+                    stopBreathing();
+                }
+            }, 120000);
+        } else {
+            stopBreathing();
+        }
+    }
+
+    function stopBreathing() {
+        clearInterval(breathingInterval);
+        breathingActive = false;
+        document.getElementById('breathingText').textContent = "Well done! You've taken time to breathe mindfully.";
+        document.getElementById('breathingCircle').classList.remove('expand');
+    }
+
+    function selfHugPractice() {
+        const practice = document.getElementById('hug-practice');
+        practice.classList.toggle('hidden');
+        createFloatingHeart();
+    }
+
+    function growthMindset() {
+        const practice = document.getElementById('growth-practice');
+        practice.classList.toggle('hidden');
+        createFloatingHeart();
+    }
+
+    function stopTechnique() {
+        const practice = document.getElementById('stop-practice');
+        practice.classList.toggle('hidden');
+        createFloatingHeart();
+    }
+
+    function compassionBreak() {
+        const practice = document.getElementById('compassion-practice');
+        practice.classList.toggle('hidden');
+        createFloatingHeart();
+    }
+
+    function validateEmotions() {
+        const practice = document.getElementById('emotion-practice');
+        practice.classList.toggle('hidden');
+        createFloatingHeart();
+    }
+
+    function getAffirmation() {
+        const box = document.getElementById('affirmationBox');
+        const randomAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+        box.textContent = randomAffirmation;
+        box.classList.add('gentle-pulse');
+        createFloatingHeart();
+        
+        setTimeout(() => {
+            box.classList.remove('gentle-pulse');
+        }, 2000);
+    }
+
+    function createPersonalAffirmation() {
+        const name = document.getElementById('nameInput').value.trim();
+        const box = document.getElementById('personalAffirmation');
+        
+        const personalAffirmations = [
+            `${name ? name + ', you' : 'You'} are deserving of all the love and kindness in the world`,
+            `${name ? name + ', your' : 'Your'} journey is unique and valuable`,
+            `${name ? name + ', you' : 'You'} have the strength to overcome any challenge`,
+            `${name ? name + ', your' : 'Your'} feelings matter and are completely valid`,
+            `${name ? name + ', you' : 'You'} are enough, just as you are right now`
+        ];
+        
+        const randomPersonal = personalAffirmations[Math.floor(Math.random() * personalAffirmations.length)];
+        box.textContent = randomPersonal;
+        box.classList.remove('hidden');
+        createFloatingHeart();
+    }
+
+    function getJournalPrompt() {
+        const promptArea = document.getElementById('journal-prompt');
+        const promptText = document.getElementById('promptText');
+        const randomPrompt = journalPrompts[Math.floor(Math.random() * journalPrompts.length)];
+        
+        promptText.textContent = randomPrompt;
+        promptArea.classList.remove('hidden');
+    }
+
+    function saveJournalEntry() {
+        const savedMessage = document.getElementById('journalSaved');
+        savedMessage.classList.remove('hidden');
+        createFloatingHeart();
+        
+        setTimeout(() => {
+            savedMessage.classList.add('hidden');
+        }, 3000);
+    }
+
+    function clearJournal() {
+        document.getElementById('journalText').value = '';
+    }
+
+    function createFloatingHeart() {
+        const heart = document.createElement('div');
+        heart.textContent = '💖';
+        heart.className = 'floating-hearts';
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.top = window.innerHeight + 'px';
+        
+        document.body.appendChild(heart);
+        
+        setTimeout(() => {
+            heart.remove();
+        }, 3000);
+    }
+
+    // Initialize with a gentle reminder
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            createFloatingHeart();
+        }, 2000);
+    });
+
+    // Add gentle encouragement when clicking buttons
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn')) {
+            if (Math.random() < 0.3) { // 30% chance
+                createFloatingHeart();
+            }
+        }
+    });
+</script>
 ```
 
 </body>
