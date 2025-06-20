@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Compassion Tips</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Georgia', serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    
+    .infographic {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        padding: 40px;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        animation: fadeInUp 0.8s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .main-title {
+        font-size: 2.5rem;
+        color: #4a5568;
+        margin-bottom: 12px;
+        font-weight: 300;
+        letter-spacing: -0.5px;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
+        color: #718096;
+        font-style: italic;
+        opacity: 0.8;
+    }
+    
+    .decorative-line {
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, #fbb6ce, #d6bcfa, #a7f3d0);
+        margin: 20px auto;
+        border-radius: 2px;
+    }
+    
+    .tips-container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+    
+    .tip-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+        border-radius: 16px;
+        padding: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tip-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .tip-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        border-radius: 16px 16px 0 0;
+    }
+    
+    .tip-card:nth-child(1)::before {
+        background: linear-gradient(90deg, #fbb6ce, #f687b3);
+    }
+    
+    .tip-card:nth-child(2)::before {
+        background: linear-gradient(90deg, #d6bcfa, #b794f6);
+    }
+    
+    .tip-card:nth-child(4)::before {
+        background: linear-gradient(90deg, #fbb9d3, #f6a6cd);
+    }
+    
+    .tip-card:nth-child(5)::before {
+        background: linear-gradient(90deg, #b8e6ff, #87ceeb);
+    }
+    
+    .tip-card:nth-child(6)::before {
+        background: linear-gradient(90deg, #ffcccb, #ffa07a);
+    }
+    
+    .tip-card:nth-child(7)::before {
+        background: linear-gradient(90deg, #e6e6fa, #dda0dd);
+    }
+    
+    .tip-card:nth-child(8)::before {
+        background: linear-gradient(90deg, #f0e68c, #daa520);
+    }
+    
+    .tip-number {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: white;
+        text-align: center;
+        line-height: 32px;
+        margin-bottom: 16px;
+    }
+    
+    .tip-card:nth-child(1) .tip-number {
+        background: linear-gradient(135deg, #fbb6ce, #f687b3);
+    }
+    
+    .tip-card:nth-child(2) .tip-number {
+        background: linear-gradient(135deg, #d6bcfa, #b794f6);
+    }
+    
+    .tip-card:nth-child(3) .tip-number {
+        background: linear-gradient(135deg, #a7f3d0, #68d391);
+    }
+    
+    .tip-card:nth-child(4) .tip-number {
+        background: linear-gradient(135deg, #fbb9d3, #f6a6cd);
+    }
+    
+    .tip-card:nth-child(5) .tip-number {
+        background: linear-gradient(135deg, #b8e6ff, #87ceeb);
+    }
+    
+    .tip-card:nth-child(6) .tip-number {
+        background: linear-gradient(135deg, #ffcccb, #ffa07a);
+    }
+    
+    .tip-card:nth-child(7) .tip-number {
+        background: linear-gradient(135deg, #e6e6fa, #dda0dd);
+    }
+    
+    .tip-card:nth-child(8) .tip-number {
+        background: linear-gradient(135deg, #f0e68c, #daa520);
+    }
+    
+    .tip-title {
+        font-size: 1.4rem;
+        color: #2d3748;
+        margin-bottom: 12px;
+        font-weight: 400;
+        line-height: 1.3;
+    }
+    
+    .tip-description {
+        color: #4a5568;
+        font-size: 1rem;
+        line-height: 1.6;
+        opacity: 0.9;
+    }
+    
+    .footer {
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .footer-text {
+        color: #718096;
+        font-size: 0.9rem;
+        font-style: italic;
+    }
+    
+    .heart {
+        color: #f687b3;
+        font-size: 1.1rem;
+        margin: 0 4px;
+        animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+    
+    @media (max-width: 480px) {
+        .infographic {
+            padding: 24px;
+            margin: 10px;
+        }
+        
+        .main-title {
+            font-size: 2rem;
+        }
+        
+        .tip-card {
+            padding: 20px;
+        }
+        
+        .tip-title {
+            font-size: 1.2rem;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="infographic">
+        <div class="header">
+            <h1 class="main-title">Self-Compassion Tips</h1>
+            <p class="subtitle">Gentle reminders for your journey</p>
+            <div class="decorative-line"></div>
+        </div>
+
+```
+    <div class="tips-container">
+        <div class="tip-card">
+            <div class="tip-number">1</div>
+            <h2 class="tip-title">Speak Kindly to Yourself</h2>
+            <p class="tip-description">Replace harsh inner criticism with the same gentle words you'd offer a dear friend. Your inner voice has the power to heal or harm—choose kindness.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">2</div>
+            <h2 class="tip-title">Give Yourself Permission to Rest</h2>
+            <p class="tip-description">Rest isn't earned through productivity—it's a fundamental need. Honor your body and mind by taking breaks without guilt or justification.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">3</div>
+            <h2 class="tip-title">Celebrate Small Wins</h2>
+            <p class="tip-description">Every step forward matters, no matter how small. Acknowledge your efforts and progress—you're doing better than you think you are.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">4</div>
+            <h2 class="tip-title">Practice Mindful Breathing</h2>
+            <p class="tip-description">When overwhelmed, return to your breath. Take three deep, slow breaths and remind yourself: "This moment is temporary, and I am safe right now."</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">5</div>
+            <h2 class="tip-title">Embrace Your Imperfections</h2>
+            <p class="tip-description">Perfectionism is the enemy of self-compassion. Remember that being human means being beautifully, wonderfully imperfect—and that's exactly as it should be.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">6</div>
+            <h2 class="tip-title">Set Gentle Boundaries</h2>
+            <p class="tip-description">Saying "no" to others sometimes means saying "yes" to yourself. Protect your energy and well-being without apologizing for your limits.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">7</div>
+            <h2 class="tip-title">Treat Mistakes as Learning</h2>
+            <p class="tip-description">Instead of beating yourself up over errors, ask "What can I learn from this?" Mistakes are stepping stones, not roadblocks to your growth.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">8</div>
+            <h2 class="tip-title">Create a Self-Care Ritual</h2>
+            <p class="tip-description">Dedicate time each day to something that nourishes your soul—whether it's a warm bath, reading, or simply sitting quietly with your favorite tea.</p>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p class="footer-text">Be gentle with yourself <span class="heart">♡</span> You deserve compassion</p>
+    </div>
+</div>
+```
+
+</body>
+</html>
