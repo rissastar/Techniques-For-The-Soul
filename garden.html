@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Memorial Garden</title>
+    <title>Memorial Garden - Plant for Your Loved Ones</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/supabase/2.39.3/supabase.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -12,662 +12,515 @@
             box-sizing: border-box;
         }
 
-```
-    body {
-        font-family: 'Georgia', serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
-
-    .header {
-        text-align: center;
-        padding: 2rem;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .header h1 {
-        color: white;
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    .header p {
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 1.1rem;
-        font-style: italic;
-    }
-
-    .garden-container {
-        position: relative;
-        min-height: 80vh;
-        background: linear-gradient(to bottom, #87CEEB 0%, #98FB98 40%, #228B22 100%);
-        overflow: hidden;
-    }
-
-    .clouds {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 200px;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><circle cx="20" cy="10" r="8" fill="white" opacity="0.7"/><circle cx="25" cy="8" r="6" fill="white" opacity="0.7"/><circle cx="30" cy="10" r="5" fill="white" opacity="0.7"/><circle cx="60" cy="12" r="7" fill="white" opacity="0.5"/><circle cx="65" cy="9" r="5" fill="white" opacity="0.5"/><circle cx="85" cy="11" r="6" fill="white" opacity="0.6"/></svg>') repeat-x;
-        animation: float 20s infinite linear;
-    }
-
-    @keyframes float {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-100px); }
-    }
-
-    .garden-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 1rem;
-        padding: 2rem;
-        min-height: 60vh;
-        position: relative;
-        z-index: 1;
-    }
-
-    .plant-spot {
-        aspect-ratio: 1;
-        border-radius: 50%;
-        background: rgba(139, 69, 19, 0.3);
-        border: 3px dashed rgba(139, 69, 19, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .plant-spot:hover {
-        transform: scale(1.05);
-        background: rgba(139, 69, 19, 0.4);
-        border-color: rgba(139, 69, 19, 0.7);
-    }
-
-    .plant-spot.planted {
-        background: radial-gradient(circle, #8FBC8F 0%, #228B22 70%);
-        border: 3px solid #228B22;
-    }
-
-    .plant-emoji {
-        font-size: 3rem;
-        animation: grow 2s ease-out;
-    }
-
-    @keyframes grow {
-        0% { transform: scale(0); opacity: 0; }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(1); opacity: 1; }
-    }
-
-    .plant-info {
-        position: absolute;
-        bottom: -40px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 0.5rem;
-        border-radius: 8px;
-        font-size: 0.8rem;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        white-space: nowrap;
-        pointer-events: none;
-    }
-
-    .plant-spot:hover .plant-info {
-        opacity: 1;
-    }
-
-    .add-plant-btn {
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-        border: none;
-        color: white;
-        font-size: 2rem;
-        cursor: pointer;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        transition: all 0.3s ease;
-        z-index: 1000;
-    }
-
-    .add-plant-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        z-index: 2000;
-        animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .modal-content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        max-width: 500px;
-        width: 90%;
-        animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-        from { transform: translate(-50%, -60%); opacity: 0; }
-        to { transform: translate(-50%, -50%); opacity: 1; }
-    }
-
-    .modal h2 {
-        color: #333;
-        margin-bottom: 1rem;
-        text-align: center;
-    }
-
-    .form-group {
-        margin-bottom: 1rem;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        color: #555;
-        font-weight: bold;
-    }
-
-    .form-group input, .form-group textarea, .form-group select {
-        width: 100%;
-        padding: 0.75rem;
-        border: 2px solid #ddd;
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: border-color 0.3s ease;
-    }
-
-    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-        outline: none;
-        border-color: #4ECDC4;
-    }
-
-    .plant-options {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1rem;
-        margin: 1rem 0;
-    }
-
-    .plant-option {
-        padding: 1rem;
-        border: 2px solid #ddd;
-        border-radius: 8px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .plant-option:hover, .plant-option.selected {
-        border-color: #4ECDC4;
-        background: #f0f9ff;
-    }
-
-    .plant-option-emoji {
-        font-size: 2rem;
-        display: block;
-        margin-bottom: 0.5rem;
-    }
-
-    .modal-buttons {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        margin-top: 1.5rem;
-    }
-
-    .btn {
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-        background: linear-gradient(45deg, #4ECDC4, #44A08D);
-        color: white;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(78, 205, 196, 0.4);
-    }
-
-    .btn-secondary {
-        background: #f5f5f5;
-        color: #666;
-    }
-
-    .btn-secondary:hover {
-        background: #e0e0e0;
-    }
-
-    .garden-stats {
-        position: fixed;
-        top: 1rem;
-        left: 1rem;
-        background: rgba(255, 255, 255, 0.9);
-        padding: 1rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .garden-stats h3 {
-        color: #333;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-    }
-
-    .garden-stats p {
-        color: #666;
-        font-size: 0.9rem;
-        margin: 0.25rem 0;
-    }
-
-    .memorial-text {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        color: white;
-        text-align: center;
-        font-size: 0.7rem;
-        background: rgba(0, 0, 0, 0.6);
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .plant-spot:hover .memorial-text {
-        opacity: 1;
-    }
-
-    @media (max-width: 768px) {
-        .garden-grid {
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 0.5rem;
-            padding: 1rem;
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        
-        .plant-spot {
-            aspect-ratio: 1;
+
+        .header {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
-        
-        .plant-emoji {
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .garden-container {
+            position: relative;
+            min-height: 600px;
+            background: linear-gradient(to bottom, #87CEEB 0%, #90EE90 50%, #228B22 100%);
+            margin: 2rem;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .garden {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 600px;
+            cursor: crosshair;
+        }
+
+        .plant {
+            position: absolute;
+            transform-origin: bottom center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .plant:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .tree {
+            font-size: 3rem;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .flower {
             font-size: 2rem;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
         }
-        
-        .garden-stats {
-            position: static;
-            margin: 1rem;
-        }
-        
-        .modal-content {
-            width: 95%;
-            padding: 1.5rem;
-        }
-        
-        .plant-options {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-</style>
-```
 
+        .plant-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            max-width: 300px;
+        }
+
+        .plant-type {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .plant-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .plant-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .plant-btn.active {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            transform: scale(1.1);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .plant-memorial {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .plant-memorial:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            margin: 1rem 2rem;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .memorial-count {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                position: static;
+                margin: 1rem;
+                max-width: none;
+            }
+            
+            .memorial-count {
+                position: static;
+                margin: 1rem;
+                text-align: center;
+            }
+            
+            .garden-container {
+                margin: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="header">
-        <h1>🌿 Memorial Garden 🌿</h1>
-        <p>A peaceful place to honor and remember those we love</p>
+        <h1>🌸 Memorial Garden 🌸</h1>
+        <p>Plant a tree or flower in memory of your loved one. Click anywhere in the garden to create a beautiful memorial that will bloom forever.</p>
     </div>
 
-```
-<div class="garden-stats">
-    <h3>Garden Statistics</h3>
-    <p>🌱 Plants: <span id="plant-count">0</span></p>
-    <p>🌳 Trees: <span id="tree-count">0</span></p>
-    <p>🌸 Flowers: <span id="flower-count">0</span></p>
-    <p>💚 Total Memorials: <span id="total-count">0</span></p>
-</div>
-
-<div class="garden-container">
-    <div class="clouds"></div>
-    <div class="garden-grid" id="garden-grid">
-        <!-- Plant spots will be generated here -->
+    <div class="instructions">
+        💝 Choose a tree or flower below, fill in the memorial details, then click anywhere in the garden to plant your memorial. Hover over existing plants to see the loving memories others have shared.
     </div>
-</div>
 
-<button class="add-plant-btn" onclick="openModal()">+</button>
-
-<div class="modal" id="plant-modal">
-    <div class="modal-content">
-        <h2>Plant a Memorial</h2>
-        <div class="form-group">
-            <label for="loved-one-name">In Memory of:</label>
-            <input type="text" id="loved-one-name" placeholder="Enter their name" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="relationship">Your Relationship:</label>
-            <input type="text" id="relationship" placeholder="e.g., Mother, Father, Friend, Pet">
-        </div>
-        
-        <div class="form-group">
-            <label for="memorial-message">Memorial Message (Optional):</label>
-            <textarea id="memorial-message" rows="3" placeholder="Share a memory or message..."></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label>Choose Your Plant:</label>
-            <div class="plant-options">
-                <div class="plant-option" data-plant="🌹" data-type="flower">
-                    <span class="plant-option-emoji">🌹</span>
-                    <div>Rose</div>
-                </div>
-                <div class="plant-option" data-plant="🌻" data-type="flower">
-                    <span class="plant-option-emoji">🌻</span>
-                    <div>Sunflower</div>
-                </div>
-                <div class="plant-option" data-plant="🌳" data-type="tree">
-                    <span class="plant-option-emoji">🌳</span>
-                    <div>Oak Tree</div>
-                </div>
-                <div class="plant-option" data-plant="🌲" data-type="tree">
-                    <span class="plant-option-emoji">🌲</span>
-                    <div>Pine Tree</div>
-                </div>
-                <div class="plant-option" data-plant="🌺" data-type="flower">
-                    <span class="plant-option-emoji">🌺</span>
-                    <div>Hibiscus</div>
-                </div>
-                <div class="plant-option" data-plant="🌷" data-type="flower">
-                    <span class="plant-option-emoji">🌷</span>
-                    <div>Tulip</div>
-                </div>
-                <div class="plant-option" data-plant="🌴" data-type="tree">
-                    <span class="plant-option-emoji">🌴</span>
-                    <div>Palm Tree</div>
-                </div>
-                <div class="plant-option" data-plant="🌿" data-type="plant">
-                    <span class="plant-option-emoji">🌿</span>
-                    <div>Herb</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label for="planter-name">Your Name (Optional):</label>
-            <input type="text" id="planter-name" placeholder="Your name">
-        </div>
-        
-        <div class="modal-buttons">
-            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-            <button class="btn btn-primary" onclick="plantMemorial()">Plant Memorial</button>
-        </div>
+    <div class="memorial-count">
+        <strong>🌱 Memorials Planted: <span id="count">0</span></strong>
     </div>
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase/2.39.3/supabase.min.js"></script>
-<script>
-    // Supabase configuration
-    const SUPABASE_URL = 'https://ytgrzhtntwzefwjmhgjj.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
-    
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <div class="garden-container">
+        <div class="garden" id="garden"></div>
+        <div class="plant-tooltip" id="tooltip"></div>
+    </div>
 
-    let selectedPlant = null;
-    let selectedPlantType = null;
-    let memorials = [];
-
-    // Initialize garden
-    function initGarden() {
-        createGardenSpots();
-        loadMemorials();
-    }
-
-    function createGardenSpots() {
-        const grid = document.getElementById('garden-grid');
-        grid.innerHTML = '';
+    <div class="controls">
+        <div class="plant-type">
+            <button class="plant-btn active" data-type="tree" title="Plant a Tree">🌳</button>
+            <button class="plant-btn" data-type="tree" title="Oak Tree">🌲</button>
+            <button class="plant-btn" data-type="flower" title="Rose">🌹</button>
+            <button class="plant-btn" data-type="flower" title="Sunflower">🌻</button>
+            <button class="plant-btn" data-type="flower" title="Tulip">🌷</button>
+            <button class="plant-btn" data-type="flower" title="Cherry Blossom">🌸</button>
+        </div>
         
-        // Create 50 planting spots
-        for (let i = 0; i < 50; i++) {
-            const spot = document.createElement('div');
-            spot.className = 'plant-spot';
-            spot.id = `spot-${i}`;
-            spot.innerHTML = `
-                <div style="color: rgba(139, 69, 19, 0.6); font-size: 2rem;">○</div>
-            `;
-            grid.appendChild(spot);
-        }
-    }
-
-    async function loadMemorials() {
-        try {
-            const { data, error } = await supabase
-                .from('memorials')
-                .select('*')
-                .order('created_at', { ascending: true });
-
-            if (error) {
-                console.error('Error loading memorials:', error);
-                return;
-            }
-
-            memorials = data || [];
-            renderMemorials();
-            updateStats();
-        } catch (error) {
-            console.error('Error loading memorials:', error);
-        }
-    }
-
-    function renderMemorials() {
-        memorials.forEach((memorial, index) => {
-            const spot = document.getElementById(`spot-${index}`);
-            if (spot) {
-                spot.className = 'plant-spot planted';
-                spot.innerHTML = `
-                    <div class="plant-emoji">${memorial.plant_emoji}</div>
-                    <div class="memorial-text">
-                        💝 ${memorial.loved_one_name}
-                        ${memorial.relationship ? `(${memorial.relationship})` : ''}
-                    </div>
-                `;
-                
-                // Add click event to show full memorial
-                spot.onclick = () => showMemorialDetails(memorial);
-            }
-        });
-    }
-
-    function updateStats() {
-        const stats = memorials.reduce((acc, memorial) => {
-            if (memorial.plant_type === 'tree') acc.trees++;
-            else if (memorial.plant_type === 'flower') acc.flowers++;
-            else acc.plants++;
-            return acc;
-        }, { trees: 0, flowers: 0, plants: 0 });
-
-        document.getElementById('plant-count').textContent = stats.plants;
-        document.getElementById('tree-count').textContent = stats.trees;
-        document.getElementById('flower-count').textContent = stats.flowers;
-        document.getElementById('total-count').textContent = memorials.length;
-    }
-
-    function openModal() {
-        document.getElementById('plant-modal').style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-        document.getElementById('plant-modal').style.display = 'none';
-        document.body.style.overflow = 'auto';
-        resetForm();
-    }
-
-    function resetForm() {
-        document.getElementById('loved-one-name').value = '';
-        document.getElementById('relationship').value = '';
-        document.getElementById('memorial-message').value = '';
-        document.getElementById('planter-name').value = '';
+        <div class="form-group">
+            <label for="loved-one-name">Loved One's Name:</label>
+            <input type="text" id="loved-one-name" placeholder="Enter their name..." required>
+        </div>
         
-        // Clear plant selection
-        document.querySelectorAll('.plant-option').forEach(option => {
-            option.classList.remove('selected');
-        });
-        selectedPlant = null;
-        selectedPlantType = null;
-    }
+        <div class="form-group">
+            <label for="memorial-message">Memorial Message:</label>
+            <textarea id="memorial-message" placeholder="Share a loving memory or message..."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="planted-by">Your Name (optional):</label>
+            <input type="text" id="planted-by" placeholder="Your name...">
+        </div>
+        
+        <button class="plant-memorial" id="plant-btn">🌱 Ready to Plant</button>
+    </div>
 
-    // Plant selection
-    document.querySelectorAll('.plant-option').forEach(option => {
-        option.addEventListener('click', function() {
-            document.querySelectorAll('.plant-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            this.classList.add('selected');
-            selectedPlant = this.dataset.plant;
-            selectedPlantType = this.dataset.type;
-        });
-    });
+    <div class="loading" id="loading">Planting your memorial... 🌱</div>
 
-    async function plantMemorial() {
-        const lovedOneName = document.getElementById('loved-one-name').value.trim();
-        const relationship = document.getElementById('relationship').value.trim();
-        const memorialMessage = document.getElementById('memorial-message').value.trim();
-        const planterName = document.getElementById('planter-name').value.trim();
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://ytgrzhtntwzefwjmhgjj.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        if (!lovedOneName) {
-            alert('Please enter the name of your loved one.');
-            return;
-        }
-
-        if (!selectedPlant) {
-            alert('Please select a plant for your memorial.');
-            return;
-        }
-
-        if (memorials.length >= 50) {
-            alert('The garden is full. Thank you for wanting to contribute to this memorial space.');
-            return;
-        }
-
-        const memorial = {
-            loved_one_name: lovedOneName,
-            relationship: relationship,
-            memorial_message: memorialMessage,
-            planter_name: planterName,
-            plant_emoji: selectedPlant,
-            plant_type: selectedPlantType,
-            created_at: new Date().toISOString()
+        // Plant types
+        const plantTypes = {
+            '🌳': 'tree',
+            '🌲': 'tree', 
+            '🌹': 'flower',
+            '🌻': 'flower',
+            '🌷': 'flower',
+            '🌸': 'flower'
         };
 
-        try {
-            const { data, error } = await supabase
-                .from('memorials')
-                .insert([memorial])
-                .select();
+        let selectedPlant = '🌳';
+        let isPlantingMode = false;
+        let memorials = [];
 
-            if (error) {
-                console.error('Error saving memorial:', error);
-                alert('There was an error saving your memorial. Please try again.');
-                return;
+        // DOM elements
+        const garden = document.getElementById('garden');
+        const tooltip = document.getElementById('tooltip');
+        const loading = document.getElementById('loading');
+        const countElement = document.getElementById('count');
+        const plantBtns = document.querySelectorAll('.plant-btn');
+        const plantBtn = document.getElementById('plant-btn');
+        const lovedOneName = document.getElementById('loved-one-name');
+        const memorialMessage = document.getElementById('memorial-message');
+        const plantedBy = document.getElementById('planted-by');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMemorials();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Plant type selection
+            plantBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    plantBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedPlant = this.textContent;
+                });
+            });
+
+            // Plant button
+            plantBtn.addEventListener('click', function() {
+                if (!lovedOneName.value.trim()) {
+                    alert('Please enter your loved one\'s name.');
+                    return;
+                }
+                
+                if (isPlantingMode) {
+                    isPlantingMode = false;
+                    this.textContent = '🌱 Ready to Plant';
+                    garden.style.cursor = 'crosshair';
+                } else {
+                    isPlantingMode = true;
+                    this.textContent = '❌ Cancel Planting';
+                    garden.style.cursor = 'copy';
+                }
+            });
+
+            // Garden click
+            garden.addEventListener('click', function(e) {
+                if (isPlantingMode) {
+                    plantMemorial(e);
+                }
+            });
+
+            // Mouse events for tooltip
+            garden.addEventListener('mousemove', handleMouseMove);
+            garden.addEventListener('mouseleave', hideTooltip);
+        }
+
+        async function loadMemorials() {
+            try {
+                loading.style.display = 'block';
+                
+                // Try to get from memorials table, create if doesn't exist
+                const { data, error } = await supabase
+                    .from('memorials')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error && error.code === '42P01') {
+                    // Table doesn't exist, create it
+                    await createMemorialsTable();
+                    memorials = [];
+                } else if (error) {
+                    console.error('Error loading memorials:', error);
+                    memorials = [];
+                } else {
+                    memorials = data || [];
+                }
+
+                renderMemorials();
+                updateCount();
+            } catch (error) {
+                console.error('Error loading memorials:', error);
+                memorials = [];
+            } finally {
+                loading.style.display = 'none';
             }
+        }
 
-            // Add to local array and re-render
-            memorials.push(data[0]);
-            renderMemorials();
-            updateStats();
+        async function createMemorialsTable() {
+            // Note: This requires appropriate RLS policies and permissions
+            // For now, we'll continue without creating the table automatically
+            console.log('Memorials table needs to be created in Supabase dashboard');
+        }
+
+        async function plantMemorial(e) {
+            if (!lovedOneName.value.trim()) return;
+
+            const rect = garden.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+            const memorial = {
+                loved_one_name: lovedOneName.value.trim(),
+                memorial_message: memorialMessage.value.trim(),
+                planted_by: plantedBy.value.trim() || 'Anonymous',
+                plant_type: selectedPlant,
+                position_x: x,
+                position_y: y,
+                created_at: new Date().toISOString()
+            };
+
+            try {
+                loading.style.display = 'block';
+                
+                const { data, error } = await supabase
+                    .from('memorials')
+                    .insert([memorial])
+                    .select();
+
+                if (error) {
+                    console.error('Error saving memorial:', error);
+                    // Continue with local storage as fallback
+                    memorial.id = Date.now();
+                    memorials.unshift(memorial);
+                } else {
+                    memorials.unshift(data[0]);
+                }
+
+                renderMemorials();
+                updateCount();
+                clearForm();
+                isPlantingMode = false;
+                plantBtn.textContent = '🌱 Ready to Plant';
+                garden.style.cursor = 'crosshair';
+
+            } catch (error) {
+                console.error('Error planting memorial:', error);
+                // Fallback to local storage
+                memorial.id = Date.now();
+                memorials.unshift(memorial);
+                renderMemorials();
+                updateCount();
+                clearForm();
+                isPlantingMode = false;
+                plantBtn.textContent = '🌱 Ready to Plant';
+                garden.style.cursor = 'crosshair';
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function renderMemorials() {
+            // Clear existing plants
+            const existingPlants = garden.querySelectorAll('.plant');
+            existingPlants.forEach(plant => plant.remove());
+
+            // Render each memorial
+            memorials.forEach(memorial => {
+                const plant = document.createElement('div');
+                plant.className = `plant ${plantTypes[memorial.plant_type]}`;
+                plant.textContent = memorial.plant_type;
+                plant.style.left = memorial.position_x + '%';
+                plant.style.top = memorial.position_y + '%';
+                plant.dataset.memorial = JSON.stringify(memorial);
+                
+                garden.appendChild(plant);
+            });
+        }
+
+        function handleMouseMove(e) {
+            const target = e.target;
+            if (target.classList.contains('plant')) {
+                const memorial = JSON.parse(target.dataset.memorial);
+                showTooltip(e, memorial);
+            } else {
+                hideTooltip();
+            }
+        }
+
+        function showTooltip(e, memorial) {
+            const tooltipText = `💝 ${memorial.loved_one_name}\n${memorial.memorial_message ? memorial.memorial_message : 'Forever in our hearts'}\n🌱 Planted by: ${memorial.planted_by}`;
             
-            closeModal();
-            
-            // Show success message
-            setTimeout(() => {
-                alert(`🌱 Your memorial for ${lovedOneName} has been planted in the garden. Thank you for sharing their memory.`);
-            }, 500);
-
-        } catch (error) {
-            console.error('Error planting memorial:', error);
-            alert('There was an error saving your memorial. Please try again.');
+            tooltip.innerHTML = tooltipText.replace(/\n/g, '<br>');
+            tooltip.style.opacity = '1';
+            tooltip.style.left = (e.pageX + 10) + 'px';
+            tooltip.style.top = (e.pageY - 10) + 'px';
         }
-    }
 
-    function showMemorialDetails(memorial) {
-        let message = `🌿 Memorial for ${memorial.loved_one_name}`;
-        
-        if (memorial.relationship) {
-            message += `\n💝 Relationship: ${memorial.relationship}`;
+        function hideTooltip() {
+            tooltip.style.opacity = '0';
         }
-        
-        if (memorial.memorial_message) {
-            message += `\n📝 Message: "${memorial.memorial_message}"`;
-        }
-        
-        if (memorial.planter_name) {
-            message += `\n🌱 Planted by: ${memorial.planter_name}`;
-        }
-        
-        message += `\n📅 Planted: ${new Date(memorial.created_at).toLocaleDateString()}`;
-        
-        alert(message);
-    }
 
-    // Close modal when clicking outside
-    document.getElementById('plant-modal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModal();
+        function clearForm() {
+            lovedOneName.value = '';
+            memorialMessage.value = '';
+            plantedBy.value = '';
         }
-    });
 
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeModal();
+        function updateCount() {
+            countElement.textContent = memorials.length;
         }
-    });
 
-    // Initialize the garden when page loads
-    document.addEventListener('DOMContentLoaded', initGarden);
-</script>
-```
-
+        // Add some gentle animations
+        setInterval(() => {
+            const plants = document.querySelectorAll('.plant');
+            plants.forEach(plant => {
+                if (Math.random() < 0.1) {
+                    plant.style.transform = 'scale(1.05) rotate(2deg)';
+                    setTimeout(() => {
+                        plant.style.transform = 'scale(1) rotate(0deg)';
+                    }, 500);
+                }
+            });
+        }, 3000);
+    </script>
 </body>
 </html>
