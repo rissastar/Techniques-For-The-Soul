@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Your Safe Space</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Georgia', serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        transition: background 0.5s ease;
+        color: white;
+        overflow-x: hidden;
+    }
+
+    .container {
+        max-width: 1200px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        z-index: 1;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .welcome-message {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.2em;
+        margin-bottom: 40px;
+        line-height: 1.6;
+    }
+
+    .activities-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .activity-card {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        user-select: none;
+    }
+
+    .activity-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .activity-card h3 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+
+    .activity-card p {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        background: linear-gradient(45deg, #ff6b6b, #ffa500);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: all 0.3s ease;
+        margin: 5px;
+        user-select: none;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .breathing-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+        margin: 20px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: breathe 4s infinite;
+        font-size: 1.2em;
+        text-align: center;
+        color: white;
+        user-select: none;
+        line-height: 1.5;
+        white-space: pre-line;
+    }
+
+    @keyframes breathe {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .affirmation-display, .comfort-display {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 20px 0;
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-style: italic;
+        font-size: 1.4em;
+        line-height: 1.6;
+        user-select: none;
+    }
+
+    .color-palette {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+
+    .color-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 3px solid white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+
+    .color-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .journal-area {
+        width: 100%;
+        min-height: 150px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 10px;
+        padding: 20px;
+        font-size: 1.1em;
+        resize: vertical;
+        margin: 15px 0;
+        color: #333;
+        font-family: 'Georgia', serif;
+    }
+
+    .mood-tracker {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+
+    .mood-emoji {
+        font-size: 3em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 10px;
+        border-radius: 50%;
+        user-select: none;
+        user-drag: none;
+    }
+
+    .mood-emoji:hover {
+        transform: scale(1.2);
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .mood-emoji.selected {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+    }
+
+    .stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 2s infinite;
+    }
+
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+    }
+
+    /* Modal styles */
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(20, 20, 20, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        padding: 20px;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .modal-content {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        animation: popupFade 0.4s ease forwards;
+        color: white;
+        text-align: center;
+        position: relative;
+    }
+
+    @keyframes popupFade {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+    <h1>🌟 Your Safe Space 🌟</h1>
+    
+    <div class="welcome-message">
+        <p>Welcome to your personal sanctuary. This is a space where you can breathe, reflect, and find peace. Take your time, be gentle with yourself, and remember that you are valued and loved.</p>
+    </div>
+
+    <div class="activities-grid">
+        <!-- Breathing Exercise -->
+        <div class="activity-card" onclick="showBreathing()">
+            <h3>🫁 Mindful Breathing</h3>
+            <p>Follow the gentle rhythm to center yourself and find calm in the present moment.</p>
+            <button class="btn">Start Breathing</button>
+        </div>
+
+        <!-- Positive Affirmations -->
+        <div class="activity-card" onclick="showAffirmations()">
+            <h3>💫 Positive Affirmations</h3>
+            <p>Remind yourself of your worth with uplifting and empowering messages.</p>
+            <button class="btn">Get Affirmation</button>
+        </div>
+
+        <!-- Mood Tracker -->
+        <div class="activity-card" onclick="showMoodTracker()">
+            <h3>😊 Mood Check-in</h3>
+            <p>Acknowledge your feelings without judgment and track your emotional journey.</p>
+            <button class="btn">Check In</button>
+        </div>
+
+        <!-- Gratitude Journal -->
+        <div class="activity-card" onclick="showJournal()">
+            <h3>📝 Reflection Space</h3>
+            <p>Write down your thoughts, feelings, or things you're grateful for today.</p>
+            <button class="btn">Start Writing</button>
+        </div>
+
+        <!-- Calming Colors -->
+        <div class="activity-card" onclick="showColors()">
+            <h3>🎨 Calming Colors</h3>
+            <p>Change your environment with soothing colors that bring you peace.</p>
+            <button class="btn">Explore Colors</button>
+        </div>
+
+        <!-- Comfort Messages -->
+        <div class="activity-card" onclick="showComfort()">
+            <h3>🤗 Comfort Corner</h3>
+            <p>Receive gentle reminders and comforting messages when you need them most.</p>
+            <button class="btn">Find Comfort</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+
+<!-- Breathing Modal -->
+<div id="breathing-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Breathe with the Circle</h2>
+        <div class="breathing-circle">
+            Breathe In<br>Hold<br>Breathe Out
+        </div>
+        <button class="btn" onclick="closeModal()">Return to Main</button>
+    </div>
+</div>
+
+<!-- Affirmations Modal -->
+<div id="affirmations-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Your Daily Affirmation</h2>
+        <div class="affirmation-display" id="affirmation-text">
+            Click the button below to receive your affirmation
+        </div>
+        <button class="btn" onclick="newAffirmation()">New Affirmation</button>
+        <button class="btn" onclick="closeModal()">Return to Main</button>
+    </div>
+</div>
+
+<!-- Mood Modal -->
+<div id="mood-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>How are you feeling today?</h2>
+        <div class="mood-tracker">
+            <div class="mood-emoji" onclick="selectMood(this, 'amazing')">🤩</div>
+            <div class="mood-emoji" onclick="selectMood(this, 'happy')">😊</div>
+            <div class="mood-emoji" onclick="selectMood(this, 'okay')">😐</div>
+            <div class="mood-emoji" onclick="selectMood(this, 'sad')">😢</div>
+            <div class="mood-emoji" onclick="selectMood(this, 'stressed')">😰</div>
+        </div>
+        <div id="mood-message" style="margin: 20px 0; font-size: 1.2em;"></div>
+        <button class="btn" onclick="closeModal()">Return to Main</button>
+    </div>
+</div>
+
+<!-- Journal Modal -->
+<div id="journal-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Your Reflection Space</h2>
+        <textarea class="journal-area" placeholder="Write your thoughts, feelings, or gratitude here... Remember, this is your safe space to express yourself freely."></textarea>
+        <div>
+            <button class="btn" onclick="clearJournal()">Clear Text</button>
+            <button class="btn" onclick="closeModal()">Return to Main</button>
+        </div>
+    </div>
+</div>
+
+<!-- Colors Modal -->
+<div id="colors-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Choose Your Calming Color</h2>
+        <div class="color-palette">
+            <div class="color-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="changeBackground('linear-gradient(135deg, #667eea 0%, #764ba2 100%)')"></div>
+            <div class="color-btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" onclick="changeBackground('linear-gradient(135deg, #f093fb 0%, #f5576c 100%)')"></div>
+            <div class="color-btn" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" onclick="changeBackground('linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)')"></div>
+            <div class="color-btn" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);" onclick="changeBackground('linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)')"></div>
+            <div class="color-btn" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);" onclick="changeBackground('linear-gradient(135deg, #fa709a 0%, #fee140 100%)')"></div>
+            <div class="color-btn" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);" onclick="changeBackground('linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)')"></div>
+        </div>
+        <button class="btn" onclick="closeModal()">Return to Main</button>
+    </div>
+</div>
+
+<!-- Comfort Modal -->
+<div id="comfort-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Comfort Corner</h2>
+        <div class="affirmation-display" id="comfort-text">
+            Click below for a comforting message
+        </div>
+        <button class="btn" onclick="newComfortMessage()">New Message</button>
+        <button class="btn" onclick="closeModal()">Return to Main</button>
+    </div>
+</div>
+
+<script>
+    // Create stars background
+    function createStars() {
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starsContainer.appendChild(star);
+        }
+    }
+
+    // Affirmations array
+    const affirmations = [
+        "You are stronger than you know and braver than you feel.",
+        "Your feelings are valid, and it's okay to take time to process them.",
+        "You deserve love, kindness, and compassion - especially from yourself.",
+        "Every small step forward is progress worth celebrating.",
+        "You have survived 100% of your difficult days so far.",
+        "Your worth is not determined by your productivity or achievements.",
+        "It's okay to rest, to pause, and to take care of yourself.",
+        "You are enough, exactly as you are in this moment.",
+        "Your presence in this world makes a difference.",
+        "You are allowed to take up space and have your needs met.",
+        "Healing is not linear, and that's perfectly okay.",
+        "You are worthy of patience, especially from yourself."
+    ];
+
+    // Comfort messages array
+    const comfortMessages = [
+        "It's okay to not be okay. Your feelings are heard and respected here.",
+        "You're not alone in this journey. Take it one breath at a time.",
+        "This feeling will pass. You have weathered storms before.",
+        "Be gentle with yourself today. You're doing the best you can.",
+        "Your struggles don't define you. Your resilience does.",
+        "It's okay to ask for help. It's okay to need support.",
+        "You matter deeply, even when it feels hard to believe.",
+        "Take a moment to breathe and remind yourself: You are loved.",
+        "Small steps are still steps forward. Keep moving gently.",
+        "You are worthy of kindness and care, from others and yourself."
+    ];
+
+    function newAffirmation() {
+        const index = Math.floor(Math.random() * affirmations.length);
+        document.getElementById('affirmation-text').textContent = affirmations[index];
+    }
+
+    function newComfortMessage() {
+        const index = Math.floor(Math.random() * comfortMessages.length);
+        document.getElementById('comfort-text').textContent = comfortMessages[index];
+    }
+
+    function changeBackground(gradient) {
+        document.body.style.background = gradient;
+    }
+
+    // Modal control functions
+    function openModal(modalId) {
+        closeModal();
+        document.getElementById(modalId).classList.add('active');
+    }
+
+    function closeModal() {
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.classList.remove('active');
+        });
+        // Clear mood message and selections when closing mood modal
+        clearMoodSelection();
+        document.getElementById('mood-message').textContent = '';
+    }
+
+    // Show modal triggers
+    function showBreathing() {
+        openModal('breathing-modal');
+    }
+    function showAffirmations() {
+        openModal('affirmations-modal');
+        newAffirmation();
+    }
+    function showMoodTracker() {
+        openModal('mood-modal');
+    }
+    function showJournal() {
+        openModal('journal-modal');
+    }
+    function showColors() {
+        openModal('colors-modal');
+    }
+    function showComfort() {
+        openModal('comfort-modal');
+        newComfortMessage();
+    }
+
+    // Mood tracker logic
+    function selectMood(element, mood) {
+        clearMoodSelection();
+        element.classList.add('selected');
+
+        const moodMessage = {
+            amazing: "You're feeling amazing! Keep shining your light.",
+            happy: "You're happy! Celebrate these good moments.",
+            okay: "It's okay to have just an okay day. You're doing fine.",
+            sad: "Feeling sad is part of healing. Be kind to yourself.",
+            stressed: "Stressful moments will pass. Take deep breaths."
+        };
+
+        document.getElementById('mood-message').textContent = moodMessage[mood] || '';
+    }
+
+    function clearMoodSelection() {
+        document.querySelectorAll('.mood-emoji').forEach(e => e.classList.remove('selected'));
+    }
+
+    // Clear journal text
+    function clearJournal() {
+        document.querySelector('.journal-area').value = '';
+    }
+
+    // Close modal when clicking outside content
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    });
+
+    // Initialize stars on load
+    window.onload = () => {
+        createStars();
+    };
+</script>
+
+</body>
+</html>
