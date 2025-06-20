@@ -14,28 +14,15 @@
       color:#fff; min-height:100vh; overflow-x:hidden;
     }
 
-    /* Animated Star Background */
-    .stars {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
+    /* Animated Star Layers */
+    #stars, #stars2, #stars3 {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background-repeat:repeat; pointer-events:none; z-index:-1;
     }
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: #fff;
-      border-radius: 50%;
-      animation: twinkle 3s infinite alternate;
-    }
-    @keyframes twinkle {
-      0% { opacity: 0.3; }
-      100% { opacity: 1; }
-    }
+    #stars { background:url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars.png'); animation:moveStars 200s linear infinite; opacity:0.6; }
+    #stars2{ background:url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars2.png'); animation:moveStars 400s linear infinite; opacity:0.4; }
+    #stars3{ background:url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars3.png'); animation:moveStars 800s linear infinite; opacity:0.2; }
+    @keyframes moveStars { from{transform:translateY(0);} to{transform:translateY(-10000px);} }
 
     /* Header */
     header {
@@ -46,11 +33,6 @@
     header h1 {
       font-size:3rem; font-weight:700; letter-spacing:2px;
       color:#aaddff; text-shadow:0 0 14px #77aaff;
-      margin-bottom: 0.5rem;
-    }
-    .subtitle {
-      font-size: 1.1rem; color: #99ccee; margin-bottom: 1rem;
-      font-weight: 400;
     }
     #lang-toggle {
       margin-top:1rem; padding:0.6rem 1.4rem;
@@ -59,38 +41,6 @@
       cursor:pointer; font-weight:600; transition:0.3s;
     }
     #lang-toggle:hover { background:#77aaff; color:#0f1123; }
-
-    /* Emergency Banner */
-    .emergency-banner {
-      background: linear-gradient(135deg, #ff4444, #cc3333);
-      padding: 1rem;
-      text-align: center;
-      margin-bottom: 2rem;
-      border-radius: 8px;
-      border: 2px solid #ff6666;
-    }
-    .emergency-banner h3 {
-      margin-bottom: 0.5rem;
-      font-size: 1.3rem;
-    }
-    .emergency-links {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .emergency-links a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      background: rgba(255,255,255,0.2);
-      border-radius: 20px;
-      transition: 0.3s;
-    }
-    .emergency-links a:hover {
-      background: rgba(255,255,255,0.3);
-    }
 
     /* Main Sections */
     main { max-width:1200px; margin:3rem auto; padding:0 1rem; }
@@ -103,66 +53,38 @@
     /* Resources Grid */
     .resources-list {
       list-style:none; display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
       gap:1rem;
     }
-    .resource-card {
+    .resources-list a {
+      display:block; padding:1rem;
       background:rgba(119,170,255,0.15);
-      border-radius:12px; padding:1.2rem;
-      transition:0.3s; border: 1px solid rgba(119,170,255,0.3);
+      border-radius:10px; text-align:center;
+      color:#fff; font-weight:600;
+      text-decoration:none; transition:0.3s;
     }
-    .resource-card:hover { 
-      background:rgba(119,170,255,0.25); 
-      transform: translateY(-2px);
-    }
-    .resource-card h4 {
-      color: #aaddff;
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-    }
-    .resource-card p {
-      margin-bottom: 0.8rem;
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
-    .resource-card a {
-      color:#77aaff; text-decoration:none; font-weight:600;
-      padding: 0.4rem 0.8rem;
-      background: rgba(119,170,255,0.2);
-      border-radius: 6px;
-      display: inline-block;
-      transition: 0.3s;
-    }
-    .resource-card a:hover { 
-      background: rgba(119,170,255,0.4);
-      color: #fff;
-    }
+    .resources-list a:hover { background:rgba(119,170,255,0.4); }
 
     /* Subject Cards Grid */
     .subject-grid {
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:1.2rem;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:1rem;
     }
     .subject-card {
       background:linear-gradient(135deg,#225588,#5577aa);
-      padding:1.5rem; border-radius:12px;
-      box-shadow:0 4px 15px rgba(0,0,0,0.3);
+      padding:1.2rem; border-radius:12px;
+      box-shadow:0 0 15px rgba(0,0,0,0.5);
       cursor:pointer; transition:0.3s;
-      border: 1px solid rgba(255,255,255,0.1);
     }
     .subject-card:hover {
       transform:translateY(-5px);
-      box-shadow:0 8px 25px rgba(0,0,0,0.4);
+      box-shadow:0 0 25px rgba(0,0,0,0.3);
     }
     .subject-card h3 {
-      margin-bottom:0.8rem; font-size:1.3rem; font-weight:600;
-      color: #fff;
+      margin-bottom:0.6rem; font-size:1.2rem; font-weight:600;
     }
-    .subject-card p { 
-      font-size:0.95rem; opacity:0.9; 
-      line-height: 1.4;
-    }
+    .subject-card p { font-size:0.95rem; opacity:0.9; }
 
     /* Modal Styles */
     .modal-overlay {
@@ -173,136 +95,101 @@
     }
     .modal-overlay.active { display:flex; }
     .modal {
-      background:#112240; padding:2rem;
-      border-radius:12px; max-width:700px; width:100%;
+      background:#112240; padding:1.6rem;
+      border-radius:12px; max-width:600px; width:100%;
       max-height:85vh; overflow-y:auto; position:relative;
       color:#ddeeff; outline:none;
-      border: 1px solid rgba(119,170,255,0.3);
     }
     .modal h3 {
-      margin-top:0; margin-bottom:1.2rem;
-      color:#aaddff; font-size:1.6rem;
+      margin-top:0; margin-bottom:1rem;
+      color:#aaddff; font-size:1.5rem;
     }
-    .modal p, .modal ul { margin-bottom:1.2rem; line-height:1.6; }
-    .modal ul { padding-left:1.5rem; }
-    .modal li { margin-bottom: 0.5rem; }
+    .modal p, .modal ul { margin-bottom:1rem; line-height:1.5; }
+    .modal ul { padding-left:1.2rem; }
     .modal a {
-      color:#77aaff; font-weight:600; text-decoration:none;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      transition: 0.3s;
+      color:#aaddff; font-weight:600; text-decoration:underline;
     }
-    .modal a:hover { 
-      background: rgba(119,170,255,0.2);
-      color: #aaddff; 
-    }
+    .modal a:hover { color:#77aaff; }
     .modal-close {
-      position:absolute; top:1rem; right:1.2rem;
-      background:none; border:none; font-size:1.8rem;
-      color:#aaddff; cursor:pointer; padding: 0.2rem;
+      position:absolute; top:0.8rem; right:1rem;
+      background:none; border:none; font-size:1.5rem;
+      color:#aaddff; cursor:pointer;
     }
-    .modal-close:hover { color: #77aaff; }
 
     /* Footer */
     footer {
-      text-align:center; padding:2rem 1rem;
+      text-align:center; padding:1.5rem 1rem;
       background:rgba(0,0,0,0.7); backdrop-filter:blur(8px);
-      font-size:0.9rem; margin-top: 3rem;
+      font-size:0.9rem;
     }
     footer a {
-      color:#77aaff; margin:0 0.8rem; text-decoration:none;
+      color:#77aaff; margin:0 0.5rem; text-decoration:none;
       font-weight:600;
     }
     footer a:hover { text-decoration:underline; }
 
     @media(max-width:600px){
       header h1 { font-size:2.2rem; }
-      .subtitle { font-size: 1rem; }
       #lang-toggle { padding:0.5rem 1rem; }
       section h2 { font-size:1.8rem; }
-      .emergency-links { flex-direction: column; align-items: center; }
-      .modal { padding: 1.5rem; }
     }
   </style>
 </head>
 <body>
-  <div class="stars" id="stars"></div>
+  <div id="stars"></div>
+  <div id="stars2"></div>
+  <div id="stars3"></div>
 
   <header>
-    <h1 data-en="✨ Techniques For The Soul ✨" data-fr="✨ Techniques Pour L'Âme ✨">
+    <h1 data-en="✨ Techniques For The Soul ✨" data-fr="✨ Techniques Pour L’Âme ✨">
       ✨ Techniques For The Soul ✨
     </h1>
-    <p class="subtitle" data-en="Mental Health Resources & Support" data-fr="Ressources et soutien en santé mentale">
-      Mental Health Resources & Support
-    </p>
     <button id="lang-toggle">Français</button>
   </header>
 
   <main>
-    <!-- Emergency Resources -->
-    <div class="emergency-banner">
-      <h3 data-en="🚨 Need Help Now? 🚨" data-fr="🚨 Besoin d'aide maintenant? 🚨">
-        🚨 Need Help Now? 🚨
-      </h3>
-      <div class="emergency-links">
-        <a href="tel:988" data-en="Call 988 (US Crisis)" data-fr="Appeler 988 (Crise US)">Call 988 (US Crisis)</a>
-        <a href="tel:1-833-456-4566" data-en="Call 1-833-456-4566 (Canada)" data-fr="Appeler 1-833-456-4566 (Canada)">Call 1-833-456-4566 (Canada)</a>
-        <a href="https://suicidepreventionlifeline.org/chat/" target="_blank" data-en="Chat Online" data-fr="Clavardage en ligne">Chat Online</a>
-      </div>
-    </div>
-
-    <!-- Key Resources Section -->
+    <!-- Resources Section -->
     <section>
-      <h2 data-en="Essential Resources" data-fr="Ressources essentielles">
-        Essential Resources
+      <h2 data-en="Resources – Canada & US" data-fr="Ressources – Canada & États-Unis">
+        Resources – Canada & US
       </h2>
       <ul class="resources-list">
-        <li class="resource-card">
-          <h4 data-en="Crisis Text Line" data-fr="Ligne de texte de crise">Crisis Text Line</h4>
-          <p data-en="Text HOME to 741741 for crisis support" data-fr="Textez ACCUEIL au 741741 pour soutien de crise">Text HOME to 741741 for crisis support</p>
-          <a href="https://www.crisistextline.org/" target="_blank" data-en="Visit Website" data-fr="Visiter le site">Visit Website</a>
+        <li>
+          <a href="https://www.canada.ca/en/public-health/services/mental-health-services/mental-health-contacts.html" target="_blank" data-en="Canadian Mental Health Contacts" data-fr="Contacts santé mentale Canada">
+            Canadian Mental Health Contacts
+          </a>
         </li>
-        <li class="resource-card">
-          <h4 data-en="NAMI (US)" data-fr="NAMI (États-Unis)">NAMI (US)</h4>
-          <p data-en="National Alliance on Mental Illness - advocacy, education, support" data-fr="Alliance nationale sur la maladie mentale - défense, éducation, soutien">National Alliance on Mental Illness - advocacy, education, support</p>
-          <a href="https://www.nami.org/" target="_blank" data-en="Visit Website" data-fr="Visiter le site">Visit Website</a>
+        <li>
+          <a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank" data-en="US SAMHSA National Helpline" data-fr="Ligne SAMHSA (US)">
+            US SAMHSA National Helpline
+          </a>
         </li>
-        <li class="resource-card">
-          <h4 data-en="CMHA (Canada)" data-fr="ACSM (Canada)">CMHA (Canada)</h4>
-          <p data-en="Canadian Mental Health Association - nationwide mental health support" data-fr="Association canadienne pour la santé mentale - soutien national">Canadian Mental Health Association - nationwide mental health support</p>
-          <a href="https://cmha.ca/" target="_blank" data-en="Visit Website" data-fr="Visiter le site">Visit Website</a>
+        <li>
+          <a href="https://www.crisisservicescanada.ca/en/" target="_blank" data-en="Crisis Services Canada" data-fr="Services de crise Canada">
+            Crisis Services Canada
+          </a>
         </li>
-        <li class="resource-card">
-          <h4 data-en="BetterHelp" data-fr="BetterHelp">BetterHelp</h4>
-          <p data-en="Online therapy platform with licensed therapists" data-fr="Plateforme de thérapie en ligne avec thérapeutes licenciés">Online therapy platform with licensed therapists</p>
-          <a href="https://www.betterhelp.com/" target="_blank" data-en="Visit Website" data-fr="Visiter le site">Visit Website</a>
-        </li>
-        <li class="resource-card">
-          <h4 data-en="MindBeacon (Canada)" data-fr="MindBeacon (Canada)">MindBeacon (Canada)</h4>
-          <p data-en="Free online mental health therapy for Canadians" data-fr="Thérapie gratuite en ligne pour les Canadiens">Free online mental health therapy for Canadians</p>
-          <a href="https://www.mindbeacon.com/" target="_blank" data-en="Visit Website" data-fr="Visiter le site">Visit Website</a>
-        </li>
-        <li class="resource-card">
-          <h4 data-en="Mental Health First Aid" data-fr="Premiers secours en santé mentale">Mental Health First Aid</h4>
-          <p data-en="Training courses to help others in mental health crises" data-fr="Cours de formation pour aider en cas de crise de santé mentale">Training courses to help others in mental health crises</p>
-          <a href="https://www.mentalhealthfirstaid.org/" target="_blank" data-en="Visit Website" data-fr="Visiter le site">Visit Website</a>
+        <li>
+          <a href="https://988lifeline.org/" target="_blank" data-en="988 Suicide & Crisis Lifeline (US)" data-fr="988 Ligne de vie (US)">
+            988 Suicide & Crisis Lifeline (US)
+          </a>
         </li>
       </ul>
     </section>
 
     <!-- Subject Cards Section -->
     <section>
-      <h2 data-en="Support by Topic" data-fr="Soutien par sujet">
-        Support by Topic
+      <h2 data-en="Information by Subject" data-fr="Informations par sujet">
+        Information by Subject
       </h2>
       <div class="subject-grid">
         <!-- Mental Health -->
         <div class="subject-card" data-key="mentalHealth">
-          <h3 data-en="Depression & Anxiety" data-fr="Dépression et anxiété">
-            Depression & Anxiety
+          <h3 data-en="Mental Health Conditions & Disorders" data-fr="Troubles de santé mentale">
+            Mental Health Conditions & Disorders
           </h3>
-          <p data-en="Resources for managing depression, anxiety, and related conditions." data-fr="Ressources pour gérer la dépression, l'anxiété et conditions connexes.">
-            Resources for managing depression, anxiety, and related conditions.
+          <p data-en="Learn about common conditions and find support." data-fr="En savoir plus et trouver du soutien.">
+            Learn about common conditions and find support.
           </p>
         </div>
         <!-- Addiction -->
@@ -310,44 +197,17 @@
           <h3 data-en="Addiction & Recovery" data-fr="Addiction et rétablissement">
             Addiction & Recovery
           </h3>
-          <p data-en="Support for substance use disorders and recovery programs." data-fr="Soutien pour troubles liés aux substances et programmes de rétablissement.">
-            Support for substance use disorders and recovery programs.
+          <p data-en="Support for substance use and recovery." data-fr="Soutien pour la consommation et le rétablissement.">
+            Support for substance use and recovery.
           </p>
         </div>
         <!-- Trauma -->
         <div class="subject-card" data-key="trauma">
-          <h3 data-en="Trauma & PTSD" data-fr="Traumatisme et PTSD">
-            Trauma & PTSD
+          <h3 data-en="Trauma & Abuse" data-fr="Traumatisme et abus">
+            Trauma & Abuse
           </h3>
-          <p data-en="Help for survivors of trauma and post-traumatic stress." data-fr="Aide pour survivants de traumatisme et stress post-traumatique.">
-            Help for survivors of trauma and post-traumatic stress.
-          </p>
-        </div>
-        <!-- Youth -->
-        <div class="subject-card" data-key="youth">
-          <h3 data-en="Youth & Teen Support" data-fr="Soutien jeunes et ados">
-            Youth & Teen Support
-          </h3>
-          <p data-en="Mental health resources specifically for young people." data-fr="Ressources de santé mentale spécifiquement pour les jeunes.">
-            Mental health resources specifically for young people.
-          </p>
-        </div>
-        <!-- LGBTQ+ -->
-        <div class="subject-card" data-key="lgbtq">
-          <h3 data-en="LGBTQ2S+ Resources" data-fr="Ressources LGBTQ2S+">
-            LGBTQ2S+ Resources
-          </h3>
-          <p data-en="Affirming support for LGBTQ2S+ individuals and families." data-fr="Soutien affirmatif pour individus et familles LGBTQ2S+.">
-            Affirming support for LGBTQ2S+ individuals and families.
-          </p>
-        </div>
-        <!-- Eating Disorders -->
-        <div class="subject-card" data-key="eating">
-          <h3 data-en="Eating Disorders" data-fr="Troubles alimentaires">
-            Eating Disorders
-          </h3>
-          <p data-en="Support for eating disorders and body image issues." data-fr="Soutien pour troubles alimentaires et image corporelle.">
-            Support for eating disorders and body image issues.
+          <p data-en="Help for healing from trauma or abuse." data-fr="Aide à la guérison de traumatisme ou abus.">
+            Help for healing from trauma or abuse.
           </p>
         </div>
         <!-- Grief -->
@@ -355,26 +215,62 @@
           <h3 data-en="Grief & Loss" data-fr="Deuil et perte">
             Grief & Loss
           </h3>
-          <p data-en="Support for coping with loss and bereavement." data-fr="Soutien pour faire face à la perte et au deuil.">
-            Support for coping with loss and bereavement.
+          <p data-en="Support for navigating grief and loss." data-fr="Soutien pour traverser le deuil et la perte.">
+            Support for navigating grief and loss.
           </p>
         </div>
-        <!-- Workplace -->
-        <div class="subject-card" data-key="workplace">
-          <h3 data-en="Workplace Mental Health" data-fr="Santé mentale au travail">
-            Workplace Mental Health
+        <!-- Youth -->
+        <div class="subject-card" data-key="youth">
+          <h3 data-en="Youth & Adolescents" data-fr="Jeunes et adolescents">
+            Youth & Adolescents
           </h3>
-          <p data-en="Resources for mental health in professional settings." data-fr="Ressources pour la santé mentale en milieu professionnel.">
-            Resources for mental health in professional settings.
+          <p data-en="Help for young people’s mental health." data-fr="Aide pour la santé mentale des jeunes.">
+            Help for young people’s mental health.
           </p>
         </div>
-        <!-- Self-Care -->
-        <div class="subject-card" data-key="selfcare">
-          <h3 data-en="Self-Care & Wellness" data-fr="Autosoins et bien-être">
-            Self-Care & Wellness
+        <!-- LGBTQ2S+ -->
+        <div class="subject-card" data-key="lgbtq">
+          <h3 data-en="LGBTQ2S+ Support" data-fr="Soutien LGBTQ2S+">
+            LGBTQ2S+ Support
           </h3>
-          <p data-en="Tools and strategies for maintaining mental wellness." data-fr="Outils et stratégies pour maintenir le bien-être mental.">
-            Tools and strategies for maintaining mental wellness.
+          <p data-en="Safe, inclusive support." data-fr="Soutien inclusif sécurisé.">
+            Safe, inclusive support.
+          </p>
+        </div>
+        <!-- Veterans -->
+        <div class="subject-card" data-key="veterans">
+          <h3 data-en="Veterans & Military Families" data-fr="Vétérans et familles militaires">
+            Veterans & Military Families
+          </h3>
+          <p data-en="Resources for veterans and their families." data-fr="Ressources pour vétérans et familles.">
+            Resources for veterans and their families.
+          </p>
+        </div>
+        <!-- Disability -->
+        <div class="subject-card" data-key="disability">
+          <h3 data-en="Chronic Illness & Disability" data-fr="Maladie chronique et handicap">
+            Chronic Illness & Disability
+          </h3>
+          <p data-en="Support for chronic conditions." data-fr="Soutien pour maladies chroniques.">
+            Support for chronic conditions.
+          </p>
+        </div>
+        <!-- Intersectionality -->
+        <div class="subject-card" data-key="intersectionality">
+          <h3 data-en="Intersectionality & Marginalized Groups" data-fr="Intersectionnalité et groupes marginalisés">
+            Intersectionality & Marginalized Groups
+          </h3>
+          <p data-en="Navigating complex identities." data-fr="Naviguer identités complexes.">
+            Navigating complex identities.
+          </p>
+        </div>
+        <!-- Wellness -->
+        <div class="subject-card" data-key="wellness">
+          <h3 data-en="Wellness & Coping Strategies" data-fr="Bien-être et stratégies d’adaptation">
+            Wellness & Coping Strategies
+          </h3>
+          <p data-en="Tools for self-care and resilience." data-fr="Outils pour l'autosoins et résilience.">
+            Tools for self-care and resilience.
           </p>
         </div>
       </div>
@@ -403,20 +299,6 @@
   </footer>
 
   <script>
-    // Generate animated stars
-    function createStars() {
-      const starsContainer = document.getElementById('stars');
-      for (let i = 0; i < 100; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.animationDelay = Math.random() * 3 + 's';
-        starsContainer.appendChild(star);
-      }
-    }
-    createStars();
-
     // Language Toggle
     const langToggle = document.getElementById('lang-toggle');
     let lang = 'en';
@@ -432,283 +314,280 @@
     });
     applyLang();
 
-    // Modal Data with working resources
+    // Modal Data
     const modalData = {
       mentalHealth: {
         en: {
-          title: "Depression & Anxiety Resources",
+          title: "Mental Health Conditions & Disorders",
           description: `
-            <p>Depression and anxiety are among the most common mental health conditions, affecting millions of people worldwide. Help is available.</p>
+            <p>Mental health conditions include anxiety, depression, bipolar disorder, schizophrenia, and more.</p>
             <ul>
-              <li><a href="https://www.nimh.nih.gov/health/topics/depression" target="_blank">NIMH Depression Information</a> - Comprehensive guide to depression</li>
-              <li><a href="https://www.nimh.nih.gov/health/topics/anxiety-disorders" target="_blank">NIMH Anxiety Disorders</a> - Understanding anxiety conditions</li>
-              <li><a href="https://www.anxietycanada.com/" target="_blank">Anxiety Canada</a> - Canadian resources for anxiety</li>
-              <li><a href="https://www.adaa.org/" target="_blank">ADAA</a> - Anxiety and Depression Association of America</li>
-              <li><a href="https://www.mooddisorders.ca/" target="_blank">Mood Disorders Society of Canada</a> - Support and information</li>
+              <li><a href="https://www.nimh.nih.gov/health/topics" target="_blank">NIMH – Mental Health Topics</a></li>
+              <li><a href="https://mhanational.org/" target="_blank">Mental Health America</a></li>
+              <li><a href="https://cmha.ca/" target="_blank">CMHA – Canadian Mental Health Association</a></li>
+              <li><a href="https://www.who.int/health-topics/mental-health" target="_blank">WHO – Mental Health</a></li>
             </ul>
           `
         },
         fr: {
-          title: "Ressources dépression et anxiété",
+          title: "Troubles de santé mentale",
           description: `
-            <p>La dépression et l'anxiété sont parmi les troubles de santé mentale les plus courants. De l'aide est disponible.</p>
+            <p>Les troubles de santé mentale comprennent l’anxiété, la dépression, le trouble bipolaire, la schizophrénie, etc.</p>
             <ul>
-              <li><a href="https://www.nimh.nih.gov/health/topics/depression" target="_blank">NIMH Information sur la dépression</a> - Guide complet</li>
-              <li><a href="https://www.anxietycanada.com/fr/" target="_blank">Anxiety Canada</a> - Ressources canadiennes pour l'anxiété</li>
-              <li><a href="https://www.mooddisorders.ca/" target="_blank">Société des troubles de l'humeur du Canada</a> - Soutien et information</li>
+              <li><a href="https://www.nimh.nih.gov/health/topics" target="_blank">NIMH – Sujets santé mentale</a></li>
+              <li><a href="https://mhanational.org/" target="_blank">Mental Health America</a></li>
+              <li><a href="https://cmha.ca/fr" target="_blank">ACSM – Association canadienne pour la santé mentale</a></li>
+              <li><a href="https://www.who.int/health-topics/mental-health" target="_blank">OMS – Santé mentale</a></li>
             </ul>
           `
         }
       },
       addiction: {
         en: {
-          title: "Addiction & Recovery Support",
+          title: "Addiction & Recovery",
           description: `
-            <p>Addiction is a treatable medical condition. Recovery is possible with the right support and resources.</p>
+            <p>Support for substance use, harm reduction, and long-term recovery.</p>
             <ul>
-              <li><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">SAMHSA National Helpline</a> - 1-800-662-4357 (24/7 treatment referral)</li>
-              <li><a href="https://www.aa.org/" target="_blank">Alcoholics Anonymous</a> - Free support groups worldwide</li>
-              <li><a href="https://www.na.org/" target="_blank">Narcotics Anonymous</a> - Support for drug addiction recovery</li>
-              <li><a href="https://www.ccsa.ca/" target="_blank">Canadian Centre on Substance Use and Addiction</a> - Canadian resources</li>
-              <li><a href="https://www.smartrecovery.org/" target="_blank">SMART Recovery</a> - Science-based addiction recovery</li>
+              <li><a href="https://www.ccsa.ca/" target="_blank">CCSA – Canadian Centre on Substance Use and Addiction</a></li>
+              <li><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">SAMHSA National Helpline</a></li>
+              <li><a href="https://nida.nih.gov/" target="_blank">NIDA – National Institute on Drug Abuse</a></li>
+              <li><a href="https://www.niaaa.nih.gov/" target="_blank">NIAAA – Alcohol Abuse & Alcoholism</a></li>
             </ul>
           `
         },
         fr: {
-          title: "Soutien addiction et rétablissement",
+          title: "Addiction et rétablissement",
           description: `
-            <p>L'addiction est une condition médicale traitable. Le rétablissement est possible avec le bon soutien.</p>
+            <p>Soutien pour la consommation de substances, réduction des méfaits et rétablissement.</p>
             <ul>
-              <li><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">SAMHSA Ligne d'aide nationale</a> - Référence de traitement 24/7</li>
-              <li><a href="https://www.aa.org/" target="_blank">Alcooliques Anonymes</a> - Groupes de soutien gratuits</li>
-              <li><a href="https://www.ccsa.ca/" target="_blank">Centre canadien sur les dépendances</a> - Ressources canadiennes</li>
+              <li><a href="https://www.ccsa.ca/" target="_blank">CCSA – Centre canadien sur l’usage de substances et l’addiction</a></li>
+              <li><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">SAMHSA National Helpline</a></li>
+              <li><a href="https://nida.nih.gov/" target="_blank">NIDA – Institut national sur la toxicomanie</a></li>
+              <li><a href="https://www.niaaa.nih.gov/" target="_blank">NIAAA – Abus d’alcool et alcoolisme</a></li>
             </ul>
           `
         }
       },
       trauma: {
         en: {
-          title: "Trauma & PTSD Resources",
+          title: "Trauma & Abuse",
           description: `
-            <p>Trauma can have lasting effects, but healing is possible with proper support and treatment.</p>
+            <p>Healing and support for survivors of trauma and abuse.</p>
             <ul>
-              <li><a href="https://www.ptsd.va.gov/" target="_blank">National Center for PTSD</a> - Comprehensive PTSD information</li>
-              <li><a href="https://www.rainn.org/" target="_blank">RAINN</a> - Sexual assault hotline: 1-800-656-4673</li>
-              <li><a href="https://www.nctsn.org/" target="_blank">National Child Traumatic Stress Network</a> - Child trauma resources</li>
-              <li><a href="https://www.thehotline.org/" target="_blank">National Domestic Violence Hotline</a> - 1-800-799-7233</li>
-              <li><a href="https://www.istss.org/" target="_blank">International Society for Traumatic Stress Studies</a> - Professional resources</li>
+              <li><a href="https://www.rainn.org/" target="_blank">RAINN – Sexual Assault Support</a></li>
+              <li><a href="https://www.nctsn.org/" target="_blank">NCTSN – Child Traumatic Stress Network</a></li>
+              <li><a href="https://www.ptsd.va.gov/" target="_blank">National Center for PTSD (US VA)</a></li>
+              <li><a href="https://ncadv.org/" target="_blank">NCADV – Domestic Violence</a></li>
             </ul>
           `
         },
         fr: {
-          title: "Ressources traumatisme et PTSD",
+          title: "Traumatisme et abus",
           description: `
-            <p>Le traumatisme peut avoir des effets durables, mais la guérison est possible avec un soutien approprié.</p>
+            <p>Guérison et soutien pour les survivants de traumatismes et d’abus.</p>
             <ul>
-              <li><a href="https://www.ptsd.va.gov/" target="_blank">Centre national pour le PTSD</a> - Information complète</li>
-              <li><a href="https://www.rainn.org/" target="_blank">RAINN</a> - Ligne d'écoute pour agression sexuelle</li>
-              <li><a href="https://www.thehotline.org/" target="_blank">Ligne d'écoute violence domestique</a> - Soutien 24/7</li>
-            </ul>
-          `
-        }
-      },
-      youth: {
-        en: {
-          title: "Youth & Teen Mental Health",
-          description: `
-            <p>Mental health challenges often begin in adolescence. Early support can make a significant difference.</p>
-            <ul>
-              <li><a href="https://kidshelpphone.ca/" target="_blank">Kids Help Phone</a> - Text CONNECT to 686868 (Canada)</li>
-              <li><a href="https://www.childmind.org/" target="_blank">Child Mind Institute</a> - Children's mental health resources</li>
-              <li><a href="https://www.jed-foundation.org/" target="_blank">The Jed Foundation</a> - Teen and young adult mental health</li>
-              <li><a href="https://www.teenline.org/" target="_blank">Teen Line</a> - Teens helping teens: 1-800-852-8336</li>
-              <li><a href="https://www.youthline.co.nz/" target="_blank">Youthline</a> - 24/7 support for young people</li>
-            </ul>
-          `
-        },
-        fr: {
-          title: "Santé mentale jeunes et ados",
-          description: `
-            <p>Les défis de santé mentale commencent souvent à l'adolescence. Un soutien précoce peut faire une grande différence.</p>
-            <ul>
-              <li><a href="https://kidshelpphone.ca/fr/" target="_blank">Jeunesse, J'écoute</a> - Textez PARLER au 686868</li>
-              <li><a href="https://www.childmind.org/" target="_blank">Child Mind Institute</a> - Ressources santé mentale enfants</li>
-              <li><a href="https://www.jed-foundation.org/" target="_blank">The Jed Foundation</a> - Santé mentale jeunes adultes</li>
-            </ul>
-          `
-        }
-      },
-      lgbtq: {
-        en: {
-          title: "LGBTQ2S+ Mental Health Support",
-          description: `
-            <p>LGBTQ2S+ individuals face unique mental health challenges. Affirming support is crucial for wellbeing.</p>
-            <ul>
-              <li><a href="https://www.thetrevorproject.org/" target="_blank">The Trevor Project</a> - Crisis support: 1-866-488-7386</li>
-              <li><a href="https://pflag.org/" target="_blank">PFLAG</a> - Support for LGBTQ+ people and families</li>
-              <li><a href="https://www.glaad.org/" target="_blank">GLAAD</a> - Media advocacy and resources</li>
-              <li><a href="https://egale.ca/" target="_blank">Egale Canada</a> - Canadian LGBTQ2S+ advocacy</li>
-              <li><a href="https://www.hrc.org/" target="_blank">Human Rights Campaign</a> - LGBTQ+ equality resources</li>
-            </ul>
-          `
-        },
-        fr: {
-          title: "Soutien santé mentale <!-- Complete the LGBTQ+ French section -->
-LGBTQ2S+",
-          description: `
-            <p>Les personnes LGBTQ2S+ font face à des défis uniques de santé mentale. Un soutien affirmatif est crucial.</p>
-            <ul>
-              <li><a href="https://www.thetrevorproject.org/" target="_blank">The Trevor Project</a> - Soutien de crise: 1-866-488-7386</li>
-              <li><a href="https://pflag.org/" target="_blank">PFLAG</a> - Soutien pour personnes et familles LGBTQ+</li>
-              <li><a href="https://egale.ca/fr/" target="_blank">Egale Canada</a> - Défense des droits LGBTQ2S+</li>
-            </ul>
-          `
-        }
-      },
-      eating: {
-        en: {
-          title: "Eating Disorders Support",
-          description: `
-            <p>Eating disorders are serious mental health conditions that require specialized treatment and support.</p>
-            <ul>
-              <li><a href="https://www.nationaleatingdisorders.org/" target="_blank">National Eating Disorders Association</a> - Screening tool and resources</li>
-              <li><a href="https://www.anad.org/" target="_blank">ANAD</a> - Free support groups and helpline</li>
-              <li><a href="https://nedic.ca/" target="_blank">NEDIC</a> - Canadian eating disorder resources</li>
-              <li><a href="https://www.eatingdisorderhope.com/" target="_blank">Eating Disorder Hope</a> - Treatment information</li>
-              <li><a href="https://www.bulimia.com/" target="_blank">Bulimia.com</a> - Online support and resources</li>
-            </ul>
-          `
-        },
-        fr: {
-          title: "Soutien troubles alimentaires",
-          description: `
-            <p>Les troubles alimentaires sont des conditions sérieuses qui nécessitent un traitement spécialisé.</p>
-            <ul>
-              <li><a href="https://www.nationaleatingdisorders.org/" target="_blank">Association nationale troubles alimentaires</a> - Outils et ressources</li>
-              <li><a href="https://nedic.ca/fr/" target="_blank">NEDIC</a> - Ressources canadiennes troubles alimentaires</li>
-              <li><a href="https://www.eatingdisorderhope.com/" target="_blank">Eating Disorder Hope</a> - Information sur les traitements</li>
+              <li><a href="https://www.rainn.org/" target="_blank">RAINN – Aide agression sexuelle</a></li>
+              <li><a href="https://www.nctsn.org/" target="_blank">NCTSN – Réseau de stress traumatique</a></li>
+              <li><a href="https://www.ptsd.va.gov/" target="_blank">Centre national PTSD (US VA)</a></li>
+              <li><a href="https://ncadv.org/" target="_blank">NCADV – Violence domestique</a></li>
             </ul>
           `
         }
       },
       grief: {
         en: {
-          title: "Grief & Loss Support",
+          title: "Grief & Loss",
           description: `
-            <p>Grief is a natural response to loss. Support and understanding can help navigate this difficult process.</p>
+            <p>Support for navigating bereavement, mourning and adjustment.</p>
             <ul>
-              <li><a href="https://www.griefshare.org/" target="_blank">GriefShare</a> - Grief recovery support groups</li>
-              <li><a href="https://www.hospicefoundation.org/" target="_blank">Hospice Foundation of America</a> - Grief resources</li>
-              <li><a href="https://www.dougy.org/" target="_blank">The Dougy Center</a> - Grief support for children</li>
-              <li><a href="https://www.compassionatefriends.org/" target="_blank">The Compassionate Friends</a> - Support for bereaved parents</li>
-              <li><a href="https://www.griefrecoverymethod.com/" target="_blank">Grief Recovery Method</a> - Structured grief support</li>
+              <li><a href="https://www.nimh.nih.gov/health/topics/grief" target="_blank">NIMH – Grief</a></li>
+              <li><a href="https://hospicefoundation.org/" target="_blank">Hospice Foundation of America</a></li>
+              <li><a href="https://www.compassionatefriends.org/" target="_blank">The Compassionate Friends</a></li>
+              <li><a href="https://www.opentohope.com/" target="_blank">Open to Hope Foundation</a></li>
             </ul>
           `
         },
         fr: {
-          title: "Soutien deuil et perte",
+          title: "Deuil et perte",
           description: `
-            <p>Le deuil est une réponse naturelle à la perte. Le soutien peut aider à naviguer ce processus difficile.</p>
+            <p>Soutien pour le deuil, la perte et l’adaptation.</p>
             <ul>
-              <li><a href="https://www.griefshare.org/" target="_blank">GriefShare</a> - Groupes de soutien pour le deuil</li>
-              <li><a href="https://www.hospicefoundation.org/" target="_blank">Hospice Foundation of America</a> - Ressources de deuil</li>
-              <li><a href="https://www.dougy.org/" target="_blank">The Dougy Center</a> - Soutien de deuil pour enfants</li>
+              <li><a href="https://www.nimh.nih.gov/health/topics/grief
+" target="_blank">NIMH – Deuil</a></li>
+              <li><a href="https://hospicefoundation.org/" target="_blank">Fondation Hospice d’Amérique</a></li>
+              <li><a href="https://www.compassionatefriends.org/" target="_blank">The Compassionate Friends</a></li>
+              <li><a href="https://www.opentohope.com/" target="_blank">Open to Hope</a></li>
             </ul>
           `
         }
       },
-      workplace: {
+      youth: {
         en: {
-          title: "Workplace Mental Health",
+          title: "Youth & Adolescents",
           description: `
-            <p>Mental health in the workplace is crucial for both individual wellbeing and organizational success.</p>
+            <p>Resources for young people’s mental health and development.</p>
             <ul>
-              <li><a href="https://www.mentalhealthcommission.ca/" target="_blank">Mental Health Commission of Canada</a> - Workplace standards</li>
-              <li><a href="https://www.workplacementalhealth.org/" target="_blank">Workplace Mental Health</a> - Resources for employers</li>
-              <li><a href="https://www.ccohs.ca/" target="_blank">CCOHS</a> - Canadian workplace health and safety</li>
-              <li><a href="https://www.nimh.nih.gov/health/topics/caring-for-your-mental-health" target="_blank">NIMH Workplace Resources</a> - Mental health at work</li>
-              <li><a href="https://www.apa.org/science/about/psa/2019/10/workplace-mental-health" target="_blank">APA Workplace Mental Health</a> - Professional resources</li>
+              <li><a href="https://kidshelpphone.ca/" target="_blank">Kids Help Phone (Canada)</a></li>
+              <li><a href="https://childmind.org/" target="_blank">Child Mind Institute</a></li>
+              <li><a href="https://youngminds.org.uk/" target="_blank">YoungMinds (UK)</a></li>
             </ul>
           `
         },
         fr: {
-          title: "Santé mentale au travail",
+          title: "Jeunes et adolescents",
           description: `
-            <p>La santé mentale au travail est cruciale pour le bien-être individuel et le succès organisationnel.</p>
+            <p>Ressources pour la santé mentale des jeunes et adolescents.</p>
             <ul>
-              <li><a href="https://www.mentalhealthcommission.ca/fr/" target="_blank">Commission de la santé mentale du Canada</a> - Standards de milieu de travail</li>
-              <li><a href="https://www.workplacementalhealth.org/" target="_blank">Santé mentale au travail</a> - Ressources pour employeurs</li>
-              <li><a href="https://www.cchst.ca/fr/" target="_blank">CCHST</a> - Santé et sécurité au travail canadien</li>
+              <li><a href="https://kidshelpphone.ca/" target="_blank">Téléphone d’aide aux jeunes</a></li>
+              <li><a href="https://childmind.org/" target="_blank">Child Mind Institute</a></li>
+              <li><a href="https://youngminds.org.uk/" target="_blank">YoungMinds (Royaume-Uni)</a></li>
             </ul>
           `
         }
       },
-      selfcare: {
+      lgbtq: {
         en: {
-          title: "Self-Care & Wellness",
+          title: "LGBTQ2S+ Support",
           description: `
-            <p>Self-care is essential for maintaining mental health and preventing burnout. Small daily practices can make a big difference.</p>
+            <p>Inclusive support and advocacy for LGBTQ2S+ communities.</p>
             <ul>
-              <li><a href="https://www.mindful.org/" target="_blank">Mindful.org</a> - Mindfulness and meditation resources</li>
-              <li><a href="https://www.headspace.com/" target="_blank">Headspace</a> - Meditation and mindfulness app</li>
-              <li><a href="https://www.calm.com/" target="_blank">Calm</a> - Sleep, meditation, and relaxation</li>
-              <li><a href="https://www.psychologytoday.com/us/basics/self-care" target="_blank">Psychology Today Self-Care</a> - Self-care strategies</li>
-              <li><a href="https://www.selfcare.gov/" target="_blank">Self-Care.gov</a> - Government wellness resources</li>
+              <li><a href="https://pflag.org/" target="_blank">PFLAG (US)</a></li>
+              <li><a href="https://www.thetrevorproject.org/" target="_blank">The Trevor Project</a></li>
+              <li><a href="https://www.hrc.org/" target="_blank">Human Rights Campaign</a></li>
             </ul>
           `
         },
         fr: {
-          title: "Autosoins et bien-être",
+          title: "Soutien LGBTQ2S+",
           description: `
-            <p>L'autosoin est essentiel pour maintenir la santé mentale. De petites pratiques quotidiennes peuvent faire une grande différence.</p>
+            <p>Soutien inclusif pour la communauté LGBTQ2S+.</p>
             <ul>
-              <li><a href="https://www.mindful.org/" target="_blank">Mindful.org</a> - Ressources pleine conscience et méditation</li>
-              <li><a href="https://www.headspace.com/" target="_blank">Headspace</a> - Application méditation et pleine conscience</li>
-              <li><a href="https://www.calm.com/" target="_blank">Calm</a> - Sommeil, méditation et relaxation</li>
+              <li><a href="https://pflag.org/" target="_blank">PFLAG (États-Unis)</a></li>
+              <li><a href="https://www.thetrevorproject.org/" target="_blank">The Trevor Project</a></li>
+              <li><a href="https://www.hrc.org/" target="_blank">Human Rights Campaign</a></li>
+            </ul>
+          `
+        }
+      },
+      veterans: {
+        en: {
+          title: "Veterans & Military Families",
+          description: `
+            <p>Care and mental health support for veterans and their loved ones.</p>
+            <ul>
+              <li><a href="https://www.va.gov/health-care/health-needs-conditions/mental-health/" target="_blank">U.S. Dept. of Veterans Affairs</a></li>
+              <li><a href="https://www.woundedwarriorproject.org/" target="_blank">Wounded Warrior Project</a></li>
+              <li><a href="https://www.veterans.gc.ca/" target="_blank">Veterans Affairs Canada</a></li>
+            </ul>
+          `
+        },
+        fr: {
+          title: "Vétérans et familles militaires",
+          description: `
+            <p>Soutien en santé mentale pour vétérans et familles militaires.</p>
+            <ul>
+              <li><a href="https://www.va.gov/health-care/health-needs-conditions/mental-health/" target="_blank">Département des anciens combattants (US)</a></li>
+              <li><a href="https://www.woundedwarriorproject.org/" target="_blank">Wounded Warrior Project</a></li>
+              <li><a href="https://www.veterans.gc.ca/" target="_blank">Anciens Combattants Canada</a></li>
+            </ul>
+          `
+        }
+      },
+      disability: {
+        en: {
+          title: "Chronic Illness & Disability",
+          description: `
+            <p>Support and resources for living well with chronic illness and disability.</p>
+            <ul>
+              <li><a href="https://cmha.ca/mental-health-and-chronic-illness" target="_blank">CMHA – Chronic Illness</a></li>
+              <li><a href="https://www.cdc.gov/mentalhealth/learn/index.htm" target="_blank">CDC – Mental Health & Chronic Disease</a></li>
+              <li><a href="https://www.who.int/health-topics/disability" target="_blank">WHO – Disability</a></li>
+            </ul>
+          `
+        },
+        fr: {
+          title: "Maladie chronique et handicap",
+          description: `
+            <p>Soutien pour la santé mentale avec maladies chroniques et handicap.</p>
+            <ul>
+              <li><a href="https://cmha.ca/mental-health-and-chronic-illness" target="_blank">ACSM – Maladie chronique</a></li>
+              <li><a href="https://www.cdc.gov/mentalhealth/learn/index.htm" target="_blank">CDC – Santé mentale & maladie chronique</a></li>
+              <li><a href="https://www.who.int/health-topics/disability" target="_blank">OMS – Handicap</a></li>
+            </ul>
+          `
+        }
+      },
+      intersectionality: {
+        en: {
+          title: "Intersectionality & Marginalized Groups",
+          description: `
+            <p>Understanding mental health through the lens of overlapping identities.</p>
+            <ul>
+              <li><a href="https://www.apa.org/topics/racism-bias-discrimination" target="_blank">APA – Racism, Bias & Discrimination</a></li>
+              <li><a href="https://multiculturalmentalhealth.ca/" target="_blank">Multicultural MHC (Canada)</a></li>
+              <li><a href="https://www.mentalhealtheurope.org/" target="_blank">Mental Health Europe</a></li>
+            </ul>
+          `
+        },
+        fr: {
+          title: "Intersectionnalité et groupes marginalisés",
+          description: `
+            <p>Comprendre la santé mentale à travers les identités croisées.</p>
+            <ul>
+              <li><a href="https://www.apa.org/topics/racism-bias-discrimination" target="_blank">APA – Racisme & discrimination</a></li>
+              <li><a href="https://multiculturalmentalhealth.ca/" target="_blank">Multicultural MHC (Canada)</a></li>
+              <li><a href="https://www.mentalhealtheurope.org/" target="_blank">Mental Health Europe</a></li>
+            </ul>
+          `
+        }
+      },
+      wellness: {
+        en: {
+          title: "Wellness & Coping Strategies",
+          description: `
+            <p>Tools, habits, and tips to boost resilience and manage stress.</p>
+            <ul>
+              <li><a href="https://www.mentalhealth.gov/talk/need-to-know" target="_blank">MentalHealth.gov – Wellness</a></li>
+              <li><a href="https://www.psychologytoday.com/us/basics/coping-skills" target="_blank">Psychology Today – Coping Skills</a></li>
+              <li><a href="https://www.mind.org.uk/" target="_blank">Mind (UK) – Self-Care</a></li>
+            </ul>
+          `
+        },
+        fr: {
+          title: "Bien-être et stratégies d’adaptation",
+          description: `
+            <p>Outils, habitudes et conseils pour gérer le stress et renforcer la résilience.</p>
+            <ul>
+              <li><a href="https://www.mentalhealth.gov/talk/need-to-know" target="_blank">MentalHealth.gov – Bien-être</a></li>
+              <li><a href="https://www.psychologytoday.com/us/basics/coping-skills" target="_blank">Psychology Today – Compétences d’adaptation</a></li>
+              <li><a href="https://www.mind.org.uk/" target="_blank">Mind (R.-U.) – Auto-soin</a></li>
             </ul>
           `
         }
       }
     };
 
-    // Modal functionality
+    // Modal Logic
     const modal = document.getElementById('modal');
     const modalTitle = document.getElementById('modal-title');
     const modalDesc = document.getElementById('modal-desc');
-    const modalClose = document.getElementById('modal-close');
+    const closeBtn = document.getElementById('modal-close');
 
-    // Open modal
     document.querySelectorAll('.subject-card').forEach(card => {
       card.addEventListener('click', () => {
         const key = card.getAttribute('data-key');
         const data = modalData[key];
-        if (data) {
-          const content = lang === 'en' ? data.en : data.fr;
-          modalTitle.textContent = content.title;
-          modalDesc.innerHTML = content.description;
-          modal.classList.add('active');
-          modal.querySelector('.modal').focus();
-        }
+        if (!data) return;
+        modalTitle.innerHTML = data[lang].title;
+        modalDesc.innerHTML = data[lang].description;
+        modal.classList.add('active');
+        modal.querySelector('.modal').focus();
       });
     });
 
-    // Close modal
-    modalClose.addEventListener('click', () => {
-      modal.classList.remove('active');
-    });
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-      }
-    });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('active')) {
-        modal.classList.remove('active');
-      }
-    });
+    closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('active'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('active'); });
   </script>
 </body>
 </html>
