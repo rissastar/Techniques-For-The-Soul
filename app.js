@@ -1,249 +1,180 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
+// ─── Supabase Initialization ─────────────────────────────────────────
 const URL = 'https://ytgrzhtntwzefwjmhgjj.supabase.co';
 const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
 const supabase = createClient(URL, KEY);
 
-let lang = localStorage.getItem('lang') || 'en';
-let theme = localStorage.getItem('theme') || 'dark';
-let candleCount = parseInt(localStorage.getItem('candleCount')) || 0;
-let profiles = [], messages = [];
-
-// Translations
-const texts = {
-  en: {
-    header: 'Community Memorial Wall',
-    subheader: 'Light a candle, honor a loved one, and share…',
-    profileTitle: '📅 Remembered Loved One Profile',
-    lightCandleTitle: '🕯️ Light a Candle',
-    sendMsgTitle: '💬 Send Message',
-    communityTitle: '🌐 Community Messages',
-    saveProfile: 'Save Profile',
-    send: 'Send'
-  },
-  fr: {
-    header: 'Mur Commémoratif Communautaire',
-    subheader: 'Allumez une bougie, honorez un être cher, et partagez…',
-    profileTitle: '📅 Profil de l’être cher',
-    lightCandleTitle: '🕯️ Allumer une bougie',
-    sendMsgTitle: '💬 Envoyer un message',
-    communityTitle: '🌐 Messages de la communauté',
-    saveProfile: 'Enregistrer',
-    send: 'Envoyer'
-  }
+// ─── Theme, Language & Music Toggles ──────────────────────────────
+const htmlEl = document.documentElement;
+document.getElementById('theme-toggle').onclick = () => {
+  htmlEl.dataset.theme = htmlEl.dataset.theme==='dark'?'light':'dark';
 };
-
-// Initialize UI
-document.body.setAttribute('data-theme', theme);
-document.getElementById('themeToggle').innerText = theme === 'light' ? '🌙' : '☀️';
-document.getElementById('langSelector').value = lang;
-document.getElementById('count').innerText = candleCount;
-updateLang();
-startStarfield();
-loadAll();
-
-// Event Listeners
-document.getElementById('themeToggle').onclick = () => {
-  theme = theme === 'light' ? 'dark' : 'light';
-  localStorage.setItem('theme', theme);
-  document.body.setAttribute('data-theme', theme);
-  document.getElementById('themeToggle').innerText = theme === 'light' ? '🌙' : '☀️';
-};
-document.getElementById('langSelector').onchange = e => {
-  lang = e.target.value;
-  localStorage.setItem('lang', lang);
-  updateLang();
-};
-
-// Language update
-function updateLang() {
-  const t = texts[lang];
-  document.getElementById('header').innerText = t.header;
-  document.getElementById('subheader').innerText = t.subheader;
-  document.getElementById('profileTitle').innerText = t.profileTitle;
-  document.getElementById('lightCandleTitle').innerText = t.lightCandleTitle;
-  document.getElementById('sendMsgTitle').innerText = t.sendMsgTitle;
-  document.getElementById('communityTitle').innerText = t.communityTitle;
-  document.getElementById('profileBtn').innerText = t.saveProfile;
-  document.getElementById('sendBtn').innerText = t.send;
-}
-
-// Candle click
-document.getElementById('candleBtn').onclick = () => {
-  candleCount++;
-  localStorage.setItem('candleCount', candleCount);
-  document.getElementById('count').innerText = candleCount;
-};
-
-// Load data
-async function loadAll() {
-  await refreshProfiles();
-  await refreshMessages();
-}
-
-// Profiles
-async function refreshProfiles() {
-  const { data } = await supabase
-    .from('loved_ones')
-    .select('*')
-    .order('created_at', { ascending: false });
-  profiles = data;
-  const sel = document.getElementById('profileLink');
-  sel.innerHTML = `<option value="">—Tag Loved One—</option>`;
-  profiles.forEach(p => {
-    const o = document.createElement('option');
-    o.value = p.id;
-    o.innerText = `${p.name} (${p.birth}–${p.death})`;
-    sel.appendChild(o);
+document.getElementById('lang-toggle').onclick = () => {
+  htmlEl.dataset.lang = htmlEl.dataset.lang==='en'?'fr':'en';
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    el.textContent = el.dataset[ htmlEl.dataset.lang ];
   });
-  const div = document.getElementById('profiles');
-  div.innerHTML = '';
-  profiles.forEach(p => {
-    const el = document.createElement('div');
-    el.className = 'profile';
-    el.innerHTML = `
-      <strong>${p.name} (${p.birth}–${p.death})</strong>
-      <p>${p.tribute}</p>
-      ${p.photo_url ? `<img src="${p.photo_url}" />` : ''}
-      <span class="pin" onclick="togglePin('loved_ones','${p.id}')">📌</span>
-    `;
-    div.appendChild(el);
+};
+const music = new Audio('ambient.mp3');
+music.loop = true;
+document.getElementById('music-toggle').onclick = () => {
+  music.paused?music.play():music.pause();
+};
+
+// ─── Utility: show items in a grid ────────────────────────────────
+function renderGrid(containerId, items, renderer) {
+  document.getElementById(containerId).innerHTML =
+    items.map(renderer).join('');
+}
+
+// ─── Candle Section ───────────────────────────────────────────────
+async function loadCandles() {
+  let { data } = await supabase.from('candles').select('*').order('created_at', {asc:false});
+  renderGrid('candle-list', data, c =>
+    `<div class="item"><p>🕯 ${c.name}</p></div>`);
+}
+document.getElementById('submit-candle').onclick = async ()=>{
+  let name = document.getElementById('candle-name').value.trim();
+  if(!name) return alert('Enter a name');
+  await supabase.from('candles').insert({ name });
+  document.getElementById('candle-name').value='';
+  loadCandles();
+};
+loadCandles();
+
+// ─── Tributes Section ────────────────────────────────────────────
+async function loadTributes() {
+  let { data } = await supabase.from('tributes').select('*').order('created_at',{asc:false});
+  renderGrid('tribute-list', data, t =>
+    `<div class="item"><p>"${t.content}"</p><p>– ${t.name||'Anonymous'}</p></div>`);
+}
+document.getElementById('submit-tribute').onclick = async ()=>{
+  let content = document.getElementById('tribute-text').value.trim();
+  if(!content) return alert('Write your tribute');
+  await supabase.from('tributes').insert({
+    content, name: document.getElementById('tribute-name').value.trim()
+  });
+  document.getElementById('tribute-text').value='';
+  document.getElementById('tribute-name').value='';
+  loadTributes();
+};
+loadTributes();
+
+// ─── Photo Gallery ────────────────────────────────────────────────
+async function loadPhotos() {
+  let { data } = await supabase.from('photos').select('*').order('created_at',{asc:false});
+  renderGrid('photo-gallery', data, p =>
+    `<div class="item"><img src="${p.url}" alt="photo" style="width:100%; border-radius:8px;"><p>– ${p.name||''}</p></div>`);
+}
+document.getElementById('submit-photo').onclick = async ()=>{
+  let file = document.getElementById('photo-input').files[0];
+  if(!file) return alert('Choose a file');
+  let path = `${Date.now()}_${file.name}`;
+  let { data:uploadError } = await supabase.storage.from('photos').upload(path,file);
+  let { publicURL } = supabase.storage.from('photos').getPublicUrl(path);
+  await supabase.from('photos').insert({ url: publicURL, name:'' });
+  loadPhotos();
+};
+loadPhotos();
+
+// ─── Cloud Messages ───────────────────────────────────────────────
+async function loadClouds() {
+  let { data } = await supabase.from('clouds').select('*').order('created_at',{asc:false}).limit(20);
+  const container = document.getElementById('cloud-container');
+  container.innerHTML = '';
+  data.forEach((c,i)=>{
+    let span = document.createElement('span');
+    span.className = 'cloud-msg';
+    span.textContent = c.text;
+    span.style.top = Math.random()*80+'%';
+    span.style.left = Math.random()*80+'%';
+    container.append(span);
+    setTimeout(()=>span.remove(),10000+Math.random()*5000);
   });
 }
+document.getElementById('submit-cloud').onclick = async ()=>{
+  let txt = document.getElementById('cloud-text').value.trim();
+  if(!txt) return;
+  await supabase.from('clouds').insert({ text:txt });
+  document.getElementById('cloud-text').value='';
+  loadClouds();
+};
+setInterval(loadClouds, 5000);
+loadClouds();
 
-// Messages
-async function refreshMessages() {
-  const { data } = await supabase
-    .from('messages')
-    .select('*')
-    .order('created_at', { ascending: true });
-  messages = data;
-  const div = document.getElementById('messages');
-  div.innerHTML = '';
-  messages.forEach(m => renderMessage(m, div));
+// ─── Pinned Tributes ─────────────────────────────────────────────
+async function loadPinned() {
+  let { data } = await supabase.from('tributes').select('*').eq('pinned', true);
+  renderGrid('pinned-list', data, t =>
+    `<div class="item"><strong>★</strong><p>"${t.content}"</p></div>`);
 }
+loadPinned();
 
-function renderMessage(m, container, parentId = null) {
-  if ((parentId && m.parent_id !== parentId) || (!parentId && m.parent_id)) return;
-  const el = document.createElement('div');
-  el.className = 'message' + (parentId ? ' reply' : '');
-  const dt = new Date(m.created_at).toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-CA');
-  el.innerHTML = `
-    <strong>${m.name || 'Anonymous'}</strong> <em>(${dt})</em>
-    <p>${m.text}</p>
-    ${m.photo_url ? `<img src="${m.photo_url}" />` : ''}
-    ${m.audio_url ? `<audio controls src="${m.audio_url}"></audio>` : ''}
-    <span class="pin" onclick="togglePin('messages','${m.id}')">📌</span>
-    <button onclick="showReply('${m.id}')">↩ Reply</button>
-    <div id="replyBox${m.id}"></div>
-  `;
-  container.appendChild(el);
-  messages.forEach(c => renderMessage(c, container, m.id));
-}
-
-window.showReply = id => {
-  const box = document.getElementById(`replyBox${id}`);
-  if (box.innerHTML) return box.innerHTML = '';
-  box.innerHTML = `
-    <textarea id="replyTxt${id}" placeholder="Reply…"></textarea>
-    <button onclick="postReply('${id}')">Send</button>
-  `;
+// ─── Memory Map ─────────────────────────────────────────────────
+document.getElementById('submit-map').onclick = async ()=>{
+  let loc = document.getElementById('map-location').value.trim();
+  if(!loc) return;
+  await supabase.from('map_pins').insert({ location:loc });
+  document.getElementById('map-location').value='';
+  // placeholder: you’d integrate a real map API here
+  alert(`Pinned: ${loc}`);
 };
 
-document.getElementById('profileBtn').onclick = async () => {
-  const name = document.getElementById('profileName').value.trim();
-  const birth = document.getElementById('profileBirth').value;
-  const death = document.getElementById('profileDeath').value;
-  const tribute = document.getElementById('profileTribute').value.trim();
-  const photo = document.getElementById('profilePhoto').files[0];
-  if (!name || !birth || !death) return alert('Name, birth & death required');
-  let photo_url = null;
-  if (photo) {
-    const path = `profiles/${Date.now()}_${photo.name}`;
-    await supabase.storage.from('photos').upload(path, photo);
-    photo_url = `${URL}/storage/v1/object/public/photos/${path}`;
-  }
-  await supabase.from('loved_ones').insert({ name, birth, death, tribute, photo_url, is_pinned: false });
-  refreshProfiles();
-};
-
-document.getElementById('sendBtn').onclick = async () => {
-  const name = document.getElementById('nameField').value.trim() || null;
-  const profile_id = document.getElementById('profileLink').value || null;
-  const text = document.getElementById('messageText').value.trim();
-  const photo = document.getElementById('messagePhoto').files[0];
-  const audio = document.getElementById('messageAudio').files[0];
-  if (!text) return;
-  let photo_url = null, audio_url = null;
-  if (photo) {
-    const p = `msgs/${Date.now()}_${photo.name}`;
-    await supabase.storage.from('photos').upload(p, photo);
-    photo_url = `${URL}/storage/v1/object/public/photos/${p}`;
-  }
-  if (audio) {
-    const a = `msgs/${Date.now()}_${audio.name}`;
-    await supabase.storage.from('photos').upload(a, audio);
-    audio_url = `${URL}/storage/v1/object/public/photos/${a}`;
-  }
-  await supabase.from('messages').insert({
-    name, profile_id, text, photo_url, audio_url, parent_id: null, is_pinned: false
+// ─── Grief Support ───────────────────────────────────────────────
+const supportPrompts = [
+  "Today, I honor my grief by remembering their laughter.",
+  "Today, I honor my grief by lighting a candle.",
+  "Today, I honor my grief by sharing a kind word."
+];
+document.getElementById('daily-prompt').textContent =
+  supportPrompts[new Date().getDate() % supportPrompts.length];
+async function loadSupport(){
+  let { data } = await supabase.from('grief_support').select('*').order('created_at',{asc:false});
+  renderGrid('support-list', data, m =>
+    `<div class="item"><p>${m.content}</p><p>– ${m.name||'Anonymous'}</p></div>`);
+}
+document.getElementById('submit-support').onclick = async ()=>{
+  let c = document.getElementById('support-text').value.trim();
+  if(!c) return;
+  await supabase.from('grief_support').insert({
+    content:c, name:document.getElementById('support-name').value.trim()
   });
-  refreshMessages();
+  document.getElementById('support-text').value='';
+  document.getElementById('support-name').value='';
+  loadSupport();
 };
+loadSupport();
 
-window.postReply = async parent_id => {
-  const txt = document.getElementById(`replyTxt${parent_id}`).value.trim();
-  if (!txt) return;
-  await supabase.from('messages').insert({ name: null, profile_id: null, text: txt, parent_id, is_pinned: false });
-  refreshMessages();
-};
-
-window.togglePin = async (table, id) => {
-  await supabase.from(table).update({ is_pinned: true }).eq('id', id);
-  if (table === 'loved_ones') refreshProfiles();
-  else refreshMessages();
-};
-
-// Starfield & Shooting Stars
-function startStarfield() {
-  const canvas = document.getElementById('starfield');
-  const ctx = canvas.getContext('2d');
-  let w, h, stars = [], shooting = null;
-
-  function resize() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-    stars = Array.from({ length: 200 }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: Math.random() * 1.1
-    }));
-  }
-  function draw() {
-    ctx.fillStyle = 'rgba(11,19,43,0.4)';
-    ctx.fillRect(0, 0, w, h);
-    stars.forEach(s => {
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
-      ctx.fillStyle = '#fff';
-      ctx.fill();
-    });
-    if (!shooting && Math.random() < 0.005) {
-      shooting = { x: Math.random() * w, y: Math.random() * h/2, len: 0 };
-    }
-    if (shooting) {
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(shooting.x, shooting.y);
-      ctx.lineTo(shooting.x + shooting.len * 10, shooting.y + shooting.len * 5);
-      ctx.stroke();
-      shooting.len += 1;
-      if (shooting.len > 20) shooting = null;
-    }
-    requestAnimationFrame(draw);
-  }
-  window.onresize = resize;
-  resize();
-  draw();
+// ─── Community Wall ────────────────────────────────────────────
+async function loadCommunity(){
+  let { data } = await supabase.from('community').select('*').order('created_at',{asc:false});
+  renderGrid('community-list', data, m =>
+    `<div class="item"><p>${m.content}</p><p>– ${m.name||'Anonymous'}</p></div>`);
 }
+document.getElementById('submit-community').onclick = async ()=>{
+  let c = document.getElementById('community-text').value.trim();
+  if(!c) return;
+  await supabase.from('community').insert({
+    content:c, name:document.getElementById('community-name').value.trim()
+  });
+  document.getElementById('community-text').value='';
+  document.getElementById('community-name').value='';
+  loadCommunity();
+};
+loadCommunity();
+
+// ─── Anniversary Calendar ───────────────────────────────────────
+async function loadAnniv(){
+  let { data } = await supabase.from('anniversaries').select('*').order('date',{ascending:true});
+  renderGrid('anniv-list', data, a =>
+    `<div class="item"><strong>${new Date(a.date).toLocaleDateString()}</strong><p>${a.content}</p></div>`);
+}
+document.getElementById('submit-anniv').onclick = async ()=>{
+  let date = document.getElementById('anniv-date').value;
+  let content = document.getElementById('anniv-text').value.trim();
+  if(!date||!content) return;
+  await supabase.from('anniversaries').insert({ date, content });
+  document.getElementById('anniv-date').value='';
+  document.getElementById('anniv-text').value='';
+  loadAnniv();
+};
+loadAnniv();
