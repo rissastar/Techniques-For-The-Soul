@@ -1,3 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bedtime Checklist</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+    :root {
+      --bg-light: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --bg-dark: #1a202c;
+      --text-light: #2d3748;
+      --text-dark: #f7fafc;
+      --card-light: white;
+      --card-dark: #2d3748;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0; padding: 20px;
+      background: var(--bg-light); color: var(--text-light);
+      transition: 0.3s;
+      min-height: 100vh;
+    }
+    body.dark { background: var(--bg-dark); color: var(--text-dark); }
+    .container {
+      max-width: 600px; margin: 0 auto;
+      background: var(--card-light);
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    body.dark .container { background: var(--card-dark); }
+    .header {
+      text-align: center; padding: 30px 20px;
+      background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+      color: white;
+    }
+    .controls {
+      margin-top: 15px;
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 8px;
+    }
+    .controls button, .controls select {
+      background: #667eea; color: white;
+      border: none; padding: 8px 12px;
+      border-radius: 6px; cursor: pointer;
+      font-size: 0.9em;
+    }
+    .controls button:hover, .controls select:hover {
+      background: #5a67d8;
+    }
+    .controls select { appearance: none; }
+    .content { padding: 30px; }
+    .quote-box { font-style: italic; text-align: center; margin: 20px 0; }
+    .section { margin-bottom: 40px; }
+    .section-title {
+      font-size: 1.3em; font-weight: 600;
+      margin-bottom: 20px; padding-bottom: 8px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      display: flex; align-items: center;
+      margin-bottom: 12px;
+    }
+    .checklist input { margin-right: 12px; width: 18px; height: 18px; cursor: pointer; }
+    .reflection-item { margin-bottom: 25px; }
+    .reflection-label {
+      font-weight: 500; display: block; margin-bottom: 8px;
+    }
+    .reflection-lines {
+      width: 100%; min-height: 60px;
+      border: none; border-bottom: 1px solid #e2e8f0;
+      padding: 8px 0; font-family: inherit;
+      background: transparent; color: inherit;
+    }
+    .divider {
+      border: none; height: 2px;
+      background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+      margin: 30px 0;
+    }
+    .wind-down, .your-turn, .reminder {
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  transition: background 0.3s;
+}
+body.dark .wind-down,
+body.dark .your-turn,
+body.dark .reminder {
+  background: #2c2f36; /* or #2d3748 for harmony */
+}
+    }
+    .hashtag { margin-top: 15px; font-weight: 600; color: #667eea; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 id="title">🛏️ Get Ready for Bed</h1>
+      <p id="subtitle">Take a moment to slow down and care for yourself.</p>
+      <div class="controls">
+        <select id="langSelect" onchange="updateLanguage()">
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+        </select>
+        <select id="moodSelect" onchange="updateMood()">
+          <option value="" id="moodSelEn">🌙 Select Mood</option>
+          <option value="peaceful" id="peacefulEn">Peaceful</option>
+          <option value="anxious" id="anxiousEn">Anxious</option>
+          <option value="hopeful" id="hopefulEn">Hopeful</option>
+          <option value="tired" id="tiredEn">Tired</option>
+        </select>
+        <button onclick="toggleNightMode()">🌓 <span id="nightBtn">Night Mode</span></button>
+        <button onclick="window.print()">🖨️ <span id="printBtn">Print</span></button>
+        <button onclick="downloadPDF()">📥 <span id="downloadBtn">Download</span></button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="quote-box" id="moodQuote"></div>
+
+      <!-- Sections -->
+      <div class="section" id="selfCareSec">
+        <h2 class="section-title" id="selfCareTitle">Self-Care Check</h2>
+        <ul class="checklist">
+          <li><input type="checkbox"><span id="care1">Washed your face or taken a shower</span></li>
+          <li><input type="checkbox"><span id="care2">Changed into something cozy and comfortable</span></li>
+          <li><input type="checkbox"><span id="care3">Brushed your teeth or completed your bedtime routine</span></li>
+        </ul>
+      </div>
+
+      <hr class="divider">
+
+      <div class="section" id="mindResetSec">
+        <h2 class="section-title" id="mindResetTitle">Mind Reset</h2>
+        <ul class="checklist">
+          <li><input type="checkbox"><span id="mind1">Put your phone away for at least 10 minutes</span></li>
+          <li><input type="checkbox"><span id="mind2">Took 3 deep, grounding breaths</span></li>
+          <li><input type="checkbox"><span id="mind3">Let go of what you can't control tonight</span></li>
+        </ul>
+      </div>
+
+      <hr class="divider">
+
+      <div class="section" id="reflectionSec">
+        <h2 class="section-title" id="reflectionTitle">Reflect and Release</h2>
+        <div class="reflection-item"><label class="reflection-label"><span id="rel1">• Something that went well today:</span></label><textarea class="reflection-lines"></textarea></div>
+        <div class="reflection-item"><label class="reflection-label"><span id="rel2">• Something I'm letting go of:</span></label><textarea class="reflection-lines"></textarea></div>
+        <div class="reflection-item"><label class="reflection-label"><span id="rel3">• Something I'm grateful for:</span></label><textarea class="reflection-lines"></textarea></div>
+        <div class="reflection-item"><label class="reflection-label"><span id="rel4">• What are you looking forward to tomorrow?</span></label><textarea class="reflection-lines"></textarea></div>
+        <div class="reflection-item"><label class="reflection-label"><span id="rel5">• What did you learn today?</span></label><textarea class="reflection-lines"></textarea></div>
+        <div class="reflection-item"><label class="reflection-label"><span id="rel6">• Something kind you did or witnessed today:</span></label><textarea class="reflection-lines"></textarea></div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="section">
+        <h2 class="section-title" id="windDownTitle">Optional Wind-Down Tools</h2>
+        <div class="wind-down">
+          <ul class="checklist">
+            <li><input type="checkbox"><span id="wind1">Played calming music or nature sounds</span></li>
+            <li><input type="checkbox"><span id="wind2">Did a gentle stretch or movement</span></li>
+            <li><input type="checkbox"><span id="wind3">Sipped a warm tea or glass of water</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="your-turn">
+          <h2 class="section-title" id="yourTurnTitle">Your Turn</h2>
+          <div class="reflection-item"><label class="reflection-label"><span id="your1">✨ What's one kind thing you'll say to yourself before sleep?</span></label><textarea class="reflection-lines"></textarea></div>
+          <div class="reflection-item"><label class="reflection-label"><span id="your2">✨ How are you feeling right now?</span></label><textarea class="reflection-lines"></textarea></div>
+        </div>
+      </div>
+
+      <div class="reminder">
+        <h3 id="reminderTitle">🌙 Reminder:</h3>
+        <p id="reminderText">You are safe.<br>You are enough.<br>You are not alone.</p>
+        <div class="hashtag">#SpeakLouderLoveHarder</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const text = {
+      en: {
+        title: '🛏️ Get Ready for Bed',
+        subtitle: 'Take a moment to slow down and care for yourself.',
+        moodDefault: '🌙 Select Mood',
+        moodOptions: ['Peaceful', 'Anxious', 'Hopeful', 'Tired'],
+        night: 'Night Mode', print: 'Print', download: 'Download',
+        selfCareTitle: 'Self-Care Check',
+        care: [
+          'Washed your face or taken a shower',
+          'Changed into something cozy and comfortable',
+          'Brushed your teeth or completed your bedtime routine'
+        ],
+        mindResetTitle: 'Mind Reset',
+        mind: [
+          'Put your phone away for at least 10 minutes',
+          'Took 3 deep, grounding breaths',
+          'Let go of what you can\'t control tonight'
+        ],
+        reflectionTitle: 'Reflect and Release',
+        rel: [
+          '• Something that went well today:',
+          '• Something I\'m letting go of:',
+          '• Something I\'m grateful for:',
+          '• What are you looking forward to tomorrow?',
+          '• What did you learn today?',
+          '• Something kind you did or witnessed today:'
+        ],
+        windDownTitle: 'Optional Wind-Down Tools',
+        wind: [
+          'Played calming music or nature sounds',
+          'Did a gentle stretch or movement',
+          'Sipped a warm tea or glass of water'
+        ],
+        yourTurnTitle: 'Your Turn',
+        your: [
+          '✨ What\'s one kind thing you\'ll say to yourself before sleep?',
+          '✨ How are you feeling right now?'
+        ],
+        reminderTitle: '🌙 Reminder:',
+        reminderText: 'You are safe.<br>You are enough.<br>You are not alone.'
+      },
+      fr: {
+        title: '🌙 Checklist du Coucher',
+        subtitle: 'Prends un moment pour ralentir et t’occuper de toi.',
+        moodDefault: '🌙 Choisis ton humeur',
+        moodOptions: ['Paisible', 'Anxieux·se', 'Plein·e d’espoir', 'Fatigué·e'],
+        night: 'Mode Nuit', print: 'Imprimer', download: 'Télécharger',
+        selfCareTitle: 'Soins Personnels',
+        care: [
+          'Tu t\'es lavé le visage ou as pris une douche',
+          'Tu t\'es changé·e en quelque chose de confortable',
+          'Tu as brossé tes dents ou fait ta routine du soir'
+        ],
+        mindResetTitle: 'Pause Mental',
+        mind: [
+          'Tu as mis ton téléphone de côté pendant 10 minutes',
+          'Tu as pris 3 respirations profondes',
+          'Tu as laissé aller ce que tu ne peux pas contrôler'
+        ],
+        reflectionTitle: 'Réflexion du Soir',
+        rel: [
+          '• Qu’est-ce qui s’est bien passé aujourd’hui ?',
+          '• Qu’est-ce que tu laisses aller ce soir ?',
+          '• Pour quoi es-tu reconnaissant·e ?',
+          '• Qu’attends-tu avec impatience demain ?',
+          '• Qu’as-tu appris aujourd’hui ?',
+          '• Quel geste de gentillesse as-tu fait ou vu ?'
+        ],
+        windDownTitle: 'Outils de Détente',
+        wind: [
+          'Écouté de la musique calme ou des sons de la nature',
+          'Fait des étirements doux',
+          'Bu un thé chaud ou un verre d’eau'
+        ],
+        yourTurnTitle: 'À ton tour',
+        your: [
+          '✨ Quelle parole douce te dis-tu ce soir ?',
+          '✨ Comment te sens-tu maintenant ?'
+        ],
+        reminderTitle: '🌙 Rappel :',
+        reminderText: 'Tu es en sécurité.<br>Tu es suffisant·e.<br>Tu n’es pas seul·e.'
+      }
+    };
+
+    function updateLanguage() {
+      const lang = document.getElementById('langSelect').value;
+      const t = text[lang];
+
+      document.getElementById('title').innerHTML = t.title;
+      document.getElementById('subtitle').innerHTML = t.subtitle;
+      document.getElementById('moodSelEn').textContent = t.moodDefault;
+      ['peacefulEn','anxiousEn','hopefulEn','tiredEn'].forEach((id,i) => {
+        document.getElementById(id).textContent = t.moodOptions[i];
+      });
+      document.getElementById('nightBtn').textContent = t.night;
+      document.getElementById('printBtn').textContent = t.print;
+      document.getElementById('downloadBtn').textContent = t.download;
+
+      document.getElementById('selfCareTitle').textContent = t.selfCareTitle;
+      t.care.forEach((txt,i) => document.getElementById('care'+(i+1)).textContent = txt);
+      document.getElementById('mindResetTitle').textContent = t.mindResetTitle;
+      t.mind.forEach((txt,i) => document.getElementById('mind'+(i+1)).textContent = txt);
+      document.getElementById('reflectionTitle').textContent = t.reflectionTitle;
+      t.rel.forEach((txt,i) => document.getElementById('rel'+(i+1)).textContent = txt);
+      document.getElementById('windDownTitle').textContent = t.windDownTitle;
+      t.wind.forEach((txt,i) => document.getElementById('wind'+(i+1)).textContent = txt);
+      document.getElementById('yourTurnTitle').textContent = t.yourTurnTitle;
+      t.your.forEach((txt,i) => document.getElementById('your'+(i+1)).textContent = txt);
+      document.getElementById('reminderTitle').textContent = t.reminderTitle;
+      document.getElementById('reminderText').innerHTML = t.reminderText;
+    }
+
+    function toggleNightMode() {
+      document.body.classList.toggle('dark');
+    }
+
+    function updateMood() {
+      const mood = document.getElementById('moodSelect').value;
+      const q = document.getElementById('moodQuote');
+      const moods = {
+        peaceful: {
+          quote: '“Peace is the result of retraining your mind to process life as it is.” – Wayne Dyer',
+          bg: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
+        },
+        anxious: {
+          quote: '“You don’t have to control your thoughts. You just have to stop letting them control you.” – Dan Millman',
+          bg: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
+        },
+        hopeful: {
+          quote: '“Hope is being able to see that there is light despite all of the darkness.” – Desmond Tutu',
+          bg: 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)'
+        },
         tired: {
           quote: '“Rest is not idleness.” – John Lubbock',
           bg: 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)'
