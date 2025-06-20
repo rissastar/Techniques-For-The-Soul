@@ -3,915 +3,544 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mood Tracker Toolkit / Suivi d'Humeur</title>
+<title>Mood Toolkit — Vivid & Visual</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-  :root {
-    --color-happy: #fff1c1;
-    --color-sad: #a0c4ff;
-    --color-angry: #ffadad;
-    --color-relaxed: #bde0fe;
-    --color-anxious: #ffc6ff;
-    --color-neutral: #d3d3d3;
-    --color-text-dark: #222;
-    --color-text-light: #fff;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+  /* Reset and base */
   * {
     box-sizing: border-box;
   }
   body {
     margin: 0; padding: 0;
-    font-family: 'Inter', sans-serif;
-    background: var(--color-neutral);
-    color: var(--color-text-dark);
+    font-family: 'Poppins', sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1rem;
-    transition: background-color 0.5s ease;
-  }
-  header {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  header h1 {
-    font-weight: 700;
-    font-size: 2rem;
-    margin-bottom: 0.25rem;
-  }
-  header button.lang-toggle {
-    background: #222;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    user-select: none;
-  }
-  main {
-    max-width: 600px;
-    width: 100%;
-    background: #fff;
-    border-radius: 10px;
-    padding: 1rem 1.5rem 2rem;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-  }
-  .mood-selection {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 1rem;
-  }
-  .mood-btn {
-    background: var(--color-neutral);
-    border-radius: 10px;
-    padding: 10px 14px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    font-size: 1.5rem;
-    user-select: none;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80px;
-  }
-  .mood-btn.selected {
-    border-color: #444;
-    background: #f0f0f0;
-  }
-  .mood-emoji {
-    font-size: 2.5rem;
-  }
-  .mood-name {
-    font-weight: 600;
-    margin-top: 0.25rem;
-    font-size: 1rem;
-    text-align: center;
-  }
-  .quote {
-    margin: 1rem 0 1.5rem;
-    font-style: italic;
-    font-size: 1.1rem;
-    text-align: center;
-    min-height: 60px;
-    color: #555;
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-  textarea {
-    resize: vertical;
-    min-height: 60px;
-    font-family: inherit;
-    font-size: 1rem;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1.5px solid #ccc;
-    transition: border-color 0.3s ease;
-  }
-  textarea:focus {
-    outline: none;
-    border-color: #666;
-  }
-  button.add-entry, button#clearEntriesBtn, button#downloadPdfBtn {
-    background: #007bff;
-    border: none;
-    color: white;
-    font-weight: 700;
-    padding: 0.6rem 0;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-    margin-top: 0.4rem;
-  }
-  button.add-entry:hover, button#clearEntriesBtn:hover, button#downloadPdfBtn:hover {
-    background: #0056b3;
-  }
-  .buttons-row {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin-top: 1rem;
-  }
-  .entries {
-    margin-top: 2rem;
-    max-height: 320px;
-    overflow-y: auto;
-    border-top: 2px solid #eee;
-    padding-top: 1rem;
-  }
-  .entry {
-    background: #f9f9f9;
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    margin-bottom: 0.8rem;
-    box-shadow: 0 1px 4px rgb(0 0 0 / 0.05);
-  }
-  .entry-header {
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: 0.3rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .entry-mood {
-    font-size: 1.4rem;
-  }
-  .entry-note {
-    white-space: pre-wrap;
-    font-size: 0.95rem;
-    color: #333;
-  }
-  footer {
-    margin-top: 2rem;
-    font-size: 0.8rem;
-    color: #999;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+    color: #222;
+    overflow-x: hidden;
+    transition: background 1s ease;
   }
 
-  /* Mood backgrounds */
-  body.mood-happy {
-    background: var(--color-happy);
+  h1 {
+    margin: 30px 0 10px;
+    font-weight: 700;
+    font-size: 2.8rem;
+    color: #1a1a2e;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #222;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* Form container */
+  #mood-form {
+    background: rgba(255 255 255 / 0.95);
+    max-width: 650px;
+    width: 90vw;
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgb(0 0 0 / 0.15);
+    padding: 28px 36px;
+    margin-bottom: 30px;
+    transition: box-shadow 0.3s ease;
+  }
+  #mood-form:hover, #mood-form:focus-within {
+    box-shadow: 0 14px 50px rgb(0 0 0 / 0.25);
+  }
+
+  label {
+    display: block;
+    margin-top: 20px;
+    font-weight: 600;
+    font-size: 1.1rem;
     color: #444;
   }
-  body.mood-sad {
-    background: var(--color-sad);
-    color: #222;
+  select, textarea {
+    margin-top: 8px;
+    width: 100%;
+    font-size: 1rem;
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 2px solid #ccc;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-family: inherit;
+    resize: vertical;
+    background: #fff;
   }
-  body.mood-angry {
-    background: var(--color-angry);
-    color: #222;
+  select:focus, textarea:focus {
+    border-color: #74ebd5;
+    box-shadow: 0 0 8px #74ebd5aa;
+    outline: none;
   }
-  body.mood-relaxed {
-    background: var(--color-relaxed);
-    color: #222;
-  }
-  body.mood-anxious {
-    background: var(--color-anxious);
-    color: #222;
-  }
-  body.mood-neutral {
-    background: var(--color-neutral);
-    color: var(--color-text-dark);
+  textarea {
+    min-height: 100px;
   }
 
-  /* Scrollbar for entries */
-  .entries::-webkit-scrollbar {
-    width: 8px;
+  button[type="submit"] {
+    margin-top: 28px;
+    background: linear-gradient(45deg, #74ebd5, #ACB6E5);
+    color: #1a1a2e;
+    font-weight: 700;
+    font-size: 1.3rem;
+    border: none;
+    border-radius: 36px;
+    padding: 16px 40px;
+    cursor: pointer;
+    box-shadow: 0 5px 18px #74ebd566;
+    transition: background 0.4s ease, box-shadow 0.3s ease;
+    width: 100%;
+    user-select: none;
   }
-  .entries::-webkit-scrollbar-thumb {
-    background-color: rgba(0,0,0,0.15);
-    border-radius: 4px;
+  button[type="submit"]:hover {
+    background: linear-gradient(45deg, #4ecdc4, #6aa8e6);
+    box-shadow: 0 8px 26px #4ecdc499;
+  }
+  button[type="submit"]:focus {
+    outline: 3px solid #74ebd5;
+  }
+
+  /* Mood display */
+  #mood-display {
+    max-width: 650px;
+    width: 90vw;
+    background: rgba(255 255 255 / 0.9);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.12);
+    padding: 30px 40px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #444;
+    min-height: 210px;
+    position: relative;
+    overflow: hidden;
+  }
+  #mood-display .mood-icon {
+    font-size: 6rem;
+    line-height: 1;
+    margin-bottom: 20px;
+    user-select: none;
+    animation: pulse 2s infinite ease-in-out alternate;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+  }
+  #mood-display p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #mood-display p strong {
+    color: #333;
+    font-weight: 600;
+  }
+  #mood-display p em {
+    color: #777;
+  }
+
+  /* Cards for message, affirmation, tip */
+  .mood-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 0.05);
+    padding: 18px 24px;
+    margin: 14px auto;
+    max-width: 520px;
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+  }
+  .mood-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgb(0 0 0 / 0.15);
+  }
+
+  /* Entries section */
+  #entries-section {
+    max-width: 650px;
+    width: 90vw;
+    background: rgba(255 255 255 / 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.15);
+    padding: 30px 35px 40px;
+    margin-bottom: 40px;
+  }
+  #entries-section h2 {
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #222;
+  }
+  #entries-list {
+    list-style: none;
+    padding-left: 0;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  #entries-list li {
+    background: #f0f7f7;
+    border-radius: 16px;
+    padding: 16px 22px;
+    margin-bottom: 14px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.06);
+    color: #2d3e4f;
+    font-size: 1rem;
+  }
+  #entries-list li strong {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #1a2a43;
+  }
+  #entries-list li p {
+    white-space: pre-wrap;
+    font-style: italic;
+    color: #555e6f;
+    margin: 0;
+  }
+
+  /* Buttons row */
+  #buttons-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 15px;
+    justify-content: center;
+  }
+  #buttons-row button {
+    flex: 1 1 45%;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 14px 20px;
+    border-radius: 36px;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    user-select: none;
+    transition: background 0.3s ease;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.15);
+  }
+  #download-pdf {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+  }
+  #download-pdf:hover {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+  }
+  #clear-entries {
+    background: linear-gradient(135deg, #fc5c7d, #6a82fb);
+  }
+  #clear-entries:hover {
+    background: linear-gradient(135deg, #6a82fb, #fc5c7d);
+  }
+  #download-pdf:focus, #clear-entries:focus {
+    outline: 3px solid #74ebd5;
+  }
+
+  /* Scrollbar for entries list */
+  #entries-list::-webkit-scrollbar {
+    width: 10px;
+  }
+  #entries-list::-webkit-scrollbar-track {
+    background: #e0f0f0;
+    border-radius: 10px;
+  }
+  #entries-list::-webkit-scrollbar-thumb {
+    background: #74ebd5;
+    border-radius: 10px;
+  }
+
+  /* Mood background gradients */
+  body.mood-happy {
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    color: #5a3100;
+  }
+  body.mood-sad {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #e0e7ff;
+  }
+  body.mood-angry {
+    background: linear-gradient(135deg, #f85032, #e73827);
+    color: #fff7f7;
+  }
+  body.mood-anxious {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #3a2600;
+  }
+  body.mood-excited {
+    background: linear-gradient(135deg, #fcb045, #fd1d1d, #833ab4);
+    color: #fff;
+  }
+  body.mood-calm {
+    background: linear-gradient(135deg, #96fbc4, #f9f586);
+    color: #204f2f;
+  }
+
+  /* Confetti sparkles container */
+  #confetti-container {
+    pointer-events: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 10;
+    overflow: visible;
+  }
+
+  .confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    opacity: 0.8;
+    border-radius: 3px;
+    filter: drop-shadow(0 0 3px #fff);
+    animation-name: confettiFall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  @keyframes confettiFall {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(120vh) rotate(360deg);
+      opacity: 0;
+    }
   }
 
   /* Responsive */
   @media (max-width: 480px) {
-    .mood-btn {
-      width: 60px;
-      font-size: 1.2rem;
-    }
-    .mood-emoji {
+    h1 {
       font-size: 2rem;
     }
-    .buttons-row {
-      flex-direction: column;
+    #mood-form, #mood-display, #entries-section {
+      padding: 20px;
     }
-    button#clearEntriesBtn, button#downloadPdfBtn {
-      width: 100%;
+    #mood-display .mood-icon {
+      font-size: 4.5rem;
+      margin-bottom: 12px;
     }
-  }
-  /* Reminder input */
-  .reminder-section {
-    margin-top: 1rem;
-    border-top: 2px solid #eee;
-    padding-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-  label {
-    font-weight: 600;
-  }
-  input[type="time"] {
-    padding: 0.3rem 0.5rem;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: 1.5px solid #ccc;
-    max-width: 140px;
-  }
-  button#setReminderBtn {
-    margin-top: 0.5rem;
-    background: #28a745;
-    border: none;
-    color: white;
-    font-weight: 700;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  button#setReminderBtn:hover {
-    background: #1e7e34;
-  }
-  .reminder-message {
-    font-size: 0.9rem;
-    color: #444;
-    min-height: 1.2rem;
-  }
-
-  /* Analytics section */
-  .analytics {
-    margin-top: 2rem;
-    border-top: 2px solid #eee;
-    padding-top: 1rem;
-  }
-  .analytics h2 {
-    font-weight: 700;
-    font-size: 1.4rem;
-    margin-bottom: 0.5rem;
-    text-align: center;
-  }
-  canvas {
-    max-width: 100%;
-    margin: 0 auto 1rem auto;
-    display: block;
   }
 </style>
 </head>
-<body class="mood-neutral">
+<body>
 
-<header>
-  <h1 id="title">Mood Tracker Toolkit</h1>
-  <button class="lang-toggle" id="langToggle">Français</button>
-</header>
+<h1>Mood Toolkit</h1>
 
-<main>
-  <section class="mood-selection" aria-label="Select your mood / Sélectionnez votre humeur">
-    <!-- Mood buttons inserted by JS -->
-  </section>
+<form id="mood-form" aria-label="Mood selection form">
+  <label for="mood-select">Select Your Mood:</label>
+  <select id="mood-select" required aria-required="true" aria-describedby="moodHelp">
+    <option value="" disabled selected>Select a mood</option>
+    <option value="happy">😊 Happy</option>
+    <option value="sad">😢 Sad</option>
+    <option value="angry">😠 Angry</option>
+    <option value="anxious">😟 Anxious</option>
+    <option value="excited">🤩 Excited</option>
+    <option value="calm">😌 Calm</option>
+  </select>
+  <small id="moodHelp">Choose how you feel right now</small>
 
-  <div class="quote" id="quoteArea">Select a mood to see an inspirational quote.</div>
+  <label for="notes">Add Notes (optional):</label>
+  <textarea id="notes" placeholder="Write about what’s on your mind..."></textarea>
 
-  <form id="entryForm" aria-label="Add mood entry / Ajouter une entrée d'humeur">
-    <textarea id="noteInput" placeholder="Add notes about your mood..."></textarea>
-    <button type="submit" class="add-entry" disabled>Add Entry</button>
-  </form>
+  <button type="submit" aria-label="Save mood entry">Save Mood Entry</button>
+</form>
 
-  <div class="buttons-row">
-    <button id="downloadPdfBtn" title="Download PDF of all entries">Download PDF</button>
-    <button id="clearEntriesBtn" title="Clear all mood entries">Clear All Entries</button>
+<div id="mood-display" aria-live="polite" aria-atomic="true" tabindex="0">
+  <p>Select a mood and save your entry to see personalized suggestions here.</p>
+</div>
+
+<section id="entries-section" aria-label="Saved mood entries">
+  <h2>Your Mood Entries</h2>
+  <ul id="entries-list" aria-live="polite" aria-relevant="additions"></ul>
+  <div id="buttons-row">
+    <button id="download-pdf" aria-label="Download all mood entries as PDF">Download PDF</button>
+    <button id="clear-entries" aria-label="Clear all mood entries">Clear All</button>
   </div>
+</section>
 
-  <section class="reminder-section" aria-label="Daily mood reminder setting / Réglage du rappel quotidien">
-    <label for="reminderTimeInput">Set daily mood reminder time:</label>
-    <input type="time" id="reminderTimeInput" aria-describedby="reminderMessage" />
-    <button id="setReminderBtn">Set Reminder</button>
-    <div class="reminder-message" id="reminderMessage"></div>
-  </section>
-
-  <section class="entries" id="entriesList" aria-live="polite" aria-label="Mood entries / Entrées d'humeur">
-    <!-- Mood entries will appear here -->
-  </section>
-
-  <section class="analytics" aria-label="Mood analytics / Analyse des humeurs">
-    <h2 id="analyticsTitle">Mood Analytics</h2>
-    <canvas id="barChart" aria-label="Mood counts bar chart" role="img"></canvas>
-    <canvas id="lineChart" aria-label="Mood trend line chart" role="img"></canvas>
-  </section>
-</main>
-
-<footer>
-  &copy; 2025 Mood Tracker Toolkit | Outil de suivi d'humeur
-</footer>
+<div id="confetti-container" aria-hidden="true"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   (function(){
-    const moods = [
-      {
-        id: 'happy',
-        emoji: '😊',
-        name_en: 'Happy',
-        name_fr: 'Heureux/Heureuse',
-        quote_en: 'Happiness is not by chance, but by choice.',
-        quote_fr: "Le bonheur n'est pas un hasard, mais un choix.",
-        intensity: 5
-      },
-      {
-        id: 'sad',
-        emoji: '😢',
-        name_en: 'Sad',
-        name_fr: 'Triste',
-        quote_en: 'Every sadness will fade with time.',
-        quote_fr: "Toute tristesse s'estompe avec le temps.",
-        intensity: 1
-      },
-      {
-        id: 'angry',
-        emoji: '😠',
-        name_en: 'Angry',
-        name_fr: 'En colère',
-        quote_en: 'Anger is a valid emotion, but control is key.',
-        quote_fr: "La colère est une émotion valide, mais le contrôle est la clé.",
-        intensity: 2
-      },
-      {
-        id: 'relaxed',
-        emoji: '😌',
-        name_en: 'Relaxed',
-        name_fr: 'Détendu/Détendue',
-        quote_en: 'Peace comes from within, not from without.',
-        quote_fr: "La paix vient de l'intérieur, pas de l'extérieur.",
-        intensity: 4
-      },
-      {
-        id: 'anxious',
-        emoji: '😰',
-        name_en: 'Anxious',
-        name_fr: 'Anxieux/Anxieuse',
-        quote_en: 'This too shall pass, breathe deeply.',
-        quote_fr: "Cela aussi passera, respirez profondément.",
-        intensity: 3
-      },
-      {
-        id: 'neutral',
-        emoji: '😐',
-        name_en: 'Neutral',
-        name_fr: 'Neutre',
-        quote_en: 'Every mood is valid and part of the journey.',
-        quote_fr: "Chaque humeur est valide et fait partie du chemin.",
-        intensity: 3
-      }
-    ];
+    const moodSelect = document.getElementById('mood-select');
+    const notesInput = document.getElementById('notes');
+    const form = document.getElementById('mood-form');
+    const display = document.getElementById('mood-display');
+    const entriesList = document.getElementById('entries-list');
+    const clearBtn = document.getElementById('clear-entries');
+    const downloadBtn = document.getElementById('download-pdf');
+    const confettiContainer = document.getElementById('confetti-container');
 
-    // DOM elements
-    const moodSelectionEl = document.querySelector('.mood-selection');
-    const quoteEl = document.getElementById('quoteArea');
-    const noteInput = document.getElementById('noteInput');
-    const entryForm = document.getElementById('entryForm');
-    const addEntryBtn = entryForm.querySelector('button');
-    const entriesList = document.getElementById('entriesList');
-    const langToggleBtn = document.getElementById('langToggle');
-    const titleEl = document.getElementById('title');
-    const clearEntriesBtn = document.getElementById('clearEntriesBtn');
-    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-    const reminderTimeInput = document.getElementById('reminderTimeInput');
-    const setReminderBtn = document.getElementById('setReminderBtn');
-    const reminderMessage = document.getElementById('reminderMessage');
-    const analyticsTitle = document.getElementById('analyticsTitle');
-
-    // Chart.js instances
-    let barChart = null;
-    let lineChart = null;
-
-    // State
-    let selectedMood = null;
-    let language = localStorage.getItem('moodTrackerLang') || 'en'; // default English
-    let entries = JSON.parse(localStorage.getItem('moodEntries')) || [];
-    let reminderTime = localStorage.getItem('moodReminderTime') || '';
-
-    // Texts per language
-    const texts = {
-      en: {
-        title: 'Mood Tracker Toolkit',
-        addEntry: 'Add Entry',
-        notePlaceholder: 'Add notes about your mood...',
-        quoteDefault: 'Select a mood to see an inspirational quote.',
-        langToggle: 'Français',
-        ariaMoodSelection: 'Select your mood',
-        ariaAddEntry: 'Add mood entry',
-        ariaEntries: 'Mood entries',
-        noEntries: 'No mood entries yet.',
-        entryAddedAlert: 'Mood entry added!',
-        clearConfirm: 'Are you sure you want to clear all mood entries?',
-        clearSuccess: 'All entries cleared.',
-        downloadTitle: 'Mood Tracker Entries',
-        reminderLabel: 'Set daily mood reminder time:',
-        reminderSet: 'Reminder set for',
-        reminderUnset: 'Reminder cleared.',
-        reminderUnsupported: 'Notification permission denied or unsupported.',
-        reminderPrompt: 'Time for your daily mood check-in!',
-        analyticsTitle: 'Mood Analytics'
+    // Data for moods
+    const moodData = {
+      happy: {
+        icon: '😊',
+        colorClass: 'mood-happy',
+        message: 'You’re feeling joyful and positive! Keep shining your light.',
+        affirmation: '“I attract happiness and joy into my life.”',
+        tip: 'Try to share your happiness with others — a smile or kind word can brighten someone’s day.'
       },
-      fr: {
-        title: "Outil de suivi d'humeur",
-        addEntry: "Ajouter l'entrée",
-        notePlaceholder: "Ajoutez des notes sur votre humeur...",
-        quoteDefault: "Sélectionnez une humeur pour voir une citation inspirante.",
-        langToggle: "English",
-        ariaMoodSelection: "Sélectionnez votre humeur",
-        ariaAddEntry: "Ajouter une entrée d'humeur",
-        ariaEntries: "Entrées d'humeur",
-        noEntries: "Aucune entrée d'humeur pour le moment.",
-        entryAddedAlert: "Entrée d'humeur ajoutée !",
-        clearConfirm: "Voulez-vous vraiment effacer toutes les entrées d'humeur ?",
-        clearSuccess: "Toutes les entrées ont été effacées.",
-        downloadTitle: "Entrées du suivi d'humeur",
-        reminderLabel: "Réglez l'heure du rappel quotidien :",
-        reminderSet: "Rappel réglé pour",
-        reminderUnset: "Rappel effacé.",
-        reminderUnsupported: "Permission de notification refusée ou non prise en charge.",
-        reminderPrompt: "Il est temps de vérifier votre humeur quotidienne !",
-        analyticsTitle: "Analyse des humeurs"
+      sad: {
+        icon: '😢',
+        colorClass: 'mood-sad',
+        message: 'It’s okay to feel down sometimes. Allow yourself space to process.',
+        affirmation: '“I honor my feelings and give myself time to heal.”',
+        tip: 'Consider journaling or talking to a trusted friend about your feelings.'
+      },
+      angry: {
+        icon: '😠',
+        colorClass: 'mood-angry',
+        message: 'Anger is valid. Try to channel it into constructive action or release.',
+        affirmation: '“I control my reactions and choose peace.”',
+        tip: 'Take deep breaths or physical activity to calm your mind.'
+      },
+      anxious: {
+        icon: '😟',
+        colorClass: 'mood-anxious',
+        message: 'Feeling anxious can be tough. Remember you are not alone.',
+        affirmation: '“I am grounded and in control of my thoughts.”',
+        tip: 'Practice grounding exercises or mindfulness to stay present.'
+      },
+      excited: {
+        icon: '🤩',
+        colorClass: 'mood-excited',
+        message: 'Your excitement is contagious! Enjoy the energy and focus it.',
+        affirmation: '“I welcome positive energy and opportunities.”',
+        tip: 'Channel your excitement into productive creativity or goal setting.'
+      },
+      calm: {
+        icon: '😌',
+        colorClass: 'mood-calm',
+        message: 'Peace and calm are your friends right now. Savor this moment.',
+        affirmation: '“I am centered, calm, and at peace.”',
+        tip: 'Maintain your calm by spending time in nature or gentle breathing.'
       }
     };
 
-    // Initialize language text
-    function updateLanguageText() {
-      const t = texts[language];
-      titleEl.textContent = t.title;
-      addEntryBtn.textContent = t.addEntry;
-      noteInput.placeholder = t.notePlaceholder;
-      quoteEl.textContent = t.quoteDefault;
-      langToggleBtn.textContent = t.langToggle;
-      moodSelectionEl.setAttribute('aria-label', t.ariaMoodSelection);
-      entryForm.setAttribute('aria-label', t.ariaAddEntry);
-      entriesList.setAttribute('aria-label', t.ariaEntries);
-      reminderMessage.textContent = reminderTime ? `${t.reminderSet} ${reminderTime}` : t.reminderUnset;
-      document.querySelector('.reminder-section label').textContent = t.reminderLabel;
-      analyticsTitle.textContent = t.analyticsTitle;
-    }
+    // Load entries from localStorage or initialize empty array
+    let entries = JSON.parse(localStorage.getItem('moodEntries')) || [];
 
-    // Render moods
-    function renderMoods() {
-      moodSelectionEl.innerHTML = '';
-      moods.forEach(m => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'mood-btn';
-        if(selectedMood === m.id) btn.classList.add('selected');
-        btn.setAttribute('data-id', m.id);
-        btn.setAttribute('aria-pressed', selectedMood === m.id ? 'true' : 'false');
-        btn.innerHTML = `
-          <div class="mood-emoji">${m.emoji}</div>
-          <div class="mood-name">${language === 'en' ? m.name_en : m.name_fr}</div>
-        `;
-        moodSelectionEl.appendChild(btn);
-      });
-    }
-
-    // Update background by mood
-    function updateBackground() {
-      document.body.className = 'mood-neutral';
-      if(selectedMood) {
-        document.body.classList.add('mood-' + selectedMood);
-      }
-    }
-
-    // Update inspirational quote
-    function updateQuote() {
-      if(!selectedMood) {
-        quoteEl.textContent = texts[language].quoteDefault;
+    // Helper to update mood display area
+    function updateMoodDisplay(moodKey) {
+      if (!moodKey || !moodData[moodKey]) {
+        display.innerHTML = '<p>Select a mood and save your entry to see personalized suggestions here.</p>';
+        document.body.className = '';
         return;
       }
-      const mood = moods.find(m => m.id === selectedMood);
-      quoteEl.textContent = language === 'en' ? mood.quote_en : mood.quote_fr;
+      const {icon, message, affirmation, tip, colorClass} = moodData[moodKey];
+      document.body.className = colorClass;
+
+      display.innerHTML = `
+        <div class="mood-icon" aria-hidden="true">${icon}</div>
+        <div class="mood-card" role="region" aria-label="Message">${message}</div>
+        <div class="mood-card" role="region" aria-label="Affirmation">${affirmation}</div>
+        <div class="mood-card" role="region" aria-label="Tip">${tip}</div>
+      `;
+
+      // Trigger confetti animation on mood update
+      createConfetti();
     }
 
-    // Enable/disable Add Entry button
-    function updateAddEntryBtn() {
-      addEntryBtn.disabled = !selectedMood || noteInput.value.trim().length === 0;
-    }
-
-    // Render entries
+    // Render entries list
     function renderEntries() {
-      entriesList.innerHTML = '';
-      if(entries.length === 0) {
-        entriesList.textContent = texts[language].noEntries;
+      if (entries.length === 0) {
+        entriesList.innerHTML = '<li>No mood entries yet.</li>';
         return;
       }
-      entries.slice().reverse().forEach(entry => {
-        const mood = moods.find(m => m.id === entry.mood);
-        const date = new Date(entry.timestamp);
-        const dateStr = date.toLocaleString(language === 'en' ? 'en-CA' : 'fr-CA', {
-          year: 'numeric', month: 'short', day: 'numeric',
-          hour: '2-digit', minute: '2-digit'
-        });
-
-        const entryEl = document.createElement('article');
-        entryEl.className = 'entry';
-        entryEl.innerHTML = `
-          <div class="entry-header">
-            <span class="entry-mood" aria-label="${language === 'en' ? mood.name_en : mood.name_fr}">${mood.emoji} ${language === 'en' ? mood.name_en : mood.name_fr}</span>
-            <time datetime="${entry.timestamp}">${dateStr}</time>
-          </div>
-          <div class="entry-note">${escapeHtml(entry.note)}</div>
+      entriesList.innerHTML = entries.map(entry => {
+        const date = new Date(entry.date).toLocaleString();
+        const mood = moodData[entry.mood] || {};
+        const icon = mood.icon || '';
+        return `
+          <li>
+            <strong>${icon} ${entry.mood.charAt(0).toUpperCase() + entry.mood.slice(1)} — ${date}</strong>
+            <p>${entry.notes || '(No notes)'}</p>
+          </li>
         `;
-        entriesList.appendChild(entryEl);
-      });
-    }
-
-    // Escape HTML in user input (simple)
-    function escapeHtml(text) {
-      return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      }).join('');
     }
 
     // Save entries to localStorage
     function saveEntries() {
       localStorage.setItem('moodEntries', JSON.stringify(entries));
-      updateCharts();
     }
 
-    // Save language selection
-    function saveLanguage() {
-      localStorage.setItem('moodTrackerLang', language);
-    }
-
-    // Save selected mood
-    function saveSelectedMood() {
-      localStorage.setItem('moodSelected', selectedMood);
-    }
-
-    // Save reminder time
-    function saveReminderTime(time) {
-      if(time) {
-        localStorage.setItem('moodReminderTime', time);
-      } else {
-        localStorage.removeItem('moodReminderTime');
-      }
-      reminderTime = time;
-      reminderMessage.textContent = time ? `${texts[language].reminderSet} ${time}` : texts[language].reminderUnset;
-    }
-
-    // Load selected mood
-    function loadSelectedMood() {
-      const savedMood = localStorage.getItem('moodSelected');
-      if(savedMood && moods.some(m => m.id === savedMood)) {
-        selectedMood = savedMood;
-      }
-    }
-
-    // Initialize charts
-    function initCharts() {
-      const barCtx = document.getElementById('barChart').getContext('2d');
-      const lineCtx = document.getElementById('lineChart').getContext('2d');
-
-      barChart = new Chart(barCtx, {
-        type: 'bar',
-        data: {
-          labels: moods.map(m => language === 'en' ? m.name_en : m.name_fr),
-          datasets: [{
-            label: language === 'en' ? 'Number of Entries' : 'Nombre d\'entrées',
-            data: [],
-            backgroundColor: moods.map(m => getComputedStyle(document.documentElement).getPropertyValue(`--color-${m.id}`).trim() || '#999'),
-            borderRadius: 6,
-            borderSkipped: false
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: { beginAtZero: true, ticks: { precision: 0 } }
-          },
-          plugins: {
-            legend: { display: false }
-          }
-        }
-      });
-
-      lineChart = new Chart(lineCtx, {
-        type: 'line',
-        data: {
-          labels: [],
-          datasets: [{
-            label: language === 'en' ? 'Mood Intensity Over Time' : "Intensité de l'humeur au fil du temps",
-            data: [],
-            fill: false,
-            borderColor: '#007bff',
-            tension: 0.25,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            backgroundColor: '#007bff'
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            x: {
-              type: 'time',
-              time: {
-                unit: 'day',
-                tooltipFormat: language === 'en' ? 'MMM d, yyyy' : 'd MMM yyyy'
-              },
-              title: {
-                display: true,
-                text: language === 'en' ? 'Date' : 'Date'
-              }
-            },
-            y: {
-              min: 0,
-              max: 5,
-              ticks: {
-                stepSize: 1,
-                callback: (val) => {
-                  // Map intensity number to mood name (english only here)
-                  const moodByIntensity = moods.find(m => m.intensity === val);
-                  return moodByIntensity ? (language === 'en' ? moodByIntensity.name_en : moodByIntensity.name_fr) : val;
-                }
-              },
-              title: {
-                display: true,
-                text: language === 'en' ? 'Intensity' : "Intensité"
-              }
-            }
-          },
-          plugins: {
-            legend: { labels: { font: { weight: '700' } } }
-          }
-        }
-      });
-    }
-
-    // Update charts data from entries
-    function updateCharts() {
-      if(!barChart || !lineChart) return;
-
-      // Bar chart: count moods in last 30 days
-      const cutoffDate = new Date();
-      cutoffDate.setDate(cutoffDate.getDate() - 30);
-
-      const filteredEntries = entries.filter(e => new Date(e.timestamp) >= cutoffDate);
-
-      const moodCounts = moods.map(m => 0);
-      filteredEntries.forEach(e => {
-        const idx = moods.findIndex(m => m.id === e.mood);
-        if(idx >= 0) moodCounts[idx]++;
-      });
-
-      barChart.data.datasets[0].data = moodCounts;
-      barChart.options.plugins.legend.labels.font.weight = '700';
-      barChart.update();
-
-      // Line chart: mood intensity over time (last 30 days)
-      // Aggregate by date, average intensity
-      const dayMap = {};
-      filteredEntries.forEach(e => {
-        const dateKey = new Date(e.timestamp).toISOString().slice(0,10); // YYYY-MM-DD
-        if(!dayMap[dateKey]) dayMap[dateKey] = { sum: 0, count: 0 };
-        const mood = moods.find(m => m.id === e.mood);
-        if(mood){
-          dayMap[dateKey].sum += mood.intensity;
-          dayMap[dateKey].count++;
-        }
-      });
-
-      // Sort dates ascending
-      const sortedDates = Object.keys(dayMap).sort();
-
-      const lineLabels = sortedDates.map(d => {
-        const dt = new Date(d);
-        return dt;
-      });
-      const lineData = sortedDates.map(d => dayMap[d].sum / dayMap[d].count);
-
-      lineChart.data.labels = lineLabels;
-      lineChart.data.datasets[0].data = lineData;
-      lineChart.options.scales.x.time.tooltipFormat = language === 'en' ? 'MMM d, yyyy' : 'd MMM yyyy';
-      lineChart.update();
-    }
-
-    // Event handlers
-    moodSelectionEl.addEventListener('click', (e) => {
-      const btn = e.target.closest('button.mood-btn');
-      if(!btn) return;
-      const moodId = btn.getAttribute('data-id');
-      if(moodId === selectedMood) {
-        selectedMood = null;
-      } else {
-        selectedMood = moodId;
-      }
-      saveSelectedMood();
-      renderMoods();
-      updateBackground();
-      updateQuote();
-      updateAddEntryBtn();
-    });
-
-    noteInput.addEventListener('input', updateAddEntryBtn);
-
-    entryForm.addEventListener('submit', e => {
+    // Handle form submit
+    form.addEventListener('submit', e => {
       e.preventDefault();
-      if(!selectedMood) return;
-      const note = noteInput.value.trim();
-      if(note.length === 0) return;
-      const newEntry = {
-        id: Date.now(),
-        mood: selectedMood,
-        note: note,
-        timestamp: new Date().toISOString()
-      };
-      entries.push(newEntry);
+      const mood = moodSelect.value;
+      const notes = notesInput.value.trim();
+      if (!mood) return alert('Please select a mood.');
+
+      const entry = { mood, notes, date: new Date().toISOString() };
+      entries.unshift(entry); // newest on top
       saveEntries();
       renderEntries();
-      noteInput.value = '';
-      updateAddEntryBtn();
-      alert(language === 'en' ? texts.en.entryAddedAlert : texts.fr.entryAddedAlert);
+      updateMoodDisplay(mood);
+      notesInput.value = '';
+      moodSelect.value = '';
     });
 
-    langToggleBtn.addEventListener('click', () => {
-      language = language === 'en' ? 'fr' : 'en';
-      saveLanguage();
-      updateLanguageText();
-      renderMoods();
-      updateQuote();
-      renderEntries();
-      updateAddEntryBtn();
-      updateCharts();
-    });
-
-    clearEntriesBtn.addEventListener('click', () => {
-      if(confirm(language === 'en' ? texts.en.clearConfirm : texts.fr.clearConfirm)) {
+    // Clear all entries
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to clear all mood entries? This cannot be undone.')) {
         entries = [];
         saveEntries();
         renderEntries();
-        alert(language === 'en' ? texts.en.clearSuccess : texts.fr.clearSuccess);
+        updateMoodDisplay(null);
       }
     });
 
-    downloadPdfBtn.addEventListener('click', () => {
-      if(entries.length === 0){
-        alert(language === 'en' ? texts.en.noEntries : texts.fr.noEntries);
-        return;
-      }
-      generatePdf();
-    });
-
-    setReminderBtn.addEventListener('click', () => {
-      const time = reminderTimeInput.value;
-      if(!time){
-        saveReminderTime('');
-        alert(language === 'en' ? texts.en.reminderUnset : texts.fr.reminderUnset);
-        clearTimeout(reminderTimeout);
-        return;
-      }
-      saveReminderTime(time);
-      alert(`${language === 'en' ? texts.en.reminderSet : texts.fr.reminderSet} ${time}`);
-      scheduleReminder();
-    });
-
-    // PDF Generation using jsPDF
-    async function generatePdf() {
+    // Download PDF
+    downloadBtn.addEventListener('click', () => {
+      if (entries.length === 0) return alert('No entries to download.');
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-
-      const title = language === 'en' ? texts.en.downloadTitle : texts.fr.downloadTitle;
-      doc.setFontSize(16);
-      doc.text(title, 14, 20);
-
+      const pageWidth = doc.internal.pageSize.getWidth();
+      let y = 15;
+      doc.setFontSize(18);
+      doc.text('Mood Toolkit Entries', pageWidth / 2, y, { align: 'center' });
+      y += 10;
       doc.setFontSize(12);
-
-      let y = 30;
-
-      entries.slice().reverse().forEach((entry, i) => {
-        if(y > 270) {
+      entries.forEach((entry, i) => {
+        const moodInfo = moodData[entry.mood] || {};
+        const dateStr = new Date(entry.date).toLocaleString();
+        let entryText = `${moodInfo.icon || ''} ${entry.mood.charAt(0).toUpperCase() + entry.mood.slice(1)} - ${dateStr}\n${entry.notes || '(No notes)'}`;
+        const splitText = doc.splitTextToSize(entryText, pageWidth - 30);
+        if (y + splitText.length * 7 > doc.internal.pageSize.getHeight() - 20) {
           doc.addPage();
-          y = 20;
+          y = 15;
         }
-        const mood = moods.find(m => m.id === entry.mood);
-        const date = new Date(entry.timestamp);
-        const dateStr = date.toLocaleString(language === 'en' ? 'en-CA' : 'fr-CA', {
-          year: 'numeric', month: 'short', day: 'numeric',
-          hour: '2-digit', minute: '2-digit'
-        });
-
-        doc.setFont(undefined, 'bold');
-        doc.text(`${mood.emoji} ${language === 'en' ? mood.name_en : mood.name_fr} — ${dateStr}`, 14, y);
-        y += 8;
-        doc.setFont(undefined, 'normal');
-
-        const splitNote = doc.splitTextToSize(entry.note, 180);
-        doc.text(splitNote, 14, y);
-        y += splitNote.length * 7 + 5;
+        doc.text(splitText, 15, y);
+        y += splitText.length * 7 + 8;
       });
+      doc.save('mood-toolkit-entries.pdf');
+    });
 
-      doc.save('mood-tracker-entries.pdf');
-    }
-
-    // Reminder scheduling
-    let reminderTimeout = null;
-    function scheduleReminder(){
-      clearTimeout(reminderTimeout);
-      if(!reminderTime) return;
-
-      const [hours, minutes] = reminderTime.split(':').map(Number);
-      const now = new Date();
-      let nextReminder = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
-
-      if(nextReminder <= now) {
-        nextReminder.setDate(nextReminder.getDate() + 1);
-      }
-
-      const delay = nextReminder.getTime() - now.getTime();
-
-      reminderTimeout = setTimeout(() => {
-        showReminderNotification();
-        scheduleReminder();
-      }, delay);
-    }
-
-    function showReminderNotification(){
-      if(!('Notification' in window)){
-        fallbackReminderAlert();
-        return;
-      }
-
-      if(Notification.permission === 'granted'){
-        const options = {
-          body: language === 'en' ? texts.en.reminderPrompt : texts.fr.reminderPrompt,
-          icon: 'https://cdn-icons-png.flaticon.com/512/888/888879.png',
-          badge: 'https://cdn-icons-png.flaticon.com/512/888/888879.png',
-        };
-        new Notification(titleEl.textContent, options);
-      }
-      else if(Notification.permission !== 'denied'){
-        Notification.requestPermission().then(permission => {
-          if(permission === 'granted'){
-            showReminderNotification();
-          } else {
-            fallbackReminderAlert();
-          }
-        });
-      } else {
-        fallbackReminderAlert();
+    function createConfetti() {
+      for (let i = 0; i < 25; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.background = `hsl(${Math.random() * 360}, 80%, 70%)`;
+        confetti.style.animationDuration = `${Math.random() * 2 + 2}s`;
+        confettiContainer.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 4000);
       }
     }
 
-    function fallbackReminderAlert(){
-      alert(language === 'en' ? texts.en.reminderPrompt : texts.fr.reminderPrompt);
-    }
-
-    // Load selected mood on start
-    function init() {
-      loadSelectedMood();
-      updateLanguageText();
-      renderMoods();
-      updateBackground();
-      updateQuote();
-      renderEntries();
-      updateAddEntryBtn();
-      reminderTimeInput.value = reminderTime || '';
-      initCharts();
-      updateCharts();
-      scheduleReminder();
-    }
-
-    init();
-
+    // Init
+    renderEntries();
+    updateMoodDisplay(null);
   })();
 </script>
-
 </body>
 </html>
