@@ -1,790 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🌟 Personal Self-Care Toolkit 🌟</title>
-  <style>
-    /* Reset & Base */
-    * {
-      box-sizing: border-box;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Self-Care Toolkit</title>
+<style>
+  /* Reset and base */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #fceabb, #f8b500);
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: linear-gradient(90deg, #f67280, #c06c84, #6c5b7b);
+    color: white;
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: 0.07em;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+  }
+  main {
+    flex-grow: 1;
+    padding: 2rem 1.5rem;
+    max-width: 900px;
+    margin: 0 auto 3rem auto;
+  }
+  h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.2rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    border-bottom: 3px solid;
+    padding-bottom: 0.4rem;
+  }
+  /* Different colors for each category */
+  #physical h2 {
+    border-color: #f67280;
+    color: #f85c70;
+  }
+  #mental h2 {
+    border-color: #6c5b7b;
+    color: #5a476b;
+  }
+  #emotional h2 {
+    border-color: #355c7d;
+    color: #2c4560;
+  }
+  #social h2 {
+    border-color: #ff6f61;
+    color: #d94b3f;
+  }
+  #creative h2 {
+    border-color: #f8b500;
+    color: #c69300;
+  }
+
+  details {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 1.3rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 1.2rem 1.6rem;
+    transition: box-shadow 0.3s ease;
+    border-left: 6px solid transparent;
+  }
+  #physical details {
+    border-left-color: #f67280;
+  }
+  #mental details {
+    border-left-color: #6c5b7b;
+  }
+  #emotional details {
+    border-left-color: #355c7d;
+  }
+  #social details {
+    border-left-color: #ff6f61;
+  }
+  #creative details {
+    border-left-color: #f8b500;
+  }
+  details[open] {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  }
+  summary {
+    font-weight: 700;
+    font-size: 1.25rem;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 0.9rem;
+    font-size: 1.3rem;
+    color: #777;
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+  details[open] summary::before {
+    transform: rotate(90deg);
+    color: #222;
+  }
+  p {
+    margin-top: 0.8rem;
+    line-height: 1.5;
+    font-size: 1.1rem;
+    color: #444;
+  }
+  ul {
+    margin-top: 0.6rem;
+    padding-left: 1.2rem;
+    line-height: 1.5;
+  }
+  li {
+    margin-bottom: 0.6rem;
+  }
+  textarea {
+    width: 100%;
+    height: 90px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    padding: 0.7rem 1rem;
+    resize: vertical;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.05rem;
+    margin-top: 0.8rem;
+    box-shadow: inset 1px 1px 5px rgba(0,0,0,0.05);
+    transition: border-color 0.3s ease;
+  }
+  textarea:focus {
+    border-color: #f67280;
+    outline: none;
+    box-shadow: 0 0 6px 2px #f67280a0;
+  }
+  .notes-section label {
+    font-weight: 600;
+    color: #333;
+  }
+  .btns {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  button {
+    background: linear-gradient(135deg, #f67280, #c06c84);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 0.65rem 2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 5px 15px #c06c8433;
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+    font-family: 'Poppins', sans-serif;
+  }
+  button:hover, button:focus {
+    background: linear-gradient(135deg, #c06c84, #f67280);
+    box-shadow: 0 8px 20px #f6728077;
+    outline: none;
+  }
+  footer {
+    text-align: center;
+    padding: 1.2rem;
+    background: linear-gradient(90deg, #6c5b7b, #355c7d);
+    color: white;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.05em;
+    user-select: none;
+  }
+  @media (max-width: 600px) {
+    main {
+      padding: 1.2rem;
     }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem 4rem;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    h1, h2, h3, h4 {
-      margin: 0 0 1rem 0;
-      font-weight: 600;
-      color: #1e1e2f;
-      text-align: center;
-    }
-    p {
-      margin: 0 0 1rem 0;
-      line-height: 1.5;
-      color: #444;
-      max-width: 600px;
+    summary {
+      font-size: 1.15rem;
     }
     button {
-      font-family: inherit;
-    }
-
-    /* Container */
-    .container {
-      width: 100%;
-      max-width: 900px;
-      background: #fff;
-      border-radius: 25px;
-      padding: 2rem 2.5rem 3rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Header */
-    .header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.2rem;
-      color: #4a47a3;
-      text-shadow: 0 2px 6px rgba(102,126,234,0.6);
-    }
-    .header p {
-      font-size: 1.15rem;
-      color: #666;
-      margin-bottom: 2rem;
-    }
-
-    /* Stats Bar */
-    .stats-bar {
-      display: flex;
-      justify-content: center;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-    .stat-item {
-      text-align: center;
-      user-select: none;
-    }
-    .stat-number {
-      font-weight: 700;
-      font-size: 2rem;
-      color: #667eea;
-      display: block;
-    }
-
-    /* Tabs */
-    .plan-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-    .tab-btn {
-      background: #e2e8f0;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 15px;
       font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      padding: 0.55rem 1.6rem;
     }
-    .tab-btn.active,
-    .tab-btn:hover {
-      background: #667eea;
-      color: white;
-      box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
-      transform: translateY(-2px);
-    }
-
-    /* Activity Grid & Cards */
-    .activity-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap: 1.5rem;
-    }
-    .activity-card {
-      background: #f9fafc;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.07);
-      padding: 1rem 1.3rem;
-      cursor: pointer;
-      user-select: none;
-      transition: transform 0.25s ease, box-shadow 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      border: 2px solid transparent;
-    }
-    .activity-card:hover {
-      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-      transform: translateY(-5px) scale(1.03);
-      border-color: #667eea;
-    }
-    .activity-card.selected {
-      border-color: #764ba2;
-      background: #dbe4ff;
-      box-shadow: 0 12px 30px rgba(118, 75, 162, 0.5);
-      transform: translateY(-5px) scale(1.05);
-    }
-    .activity-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.8rem;
-      color: #667eea;
-    }
-    .activity-title {
-      font-weight: 700;
-      font-size: 1.15rem;
-      margin-bottom: 0.3rem;
-      color: #3b3b5c;
-    }
-    .activity-desc {
-      font-size: 0.9rem;
-      color: #5a5a7d;
-    }
-
-    /* Plan Content */
-    .plan-category {
-      display: none;
-      margin-bottom: 3rem;
-    }
-    .plan-category.active {
-      display: block;
-    }
-
-    /* Generate Plan Button */
-    .generate-plan-btn {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: none;
-      padding: 1rem 2.5rem;
-      border-radius: 25px;
-      font-weight: 700;
-      font-size: 1.25rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-      display: block;
-      margin: 0 auto 3rem;
-    }
-    .generate-plan-btn:hover {
-      transform: translateY(-4px) scale(1.05);
-      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
-    }
-
-    /* Generated Plan Display */
-    .generated-plan {
-      background: #e8ebff;
-      border-radius: 20px;
-      padding: 1.5rem 2rem;
-      box-shadow: inset 0 0 8px rgba(102, 126, 234, 0.2);
-      max-width: 600px;
-      margin: 0 auto 3rem;
-      font-size: 1.1rem;
-      display: none;
-      color: #3a3a6a;
-    }
-    .generated-plan.show {
-      display: block;
-    }
-    .generated-plan ul {
-      list-style-type: disc;
-      margin-left: 1.5rem;
-      padding-left: 0;
-    }
-
-    /* Breathing Exercise */
-    .breathing-exercise {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-    .breathing-exercise h2 {
-      margin-bottom: 1rem;
-      color: #4a47a3;
-    }
-    .breathing-circle {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      margin: 0 auto 1rem;
-      background: #667eea;
-      box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
-      cursor: pointer;
-      user-select: none;
-      position: relative;
-      transition: box-shadow 0.3s ease;
-    }
-    .breathing-circle::after {
-      content: 'Click to Start/Stop';
-      position: absolute;
-      width: 100%;
-      bottom: -2rem;
-      left: 0;
-      font-weight: 600;
-      color: #444;
-      font-size: 0.9rem;
-      user-select: none;
-    }
-    .breathing-circle.animate {
-      animation: breatheAnimation 6s ease-in-out infinite;
-      box-shadow: 0 0 40px rgba(118, 75, 162, 0.8);
-    }
-    @keyframes breatheAnimation {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-    }
-    .breathing-instructions {
-      font-size: 1rem;
-      color: #555;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-
-    /* Mood Tracker */
-    .mood-tracker {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-    .mood-btn {
-      font-size: 2.2rem;
-      margin: 0 0.7rem;
-      cursor: pointer;
-      background: transparent;
-      border: none;
-      transition: transform 0.25s ease;
-      user-select: none;
-    }
-    .mood-btn:hover {
-      transform: scale(1.3);
-    }
-    .mood-btn.selected {
-      filter: drop-shadow(0 0 5px #764ba2);
-      transform: scale(1.5);
-    }
-    .mood-feedback {
-      font-size: 1.2rem;
-      color: #4a47a3;
-      margin-top: 1rem;
-      font-weight: 600;
-      min-height: 1.5rem;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .mood-feedback.show {
-      opacity: 1;
-    }
-
-    /* Gratitude Journal */
-    .gratitude-container {
-      max-width: 600px;
-      margin: 0 auto 4rem;
-      text-align: center;
-    }
-    .gratitude-input {
-      width: 100%;
-      padding: 1rem 1.2rem;
-      font-size: 1.1rem;
-      border-radius: 15px;
-      border: 2px solid #e2e8f0;
-      resize: vertical;
-      min-height: 100px;
-      transition: border-color 0.3s ease;
-    }
-    .gratitude-input:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-      transform: scale(1.02);
-    }
-    .add-btn {
-      margin-top: 1rem;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border: none;
-      color: white;
-      font-weight: 700;
-      padding: 1rem 2.5rem;
-      font-size: 1.15rem;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-      user-select: none;
-    }
-    .add-btn:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.7);
-    }
-    .gratitude-list {
-      margin-top: 2rem;
-      max-height: 220px;
-      overflow-y: auto;
-    }
-    .gratitude-item {
-      background: #dbe4ff;
-      border-radius: 15px;
-      padding: 1rem 1.5rem;
-      margin-bottom: 1rem;
-      font-size: 1.05rem;
-      color: #3a3a6a;
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-      position: relative;
-      user-select: text;
-    }
-    .gratitude-item::before {
-      content: "✨";
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.5rem;
-      opacity: 0.7;
-    }
-
-    /* Responsive */
-    @media (max-width: 700px) {
-      .activity-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    @media (max-width: 480px) {
-      .activity-grid {
-        grid-template-columns: 1fr;
-      }
-      .container {
-        padding: 1.5rem 1.2rem 2.5rem;
-      }
-      .stats-bar {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      .tab-btn {
-        padding: 0.7rem 1rem;
-        font-size: 0.9rem;
-      }
-      .generate-plan-btn {
-        padding: 0.9rem 2rem;
-        font-size: 1.1rem;
-      }
-      .breathing-circle {
-        width: 160px;
-        height: 160px;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <main class="container" role="main" aria-label="Self-Care Toolkit">
-    <header class="header">
-      <h1>🌟 Your Personal Self-Care Toolkit 🌟</h1>
-      <p>Welcome to your sanctuary of wellness. This is your space to nurture your mind, body, and soul. Take a deep breath and remember: you deserve all the love and care in the world.</p>
-      <section class="stats-bar" aria-label="User progress statistics">
-        <div class="stat-item" aria-live="polite">
-          <span class="stat-number" id="activitiesCompleted">0</span>
-          <span>Activities Completed</span>
-        </div>
-        <div class="stat-item" aria-live="polite">
-          <span class="stat-number" id="dayStreak">0</span>
-          <span>Day Streak</span>
-        </div>
-        <div class="stat-item" aria-live="polite">
-          <span class="stat-number" id="moodScore">😊</span>
-          <span>Today's Mood</span>
-        </div>
-      </section>
-    </header>
 
-    <!-- Plan Builder -->
-    <section aria-label="Self-care plan builder">
-      <div class="plan-tabs" role="tablist" aria-label="Self-care plan categories">
-        <button role="tab" aria-selected="true" tabindex="0" class="tab-btn active" onclick="showPlanCategory('physical')">🏃‍♀️ Physical</button>
-        <button role="tab" aria-selected="false" tabindex="-1" class="tab-btn" onclick="showPlanCategory('cognitive')">🧠 Cognitive</button>
-        <button role="tab" aria-selected="false" tabindex="-1" class="tab-btn" onclick="showPlanCategory('creative')">🎨 Creative</button>
-        <button role="tab" aria-selected="false" tabindex="-1" class="tab-btn" onclick="showPlanCategory('motivation')">☀️ Motivation</button>
-        <button role="tab" aria-selected="false" tabindex="-1" class="tab-btn" onclick="showPlanCategory('social')">💝 Social</button>
+<header>🧘‍♀️ Self-Care Toolkit</header>
+
+<main>
+  <section id="physical">
+    <h2>Physical Self-Care</h2>
+    <details>
+      <summary>Take a Short Walk</summary>
+      <p>Getting outside for a 10-15 minute walk can boost your mood and energy.</p>
+      <div class="notes-section">
+        <label for="notes-physical-walk">Your notes:</label>
+        <textarea id="notes-physical-walk" placeholder="Write how you felt..."></textarea>
       </div>
-
-      <!-- Physical -->
-      <div role="tabpanel" tabindex="0" class="plan-category active" id="physical">
-        <h3>🏃‍♀️ Physical Self-Care Activities</h3>
-        <div class="activity-grid">
-          <div class="activity-card" tabindex="0" data-activity="Morning Stretches" data-time="10" data-type="morning" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🧘‍♀️</span>
-            <div class="activity-title">Morning Stretches</div>
-            <div class="activity-desc">Gentle stretching to awaken your body and improve flexibility</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Mindful Walk" data-time="20" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🚶‍♀️</span>
-            <div class="activity-title">Mindful Walk</div>
-            <div class="activity-desc">Fresh air and movement to energize or unwind</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Hydration Ritual" data-time="2" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">💧</span>
-            <div class="activity-title">Hydration Ritual</div>
-            <div class="activity-desc">Drink a full glass of water mindfully</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Exercise Session" data-time="30" data-type="morning" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">💪</span>
-            <div class="activity-title">Exercise Session</div>
-            <div class="activity-desc">Workout, yoga, or physical activity of your choice</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Relaxing Bath" data-time="25" data-type="evening" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🛁</span>
-            <div class="activity-title">Relaxing Bath</div>
-            <div class="activity-desc">Warm bath with essential oils or bath salts</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Skincare Routine" data-time="10" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">✨</span>
-            <div class="activity-title">Skincare Routine</div>
-            <div class="activity-desc">Nourish your skin with loving care</div>
-          </div>
-        </div>
+    </details>
+    <details>
+      <summary>Stretch or Do Yoga</summary>
+      <p>Simple stretches or yoga poses help release tension and improve flexibility.</p>
+      <div class="notes-section">
+        <label for="notes-physical-stretch">Your notes:</label>
+        <textarea id="notes-physical-stretch" placeholder="Write your experience..."></textarea>
       </div>
+    </details>
+  </section>
 
-      <!-- Cognitive -->
-      <div role="tabpanel" tabindex="0" class="plan-category" id="cognitive" hidden>
-        <h3>🧠 Cognitive Tools & Mental Wellness</h3>
-        <div class="activity-grid">
-          <div class="activity-card" tabindex="0" data-activity="Journal Writing" data-time="15" data-type="evening" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">📓</span>
-            <div class="activity-title">Journal Writing</div>
-            <div class="activity-desc">Reflect and process thoughts before sleep</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Daily Affirmations" data-time="5" data-type="morning" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">💬</span>
-            <div class="activity-title">Daily Affirmations</div>
-            <div class="activity-desc">Start the day with empowering thoughts</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Mindful Reading" data-time="20" data-type="evening" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">📖</span>
-            <div class="activity-title">Mindful Reading</div>
-            <div class="activity-desc">Engage with calming or inspiring literature</div>
-          </div>
-        </div>
+  <section id="mental">
+    <h2>Mental Self-Care</h2>
+    <details>
+      <summary>Practice Mindfulness Meditation</summary>
+      <p>Spend 5-10 minutes focusing on your breath or a guided meditation to calm your mind.</p>
+      <div class="notes-section">
+        <label for="notes-mental-meditation">Your notes:</label>
+        <textarea id="notes-mental-meditation" placeholder="How was your meditation?"></textarea>
       </div>
-
-      <!-- Creative -->
-      <div role="tabpanel" tabindex="0" class="plan-category" id="creative" hidden>
-        <h3>🎨 Creative Expression</h3>
-        <div class="activity-grid">
-          <div class="activity-card" tabindex="0" data-activity="Doodling" data-time="10" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🖍️</span>
-            <div class="activity-title">Doodling</div>
-            <div class="activity-desc">Express emotions through art</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Music Time" data-time="15" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🎧</span>
-            <div class="activity-title">Music Time</div>
-            <div class="activity-desc">Listen or create music to shift your energy</div>
-          </div>
-        </div>
+    </details>
+    <details>
+      <summary>Read Something Inspirational</summary>
+      <p>Choose a book, article, or quote that lifts your spirits or teaches you something new.</p>
+      <div class="notes-section">
+        <label for="notes-mental-reading">Your notes:</label>
+        <textarea id="notes-mental-reading" placeholder="What inspired you?"></textarea>
       </div>
+    </details>
+  </section>
 
-      <!-- Motivation -->
-      <div role="tabpanel" tabindex="0" class="plan-category" id="motivation" hidden>
-        <h3>☀️ Motivational Boosts</h3>
-        <div class="activity-grid">
-          <div class="activity-card" tabindex="0" data-activity="Set a Goal" data-time="5" data-type="morning" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🎯</span>
-            <div class="activity-title">Set a Goal</div>
-            <div class="activity-desc">Pick one positive goal for today</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Celebrate Wins" data-time="10" data-type="evening" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🏆</span>
-            <div class="activity-title">Celebrate Wins</div>
-            <div class="activity-desc">List 3 things you did well today</div>
-          </div>
-        </div>
+  <section id="emotional">
+    <h2>Emotional Self-Care</h2>
+    <details>
+      <summary>Journaling Your Feelings</summary>
+      <p>Write freely about your emotions to process and understand them better.</p>
+      <div class="notes-section">
+        <label for="notes-emotional-journaling">Your notes:</label>
+        <textarea id="notes-emotional-journaling" placeholder="Express yourself..."></textarea>
       </div>
-
-      <!-- Social -->
-      <div role="tabpanel" tabindex="0" class="plan-category" id="social" hidden>
-        <h3>💝 Social Connection</h3>
-        <div class="activity-grid">
-          <div class="activity-card" tabindex="0" data-activity="Check In" data-time="10" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">📞</span>
-            <div class="activity-title">Check In</div>
-            <div class="activity-desc">Message a friend or loved one</div>
-          </div>
-          <div class="activity-card" tabindex="0" data-activity="Kind Act" data-time="10" data-type="both" aria-pressed="false" role="button">
-            <span class="activity-icon" aria-hidden="true">🌷</span>
-            <div class="activity-title">Kind Act</div>
-            <div class="activity-desc">Do something kind for someone else</div>
-          </div>
-        </div>
+    </details>
+    <details>
+      <summary>Connect with a Loved One</summary>
+      <p>Reach out to a friend or family member to share how you’re feeling.</p>
+      <div class="notes-section">
+        <label for="notes-emotional-connection">Your notes:</label>
+        <textarea id="notes-emotional-connection" placeholder="How did it go?"></textarea>
       </div>
+    </details>
+  </section>
 
-      <button class="generate-plan-btn" aria-label="Generate personalized self-care plan" id="generatePlanBtn">💡 Generate My Self-Care Plan</button>
-      <div id="generatedPlan" class="generated-plan" aria-live="polite" role="region" aria-label="Generated self-care plan"></div>
-    </section>
+  <section id="social">
+    <h2>Social Self-Care</h2>
+    <details>
+      <summary>Join a Community Group</summary>
+      <p>Find an online or in-person group that shares your interests or values.</p>
+      <div class="notes-section">
+        <label for="notes-social-group">Your notes:</label>
+        <textarea id="notes-social-group" placeholder="Which group? How did it feel?"></textarea>
+      </div>
+    </details>
+    <details>
+      <summary>Schedule Time for Fun</summary>
+      <p>Plan an activity that you enjoy doing with others.</p>
+      <div class="notes-section">
+        <label for="notes-social-fun">Your notes:</label>
+        <textarea id="notes-social-fun" placeholder="What did you do?"></textarea>
+      </div>
+    </details>
+  </section>
 
-    <!-- Breathing Exercise -->
-    <section class="breathing-exercise" aria-label="Guided breathing exercise">
-      <h2>Breathe with Me</h2>
-      <div class="breathing-circle" role="button" tabindex="0" aria-pressed="false" aria-label="Start or stop breathing exercise" id="breathingCircle"></div>
-      <p class="breathing-instructions">
-        Inhale slowly as the circle expands... exhale gently as it contracts. Repeat for 1–3 minutes.
-      </p>
-    </section>
+  <section id="creative">
+    <h2>Creative Self-Care</h2>
+    <details>
+      <summary>Draw or Paint</summary>
+      <p>Use art as a way to express your inner thoughts and feelings.</p>
+      <div class="notes-section">
+        <label for="notes-creative-art">Your notes:</label>
+        <textarea id="notes-creative-art" placeholder="What did you create?"></textarea>
+      </div>
+    </details>
+    <details>
+      <summary>Write a Poem or Story</summary>
+      <p>Try writing creatively to explore your imagination and emotions.</p>
+      <div class="notes-section">
+        <label for="notes-creative-writing">Your notes:</label>
+        <textarea id="notes-creative-writing" placeholder="Write your poem or story..."></textarea>
+      </div>
+    </details>
+  </section>
 
-    <!-- Mood Tracker -->
-    <section class="mood-tracker" aria-label="Mood tracker">
-      <button class="mood-btn" aria-label="Happy mood" role="radio" name="mood" aria-checked="false">😊</button>
-      <button class="mood-btn" aria-label="Neutral mood" role="radio" name="mood" aria-checked="false">😐</button>
-      <button class="mood-btn" aria-label="Sad mood" role="radio" name="mood" aria-checked="false">😢</button>
-      <button class="mood-btn" aria-label="Angry mood" role="radio" name="mood" aria-checked="false">😠</button>
-      <button class="mood-btn" aria-label="Tired mood" role="radio" name="mood" aria-checked="false">😴</button>
-    </section>
-    <div id="moodFeedback" class="mood-feedback" aria-live="polite"></div>
+  <div class="btns" role="group" aria-label="Self-care notes actions">
+    <button id="saveNotes" aria-label="Save notes">💾 Save Notes</button>
+    <button id="clearNotes" aria-label="Clear all notes">🗑️ Clear All Notes</button>
+    <button id="downloadNotes" aria-label="Download notes as PDF">📥 Download Notes PDF</button>
+  </div>
+</main>
 
-    <!-- Gratitude Journal -->
-    <section class="gratitude-container" aria-label="Gratitude journal">
-      <h2>Gratitude Journal</h2>
-      <textarea class="gratitude-input" id="gratitudeInput" aria-label="Enter three things you are grateful for today" placeholder="What are 3 things you're grateful for today?"></textarea>
-      <button class="add-btn" id="addGratitudeBtn" aria-label="Add gratitude entry">Add</button>
-      <div class="gratitude-list" id="gratitudeList" role="list"></div>
-    </section>
-  </main>
+<footer>© 2025 Self-Care Toolkit by Larissa Wood</footer>
 
-  <footer class="footer" role="contentinfo">
-    <p>Made with 💖 for your daily self-care journey. Keep shining!</p>
-  </footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  const textareas = [...document.querySelectorAll('textarea')];
 
-  <script>
-    // Tabs
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const planCategories = document.querySelectorAll('.plan-category');
-
-    function showPlanCategory(categoryId) {
-      tabButtons.forEach(btn => {
-        const isActive = btn.getAttribute('onclick').includes(categoryId);
-        btn.classList.toggle('active', isActive);
-        btn.setAttribute('aria-selected', isActive);
-        btn.tabIndex = isActive ? 0 : -1;
-      });
-
-      planCategories.forEach(category => {
-        if (category.id === categoryId) {
-          category.classList.add('active');
-          category.hidden = false;
-          category.focus();
-        } else {
-          category.classList.remove('active');
-          category.hidden = true;
-        }
+  function loadNotes() {
+    textareas.forEach(ta => {
+      const saved = localStorage.getItem(ta.id);
+      if(saved) ta.value = saved;
+    });
+  }
+  function saveNotes() {
+    textareas.forEach(ta => {
+      localStorage.setItem(ta.id, ta.value);
+    });
+    alert('Notes saved locally!');
+  }
+  function clearNotes() {
+    if(confirm('Are you sure you want to clear all notes?')) {
+      textareas.forEach(ta => {
+        ta.value = '';
+        localStorage.removeItem(ta.id);
       });
     }
+  }
+  async function downloadNotes() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-    // Keyboard navigation for tabs (optional, for accessibility)
-    tabButtons.forEach((btn, index) => {
-      btn.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-          e.preventDefault();
-          let newIndex = (index + (e.key === 'ArrowRight' ? 1 : -1) + tabButtons.length) % tabButtons.length;
-          tabButtons[newIndex].focus();
-          showPlanCategory(tabButtons[newIndex].getAttribute('onclick').match(/'(.+)'/)[1]);
-        }
-      });
+    let y = 10;
+    doc.setFontSize(18);
+    doc.text("Self-Care Toolkit Notes", 105, y, {align: 'center'});
+    y += 10;
+    doc.setFontSize(12);
+
+    textareas.forEach((ta) => {
+      const label = ta.previousElementSibling ? ta.previousElementSibling.textContent : ta.id;
+      const content = ta.value.trim() || '[No notes]';
+
+      if(y > 270) {
+        doc.addPage();
+        y = 10;
+      }
+      doc.setFont(undefined, 'bold');
+      doc.text(label, 10, y);
+      y += 6;
+      doc.setFont(undefined, 'normal');
+
+      const splitText = doc.splitTextToSize(content, 180);
+      doc.text(splitText, 10, y);
+      y += splitText.length * 6 + 6;
     });
 
-    // Activity selection
-    let selectedActivities = [];
+    doc.save("SelfCareToolkitNotes.pdf");
+  }
 
-    function toggleActivitySelection(card) {
-      const activityName = card.dataset.activity;
-      if (selectedActivities.includes(activityName)) {
-        selectedActivities = selectedActivities.filter(a => a !== activityName);
-        card.classList.remove('selected');
-        card.setAttribute('aria-pressed', 'false');
-      } else {
-        selectedActivities.push(activityName);
-        card.classList.add('selected');
-        card.setAttribute('aria-pressed', 'true');
-      }
-      saveToLocalStorage();
-    }
+  document.getElementById('saveNotes').addEventListener('click', saveNotes);
+  document.getElementById('clearNotes').addEventListener('click', clearNotes);
+  document.getElementById('downloadNotes').addEventListener('click', downloadNotes);
 
-    document.querySelectorAll('.activity-card').forEach(card => {
-      card.addEventListener('click', () => toggleActivitySelection(card));
-      card.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          toggleActivitySelection(card);
-        }
-      });
-    });
+  window.addEventListener('load', loadNotes);
+</script>
 
-    // Generate plan display
-    const generatedPlanEl = document.getElementById('generatedPlan');
-    const activitiesCompletedEl = document.getElementById('activitiesCompleted');
-
-    function generatePlan() {
-      if (!selectedActivities.length) {
-        generatedPlanEl.innerHTML = '<p>Please select some activities first.</p>';
-        generatedPlanEl.classList.add('show');
-        return;
-      }
-      let html = '<h3>Your Personalized Plan</h3><ul>';
-      selectedActivities.forEach(a => {
-        html += `<li>${a}</li>`;
-      });
-      html += '</ul>';
-      generatedPlanEl.innerHTML = html;
-      generatedPlanEl.classList.add('show');
-
-      updateStats('activitiesCompleted', selectedActivities.length);
-      saveToLocalStorage();
-    }
-
-    document.getElementById('generatePlanBtn').addEventListener('click', generatePlan);
-
-    // Breathing animation toggle
-    const breathingCircle = document.getElementById('breathingCircle');
-    let breathingActive = false;
-
-    function toggleBreathing() {
-      breathingActive = !breathingActive;
-      breathingCircle.classList.toggle('animate', breathingActive);
-      breathingCircle.setAttribute('aria-pressed', breathingActive);
-    }
-
-    breathingCircle.addEventListener('click', toggleBreathing);
-    breathingCircle.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggleBreathing();
-      }
-    });
-
-    // Mood tracker
-    const moodButtons = document.querySelectorAll('.mood-btn');
-    const moodFeedback = document.getElementById('moodFeedback');
-    const moodScoreEl = document.getElementById('moodScore');
-
-    function setMood(mood, btn) {
-      moodButtons.forEach(b => {
-        b.classList.remove('selected');
-        b.setAttribute('aria-checked', 'false');
-      });
-      if (btn) {
-        btn.classList.add('selected');
-        btn.setAttribute('aria-checked', 'true');
-      }
-      moodFeedback.textContent = `Mood logged: ${mood}`;
-      moodFeedback.classList.add('show');
-      moodScoreEl.textContent = mood;
-      localStorage.setItem('mood', mood);
-    }
-
-    moodButtons.forEach(btn => {
-      btn.addEventListener('click', () => setMood(btn.textContent, btn));
-      btn.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          setMood(btn.textContent, btn);
-        }
-      });
-    });
-
-    // Gratitude journal
-    const gratitudeInput = document.getElementById('gratitudeInput');
-    const gratitudeList = document.getElementById('gratitudeList');
-    const addGratitudeBtn = document.getElementById('addGratitudeBtn');
-
-    function addGratitude() {
-      const text = gratitudeInput.value.trim();
-      if (!text) return;
-
-      const entry = document.createElement('div');
-      entry.className = 'gratitude-item';
-      entry.textContent = text;
-      entry.setAttribute('role', 'listitem');
-      gratitudeList.prepend(entry);
-
-      let savedGratitude = JSON.parse(localStorage.getItem('gratitude') || '[]');
-      savedGratitude.push(text);
-      localStorage.setItem('gratitude', JSON.stringify(savedGratitude));
-
-      gratitudeInput.value = '';
-      updateStats('dayStreak', savedGratitude.length);
-    }
-
-    addGratitudeBtn.addEventListener('click', addGratitude);
-
-    gratitudeInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        addGratitude();
-      }
-    });
-
-    // Progress tracking
-    function updateStats(id, value) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.textContent = value;
-      localStorage.setItem(id, value);
-    }
-
-    // LocalStorage save/load
-    function saveToLocalStorage() {
-      localStorage.setItem('selectedActivities', JSON.stringify(selectedActivities));
-    }
-
-    function loadFromLocalStorage() {
-      // Load selected activities
-      const savedActivities = JSON.parse(localStorage.getItem('selectedActivities') || '[]');
-      selectedActivities = savedActivities;
-      selectedActivities.forEach(activity => {
-        document.querySelectorAll('.activity-card').forEach(card => {
-          if (card.dataset.activity === activity) {
-            card.classList.add('selected');
-            card.setAttribute('aria-pressed', 'true');
-          }
-        });
-      });
-
-      // Load mood
-      const savedMood = localStorage.getItem('mood');
-      if (savedMood) {
-        const moodBtn = Array.from(moodButtons).find(b => b.textContent === savedMood);
-        if (moodBtn) setMood(savedMood, moodBtn);
-      }
-
-      // Load gratitude
-      const savedGratitude = JSON.parse(localStorage.getItem('gratitude') || '[]');
-      savedGratitude.forEach(text => {
-        const entry = document.createElement('div');
-        entry.className = 'gratitude-item';
-        entry.textContent = text;
-        entry.setAttribute('role', 'listitem');
-        gratitudeList.appendChild(entry);
-      });
-
-      // Load stats
-      ['activitiesCompleted', 'dayStreak'].forEach(id => {
-        const val = localStorage.getItem(id);
-        if (val) {
-          const el = document.getElementById(id);
-          if (el) el.textContent = val;
-        }
-      });
-    }
-
-    // Initialize
-    window.addEventListener('load', () => {
-      loadFromLocalStorage();
-    });
-  </script>
 </body>
 </html>
