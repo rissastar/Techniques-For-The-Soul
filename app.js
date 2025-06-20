@@ -3,178 +3,236 @@ const URL = 'https://ytgrzhtntwzefwjmhgjj.supabase.co';
 const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
 const supabase = createClient(URL, KEY);
 
-// ─── Theme, Language & Music Toggles ──────────────────────────────
+// === Supabase Initialization ===
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// === DOM Elements & Globals ===
 const htmlEl = document.documentElement;
-document.getElementById('theme-toggle').onclick = () => {
-  htmlEl.dataset.theme = htmlEl.dataset.theme==='dark'?'light':'dark';
-};
-document.getElementById('lang-toggle').onclick = () => {
-  htmlEl.dataset.lang = htmlEl.dataset.lang==='en'?'fr':'en';
-  document.querySelectorAll('[data-en]').forEach(el=>{
-    el.textContent = el.dataset[ htmlEl.dataset.lang ];
+
+const themeToggleBtn = document.getElementById('theme-toggle');
+const langToggleBtn = document.getElementById('lang-toggle');
+const musicToggleBtn = document.getElementById('music-toggle');
+
+const ambientMusic = new Audio('ambient.mp3');
+ambientMusic.loop = true;
+
+// Language toggle helper: update all [data-en] text based on data-lang attribute
+function updateLanguageTexts() {
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = el.dataset[htmlEl.dataset.lang];
   });
-};
-const music = new Audio('ambient.mp3');
-music.loop = true;
-document.getElementById('music-toggle').onclick = () => {
-  music.paused?music.play():music.pause();
+  // Update placeholders
+  updatePlaceholders();
+}
+
+function updatePlaceholders() {
+  // Inputs & textareas placeholders must be updated manually
+  const placeholders = {
+    'candle-name': { en: 'Name…', fr: 'Nom…' },
+    'tribute-text': { en: 'Write your tribute here...', fr: 'Écrivez votre hommage ici...' },
+    'tribute-name': { en: 'Name (optional)', fr: 'Nom (facultatif)' },
+    'cloud-text': { en: 'Your message...', fr: 'Votre message...' },
+    'support-text': { en: 'Your comforting message...', fr: 'Votre message réconfortant...' },
+    'support-name': { en: 'Name (optional)', fr: 'Nom (facultatif)' }
+  };
+  Object.entries(placeholders).forEach(([id, texts]) => {
+    const el = document.getElementById(id);
+    if(el) el.placeholder = texts[htmlEl.dataset.lang];
+  });
+}
+
+// === Event Listeners ===
+themeToggleBtn.onclick = () => {
+  htmlEl.dataset.theme = htmlEl.dataset.theme === 'dark' ? 'light' : 'dark';
 };
 
-// ─── Utility: show items in a grid ────────────────────────────────
+langToggleBtn.onclick = () => {
+  htmlEl.dataset.lang = htmlEl.dataset.lang === 'en' ? 'fr' : 'en';
+  updateLanguageTexts();
+};
+
+musicToggleBtn.onclick = () => {
+  if (ambientMusic.paused) {
+    ambientMusic.play();
+    musicToggleBtn.textContent = '🔊';
+  } else {
+    ambientMusic.pause();
+    musicToggleBtn.textContent = '🔈';
+  }
+};
+
+// Initialize language texts on load
+updateLanguageTexts();
+
+// === Helper: Render grid items ===
 function renderGrid(containerId, items, renderer) {
-  document.getElementById(containerId).innerHTML =
-    items.map(renderer).join('');
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = items.map(renderer).join('');
 }
 
-// ─── Candle Section ───────────────────────────────────────────────
+// === Candle Lighting ===
 async function loadCandles() {
-  let { data } = await supabase.from('candles').select('*').order('created_at', {asc:false});
-  renderGrid('candle-list', data, c =>
-    `<div class="item"><p>🕯 ${c.name}</p></div>`);
+  const { data, error } = await supabase.from('candles').select('*').order('created_at', { ascending: false });
+  if (error) return console.error('Load candles error:', error);
+  renderGrid('candle-list', data || [], c => `
+    <div class="item candle-flicker" title="🕯 ${c.name}">${c.name}</div>
+  `);
 }
-document.getElementById('submit-candle').onclick = async ()=>{
-  let name = document.getElementById('candle-name').value.trim();
-  if(!name) return alert('Enter a name');
-  await supabase.from('candles').insert({ name });
-  document.getElementById('candle-name').value='';
+
+document.getElementById('submit-candle').onclick = async () => {
+  const nameInput = document.getElementById('candle-name');
+  const name = nameInput.value.trim();
+  if (!name) return alert(htmlEl.dataset.lang === 'fr' ? "Entrez un nom" : "Please enter a name");
+  const { error } = await supabase.from('candles').insert([{ name }]);
+  if (error) return alert('Error saving candle');
+  nameInput.value = '';
   loadCandles();
 };
+
 loadCandles();
 
-// ─── Tributes Section ────────────────────────────────────────────
+// === Tributes ===
 async function loadTributes() {
-  let { data } = await supabase.from('tributes').select('*').order('created_at',{asc:false});
-  renderGrid('tribute-list', data, t =>
-    `<div class="item"><p>"${t.content}"</p><p>– ${t.name||'Anonymous'}</p></div>`);
+  const { data, error } = await supabase.from('tributes').select('*').order('created_at', { ascending: false });
+  if (error) return console.error('Load tributes error:', error);
+  renderGrid('tribute-list', data || [], t => `
+    <div class="item" title="${t.name || (htmlEl.dataset.lang === 'fr' ? 'Anonyme' : 'Anonymous')}">
+      <p>"${t.content}"</p>
+      <p style="text-align:right; font-style:italic;">– ${t.name || (htmlEl.dataset.lang === 'fr' ? 'Anonyme' : 'Anonymous')}</p>
+    </div>
+  `);
 }
-document.getElementById('submit-tribute').onclick = async ()=>{
-  let content = document.getElementById('tribute-text').value.trim();
-  if(!content) return alert('Write your tribute');
-  await supabase.from('tributes').insert({
-    content, name: document.getElementById('tribute-name').value.trim()
-  });
-  document.getElementById('tribute-text').value='';
-  document.getElementById('tribute-name').value='';
+
+document.getElementById('submit-tribute').onclick = async () => {
+  const textInput = document.getElementById('tribute-text');
+  const nameInput = document.getElementById('tribute-name');
+  const content = textInput.value.trim();
+  if (!content) return alert(htmlEl.dataset.lang === 'fr' ? "Écrivez votre hommage" : "Write your tribute");
+  const { error } = await supabase.from('tributes').insert([{ content, name: nameInput.value.trim() || null }]);
+  if (error) return alert('Error saving tribute');
+  textInput.value = '';
+  nameInput.value = '';
   loadTributes();
 };
+
 loadTributes();
 
-// ─── Photo Gallery ────────────────────────────────────────────────
+// === Photos ===
 async function loadPhotos() {
-  let { data } = await supabase.from('photos').select('*').order('created_at',{asc:false});
-  renderGrid('photo-gallery', data, p =>
-    `<div class="item"><img src="${p.url}" alt="photo" style="width:100%; border-radius:8px;"><p>– ${p.name||''}</p></div>`);
+  const { data, error } = await supabase.from('photos').select('*').order('created_at', { ascending: false });
+  if (error) return console.error('Load photos error:', error);
+  renderGrid('photo-gallery', data || [], p => `
+    <div class="item">
+      <img src="${p.url}" alt="Photo tribute" style="width:100%; border-radius:8px;" />
+      <p style="text-align:right; font-style:italic;">– ${p.name || ''}</p>
+    </div>
+  `);
 }
-document.getElementById('submit-photo').onclick = async ()=>{
-  let file = document.getElementById('photo-input').files[0];
-  if(!file) return alert('Choose a file');
-  let path = `${Date.now()}_${file.name}`;
-  let { data:uploadError } = await supabase.storage.from('photos').upload(path,file);
-  let { publicURL } = supabase.storage.from('photos').getPublicUrl(path);
-  await supabase.from('photos').insert({ url: publicURL, name:'' });
+
+document.getElementById('submit-photo').onclick = async () => {
+  const input = document.getElementById('photo-input');
+  const file = input.files[0];
+  if (!file) return alert(htmlEl.dataset.lang === 'fr' ? "Choisissez une image" : "Choose an image file");
+  
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${Date.now()}.${fileExt}`;
+  const { error: uploadError } = await supabase.storage.from('photos').upload(fileName, file);
+
+  if(uploadError){
+    alert(htmlEl.dataset.lang === 'fr' ? "Erreur de téléchargement" : "Upload error");
+    return console.error(uploadError);
+  }
+
+  const { publicURL, error: urlError } = supabase.storage.from('photos').getPublicUrl(fileName);
+  if(urlError) return alert('Error getting photo URL');
+
+  const { error: dbError } = await supabase.from('photos').insert([{ url: publicURL, name: null }]);
+  if(dbError) return alert('Error saving photo info');
+
+  input.value = '';
   loadPhotos();
 };
+
 loadPhotos();
 
-// ─── Cloud Messages ───────────────────────────────────────────────
+// === Cloud Messages ===
 async function loadClouds() {
-  let { data } = await supabase.from('clouds').select('*').order('created_at',{asc:false}).limit(20);
+  const { data, error } = await supabase.from('clouds').select('*').order('created_at', { ascending: false }).limit(20);
+  if (error) return console.error('Load clouds error:', error);
   const container = document.getElementById('cloud-container');
   container.innerHTML = '';
-  data.forEach((c,i)=>{
-    let span = document.createElement('span');
+  data.forEach((msg, i) => {
+    const span = document.createElement('span');
     span.className = 'cloud-msg';
-    span.textContent = c.text;
-    span.style.top = Math.random()*80+'%';
-    span.style.left = Math.random()*80+'%';
-    container.append(span);
-    setTimeout(()=>span.remove(),10000+Math.random()*5000);
+    span.textContent = msg.text;
+    span.style.top = `${Math.random() * 70 + 5}%`;
+    span.style.left = '100%'; // start offscreen right
+    container.appendChild(span);
+
+    // Animate cloud message across screen
+    const duration = 15000 + Math.random() * 10000;
+    span.animate(
+      [
+        { transform: 'translateX(0)', opacity: 1 },
+        { transform: 'translateX(-120vw)', opacity: 0 }
+      ],
+      { duration, easing: 'linear', fill: 'forwards' }
+    );
+    // Remove after animation ends
+    setTimeout(() => span.remove(), duration);
   });
 }
-document.getElementById('submit-cloud').onclick = async ()=>{
-  let txt = document.getElementById('cloud-text').value.trim();
-  if(!txt) return;
-  await supabase.from('clouds').insert({ text:txt });
-  document.getElementById('cloud-text').value='';
+
+document.getElementById('submit-cloud').onclick = async () => {
+  const input = document.getElementById('cloud-text');
+  const text = input.value.trim();
+  if (!text) return;
+  const { error } = await supabase.from('clouds').insert([{ text }]);
+  if (error) return alert('Error sending message');
+  input.value = '';
   loadClouds();
 };
-setInterval(loadClouds, 5000);
+
 loadClouds();
+setInterval(loadClouds, 10000);
 
-// ─── Pinned Tributes ─────────────────────────────────────────────
-async function loadPinned() {
-  let { data } = await supabase.from('tributes').select('*').eq('pinned', true);
-  renderGrid('pinned-list', data, t =>
-    `<div class="item"><strong>★</strong><p>"${t.content}"</p></div>`);
-}
-loadPinned();
-
-// ─── Memory Map ─────────────────────────────────────────────────
-document.getElementById('submit-map').onclick = async ()=>{
-  let loc = document.getElementById('map-location').value.trim();
-  if(!loc) return;
-  await supabase.from('map_pins').insert({ location:loc });
-  document.getElementById('map-location').value='';
-  // placeholder: you’d integrate a real map API here
-  alert(`Pinned: ${loc}`);
-};
-
-// ─── Grief Support ───────────────────────────────────────────────
+// === Grief Support ===
 const supportPrompts = [
   "Today, I honor my grief by remembering their laughter.",
   "Today, I honor my grief by lighting a candle.",
-  "Today, I honor my grief by sharing a kind word."
+  "Today, I honor my grief by sharing a kind word.",
+  "Today, I honor my grief by taking a deep breath.",
+  "Today, I honor my grief by writing a letter.",
+  "Today, I honor my grief by looking at old photos."
 ];
-document.getElementById('daily-prompt').textContent =
-  supportPrompts[new Date().getDate() % supportPrompts.length];
-async function loadSupport(){
-  let { data } = await supabase.from('grief_support').select('*').order('created_at',{asc:false});
-  renderGrid('support-list', data, m =>
-    `<div class="item"><p>${m.content}</p><p>– ${m.name||'Anonymous'}</p></div>`);
-}
-document.getElementById('submit-support').onclick = async ()=>{
-  let c = document.getElementById('support-text').value.trim();
-  if(!c) return;
-  await supabase.from('grief_support').insert({
-    content:c, name:document.getElementById('support-name').value.trim()
-  });
-  document.getElementById('support-text').value='';
-  document.getElementById('support-name').value='';
-  loadSupport();
-};
-loadSupport();
 
-// ─── Community Wall ────────────────────────────────────────────
-async function loadCommunity(){
-  let { data } = await supabase.from('community').select('*').order('created_at',{asc:false});
-  renderGrid('community-list', data, m =>
-    `<div class="item"><p>${m.content}</p><p>– ${m.name||'Anonymous'}</p></div>`);
-}
-document.getElementById('submit-community').onclick = async ()=>{
-  let c = document.getElementById('community-text').value.trim();
-  if(!c) return;
-  await supabase.from('community').insert({
-    content:c, name:document.getElementById('community-name').value.trim()
-  });
-  document.getElementById('community-text').value='';
-  document.getElementById('community-name').value='';
-  loadCommunity();
-};
-loadCommunity();
+const dailyPromptEl = document.getElementById('daily-prompt');
+dailyPromptEl.textContent = supportPrompts[new Date().getDate() % supportPrompts.length];
 
-// ─── Anniversary Calendar ───────────────────────────────────────
-async function loadAnniv(){
-  let { data } = await supabase.from('anniversaries').select('*').order('date',{ascending:true});
-  renderGrid('anniv-list', data, a =>
-    `<div class="item"><strong>${new Date(a.date).toLocaleDateString()}</strong><p>${a.content}</p></div>`);
+async function loadSupportMessages() {
+  const { data, error } = await supabase.from('grief_support').select('*').order('created_at', { ascending: false });
+  if (error) return console.error('Load grief support error:', error);
+  renderGrid('support-list', data || [], m => `
+    <div class="item">
+      <p>${m.content}</p>
+      <p style="text-align:right; font-style:italic;">– ${m.name || (htmlEl.dataset.lang === 'fr' ? 'Anonyme' : 'Anonymous')}</p>
+    </div>
+  `);
 }
-document.getElementById('submit-anniv').onclick = async ()=>{
-  let date = document.getElementById('anniv-date').value;
-  let content = document.getElementById('anniv-text').value.trim();
-  if(!date||!content) return;
-  await supabase.from('anniversaries').insert({ date, content });
-  document.getElementById('anniv-date').value='';
-  document.getElementById('anniv-text').value='';
-  loadAnniv();
+
+document.getElementById('submit-support').onclick = async () => {
+  const textInput = document.getElementById('support-text');
+  const nameInput = document.getElementById('support-name');
+  const content = textInput.value.trim();
+  if (!content) return alert(htmlEl.dataset.lang === 'fr' ? "Écrivez un message" : "Write a message");
+  const { error } = await supabase.from('grief_support').insert([{ content, name: nameInput.value.trim() || null }]);
+  if (error) return alert('Error saving message');
+  textInput.value = '';
+  nameInput.value = '';
+  loadSupportMessages();
 };
-loadAnniv();
+
+loadSupportMessages();
