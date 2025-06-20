@@ -15,42 +15,42 @@
   <header>
     <h1 class="site-title">Memorial Wall</h1>
     <div class="toggles">
-      <button id="theme-toggle">🌙/☀️</button>
-      <button id="lang-toggle">EN/FR</button>
-      <button id="music-toggle">🔈</button>
+      <button id="theme-toggle" aria-label="Toggle theme">🌙/☀️</button>
+      <button id="lang-toggle" aria-label="Toggle language">EN/FR</button>
+      <button id="music-toggle" aria-label="Toggle ambient music">🔈</button>
     </div>
   </header>
 
   <main>
     <!-- Hero -->
-    <section id="hero">
+    <section id="hero" class="fade-in">
       <h2 data-en="Remember & Honor" data-fr="Se souvenir & Honorer"></h2>
       <p data-en="Share memories, light candles, and support each other." 
          data-fr="Partagez des souvenirs, allumez des bougies et soutenez-vous."></p>
     </section>
 
     <!-- Candle Lighting -->
-    <section id="candles">
+    <section id="candles" class="fade-in delay-1">
       <h3 data-en="Light a Candle" data-fr="Allumer une bougie"></h3>
       <div class="prompt" data-en="Who are you remembering today?" data-fr="Qui commémorez-vous aujourd'hui ?"></div>
-      <input type="text" id="candle-name" placeholder="Name…" />
+      <input type="text" id="candle-name" placeholder="Name…" autocomplete="off" />
       <button id="submit-candle" data-en="Light" data-fr="Allumer"></button>
       <div id="candle-list" class="grid"></div>
     </section>
 
     <!-- Tributes -->
-    <section id="tributes">
+    <section id="tributes" class="fade-in delay-2">
       <h3 data-en="Write a Tribute" data-fr="Écrire un hommage"></h3>
       <div class="prompt" data-en="Tell us about a memory that brings you joy." 
            data-fr="Racontez-nous un souvenir qui vous rend heureux ?"></div>
-      <textarea id="tribute-text" placeholder=""></textarea>
-      <input type="text" id="tribute-name" placeholder="Name (optional)" />
+      <textarea id="tribute-text" placeholder="" autocomplete="off"></textarea>
+      <input type="text" id="tribute-name" placeholder="Name (optional)" autocomplete="off" />
       <button id="submit-tribute" data-en="Post Tribute" data-fr="Publier"></button>
       <div id="tribute-list" class="grid"></div>
     </section>
 
     <!-- Photo Gallery -->
-    <section id="photos">
+    <section id="photos" class="fade-in delay-3">
       <h3 data-en="Share a Photo" data-fr="Partager une photo"></h3>
       <div class="prompt" data-en="Upload a moment that captures their spirit." 
            data-fr="Téléchargez un moment qui capture leur esprit."></div>
@@ -60,63 +60,25 @@
     </section>
 
     <!-- Cloud Messages -->
-    <section id="clouds">
+    <section id="clouds" class="fade-in delay-4">
       <h3 data-en="Message to the Clouds" data-fr="Message aux nuages"></h3>
       <div class="prompt" data-en="Send a thought into the sky." 
            data-fr="Envoyez une pensée dans le ciel."></div>
-      <input type="text" id="cloud-text" placeholder="" />
+      <input type="text" id="cloud-text" placeholder="" autocomplete="off" />
       <button id="submit-cloud" data-en="Send" data-fr="Envoyer"></button>
-      <div id="cloud-container"></div>
-    </section>
-
-    <!-- Pinned Tributes -->
-    <section id="pinned">
-      <h3 data-en="Pinned Tributes" data-fr="Hommages épinglés"></h3>
-      <div id="pinned-list" class="grid"></div>
-    </section>
-
-    <!-- Memory Map -->
-    <section id="memory-map">
-      <h3 data-en="Memory Map" data-fr="Carte des souvenirs"></h3>
-      <div class="prompt" data-en="Where did a special memory happen?" 
-           data-fr="Où un souvenir spécial a-t-il eu lieu ?"></div>
-      <input type="text" id="map-location" placeholder="City, Country…" />
-      <button id="submit-map" data-en="Pin it" data-fr="Épingler"></button>
-      <div id="map" class="map-placeholder">[Map goes here]</div>
+      <div id="cloud-container" aria-live="polite" aria-atomic="true"></div>
     </section>
 
     <!-- Grief Support -->
-    <section id="grief-support">
+    <section id="grief-support" class="fade-in delay-5">
       <h3 data-en="You’re Not Alone" data-fr="Vous n'êtes pas seul·e"></h3>
       <div class="prompt" data-en="Share a comforting message, ritual, or quote." 
            data-fr="Partagez un message réconfortant, un rituel ou une citation."></div>
-      <textarea id="support-text" placeholder=""></textarea>
-      <input type="text" id="support-name" placeholder="Name (optional)" />
+      <textarea id="support-text" placeholder="" autocomplete="off"></textarea>
+      <input type="text" id="support-name" placeholder="Name (optional)" autocomplete="off" />
       <button id="submit-support" data-en="Share" data-fr="Partager"></button>
       <div id="daily-prompt" class="daily-prompt"></div>
       <div id="support-list" class="grid"></div>
-    </section>
-
-    <!-- Community Wall -->
-    <section id="community">
-      <h3 data-en="Words of Love" data-fr="Mots d'amour"></h3>
-      <div class="prompt" data-en="Leave kindness for someone else." 
-           data-fr="Laissez de la gentillesse pour quelqu'un d'autre."></div>
-      <textarea id="community-text" placeholder=""></textarea>
-      <input type="text" id="community-name" placeholder="Name (optional)" />
-      <button id="submit-community" data-en="Post" data-fr="Publier"></button>
-      <div id="community-list" class="grid"></div>
-    </section>
-
-    <!-- Anniversary Calendar -->
-    <section id="anniversary">
-      <h3 data-en="Memory Calendar" data-fr="Calendrier des souvenirs"></h3>
-      <div class="prompt" data-en="Select a date meaningful to you." 
-           data-fr="Sélectionnez une date significative pour vous."></div>
-      <input type="date" id="anniv-date" />
-      <textarea id="anniv-text" placeholder=""></textarea>
-      <button id="submit-anniv" data-en="Save" data-fr="Enregistrer"></button>
-      <div id="anniv-list" class="grid"></div>
     </section>
   </main>
 
