@@ -176,7 +176,7 @@
 </style>
 </head>
 <body>
-<div class="container">
+<div class="container" id="contentToPrint">
   <div class="header">
     <h1 id="title">🛏️ Get Ready for Bed</h1>
     <p id="subtitle">Take a moment to slow down and care for yourself.</p>
@@ -194,7 +194,7 @@
       </select>
       <button onclick="toggleNightMode()">🌓 <span id="nightBtn">Night Mode</span></button>
       <button onclick="window.print()">🖨️ <span id="printBtn">Print</span></button>
-      <button onclick="downloadPDF()">📥 <span id="downloadBtn">Download</span></button>
+      <button onclick="savePdf()">💾 <span id="savePdfBtn">Save as PDF</span></button>
     </div>
   </div>
 
@@ -222,7 +222,8 @@
     </div>
 
     <hr class="divider" />
-        <div class="section">
+
+    <div class="section">
       <h2 class="section-title" id="section3">Reflect and Release</h2>
 
       <div class="reflection-item">
@@ -282,6 +283,7 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   const moods = {
@@ -323,13 +325,11 @@
   const defaultMood = '';
   const defaultNight = false;
 
-  // Elements
+  const body = document.body;
   const langSelect = document.getElementById('langSelect');
   const moodSelect = document.getElementById('moodSelect');
-  const body = document.body;
   const quoteBox = document.getElementById('moodQuote');
 
-  // Load saved data from localStorage
   function loadSettings() {
     const lang = localStorage.getItem('bedtimeLang') || defaultLang;
     const mood = localStorage.getItem('bedtimeMood') || defaultMood;
@@ -344,27 +344,21 @@
     }
   }
 
-  // Save language selection
   function saveLanguage(lang) {
     localStorage.setItem('bedtimeLang', lang);
   }
 
-  // Save mood selection
   function saveMood(mood) {
     localStorage.setItem('bedtimeMood', mood);
   }
 
-  // Save night mode
   function saveNightMode(isNight) {
     localStorage.setItem('bedtimeNight', isNight);
   }
 
-  // Update language texts
   function updateLanguage() {
     const lang = langSelect.value;
     saveLanguage(lang);
-
-    // Text mappings
     const texts = {
       title: { en: '🛏️ Get Ready for Bed', fr: '🛏️ Prépare-toi pour le lit' },
       subtitle: {
@@ -373,12 +367,12 @@
       },
       nightBtn: { en: 'Night Mode', fr: 'Mode Nuit' },
       printBtn: { en: 'Print', fr: 'Imprimer' },
-      downloadBtn: { en: 'Download', fr: 'Télécharger' },
-      moodSel: { en: '🌙 Select Mood', fr: '🌙 Choisir une humeur' },
-      peaceful: { en: 'Peaceful', fr: 'Paisible' },
-      anxious: { en: 'Anxious', fr: 'Anxieux·se' },
-      hopeful: { en: 'Hopeful', fr: 'Plein·e d’espoir' },
-      tired: { en: 'Tired', fr: 'Fatigué·e' },
+      savePdfBtn: { en: 'Save as PDF', fr: 'Sauvegarder en PDF' },
+      moodSelEn: { en: '🌙 Select Mood', fr: '🌙 Choisir une humeur' },
+      peacefulEn: { en: 'Peaceful', fr: 'Paisible' },
+      anxiousEn: { en: 'Anxious', fr: 'Anxieux·se' },
+      hopefulEn: { en: 'Hopeful', fr: 'Plein·e d’espoir' },
+      tiredEn: { en: 'Tired', fr: 'Fatigué·e' },
       section1: { en: 'Self-Care Check', fr: 'Vérification des soins personnels' },
       check1: { en: 'Washed your face or taken a shower', fr: 'Lavé ton visage ou pris une douche' },
       check2: { en: 'Changed into something cozy', fr: 'Mis quelque chose de confortable' },
@@ -405,7 +399,6 @@
       }
     };
 
-    // Update all mapped texts
     for (const id in texts) {
       const el = document.getElementById(id);
       if (el) el.innerHTML = texts[id][lang];
@@ -414,7 +407,6 @@
     updateMood();
   }
 
-  // Update mood background & quote
   function updateMood() {
     const mood = moodSelect.value;
     saveMood(mood);
@@ -433,114 +425,66 @@
     }
   }
 
-  // Toggle night mode
   function toggleNightMode() {
     const isNight = body.classList.toggle('dark');
     saveNightMode(isNight);
     updateMood();
   }
 
-  // Save checkboxes and textareas
+  // Save and load inputs (checkboxes + textareas)
   function saveInputs() {
-    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
-    allCheckboxes.forEach(cb => {
+    document.querySelectorAll('input[type=checkbox]').forEach(cb => {
       localStorage.setItem(cb.id, cb.checked);
     });
-    const allTextareas = document.querySelectorAll('textarea');
-    allTextareas.forEach(ta => {
+    document.querySelectorAll('textarea').forEach(ta => {
       localStorage.setItem(ta.id, ta.value);
     });
   }
-
-  // Load checkboxes and textareas
   function loadInputs() {
-    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
-    allCheckboxes.forEach(cb => {
+    document.querySelectorAll('input[type=checkbox]').forEach(cb => {
       const saved = localStorage.getItem(cb.id);
       cb.checked = saved === 'true';
       cb.addEventListener('change', saveInputs);
     });
-    const allTextareas = document.querySelectorAll('textarea');
-    allTextareas.forEach(ta => {
+    document.querySelectorAll('textarea').forEach(ta => {
       const saved = localStorage.getItem(ta.id);
       if (saved) ta.value = saved;
       ta.addEventListener('input', saveInputs);
     });
   }
 
-  // Download PDF function using jsPDF
-  async function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({
-      unit: 'pt',
-      format: 'letter',
-      putOnlyUsedFonts:true,
-      floatPrecision: 16
+  // Save PDF with html2canvas + jsPDF
+  async function savePdf() {
+    const content = document.getElementById('contentToPrint');
+    // Scroll to top to avoid cutoffs
+    window.scrollTo(0, 0);
+    // Use html2canvas to capture the content div
+    const canvas = await html2canvas(content, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: null
     });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jspdf.jsPDF('p', 'pt', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
 
-    // Basic text layout for PDF - you can enhance with html2canvas if needed
-    doc.setFontSize(20);
-    doc.text(langSelect.value === 'fr' ? 'Checklist du coucher' : 'Bedtime Checklist', 40, 40);
+    // Calculate image dimensions to fit PDF while maintaining aspect ratio
+    const imgProps = {
+      width: canvas.width,
+      height: canvas.height
+    };
+    const ratio = Math.min(pdfWidth / imgProps.width, pdfHeight / imgProps.height);
+    const imgWidth = imgProps.width * ratio;
+    const imgHeight = imgProps.height * ratio;
 
-    let y = 70;
-    function addText(text) {
-      const splitText = doc.splitTextToSize(text, 500);
-      doc.text(splitText, 40, y);
-      y += splitText.length * 14 + 10;
-    }
+    // Add image to PDF centered vertically
+    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
 
-    // Sections and content
-    addText(`${langSelect.value === 'fr' ? 'Humeur' : 'Mood'}: ${moodSelect.options[moodSelect.selectedIndex].text}`);
-    addText('');
-    addText(langSelect.value === 'fr' ? 'Contrôle des soins personnels:' : 'Self-Care Check:');
-    for (let i=1; i<=3; i++) {
-      const checked = localStorage.getItem(`chk${i}`) === 'true' ? '✅' : '⬜';
-      const label = document.getElementById(`check${i}`).textContent;
-      addText(`${checked} ${label}`);
-    }
-
-    addText('');
-    addText(langSelect.value === 'fr' ? 'Réinitialisation de l’esprit:' : 'Mind Reset:');
-    for (let i=4; i<=6; i++) {
-      const checked = localStorage.getItem(`chk${i}`) === 'true' ? '✅' : '⬜';
-      const label = document.getElementById(`check${i}`).textContent;
-      addText(`${checked} ${label}`);
-    }
-
-    addText('');
-    addText(langSelect.value === 'fr' ? 'Réfléchir et lâcher prise:' : 'Reflect and Release:');
-    for (let i=1; i<=3; i++) {
-      const val = localStorage.getItem(`ref${i}`) || '';
-      addText(`• ${document.getElementById(`refLabel${i}`).textContent}`);
-      addText(val);
-      addText('');
-    }
-
-    addText('');
-    addText(langSelect.value === 'fr' ? 'Outils facultatifs pour se détendre:' : 'Optional Wind-Down Tools:');
-    for (let i=7; i<=9; i++) {
-      const checked = localStorage.getItem(`chk${i}`) === 'true' ? '✅' : '⬜';
-      const label = document.getElementById(`check${i}`).textContent;
-      addText(`${checked} ${label}`);
-    }
-
-    addText('');
-    addText(langSelect.value === 'fr' ? 'À toi:' : 'Your Turn:');
-    for (let i=4; i<=5; i++) {
-      const val = localStorage.getItem(`ref${i}`) || '';
-      addText(`• ${document.getElementById(`refLabel${i}`).textContent}`);
-      addText(val);
-      addText('');
-    }
-
-    addText('');
-    addText(langSelect.value === 'fr' ? 'Rappel:' : 'Reminder:');
-    addText(document.getElementById('reminderText').innerText);
-
-    doc.save('bedtime-checklist.pdf');
+    pdf.save('bedtime-checklist.pdf');
   }
 
-  // Initial setup
   window.onload = () => {
     loadSettings();
     loadInputs();
@@ -549,4 +493,3 @@
 </script>
 </body>
 </html>
-    
