@@ -1,16 +1,11 @@
 :root {
-  /* Theme colors */
   --bg-light: #fafafa;
   --bg-dark: #0b132b;
   --text-light: #111;
   --text-dark: #f0f0f0;
-
-  /* Accent palette */
   --accent-primary: #ff6b6b;
   --accent-secondary: #4ecdc4;
   --accent-tertiary: #f7b733;
-
-  /* Section gradient stops */
   --sec1-start: rgba(255, 107, 107, 0.15);
   --sec1-end:   rgba(255, 107, 107, 0.05);
   --sec2-start: rgba(78, 205, 196, 0.15);
@@ -24,7 +19,7 @@
   color: var(--text-light);
 }
 [data-theme="dark"] {
-  background: var(--bg-dark);
+  background: transparent; /* let canvas show */
   color: var(--text-dark);
 }
 
@@ -35,10 +30,13 @@ body, html {
   transition: background .3s, color .3s;
 }
 
+/* Starfield */
 #starfield {
-  position: fixed; top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 0;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: black; /* fallback */
+  z-index: -1;
 }
 
 /* Top-right switches */
@@ -50,8 +48,7 @@ body, html {
 .switches button {
   padding: .5rem; border: none; border-radius: 6px;
   background: rgba(255,255,255,0.2); color: inherit;
-  backdrop-filter: blur(4px);
-  cursor: pointer;
+  backdrop-filter: blur(4px); cursor: pointer;
 }
 .switches button:hover {
   background: var(--accent-primary);
@@ -65,7 +62,7 @@ body, html {
   overflow-y: auto;
 }
 
-/* Section base style */
+/* Section styling */
 .section {
   position: relative;
   margin-bottom: 2rem; padding: 1.5rem;
@@ -73,8 +70,6 @@ body, html {
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
   backdrop-filter: blur(6px);
 }
-
-/* Section-specific gradients */
 .section:nth-child(1) {
   background: linear-gradient(135deg, var(--sec1-start), var(--sec1-end));
 }
@@ -85,11 +80,8 @@ body, html {
   background: linear-gradient(135deg, var(--sec3-start), var(--sec3-end));
 }
 .section:nth-child(4) {
-  /* alternate back to primary */
   background: linear-gradient(135deg, var(--sec1-start), var(--sec1-end));
 }
-
-/* Headings */
 .section h2 {
   margin-bottom: 1rem;
   font-size: 1.5rem;
@@ -97,7 +89,7 @@ body, html {
   padding-bottom: .5rem;
 }
 
-/* Forms */
+/* Form elements */
 input, textarea, select {
   width: 100%; margin: .5rem 0;
   padding: .7rem; border: 2px solid rgba(255,255,255,0.3);
@@ -134,8 +126,8 @@ button:active {
   color: var(--accent-secondary);
 }
 @keyframes flicker {
-  0% { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-secondary); }
-  100% { text-shadow: 0 0 15px #fff, 0 0 20px var(--accent-tertiary); }
+  from { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-secondary); }
+  to   { text-shadow: 0 0 15px #fff, 0 0 20px var(--accent-tertiary); }
 }
 
 /* Profiles & messages */
@@ -158,7 +150,6 @@ button:active {
 .love {
   color: var(--accent-primary);
 }
-
 img {
   max-width: 100px; border-radius: 6px; margin-top: .5rem;
 }
@@ -166,7 +157,6 @@ audio {
   width: 100%; margin-top: .5rem;
 }
 
-/* Fade-in animation */
 @keyframes fadeUp {
   to { opacity: 1; transform: translateY(0); }
 }
