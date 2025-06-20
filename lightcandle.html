@@ -2,138 +2,196 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Light a Candle</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #fff;
-      min-height: 100vh;
       margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    }
-    form {
-      max-width: 500px;
-      margin: 0 auto 30px;
-      background: rgba(255,255,255,0.1);
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    button {
-      background: #764ba2;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #0d0d2b, #3b297b);
       color: white;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px 20px;
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    input, textarea, button {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    input, textarea {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    button {
+      background: #ffb347;
+      color: black;
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s ease;
-      border: none;
     }
+
     button:hover {
-      background: #5a3780;
+      background: #ff9933;
     }
-    .candles-list {
-      max-width: 700px;
+
+    .sky {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .candle {
+      position: absolute;
+      bottom: -60px;
+      width: 40px;
+      height: 100px;
+      animation: floatUp 20s linear infinite;
+      opacity: 0.9;
+    }
+
+    .candle .body {
+      width: 20px;
+      height: 60px;
+      background: #fceabb;
+      border-radius: 5px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
-    .candle-item {
-      background: rgba(255, 255, 255, 0.15);
-      padding: 15px 20px;
-      border-radius: 15px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+    .candle .wick {
+      width: 2px;
+      height: 10px;
+      background: black;
+      margin: 0 auto;
+      position: relative;
+      top: -5px;
+      z-index: 2;
     }
-    .candle-item .user {
-      font-weight: 700;
-      margin-bottom: 5px;
+
+    .candle .flame {
+      width: 15px;
+      height: 15px;
+      background: radial-gradient(ellipse at center, #ffecb3 0%, #ff9800 60%, transparent 80%);
+      border-radius: 50%;
+      margin: 0 auto;
+      position: relative;
+      top: -20px;
+      animation: flicker 1s infinite alternate;
+      z-index: 3;
     }
-    .candle-item .message {
-      font-style: italic;
-      margin-bottom: 5px;
-    }
-    .candle-item .time {
-      font-size: 0.85rem;
-      color: #ddd;
-    }
-    .loading {
+
+    .candle .label {
       text-align: center;
-      font-style: italic;
-      margin-top: 20px;
+      font-size: 0.8rem;
+      margin-top: 4px;
+      color: #fff;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-120vh);
+        opacity: 0;
+      }
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.1) rotate(2deg); opacity: 0.8; }
     }
   </style>
 </head>
 <body>
-  <h1>🕯️ Light a Candle</h1>
+  <h1>🕯️ Light a Tribute Candle</h1>
+
   <form id="candleForm">
     <input type="text" id="username" placeholder="Your name (optional)" maxlength="50" />
-    <textarea id="message" placeholder="Write a message or dedication (optional)" maxlength="250"></textarea>
+    <textarea id="message" placeholder="Message or dedication" maxlength="150"></textarea>
     <button type="submit">Light Candle</button>
   </form>
 
-  <div class="candles-list" id="candlesList">
-    <p class="loading">Loading candles...</p>
-  </div>
+  <div class="sky" id="sky"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Replace with your Supabase project URL and anon key
+        // Replace with your Supabase project URL and anon key
     const SUPABASE_URL = 'https://ytgrzhtntwzefwjmhgjj.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
 
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+    const sky = document.getElementById('sky');
     const form = document.getElementById('candleForm');
     const usernameInput = document.getElementById('username');
     const messageInput = document.getElementById('message');
-    const candlesList = document.getElementById('candlesList');
+
+    // Function to create a candle element
+    function createCandleElement(data) {
+      const candle = document.createElement('div');
+      candle.className = 'candle';
+      candle.style.left = Math.random() * 90 + '%';
+      candle.style.animationDuration = 18 + Math.random() * 10 + 's';
+
+      candle.innerHTML = `
+        <div class="flame"></div>
+        <div class="wick"></div>
+        <div class="body"></div>
+        <div class="label">${(data.username || 'Anonymous').slice(0, 16)}</div>
+      `;
+
+      sky.appendChild(candle);
+
+      // Remove after float completes
+      setTimeout(() => {
+        sky.removeChild(candle);
+      }, 20000);
+    }
 
     async function fetchCandles() {
-      candlesList.innerHTML = '<p class="loading">Loading candles...</p>';
-      let { data, error } = await supabase
+      const { data, error } = await supabase
         .from('candles')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(50);
+        .limit(100);
 
-      if (error) {
-        candlesList.innerHTML = `<p>Error loading candles: ${error.message}</p>`;
-        return;
+      if (!error && data.length > 0) {
+        data.forEach((candle, i) => {
+          setTimeout(() => createCandleElement(candle), i * 200);
+        });
       }
-
-      if (!data || data.length === 0) {
-        candlesList.innerHTML = '<p>No candles lit yet. Be the first!</p>';
-        return;
-      }
-
-      candlesList.innerHTML = '';
-      data.forEach(candle => {
-        const div = document.createElement('div');
-        div.className = 'candle-item';
-        div.innerHTML = `
-          <div class="user">${candle.username || 'Anonymous'}</div>
-          <div class="message">${candle.message ? candle.message.replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''}</div>
-          <div class="time">${new Date(candle.created_at).toLocaleString()}</div>
-        `;
-        candlesList.appendChild(div);
-      });
     }
 
     form.addEventListener('submit', async (e) => {
@@ -141,36 +199,17 @@
       const username = usernameInput.value.trim();
       const message = messageInput.value.trim();
 
-      // Optional: simple validation - limit at least something to submit
-      if (!username && !message) {
-        alert('Please enter your name or a message.');
-        return;
-      }
-
-      // Disable button to prevent multiple submits
-      form.querySelector('button').disabled = true;
-      form.querySelector('button').textContent = 'Lighting...';
-
       const { data, error } = await supabase.from('candles').insert([
-        {
-          username: username || null,
-          message: message || null,
-        }
+        { username: username || null, message: message || null }
       ]);
 
-      if (error) {
-        alert('Error lighting candle: ' + error.message);
-      } else {
+      if (!error) {
+        createCandleElement({ username });
         usernameInput.value = '';
         messageInput.value = '';
-        fetchCandles();
       }
-
-      form.querySelector('button').disabled = false;
-      form.querySelector('button').textContent = 'Light Candle';
     });
 
-    // Initial fetch
     fetchCandles();
   </script>
 </body>
