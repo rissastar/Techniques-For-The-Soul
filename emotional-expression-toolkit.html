@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Emotional Expression Toolkit</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    .toolkit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .tool-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+    }
+
+    .tool-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #5a67d8;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .emoji-wheel {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .emoji-btn {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      border: none;
+      border-radius: 15px;
+      padding: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      aspect-ratio: 1;
+      user-select: none;
+    }
+
+    .emoji-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .emoji-btn.selected {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      transform: scale(1.15);
+    }
+
+    .mood-tracker {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    }
+
+    .mood-scale {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 15px;
+    }
+
+    .mood-point {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 3px solid transparent;
+      user-select: none;
+    }
+
+    .mood-point:hover {
+      transform: scale(1.2);
+      border-color: #667eea;
+    }
+
+    .mood-point.selected {
+      transform: scale(1.3);
+      border-color: #667eea;
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .mood-1 { background: #ff6b6b; }
+    .mood-2 { background: #ffa726; }
+    .mood-3 { background: #ffee58; }
+    .mood-4 { background: #66bb6a; }
+    .mood-5 { background: #42a5f5; }
+
+    .emotion-journal {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    }
+
+    .journal-entry {
+      width: 100%;
+      min-height: 150px;
+      padding: 15px;
+      border: none;
+      border-radius: 15px;
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      background: rgba(255, 255, 255, 0.8);
+      transition: all 0.3s ease;
+    }
+
+    .journal-entry:focus {
+      outline: none;
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .breathing-exercise {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      text-align: center;
+    }
+
+    .breathing-circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      transition: all 4s ease-in-out;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .breathing-circle.inhale {
+      transform: scale(1.3);
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .breathing-circle.exhale {
+      transform: scale(0.8);
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 10px 5px 0 0;
+      user-select: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .emotions-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .emotion-tag {
+      background: rgba(102, 126, 234, 0.1);
+      color: #5a67d8;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      user-select: none;
+    }
+
+    .emotion-tag:hover {
+      background: rgba(102, 126, 234, 0.2);
+      transform: scale(1.05);
+    }
+
+    .emotion-tag.selected {
+      background: #667eea;
+      color: white;
+      border-color: #5a67d8;
+    }
+
+    .affirmations {
+      background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%);
+    }
+
+    .affirmation-display {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 25px;
+      border-radius: 15px;
+      margin: 20px 0;
+      text-align: center;
+      font-size: 1.1rem;
+      font-style: italic;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 5px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 5px;
+    }
+
+    .results-display {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .floating {
+      animation: pulse 2s infinite;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 { font-size: 2rem; }
+      .toolkit-grid { grid-template-columns: 1fr; gap: 20px; }
+      .emoji-wheel { grid-template-columns: repeat(4, 1fr); }
+      .breathing-circle { width: 150px; height: 150px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🌈 Emotional Expression Toolkit</h1>
+      <p>Explore, understand, and express your emotions in a healthy way</p>
+    </div>
+
+    <div class="toolkit-grid">
+      <!-- Emotion Wheel -->
+      <div class="tool-card">
+        <h3>🎭 Emotion Wheel</h3>
+        <p>Click on emojis to identify how you're feeling right now:</p>
+        <div class="emoji-wheel">
+          <button class="emoji-btn" data-emotion="happy" aria-label="Happy">😊</button>
+          <button class="emoji-btn" data-emotion="sad" aria-label="Sad">😢</button>
+          <button class="emoji-btn" data-emotion="angry" aria-label="Angry">😠</button>
+          <button class="emoji-btn" data-emotion="excited" aria-label="Excited">🤩</button>
+          <button class="emoji-btn" data-emotion="anxious" aria-label="Anxious">😰</button>
+          <button class="emoji-btn" data-emotion="calm" aria-label="Calm">😌</button>
+          <button class="emoji-btn" data-emotion="confused" aria-label="Confused">😕</button>
+          <button class="emoji-btn" data-emotion="grateful" aria-label="Grateful">🙏</button>
+          <button class="emoji-btn" data-emotion="tired" aria-label="Tired">😴</button>
+          <button class="emoji-btn" data-emotion="surprised" aria-label="Surprised">😲</button>
+          <button class="emoji-btn" data-emotion="frustrated" aria-label="Frustrated">😤</button>
+          <button class="emoji-btn" data-emotion="loved" aria-label="Loved">🥰</button>
+        </div>
+        <div class="results-display" id="emotion-result" aria-live="polite">
+          <p>Select emotions to see your current emotional state</p>
+        </div>
+      </div>
+
+      <!-- Mood Tracker -->
+      <div class="tool-card mood-tracker">
+        <h3>📊 Mood Scale</h3>
+        <p>Rate your overall mood from 1 (lowest) to 5 (highest):</p>
+        <div class="mood-scale" role="radiogroup" aria-label="Mood Scale">
+          <div class="mood-point mood-1" data-mood="1" role="radio" tabindex="0" aria-checked="false"></div>
+          <div class="mood-point mood-2" data-mood="2" role="radio" tabindex="-1" aria-checked="false"></div>
+          <div class="mood-point mood-3" data-mood="3" role="radio" tabindex="-1" aria-checked="false"></div>
+          <div class="mood-point mood-4" data-mood="4" role="radio" tabindex="-1" aria-checked="false"></div>
+          <div class="mood-point mood-5" data-mood="5" role="radio" tabindex="-1" aria-checked="false"></div>
+        </div>
+        <div class="progress-bar" aria-hidden="true">
+          <div class="progress-fill" id="mood-progress"></div>
+        </div>
+        <div class="results-display" id="mood-result" aria-live="polite">
+          <p>Click on a mood level to track your current state</p>
+        </div>
+      </div>
+
+      <!-- Emotion Journal -->
+      <div class="tool-card emotion-journal">
+        <h3>📝 Emotion Journal</h3>
+        <p>Write about your feelings and experiences:</p>
+        <textarea class="journal-entry" placeholder="What emotions are you experiencing today? What triggered them? How are you processing these feelings?" aria-label="Emotion Journal"></textarea>
+        <div>
+          <button class="btn" onclick="saveJournalEntry()">Save Entry</button>
+          <button class="btn" onclick="clearJournal()">Clear</button>
+        </div>
+      </div>
+
+      <!-- Breathing Exercise -->
+      <div class="tool-card breathing-exercise">
+        <h3>🫁 Breathing Exercise</h3>
+        <p>Click the circle to start a guided breathing session:</p>
+        <div class="breathing-circle" id="breathing-circle" onclick="startBreathing()" tabindex="0" role="button" aria-pressed="false" aria-label="Start Breathing Exercise">
+          Click to Start
+        </div>
+        <button class="btn" onclick="stopBreathing()">Stop</button>
+      </div>
+
+      <!-- Emotion Categories -->
+      <div class="tool-card">
+        <h3>🏷️ Emotion Categories</h3>
+        <p>Select emotions you're experiencing to explore them:</p>
+        <div class="emotions-list" role="list">
+          <span class="emotion-tag" data-category="joy" role="listitem" tabindex="0">Joy</span>
+          <span class="emotion-tag" data-category="sadness" role="listitem" tabindex="0">Sadness</span>
+          <span class="emotion-tag" data-category="anger" role="listitem" tabindex="0">Anger</span>
+          <span class="emotion-tag" data-category="fear" role="listitem" tabindex="0">Fear</span>
+          <span class="emotion-tag" data-category="surprise" role="listitem" tabindex="0">Surprise</span>
+          <span class="emotion-tag" data-category="disgust" role="listitem" tabindex="0">Disgust</span>
+          <span class="emotion-tag" data-category="trust" role="listitem" tabindex="0">Trust</span>
+          <span class="emotion-tag" data-category="anticipation" role="listitem" tabindex="0">Anticipation</span>
+        </div>
+        <div class="results-display" id="category-result" aria-live="polite">
+          <p>Select emotion categories to learn more about them</p>
+        </div>
+      </div>
+
+      <!-- Daily Affirmations -->
+      <div class="tool-card affirmations">
+        <h3>✨ Daily Affirmations</h3>
+        <p>Generate positive affirmations to boost your mood:</p>
+        <div class="affirmation-display" id="affirmation-text" aria-live="polite" tabindex="0">
+          Click below to receive your daily affirmation
+        </div>
+        <div>
+          <button class="btn" onclick="generateAffirmation()">New Affirmation</button>
+          <button class="btn" onclick="saveAffirmation()">Save This One</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global state
+    let selectedEmotions = [];
+    let currentMood = 0;
+    let breathingActive = false;
+    let breathingInterval;
+
+    // Affirmations array
+    const affirmations = [
+      "I am worthy of love and happiness.",
+      "My feelings are valid and important.",
+      "I have the strength to overcome challenges.",
+      "I choose to focus on what I can control.",
+      "I am growing and learning every day.",
+      "I deserve compassion, especially from myself.",
+      "I trust in my ability to handle whatever comes my way.",
+      "I am enough, just as I am.",
+      "My emotions are temporary and will pass.",
+      "I am creating positive change in my life.",
+      "I choose peace over worry.",
+      "I am grateful for this moment and this breath."
+    ];
+
+    // Emotion descriptions
+    const emotionDescriptions = {
+      joy: "Joy is a feeling of great pleasure and happiness. It often comes from positive experiences, achievements, or connections with others.",
+      sadness: "Sadness is a natural response to loss, disappointment, or difficult situations. It's important to acknowledge and process these feelings.",
+      anger: "Anger can signal that something important to you has been threatened or violated. It's energy that can be channeled constructively.",
+      fear: "Fear helps protect us from danger, but sometimes it can be overwhelming. Learning to understand fear helps us respond appropriately.",
+      surprise: "Surprise occurs when something unexpected happens. It can be positive or negative and often leads to other emotions.",
+      disgust: "Disgust helps us avoid things that might be harmful. It's a protective emotion that keeps us safe.",
+      trust: "Trust is fundamental to healthy relationships and personal growth. It develops over time through consistent positive experiences.",
+      anticipation: "Anticipation is the emotion we feel when looking forward to future events. It can be exciting or anxiety-provoking."
+    };
+
+    // Emotion wheel functionality
+    document.querySelectorAll('.emoji-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const emotion = this.dataset.emotion;
+
+        if (this.classList.contains('selected')) {
+          this.classList.remove('selected');
+          selectedEmotions = selectedEmotions.filter(e => e !== emotion);
+        } else {
+          this.classList.add('selected');
+          selectedEmotions.push(emotion);
+        }
+
+        updateEmotionResult();
+      });
+    });
+
+    function updateEmotionResult() {
+      const resultDiv = document.getElementById('emotion-result');
+      if (selectedEmotions.length === 0) {
+        resultDiv.innerHTML = '<p>Select emotions to see your current emotional state</p>';
+      } else {
+        resultDiv.innerHTML = `
+          <h4>Current Emotions:</h4>
+          <p>${selectedEmotions.join(', ')}</p>
+          <p><em>Remember: It's normal to feel multiple emotions at once. Take time to acknowledge each feeling.</em></p>
+        `;
+      }
+    }
+
+    // Mood tracker functionality
+    document.querySelectorAll('.mood-point').forEach((point, idx, points) => {
+      point.addEventListener('click', function() {
+        // Remove previous selection
+        points.forEach(p => {
+          p.classList.remove('selected');
+          p.setAttribute('aria-checked', 'false');
+          p.setAttribute('tabindex', '-1');
+        });
+
+        // Add selection to clicked point
+        this.classList.add('selected');
+        this.setAttribute('aria-checked', 'true');
+        this.setAttribute('tabindex', '0');
+        currentMood = parseInt(this.dataset.mood);
+
+        // Update progress bar
+        const progressFill = document.getElementById('mood-progress');
+        progressFill.style.width = (currentMood * 20) + '%';
+
+        // Update result
+        updateMoodResult();
+      });
+
+      // Keyboard support for mood points (arrow keys)
+      point.addEventListener('keydown', e => {
+        const currentIndex = Array.from(points).indexOf(e.target);
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          const nextIndex = (currentIndex + 1) % points.length;
+          points[nextIndex].focus();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const prevIndex = (currentIndex - 1 + points.length) % points.length;
+          points[prevIndex].focus();
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.target.click();
+        }
+      });
+    });
+
+    function updateMoodResult() {
+      const resultDiv = document.getElementById('mood-result');
+      const moodTexts = {
+        1: "I understand you're having a tough time. Remember that difficult feelings are temporary.",
+        2: "You're feeling low, and that's okay. Consider reaching out to someone you trust.",
+        3: "You're in a neutral space. This can be a good time for reflection and self-care.",
+        4: "You're feeling good! This is a great time to appreciate the positive things in your life.",
+        5: "You're feeling fantastic! Enjoy this positive energy and maybe share it with others."
+      };
+
+      resultDiv.innerHTML = `
+        <h4>Mood Level: ${currentMood}/5</h4>
+        <p>${moodTexts[currentMood]}</p>
+      `;
+    }
+
+    // Journal functionality
+    function saveJournalEntry() {
+      const entry = document.querySelector('.journal-entry').value;
+      if (entry.trim()) {
+        alert('Journal entry saved! Remember: regular journaling can help you better understand your emotional patterns.');
+      } else {
+        alert('Please write something in your journal first.');
+      }
+    }
+
+    function clearJournal() {
+      document.querySelector('.journal-entry').value = '';
+    }
+
+    // Breathing exercise functionality
+    function startBreathing() {
+      if (breathingActive) return;
+
+      breathingActive = true;
+      const circle = document.getElementById('breathing-circle');
+      circle.setAttribute('aria-pressed', 'true');
+      let phase = 'inhale';
+      let count = 4;
+
+      function breathingCycle() {
+        if (!breathingActive) return;
+
+        if (phase === 'inhale') {
+          circle.classList.add('inhale');
+          circle.classList.remove('exhale');
+          circle.textContent = `Inhale ${count}`;
+          count--;
+
+          if (count < 1) {
+            phase = 'hold';
+            count = 4;
+          }
+        } else if (phase === 'hold') {
+          circle.textContent = `Hold ${count}`;
+          count--;
+
+          if (count < 1) {
+            phase = 'exhale';
+            count = 4;
+          }
+        } else if (phase === 'exhale') {
+          circle.classList.add('exhale');
+          circle.classList.remove('inhale');
+          circle.textContent = `Exhale ${count}`;
+          count--;
+
+          if (count < 1) {
+            phase = 'inhale';
+            count = 4;
+          }
+        }
+      }
+
+      breathingCycle(); // Run immediately so text updates instantly
+      breathingInterval = setInterval(breathingCycle, 1000);
+    }
+
+    function stopBreathing() {
+      breathingActive = false;
+      clearInterval(breathingInterval);
+      const circle = document.getElementById('breathing-circle');
+      circle.classList.remove('inhale', 'exhale');
+      circle.textContent = 'Click to Start';
+      circle.setAttribute('aria-pressed', 'false');
+    }
+
+    // Emotion categories functionality
+    document.querySelectorAll('.emotion-tag').forEach(tag => {
+      tag.addEventListener('click', function() {
+        // Toggle selection
+        document.querySelectorAll('.emotion-tag').forEach(t => t.classList.remove('selected'));
+        this.classList.add('selected');
+
+        const category = this.dataset.category;
+        const resultDiv = document.getElementById('category-result');
+
+        resultDiv.innerHTML = `
+          <h4>${category.charAt(0).toUpperCase() + category.slice(1)}</h4>
+          <p>${emotionDescriptions[category]}</p>
+        `;
+      });
+
+      // Keyboard support
+      tag.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.target.click();
+        }
+      });
+    });
+
+    // Affirmations functionality
+    function generateAffirmation() {
+      const randomIndex = Math.floor(Math.random() * affirmations.length);
+      const affirmation = affirmations[randomIndex];
+      const affTextEl = document.getElementById('affirmation-text');
+      affTextEl.textContent = affirmation;
+      affTextEl.focus();
+    }
+
+    function saveAffirmation() {
+      const currentAffirmation = document.getElementById('affirmation-text').textContent;
+      if (currentAffirmation && currentAffirmation !== 'Click below to receive your daily affirmation') {
+        alert('Affirmation saved to your heart! 💝\n\nRemember to repeat it throughout your day.');
+      } else {
+        alert('Please generate an affirmation first!');
+      }
+    }
+
+    // Initialize with a random affirmation
+    generateAffirmation();
+
+    // Add floating animation to cards on scroll
+    function addScrollAnimations() {
+      const cards = document.querySelectorAll('.tool-card');
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('floating');
+          }
+        });
+      });
+
+      cards.forEach(card => observer.observe(card));
+    }
+
+    // Initialize animations when page loads
+    document.addEventListener('DOMContentLoaded', addScrollAnimations);
+  </script>
+</body>
+</html>
