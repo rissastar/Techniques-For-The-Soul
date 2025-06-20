@@ -222,43 +222,51 @@
     </div>
 
     <hr class="divider" />
+        <div class="section">
+      <h2 class="section-title" id="section3">Reflect and Release</h2>
 
-    <div class="section">
-      <h2 class="section-title" id="section3">Reflect & Release</h2>
       <div class="reflection-item">
-        <label class="reflection-label" id="ref1">• Something that went well today:</label>
-        <textarea class="reflection-lines" rows="3"></textarea>
+        <label class="reflection-label" id="refLabel1">• Something that went well today:</label>
+        <textarea class="reflection-lines" id="ref1" rows="3"></textarea>
       </div>
+
       <div class="reflection-item">
-        <label class="reflection-label" id="ref2">• Something I'm letting go of:</label>
-        <textarea class="reflection-lines" rows="3"></textarea>
+        <label class="reflection-label" id="refLabel2">• Something I'm letting go of:</label>
+        <textarea class="reflection-lines" id="ref2" rows="3"></textarea>
       </div>
+
       <div class="reflection-item">
-        <label class="reflection-label" id="ref3">• Something I'm grateful for:</label>
-        <textarea class="reflection-lines" rows="3"></textarea>
+        <label class="reflection-label" id="refLabel3">• Something I'm grateful for:</label>
+        <textarea class="reflection-lines" id="ref3" rows="3"></textarea>
       </div>
     </div>
 
     <hr class="divider" />
 
-    <div class="section wind-down">
+    <div class="section">
       <h2 class="section-title" id="section4">Optional Wind-Down Tools</h2>
-      <ul class="checklist">
-        <li><input type="checkbox" id="chk7" /> <label for="chk7" id="check7">Played calming music or nature sounds</label></li>
-        <li><input type="checkbox" id="chk8" /> <label for="chk8" id="check8">Did a gentle stretch or movement</label></li>
-        <li><input type="checkbox" id="chk9" /> <label for="chk9" id="check9">Sipped a warm tea or water</label></li>
-      </ul>
+      <div class="wind-down">
+        <ul class="checklist">
+          <li><input type="checkbox" id="chk7" /> <label for="chk7" id="check7">Played calming music or nature sounds</label></li>
+          <li><input type="checkbox" id="chk8" /> <label for="chk8" id="check8">Did a gentle stretch or movement</label></li>
+          <li><input type="checkbox" id="chk9" /> <label for="chk9" id="check9">Sipped a warm tea or glass of water</label></li>
+        </ul>
+      </div>
     </div>
 
-    <div class="section your-turn">
-      <h2 class="section-title" id="section5">Your Turn</h2>
-      <div class="reflection-item">
-        <label class="reflection-label" id="ref4">✨ One kind thing you'll say to yourself before sleep?</label>
-        <textarea class="reflection-lines" rows="3"></textarea>
-      </div>
-      <div class="reflection-item">
-        <label class="reflection-label" id="ref5">✨ How are you feeling right now?</label>
-        <textarea class="reflection-lines" rows="3"></textarea>
+    <div class="section">
+      <div class="your-turn">
+        <h2 class="section-title" id="section5">Your Turn</h2>
+
+        <div class="reflection-item">
+          <label class="reflection-label" id="refLabel4">✨ What's one kind thing you'll say to yourself before sleep?</label>
+          <textarea class="reflection-lines" id="ref4" rows="3"></textarea>
+        </div>
+
+        <div class="reflection-item">
+          <label class="reflection-label" id="refLabel5">✨ How are you feeling right now?</label>
+          <textarea class="reflection-lines" id="ref5" rows="3"></textarea>
+        </div>
       </div>
     </div>
 
@@ -274,144 +282,271 @@
   </div>
 </div>
 
-<!-- jsPDF & html2canvas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 <script>
-  const quotes = {
+  const moods = {
     peaceful: {
-      en: "Let your breath guide you to peace tonight.",
-      fr: "Laisse ton souffle te guider vers la paix ce soir."
+      colorLight: '#a8dadc',
+      colorDark: '#457b9d',
+      quote: {
+        en: '“Peace comes from within. Do not seek it without.” – Buddha',
+        fr: '« La paix vient de l’intérieur. Ne la cherche pas à l’extérieur. » – Bouddha'
+      }
     },
     anxious: {
-      en: "You’ve made it through the day. Breathe. You are safe now.",
-      fr: "Tu as survécu à cette journée. Respire. Tu es en sécurité maintenant."
+      colorLight: '#f4a261',
+      colorDark: '#e76f51',
+      quote: {
+        en: '“This too shall pass.”',
+        fr: '« Cela aussi passera. »'
+      }
     },
     hopeful: {
-      en: "Tomorrow holds possibility. Rest and restore tonight.",
-      fr: "Demain est plein de possibilités. Repose-toi et ressource-toi."
+      colorLight: '#90be6d',
+      colorDark: '#43aa8b',
+      quote: {
+        en: '“Hope is the thing with feathers that perches in the soul.” – Emily Dickinson',
+        fr: '« L’espoir est la chose avec des plumes qui se perche dans l’âme. » – Emily Dickinson'
+      }
     },
     tired: {
-      en: "You’ve done enough. It’s okay to rest now.",
-      fr: "Tu as assez fait. Il est temps de te reposer."
+      colorLight: '#b0a8b9',
+      colorDark: '#6b5b7c',
+      quote: {
+        en: '“Rest and self-care are so important.”',
+        fr: '« Le repos et le soin de soi sont si importants. »'
+      }
     }
   };
 
-  function updateMood() {
-    const mood = document.getElementById('moodSelect').value;
-    const lang = document.getElementById('langSelect').value;
-    const quote = quotes[mood] ? quotes[mood][lang] : "";
-    document.getElementById('moodQuote').innerText = quote;
+  const defaultLang = 'en';
+  const defaultMood = '';
+  const defaultNight = false;
 
-    // Change background based on mood for light mode
-    if (!document.body.classList.contains('dark')) {
-      switch(mood) {
-        case 'peaceful':
-          document.body.style.background = "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)";
-          break;
-        case 'anxious':
-          document.body.style.background = "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
-          break;
-        case 'hopeful':
-          document.body.style.background = "linear-gradient(135deg, #c3ec52 0%, #0ba29d 100%)";
-          break;
-        case 'tired':
-          document.body.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
-          break;
-        default:
-          document.body.style.background = "var(--bg-light)";
-      }
+  // Elements
+  const langSelect = document.getElementById('langSelect');
+  const moodSelect = document.getElementById('moodSelect');
+  const body = document.body;
+  const quoteBox = document.getElementById('moodQuote');
+
+  // Load saved data from localStorage
+  function loadSettings() {
+    const lang = localStorage.getItem('bedtimeLang') || defaultLang;
+    const mood = localStorage.getItem('bedtimeMood') || defaultMood;
+    const night = localStorage.getItem('bedtimeNight') === 'true';
+
+    langSelect.value = lang;
+    moodSelect.value = mood;
+    if (night) {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
     }
   }
 
-  function toggleNightMode() {
-    document.body.classList.toggle("dark");
-    updateMood(); // update background properly in light/dark
+  // Save language selection
+  function saveLanguage(lang) {
+    localStorage.setItem('bedtimeLang', lang);
   }
 
-  async function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const element = document.querySelector('.container');
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      backgroundColor: document.body.classList.contains('dark') ? "#2d3748" : null
-    });
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'pt', 'a4');
-
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-    let heightLeft = pdfHeight;
-    let position = 0;
-
-    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-    heightLeft -= pdf.internal.pageSize.getHeight();
-
-    while (heightLeft > 0) {
-      position -= pdf.internal.pageSize.getHeight();
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-      heightLeft -= pdf.internal.pageSize.getHeight();
-    }
-
-    pdf.save('bedtime-checklist.pdf');
+  // Save mood selection
+  function saveMood(mood) {
+    localStorage.setItem('bedtimeMood', mood);
   }
 
+  // Save night mode
+  function saveNightMode(isNight) {
+    localStorage.setItem('bedtimeNight', isNight);
+  }
+
+  // Update language texts
   function updateLanguage() {
-    const lang = document.getElementById('langSelect').value;
-    const map = {
-      title: { en: "🛏️ Get Ready for Bed", fr: "🛏️ Prépare-toi pour dormir" },
-      subtitle: { en: "Take a moment to slow down and care for yourself.", fr: "Prends un moment pour ralentir et prendre soin de toi." },
-      nightBtn: { en: "Night Mode", fr: "Mode Nuit" },
-      printBtn: { en: "Print", fr: "Imprimer" },
-      downloadBtn: { en: "Download", fr: "Télécharger" },
-      moodSelEn: { en: "🌙 Select Mood", fr: "🌙 Choisir l'humeur" },
-      peacefulEn: { en: "Peaceful", fr: "Paisible" },
-      anxiousEn: { en: "Anxious", fr: "Anxieux(se)" },
-      hopefulEn: { en: "Hopeful", fr: "Plein·e d’espoir" },
-      tiredEn: { en: "Tired", fr: "Fatigué·e" },
-      section1: { en: "Self-Care Check", fr: "Vérification du bien-être" },
-      check1: { en: "Washed your face or taken a shower", fr: "Laver ton visage ou prendre une douche" },
-      check2: { en: "Changed into something cozy", fr: "Mettre quelque chose de confortable" },
-      check3: { en: "Brushed your teeth or did your routine", fr: "Brosser tes dents ou faire ta routine" },
-      section2: { en: "Mind Reset", fr: "Réinitialisation mentale" },
-      check4: { en: "Put your phone away for 10 minutes", fr: "Ranger ton téléphone pendant 10 minutes" },
-      check5: { en: "Took 3 deep grounding breaths", fr: "Prendre 3 grandes respirations profondes" },
-      check6: { en: "Let go of what you can't control", fr: "Lâcher prise sur ce que tu ne peux pas contrôler" },
-      section3: { en: "Reflect & Release", fr: "Réfléchir et relâcher" },
-      ref1: { en: "• Something that went well today:", fr: "• Quelque chose qui s'est bien passé aujourd'hui :" },
-      ref2: { en: "• Something I'm letting go of:", fr: "• Quelque chose que je laisse aller :" },
-      ref3: { en: "• Something I'm grateful for:", fr: "• Quelque chose pour lequel je suis reconnaissant·e :" },
-      section4: { en: "Optional Wind-Down Tools", fr: "Outils optionnels pour se détendre" },
-      check7: { en: "Played calming music or nature sounds", fr: "Écouter de la musique douce ou des sons naturels" },
-      check8: { en: "Did a gentle stretch or movement", fr: "Faire un étirement doux ou un mouvement" },
-      check9: { en: "Sipped a warm tea or water", fr: "Boire une tisane ou de l’eau" },
-      section5: { en: "Your Turn", fr: "À ton tour" },
-      ref4: { en: "✨ One kind thing you'll say to yourself before sleep?", fr: "✨ Une chose gentille à te dire avant de dormir ?" },
-      ref5: { en: "✨ How are you feeling right now?", fr: "✨ Comment te sens-tu maintenant ?" },
-      reminderTitle: { en: "🌙 Reminder:", fr: "🌙 Rappel :" },
+    const lang = langSelect.value;
+    saveLanguage(lang);
+
+    // Text mappings
+    const texts = {
+      title: { en: '🛏️ Get Ready for Bed', fr: '🛏️ Prépare-toi pour le lit' },
+      subtitle: {
+        en: 'Take a moment to slow down and care for yourself.',
+        fr: 'Prends un moment pour ralentir et prendre soin de toi.'
+      },
+      nightBtn: { en: 'Night Mode', fr: 'Mode Nuit' },
+      printBtn: { en: 'Print', fr: 'Imprimer' },
+      downloadBtn: { en: 'Download', fr: 'Télécharger' },
+      moodSel: { en: '🌙 Select Mood', fr: '🌙 Choisir une humeur' },
+      peaceful: { en: 'Peaceful', fr: 'Paisible' },
+      anxious: { en: 'Anxious', fr: 'Anxieux·se' },
+      hopeful: { en: 'Hopeful', fr: 'Plein·e d’espoir' },
+      tired: { en: 'Tired', fr: 'Fatigué·e' },
+      section1: { en: 'Self-Care Check', fr: 'Vérification des soins personnels' },
+      check1: { en: 'Washed your face or taken a shower', fr: 'Lavé ton visage ou pris une douche' },
+      check2: { en: 'Changed into something cozy', fr: 'Mis quelque chose de confortable' },
+      check3: { en: 'Brushed your teeth or did your routine', fr: 'Brossé tes dents ou fait ta routine' },
+      section2: { en: 'Mind Reset', fr: 'Réinitialisation de l’esprit' },
+      check4: { en: 'Put your phone away for 10 minutes', fr: 'Mis ton téléphone de côté pendant 10 minutes' },
+      check5: { en: 'Took 3 deep grounding breaths', fr: 'Pris 3 grandes respirations apaisantes' },
+      check6: { en: "Let go of what you can't control", fr: "Lâché prise sur ce que tu ne peux pas contrôler" },
+      section3: { en: 'Reflect and Release', fr: 'Réfléchir et lâcher prise' },
+      refLabel1: { en: '• Something that went well today:', fr: '• Quelque chose qui a bien marché aujourd’hui :' },
+      refLabel2: { en: "• Something I'm letting go of:", fr: "• Quelque chose que je lâche prise :" },
+      refLabel3: { en: "• Something I'm grateful for:", fr: "• Quelque chose pour laquelle je suis reconnaissant·e :" },
+      section4: { en: 'Optional Wind-Down Tools', fr: 'Outils facultatifs pour se détendre' },
+      check7: { en: 'Played calming music or nature sounds', fr: 'Écouté de la musique apaisante ou des sons de la nature' },
+      check8: { en: 'Did a gentle stretch or movement', fr: 'Fait un étirement doux ou un mouvement' },
+      check9: { en: 'Sipped a warm tea or glass of water', fr: 'Bu une tisane chaude ou un verre d’eau' },
+      section5: { en: 'Your Turn', fr: 'À toi' },
+      refLabel4: { en: "✨ What's one kind thing you'll say to yourself before sleep?", fr: "✨ Quelle est une chose gentille que tu te diras avant de dormir ?" },
+      refLabel5: { en: '✨ How are you feeling right now?', fr: '✨ Comment te sens-tu maintenant ?' },
+      reminderTitle: { en: '🌙 Reminder:', fr: '🌙 Rappel :' },
       reminderText: {
-        en: "You are safe.<br>You are enough.<br>You are not alone.",
+        en: 'You are safe.<br>You are enough.<br>You are not alone.',
         fr: "Tu es en sécurité.<br>Tu es suffisant·e.<br>Tu n'es pas seul·e."
       }
     };
-    for (const id in map) {
+
+    // Update all mapped texts
+    for (const id in texts) {
       const el = document.getElementById(id);
-      if (el) {
-        el.innerHTML = map[id][lang];
-      }
+      if (el) el.innerHTML = texts[id][lang];
     }
+
     updateMood();
   }
 
-  // Initialize on load
-  window.onload = () => {
-    updateLanguage();
+  // Update mood background & quote
+  function updateMood() {
+    const mood = moodSelect.value;
+    saveMood(mood);
+    if (!mood || !moods[mood]) {
+      quoteBox.innerHTML = '';
+      body.style.background = '';
+      return;
+    }
+    const lang = langSelect.value;
+    const moodData = moods[mood];
+    quoteBox.innerHTML = moodData.quote[lang];
+    if (body.classList.contains('dark')) {
+      body.style.background = moodData.colorDark;
+    } else {
+      body.style.background = moodData.colorLight;
+    }
+  }
+
+  // Toggle night mode
+  function toggleNightMode() {
+    const isNight = body.classList.toggle('dark');
+    saveNightMode(isNight);
     updateMood();
+  }
+
+  // Save checkboxes and textareas
+  function saveInputs() {
+    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+    allCheckboxes.forEach(cb => {
+      localStorage.setItem(cb.id, cb.checked);
+    });
+    const allTextareas = document.querySelectorAll('textarea');
+    allTextareas.forEach(ta => {
+      localStorage.setItem(ta.id, ta.value);
+    });
+  }
+
+  // Load checkboxes and textareas
+  function loadInputs() {
+    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+    allCheckboxes.forEach(cb => {
+      const saved = localStorage.getItem(cb.id);
+      cb.checked = saved === 'true';
+      cb.addEventListener('change', saveInputs);
+    });
+    const allTextareas = document.querySelectorAll('textarea');
+    allTextareas.forEach(ta => {
+      const saved = localStorage.getItem(ta.id);
+      if (saved) ta.value = saved;
+      ta.addEventListener('input', saveInputs);
+    });
+  }
+
+  // Download PDF function using jsPDF
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+      unit: 'pt',
+      format: 'letter',
+      putOnlyUsedFonts:true,
+      floatPrecision: 16
+    });
+
+    // Basic text layout for PDF - you can enhance with html2canvas if needed
+    doc.setFontSize(20);
+    doc.text(langSelect.value === 'fr' ? 'Checklist du coucher' : 'Bedtime Checklist', 40, 40);
+
+    let y = 70;
+    function addText(text) {
+      const splitText = doc.splitTextToSize(text, 500);
+      doc.text(splitText, 40, y);
+      y += splitText.length * 14 + 10;
+    }
+
+    // Sections and content
+    addText(`${langSelect.value === 'fr' ? 'Humeur' : 'Mood'}: ${moodSelect.options[moodSelect.selectedIndex].text}`);
+    addText('');
+    addText(langSelect.value === 'fr' ? 'Contrôle des soins personnels:' : 'Self-Care Check:');
+    for (let i=1; i<=3; i++) {
+      const checked = localStorage.getItem(`chk${i}`) === 'true' ? '✅' : '⬜';
+      const label = document.getElementById(`check${i}`).textContent;
+      addText(`${checked} ${label}`);
+    }
+
+    addText('');
+    addText(langSelect.value === 'fr' ? 'Réinitialisation de l’esprit:' : 'Mind Reset:');
+    for (let i=4; i<=6; i++) {
+      const checked = localStorage.getItem(`chk${i}`) === 'true' ? '✅' : '⬜';
+      const label = document.getElementById(`check${i}`).textContent;
+      addText(`${checked} ${label}`);
+    }
+
+    addText('');
+    addText(langSelect.value === 'fr' ? 'Réfléchir et lâcher prise:' : 'Reflect and Release:');
+    for (let i=1; i<=3; i++) {
+      const val = localStorage.getItem(`ref${i}`) || '';
+      addText(`• ${document.getElementById(`refLabel${i}`).textContent}`);
+      addText(val);
+      addText('');
+    }
+
+    addText('');
+    addText(langSelect.value === 'fr' ? 'Outils facultatifs pour se détendre:' : 'Optional Wind-Down Tools:');
+    for (let i=7; i<=9; i++) {
+      const checked = localStorage.getItem(`chk${i}`) === 'true' ? '✅' : '⬜';
+      const label = document.getElementById(`check${i}`).textContent;
+      addText(`${checked} ${label}`);
+    }
+
+    addText('');
+    addText(langSelect.value === 'fr' ? 'À toi:' : 'Your Turn:');
+    for (let i=4; i<=5; i++) {
+      const val = localStorage.getItem(`ref${i}`) || '';
+      addText(`• ${document.getElementById(`refLabel${i}`).textContent}`);
+      addText(val);
+      addText('');
+    }
+
+    addText('');
+    addText(langSelect.value === 'fr' ? 'Rappel:' : 'Reminder:');
+    addText(document.getElementById('reminderText').innerText);
+
+    doc.save('bedtime-checklist.pdf');
+  }
+
+  // Initial setup
+  window.onload = () => {
+    loadSettings();
+    loadInputs();
+    updateLanguage();
   };
 </script>
 </body>
 </html>
+    
