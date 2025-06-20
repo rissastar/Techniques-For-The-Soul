@@ -1,304 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bedtime Checklist</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
-    :root {
-      --bg-light: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --bg-dark: #1a202c;
-      --text-light: #2d3748;
-      --text-dark: #f7fafc;
-      --card-light: white;
-      --card-dark: #2d3748;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bedtime Checklist - Bilingual</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+  :root {
+    --bg-light: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-dark: #1a202c;
+    --text-light: #2d3748;
+    --text-dark: #f7fafc;
+    --card-light: white;
+    --card-dark: #2d3748;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    margin: 0; padding: 20px;
+    background: var(--bg-light);
+    color: var(--text-light);
+    transition: 0.3s;
+    min-height: 100vh;
+  }
+  body.dark {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--card-light);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    transition: 0.3s;
+  }
+  body.dark .container {
+    background: var(--card-dark);
+  }
+  .header {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    color: white;
+  }
+  .controls {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .controls button,
+  .controls select {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+  }
+  .controls button:hover,
+  .controls select:hover {
+    background: #5a67d8;
+  }
+  .controls select {
+    appearance: none;
+  }
+  .content {
+    padding: 30px;
+  }
+  .quote-box {
+    font-style: italic;
+    text-align: center;
+    margin: 20px 0;
+    min-height: 50px;
+  }
+  .section {
+    margin-bottom: 40px;
+  }
+  .section-title {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+  .checklist li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-right: 12px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+  .reflection-item {
+    margin-bottom: 25px;
+  }
+  .reflection-label {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .reflection-lines {
+    width: 100%;
+    min-height: 60px;
+    border: none;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 8px 0;
+    font-family: inherit;
+    background: transparent;
+    color: inherit;
+    font-size: 1em;
+    resize: vertical;
+    outline-offset: 2px;
+  }
+  .reflection-lines:focus {
+    border-bottom-color: #667eea;
+  }
+  .divider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+    margin: 30px 0;
+  }
+  .wind-down,
+  .your-turn,
+  .reminder {
+    background: #f7fafc;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+    transition: background 0.3s;
+  }
+  body.dark .wind-down,
+  body.dark .your-turn,
+  body.dark .reminder {
+    background: #2c2f36;
+  }
+  body.dark .divider {
+    background: linear-gradient(90deg, transparent, #4a5568, transparent);
+  }
+  .reminder h3 {
+    margin-top: 0;
+  }
+  .hashtag {
+    margin-top: 15px;
+    font-weight: 600;
+    color: #667eea;
+    font-size: 0.9em;
+  }
+  @media print {
     body {
-      font-family: 'Inter', sans-serif;
-      margin: 0; padding: 20px;
-      background: var(--bg-light); color: var(--text-light);
-      transition: 0.3s; min-height: 100vh;
+      margin: 0.5in;
+      font-size: 12pt;
+      line-height: 1.4;
+      background: white !important;
+      color: black !important;
     }
-    body.dark { background: var(--bg-dark); color: var(--text-dark); }
-    .container {
-      max-width: 600px; margin: 0 auto;
-      background: var(--card-light);
-      border-radius: 16px; overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      transition: 0.3s;
+    .no-print {
+      display: none !important;
     }
-    body.dark .container { background: var(--card-dark); }
-    .header {
-      text-align: center; padding: 30px 20px;
-      background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
-      color: white;
+    .page-break {
+      page-break-before: always;
     }
-    .controls {
-      margin-top: 15px;
-      display: flex; flex-wrap: wrap;
-      justify-content: center; gap: 8px;
-    }
-    .controls button, .controls select {
-      background: #667eea; color: white;
-      border: none; padding: 8px 12px;
-      border-radius: 6px; cursor: pointer;
-      font-size: 0.9em;
-    }
-    .controls button:hover, .controls select:hover {
-      background: #5a67d8;
-    }
-    .controls select { appearance: none; }
-    .content { padding: 30px; }
-    .quote-box { font-style: italic; text-align: center; margin: 20px 0; }
-    .section { margin-bottom: 40px; }
-    .section-title {
-      font-size: 1.3em; font-weight: 600;
-      margin-bottom: 20px; padding-bottom: 8px;
-      border-bottom: 2px solid #e2e8f0;
-    }
-    .checklist { list-style: none; padding: 0; }
-    .checklist li {
-      display: flex; align-items: center;
-      margin-bottom: 12px;
-    }
-    .checklist input { margin-right: 12px; width: 18px; height: 18px; cursor: pointer; }
-    .reflection-item { margin-bottom: 25px; }
-    .reflection-label {
-      font-weight: 500; display: block; margin-bottom: 8px;
-    }
-    .reflection-lines {
-      width: 100%; min-height: 60px;
-      border: none; border-bottom: 1px solid #e2e8f0;
-      padding: 8px 0; font-family: inherit;
-      background: transparent; color: inherit;
-    }
-    .divider {
-      border: none; height: 2px;
-      background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
-      margin: 30px 0;
-    }
-    .wind-down, .your-turn, .reminder {
-      background: #f7fafc; padding: 20px; border-radius: 12px;
-      margin: 20px 0;
-      transition: background 0.3s;
-    }
-    body.dark .wind-down,
-    body.dark .your-turn,
-    body.dark .reminder {
-      background: #2c2f36;
-    }
-    body.dark .divider {
-      background: linear-gradient(90deg, transparent, #4a5568, transparent);
-    }
-    .hashtag { margin-top: 15px; font-weight: 600; color: #667eea; font-size: 0.9em; }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1 id="title">🛏️ Get Ready for Bed</h1>
-      <p id="subtitle">Take a moment to slow down and care for yourself.</p>
-      <div class="controls">
-        <select id="langSelect" onchange="updateLanguage()">
-          <option value="en">English</option>
-          <option value="fr">Français</option>
-        </select>
-        <select id="moodSelect" onchange="updateMood()">
-          <option value="" id="moodSelEn">🌙 Select Mood</option>
-          <option value="peaceful" id="peacefulEn">Peaceful</option>
-          <option value="anxious" id="anxiousEn">Anxious</option>
-          <option value="hopeful" id="hopefulEn">Hopeful</option>
-          <option value="tired" id="tiredEn">Tired</option>
-        </select>
-        <button onclick="toggleNightMode()">🌓 <span id="nightBtn">Night Mode</span></button>
-        <button onclick="window.print()">🖨️ <span id="printBtn">Print</span></button>
-        <button onclick="downloadPDF()">📥 <span id="downloadBtn">Download</span></button>
-      </div>
-    </div>
-
-    <div class="content">
-      <div class="quote-box" id="moodQuote"></div>
-            <div class="section">
-        <h2 class="section-title" id="section1">Self-Care Check</h2>
-        <ul class="checklist">
-          <li><input type="checkbox" /> <span id="check1">Washed your face or taken a shower</span></li>
-          <li><input type="checkbox" /> <span id="check2">Changed into something cozy</span></li>
-          <li><input type="checkbox" /> <span id="check3">Brushed your teeth or did your routine</span></li>
-        </ul>
-      </div>
-
-      <hr class="divider">
-
-      <div class="section">
-        <h2 class="section-title" id="section2">Mind Reset</h2>
-        <ul class="checklist">
-          <li><input type="checkbox" /> <span id="check4">Put your phone away for 10 minutes</span></li>
-          <li><input type="checkbox" /> <span id="check5">Took 3 deep grounding breaths</span></li>
-          <li><input type="checkbox" /> <span id="check6">Let go of what you can't control</span></li>
-        </ul>
-      </div>
-
-      <hr class="divider">
-
-      <div class="section">
-        <h2 class="section-title" id="section3">Reflect & Release</h2>
-        <div class="reflection-item">
-          <label class="reflection-label" id="ref1">• Something that went well today:</label>
-          <textarea class="reflection-lines"></textarea>
-        </div>
-        <div class="reflection-item">
-          <label class="reflection-label" id="ref2">• Something I'm letting go of:</label>
-          <textarea class="reflection-lines"></textarea>
-        </div>
-        <div class="reflection-item">
-          <label class="reflection-label" id="ref3">• Something I'm grateful for:</label>
-          <textarea class="reflection-lines"></textarea>
-        </div>
-      </div>
-
-      <hr class="divider">
-
-      <div class="section wind-down">
-        <h2 class="section-title" id="section4">Optional Wind-Down Tools</h2>
-        <ul class="checklist">
-          <li><input type="checkbox" /> <span id="check7">Played calming music or nature sounds</span></li>
-          <li><input type="checkbox" /> <span id="check8">Did a gentle stretch or movement</span></li>
-          <li><input type="checkbox" /> <span id="check9">Sipped a warm tea or water</span></li>
-        </ul>
-      </div>
-
-      <div class="section your-turn">
-        <h2 class="section-title" id="section5">Your Turn</h2>
-        <div class="reflection-item">
-          <label class="reflection-label" id="ref4">✨ One kind thing you'll say to yourself before sleep?</label>
-          <textarea class="reflection-lines"></textarea>
-        </div>
-        <div class="reflection-item">
-          <label class="reflection-label" id="ref5">✨ How are you feeling right now?</label>
-          <textarea class="reflection-lines"></textarea>
-        </div>
-      </div>
-
-      <div class="reminder">
-        <h3 id="reminderTitle">🌙 Reminder:</h3>
-        <p class="reminder-text" id="reminderText">
-          You are safe.<br>You are enough.<br>You are not alone.
-        </p>
-        <div class="hashtag">#SpeakLouderLoveHarder</div>
-      </div>
+<div class="container">
+  <div class="header">
+    <h1 id="title">🛏️ Get Ready for Bed</h1>
+    <p id="subtitle">Take a moment to slow down and care for yourself.</p>
+    <div class="controls">
+      <select id="langSelect" onchange="updateLanguage()">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+      </select>
+      <select id="moodSelect" onchange="updateMood()">
+        <option value="" id="moodSelEn">🌙 Select Mood</option>
+        <option value="peaceful" id="peacefulEn">Peaceful</option>
+        <option value="anxious" id="anxiousEn">Anxious</option>
+        <option value="hopeful" id="hopefulEn">Hopeful</option>
+        <option value="tired" id="tiredEn">Tired</option>
+      </select>
+      <button onclick="toggleNightMode()">🌓 <span id="nightBtn">Night Mode</span></button>
+      <button onclick="window.print()">🖨️ <span id="printBtn">Print</span></button>
+      <button onclick="downloadPDF()">📥 <span id="downloadBtn">Download</span></button>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script>
-    const quotes = {
-      peaceful: {
-        en: "Let your breath guide you to peace tonight.",
-        fr: "Laisse ton souffle te guider vers la paix ce soir."
-      },
-      anxious: {
-        en: "You’ve made it through the day. Breathe. You are safe now.",
-        fr: "Tu as survécu à cette journée. Respire. Tu es en sécurité maintenant."
-      },
-      hopeful: {
-        en: "Tomorrow holds possibility. Rest and restore tonight.",
-        fr: "Demain est plein de possibilités. Repose-toi et ressource-toi."
-      },
-      tired: {
-        en: "You’ve done enough. It’s okay to rest now.",
-        fr: "Tu as assez fait. Il est temps de te reposer."
+  <div class="content">
+    <div class="quote-box" id="moodQuote"></div>
+
+    <div class="section">
+      <h2 class="section-title" id="section1">Self-Care Check</h2>
+      <ul class="checklist">
+        <li><input type="checkbox" id="chk1" /> <label for="chk1" id="check1">Washed your face or taken a shower</label></li>
+        <li><input type="checkbox" id="chk2" /> <label for="chk2" id="check2">Changed into something cozy</label></li>
+        <li><input type="checkbox" id="chk3" /> <label for="chk3" id="check3">Brushed your teeth or did your routine</label></li>
+      </ul>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <h2 class="section-title" id="section2">Mind Reset</h2>
+      <ul class="checklist">
+        <li><input type="checkbox" id="chk4" /> <label for="chk4" id="check4">Put your phone away for 10 minutes</label></li>
+        <li><input type="checkbox" id="chk5" /> <label for="chk5" id="check5">Took 3 deep grounding breaths</label></li>
+        <li><input type="checkbox" id="chk6" /> <label for="chk6" id="check6">Let go of what you can't control</label></li>
+      </ul>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <h2 class="section-title" id="section3">Reflect & Release</h2>
+      <div class="reflection-item">
+        <label class="reflection-label" id="ref1">• Something that went well today:</label>
+        <textarea class="reflection-lines" rows="3"></textarea>
+      </div>
+      <div class="reflection-item">
+        <label class="reflection-label" id="ref2">• Something I'm letting go of:</label>
+        <textarea class="reflection-lines" rows="3"></textarea>
+      </div>
+      <div class="reflection-item">
+        <label class="reflection-label" id="ref3">• Something I'm grateful for:</label>
+        <textarea class="reflection-lines" rows="3"></textarea>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section wind-down">
+      <h2 class="section-title" id="section4">Optional Wind-Down Tools</h2>
+      <ul class="checklist">
+        <li><input type="checkbox" id="chk7" /> <label for="chk7" id="check7">Played calming music or nature sounds</label></li>
+        <li><input type="checkbox" id="chk8" /> <label for="chk8" id="check8">Did a gentle stretch or movement</label></li>
+        <li><input type="checkbox" id="chk9" /> <label for="chk9" id="check9">Sipped a warm tea or water</label></li>
+      </ul>
+    </div>
+
+    <div class="section your-turn">
+      <h2 class="section-title" id="section5">Your Turn</h2>
+      <div class="reflection-item">
+        <label class="reflection-label" id="ref4">✨ One kind thing you'll say to yourself before sleep?</label>
+        <textarea class="reflection-lines" rows="3"></textarea>
+      </div>
+      <div class="reflection-item">
+        <label class="reflection-label" id="ref5">✨ How are you feeling right now?</label>
+        <textarea class="reflection-lines" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="reminder">
+      <h3 id="reminderTitle">🌙 Reminder:</h3>
+      <p class="reminder-text" id="reminderText">
+        You are safe.<br />
+        You are enough.<br />
+        You are not alone.
+      </p>
+      <div class="hashtag">#SpeakLouderLoveHarder</div>
+    </div>
+  </div>
+</div>
+
+<!-- jsPDF & html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+  const quotes = {
+    peaceful: {
+      en: "Let your breath guide you to peace tonight.",
+      fr: "Laisse ton souffle te guider vers la paix ce soir."
+    },
+    anxious: {
+      en: "You’ve made it through the day. Breathe. You are safe now.",
+      fr: "Tu as survécu à cette journée. Respire. Tu es en sécurité maintenant."
+    },
+    hopeful: {
+      en: "Tomorrow holds possibility. Rest and restore tonight.",
+      fr: "Demain est plein de possibilités. Repose-toi et ressource-toi."
+    },
+    tired: {
+      en: "You’ve done enough. It’s okay to rest now.",
+      fr: "Tu as assez fait. Il est temps de te reposer."
+    }
+  };
+
+  function updateMood() {
+    const mood = document.getElementById('moodSelect').value;
+    const lang = document.getElementById('langSelect').value;
+    const quote = quotes[mood] ? quotes[mood][lang] : "";
+    document.getElementById('moodQuote').innerText = quote;
+
+    // Change background based on mood for light mode
+    if (!document.body.classList.contains('dark')) {
+      switch(mood) {
+        case 'peaceful':
+          document.body.style.background = "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)";
+          break;
+        case 'anxious':
+          document.body.style.background = "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
+          break;
+        case 'hopeful':
+          document.body.style.background = "linear-gradient(135deg, #c3ec52 0%, #0ba29d 100%)";
+          break;
+        case 'tired':
+          document.body.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+          break;
+        default:
+          document.body.style.background = "var(--bg-light)";
+      }
+    }
+  }
+
+  function toggleNightMode() {
+    document.body.classList.toggle("dark");
+    updateMood(); // update background properly in light/dark
+  }
+
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const element = document.querySelector('.container');
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      backgroundColor: document.body.classList.contains('dark') ? "#2d3748" : null
+    });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'pt', 'a4');
+
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    let heightLeft = pdfHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+    heightLeft -= pdf.internal.pageSize.getHeight();
+
+    while (heightLeft > 0) {
+      position -= pdf.internal.pageSize.getHeight();
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pdf.internal.pageSize.getHeight();
+    }
+
+    pdf.save('bedtime-checklist.pdf');
+  }
+
+  function updateLanguage() {
+    const lang = document.getElementById('langSelect').value;
+    const map = {
+      title: { en: "🛏️ Get Ready for Bed", fr: "🛏️ Prépare-toi pour dormir" },
+      subtitle: { en: "Take a moment to slow down and care for yourself.", fr: "Prends un moment pour ralentir et prendre soin de toi." },
+      nightBtn: { en: "Night Mode", fr: "Mode Nuit" },
+      printBtn: { en: "Print", fr: "Imprimer" },
+      downloadBtn: { en: "Download", fr: "Télécharger" },
+      moodSelEn: { en: "🌙 Select Mood", fr: "🌙 Choisir l'humeur" },
+      peacefulEn: { en: "Peaceful", fr: "Paisible" },
+      anxiousEn: { en: "Anxious", fr: "Anxieux(se)" },
+      hopefulEn: { en: "Hopeful", fr: "Plein·e d’espoir" },
+      tiredEn: { en: "Tired", fr: "Fatigué·e" },
+      section1: { en: "Self-Care Check", fr: "Vérification du bien-être" },
+      check1: { en: "Washed your face or taken a shower", fr: "Laver ton visage ou prendre une douche" },
+      check2: { en: "Changed into something cozy", fr: "Mettre quelque chose de confortable" },
+      check3: { en: "Brushed your teeth or did your routine", fr: "Brosser tes dents ou faire ta routine" },
+      section2: { en: "Mind Reset", fr: "Réinitialisation mentale" },
+      check4: { en: "Put your phone away for 10 minutes", fr: "Ranger ton téléphone pendant 10 minutes" },
+      check5: { en: "Took 3 deep grounding breaths", fr: "Prendre 3 grandes respirations profondes" },
+      check6: { en: "Let go of what you can't control", fr: "Lâcher prise sur ce que tu ne peux pas contrôler" },
+      section3: { en: "Reflect & Release", fr: "Réfléchir et relâcher" },
+      ref1: { en: "• Something that went well today:", fr: "• Quelque chose qui s'est bien passé aujourd'hui :" },
+      ref2: { en: "• Something I'm letting go of:", fr: "• Quelque chose que je laisse aller :" },
+      ref3: { en: "• Something I'm grateful for:", fr: "• Quelque chose pour lequel je suis reconnaissant·e :" },
+      section4: { en: "Optional Wind-Down Tools", fr: "Outils optionnels pour se détendre" },
+      check7: { en: "Played calming music or nature sounds", fr: "Écouter de la musique douce ou des sons naturels" },
+      check8: { en: "Did a gentle stretch or movement", fr: "Faire un étirement doux ou un mouvement" },
+      check9: { en: "Sipped a warm tea or water", fr: "Boire une tisane ou de l’eau" },
+      section5: { en: "Your Turn", fr: "À ton tour" },
+      ref4: { en: "✨ One kind thing you'll say to yourself before sleep?", fr: "✨ Une chose gentille à te dire avant de dormir ?" },
+      ref5: { en: "✨ How are you feeling right now?", fr: "✨ Comment te sens-tu maintenant ?" },
+      reminderTitle: { en: "🌙 Reminder:", fr: "🌙 Rappel :" },
+      reminderText: {
+        en: "You are safe.<br>You are enough.<br>You are not alone.",
+        fr: "Tu es en sécurité.<br>Tu es suffisant·e.<br>Tu n'es pas seul·e."
       }
     };
-
-    function updateMood() {
-      const mood = document.getElementById('moodSelect').value;
-      const lang = document.getElementById('langSelect').value;
-      const quote = quotes[mood] ? quotes[mood][lang] : "";
-      document.getElementById('moodQuote').innerText = quote;
-    }
-
-    function toggleNightMode() {
-      document.body.classList.toggle("dark");
-    }
-
-    async function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const el = document.querySelector('.container');
-      const canvas = await html2canvas(el, { scale: 2 });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'pt', 'a4');
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const imgHeight = (canvas.height * pageWidth) / canvas.width;
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position -= pageHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
-        heightLeft -= pageHeight;
+    for (const id in map) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.innerHTML = map[id][lang];
       }
-
-      pdf.save("bedtime-checklist.pdf");
     }
+    updateMood();
+  }
 
-    function updateLanguage() {
-      const lang = document.getElementById('langSelect').value;
-      const map = {
-        title: { en: "🛏️ Get Ready for Bed", fr: "🛏️ Prépare-toi pour dormir" },
-        subtitle: { en: "Take a moment to slow down and care for yourself.", fr: "Prends un moment pour ralentir et prendre soin de toi." },
-        nightBtn: { en: "Night Mode", fr: "Mode Nuit" },
-        printBtn: { en: "Print", fr: "Imprimer" },
-        downloadBtn: { en: "Download", fr: "Télécharger" },
-        moodSelEn: { en: "🌙 Select Mood", fr: "🌙 Choisir l'humeur" },
-        peacefulEn: { en: "Peaceful", fr: "Paisible" },
-        anxiousEn: { en: "Anxious", fr: "Anxieux(se)" },
-        hopefulEn: { en: "Hopeful", fr: "Plein·e d’espoir" },
-        tiredEn: { en: "Tired", fr: "Fatigué·e" },
-        section1: { en: "Self-Care Check", fr: "Vérification du bien-être" },
-        check1: { en: "Washed your face or taken a shower", fr: "Laver ton visage ou prendre une douche" },
-        check2: { en: "Changed into something cozy", fr: "Mettre quelque chose de confortable" },
-        check3: { en: "Brushed your teeth or did your routine", fr: "Brosser tes dents ou faire ta routine" },
-        section2: { en: "Mind Reset", fr: "Réinitialisation mentale" },
-        check4: { en: "Put your phone away for 10 minutes", fr: "Ranger ton téléphone pendant 10 minutes" },
-        check5: { en: "Took 3 deep grounding breaths", fr: "Prendre 3 grandes respirations profondes" },
-        check6: { en: "Let go of what you can't control", fr: "Lâcher prise sur ce que tu ne peux pas contrôler" },
-        section3: { en: "Reflect & Release", fr: "Réfléchir et relâcher" },
-        ref1: { en: "• Something that went well today:", fr: "• Quelque chose qui s'est bien passé aujourd'hui :" },
-        ref2: { en: "• Something I'm letting go of:", fr: "• Quelque chose que je laisse aller :" },
-        ref3: { en: "• Something I'm grateful for:", fr: "• Quelque chose pour lequel je suis reconnaissant·e :" },
-        section4: { en: "Optional Wind-Down Tools", fr: "Outils optionnels pour se détendre" },
-        check7: { en: "Played calming music or nature sounds", fr: "Écouter de la musique douce ou des sons naturels" },
-        check8: { en: "Did a gentle stretch or movement", fr: "Faire un étirement doux ou un mouvement" },
-        check9: { en: "Sipped a warm tea or water", fr: "Boire une tisane ou de l’eau" },
-        section5: { en: "Your Turn", fr: "À ton tour" },
-        ref4: { en: "✨ One kind thing you'll say to yourself before sleep?", fr: "✨ Une chose gentille à te dire avant de dormir ?" },
-        ref5: { en: "✨ How are you feeling right now?", fr: "✨ Comment te sens-tu maintenant ?" },
-        reminderTitle: { en: "🌙 Reminder:", fr: "🌙 Rappel :" },
-        reminderText: {
-          en: "You are safe.<br>You are enough.<br>You are not alone.",
-          fr: "Tu es en sécurité.<br>Tu es suffisant·e.<br>Tu n'es pas seul·e."
-        }
-      };
-
-      for (const id in map) {
-        const el = document.getElementById(id);
-        if (el) {
-          el.innerHTML = map[id][lang];
-        }
-      }
-
-      updateMood(); // refresh quote in new language
-    }
-
-    window.onload = () => updateMood();
-  </script>
+  // Initialize on load
+  window.onload = () => {
+    updateLanguage();
+    updateMood();
+  };
+</script>
 </body>
 </html>
