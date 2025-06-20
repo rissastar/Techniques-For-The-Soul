@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>Speak Louder, Love Harder - Accueil</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Speak Louder, Love Harder</title>
 <style>
   /* Reset & base */
   * {
@@ -13,133 +13,185 @@
     margin: 0; padding: 0;
     height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(270deg, #6a11cb, #2575fc, #6a11cb);
-    background-size: 600% 600%;
-    animation: gradientBG 20s ease infinite;
     color: #f0f0f5;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    overflow-x: hidden;
+    background: #000010;
+    position: relative;
   }
-  @keyframes gradientBG {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+  /* Starry background */
+  #stars, #stars2, #stars3 {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: block;
+    pointer-events: none;
+    z-index: -1;
   }
+  #stars {
+    background: transparent url('https://raw.githubusercontent.com/joshbuchea/planet-css/master/stars.svg') repeat top center;
+    animation: moveStars 200s linear infinite;
+  }
+  #stars2 {
+    background: transparent url('https://raw.githubusercontent.com/joshbuchea/planet-css/master/stars2.svg') repeat top center;
+    animation: moveStarsBack 150s linear infinite;
+  }
+  #stars3 {
+    background: transparent url('https://raw.githubusercontent.com/joshbuchea/planet-css/master/stars3.svg') repeat top center;
+    animation: moveStars 100s linear infinite;
+  }
+  @keyframes moveStars {
+    from {background-position: 0 0;}
+    to {background-position: -10000px 5000px;}
+  }
+  @keyframes moveStarsBack {
+    from {background-position: 0 0;}
+    to {background-position: 10000px -5000px;}
+  }
+
   header {
-    padding: 1.5rem 1rem 1rem;
     text-align: center;
-    background: rgba(0,0,0,0.35);
-    backdrop-filter: blur(6px);
+    padding: 2rem 1rem 1rem;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
   }
-  header h1 {
+  h1 {
     font-size: 2.8rem;
-    font-weight: 900;
-    margin-bottom: 0.25rem;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+    margin: 0.2rem 0;
+    font-weight: 800;
+    text-shadow: 0 0 8px #a4d4ffaa;
   }
-  header p {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #d0d0df;
-    margin-top: 0;
+  p {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-top: 0.1rem;
   }
   .lang-toggle {
     margin-top: 1rem;
-    display: inline-flex;
-    gap: 0.5rem;
   }
   .lang-toggle button {
-    background: #444;
+    background: #222;
     border: none;
-    padding: 0.4rem 1rem;
-    color: #eee;
+    padding: 0.5rem 1.2rem;
+    color: #ccc;
     font-weight: 600;
-    border-radius: 24px;
+    border-radius: 20px;
+    margin: 0 0.3rem;
     cursor: pointer;
-    user-select: none;
-    transition: background 0.3s ease;
+    transition: background 0.3s, color 0.3s;
   }
-  .lang-toggle button.active,
-  .lang-toggle button:hover {
-    background: #72aaff;
-    color: #050a14;
+  .lang-toggle button.active {
+    background: #7ebcff;
+    color: #002244;
   }
+
   main {
-    flex-grow: 1;
-    padding: 1rem 1.5rem 2rem;
+    padding: 2rem 1.5rem 3rem;
     max-width: 900px;
-    margin: 0 auto;
+    margin: auto;
   }
   section {
-    background: rgba(0,0,0,0.25);
-    margin-bottom: 1.8rem;
-    padding: 1rem 1.3rem;
-    border-radius: 14px;
-    box-shadow: 0 0 14px rgba(0,0,0,0.3);
+    background: rgba(0, 0, 20, 0.6);
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 0 10px #3377ff44;
   }
   section h2 {
     font-size: 1.8rem;
-    margin-bottom: 0.8rem;
-    border-bottom: 2px solid #72aaff;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #7ebcff;
     padding-bottom: 0.3rem;
   }
   ul {
     list-style: none;
     padding-left: 0;
-    margin: 0;
   }
   li {
     margin-bottom: 0.7rem;
   }
-  a {
-    color: #a0c8ff;
-    text-decoration: none;
+  a.toolkit-link {
+    color: #7ebcff;
     font-weight: 600;
-    transition: color 0.25s ease;
+    text-decoration: none;
+    transition: color 0.3s ease;
   }
-  a:hover,
-  a:focus {
-    color: #d1eaff;
-    outline: none;
+  a.toolkit-link:hover,
+  a.toolkit-link:focus {
+    color: #c0dbff;
     text-decoration: underline;
   }
-  footer {
-    background: rgba(0,0,0,0.45);
-    padding: 1rem 1.5rem;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #bbb;
-    box-shadow: 0 -3px 10px rgba(0,0,0,0.35);
+
+  /* Informational topics buttons */
+  #topics-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
   }
-  footer a {
-    color: #a0c8ff;
-    margin: 0 0.5rem;
+  #topics-list button {
+    background: #144277;
+    border: none;
+    padding: 0.75rem 1.2rem;
+    border-radius: 25px;
+    color: #a4d4ff;
     font-weight: 600;
+    cursor: pointer;
+    flex: 1 1 45%;
+    min-width: 140px;
+    transition: background-color 0.3s, color 0.3s;
   }
-  footer a:hover {
-    color: #d1eaff;
+  #topics-list button:hover,
+  #topics-list button:focus {
+    background: #3377ff;
+    color: #fff;
+    outline: none;
   }
 
-  /* Responsive */
+  footer {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: rgba(0, 0, 30, 0.75);
+    color: #a0c8ff;
+    font-size: 0.9rem;
+  }
+  footer a {
+    color: #a4d4ff;
+    margin: 0 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  footer a:hover,
+  footer a:focus {
+    text-decoration: underline;
+    outline: none;
+  }
+
   @media (max-width: 600px) {
-    header h1 {
+    h1 {
       font-size: 2rem;
     }
     section h2 {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
+    }
+    #topics-list button {
+      flex: 1 1 100%;
+      min-width: unset;
     }
   }
 </style>
 </head>
 <body>
 
+<!-- Star backgrounds -->
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars3"></div>
+
 <header role="banner" aria-label="Site header">
   <h1 id="site-title">Speak Louder, Love Harder</h1>
-  <p id="site-subtitle">Your Mental Health & Wellness Toolkit / Votre boîte à outils santé mentale et bien-être</p>
+  <p id="site-subtitle">Your Mental Health & Wellness Toolkit / Votre boîte à outils santé mentale</p>
   <nav class="lang-toggle" aria-label="Language toggle">
-    <button type="button" id="btn-en" aria-pressed="true" class="active">English</button>
-    <button type="button" id="btn-fr" aria-pressed="false">Français</button>
+    <button id="btn-en" class="active" aria-pressed="true">English</button>
+    <button id="btn-fr" aria-pressed="false">Français</button>
   </nav>
 </header>
 
@@ -148,12 +200,12 @@
   <section aria-labelledby="toolkits-title">
     <h2 id="toolkits-title">Toolkits / Boîtes à outils</h2>
     <ul id="toolkits-list">
-      <li><a href="https://github.com/rissastar/Techniques-For-The-Soul/blob/main/bedtime-checklist.html" target="_blank" rel="noopener noreferrer">Bedtime Checklist / Liste de contrôle du coucher</a></li>
-      <li><a href="https://github.com/rissastar/Techniques-For-The-Soul/blob/main/crisis-toolkit.html" target="_blank" rel="noopener noreferrer">Crisis Toolkit / Boîte à outils de crise</a></li>
-      <li><a href="https://github.com/rissastar/Techniques-For-The-Soul/blob/main/grounding-toolkit.html" target="_blank" rel="noopener noreferrer">Grounding Toolkit / Boîte à outils d’ancrage</a></li>
-      <li><a href="https://github.com/rissastar/Techniques-For-The-Soul/blob/main/emotional-expression-toolkit.html" target="_blank" rel="noopener noreferrer">Emotional Expression Toolkit / Boîte à outils d’expression émotionnelle</a></li>
-      <li><a href="https://github.com/rissastar/Techniques-For-The-Soul/blob/main/mood-tracker.html" target="_blank" rel="noopener noreferrer">Mood Tracker / Suivi d’humeur</a></li>
-      <li><a href="https://github.com/rissastar/Techniques-For-The-Soul/blob/main/selfcare-toolkit.html" target="_blank" rel="noopener noreferrer">Self-Care Toolkit / Boîte à outils de soins personnels</a></li>
+      <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/bedtime-checklist.html" target="_blank" rel="noopener noreferrer" class="toolkit-link">Bedtime Checklist / Liste de contrôle du coucher</a></li>
+      <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html" target="_blank" rel="noopener noreferrer" class="toolkit-link">Crisis Toolkit / Boîte à outils de crise</a></li>
+      <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html" target="_blank" rel="noopener noreferrer" class="toolkit-link">Grounding Toolkit / Boîte à outils d’ancrage</a></li>
+      <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/emotional-expression-toolkit.html" target="_blank" rel="noopener noreferrer" class="toolkit-link">Emotional Expression Toolkit / Boîte à outils d’expression émotionnelle</a></li>
+      <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/mood-tracker.html" target="_blank" rel="noopener noreferrer" class="toolkit-link">Mood Tracker / Suivi d’humeur</a></li>
+      <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/selfcare-toolkit.html" target="_blank" rel="noopener noreferrer" class="toolkit-link">Self-Care Toolkit / Boîte à outils de soins personnels</a></li>
     </ul>
   </section>
 
@@ -169,197 +221,101 @@
 
   <section aria-labelledby="informational-title">
     <h2 id="informational-title">Informational Topics / Sujets d’information</h2>
-    <ul id="topics-list">
-      <li>Conditions et troubles de santé mentale / Mental health conditions & disorders</li>
-      <li>Toxicomanie et rétablissement / Addiction and recovery</li>
-      <li>Trauma et abus / Trauma and abuse</li>
-      <li>Soutien pour populations spécifiques / Support for specific populations :
-        <ul>
-          <li>Enfants en famille d’accueil / Foster children</li>
-          <li>Communauté LGBTQ+</li>
-          <li>Anciens combattants et familles militaires / Veterans and military families</li>
-          <li>Jeunes et adolescents / Youth and adolescents</li>
-          <li>Personnes âgées / Elderly</li>
-          <li>Intersectionnalité et groupes marginalisés / Intersectionality & marginalized groups</li>
-        </ul>
-      </li>
-      <li>Deuil et perte / Grief and loss</li>
-      <li>Maladies chroniques et handicaps / Chronic conditions and disabilities</li>
-      <li>Bien-être et stratégies d’adaptation / Wellness and coping strategies</li>
-    </ul>
+    <div id="topics-list" role="list">
+      <!-- Buttons dynamically inserted here -->
+    </div>
   </section>
 
 </main>
 
 <footer role="contentinfo" aria-label="Footer with social links">
-  <p>Connect with us / Connectez-vous avec nous :</p>
+  <p id="footer-text">Connect with us / Connectez-vous avec nous :</p>
   <a href="https://www.facebook.com/share/g/1HXykHjt5v/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook Group for personal stories and connecting">Facebook Group</a> |
   <a href="https://www.facebook.com/share/1CC9xoafaV/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook Page for daily tools and prompts">Facebook Page</a> |
   <a href="https://linktr.ee/rissa.star?fbclid=IwQ0xDSwLBxGdleHRuA2FlbQIxMAABHomqGh-8y5PCSU4UfuWDso87OajQlity9OWwgz6m1aqgK3bWGT-gREnsOdIR_aem_jJgL3GWrmjgciWDsyjNAFQ" target="_blank" rel="noopener noreferrer" aria-label="Linktree with related links">Linktree</a>
 </footer>
 
 <script>
-  // Language toggle logic
-  const btnEn = document.getElementById('btn-en');
-  const btnFr = document.getElementById('btn-fr');
-
-  const content = {
+  const langContent = {
     en: {
-      siteTitle: "Speak Louder, Love Harder",
-      siteSubtitle: "Your Mental Health & Wellness Toolkit",
-      toolkitsTitle: "Toolkits",
-      toolkits: [
-        {text:"Bedtime Checklist", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/bedtime-checklist.html"},
-        {text:"Crisis Toolkit", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/crisis-toolkit.html"},
-        {text:"Grounding Toolkit", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/grounding-toolkit.html"},
-        {text:"Emotional Expression Toolkit", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/emotional-expression-toolkit.html"},
-        {text:"Mood Tracker", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/mood-tracker.html"},
-        {text:"Self-Care Toolkit", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/selfcare-toolkit.html"}
+      title: "Speak Louder, Love Harder",
+      subtitle: "Your Mental Health & Wellness Toolkit",
+      toolkits: "Toolkits",
+      resources: "Resources",
+      info: "Informational Topics",
+      topics: [
+        { text: "Mental Health Conditions & Disorders", href: "#" },
+        { text: "Addiction and Recovery", href: "#" },
+        { text: "Trauma and Abuse", href: "#" },
+        { text: "Support for Specific Populations: Foster Children, LGBTQ2S+, Veterans, Youth, Elderly, Marginalized Groups", href: "#" },
+        { text: "Grief and Loss", href: "#" },
+        { text: "Chronic Conditions & Disabilities", href: "#" },
+        { text: "Wellness & Coping Strategies", href: "#" }
       ],
-      resourcesTitle: "Resources",
-      resources: [
-        {text:"Crisis Services Canada", url:"https://www.crisisservicescanada.ca/en/", region:"Canada"},
-        {text:"Government of Canada Mental Health Services", url:"https://www.canada.ca/en/public-health/services/mental-health-services.html", region:"Canada"},
-        {text:"SAMHSA National Helpline", url:"https://www.samhsa.gov/find-help/national-helpline", region:"USA"},
-        {text:"National Institute of Mental Health - Find Help", url:"https://www.nimh.nih.gov/health/find-help", region:"USA"}
-      ],
-      informationalTitle: "Informational Topics",
-      informationalTopics: [
-        "Mental Health Conditions & Disorders",
-        "Addiction and Recovery",
-        "Trauma and Abuse",
-        "Support for Specific Populations: Foster Children, LGBTQ+ Community, Veterans and Military Families, Youth and Adolescents, Elderly, Intersectionality & Marginalized Groups",
-        "Grief and Loss",
-        "Chronic Conditions and Disabilities",
-        "Wellness and Coping Strategies"
-      ],
-      footerText: "Connect with us:",
-      footerLinks: [
-        {text:"Facebook Group", url:"https://www.facebook.com/share/g/1HXykHjt5v/?mibextid=wwXIfr", aria:"Facebook Group for personal stories and connecting"},
-        {text:"Facebook Page", url:"https://www.facebook.com/share/1CC9xoafaV/?mibextid=wwXIfr", aria:"Facebook Page for daily tools and prompts"},
-        {text:"Linktree", url:"https://linktr.ee/rissa.star?fbclid=IwQ0xDSwLBxGdleHRuA2FlbQIxMAABHomqGh-8y5PCSU4UfuWDso87OajQlity9OWwgz6m1aqgK3bWGT-gREnsOdIR_aem_jJgL3GWrmjgciWDsyjNAFQ", aria:"Linktree with related links"}
-      ]
+      connect: "Connect with us:"
     },
     fr: {
-      siteTitle: "Exprime-toi Plus Fort, Aime Plus Fort",
-      siteSubtitle: "Votre boîte à outils santé mentale et bien-être",
-      toolkitsTitle: "Boîtes à outils",
-      toolkits: [
-        {text:"Liste de contrôle du coucher", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/bedtime-checklist.html"},
-        {text:"Boîte à outils de crise", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/crisis-toolkit.html"},
-        {text:"Boîte à outils d’ancrage", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/grounding-toolkit.html"},
-        {text:"Boîte à outils d’expression émotionnelle", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/emotional-expression-toolkit.html"},
-        {text:"Suivi d’humeur", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/mood-tracker.html"},
-        {text:"Boîte à outils de soins personnels", url:"https://github.com/rissastar/Techniques-For-The-Soul/blob/main/selfcare-toolkit.html"}
+      title: "Exprime-toi Plus Fort, Aime Plus Fort",
+      subtitle: "Votre boîte à outils santé mentale",
+      toolkits: "Boîtes à outils",
+      resources: "Ressources",
+      info: "Sujets d’information",
+      topics: [
+        { text: "Conditions et troubles de santé mentale", href: "#" },
+        { text: "Toxicomanie et rétablissement", href: "#" },
+        { text: "Traumatismes et abus", href: "#" },
+        { text: "Soutien pour les populations spécifiques : enfants placés, LGBTQ2S+, vétérans, jeunes, personnes âgées, groupes marginalisés", href: "#" },
+        { text: "Deuil et perte", href: "#" },
+        { text: "Maladies chroniques et handicaps", href: "#" },
+        { text: "Bien-être et stratégies d’adaptation", href: "#" }
       ],
-      resourcesTitle: "Ressources",
-      resources: [
-        {text:"Services de crise Canada", url:"https://www.crisisservicescanada.ca/en/", region:"Canada"},
-        {text:"Services de santé mentale du gouvernement du Canada", url:"https://www.canada.ca/en/public-health/services/mental-health-services.html", region:"Canada"},
-        {text:"SAMHSA Ligne d’aide nationale", url:"https://www.samhsa.gov/find-help/national-helpline", region:"États-Unis"},
-        {text:"Institut national de la santé mentale - Trouver de l’aide", url:"https://www.nimh.nih.gov/health/find-help", region:"États-Unis"}
-      ],
-      informationalTitle: "Sujets d’information",
-      informationalTopics: [
-        "Conditions et troubles de santé mentale",
-        "Toxicomanie et rétablissement",
-        "Trauma et abus",
-        "Soutien pour populations spécifiques : enfants en famille d’accueil, communauté LGBTQ+, anciens combattants et familles militaires, jeunes et adolescents, personnes âgées, intersectionnalité et groupes marginalisés",
-        "Deuil et perte",
-        "Maladies chroniques et handicaps",
-        "Bien-être et stratégies d’adaptation"
-      ],
-      footerText: "Connectez-vous avec nous :",
-      footerLinks: [
-        {text:"Groupe Facebook", url:"https://www.facebook.com/share/g/1HXykHjt5v/?mibextid=wwXIfr", aria:"Groupe Facebook pour histoires personnelles et connexion"},
-        {text:"Page Facebook", url:"https://www.facebook.com/share/1CC9xoafaV/?mibextid=wwXIfr", aria:"Page Facebook pour outils quotidiens et incitations"},
-        {text:"Linktree", url:"https://linktr.ee/rissa.star?fbclid=IwQ0xDSwLBxGdleHRuA2FlbQIxMAABHomqGh-8y5PCSU4UfuWDso87OajQlity9OWwgz6m1aqgK3bWGT-gREnsOdIR_aem_jJgL3GWrmjgciWDsyjNAFQ", aria:"Linktree avec liens associés"}
-      ]
+      connect: "Connectez-vous avec nous :"
     }
   };
 
-  const siteTitleEl = document.getElementById('site-title');
-  const siteSubtitleEl = document.getElementById('site-subtitle');
-  const toolkitsTitleEl = document.getElementById('toolkits-title');
-  const toolkitsListEl = document.getElementById('toolkits-list');
-  const resourcesTitleEl = document.getElementById('resources-title');
-  const resourcesListEl = document.getElementById('resources-list');
-  const informationalTitleEl = document.getElementById('informational-title');
-  const topicsListEl = document.getElementById('topics-list');
-  const footerEl = document.querySelector('footer');
+  const btnEn = document.getElementById("btn-en");
+  const btnFr = document.getElementById("btn-fr");
 
-  function renderLang(lang) {
-    const data = content[lang];
-    // Titles
-    siteTitleEl.textContent = data.siteTitle;
-    siteSubtitleEl.textContent = data.siteSubtitle;
-    toolkitsTitleEl.textContent = data.toolkitsTitle;
-    resourcesTitleEl.textContent = data.resourcesTitle;
-    informationalTitleEl.textContent = data.informationalTitle;
+  btnEn.addEventListener("click", () => switchLang("en"));
+  btnFr.addEventListener("click", () => switchLang("fr"));
 
-    // Toolkits List
-    toolkitsListEl.innerHTML = '';
-    data.toolkits.forEach(tk => {
-      const li = document.createElement('li');
-      const a = document.createElement('a');
-      a.href = tk.url;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      a.textContent = tk.text;
-      li.appendChild(a);
-      toolkitsListEl.appendChild(li);
+  function switchLang(lang) {
+    document.getElementById("site-title").textContent = langContent[lang].title;
+    document.getElementById("site-subtitle").textContent = langContent[lang].subtitle;
+    document.getElementById("toolkits-title").textContent = langContent[lang].toolkits;
+    document.getElementById("resources-title").textContent = langContent[lang].resources;
+    document.getElementById("informational-title").textContent = langContent[lang].info;
+
+    // Topics buttons
+    const topicsDiv = document.getElementById("topics-list");
+    topicsDiv.innerHTML = "";
+    langContent[lang].topics.forEach(topic => {
+      const btn = document.createElement("button");
+      btn.textContent = topic.text;
+      btn.setAttribute("type", "button");
+      btn.onclick = () => {
+        // Replace '#' with actual links when you create pages
+        if (topic.href === "#") {
+          alert(lang === "en"
+            ? "Page coming soon: " + topic.text
+            : "Page à venir : " + topic.text);
+        } else {
+          window.open(topic.href, "_blank");
+        }
+      };
+      topicsDiv.appendChild(btn);
     });
 
-    // Resources List
-    resourcesListEl.innerHTML = '';
-    data.resources.forEach(res => {
-      const li = document.createElement('li');
-      li.innerHTML = `<strong>${res.region} :</strong> <a href="${res.url}" target="_blank" rel="noopener noreferrer">${res.text}</a>`;
-      resourcesListEl.appendChild(li);
-    });
+    document.getElementById("footer-text").textContent = langContent[lang].connect;
 
-    // Informational Topics
-    topicsListEl.innerHTML = '';
-    data.informationalTopics.forEach(topic => {
-      if (typeof topic === 'string') {
-        const li = document.createElement('li');
-        li.textContent = topic;
-        topicsListEl.appendChild(li);
-      } else if (Array.isArray(topic)) {
-        // Support for nested lists if needed in future
-      }
-    });
-
-    // Footer
-    footerEl.querySelector('p').textContent = data.footerText;
-    const footerLinks = footerEl.querySelectorAll('a');
-    data.footerLinks.forEach((linkData, i) => {
-      if (footerLinks[i]) {
-        footerLinks[i].textContent = linkData.text;
-        footerLinks[i].href = linkData.url;
-        footerLinks[i].setAttribute('aria-label', linkData.aria);
-      }
-    });
+    btnEn.classList.toggle("active", lang === "en");
+    btnFr.classList.toggle("active", lang === "fr");
+    btnEn.setAttribute("aria-pressed", lang === "en");
+    btnFr.setAttribute("aria-pressed", lang === "fr");
   }
 
-  btnEn.addEventListener('click', () => {
-    btnEn.classList.add('active');
-    btnFr.classList.remove('active');
-    btnEn.setAttribute('aria-pressed', 'true');
-    btnFr.setAttribute('aria-pressed', 'false');
-    renderLang('en');
-  });
-
-  btnFr.addEventListener('click', () => {
-    btnFr.classList.add('active');
-    btnEn.classList.remove('active');
-    btnFr.setAttribute('aria-pressed', 'true');
-    btnEn.setAttribute('aria-pressed', 'false');
-    renderLang('fr');
-  });
-
-  // Default load English
-  renderLang('en');
+  // Default language
+  switchLang("en");
 </script>
 
 </body>
