@@ -2,237 +2,145 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mood Tracker</title>
-  <meta name="description" content="Track your mood and receive uplifting tips, resources, and quotes." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mood Snapshot</title>
   <style>
-    /* Base styles and typography */
-    body, html {
-      margin: 0; padding: 0;
-      font-family: 'Inter', sans-serif;
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #cce5ff, #e6f0ff);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       min-height: 100vh;
-      background: linear-gradient(-45deg, #90caf9, #f48fb1, #a5d6a7, #ffcc80);
-      background-size: 400% 400%;
-      animation: bgAnimation 15s ease infinite;
-      display: flex; justify-content: center; align-items: center;
-      color: #1a202c;
-      overflow: auto;
-    }
-    @keyframes bgAnimation {
-      0%,100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    .container {
-      background: rgba(255,255,255,0.95);
-      border-radius: 1rem;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
-      max-width: 700px;
-      width: 90%;
-      padding: 2.5rem 2rem;
       text-align: center;
     }
-    h1 { font-size: 2.8rem; margin-bottom: 1.5rem; }
 
-    .mood-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
-      gap: 1.2rem;
-      margin-bottom: 2rem;
-    }
-    .mood-btn {
-      padding: 1.5rem;
-      border-radius: 1rem;
-      background: #fff;
-      border: 3px solid transparent;
-      cursor: pointer;
-      transition: transform .3s, box-shadow .3s;
-      user-select: none;
-    }
-    .mood-btn:hover, .mood-btn:focus {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    }
-    .mood-btn span.emoji { font-size: 3rem; display:block; margin-bottom: .5rem; }
-    .mood-btn span.label { font-weight: 600; }
-
-    #thankyou {
-      display: none;
-      animation: fadeIn 0.6s ease;
-    }
-    @keyframes fadeIn { from { opacity:0 } to { opacity:1; } }
-
-    #icon-visual { width: 120px; height: 120px; margin: 1.5rem auto; }
-    #quote-text {
-      font-size:1.1rem; font-style:italic;
-      margin-top:1rem; color:#4a5568;
-    }
-    .section { margin-top: 1.75rem; padding: 1.25rem; background: #f9fafb; border-radius: .8rem; text-align: left; }
-    .section h3 { margin-bottom: .8rem; font-size:1.3rem; }
-
-    #resources-list a {
-      display: block; margin-bottom: .5rem;
-      color: #2c5282; text-decoration: underline;
+    h1 {
+      margin-top: 20px;
+      font-size: 2em;
+      color: #444;
     }
 
-    .affirmation { margin-top: 1.25rem; font-weight: 600; font-style: italic; }
+    .mood-wheel-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 20px auto;
+    }
 
-    #retry { margin-top: 2rem; padding: 1rem 1.6rem; background:#2c5282; color:white; border:none; border-radius:.8rem; cursor: pointer; }
-    #retry:hover { background:#1a365d; }
+    .mood-wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        #FF9AA2 0% 16.6%,
+        #FFB7B2 16.6% 33.3%,
+        #FFDAC1 33.3% 50%,
+        #E2F0CB 50% 66.6%,
+        #B5EAD7 66.6% 83.3%,
+        #C7CEEA 83.3% 100%
+      );
+      border: 6px solid white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
 
-    @media (max-width:500px){
-      h1 { font-size:2.2rem; }
-      .mood-btn span.emoji { font-size:2.5rem; }
+    .pointer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 120px;
+      background: #333;
+      transform-origin: bottom center;
+      border-radius: 4px;
+      z-index: 10;
+    }
+
+    .mood-label {
+      margin-top: 20px;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .affirmation {
+      font-size: 1.2em;
+      margin-top: 10px;
+      max-width: 80%;
+      color: #444;
+    }
+
+    .selector {
+      margin-top: 30px;
+    }
+
+    select {
+      padding: 10px 15px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    @media (max-width: 500px) {
+      .mood-wheel-container {
+        width: 220px;
+        height: 220px;
+      }
+      .pointer {
+        height: 90px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Community Mood Tracker</h1>
-    <div id="grid" class="mood-grid"></div>
+  <h1>🎨 Mood Snapshot</h1>
 
-    <div id="thankyou">
-      <div id="icon-visual"></div>
-      <p id="quote-text"></p>
+  <div class="mood-wheel-container">
+    <div class="pointer" id="pointer"></div>
+    <div class="mood-wheel"></div>
+  </div>
 
-      <div class="section">
-        <h3>💡 Tip</h3>
-        <p id="tip"></p>
-      </div>
-      <div class="section">
-        <h3>📚 Resources</h3>
-        <div id="resources-list"></div>
-      </div>
-      <p class="affirmation" id="affirm"></p>
-      <button id="retry">Check In Again</button>
-    </div>
+  <div class="mood-label" id="moodLabel">Feeling: Calm</div>
+  <div class="affirmation" id="affirmation">"I am centered and at peace."</div>
+
+  <div class="selector">
+    <label for="mood">Choose Your Mood:</label>
+    <select id="mood" onchange="updateMood(this.value)">
+      <option value="0">Anxious</option>
+      <option value="60">Overwhelmed</option>
+      <option value="120">Sad</option>
+      <option value="180" selected>Calm</option>
+      <option value="240">Hopeful</option>
+      <option value="300">Motivated</option>
+    </select>
   </div>
 
   <script>
-    const moods = [
-      {
-        id: 'overwhelmed',
-        emoji: '😵‍💫',
-        label: 'Overwhelmed',
-        bg: 'linear-gradient(135deg,#f6d365,#fda085)',
-        icon: '☁️',
-        quote: '“This too shall pass.”',
-        tip: 'Take five deep breaths, feeling each inhale and exhale.',
-        affirmation: 'I give myself grace through this moment.',
-        resources: [
-          { text: 'Guided Breathing PDF', url: 'https://www.mindful.org/wp-content/uploads/2019/03/Mindful-Breathing.pdf' }
-        ]
-      },
-      {
-        id: 'struggling',
-        emoji: '🔴',
-        label: 'Struggling',
-        bg: 'linear-gradient(135deg,#f44336,#e57373)',
-        icon: '💪',
-        quote: '“Strength grows in the moments you challenge yourself.”',
-        tip: 'Try the 5-4-3-2-1 grounding exercise.',
-        affirmation: 'I am stronger than I think.',
-        resources: [
-          { text: 'Anxiety Worksheet', url: 'https://oklahomatfcbt.org/wp-content/uploads/2018/08/Grounding-Worksheet.pdf' }
-        ]
-      },
-      {
-        id: 'managing',
-        emoji: '🟡',
-        label: 'Managing',
-        bg: 'linear-gradient(135deg,#f6e05e,#faf089)',
-        icon: '🌿',
-        quote: '“Progress is progress, no matter how small.”',
-        tip: 'Write down three things you did well today.',
-        affirmation: 'I honor my progress.',
-        resources: [
-          { text: 'Gratitude Journal PDF', url: 'https://positivepsychology.com/wp-content/uploads/2015/05/gratitude-journal.pdf' }
-        ]
-      },
-      {
-        id: 'neutral',
-        emoji: '⚪️',
-        label: 'Neutral',
-        bg: 'linear-gradient(135deg,#a0aec0,#cbd5e0)',
-        icon: '🧘',
-        quote: '“In stillness, we find clarity.”',
-        tip: 'Take a moment to be present — notice your breath.',
-        affirmation: 'I am centered.',
-        resources: [
-          { text: 'Mindfulness Guide', url: 'https://www.mindful.org/meditation/mindfulness-getting-started/' }
-        ]
-      },
-      {
-        id: 'good',
-        emoji: '🟢',
-        label: 'Doing Well',
-        bg: 'linear-gradient(135deg,#48bb78,#9ae6b4)',
-        icon: '😊',
-        quote: '“Joy is not in things; it is in us.”',
-        tip: 'List three things you’re grateful for today.',
-        affirmation: 'I welcome joy today.',
-        resources: [
-          { text: 'Gratitude Journal PDF', url: 'https://positivepsychology.com/wp-content/uploads/2015/05/gratitude-journal.pdf' }
-        ]
-      },
-      {
-        id: 'thriving',
-        emoji: '🔵',
-        label: 'Thriving',
-        bg: 'linear-gradient(135deg,#3182ce,#63b3ed)',
-        icon: '🌟',
-        quote: '“Your energy inspires others.”',
-        tip: 'Consider mentoring or creative expression.',
-        affirmation: 'I am a beacon of hope.',
-        resources: [
-          { text: 'Creative Expression Guide', url: 'https://www.creativitypost.com/' }
-        ]
-      }
-    ];
+    const pointer = document.getElementById('pointer');
+    const label = document.getElementById('moodLabel');
+    const affirmation = document.getElementById('affirmation');
 
-    const grid = document.getElementById('grid');
-    const thankyou = document.getElementById('thankyou');
-    const iconVisual = document.getElementById('icon-visual');
-    const quoteText = document.getElementById('quote-text');
-    const tipEl = document.getElementById('tip');
-    const resList = document.getElementById('resources-list');
-    const affirmEl = document.getElementById('affirm');
-    const retryBtn = document.getElementById('retry');
+    const moodMap = {
+      0: { text: "Anxious", affirmation: "I breathe in calm and let go of tension." },
+      60: { text: "Overwhelmed", affirmation: "I am doing the best I can, and that is enough." },
+      120: { text: "Sad", affirmation: "It's okay to feel this way. I honor my emotions." },
+      180: { text: "Calm", affirmation: "I am centered and at peace." },
+      240: { text: "Hopeful", affirmation: "I trust that good things are coming." },
+      300: { text: "Motivated", affirmation: "I have what it takes to succeed." },
+    };
 
-    // Create mood buttons
-    moods.forEach(m => {
-      const btn = document.createElement('button');
-      btn.className = 'mood-btn';
-      btn.innerHTML = `<span class="emoji">${m.emoji}</span><span class="label">${m.label}</span>`;
-      btn.addEventListener('click', () => selectMood(m));
-      grid.appendChild(btn);
-    });
-
-    function selectMood(m) {
-      document.body.style.background = m.bg;
-      grid.style.display = 'none';
-      thankyou.style.display = 'block';
-      iconVisual.textContent = m.icon;
-      quoteText.textContent = m.quote;
-      tipEl.textContent = m.tip;
-      affirmEl.textContent = m.affirmation;
-
-      resList.innerHTML = '';
-      m.resources.forEach(r => {
-        const a = document.createElement('a');
-        a.href = r.url;
-        a.target = '_blank';
-        a.textContent = r.text;
-        resList.appendChild(a);
-      });
+    function updateMood(angle) {
+      pointer.style.transform = `rotate(${angle}deg)`;
+      const mood = moodMap[angle];
+      label.textContent = `Feeling: ${mood.text}`;
+      affirmation.textContent = `"${mood.affirmation}"`;
     }
 
-    retryBtn.addEventListener('click', () => {
-      thankyou.style.display = 'none';
-      grid.style.display = 'grid';
-      document.body.style.background = '';
-    });
-
+    // Initialize default mood
+    updateMood("180");
   </script>
 </body>
 </html>
