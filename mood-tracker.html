@@ -265,6 +265,24 @@
     color: #444;
     min-height: 1.2rem;
   }
+
+  /* Analytics section */
+  .analytics {
+    margin-top: 2rem;
+    border-top: 2px solid #eee;
+    padding-top: 1rem;
+  }
+  .analytics h2 {
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  canvas {
+    max-width: 100%;
+    margin: 0 auto 1rem auto;
+    display: block;
+  }
 </style>
 </head>
 <body class="mood-neutral">
@@ -301,6 +319,12 @@
   <section class="entries" id="entriesList" aria-live="polite" aria-label="Mood entries / Entrées d'humeur">
     <!-- Mood entries will appear here -->
   </section>
+
+  <section class="analytics" aria-label="Mood analytics / Analyse des humeurs">
+    <h2 id="analyticsTitle">Mood Analytics</h2>
+    <canvas id="barChart" aria-label="Mood counts bar chart" role="img"></canvas>
+    <canvas id="lineChart" aria-label="Mood trend line chart" role="img"></canvas>
+  </section>
 </main>
 
 <footer>
@@ -308,6 +332,7 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   (function(){
     const moods = [
@@ -317,7 +342,8 @@
         name_en: 'Happy',
         name_fr: 'Heureux/Heureuse',
         quote_en: 'Happiness is not by chance, but by choice.',
-        quote_fr: "Le bonheur n'est pas un hasard, mais un choix."
+        quote_fr: "Le bonheur n'est pas un hasard, mais un choix.",
+        intensity: 5
       },
       {
         id: 'sad',
@@ -325,7 +351,8 @@
         name_en: 'Sad',
         name_fr: 'Triste',
         quote_en: 'Every sadness will fade with time.',
-        quote_fr: "Toute tristesse s'estompe avec le temps."
+        quote_fr: "Toute tristesse s'estompe avec le temps.",
+        intensity: 1
       },
       {
         id: 'angry',
@@ -333,7 +360,8 @@
         name_en: 'Angry',
         name_fr: 'En colère',
         quote_en: 'Anger is a valid emotion, but control is key.',
-        quote_fr: "La colère est une émotion valide, mais le contrôle est la clé."
+        quote_fr: "La colère est une émotion valide, mais le contrôle est la clé.",
+        intensity: 2
       },
       {
         id: 'relaxed',
@@ -341,7 +369,8 @@
         name_en: 'Relaxed',
         name_fr: 'Détendu/Détendue',
         quote_en: 'Peace comes from within, not from without.',
-        quote_fr: "La paix vient de l'intérieur, pas de l'extérieur."
+        quote_fr: "La paix vient de l'intérieur, pas de l'extérieur.",
+        intensity: 4
       },
       {
         id: 'anxious',
@@ -349,7 +378,8 @@
         name_en: 'Anxious',
         name_fr: 'Anxieux/Anxieuse',
         quote_en: 'This too shall pass, breathe deeply.',
-        quote_fr: "Cela aussi passera, respirez profondément."
+        quote_fr: "Cela aussi passera, respirez profondément.",
+        intensity: 3
       },
       {
         id: 'neutral',
@@ -357,7 +387,8 @@
         name_en: 'Neutral',
         name_fr: 'Neutre',
         quote_en: 'Every mood is valid and part of the journey.',
-        quote_fr: "Chaque humeur est valide et fait partie du chemin."
+        quote_fr: "Chaque humeur est valide et fait partie du chemin.",
+        intensity: 3
       }
     ];
 
@@ -375,6 +406,11 @@
     const reminderTimeInput = document.getElementById('reminderTimeInput');
     const setReminderBtn = document.getElementById('setReminderBtn');
     const reminderMessage = document.getElementById('reminderMessage');
+    const analyticsTitle = document.getElementById('analyticsTitle');
+
+    // Chart.js instances
+    let barChart = null;
+    let lineChart = null;
 
     // State
     let selectedMood = null;
@@ -402,7 +438,8 @@
         reminderSet: 'Reminder set for',
         reminderUnset: 'Reminder cleared.',
         reminderUnsupported: 'Notification permission denied or unsupported.',
-        reminderPrompt: 'Time for your daily mood check-in!'
+        reminderPrompt: 'Time for your daily mood check-in!',
+        analyticsTitle: 'Mood Analytics'
       },
       fr: {
         title: "Outil de suivi d'humeur",
@@ -422,7 +459,8 @@
         reminderSet: "Rappel réglé pour",
         reminderUnset: "Rappel effacé.",
         reminderUnsupported: "Permission de notification refusée ou non prise en charge.",
-        reminderPrompt: "Il est temps de vérifier votre humeur quotidienne !"
+        reminderPrompt: "Il est temps de vérifier votre humeur quotidienne !",
+        analyticsTitle: "Analyse des humeurs"
       }
     };
 
@@ -439,6 +477,7 @@
       entriesList.setAttribute('aria-label', t.ariaEntries);
       reminderMessage.textContent = reminderTime ? `${t.reminderSet} ${reminderTime}` : t.reminderUnset;
       document.querySelector('.reminder-section label').textContent = t.reminderLabel;
+      analyticsTitle.textContent = t.analyticsTitle;
     }
 
     // Render moods
@@ -459,38 +498,36 @@
       });
     }
 
-    // Update background based on mood
+    // Update background by mood
     function updateBackground() {
-      document.body.className = ''; // reset all mood classes
+      document.body.className = 'mood-neutral';
       if(selectedMood) {
-        document.body.classList.add(`mood-${selectedMood}`);
-      } else {
-        document.body.classList.add('mood-neutral');
+        document.body.classList.add('mood-' + selectedMood);
       }
     }
 
-    // Update quote based on selected mood
+    // Update inspirational quote
     function updateQuote() {
-      if(selectedMood) {
-        const mood = moods.find(m => m.id === selectedMood);
-        quoteEl.textContent = language === 'en' ? mood.quote_en : mood.quote_fr;
-      } else {
+      if(!selectedMood) {
         quoteEl.textContent = texts[language].quoteDefault;
-      }
-    }
-
-    // Enable/disable Add Entry button based on mood and note input
-    function updateAddEntryBtn() {
-      addEntryBtn.disabled = !(selectedMood && noteInput.value.trim().length > 0);
-    }
-
-    // Render saved entries
-    function renderEntries() {
-      if(entries.length === 0) {
-        entriesList.innerHTML = `<p>${texts[language].noEntries}</p>`;
         return;
       }
+      const mood = moods.find(m => m.id === selectedMood);
+      quoteEl.textContent = language === 'en' ? mood.quote_en : mood.quote_fr;
+    }
+
+    // Enable/disable Add Entry button
+    function updateAddEntryBtn() {
+      addEntryBtn.disabled = !selectedMood || noteInput.value.trim().length === 0;
+    }
+
+    // Render entries
+    function renderEntries() {
       entriesList.innerHTML = '';
+      if(entries.length === 0) {
+        entriesList.textContent = texts[language].noEntries;
+        return;
+      }
       entries.slice().reverse().forEach(entry => {
         const mood = moods.find(m => m.id === entry.mood);
         const date = new Date(entry.timestamp);
@@ -525,6 +562,7 @@
     // Save entries to localStorage
     function saveEntries() {
       localStorage.setItem('moodEntries', JSON.stringify(entries));
+      updateCharts();
     }
 
     // Save language selection
@@ -556,19 +594,133 @@
       }
     }
 
-    // Initialize everything
-    function init() {
-      loadSelectedMood();
-      updateLanguageText();
-      renderMoods();
-      updateBackground();
-      updateQuote();
-      renderEntries();
-      updateAddEntryBtn();
+    // Initialize charts
+    function initCharts() {
+      const barCtx = document.getElementById('barChart').getContext('2d');
+      const lineCtx = document.getElementById('lineChart').getContext('2d');
 
-      // Restore reminder time input value
-      reminderTimeInput.value = reminderTime || '';
-      noteInput.value = '';
+      barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+          labels: moods.map(m => language === 'en' ? m.name_en : m.name_fr),
+          datasets: [{
+            label: language === 'en' ? 'Number of Entries' : 'Nombre d\'entrées',
+            data: [],
+            backgroundColor: moods.map(m => getComputedStyle(document.documentElement).getPropertyValue(`--color-${m.id}`).trim() || '#999'),
+            borderRadius: 6,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true, ticks: { precision: 0 } }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+
+      lineChart = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: language === 'en' ? 'Mood Intensity Over Time' : "Intensité de l'humeur au fil du temps",
+            data: [],
+            fill: false,
+            borderColor: '#007bff',
+            tension: 0.25,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            backgroundColor: '#007bff'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                unit: 'day',
+                tooltipFormat: language === 'en' ? 'MMM d, yyyy' : 'd MMM yyyy'
+              },
+              title: {
+                display: true,
+                text: language === 'en' ? 'Date' : 'Date'
+              }
+            },
+            y: {
+              min: 0,
+              max: 5,
+              ticks: {
+                stepSize: 1,
+                callback: (val) => {
+                  // Map intensity number to mood name (english only here)
+                  const moodByIntensity = moods.find(m => m.intensity === val);
+                  return moodByIntensity ? (language === 'en' ? moodByIntensity.name_en : moodByIntensity.name_fr) : val;
+                }
+              },
+              title: {
+                display: true,
+                text: language === 'en' ? 'Intensity' : "Intensité"
+              }
+            }
+          },
+          plugins: {
+            legend: { labels: { font: { weight: '700' } } }
+          }
+        }
+      });
+    }
+
+    // Update charts data from entries
+    function updateCharts() {
+      if(!barChart || !lineChart) return;
+
+      // Bar chart: count moods in last 30 days
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - 30);
+
+      const filteredEntries = entries.filter(e => new Date(e.timestamp) >= cutoffDate);
+
+      const moodCounts = moods.map(m => 0);
+      filteredEntries.forEach(e => {
+        const idx = moods.findIndex(m => m.id === e.mood);
+        if(idx >= 0) moodCounts[idx]++;
+      });
+
+      barChart.data.datasets[0].data = moodCounts;
+      barChart.options.plugins.legend.labels.font.weight = '700';
+      barChart.update();
+
+      // Line chart: mood intensity over time (last 30 days)
+      // Aggregate by date, average intensity
+      const dayMap = {};
+      filteredEntries.forEach(e => {
+        const dateKey = new Date(e.timestamp).toISOString().slice(0,10); // YYYY-MM-DD
+        if(!dayMap[dateKey]) dayMap[dateKey] = { sum: 0, count: 0 };
+        const mood = moods.find(m => m.id === e.mood);
+        if(mood){
+          dayMap[dateKey].sum += mood.intensity;
+          dayMap[dateKey].count++;
+        }
+      });
+
+      // Sort dates ascending
+      const sortedDates = Object.keys(dayMap).sort();
+
+      const lineLabels = sortedDates.map(d => {
+        const dt = new Date(d);
+        return dt;
+      });
+      const lineData = sortedDates.map(d => dayMap[d].sum / dayMap[d].count);
+
+      lineChart.data.labels = lineLabels;
+      lineChart.data.datasets[0].data = lineData;
+      lineChart.options.scales.x.time.tooltipFormat = language === 'en' ? 'MMM d, yyyy' : 'd MMM yyyy';
+      lineChart.update();
     }
 
     // Event handlers
@@ -577,7 +729,6 @@
       if(!btn) return;
       const moodId = btn.getAttribute('data-id');
       if(moodId === selectedMood) {
-        // Deselect if clicked again
         selectedMood = null;
       } else {
         selectedMood = moodId;
@@ -618,6 +769,7 @@
       updateQuote();
       renderEntries();
       updateAddEntryBtn();
+      updateCharts();
     });
 
     clearEntriesBtn.addEventListener('click', () => {
@@ -661,7 +813,6 @@
 
       doc.setFontSize(12);
 
-      // For vertical spacing
       let y = 30;
 
       entries.slice().reverse().forEach((entry, i) => {
@@ -681,7 +832,6 @@
         y += 8;
         doc.setFont(undefined, 'normal');
 
-        // Split long notes to fit page width (~180 width)
         const splitNote = doc.splitTextToSize(entry.note, 180);
         doc.text(splitNote, 14, y);
         y += splitNote.length * 7 + 5;
@@ -696,13 +846,11 @@
       clearTimeout(reminderTimeout);
       if(!reminderTime) return;
 
-      // Calculate time to next reminder (today or tomorrow)
       const [hours, minutes] = reminderTime.split(':').map(Number);
       const now = new Date();
       let nextReminder = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
 
       if(nextReminder <= now) {
-        // If time already passed today, set for tomorrow
         nextReminder.setDate(nextReminder.getDate() + 1);
       }
 
@@ -710,7 +858,7 @@
 
       reminderTimeout = setTimeout(() => {
         showReminderNotification();
-        scheduleReminder(); // schedule next day
+        scheduleReminder();
       }, delay);
     }
 
@@ -745,9 +893,22 @@
       alert(language === 'en' ? texts.en.reminderPrompt : texts.fr.reminderPrompt);
     }
 
-    // Initialize on load
+    // Load selected mood on start
+    function init() {
+      loadSelectedMood();
+      updateLanguageText();
+      renderMoods();
+      updateBackground();
+      updateQuote();
+      renderEntries();
+      updateAddEntryBtn();
+      reminderTimeInput.value = reminderTime || '';
+      initCharts();
+      updateCharts();
+      scheduleReminder();
+    }
+
     init();
-    scheduleReminder();
 
   })();
 </script>
