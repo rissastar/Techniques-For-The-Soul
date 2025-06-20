@@ -1,46 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Mood Toolkit — Bilingual & Enhanced</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Poppins',sans-serif;min-height:100vh;background:#f0f4f8;color:#222;display:flex;flex-direction:column;align-items:center;transition:background 1s;}
-  header{position:relative;width:90vw;max-width:650px;text-align:center;padding:20px 0;}
-  #lang-toggle{position:absolute;top:20px;right:0;background:#ddd;border:none;padding:6px 12px;border-radius:20px;cursor:pointer;}
-  h1{font-size:2.8rem;font-weight:700;color:#333;text-shadow:1px 1px 4px rgba(0,0,0,0.1);}
-  form,mood-display,entries-section{background:rgba(255,255,255,0.95);width:90vw;max-width:650px;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.1);margin-bottom:30px;padding:25px;}
-  label{display:block;margin-top:16px;font-weight:600;color:#555;font-size:1.05rem;}
-  select,textarea{width:100%;padding:12px;border:2px solid #ccc;border-radius:12px;margin-top:8px;font-size:1rem;transition:0.3s;border-color:#74ebd5 onfocus;}
-  select:focus,textarea:focus{outline:none;border-color:#74ebd5;box-shadow:0 0 8px rgba(116,235,213,0.6);}
-  button, .action-btn{font-weight:700;border:none;border-radius:36px;padding:14px 28px;margin-top:20px;cursor:pointer;transition:background 0.3s,box-shadow 0.3s;}
-  button:hover, .action-btn:hover{box-shadow:0 6px 18px rgba(0,0,0,0.15);}
-  #save-btn{background:linear-gradient(45deg,#74ebd5,#ACB6E5);width:100%;}
-  #download-pdf{background:linear-gradient(135deg,#6a11cb,#2575fc);color:#fff;width:48%;}
-  #clear-entries{background:linear-gradient(135deg,#fc5c7d,#6a82fb);color:#fff;width:48%;}
-  #copy-share{background:#74ebd5;color:#fff;width:100%;margin-top:10px;}
-  #mood-display{min-height:300px;text-align:center;position:relative;}
-  .mood-avatar{font-size:6rem;margin-bottom:10px;animation:pulse 2s infinite alternate;}
-  @keyframes pulse{0%{transform:scale(1);}100%{transform:scale(1.1);}}
-  .mood-section{background:#fff;border-radius:14px;padding:18px;margin:16px auto;box-shadow:0 6px 20px rgba(0,0,0,0.08);font-size:1rem;max-width:520px;cursor:pointer;transition:transform .3s;}
-  .mood-section:hover{transform:translateY(-6px);}
-  .flip-card{background:#fff;width:250px;height:150px;margin:10px;perspective:1000px;display:inline-block;}
-  .flip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;}
-  .flip-card:hover .flip-inner{transform:rotateY(180deg);}
-  .flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:10px;box-shadow:0 6px 20px rgba(0,0,0,0.08);font-size:1rem;text-align:center;}
-  .flip-front{background:#74ebd5;color:#fff;}
-  .flip-back{background:#fff;color:#333;transform:rotateY(180deg);}
-  #entries-list{list-style:none;max-height:300px;overflow-y:auto;}
-  #entries-list li{padding:14px;border-radius:12px;background:#f7f9fa;box-shadow:inset 0 2px 6px rgba(0,0,0,0.05);margin-bottom:12px;}
-  #entries-list li strong{display:block;margin-bottom:6px;font-weight:700;}
-  #word-cloud{width:90vw;max-width:650px;min-height:200px;background:#fff;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.1);padding:20px;margin-bottom:30px;position:relative;font-family:Arial, sans-serif;}
-  .word{position:absolute;color:rgba(0,0,0,0.2);white-space:nowrap;cursor:default;transition:font-size .3s,color .3s;}
-  /* Mood themes & crisis */
-  body.mood-anguished,body.mood-angry,body.mood-depressed{--crisis:1;}
-  .crisis-alert{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#e74c3c;color:#fff;padding:10px 20px;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,0.2);}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mood Toolkit — Bilingual & Animated</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Poppins',sans-serif;min-height:100vh;display:flex;
+      flex-direction:column;align-items:center;transition:background 1s;
+      overflow-x:hidden;}
+    header{position:relative;width:90vw;max-width:650px;text-align:center;padding:20px 0;}
+    #lang-toggle{position:absolute;top:20px;right:0;background:#ddd;border:none;
+      padding:6px 12px;border-radius:20px;cursor:pointer;}
+    h1{font-size:2.8rem;font-weight:700;color:#333;}
+    form, #mood-display, #entries-section, #word-cloud{background:rgba(255,255,255,0.95);
+      width:90vw;max-width:650px;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.1);
+      margin-bottom:30px;padding:25px;position:relative;}
+    label{display:block;margin-top:16px;font-weight:600;color:#555;font-size:1.05rem;}
+    select,textarea{width:100%;padding:12px;border:2px solid #ccc;border-radius:12px;
+      margin-top:8px;font-size:1rem;transition:0.3s;border-color:#74ebd5;}
+    select:focus,textarea:focus{outline:none;border-color:#74ebd5;box-shadow:0 0 8px rgba(116,235,213,0.6);}
+    .action-btn{font-weight:700;border:none;border-radius:36px;padding:14px 28px;
+      margin-top:16px;cursor:pointer;transition:background .3s,box-shadow .3s;}
+    #save-btn{background:linear-gradient(45deg,#74ebd5,#ACB6E5);width:100%;color:#1a1a2e;}
+    #save-btn:hover{box-shadow:0 6px 18px rgba(0,0,0,0.15);}
+    #download-pdf{background:linear-gradient(135deg,#6a11cb,#2575fc);color:#fff;
+      width:48%;}
+    #download-pdf:hover{box-shadow:0 6px 18px rgba(0,0,0,0.15);}
+    #clear-entries{background:linear-gradient(135deg,#fc5c7d,#6a82fb);color:#fff;
+      width:48%;}
+    #clear-entries:hover{box-shadow:0 6px 18px rgba(0,0,0,0.15);}
+    #copy-share{background:#74ebd5;color:#fff;width:100%;margin-top:10px;}
+    #mood-display{min-height:300px;text-align:center;overflow:hidden;}
+    .mood-avatar{font-size:6rem;margin-bottom:10px;animation:pulse 2s infinite alternate;}
+    @keyframes pulse{0%{transform:scale(1);}100%{transform:scale(1.1);}}
+    .bubble, .raindrop, .spark, .firework, .ripple, .mist, .heart-frag{position:absolute;
+      opacity:0.8;pointer-events:none;}
+    /* specific animations */
+    .raindrop{width:4px;height:10px;background:rgba(70,130,180,0.7);border-radius:2px;
+      animation:fall 2s linear infinite;}
+    @keyframes fall{0%{top:-10%;}100%{top:110%;opacity:0;}}
+    .bubble{width:12px;height:12px;border-radius:50%;border:2px solid rgba(173,216,230,0.7);
+      animation:rise 4s ease-in infinite;}
+    @keyframes rise{0%{bottom:-10%;}100%{bottom:110%;opacity:0;}}
+    .spark{width:4px;height:4px;border-radius:50%;background:gold;
+      animation:twinkle 1.5s ease-in-out infinite;}
+    @keyframes twinkle{0%,100%{opacity:0.2;}50%{opacity:1;}}
+    .firework{width:6px;height:6px;background:hsl(var(--h),80%,60%);
+      animation:explode 1s ease-out forwards;}
+    @keyframes explode{0%{transform:scale(0);opacity:1;}100%{transform:scale(3);opacity:0;}}
+    .ripple{width:10px;height:10px;border:2px solid rgba(255,0,0,0.5);border-radius:50%;
+      animation:wave 0.8s ease-out forwards;}
+    @keyframes wave{0%{transform:scale(0);}100%{transform:scale(6);opacity:0;}}
+    .mist{width:20px;height:20px;border-radius:50%;background:rgba(105,105,105,0.2);
+      animation:drift 5s ease-in-out infinite;}
+    @keyframes drift{0%{transform:translate(0,0);}50%{transform:translate(20px,-20px);}100%{transform:translate(0,0);}}
+    .heart-frag{width:8px;height:8px;background:rgba(255,0,0,0.7);animation:fall 3s linear infinite;}
+    #entries-list{list-style:none;max-height:300px;overflow-y:auto;}
+    #entries-list li{padding:14px;border-radius:12px;background:#f7f9fa;
+      box-shadow:inset 0 2px 6px rgba(0,0,0,0.05);margin-bottom:12px;}
+    #entries-list li strong{display:block;margin-bottom:6px;font-weight:700;}
+    #word-cloud{min-height:200px;position:relative;overflow:hidden;}
+    .word{position:absolute;color:rgba(0,0,0,0.2);white-space:nowrap;cursor:default;
+      transition:font-size .3s;color:rgba(0,0,0,0.2);}
+    /* Mood page backgrounds */
+    body.mood-happy{background:linear-gradient(135deg,#f6d365,#fda085);}
+    body.mood-sad{background:linear-gradient(135deg,#a1c4fd,#c2e9fb);}
+    body.mood-angry{background:linear-gradient(135deg,#f85032,#e73827);}
+    body.mood-anxious{background:linear-gradient(135deg,#f7971e,#ffd200);}
+    body.mood-excited{background:linear-gradient(135deg,#fcb045,#fd1d1d,#833ab4);}
+    body.mood-calm{background:linear-gradient(135deg,#96fbc4,#f9f586);}
+    body.mood-anguished{background:linear-gradient(135deg,#485563,#29323c);}
+    body.mood-depressed{background:linear-gradient(135deg,#2c3e50,#4ca1af);}
+    .crisis-alert{position:absolute;top:10px;left:50%;transform:translateX(-50%);
+      background:#e74c3c;color:#fff;padding:10px 20px;border-radius:20px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.2);}
+    @media(max-width:480px){
+      .mood-avatar{font-size:4.5rem;}
+      .flip-card{width:100%;height:auto;margin:10px 0;}
+    }
+  </style>
 </head>
 <body>
 <header>
@@ -61,28 +101,23 @@
     <option value="anguished" data-en="Anguished 💔" data-fr="Angoissé 💔">Anguished 💔</option>
     <option value="depressed" data-en="Depressed 😞" data-fr="Déprimé 😞">Depressed 😞</option>
   </select>
-
   <label data-en="Add notes (optional):" data-fr="Ajoutez des notes (optionnel) :">Add notes (optional):</label>
   <textarea id="notes" placeholder="..."></textarea>
-
   <button type="submit" id="save-btn" data-en="Save Entry" data-fr="Enregistrer">Save Entry</button>
 </form>
 
 <div id="mood-display">
   <div class="mood-avatar"></div>
-  <p data-en="Select a mood to get support below." data-fr="Choisissez une humeur pour obtenir du soutien ci-dessous.">
-    Select a mood to get support below.
-  </p>
 </div>
 
 <section id="entries-section">
   <h2 data-en="Past Entries" data-fr="Entrées Précédentes">Past Entries</h2>
   <ul id="entries-list"><li data-en="No entries yet." data-fr="Aucune entrée pour le moment.">No entries yet.</li></ul>
-  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;">
-    <button id="download-pdf">Download PDF</button>
-    <button id="clear-entries" data-en="Clear All" data-fr="Tout effacer">Clear All</button>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <button id="download-pdf" class="action-btn">Download PDF</button>
+    <button id="clear-entries" class="action-btn" data-en="Clear All" data-fr="Tout effacer">Clear All</button>
   </div>
-  <button id="copy-share" data-en="Copy Mood Summary" data-fr="Copier résumé">Copy Mood Summary</button>
+  <button id="copy-share" class="action-btn" data-en="Copy Mood Summary" data-fr="Copier résumé">Copy Mood Summary</button>
 </section>
 
 <div id="word-cloud"></div>
@@ -90,171 +125,195 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 (function(){
-  const langToggle=document.getElementById('lang-toggle'),texts=document.querySelectorAll('[data-en]');
+  const langToggle=document.getElementById('lang-toggle'),
+        texts=document.querySelectorAll('[data-en]'),
+        moodForm=document.getElementById('mood-form'),
+        moodSelect=document.getElementById('mood-select'),
+        notesInput=document.getElementById('notes'),
+        display=document.getElementById('mood-display'),
+        avatarEl=document.querySelector('.mood-avatar'),
+        downloadPDF=document.getElementById('download-pdf'),
+        clearAll=document.getElementById('clear-entries'),
+        copyBtn=document.getElementById('copy-share'),
+        entriesList=document.getElementById('entries-list'),
+        wordCloud=document.getElementById('word-cloud');
+
   let lang=localStorage.lang||'en';
-  const setLang=()=>{texts.forEach(el=>el.textContent=el.dataset[lang]);langToggle.textContent=lang==='en'?'FR':'EN';localStorage.lang=lang;};
-  langToggle.onclick=()=>{lang=lang==='en'?'fr':'en';setLang();};
+  const setLang=()=>{
+    texts.forEach(el=>el.textContent=el.dataset[lang]);
+    langToggle.textContent=lang==='en'?'FR':'EN';
+    localStorage.lang=lang;
+  };
+  langToggle.onclick=()=>{
+    lang=lang==='en'?'fr':'en';
+    setLang();
+  };
   setLang();
 
-  const moodData = {
-    happy:{
-      avatar:'😊',en:{coping:'Share smile or dive into a fun hobby.',reflect:'What made you happy today?',tip:'Keep the joy going!'},
-      fr:{coping:'Partagez votre sourire ou plongez dans un passe-temps amusant.',reflect:'Qu’est-ce qui vous a rendu heureux aujourd’hui?',tip:'Continuez à cultiver la joie !'}
-    },
-    sad:{
-      avatar:'😢',en:{coping:'Talk with someone or write about it.',reflect:'What helped or hurt you today?',tip:'Allow yourself to feel and heal.'},
-      fr:{coping:'Parlez à quelqu’un ou écrivez à ce sujet.',reflect:'Qu’est-ce qui vous a aidé ou blessé aujourd’hui?',tip:'Autorisez-vous à ressentir et guérir.'}
-    },
-    angry:{
-      avatar:'😠',en:{coping:'Try deep breaths or a brisk walk.',reflect:'What triggered your anger?',tip:'Channel it into something positive.'},
-      fr:{coping:'Essayez la respiration profonde ou une marche rapide.',reflect:'Qu’est-ce qui a déclenché votre colère?',tip:'Canalisez-la en quelque chose de positif.'}
-    },
-    anxious:{
-      avatar:'😟',en:{coping:'Use grounding: name 5 things you see.',reflect:'What exactly worries you?',tip:'Return to the present moment.'},
-      fr:{coping:'Utilisez l’ancrage : nommez 5 choses que vous voyez.',reflect:'Qu’est-ce qui vous inquiète exactement?',tip:'Revenez au moment présent.'}
-    },
-    excited:{
-      avatar:'🤩',en:{coping:'Channel energy: plan something creative.',reflect:'What are you excited about?',tip:'Use it to fuel productivity.'},
-      fr:{coping:'Canalisez l’énergie : planifiez quelque chose de créatif.',reflect:'Qu’est-ce qui vous enthousiasme?',tip:'Utilisez-le pour stimuler votre productivité.'}
-    },
-    calm:{
-      avatar:'😌',en:{coping:'Enjoy nature or meditate.',reflect:'What helps you stay calm?',tip:'Savor this peace.'},
-      fr:{coping:'Profitez de la nature ou méditer.',reflect:'Qu’est-ce qui vous aide à rester calme?',tip:'Savourez cette paix.'}
-    },
-    anguished:{
-      avatar:'💔',en:{coping:'Reach out for help—this sounds serious.',reflect:'When did you feel this way first?',tip:'You do not have to face this alone.'},
-      fr:{coping:'Demandez de l’aide – cela semble sérieux.',reflect:'Quand avez-vous ressenti cela pour la première fois?',tip:'Vous n’êtes pas seul.'}
-    },
-    depressed:{
-      avatar:'😞',en:{coping:'Consider talking to a professional.',reflect:'What is one small step you can take?',tip:'Start with something gentle.'},
-      fr:{coping:'Envisagez de parler à un professionnel.',reflect:'Quelle est la petite étape que vous pouvez faire?',tip:'Commencez par quelque chose de doux.'}
-    }
+  const moodData={
+    happy:{avatar:'😊',ang:'happy',en:['Share a smile 💫','What made you happy today?','Keep the joy going!'],fr:['Partagez un sourire 💫','Qu’est-ce qui vous a rendu heureux aujourd’hui?','Continuez à rayonner !']},
+    sad:{avatar:'😢',ang:'sad',en:['Talk it out or write.','What helped you today?','Allow yourself to heal.'],fr:['Parlez-en ou écrivez.','Qu’est-ce qui vous a aidé aujourd’hui?','Permettez-vous de guérir.']},
+    angry:{avatar:'😠',ang:'angry',en:['Try deep breaths.','What triggered it?','Channel it positively.'],fr:['Respirez profondément.','Qu’est-ce qui l’a déclenchée?','Canalisez-la positivement.']},
+    anxious:{avatar:'😟',ang:'anxious',en:['Grounding: name 5 things.','What exactly worries you?','Stay present.'],fr:['Ancrage : nommez 5 choses.','Qu’est-ce qui vous inquiète?','Restez présent.']},
+    excited:{avatar:'🤩',ang:'excited',en:['Plan something creative.','What excites you?','Use it productively.'],fr:['Planifiez un projet créatif.','Qu’est-ce qui vous enthousiasme?','Utilisez-le positivement.']},
+    calm:{avatar:'😌',ang:'calm',en:['Enjoy nature or meditate.','What keeps you calm?','Savour the peace.'],fr:['Profitez de la nature.','Qu’est-ce qui vous apaise?','Savourez la paix.']},
+    anguished:{avatar:'💔',ang:'anguished',en:['Reach out now.','When did it start?','You’re not alone.'],fr:['Demandez de l’aide maintenant.','Quand cela a-t-il commencé?','Vous n’êtes pas seul.']},
+    depressed:{avatar:'😞',ang:'depressed',en:['See a professional.','One small step today?','Gentle beginnings.'],fr:['Consultez un professionnel.','Un petit pas aujourd’hui?','Commencez doucement.']}
   };
 
-  let entries=JSON.parse(localStorage.getItem('moodEntries'))||[];
-  const form=document.getElementById('mood-form'),moodSelect=document.getElementById('mood-select'),
-        notesInput=document.getElementById('notes'),display=document.getElementById('mood-display'),
-        list=document.getElementById('entries-list'),dlPDF=document.getElementById('download-pdf'),
-        clrBtn=document.getElementById('clear-entries'),copyBtn=document.getElementById('copy-share'),
-        wordCloud=document.getElementById('word-cloud'),avatarEl=document.querySelector('.mood-avatar');
-
-  const crisisCheck=mk=>['anguished','depressed'].includes(mk);
-
-  const updateDisplay=mk=>{
-    display.innerHTML='';
-    if(!mk) {
-      avatarEl.textContent='';
-      display.appendChild(createP('select-support'));
-      return;
-    }
-    const md=moodData[mk],t=md[lang];
-    avatarEl.textContent=t?md.avatar:'';
-    if(crisisCheck(mk)){
-      const alert=document.createElement('div');alert.className='crisis-alert';
-      alert.textContent=lang==='en'?'Urgent support suggested':'Un soutien urgent est suggéré';
-      display.appendChild(alert);
-    }
-    appendSection(mk,'coping',t.coping);
-    appendFlipCard(lang==='en'?'Reflection':'Réflexion', t.reflect);
-    appendFlipCard(lang==='en'?'Tip':'Conseil', t.tip);
-  };
-
-  const appendSection=(mk,cls,txt)=>{
-    const div=document.createElement('div');
-    div.className='mood-section';
-    div.textContent=(lang==='en'?encodeSection(mk,cls,txt):encodeSection(mk,cls,txt));
-    display.appendChild(div);
-  };
-  const appendFlipCard=(front,back)=>{
-    const card=document.createElement('div');card.className='flip-card';
-    card.innerHTML=`<div class="flip-inner"><div class="flip-front">${front}</div><div class="flip-back">${back}</div></div>`;
-    display.appendChild(card);
-  };
-
-  const encodeSection=(mk,cls,txt)=>txt;
+  let entries=JSON.parse(localStorage.moodEntries||'[]');
 
   const renderEntries=()=>{
-    list.innerHTML='';
-    if(!entries.length) return list.appendChild(createLi('no-entries'));
+    entriesList.innerHTML='';
+    if(!entries.length){
+      const li=document.createElement('li');
+      li.textContent=texts[0].dataset[lang==='en'?'en':'fr']; // “No entries yet.”
+      entriesList.appendChild(li);
+      return;
+    }
     entries.forEach(e=>{
       const li=document.createElement('li');
-      const md=moodData[e.mood];
-      li.innerHTML=`<strong>${md.avatar||''} ${capitalize(e.mood)} – ${new Date(e.date).toLocaleString()}</strong><p>${e.notes||(lang==='en?'No notes':'Pas de notes')}<p><em>${getReflectLabel()}: ${e.reflect||''}</em>`;
-      list.appendChild(li);
+      const m=moodData[e.mood];
+      const strong=document.createElement('strong');
+      strong.textContent=`${m.avatar} ${e.mood.charAt(0).toUpperCase()+e.mood.slice(1)} – ${new Date(e.date).toLocaleString()}`;
+      const p=document.createElement('p');
+      p.textContent=e.notes;
+      li.appendChild(strong);
+      li.appendChild(p);
+      entriesList.appendChild(li);
     });
   };
 
-  const createP=id=>{
-    const p=document.createElement('p');
-    p.textContent=document.querySelector(`[data-en="${id}"]`)?.dataset?.[lang]||'';
-    return p;
+  const clearAnimations=()=>{
+    document.querySelectorAll('.raindrop,.bubble,.spark,.firework,.ripple,.mist,.heart-frag')
+      .forEach(el=>el.remove());
   };
 
-  const createLi=id=>{
-    const li=document.createElement('li');
-    li.textContent=document.querySelector(`[data-en="${id}"]`)?.dataset?.[lang]||'';
-    return li;
-  };
-
-  const getReflectLabel=()=>lang==='en'?'Reflection':'Réflexion';
-
-  const capitalize=s=>s.charAt(0).toUpperCase()+s.slice(1);
-
-  form.onsubmit=e=>{
-    e.preventDefault();
-    const mk=moodSelect.value,n=notesInput.value;
-    if(!mk)return;
-    const reflectTxt=display.querySelector('.flip-back')?.textContent;
-    entries.unshift({mood:mk,notes:n,date:new Date().toISOString(),reflect:reflectTxt});
-    localStorage.moodEntries=JSON.stringify(entries);
-    notesInput.value='';moodSelect.value='';
-    updateDisplay(mk);renderEntries();updateWordCloud();
-  };
-
-  clrBtn.onclick=()=>{
-    if(confirm(lang==='en?'Clear all?':'Tout effacer ?')){
-      entries=[];localStorage.moodEntries='[]';
-      renderEntries();updateDisplay(null);updateWordCloud();
+  const createAnimations=mk=>{
+    const count=20;
+    const {ang}=moodData[mk];
+    const rect=display.getBoundingClientRect();
+    clearAnimations();
+    for(let i=0;i<count;i++){
+      // generate based on mood type
+      const el=document.createElement('div');
+      let cssClass;
+      switch(ang){
+        case 'happy': cssClass='spark';break;
+        case 'sad': cssClass='raindrop';break;
+        case 'angry': cssClass='ripple';break;
+        case 'anxious': cssClass='mist';break;
+        case 'excited': cssClass='firework';el.style.setProperty('--h',Math.random()*360);break;
+        case 'calm': cssClass='bubble';break;
+        case 'anguished': cssClass='heart-frag';break;
+        case 'depressed': cssClass='mist';break;
+      }
+      el.className=cssClass;
+      el.style.left=Math.random()*90+'%';
+      el.style.top=Math.random()*90+'%';
+      display.appendChild(el);
     }
   };
 
-  dlPDF.onclick=()=>{
-    if(!entries.length)return alert(lang==='en?'No entries to download':'Aucune entrée à télécharger');
-    const {jsPDF}=window.jspdf;const doc=new jsPDF();let y=20;
-    doc.text(lang==='en?'Mood Journal':'Journal Humeur',105,10,{align:'center'});entries.forEach(e=>{
-      if(y>270){doc.addPage();y=20}
-      const md=moodData[e.mood];const t=md[lang];
-      doc.text(`${md.avatar} ${capitalize(e.mood)}, ${new Date(e.date).toLocaleString()}`,10,y);y+=8;
-      doc.text((lang==='en?'Notes':'Notes')+': '+(e.notes||'-'),10,y);y+=8;
-      doc.text(getReflectLabel()+': '+(e.reflect||'-'),10,y);y+=12;
+  const updateMoodDisplay=mk=>{
+    avatarEl.textContent='';
+    clearAnimations();
+    display.querySelectorAll('.flip-card, .mood-section, .crisis-alert').forEach(el=>el.remove());
+    document.body.className=mk?`mood-${mk}`:'';
+    if(!mk) return;
+    const md=moodData[mk];
+    avatarEl.textContent=md.avatar;
+    createAnimations(mk);
+    const [cop, ref, tip]=md[lang];
+    ['coping','Reflection','Tip'].forEach((label,i)=>{
+      const div=document.createElement('div');
+      if(label!=='Reflection'&&label!=='Reflection') div.className='mood-section';
+      else{
+        const card=document.createElement('div');
+        card.className='flip-card';
+        card.innerHTML=`<div class="flip-inner"><div class="flip-front">${label}</div><div class="flip-back">${md[lang][i]}</div></div>`;
+        display.appendChild(card);
+        return;
+      }
+      div.textContent=md[lang][i];
+      display.appendChild(div);
+    });
+    if(['anguished','depressed'].includes(mk)){
+      const alert=document.createElement('div');
+      alert.className='crisis-alert';
+      alert.textContent=lang==='en'?'Urgent support suggested':'Soutien urgent recommandé';
+      display.appendChild(alert);
+    }
+  };
+
+  const updateWordCloud=()=>{
+    wordCloud.innerHTML='';
+    const allText=entries.map(e=>e.notes).join(' ');
+    const words=allText.split(/\W+/).filter(w=>w.length>3);
+    const freq={}; words.forEach(w=>freq[w]=(freq[w]||0)+1);
+    Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,30)
+      .forEach(([w,c])=>{
+        const span=document.createElement('span');
+        const size=14+c*4;
+        span.className='word';
+        span.textContent=w;
+        span.style.fontSize=size+'px';
+        span.style.left=Math.random()*80+'%';
+        span.style.top=Math.random()*80+'%';
+        span.style.animation=`rise ${(Math.random()*3+2)}s ease-in infinite`;
+        wordCloud.appendChild(span);
+      });
+  };
+
+  moodForm.onsubmit=e=>{
+    e.preventDefault();
+    const mk=moodSelect.value, notes=notesInput.value.trim();
+    if(!mk) return;
+    const entry={mood:mk,notes,date:new Date().toISOString()};
+    entries.unshift(entry);
+    localStorage.moodEntries=JSON.stringify(entries);
+    moodSelect.value='';notesInput.value='';
+    updateMoodDisplay(mk);
+    renderEntries();
+    updateWordCloud();
+  };
+
+  clearAll.onclick=()=>{
+    if(confirm(lang==='en'?'Clear all entries?':'Tout effacer ?')){
+      entries=[];localStorage.moodEntries='[]';
+      renderEntries();updateMoodDisplay(null);updateWordCloud();
+    }
+  };
+
+  downloadPDF.onclick=()=>{
+    if(!entries.length) return alert(lang==='en'?'No entries to download':'Aucune entrée à télécharger');
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF(), pw=doc.internal.pageSize.getWidth(), margin=10;
+    let y=15;
+    doc.setFontSize(18);
+    doc.text(lang==='en'?'Mood Journal':'Journal Humeur', pw/2, y, {align:'center'});
+    y+=10;doc.setFontSize(12);
+    entries.forEach(e=>{
+      if(y>270){doc.addPage(); y=15;}
+      const m=moodData[e.mood];
+      doc.text(`${m.avatar} ${e.mood.charAt(0).toUpperCase()+e.mood.slice(1)}, ${new Date(e.date).toLocaleString()}`, margin, y);
+      y+=7; doc.text((lang==='en'?'Notes':'Notes')+': ' + e.notes, margin, y);
+      y+=7;
     });
     doc.save('mood-journal.pdf');
   };
 
   copyBtn.onclick=()=>{
-    if(!entries.length)return alert(lang==='en?'No entries to copy':'Rien à copier');
-    const last=entries[0],md=moodData[last.mood];
-    const summary=`${capitalize(last.mood)} • ${new Date(last.date).toLocaleDateString()}\n${last.notes||''}`;
-    navigator.clipboard.writeText(summary).then(_=>alert(lang==='en?'Copied!':'Copié !'));
+    if(!entries.length) return alert(lang==='en'?'No entries':'Aucune entrée');
+    const e=entries[0], m=moodData[e.mood];
+    const summary=`${m.avatar} ${e.mood.toUpperCase()} – ${new Date(e.date).toLocaleDateString()}\n${e.notes}`;
+    navigator.clipboard.writeText(summary).then(()=> alert(lang==='en'?'Copied!':'Copié !'));
   };
 
-  const updateWordCloud=()=>{
-    wordCloud.innerHTML='';
-    const text=entries.map(e=>e.notes).join(' ');
-    const words=text.split(/\W+/).filter(w=>w.length>3);
-    const freq={};words.forEach(w=>freq[w]=(freq[w]||0)+1);
-    const entriesArr=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,30);
-    entriesArr.forEach(([w,c],i)=>{
-      const span=document.createElement('span'),f=14+ c*4;
-      span.className='word';span.textContent=w;
-      span.style.fontSize=f+'px';
-      span.style.left=(Math.random()*80)+'%';
-      span.style.top=(Math.random()*80)+'%';
-      wordCloud.appendChild(span);
-    });
-  };
-
-  updateDisplay(null);renderEntries();updateWordCloud();
+  // init
+  updateMoodDisplay(null);
+  renderEntries();
+  updateWordCloud();
 })();
 </script>
 </body>
