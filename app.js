@@ -4,7 +4,6 @@ const URL = 'https://ytgrzhtntwzefwjmhgjj.supabase.co';
 const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
 const supabase = createClient(URL, KEY);
 
-// State
 let lang = localStorage.getItem('lang') || 'en';
 let theme = localStorage.getItem('theme') || 'dark';
 let candleCount = parseInt(localStorage.getItem('candleCount')) || 0;
@@ -34,7 +33,7 @@ const texts = {
   }
 };
 
-// Init
+// Initialize UI
 document.body.setAttribute('data-theme', theme);
 document.getElementById('themeToggle').innerText = theme === 'light' ? '🌙' : '☀️';
 document.getElementById('langSelector').value = lang;
@@ -46,8 +45,8 @@ loadAll();
 // Event Listeners
 document.getElementById('themeToggle').onclick = () => {
   theme = theme === 'light' ? 'dark' : 'light';
-  document.body.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
+  document.body.setAttribute('data-theme', theme);
   document.getElementById('themeToggle').innerText = theme === 'light' ? '🌙' : '☀️';
 };
 document.getElementById('langSelector').onchange = e => {
@@ -56,7 +55,7 @@ document.getElementById('langSelector').onchange = e => {
   updateLang();
 };
 
-// Language
+// Language update
 function updateLang() {
   const t = texts[lang];
   document.getElementById('header').innerText = t.header;
@@ -69,7 +68,7 @@ function updateLang() {
   document.getElementById('sendBtn').innerText = t.send;
 }
 
-// Candle
+// Candle click
 document.getElementById('candleBtn').onclick = () => {
   candleCount++;
   localStorage.setItem('candleCount', candleCount);
@@ -97,8 +96,6 @@ async function refreshProfiles() {
     o.innerText = `${p.name} (${p.birth}–${p.death})`;
     sel.appendChild(o);
   });
-
-  // Render profiles
   const div = document.getElementById('profiles');
   div.innerHTML = '';
   profiles.forEach(p => {
@@ -144,7 +141,6 @@ function renderMessage(m, container, parentId = null) {
   messages.forEach(c => renderMessage(c, container, m.id));
 }
 
-// Show reply box
 window.showReply = id => {
   const box = document.getElementById(`replyBox${id}`);
   if (box.innerHTML) return box.innerHTML = '';
@@ -154,7 +150,6 @@ window.showReply = id => {
   `;
 };
 
-// Save profile
 document.getElementById('profileBtn').onclick = async () => {
   const name = document.getElementById('profileName').value.trim();
   const birth = document.getElementById('profileBirth').value;
@@ -172,7 +167,6 @@ document.getElementById('profileBtn').onclick = async () => {
   refreshProfiles();
 };
 
-// Send message
 document.getElementById('sendBtn').onclick = async () => {
   const name = document.getElementById('nameField').value.trim() || null;
   const profile_id = document.getElementById('profileLink').value || null;
@@ -197,7 +191,6 @@ document.getElementById('sendBtn').onclick = async () => {
   refreshMessages();
 };
 
-// Post reply
 window.postReply = async parent_id => {
   const txt = document.getElementById(`replyTxt${parent_id}`).value.trim();
   if (!txt) return;
@@ -205,60 +198,51 @@ window.postReply = async parent_id => {
   refreshMessages();
 };
 
-// Pin toggle
 window.togglePin = async (table, id) => {
   await supabase.from(table).update({ is_pinned: true }).eq('id', id);
   if (table === 'loved_ones') refreshProfiles();
   else refreshMessages();
 };
 
-// Floating tribute clouds
-function spawnFloat(text) {
-  const el = document.createElement('span');
-  el.innerText = text;
-  el.style.left = Math.random() * 80 + 'vw';
-  document.body.appendChild(el);
-  el.className = 'float-clouds';
-  setTimeout(() => el.remove(), 8000);
-}
-
-// Starfield with shooting stars
+// Starfield & Shooting Stars
 function startStarfield() {
-  const c = document.getElementById('starfield');
-  const ctx = c.getContext('2d');
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
   let w, h, stars = [], shooting = null;
 
   function resize() {
-    w = c.width = window.innerWidth;
-    h = c.height = window.innerHeight;
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
     stars = Array.from({ length: 200 }, () => ({
-      x: Math.random() * w, y: Math.random() * h,
+      x: Math.random() * w,
+      y: Math.random() * h,
       r: Math.random() * 1.1
     }));
   }
-
   function draw() {
-    ctx.fillStyle = 'black'; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = 'rgba(11,19,43,0.4)';
+    ctx.fillRect(0, 0, w, h);
     stars.forEach(s => {
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
-      ctx.fillStyle = 'white'; ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.fill();
     });
     if (!shooting && Math.random() < 0.005) {
       shooting = { x: Math.random() * w, y: Math.random() * h/2, len: 0 };
     }
     if (shooting) {
-      ctx.strokeStyle = 'white'; ctx.lineWidth = 2;
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(shooting.x, shooting.y);
-      ctx.lineTo(shooting.x + shooting.len*10, shooting.y + shooting.len*5);
+      ctx.lineTo(shooting.x + shooting.len * 10, shooting.y + shooting.len * 5);
       ctx.stroke();
       shooting.len += 1;
       if (shooting.len > 20) shooting = null;
     }
     requestAnimationFrame(draw);
   }
-
   window.onresize = resize;
   resize();
   draw();
