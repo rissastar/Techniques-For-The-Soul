@@ -2,186 +2,164 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Grief Support Toolkit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* ===== GOOGLE FONT ===== */
-    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
-
-    /* ===== CSS VARIABLES for Themes ===== */
+    /* Theme & Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg-gradient: linear-gradient(135deg, #d9c1ff, #a4a4ff);
-      --text-color: #3a1c6f;
-      --card-bg: #fff;
-      --card-shadow: rgba(102,84,204,0.25);
+      --bg-img: url('https://images.pexels.com/photos/7135019/pexels-photo-7135019.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+      --text: #333;
+      --card-bg: rgba(255,255,255,0.95);
+      --shadow: rgba(0,0,0,0.1);
       --primary: #7f5af0;
       --primary-light: #a865f9;
       --accent: #4b2ca9;
     }
-    body.theme-dark {
-      --bg-gradient: #121212;
-      --text-color: #ddd;
-      --card-bg: #1e1e1e;
-      --card-shadow: rgba(0,0,0,0.7);
-      --primary: #4a90e2;
-      --primary-light: #72b5f9;
-      --accent: #aad1f7;
-    }
-    body.theme-calm {
-      --bg-gradient: linear-gradient(135deg, #f0f4f8, #c8d8e5);
-      --text-color: #333;
-      --card-bg: #fff;
-      --card-shadow: rgba(100,100,120,0.15);
-      --primary: #88c0d0;
-      --primary-light: #b0dfee;
-      --accent: #5e81ac;
-    }
-
-    /* ===== RESET & BASE ===== */
-    * { box-sizing: border-box; margin:0; padding:0; }
     body {
       font-family: 'Comfortaa', cursive, sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text-color);
+      color: var(--text);
+      background: var(--bg-img) center/cover no-repeat fixed;
       min-height: 100vh;
-      padding: 1rem;
-      transition: background 0.5s, color 0.5s;
     }
-    h1 { text-align:center; font-size:2.6rem; margin-bottom:1rem; color:var(--accent); }
-    button, select, textarea {
-      font-family: inherit;
-      border:none;
-      border-radius:8px;
-      cursor:pointer;
+    h1,h2 { text-align: center; color: var(--accent); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button, select, textarea, input { font-family: inherit; }
+
+    /* Layout */
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 8px 30px var(--shadow);
     }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+      gap: 1.5rem;
+    }
+    section.card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 1.2rem;
+      box-shadow: 0 4px 16px var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    section.card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+
+    /* Controls */
     button, select {
       background: var(--primary);
       color: #fff;
-      padding:0.6rem 1rem;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
       transition: background 0.3s;
     }
     button:hover, select:hover { background: var(--primary-light); }
-    button:focus, select:focus, textarea:focus { outline:2px solid var(--accent); }
-
-    /* ===== Layout ===== */
-    .container { max-width:1100px; margin:0 auto; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; }
-
-    section.card {
-      background: var(--card-bg);
-      border-radius:12px;
-      padding:1.5rem;
-      box-shadow: 0 8px 25px var(--card-shadow);
-      position: relative;
-      transition: box-shadow 0.3s;
+    button:focus, select:focus, textarea:focus, input:focus {
+      outline: 2px solid var(--accent);
     }
-    section.card:hover { box-shadow: 0 12px 30px var(--card-shadow); }
-    section.card h2 {
-      display:flex; align-items:center; gap:0.6rem;
-      font-size:1.4rem; margin-bottom:1rem; color:var(--accent);
-    }
-    .icon { font-size:1.8rem; }
 
-    /* ===== THEME SELECTOR ===== */
+    /* Theme toggle */
     #themeSelector {
-      position: fixed; top:1rem; left:1rem; z-index:100;
+      position: fixed; top: 1rem; left: 1rem; z-index: 100;
     }
 
-    /* ===== SOS BUTTON ===== */
+    /* SOS */
     #sosBtn {
-      position: fixed; bottom:1rem; left:1rem;
-      background:#e03e3e; color:#fff; width:52px; height:52px; 
-      border-radius:50%; font-size:1.8rem; display:flex; align-items:center; justify-content:center;
-      z-index:100;
+      position: fixed; bottom: 1rem; left: 1rem;
+      background: #e03e3e; color: #fff; width: 52px; height: 52px;
+      border: none; border-radius: 50%; font-size: 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index:100;
     }
-    #sosBtn:hover { background:#c13030; }
+    #sosBtn:hover { background: #c13030; }
 
-    /* ===== Sections Styles ===== */
     /* Memory Garden */
-    #garden { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1rem; }
+    #garden { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; }
     .garden-item {
-      background: var(--primary-light); color:white; padding:0.6rem 0.8rem;
-      border-radius:20px; cursor:pointer; transition:transform 0.2s;
+      background: var(--primary-light); color: #fff;
+      padding: 0.5rem 0.8rem; border-radius: 20px;
+      cursor: pointer; transition: transform 0.2s;
     }
-    .garden-item:hover { transform:scale(1.1); }
+    .garden-item:hover { transform: scale(1.1); }
 
-    /* Grief-in-Body Explorer */
-    .body-map { background:url('https://i.imgur.com/YOuYWbS.png') center/contain no-repeat;
-      width:100%; height:260px; position:relative; margin-bottom:1rem;
+    /* Body Map */
+    .body-map {
+      position: relative;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/1/17/Human_body_outline.png')
+                  center/contain no-repeat;
+      width: 100%; height: 350px; border-radius: 10px;
+      background-color: #f9f9f9; margin-top: 1rem;
     }
-    .body-spot { position:absolute; width:20px; height:20px;
-      background:rgba(255,0,0,0.6); border-radius:50%; cursor:pointer; transition:background 0.3s;
+    .body-spot {
+      position: absolute; width: 20px; height: 20px;
+      background: rgba(255,87,34,0.7);
+      border: 2px solid #fff; border-radius: 50%;
+      cursor: pointer; transition: transform 0.2s;
     }
-    .body-spot:hover { background:red; }
+    .body-spot:hover { transform: scale(1.2); }
 
-    /* Letters to Loved Ones */
-    #loveLetter { width:100%; min-height:120px; border:2px solid var(--primary);
-      border-radius:8px; padding:0.8rem; resize:vertical; margin-bottom:0.6rem;
+    /* Letters */
+    #loveLetter {
+      width: 100%; min-height: 100px; padding: 0.8rem;
+      border: 1px solid #ccc; border-radius: 8px;
+      resize: vertical; margin-top: 0.5rem;
     }
 
-    /* Comfort Plan Builder */
-    .plan-builder label { display:block; margin-top:0.8rem; font-weight:600; }
+    /* Comfort Plan */
+    .plan-builder label { display: block; margin-top: 0.8rem; font-weight: 600; }
     .plan-builder input, .plan-builder textarea {
-      width:100%; padding:0.6rem; border-radius:6px; border:1px solid #ccc; margin-top:0.4rem;
+      width: 100%; padding: 0.6rem; border: 1px solid #ccc;
+      border-radius: 6px; margin-top: 0.3rem;
     }
 
-    /* Myth Busters Carousel */
-    .carousel { overflow:hidden; }
+    /* Myth Carousel */
+    .carousel { overflow: hidden; margin-top:1rem; }
     .carousel-track {
-      display:flex; transition:transform 0.4s ease;
+      display: flex; transition: transform 0.4s ease;
     }
     .carousel-card {
-      min-width:280px; flex-shrink:0; background:var(--card-bg);
-      border-radius:10px; padding:1rem; margin-right:1rem; box-shadow:0 4px 16px var(--card-shadow);
+      min-width: 280px; flex-shrink: 0; margin-right: 1rem;
+      background: var(--card-bg); border-radius: 8px; padding: 1rem;
+      box-shadow: 0 4px 12px var(--shadow);
     }
-    .carousel-controls { text-align:center; margin-top:0.6rem; }
-    .carousel-btn { background: var(--primary); margin:0 0.2rem; }
+    .carousel-controls { text-align: center; margin-top: 0.5rem; }
+    .carousel-btn { margin: 0 0.3rem; }
 
-    /* Modal Overlay */
-    .modal-overlay {
-      display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);
-      justify-content:center; align-items:center; padding:1rem; z-index:500;
+    /* Modal */
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      display: none; z-index: 500;
     }
-    .modal-overlay.active { display:flex; }
-    .modal-content {
-      background:white; padding:1.5rem; border-radius:12px;
-      max-width:500px; max-height:80vh; overflow-y:auto;
-      box-shadow:0 8px 30px var(--card-shadow); position:relative;
+    .modal {
+      position: fixed; top:50%; left:50%;
+      transform: translate(-50%,-50%);
+      background: var(--card-bg); padding: 1.5rem;
+      border-radius: 10px; box-shadow: 0 20px 40px var(--shadow);
+      display: none; z-index: 501; max-width:90%; width:360px;
     }
-    .modal-close {
-      position:absolute; top:0.6rem; right:0.8rem;
-      background:transparent; font-size:1.6rem; cursor:pointer; color:var(--accent);
+    .modal h3 { margin-top: 0; color: var(--accent); }
+    .modal p { margin: 0.5rem 0; line-height: 1.4; }
+    .close-btn {
+      margin-top: 1rem; background: #E91E63; color: #fff;
+      padding: 0.5rem 1rem; border: none; border-radius: 6px;
+      cursor: pointer;
     }
 
-    /* Mood Tracker */
-    .mood-buttons { display:flex; justify-content:space-between; margin-bottom:1rem; }
-    .mood-btn {
-      flex-grow:1; margin:0 0.2rem; font-size:2.2rem; background:#ddd; border-radius:10px;
-      display:flex; align-items:center; justify-content:center; transition:transform 0.2s,background 0.3s;
-    }
-    .mood-btn[aria-checked="true"], .mood-btn:hover, .mood-btn:focus {
-      background: var(--primary); color:#fff; transform:scale(1.1); outline:none;
-      box-shadow:0 0 12px var(--card-shadow);
-    }
-    .progress-bar { background:#eee; border-radius:20px; height:10px; overflow:hidden; }
-    .progress-fill { height:100%; background:var(--primary-light); width:0; transition:width 0.4s; }
-    #moodMessage { margin-top:0.8rem; font-style:italic; font-weight:600; color:var(--accent); }
+    textarea { margin-top: 0.5rem; }
 
-    /* Journal */
-    #journalEntry { width:100%; height:120px; border:2px solid #dcd7ff; border-radius:10px;
-      padding:0.8rem; margin-bottom:0.6rem; resize:vertical; }
-    #journalEntry:focus { border-color:var(--primary); }
-    #journalMessage { font-weight:600; color:var(--accent); }
-
-    /* Additional Resources & Contacts */
-    ul { padding-left:1.2rem; margin-top:0; }
-    ul li { margin-bottom:0.5rem; }
-    ul li a { color:var(--primary); font-weight:600; text-decoration:none; }
-    ul li a:hover, ul li a:focus { text-decoration:underline; outline:none; }
-
-    /* Responsive */
-    @media (max-width:600px) {
-      .grid { display:block; }
+    @media (max-width: 600px) {
+      .body-map { height: 250px; }
       #themeSelector { top:0.5rem; left:0.5rem; }
       #sosBtn { bottom:0.5rem; left:0.5rem; }
     }
@@ -189,351 +167,250 @@
 </head>
 <body>
 
-  <!-- Theme Selector -->
+  <!-- Theme & SOS -->
   <select id="themeSelector">
-    <option value="light">Light Theme</option>
-    <option value="dark">Dark Theme</option>
-    <option value="calm">Calm Pastel</option>
+    <option value="light">Light</option>
+    <option value="dark">Dark</option>
+    <option value="calm">Calm</option>
   </select>
+  <button id="sosBtn" aria-label="SOS">🆘</button>
 
-  <!-- SOS Button -->
-  <button id="sosBtn" aria-label="SOS Button">🆘</button>
-
-  <h1>Grief Support Toolkit</h1>
   <div class="container">
+    <h1>Grief Support Toolkit</h1>
     <div class="grid">
 
-      <!-- Section: Memory Garden -->
-      <section class="card" aria-labelledby="garden-title">
-        <h2 id="garden-title"><span class="icon">🌺</span>Memory Garden</h2>
-        <p>Plant a tribute for someone you miss.</p>
-        <button id="plantBtn">Plant Tribute</button>
+      <!-- Memory Garden -->
+      <section class="card">
+        <h2>Memory Garden 🌺</h2>
+        <button onclick="plantTribute()">Plant Tribute</button>
         <div id="garden"></div>
       </section>
 
-      <!-- Section: Grief in Your Body Explorer -->
-      <section class="card" aria-labelledby="body-title">
-        <h2 id="body-title"><span class="icon">🗺️</span>Grief in Your Body</h2>
-        <p>Click areas to learn how grief can show physically.</p>
+      <!-- Body Map -->
+      <section class="card">
+        <h2>Grief in Your Body 🗺️</h2>
+        <p>Tap where you feel tension or emotion:</p>
         <div class="body-map" id="bodyMap"></div>
       </section>
 
-      <!-- Section: Letters to Loved Ones -->
-      <section class="card" aria-labelledby="letter-title">
-        <h2 id="letter-title"><span class="icon">💌</span>Letters to Loved Ones</h2>
-        <textarea id="loveLetter" placeholder="Write a letter..."></textarea>
-        <button id="saveLetterBtn">Save Letter</button>
+      <!-- Letters -->
+      <section class="card">
+        <h2>Letters to Loved Ones 💌</h2>
+        <textarea id="loveLetter" placeholder="Write an unsent letter..."></textarea>
+        <button onclick="saveLetter()">Save Letter</button>
       </section>
 
-      <!-- Section: Comfort Plan Builder -->
-      <section class="card" aria-labelledby="plan-title">
-        <h2 id="plan-title"><span class="icon">🛡️</span>Comfort Plan Builder</h2>
+      <!-- Comfort Plan -->
+      <section class="card">
+        <h2>Comfort Plan Builder 🛡️</h2>
         <div class="plan-builder">
-          <label for="helpContact">Who to call:</label>
-          <input id="helpContact" placeholder="Name & phone/email" />
-          <label for="soothingActivities">Soothing activities:</label>
+          <label for="helpContact">Who to Call</label>
+          <input id="helpContact" placeholder="Name & contact"/>
+          <label for="soothingActivities">Soothing Activities</label>
           <textarea id="soothingActivities" placeholder="e.g. music, walk"></textarea>
-          <label for="avoidList">What to avoid:</label>
+          <label for="avoidList">What to Avoid</label>
           <textarea id="avoidList" placeholder="e.g. social media"></textarea>
-          <label for="affirmations">My affirmations:</label>
+          <label for="affirmations">My Affirmations</label>
           <textarea id="affirmations" placeholder="e.g. I am allowed to feel"></textarea>
-          <button id="savePlanBtn">Save My Plan</button>
+          <button onclick="savePlan()">Save Plan</button>
         </div>
       </section>
 
-      <!-- Section: Grief Myth Busters Carousel -->
-      <section class="card" aria-labelledby="myth-title">
-        <h2 id="myth-title"><span class="icon">❌</span>Grief Myth Busters</h2>
-        <div class="carousel" tabindex="0">
+      <!-- Myth Busters -->
+      <section class="card">
+        <h2>Myth Busters ❌</h2>
+        <div class="carousel">
           <div class="carousel-track" id="mythTrack">
             <div class="carousel-card">
               <p><strong>Myth:</strong> Time heals all wounds.</p>
-              <p><em>Reality:</em> Healing is ongoing; you learn to live with pain.</p>
+              <p><em>Truth:</em> Support & self-care are essential.</p>
             </div>
             <div class="carousel-card">
               <p><strong>Myth:</strong> You should be “over it” by now.</p>
-              <p><em>Reality:</em> Grief has no timeline—every journey is unique.</p>
+              <p><em>Truth:</em> Grief has its own timeline.</p>
             </div>
             <div class="carousel-card">
-              <p><strong>Myth:</strong> Crying means weakness.</p>
-              <p><em>Reality:</em> Tears are healing, not a sign of weakness.</p>
+              <p><strong>Myth:</strong> Crying is weakness.</p>
+              <p><em>Truth:</em> Tears help you heal.</p>
             </div>
           </div>
         </div>
         <div class="carousel-controls">
-          <button class="carousel-btn" id="prevMyth">⟨</button>
-          <button class="carousel-btn" id="nextMyth">⟩</button>
+          <button class="carousel-btn" id="prevMyth">‹</button>
+          <button class="carousel-btn" id="nextMyth">›</button>
         </div>
       </section>
 
-    </div>
-
-    <h2 style="margin-top:2rem; color:var(--accent);">Core Toolkit</h2>
-    <div class="grid">
-
       <!-- Understanding Grief -->
-      <section class="card" aria-labelledby="ugb-title">
-        <h2 id="ugb-title"><span class="icon">💡</span>Understanding Grief</h2>
-        <p>Grief is a natural response to loss with many emotions and stages.</p>
-        <button id="openGriefModal">Read More</button>
+      <section class="card">
+        <h2>Understanding Grief 💡</h2>
+        <ul>
+          <li><a href="#" onclick="openModal('Stages','Denial, Anger, Bargaining, Depression, Acceptance')">Five Stages</a></li>
+          <li><a href="#" onclick="openModal('Types','Anticipatory, Complicated, Disenfranchised')">Types</a></li>
+          <li><a href="#" onclick="openModal('Myths','Time heals all? Not alone—support helps.')">Myths</a></li>
+        </ul>
       </section>
 
       <!-- Coping Strategies -->
-      <section class="card" aria-labelledby="cs-title">
-        <h2 id="cs-title"><span class="icon">🛠️</span>Coping Strategies</h2>
-        <div class="strategy-list">
-          <button class="strategy-card" data-strategy="Breathing">Breathing</button>
-          <button class="strategy-card" data-strategy="Journaling">Journaling</button>
-          <button class="strategy-card" data-strategy="Exercise">Exercise</button>
-          <button class="strategy-card" data-strategy="Connection">Connection</button>
-          <button class="strategy-card" data-strategy="Mindfulness">Mindfulness</button>
-          <button class="strategy-card" data-strategy="Help">Help</button>
-        </div>
+      <section class="card">
+        <h2>Coping Strategies 🛠️</h2>
+        <ul>
+          <li><a href="#" onclick="openModal('Breathing','Inhale 4s, hold 7s, exhale 8s')">Breathing</a></li>
+          <li><a href="#" onclick="openModal('Grounding','5-4-3-2-1 senses')">Grounding</a></li>
+          <li><a href="#" onclick="openModal('Walk','Gentle walk to shift energy')">Walk</a></li>
+        </ul>
       </section>
 
-      <!-- Journaling -->
-      <section class="card" aria-labelledby="jr-title">
-        <h2 id="jr-title"><span class="icon">✍️</span>Journaling</h2>
-        <textarea id="journalEntry" placeholder="Write your thoughts..."></textarea>
-        <button id="saveJournalBtn">Save Entry</button>
-        <p id="journalMessage"></p>
+      <!-- Journal -->
+      <section class="card">
+        <h2>Journal Space 📓</h2>
+        <textarea id="journalEntry" placeholder="Write your feelings..."></textarea>
+        <button onclick="saveJournal()">Save Entry</button>
       </section>
 
       <!-- Mood Tracker -->
-      <section class="card" aria-labelledby="mt-title">
-        <h2 id="mt-title"><span class="icon">😊</span>Mood Tracker</h2>
-        <div class="mood-buttons" role="radiogroup">
-          <button class="mood-btn" data-mood="1" aria-checked="false" role="radio">😞</button>
-          <button class="mood-btn" data-mood="2" aria-checked="false" role="radio">😟</button>
-          <button class="mood-btn" data-mood="3" aria-checked="false" role="radio">😐</button>
-          <button class="mood-btn" data-mood="4" aria-checked="false" role="radio">🙂</button>
-          <button class="mood-btn" data-mood="5" aria-checked="false" role="radio">😄</button>
+      <section class="card">
+        <h2>Mood Tracker 😊</h2>
+        <div class="mood-buttons" id="moodBtns">
+          <button data-mood="1" aria-checked="false" role="radio">😞</button>
+          <button data-mood="2" aria-checked="false" role="radio">😟</button>
+          <button data-mood="3" aria-checked="false" role="radio">😐</button>
+          <button data-mood="4" aria-checked="false" role="radio">🙂</button>
+          <button data-mood="5" aria-checked="false" role="radio">😄</button>
         </div>
-        <div class="progress-bar"><div class="progress-fill"></div></div>
-        <p id="moodMessage"></p>
+        <div class="progress-bar"><div class="progress-fill" id="moodFill"></div></div>
+        <p id="moodMsg"></p>
       </section>
 
-      <!-- Emergency Support -->
-      <section class="card emergency-section" aria-labelledby="es-title">
-        <h2 id="es-title"><span class="icon">🚨</span>Emergency Support</h2>
-        <p>If you or someone you know is in crisis:</p>
-        <p class="emergency-number"><a href="tel:1-833-456-4566">Canada Suicide Prevention: 1-833-456-4566</a></p>
-        <p><a href="https://www.crisisservicescanada.ca/en/" target="_blank">Visit Crisis Services Canada</a></p>
+      <!-- Emergency & Resources -->
+      <section class="card">
+        <h2>Emergency Support 🚨</h2>
+        <p>If in crisis, call <strong>1-833-456-4566</strong> or 911.</p>
+        <p><a href="https://www.crisisservicescanada.ca" target="_blank">Visit Crisis Services Canada</a></p>
       </section>
-
-      <!-- Additional Resources -->
-      <section class="card" aria-labelledby="ar-title">
-        <h2 id="ar-title"><span class="icon">📚</span>Additional Resources</h2>
+      <section class="card">
+        <h2>Resources 📚</h2>
         <ul>
-          <li><a href="https://www.griefshare.org/" target="_blank">GriefShare</a></li>
-          <li><a href="https://www.cmha.ca/" target="_blank">Canadian Mental Health Assoc.</a></li>
-          <li><a href="https://suicidepreventionlifeline.org/" target="_blank">US Suicide Lifeline</a></li>
-          <li><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">SAMHSA Helpline (US)</a></li>
+          <li><a href="https://www.dougy.org" target="_blank">Dougy Center</a></li>
+          <li><a href="https://www.griefshare.org" target="_blank">GriefShare</a></li>
+          <li><a href="https://www.psychologytoday.com/ca" target="_blank">Therapists (CA)</a></li>
         </ul>
       </section>
 
-      <!-- Support Contacts -->
-      <section class="card" aria-labelledby="sc-title">
-        <h2 id="sc-title"><span class="icon">☎️</span>Support Contacts</h2>
-        <ul>
-          <li><a href="https://www.suicideprevention.ca/" target="_blank">Canadian Suicide Prevention</a></li>
-          <li><a href="https://www.nimh.nih.gov" target="_blank">NIMH Coping Resources</a></li>
-          <li><a href="https://www.bereavedfamilies.net/" target="_blank">Bereaved Families of Ontario</a></li>
-        </ul>
-      </section>
+      <!-- Analytics -->
+      <button id="showAnalytics" style="grid-column:1/-1;margin:1rem auto;display:block;">📊 View Analytics</button>
+      <div id="analyticsPanel" style="display:none;grid-column:1/-1;padding:1rem;background:var(--card-bg);border-radius:8px;box-shadow:0 8px 20px var(--shadow);">
+        <h2 style="margin-top:0;color:var(--accent);">Analytics</h2>
+        <ul id="analyticsList" style="padding-left:1.2rem;"></ul>
+        <button onclick="toggleAnalytics()">Close</button>
+      </div>
 
     </div>
   </div>
 
-  <!-- Modal Overlay -->
-  <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true">
-      <button class="modal-close" aria-label="Close">&times;</button>
-      <h3 id="modalTitle"></h3>
-      <div id="modalBody" class="modal-body"></div>
-    </div>
-  </div>
-
-  <!-- Analytics Button & Panel -->
-  <button id="showAnalytics" aria-label="Show analytics">📊</button>
-  <div id="analyticsPanel" role="region" aria-live="polite" style="display:none;position:fixed;bottom:80px;right:1rem;background:var(--card-bg);padding:1rem;border-radius:8px;box-shadow:0 8px 24px var(--card-shadow);max-width:280px;z-index:100;">
-    <h4 style="margin-top:0;color:var(--accent);">Usage Analytics</h4>
-    <ul id="analyticsList" style="padding-left:1.2rem;margin:0 0 1rem;"></ul>
-    <button id="closeAnalyticsBtn" style="width:100%;">Close</button>
+  <!-- Overlay & Modal -->
+  <div class="overlay" id="overlay"></div>
+  <div class="modal" id="modal">
+    <h3 id="modalTitle"></h3>
+    <p id="modalContent"></p>
+    <button class="close-btn" onclick="closeModal()">Close</button>
   </div>
 
   <script>
-    // Theme Switcher
-    const themeSelector = document.getElementById('themeSelector');
-    themeSelector.addEventListener('change', e => {
+    // Theme switch
+    document.getElementById('themeSelector').addEventListener('change', e => {
       document.body.className = 'theme-' + e.target.value;
     });
 
-    // SOS Button
-    document.getElementById('sosBtn').addEventListener('click', () => {
-      openModal('SOS & Grounding', `
-        <p><strong>Canada Suicide Prevention Service:</strong> <a href="tel:1-833-456-4566">1-833-456-4566</a></p>
-        <p><strong>Emergency:</strong> Call 911</p>
-        <p><strong>Grounding:</strong></p>
-        <ul><li>Name 5 things you see</li><li>Name 4 things you touch</li><li>Name 3 things you hear</li><li>Name 2 things you smell</li><li>Name 1 thing you taste</li></ul>
-      `);
-      incrementAnalytics('SOS');
+    // SOS
+    document.getElementById('sosBtn').addEventListener('click', ()=>{
+      openModal('SOS / Grounding','Call 1-833-456-4566 or 911.<br>Ground: 5-4-3-2-1 senses.');
+      log('SOS');
     });
-
-    // Modal Logic
-    const modalOverlay = document.getElementById('modalOverlay');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
-    const closeModalBtn = modalOverlay.querySelector('.modal-close');
-    let lastFocus;
-    function openModal(title, content) {
-      lastFocus = document.activeElement;
-      modalTitle.textContent = title;
-      modalBody.innerHTML = content;
-      modalOverlay.setAttribute('aria-hidden','false');
-      modalOverlay.style.display = 'flex';
-      closeModalBtn.focus();
-    }
-    function closeModal() {
-      modalOverlay.setAttribute('aria-hidden','true');
-      modalOverlay.style.display = 'none';
-      if(lastFocus) lastFocus.focus();
-    }
-    closeModalBtn.addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', e => {
-      if(e.target === modalOverlay) closeModal();
-    });
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modalOverlay.style.display==='flex') closeModal(); });
 
     // Memory Garden
-    document.getElementById('plantBtn').addEventListener('click', ()=>{
-      const type = prompt('Enter tribute (e.g. 🌸 Flower):');
-      if(!type) return;
-      const item = document.createElement('div');
-      item.className='garden-item';
-      item.textContent=type;
-      document.getElementById('garden').appendChild(item);
-      incrementAnalytics('Plant ' + type);
-    });
+    window.plantTribute = ()=>{
+      const t = prompt('Tribute (emoji or text):');
+      if(!t) return;
+      const d=document.createElement('div');
+      d.className='garden-item'; d.textContent=t;
+      document.getElementById('garden').appendChild(d);
+      log('Plant '+t);
+    };
 
-    // Grief-in-Body Explorer
-    const spots = [
-      {top:'20%',left:'50%',label:'Chest tightness'},
-      {top:'50%',left:'60%',label:'Headache'},
-      {top:'70%',left:'45%',label:'Stomach ache'}
-    ];
+    // Body map hotspots
+    const spots=[{top:'18%',left:'48%',tip:'Chest tension: breathe slowly.'},
+                 {top:'35%',left:'50%',tip:'Stomach ache: sip warm tea.'},
+                 {top:'60%',left:'47%',tip:'Leg heaviness: gentle movement.'}];
     spots.forEach(s=>{
       const el=document.createElement('div');
-      el.className='body-spot';
-      el.style.top=s.top; el.style.left=s.left;
-      el.title=s.label; el.tabIndex=0;
-      el.addEventListener('click',()=>{
-        openModal('Physical Sensation', `<p><strong>${s.label}:</strong> Common in grief. Try gentle breathing or warmth.</p>`);
-        incrementAnalytics('Body ' + s.label);
-      });
+      el.className='body-spot'; el.style.top=s.top; el.style.left=s.left;
+      el.onclick=()=>{openModal('Physical Sign',s.tip); log('Body '+s.tip);};
       document.getElementById('bodyMap').appendChild(el);
     });
 
-    // Letters to Loved Ones
-    const loveLetter=document.getElementById('loveLetter');
-    document.getElementById('saveLetterBtn').addEventListener('click',()=>{
-      localStorage.setItem('loveLetter', loveLetter.value);
-      alert('Letter saved.');
-      incrementAnalytics('Save Letter');
-    });
-    if(localStorage.getItem('loveLetter')) loveLetter.value = localStorage.getItem('loveLetter');
+    // Save letter
+    window.saveLetter = ()=>{
+      localStorage.setItem('loveLetter',document.getElementById('loveLetter').value);
+      alert('Letter saved.'); log('Letter');
+    };
+    if(localStorage.getItem('loveLetter'))
+      document.getElementById('loveLetter').value=localStorage.getItem('loveLetter');
 
-    // Comfort Plan Builder
-    document.getElementById('savePlanBtn').addEventListener('click',()=>{
+    // Save comfort plan
+    window.savePlan = ()=>{
       const plan={
         call:document.getElementById('helpContact').value,
-        activity:document.getElementById('soothingActivities').value,
+        act:document.getElementById('soothingActivities').value,
         avoid:document.getElementById('avoidList').value,
-        affirm:document.getElementById('affirmations').value
+        aff:document.getElementById('affirmations').value
       };
-      localStorage.setItem('comfortPlan', JSON.stringify(plan));
-      alert('Comfort plan saved.');
-      incrementAnalytics('Save Plan');
-    });
-
-    // Myth Busters Carousel
-    const track=document.getElementById('mythTrack');
-    const prevBtn=document.getElementById('prevMyth');
-    const nextBtn=document.getElementById('nextMyth');
-    let idx=0;
-    function updateCarousel(){
-      const w=track.children[0].offsetWidth+16;
-      track.style.transform=`translateX(-${idx*w}px)`;
-    }
-    prevBtn.addEventListener('click',()=>{ idx=Math.max(0,idx-1); updateCarousel(); incrementAnalytics('Myth Prev'); });
-    nextBtn.addEventListener('click',()=>{ idx=Math.min(track.children.length-1,idx+1); updateCarousel(); incrementAnalytics('Myth Next'); });
-
-    // Basic Analytics
-    const analyticsBtn=document.getElementById('showAnalytics');
-    const analyticsPanel=document.getElementById('analyticsPanel');
-    const analyticsList=document.getElementById('analyticsList');
-    document.getElementById('closeAnalyticsBtn').addEventListener('click',()=>{
-      analyticsPanel.style.display='none'; analyticsBtn.style.display='inline-block';
-    });
-    analyticsBtn.addEventListener('click',()=>{
-      analyticsPanel.style.display='block'; analyticsBtn.style.display='none';
-      analyticsList.innerHTML=Object.keys(analytics).length
-        ? Object.entries(analytics).map(([k,v])=>`<li>${k}: ${v}</li>`).join('')
-        : '<li>No interactions yet.</li>';
-    });
-    let analytics={};
-    function incrementAnalytics(k){ analytics[k]=(analytics[k]||0)+1; }
-
-    // Core Toolkit: Understanding Grief
-    document.getElementById('openGriefModal').addEventListener('click',()=>{
-      openModal('Understanding Grief', `
-        <p>Grief is your natural response to loss. You may feel many emotions and physical sensations.</p>
-        <p><strong>Stages:</strong> Denial, Anger, Bargaining, Depression, Acceptance.</p>
-        <p>Everyone’s grief is unique—give yourself time and permission to feel.</p>
-      `); incrementAnalytics('Read Grief Info');
-    });
-
-    // Coping Strategies
-    const strategies={
-      Breathing:`<div class="breathing-circle"></div><p>Deep breathing: inhale 4s, hold 4s, exhale 4s. Repeat.</p>`,
-      Journaling:`<p>Write daily prompts: “What helped today?” “What do I miss?”</p>`,
-      Exercise:`<p>Gentle walk or stretch for 10 minutes.</p>`,
-      Connection:`<p>Call a friend or join a support group online.</p>`,
-      Mindfulness:`<p>Focus on the present moment with a 5-minute meditation.</p>`,
-      Help:`<p>Reach out to a counselor or call crisis lines if needed.</p>`
+      localStorage.setItem('comfortPlan',JSON.stringify(plan));
+      alert('Plan saved.'); log('Plan');
     };
-    document.querySelectorAll('.strategy-card').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const s=btn.getAttribute('data-strategy');
-        openModal(s, strategies[s]||'<p>Info coming soon.</p>');
-        incrementAnalytics('Strategy ' + s);
-      });
-    });
 
-    // Journaling
-    const journalEntry=document.getElementById('journalEntry');
-    document.getElementById('saveJournalBtn').addEventListener('click',()=>{
-      if(!journalEntry.value.trim()){ document.getElementById('journalMessage').textContent='Write something first.'; return; }
-      localStorage.setItem('journalEntry', journalEntry.value);
-      document.getElementById('journalMessage').textContent='Entry saved!';
-      incrementAnalytics('Save Journal');
-    });
-    if(localStorage.getItem('journalEntry')) journalEntry.value=localStorage.getItem('journalEntry');
+    // Myth carousel
+    let idx=0; const track=document.getElementById('mythTrack');
+    const cards=track.children.length;
+    document.getElementById('prevMyth').onclick=()=>{ idx=Math.max(0,idx-1); update(); log('Myth Prev');};
+    document.getElementById('nextMyth').onclick=()=>{ idx=Math.min(cards-1,idx+1); update(); log('Myth Next');};
+    function update(){
+      const w=track.children[0].offsetWidth+16;
+      track.style.transform='translateX(-'+(idx*w)+'px)';
+    }
 
-    // Mood Tracker
-    const moodBtns=document.querySelectorAll('.mood-btn');
-    const prog=document.querySelector('.progress-fill');
-    const moodMsg=document.getElementById('moodMessage');
-    const texts={1:"Very Sad",2:"Sad",3:"Neutral",4:"Happy",5:"Very Happy"};
-    moodBtns.forEach((btn,i)=>{
-      btn.addEventListener('click',()=>{
-        moodBtns.forEach(b=>b.setAttribute('aria-checked','false'));
-        btn.setAttribute('aria-checked','true');
-        const val=i+1; prog.style.width=val*20+'%';
-        moodMsg.textContent=texts[val];
-        incrementAnalytics('Mood '+val);
-      });
-    });
+    // Journal
+    window.saveJournal=()=>{
+      localStorage.setItem('journalEntry',document.getElementById('journalEntry').value);
+      alert('Journal saved.'); log('Journal');
+    };
+    if(localStorage.getItem('journalEntry'))
+      document.getElementById('journalEntry').value=localStorage.getItem('journalEntry');
+
+    // Modals & Overlay
+    const overlay=document.getElementById('overlay'), mdl=document.getElementById('modal');
+    window.openModal=(t,c)=>{
+      document.getElementById('modalTitle').innerText=t;
+      document.getElementById('modalContent').innerHTML=c;
+      overlay.style.display=mdl.style.display='block';
+    };
+    window.closeModal=()=>{ overlay.style.display=mdl.style.display='none'; };
+
+    // Analytics
+    const analytics={}, aBtn=document.getElementById('showAnalytics'),
+          aPanel=document.getElementById('analyticsPanel'),
+          aList=document.getElementById('analyticsList');
+    window.log=k=>{ analytics[k]=(analytics[k]||0)+1; };
+    window.toggleAnalytics=()=>{
+      if(aPanel.style.display==='block'){
+        aPanel.style.display='none'; aBtn.style.display='inline-block';
+      } else {
+        aList.innerHTML=Object.keys(analytics).length
+          ?Object.entries(analytics).map(([k,v])=>`<li>${k}: ${v}</li>`).join('')
+          :'<li>No interactions yet.</li>';
+        aPanel.style.display='block'; aBtn.style.display='none';
+      }
+    };
   </script>
 </body>
 </html>
