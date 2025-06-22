@@ -1,339 +1,509 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mindfulness Toolkit</title>
-<style>
-  /* Reset & base */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0; padding: 0;
-    background: #f0f4f8;
-    color: #333;
-    line-height: 1.6;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  h1, h2, h3 {
-    font-weight: 600;
-    color: #2a4058;
-  }
-  a {
-    color: #1976d2;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-  main {
-    max-width: 800px;
-    margin: 1.5rem auto 3rem auto;
-    padding: 0 1rem;
-  }
-  section {
-    background: #fff;
-    margin-bottom: 2rem;
-    padding: 1.5rem 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-  }
-  button {
-    background: #1976d2;
-    border: none;
-    color: white;
-    font-weight: 600;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-  }
-  button:hover {
-    background: #155a9c;
-  }
-  /* Breathing animation circle */
-  #breathCircle {
-    margin: 1rem auto 0 auto;
-    width: 120px;
-    height: 120px;
-    border: 4px solid #1976d2;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    color: #1976d2;
-    user-select: none;
-  }
-
-  /* Feelings Wheel Styles */
-  #feelingsWheel {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
-    gap: 0.8rem;
-    margin-top: 1rem;
-  }
-  .feeling {
-    background: #e3f2fd;
-    border-radius: 12px;
-    padding: 0.8rem;
-    text-align: center;
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.3s;
-    border: 2px solid transparent;
-  }
-  .feeling.selected {
-    background: #1976d2;
-    color: white;
-    border-color: #0d47a1;
-  }
-
-  /* Journal section */
-  textarea {
-    width: 100%;
-    min-height: 120px;
-    font-size: 1rem;
-    padding: 0.8rem;
-    border-radius: 10px;
-    border: 1.5px solid #ccc;
-    resize: vertical;
-    font-family: inherit;
-  }
-  label {
-    display: block;
-    margin-bottom: 0.3rem;
-    font-weight: 600;
-    color: #2a4058;
-  }
-  .btn-primary {
-    margin-top: 0.7rem;
-  }
-  /* Dark mode */
-  body.dark {
-    background: #1a202c;
-    color: #cbd5e0;
-  }
-  body.dark section {
-    background: #2d3748;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.9);
-  }
-  body.dark button {
-    background: #63b3ed;
-    color: #1a202c;
-  }
-  body.dark button:hover {
-    background: #4299e1;
-  }
-  body.dark a {
-    color: #90cdf4;
-  }
-
-  /* Responsive */
-  @media (max-width: 500px) {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🌈 Mindfulness Toolkit 🌟</title>
+  <style>
+    /* Mobile first base styles */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #fef6e4 0%, #ffe8d6 100%);
+      color: #3b3a39;
+      margin: 0; padding: 0;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding-bottom: 4rem;
+    }
+    h1, h2, h3 {
+      font-weight: 700;
+      color: #e07a5f;
+      text-align: center;
+      text-shadow: 1px 1px 3px #e07a5f88;
+      margin: 1rem 0 0.4rem 0;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.6rem;
+    }
     main {
-      margin: 1rem;
-      padding: 0 0.5rem;
+      width: 100%;
+      max-width: 440px;
+      background: #fff3e6;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(224, 122, 95, 0.35);
+      padding: 1.5rem 1.5rem 2rem 1.5rem;
+      margin: 1rem auto 3rem auto;
+      user-select: none;
     }
-    #breathCircle {
-      width: 100px;
-      height: 100px;
-      font-size: 1.1rem;
+    section {
+      margin-bottom: 2rem;
+      background: #ffffffcc;
+      border-radius: 18px;
+      padding: 1rem 1.3rem 1.3rem 1.3rem;
+      box-shadow: 0 6px 10px rgba(224, 122, 95, 0.25);
     }
-  }
+    p, li {
+      font-size: 1rem;
+      color: #4a4a48;
+    }
+    ul, ol {
+      padding-left: 1.2rem;
+      margin-top: 0.2rem;
+      margin-bottom: 0.8rem;
+    }
+    ul li, ol li {
+      margin-bottom: 0.4rem;
+    }
+    a {
+      color: #f28482;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #e07a5f;
+      text-decoration: underline;
+    }
 
-</style>
+    /* Buttons */
+    button {
+      background: #f28482;
+      border: none;
+      border-radius: 30px;
+      padding: 0.7rem 1.5rem;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(242, 132, 130, 0.4);
+      transition: background-color 0.3s ease;
+      user-select: none;
+      display: block;
+      margin: 1rem auto 0 auto;
+      width: 90%;
+      max-width: 280px;
+    }
+    button:hover {
+      background: #e07a5f;
+      box-shadow: 0 8px 18px rgba(224, 122, 95, 0.6);
+    }
+
+    /* Breathing circle */
+    #breathCircle {
+      margin: 1rem auto 0 auto;
+      width: 130px;
+      height: 130px;
+      border: 6px solid #f28482;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #f28482;
+      font-weight: 700;
+      user-select: none;
+      transition: transform 0.4s ease-in-out;
+      box-shadow: 0 4px 10px rgba(242, 132, 130, 0.4);
+    }
+
+    /* Feelings wheel */
+    #feelingsWheel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(110px,1fr));
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+    .feeling {
+      background: #ffcad4;
+      border-radius: 24px;
+      padding: 0.9rem 0.7rem;
+      text-align: center;
+      font-weight: 700;
+      cursor: pointer;
+      color: #6a515e;
+      user-select: none;
+      box-shadow: 0 3px 7px rgba(255, 202, 212, 0.5);
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+      outline-offset: 2px;
+    }
+    .feeling:hover, .feeling:focus {
+      background: #f28482;
+      color: white;
+      box-shadow: 0 6px 14px rgba(242, 132, 130, 0.7);
+      outline: none;
+    }
+    .feeling.selected {
+      background: #e07a5f;
+      color: white;
+      box-shadow: 0 6px 14px rgba(224, 122, 95, 0.8);
+    }
+
+    /* Journal */
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #e07a5f;
+    }
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      border-radius: 16px;
+      border: 2px solid #f28482;
+      padding: 0.8rem 1rem;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 1rem;
+      color: #4a4a48;
+      resize: vertical;
+      box-shadow: 0 3px 10px rgba(242, 132, 130, 0.3);
+      transition: border-color 0.3s ease;
+    }
+    textarea:focus {
+      border-color: #e07a5f;
+      outline: none;
+      box-shadow: 0 4px 14px rgba(224, 122, 95, 0.6);
+    }
+
+    /* Save message */
+    #saveMsg {
+      text-align: center;
+      font-weight: 700;
+      margin-top: 0.5rem;
+      color: #6ab04c;
+      min-height: 1.3rem;
+    }
+
+    /* Header */
+    header {
+      width: 100%;
+      background: #f28482;
+      color: white;
+      padding: 1rem 0 1rem 0;
+      box-shadow: 0 6px 12px rgba(242, 132, 130, 0.6);
+      user-select: none;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.1rem;
+      font-weight: 900;
+      letter-spacing: 1.4px;
+      text-align: center;
+      text-shadow: 2px 2px 4px #d95641cc;
+    }
+    #toggleThemeBtn {
+      background: #f7b733;
+      color: #512da8;
+      font-weight: 700;
+      margin-top: 0.8rem;
+      max-width: 180px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(247, 183, 51, 0.7);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      cursor: pointer;
+      user-select: none;
+    }
+    #toggleThemeBtn:hover {
+      background: #512da8;
+      color: #f7b733;
+      box-shadow: 0 8px 18px rgba(81, 45, 168, 0.9);
+    }
+
+    /* Dark mode styles */
+    body.dark {
+      background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+      color: #f0e6f6;
+    }
+    body.dark main {
+      background: #34495ecc;
+      box-shadow: 0 10px 25px rgba(52, 73, 94, 0.9);
+    }
+    body.dark section {
+      background: #3d566ecc;
+      box-shadow: 0 8px 18px rgba(81, 45, 168, 0.6);
+      color: #f0e6f6;
+    }
+    body.dark h1, body.dark h2 {
+      color: #f7b733;
+      text-shadow: 2px 2px 6px #f7b733bb;
+    }
+    body.dark a {
+      color: #f7b733;
+    }
+    body.dark a:hover {
+      color: #f28482;
+    }
+    body.dark button {
+      background: #f7b733;
+      color: #2c3e50;
+      box-shadow: 0 6px 15px rgba(247, 183, 51, 0.9);
+    }
+    body.dark button:hover {
+      background: #d4af37;
+      color: #1b263b;
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 1);
+    }
+    body.dark #breathCircle {
+      border-color: #f7b733;
+      color: #f7b733;
+      box-shadow: 0 6px 14px rgba(247, 183, 51, 0.8);
+    }
+    body.dark .feeling {
+      background: #7960a4;
+      color: #f0e6f6;
+      box-shadow: 0 3px 7px rgba(121, 96, 164, 0.6);
+    }
+    body.dark .feeling:hover, body.dark .feeling:focus {
+      background: #f7b733;
+      color: #2c3e50;
+      box-shadow: 0 6px 14px rgba(247, 183, 51, 0.9);
+    }
+    body.dark .feeling.selected {
+      background: #d4af37;
+      color: #2c3e50;
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 1);
+    }
+    body.dark textarea {
+      background: #2c3e50;
+      border-color: #f7b733;
+      color: #f0e6f6;
+      box-shadow: 0 3px 10px rgba(247, 183, 51, 0.5);
+    }
+    body.dark textarea:focus {
+      border-color: #d4af37;
+      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.8);
+    }
+    body.dark header {
+      background: #512da8;
+      box-shadow: 0 6px 14px rgba(81, 45, 168, 0.9);
+    }
+    body.dark #toggleThemeBtn {
+      background: #f28482;
+      color: #2c3e50;
+    }
+    body.dark #toggleThemeBtn:hover {
+      background: #e07a5f;
+      color: white;
+    }
+
+    /* Responsive tweaks */
+    @media (min-width: 481px) {
+      main {
+        padding: 2rem 2.5rem 2.5rem 2.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-<header style="text-align:center; padding:1rem 0; background:#1976d2; color:white;">
-  <h1>Mindfulness Toolkit</h1>
-  <button id="toggleThemeBtn" aria-label="Toggle dark/light theme">Toggle Dark Mode</button>
-</header>
+  <header>
+    <h1>🌈 Mindfulness Toolkit 🌟</h1>
+    <button id="toggleThemeBtn" aria-label="Toggle dark/light theme">Toggle Dark Mode</button>
+  </header>
+  <main>
 
-<main>
+    <!-- Introduction -->
+    <section id="intro">
+      <h2>What is Mindfulness?</h2>
+      <p>
+        Mindfulness is the simple but powerful practice of bringing your full attention to the present moment, without judging or trying to change it.
+      </p>
+      <p>
+        By cultivating mindfulness, you can better understand your thoughts and emotions, reduce stress, and improve your overall well-being.
+      </p>
+      <p><strong>Key benefits:</strong>  
+        <ul>
+          <li>Reduce anxiety and stress</li>
+          <li>Improve concentration and focus</li>
+          <li>Enhance emotional regulation</li>
+          <li>Develop self-compassion and kindness</li>
+          <li>Feel more calm and grounded</li>
+        </ul>
+      </p>
+    </section>
 
-  <!-- Introduction -->
-  <section id="intro">
-    <h2>What is Mindfulness?</h2>
-    <p>
-      Mindfulness means paying attention to the present moment — without judgment.  
-      It helps us become more aware of our thoughts, feelings, and body sensations, allowing us to respond calmly instead of reacting impulsively.  
-    </p>
-    <p><strong>Benefits include:</strong> less stress, better focus, improved emotional balance, and greater self-awareness.</p>
-  </section>
+    <!-- Breathing Exercise -->
+    <section id="breathing">
+      <h2>Breathing Exercise: 4-7-8 Breath</h2>
+      <p>This simple but effective technique helps calm your nervous system and anchor your attention. Follow the prompts below:</p>
+      <button id="startBreathBtn" aria-live="polite" aria-atomic="true">Start Exercise</button>
+      <div id="breathCircle" role="region" aria-live="polite" aria-atomic="true">Ready</div>
+      <p style="font-size:0.9rem; color:#a0503e; text-align:center; margin-top:0.5rem;">
+        Inhale for 4 seconds → Hold for 7 seconds → Exhale for 8 seconds
+      </p>
+    </section>
 
-  <!-- Breathing Exercise -->
-  <section id="breathing">
-    <h2>Breathing Exercise: 4-7-8 Breath</h2>
-    <p>This calming breathing technique helps reduce stress and anchor you in the present moment.</p>
-    <button id="startBreathBtn">Start Exercise</button>
-    <div id="breathCircle" aria-live="polite" aria-atomic="true" role="region">Ready</div>
-  </section>
+    <!-- Body Scan -->
+    <section id="bodyScan">
+      <h2>Guided Body Scan Meditation</h2>
+      <p>Relax your body and slowly bring your attention to each part, noticing sensations without judgment.</p>
+      <ol>
+        <li>Sit or lie down comfortably and close your eyes.</li>
+        <li>Take a deep breath and notice your feet. Are they warm, cold, tense, or relaxed?</li>
+        <li>Move your attention up to your calves and knees, then thighs and hips.</li>
+        <li>Notice your abdomen and chest rising and falling with breath.</li>
+        <li>Scan your shoulders, arms, hands, neck, and head.</li>
+        <li>If your mind wanders, gently bring it back to the sensations in your body.</li>
+        <li>Finish with a few deep breaths and open your eyes slowly.</li>
+      </ol>
+    </section>
 
-  <!-- Body Scan -->
-  <section id="bodyScan">
-    <h2>Guided Body Scan</h2>
-    <p>Focus your attention slowly and carefully on different parts of your body, noticing any sensations without judgment.</p>
-    <ol>
-      <li>Close your eyes and take a few deep breaths.</li>
-      <li>Bring attention to your feet. Notice how they feel.</li>
-      <li>Slowly move your focus upward to your legs, hips, abdomen, chest, arms, neck, and head.</li>
-      <li>If your mind wanders, gently bring it back to the body part.</li>
-      <li>Complete the scan feeling calm and grounded.</li>
-    </ol>
-  </section>
+    <!-- Feelings Wheel -->
+    <section id="feelings">
+      <h2>Check In: How Are You Feeling?</h2>
+      <p>Select any feeling(s) that best describe your current emotions. Naming feelings helps increase awareness and self-compassion.</p>
+      <div id="feelingsWheel" role="list" aria-label="Feelings wheel">
+        <div class="feeling" role="listitem" tabindex="0">Calm</div>
+        <div class="feeling" role="listitem" tabindex="0">Anxious</div>
+        <div class="feeling" role="listitem" tabindex="0">Happy</div>
+        <div class="feeling" role="listitem" tabindex="0">Sad</div>
+        <div class="feeling" role="listitem" tabindex="0">Frustrated</div>
+        <div class="feeling" role="listitem" tabindex="0">Grateful</div>
+        <div class="feeling" role="listitem" tabindex="0">Tired</div>
+        <div class="feeling" role="listitem" tabindex="0">Hopeful</div>
+        <div class="feeling" role="listitem" tabindex="0">Confused</div>
+        <div class="feeling" role="listitem" tabindex="0">Peaceful</div>
+      </div>
+    </section>
 
-  <!-- Feelings Wheel -->
-  <section id="feelings">
-    <h2>Check In: How Are You Feeling?</h2>
-    <p>Click on any feeling that matches your current emotion to acknowledge and name it.</p>
-    <div id="feelingsWheel" role="list">
-      <div class="feeling" role="listitem" tabindex="0">Calm</div>
-      <div class="feeling" role="listitem" tabindex="0">Anxious</div>
-      <div class="feeling" role="listitem" tabindex="0">Happy</div>
-      <div class="feeling" role="listitem" tabindex="0">Sad</div>
-      <div class="feeling" role="listitem" tabindex="0">Frustrated</div>
-      <div class="feeling" role="listitem" tabindex="0">Grateful</div>
-      <div class="feeling" role="listitem" tabindex="0">Tired</div>
-      <div class="feeling" role="listitem" tabindex="0">Hopeful</div>
-      <div class="feeling" role="listitem" tabindex="0">Confused</div>
-      <div class="feeling" role="listitem" tabindex="0">Peaceful</div>
-    </div>
-  </section>
+    <!-- Daily Mindfulness Tips -->
+    <section id="dailyTips">
+      <h2>Daily Mindfulness Tips</h2>
+      <ul>
+        <li>Start your day with a few deep breaths to set an intention.</li>
+        <li>Try to notice the small details during everyday activities like eating or walking.</li>
+        <li>Use reminders (alarms or sticky notes) to pause and breathe throughout your day.</li>
+        <li>Practice self-compassion — kindness to yourself is key.</li>
+        <li>End the day by reflecting on three things you are grateful for.</li>
+      </ul>
+    </section>
 
-  <!-- Daily Mindfulness Tips -->
-  <section id="dailyTips">
-    <h2>Daily Mindfulness Tips</h2>
-    <ul>
-      <li>Pause and take 3 deep breaths before starting a new task.</li>
-      <li>Notice the sensations when you eat, drink, or walk.</li>
-      <li>Use reminders like phone alarms or sticky notes to pause.</li>
-      <li>Be kind to yourself if your mind wanders — gently return to the present.</li>
-      <li>Practice gratitude by naming 3 things you appreciate each day.</li>
-    </ul>
-  </section>
+    <!-- Journal Prompt -->
+    <section id="journal">
+      <h2>Mindfulness Journal</h2>
+      <label for="journalInput">Take a moment to write your thoughts or observations about your mindfulness practice today:</label>
+      <textarea id="journalInput" placeholder="Write your reflections here..."></textarea>
+      <button id="saveJournalBtn">Save Entry</button>
+      <p id="saveMsg" aria-live="polite" role="status"></p>
+    </section>
 
-  <!-- Journal Prompt -->
-  <section id="journal">
-    <h2>Mindfulness Journal</h2>
-    <label for="journalInput">Reflect on your mindfulness practice today. What did you notice?</label>
-    <textarea id="journalInput" placeholder="Write your thoughts here..."></textarea>
-    <button id="saveJournalBtn" class="btn-primary">Save Entry</button>
-    <p id="saveMsg" aria-live="polite" style="margin-top:0.5rem;color:green;"></p>
-  </section>
+    <!-- Resources -->
+    <section id="resources">
+      <h2>Further Resources</h2>
+      <ul>
+        <li><a href="https://www.mindful.org/what-is-mindfulness/" target="_blank" rel="noopener noreferrer">What is Mindfulness? — Mindful.org</a></li>
+        <li><a href="https://www.headspace.com/meditation/mindfulness" target="_blank" rel="noopener noreferrer">Headspace Mindfulness Guide</a></li>
+        <li><a href="https://insighttimer.com/" target="_blank" rel="noopener noreferrer">Insight Timer App (Free Meditations)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=inpok4MKVLM" target="_blank" rel="noopener noreferrer">Guided Body Scan Meditation (YouTube)</a></li>
+      </ul>
+    </section>
 
-  <!-- Resources -->
-  <section id="resources">
-    <h2>Further Resources</h2>
-    <ul>
-      <li><a href="https://www.mindful.org/what-is-mindfulness/" target="_blank" rel="noopener">What is Mindfulness? — Mindful.org</a></li>
-      <li><a href="https://www.headspace.com/meditation/mindfulness" target="_blank" rel="noopener">Headspace Mindfulness Guide</a></li>
-      <li><a href="https://insighttimer.com/" target="_blank" rel="noopener">Insight Timer App (Free Meditations)</a></li>
-      <li><a href="https://www.youtube.com/watch?v=inpok4MKVLM" target="_blank" rel="noopener">Guided Body Scan Meditation (YouTube)</a></li>
-    </ul>
-  </section>
+  </main>
 
-</main>
-
-<script>
-  // Dark mode toggle
-  const toggleThemeBtn = document.getElementById('toggleThemeBtn');
-  toggleThemeBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-    toggleThemeBtn.textContent = document.body.classList.contains('dark') ? 'Toggle Light Mode' : 'Toggle Dark Mode';
-  });
-
-  // Breathing Exercise: 4-7-8
-  const breathCircle = document.getElementById('breathCircle');
-  const startBreathBtn = document.getElementById('startBreathBtn');
-
-  // States for breath phases
-  const phases = [
-    {text: 'Breathe In', duration: 4000},
-    {text: 'Hold', duration: 7000},
-    {text: 'Breathe Out', duration: 8000},
-  ];
-
-  let breathInterval;
-  let phaseIndex = 0;
-  let running = false;
-
-  function startBreathingExercise() {
-    if (running) return; // prevent multiple clicks
-    running = true;
-    phaseIndex = 0;
-    breathCircle.textContent = phases[phaseIndex].text;
-    breathCircle.style.transition = `transform ${phases[phaseIndex].duration}ms ease-in-out`;
-    breathCircle.style.transform = 'scale(1.3)';
-    
-    breathInterval = setTimeout(nextPhase, phases[phaseIndex].duration);
-  }
-
-  function nextPhase() {
-    phaseIndex++;
-    if (phaseIndex >= phases.length) {
-      running = false;
-      breathCircle.textContent = 'Done';
-      breathCircle.style.transform = 'scale(1)';
-      return;
-    }
-    breathCircle.textContent = phases[phaseIndex].text;
-
-    // Animate scale for inhale/exhale
-    if (phases[phaseIndex].text === 'Breathe Out') {
-      breathCircle.style.transform = 'scale(0.7)';
-    } else {
-      breathCircle.style.transform = 'scale(1.3)';
-    }
-    breathInterval = setTimeout(nextPhase, phases[phaseIndex].duration);
-  }
-
-  startBreathBtn.addEventListener('click', startBreathingExercise);
-
-  // Feelings Wheel interaction
-  const feelings = document.querySelectorAll('.feeling');
-  feelings.forEach(feeling => {
-    feeling.addEventListener('click', () => {
-      feelings.forEach(f => f.classList.remove('selected'));
-      feeling.classList.add('selected');
+  <script>
+    // Dark mode toggle
+    const toggleThemeBtn = document.getElementById('toggleThemeBtn');
+    toggleThemeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      toggleThemeBtn.textContent = document.body.classList.contains('dark') ? 'Toggle Light Mode' : 'Toggle Dark Mode';
     });
-    feeling.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        feeling.click();
+
+    // Breathing Exercise: 4-7-8 Breath
+    const breathCircle = document.getElementById('breathCircle');
+    const startBreathBtn = document.getElementById('startBreathBtn');
+
+    // Breathing phases
+    const phases = [
+      { text: 'Breathe In', duration: 4000 },
+      { text: 'Hold', duration: 7000 },
+      { text: 'Breathe Out', duration: 8000 },
+    ];
+
+    let running = false;
+    let phaseIndex = 0;
+    let breathTimeout;
+
+    function startBreathingExercise() {
+      if (running) return;
+      running = true;
+      phaseIndex = 0;
+      updateBreathPhase();
+    }
+
+    function updateBreathPhase() {
+      if (phaseIndex >= phases.length) {
+        running = false;
+        breathCircle.textContent = 'Done!';
+        breathCircle.style.transform = 'scale(1)';
+        return;
+      }
+      const phase = phases[phaseIndex];
+      breathCircle.textContent = phase.text;
+
+      if (phase.text === 'Breathe In') {
+        breathCircle.style.transform = 'scale(1.3)';
+      } else if (phase.text === 'Breathe Out') {
+        breathCircle.style.transform = 'scale(0.7)';
+      } else {
+        breathCircle.style.transform = 'scale(1)';
+      }
+
+      breathTimeout = setTimeout(() => {
+        phaseIndex++;
+        updateBreathPhase();
+      }, phase.duration);
+    }
+
+    startBreathBtn.addEventListener('click', startBreathingExercise);
+
+    // Feelings Wheel interaction
+    const feelings = document.querySelectorAll('.feeling');
+    feelings.forEach(feeling => {
+      feeling.addEventListener('click', () => {
+        feelings.forEach(f => f.classList.remove('selected'));
+        feeling.classList.add('selected');
+      });
+      feeling.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          feeling.click();
+        }
+      });
+    });
+
+    // Journal Save to localStorage
+    const journalInput = document.getElementById('journalInput');
+    const saveJournalBtn = document.getElementById('saveJournalBtn');
+    const saveMsg = document.getElementById('saveMsg');
+
+    // Load saved journal entry on page load
+    window.addEventListener('load', () => {
+      const savedEntry = localStorage.getItem('mindfulnessJournalEntry');
+      if (savedEntry) {
+        journalInput.value = savedEntry;
       }
     });
-  });
 
-  // Journal Save to localStorage
-  const journalInput = document.getElementById('journalInput');
-  const saveJournalBtn = document.getElementById('saveJournalBtn');
-  const saveMsg = document.getElementById('saveMsg');
-
-  // Load saved journal on page load
-  window.addEventListener('load', () => {
-    const savedEntry = localStorage.getItem('mindfulnessJournalEntry');
-    if(savedEntry) {
-      journalInput.value = savedEntry;
-    }
-  });
-
-  saveJournalBtn.addEventListener('click', () => {
-    const text = journalInput.value.trim();
-    if(text) {
-      localStorage.setItem('mindfulnessJournalEntry', text);
-      saveMsg.textContent = 'Entry saved locally! You can revisit anytime.';
-      setTimeout(() => saveMsg.textContent = '', 4000);
-    } else {
-      saveMsg.textContent = 'Please write something before saving.';
-      setTimeout(() => saveMsg.textContent = '', 3000);
-    }
-  });
-
-</script>
+    saveJournalBtn.addEventListener('click', () => {
+      const text = journalInput.value.trim();
+      if (text) {
+        localStorage.setItem('mindfulnessJournalEntry', text);
+        saveMsg.textContent = 'Your entry has been saved!';
+        setTimeout(() => { saveMsg.textContent = ''; }, 4000);
+      } else {
+        saveMsg.textContent = 'Please write something before saving.';
+        setTimeout(() => { saveMsg.textContent = ''; }, 3000);
+      }
+    });
+  </script>
 </body>
 </html>
