@@ -1,129 +1,256 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Grief Support Toolkit</title>
   <style>
+    /* Root colors for soft pastel, calming palette */
     :root {
-      --color-bg-light: #f7f8fa;
-      --color-bg-dark: #1a1a2e;
-      --color-primary: #6a8caf;
-      --color-accent: #f2b5d4;
-      --color-text-light: #333;
-      --color-text-dark: #eee;
-      --color-muted: #666;
-      --color-border: #ccc;
+      --color-bg-light: #e9f1f7;
+      --color-bg-dark: #1e2a3a;
+      --color-primary: #5a8fbd;
+      --color-secondary: #9fc5e8;
+      --color-accent: #f2a2b7;
+      --color-text-light: #2c3e50;
+      --color-text-dark: #dfe6ed;
+      --color-muted: #556777;
+      --color-border: #c9d7e7;
       --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      --transition: 0.3s ease;
+      --transition: 0.4s ease;
+      --cloud-color: rgba(255 255 255 / 0.85);
     }
 
+    /* Base and dark mode */
     body {
       margin: 0;
       font-family: var(--font-family);
       background: var(--color-bg-light);
       color: var(--color-text-light);
       line-height: 1.6;
-      transition: background var(--transition), color var(--transition);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+      transition: background var(--transition), color var(--transition);
     }
-
     body.dark {
       background: var(--color-bg-dark);
       color: var(--color-text-dark);
     }
 
+    /* Cloud background container */
+    #cloud-background {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #b3d4fc 0%, #e9f1f7 70%, #ffffff 100%);
+    }
+
+    /* Single cloud */
+    .cloud {
+      position: absolute;
+      background: var(--cloud-color);
+      border-radius: 50% / 50%;
+      box-shadow:
+        60px 20px 0 0 var(--cloud-color),
+        90px 40px 0 0 var(--cloud-color),
+        130px 20px 0 0 var(--cloud-color),
+        100px 0px 0 0 var(--cloud-color);
+      width: 150px;
+      height: 60px;
+      opacity: 0.9;
+      animation-timing-function: linear;
+    }
+
+    /* Different cloud sizes */
+    .cloud.small {
+      width: 90px;
+      height: 35px;
+      box-shadow:
+        36px 12px 0 0 var(--cloud-color),
+        54px 24px 0 0 var(--cloud-color),
+        78px 12px 0 0 var(--cloud-color),
+        60px 0px 0 0 var(--cloud-color);
+      opacity: 0.7;
+    }
+
+    /* Animate clouds horizontally */
+    @keyframes moveClouds {
+      0% {
+        transform: translateX(-200px);
+      }
+      100% {
+        transform: translateX(110vw);
+      }
+    }
+
+    /* Different speeds and vertical positions for clouds */
+    .cloud:nth-child(1) {
+      top: 10vh;
+      left: -200px;
+      animation: moveClouds 70s linear infinite;
+    }
+    .cloud:nth-child(2) {
+      top: 25vh;
+      left: -180px;
+      animation: moveClouds 90s linear infinite;
+      animation-delay: 20s;
+      opacity: 0.8;
+    }
+    .cloud.small:nth-child(3) {
+      top: 45vh;
+      left: -150px;
+      animation: moveClouds 60s linear infinite;
+      animation-delay: 40s;
+    }
+    .cloud:nth-child(4) {
+      top: 65vh;
+      left: -210px;
+      animation: moveClouds 80s linear infinite;
+      animation-delay: 10s;
+      opacity: 0.6;
+    }
+    .cloud.small:nth-child(5) {
+      top: 80vh;
+      left: -170px;
+      animation: moveClouds 75s linear infinite;
+      animation-delay: 30s;
+      opacity: 0.75;
+    }
+
+    /* Header styles */
     header {
       text-align: center;
-      max-width: 600px;
-      margin-bottom: 30px;
+      max-width: 640px;
+      margin-bottom: 35px;
+      padding: 0 15px;
     }
 
     header h1 {
       font-weight: 700;
-      font-size: 2.4rem;
-      margin-bottom: 0.1em;
+      font-size: 2.6rem;
+      margin-bottom: 0.15em;
       color: var(--color-primary);
+      text-shadow: 0 1px 3px rgba(90, 143, 189, 0.7);
     }
 
     header p {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       color: var(--color-muted);
+      font-style: italic;
     }
 
+    /* Main container */
     main {
-      max-width: 600px;
+      max-width: 640px;
       width: 100%;
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
-      padding: 20px 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(90, 143, 189, 0.2);
+      padding: 30px 40px;
       transition: background var(--transition), color var(--transition);
+      color: var(--color-text-light);
     }
 
     body.dark main {
-      background: #2a2a47;
+      background: #27394a;
+      color: var(--color-text-dark);
+      box-shadow: 0 8px 20px rgba(20, 32, 48, 0.7);
     }
 
+    /* Sections */
     section {
-      margin-bottom: 25px;
+      margin-bottom: 32px;
     }
 
     h2 {
-      border-bottom: 2px solid var(--color-primary);
-      padding-bottom: 6px;
-      margin-bottom: 15px;
+      border-bottom: 3px solid var(--color-primary);
+      padding-bottom: 8px;
+      margin-bottom: 18px;
       color: var(--color-primary);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-shadow: 0 1px 2px rgba(90, 143, 189, 0.6);
+    }
+
+    h3 {
+      margin-top: 20px;
+      margin-bottom: 12px;
+      color: var(--color-secondary);
       font-weight: 600;
     }
 
     p {
-      margin-bottom: 12px;
-    }
-
-    details summary {
-      cursor: pointer;
-      font-weight: 600;
-      margin-bottom: 8px;
-      outline-offset: 4px;
-      outline: none;
-    }
-
-    details summary:hover,
-    details[open] summary {
-      color: var(--color-accent);
+      margin-bottom: 14px;
+      font-size: 1.05rem;
+      line-height: 1.5;
     }
 
     ul {
       list-style: disc inside;
-      padding-left: 0;
       margin-top: 0;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      color: var(--color-muted);
     }
 
     ul li {
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    /* Details summary style */
+    details summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      outline-offset: 4px;
+      outline: none;
+      color: var(--color-primary);
+      text-shadow: 0 1px 1px rgba(90, 143, 189, 0.6);
+      user-select: none;
+      transition: color var(--transition);
+    }
+    details summary:hover,
+    details[open] summary {
+      color: var(--color-accent);
+      text-shadow: 0 1px 5px var(--color-accent);
     }
 
     /* Journaling */
     .journaling textarea {
       width: 100%;
-      min-height: 120px;
-      border-radius: 8px;
-      border: 1.5px solid var(--color-border);
-      padding: 12px 14px;
-      font-size: 1rem;
+      min-height: 140px;
+      border-radius: 12px;
+      border: 2px solid var(--color-border);
+      padding: 14px 18px;
+      font-size: 1.1rem;
+      font-family: var(--font-family);
       resize: vertical;
       transition: border-color var(--transition);
+      box-shadow: 0 2px 6px rgb(90 143 189 / 0.15);
+      background: #f7fbff;
+      color: var(--color-text-light);
     }
-
+    body.dark .journaling textarea {
+      background: #385172;
+      color: var(--color-text-dark);
+      border-color: #4976a7;
+      box-shadow: 0 2px 6px rgb(100 150 210 / 0.4);
+    }
+    .journaling textarea::placeholder {
+      color: var(--color-muted);
+      font-style: italic;
+    }
     .journaling textarea:focus {
       border-color: var(--color-primary);
       outline: none;
+      box-shadow: 0 0 8px var(--color-primary);
     }
 
     /* Mood tracker */
@@ -132,6 +259,7 @@
       flex-wrap: wrap;
       gap: 12px;
       justify-content: center;
+      margin-top: 6px;
     }
 
     .mood-tracker button {
@@ -139,43 +267,53 @@
       color: white;
       border: none;
       border-radius: 30px;
-      padding: 10px 18px;
-      font-weight: 600;
+      padding: 12px 22px;
+      font-weight: 700;
       cursor: pointer;
-      transition: background-color var(--transition);
+      transition: background-color var(--transition), box-shadow var(--transition);
       user-select: none;
-      box-shadow: 0 2px 5px rgb(0 0 0 / 0.15);
+      box-shadow: 0 4px 12px rgb(90 143 189 / 0.4);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      min-width: 110px;
     }
 
     .mood-tracker button:hover,
     .mood-tracker button.selected {
       background: var(--color-accent);
       color: var(--color-bg-dark);
-      box-shadow: 0 4px 12px rgb(0 0 0 / 0.25);
+      box-shadow: 0 6px 18px var(--color-accent);
     }
 
     /* Dark mode toggle */
     .toggle-switch {
       display: flex;
       align-items: center;
-      margin-top: 15px;
+      margin-top: 25px;
       justify-content: center;
-      gap: 10px;
-      font-weight: 600;
+      gap: 14px;
+      font-weight: 700;
       cursor: pointer;
       user-select: none;
+      font-size: 1.1rem;
+      color: var(--color-primary);
+      text-shadow: 0 1px 2px rgba(90, 143, 189, 0.7);
     }
 
     .toggle-switch input[type="checkbox"] {
-      width: 40px;
-      height: 20px;
+      width: 48px;
+      height: 26px;
       appearance: none;
       background: var(--color-border);
-      border-radius: 20px;
+      border-radius: 26px;
       position: relative;
       outline: none;
       cursor: pointer;
       transition: background var(--transition);
+      box-shadow: inset 0 0 4px rgb(0 0 0 / 0.1);
     }
 
     .toggle-switch input[type="checkbox"]:checked {
@@ -185,68 +323,93 @@
     .toggle-switch input[type="checkbox"]::before {
       content: "";
       position: absolute;
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      top: 1px;
-      left: 1px;
+      top: 2px;
+      left: 2px;
       background: white;
       transition: transform var(--transition);
-      box-shadow: 0 2px 5px rgb(0 0 0 / 0.2);
+      box-shadow: 0 3px 7px rgb(0 0 0 / 0.3);
     }
 
     .toggle-switch input[type="checkbox"]:checked::before {
-      transform: translateX(20px);
+      transform: translateX(22px);
     }
 
-    /* Responsive */
-    @media (max-width: 640px) {
+    /* Responsive adjustments */
+    @media (max-width: 680px) {
       main {
-        padding: 15px 20px;
+        padding: 25px 25px;
       }
 
       header h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
+      }
+
+      .mood-tracker button {
+        min-width: 95px;
+        padding: 10px 18px;
+        font-size: 1rem;
       }
     }
+
+    @media (max-width: 400px) {
+      .mood-tracker button {
+        min-width: 80px;
+        padding: 8px 14px;
+        font-size: 0.9rem;
+      }
+    }
+
   </style>
 </head>
 <body>
+  <!-- Cloud background container -->
+  <div id="cloud-background">
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud small"></div>
+    <div class="cloud"></div>
+    <div class="cloud small"></div>
+  </div>
+
   <header>
     <h1>Grief Support Toolkit</h1>
-    <p>A gentle guide to help you through your grief journey.</p>
+    <p>A gentle, compassionate guide to support your healing journey.</p>
   </header>
 
   <main>
     <section id="understanding-grief">
       <h2>Understanding Grief</h2>
-      <p>Grief is a deeply personal and natural response to loss. It affects us emotionally, physically, and mentally. Everyone experiences grief differently, and there is no right or wrong way to grieve.</p>
+      <p>Grief is a natural, complex response to loss, affecting emotional, physical, and mental health. It can come in waves, sometimes unexpectedly, and there is no “right” way to grieve.</p>
+      <p>While grief often feels overwhelming, it is also a sign of love and connection. By understanding its process, you can gently navigate your feelings and find your own path toward healing.</p>
       <details>
-        <summary>Learn about the stages of grief</summary>
-        <p>The five common stages of grief are:</p>
+        <summary>Explore the common stages of grief</summary>
+        <p>While experiences vary, many people go through these stages:</p>
         <ul>
-          <li><strong>Denial:</strong> Difficulty accepting the reality of loss.</li>
-          <li><strong>Anger:</strong> Feeling frustrated or helpless.</li>
-          <li><strong>Bargaining:</strong> Trying to negotiate or make deals to reverse loss.</li>
-          <li><strong>Depression:</strong> Deep sadness and reflection.</li>
-          <li><strong>Acceptance:</strong> Finding peace and moving forward.</li>
+          <li><strong>Denial:</strong> Struggling to accept the reality of loss, feeling numb or in shock.</li>
+          <li><strong>Anger:</strong> Experiencing frustration, bitterness, or helplessness about what happened.</li>
+          <li><strong>Bargaining:</strong> Searching for ways to reverse or undo the loss, often with "what if" thoughts.</li>
+          <li><strong>Depression:</strong> Deep sadness, withdrawal, and processing the reality of the loss.</li>
+          <li><strong>Acceptance:</strong> Coming to terms with the loss and finding a new normal.</li>
         </ul>
-        <p>These stages are not linear and can overlap or come and go.</p>
+        <p>Remember: these stages are not linear. You may revisit some stages many times, or experience others uniquely.</p>
       </details>
     </section>
 
     <section id="emotional-support">
       <h2>Emotional Support</h2>
-      <p>Here are some ways to connect with your emotions and soothe your heart.</p>
-      
+      <p>Expressing your feelings is essential. Here are ways to connect safely with your emotions:</p>
+
       <h3>Journaling</h3>
       <div class="journaling">
-        <label for="journal">Write your thoughts, feelings, or memories here:</label><br />
-        <textarea id="journal" placeholder="I'm feeling..."></textarea>
+        <label for="journal">Write down your thoughts, feelings, or memories here. This space is yours.</label><br />
+        <textarea id="journal" placeholder="I’m feeling..."></textarea>
       </div>
 
       <h3>Mood Tracker</h3>
-      <p>Tap to select how you feel right now:</p>
+      <p>Select how you feel right now to acknowledge your emotions:</p>
       <div class="mood-tracker" aria-label="Mood tracker">
         <button type="button" data-mood="Sad" aria-pressed="false">😢 Sad</button>
         <button type="button" data-mood="Anxious" aria-pressed="false">😰 Anxious</button>
@@ -260,13 +423,14 @@
 
     <section id="coping-strategies">
       <h2>Coping Strategies</h2>
-      <p>When grief feels overwhelming, these gentle practices may help:</p>
+      <p>When grief feels heavy, these gentle methods can provide comfort and support:</p>
       <ul>
-        <li>Practice deep breathing or mindfulness meditation.</li>
-        <li>Allow yourself to cry or express feelings freely.</li>
-        <li>Reach out to trusted friends or family members.</li>
-        <li>Set small daily goals for self-care.</li>
-        <li>Take gentle walks or spend time in nature.</li>
+        <li><strong>Mindful breathing:</strong> Try slow, deep breaths — inhale for 4 seconds, hold for 4, exhale for 6.</li>
+        <li><strong>Allow expression:</strong> Cry if you need to, write letters to your loved one, or speak your feelings aloud.</li>
+        <li><strong>Connect:</strong> Reach out to trusted friends, family, or support groups. You are not alone.</li>
+        <li><strong>Self-care routines:</strong> Set small goals each day, like drinking water, walking outside, or resting.</li>
+        <li><strong>Nature & movement:</strong> Gentle walks, yoga, or sitting in a peaceful place can soothe your mind.</li>
+        <li><strong>Creative outlets:</strong> Draw, paint, or craft memories and feelings as a form of healing.</li>
       </ul>
     </section>
 
@@ -274,29 +438,32 @@
       <h2>Connection &amp; Resources</h2>
       <details>
         <summary>Support Groups &amp; Counseling</summary>
+        <p>Joining others who understand your experience can be healing. Consider:</p>
         <ul>
-          <li><a href="https://www.griefshare.org/" target="_blank" rel="noopener">GriefShare</a> – Worldwide support groups</li>
-          <li><a href="https://www.cruse.org.uk/" target="_blank" rel="noopener">Cruse Bereavement Care</a> – UK-based counseling</li>
-          <li><a href="https://www.nami.org/Support-Education" target="_blank" rel="noopener">NAMI</a> – Mental health support</li>
-          <li><a href="https://www.beyondblue.org.au/get-support/national-support-services" target="_blank" rel="noopener">Beyond Blue</a> – Australia mental health</li>
+          <li><a href="https://www.griefshare.org/" target="_blank" rel="noopener">GriefShare</a> – Worldwide support groups that offer connection and hope.</li>
+          <li><a href="https://www.cruse.org.uk/" target="_blank" rel="noopener">Cruse Bereavement Care</a> – UK counseling and resources.</li>
+          <li><a href="https://www.nami.org/Support-Education" target="_blank" rel="noopener">NAMI</a> – Support for mental health challenges, including grief.</li>
+          <li><a href="https://www.beyondblue.org.au/get-support/national-support-services" target="_blank" rel="noopener">Beyond Blue</a> – Mental health support for Australia.</li>
         </ul>
       </details>
       <details>
         <summary>Books &amp; Podcasts</summary>
+        <p>Reading and listening to stories about grief can provide comfort and insight:</p>
         <ul>
           <li><em>On Grief and Grieving</em> by Elisabeth Kübler-Ross & David Kessler</li>
           <li><em>Healing After Loss</em> by Martha Whitmore Hickman</li>
-          <li><a href="https://www.bereavedcast.com/" target="_blank" rel="noopener">BereavedCast</a> – Podcast on grief and healing</li>
-          <li><a href="https://griefoutloud.libsyn.com/" target="_blank" rel="noopener">Grief Out Loud</a> – Podcast by Modern Loss</li>
+          <li><a href="https://www.bereavedcast.com/" target="_blank" rel="noopener">BereavedCast</a> – Podcasts discussing grief and healing journeys.</li>
+          <li><a href="https://griefoutloud.libsyn.com/" target="_blank" rel="noopener">Grief Out Loud</a> – Real stories and advice on grief by Modern Loss.</li>
         </ul>
       </details>
       <details>
         <summary>Crisis &amp; Helpline Contacts</summary>
+        <p>If you or someone you know is in crisis, please reach out immediately:</p>
         <ul>
-          <li>National Suicide Prevention Lifeline (US): 988</li>
-          <li>Canada Suicide Prevention Service: 1-833-456-4566</li>
-          <li>Samaritans (UK): 116 123</li>
-          <li>Emergency: Call 911 or your local emergency number</li>
+          <li><strong>National Suicide Prevention Lifeline (US):</strong> 988</li>
+          <li><strong>Canada Suicide Prevention Service:</strong> 1-833-456-4566</li>
+          <li><strong>Samaritans (UK):</strong> 116 123</li>
+          <li><strong>Emergency:</strong> Call 911 or your local emergency number</li>
         </ul>
       </details>
     </section>
@@ -304,11 +471,11 @@
     <section id="self-care">
       <h2>Self-Care Reminders</h2>
       <ul>
-        <li>Be gentle and patient with yourself.</li>
-        <li>Rest when your body and mind need it.</li>
-        <li>Eat nourishing food, even if in small amounts.</li>
-        <li>Find moments of quiet and peace each day.</li>
-        <li>Accept help and support when offered.</li>
+        <li>Be patient and gentle with yourself; healing takes time.</li>
+        <li>Rest and allow your body to recover when needed.</li>
+        <li>Maintain nourishing meals, even if small portions feel easier.</li>
+        <li>Find quiet moments to breathe, meditate, or simply be.</li>
+        <li>Accept help and support from others when offered.</li>
       </ul>
     </section>
 
@@ -319,40 +486,34 @@
   </main>
 
   <script>
-    // Dark mode toggle
+    // Dark mode toggle with localStorage save/load
     const toggle = document.getElementById('darkmode-toggle');
     toggle.addEventListener('change', () => {
       document.body.classList.toggle('dark', toggle.checked);
       toggle.setAttribute('aria-checked', toggle.checked);
-      // Save preference
       localStorage.setItem('griefToolkitDarkMode', toggle.checked);
     });
 
-    // Load dark mode preference
     if (localStorage.getItem('griefToolkitDarkMode') === 'true') {
       toggle.checked = true;
       document.body.classList.add('dark');
       toggle.setAttribute('aria-checked', 'true');
     }
 
-    // Mood tracker button toggle
+    // Mood tracker button toggle and localStorage
     const moodButtons = document.querySelectorAll('.mood-tracker button');
     moodButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Remove selected from all buttons
         moodButtons.forEach(b => {
           b.classList.remove('selected');
           b.setAttribute('aria-pressed', 'false');
         });
-        // Set selected to clicked
         btn.classList.add('selected');
         btn.setAttribute('aria-pressed', 'true');
-        // Optionally store the selected mood in localStorage
         localStorage.setItem('griefToolkitMood', btn.dataset.mood);
       });
     });
 
-    // Load last mood selection
     const lastMood = localStorage.getItem('griefToolkitMood');
     if (lastMood) {
       const lastBtn = [...moodButtons].find(b => b.dataset.mood === lastMood);
@@ -362,7 +523,7 @@
       }
     }
 
-    // Save journaling input to localStorage
+    // Journaling localStorage save/load
     const journal = document.getElementById('journal');
     journal.value = localStorage.getItem('griefToolkitJournal') || '';
     journal.addEventListener('input', () => {
