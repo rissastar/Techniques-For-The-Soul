@@ -3,161 +3,186 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Grief Support Toolkit</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <title>Gentle Grief Support Toolkit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Nunito', sans-serif;
-      background: linear-gradient(#f2f6ff, #dde6f0);
-      color: #333;
+      font-family: 'Quicksand', sans-serif;
       margin: 0;
+      background: linear-gradient(to bottom, #e4ecf7, #fdfbfb);
+      color: #333;
       padding: 0;
     }
     header {
-      background-color: #4a69bd;
-      color: white;
-      padding: 20px;
+      background: #a5c8e1;
+      color: #fff;
       text-align: center;
-      font-size: 1.3rem;
+      padding: 25px 15px;
+      font-size: 1.4rem;
     }
-    section {
+    .container {
       padding: 20px;
     }
-    .card {
-      background: white;
-      border-radius: 10px;
-      margin-bottom: 15px;
+    .section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
       padding: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     h2 {
       font-size: 1.2rem;
-      color: #4a69bd;
+      color: #446688;
+    }
+    p, label {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      font-family: inherit;
     }
     button {
-      background: #4a69bd;
+      background: #446688;
       color: white;
+      padding: 10px 15px;
       border: none;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
+      border-radius: 8px;
       margin-top: 10px;
+      cursor: pointer;
     }
-    input, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+    button:hover {
+      background: #345270;
     }
-    .coping-strategy {
-      background: #f9f9ff;
-      border-left: 5px solid #4a69bd;
-      padding: 10px;
-      margin: 5px 0;
+    .resources {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-    .feelings-wheel img {
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 90%;
+    }
+    .modal.show { display: flex; }
+    .feel-image {
       width: 100%;
       border-radius: 10px;
+      margin-top: 10px;
     }
     a {
-      color: #4a69bd;
-      text-decoration: underline;
-    }
-    footer {
-      text-align: center;
-      padding: 10px;
-      font-size: 0.8rem;
-      color: #555;
+      color: #446688;
     }
   </style>
 </head>
 <body>
 
 <header>
-  🌱 Grief Support Toolkit – For Canada & U.S.
+  🌸 Gentle Grief Support Toolkit
 </header>
 
-<section class="card">
-  <h2>💬 What is Grief?</h2>
-  <p>Grief is a natural response to loss. It’s different for everyone and can affect your thoughts, feelings, and body. There’s no “right” way to grieve — just your way.</p>
-</section>
+<div class="container">
 
-<section class="card">
-  <h2>🛠️ Coping Strategies</h2>
-  <div class="coping-strategy">Breathe deeply for 4 seconds, hold for 4, exhale for 4.</div>
-  <div class="coping-strategy">Write a letter to the person or thing you’ve lost.</div>
-  <div class="coping-strategy">Walk outside and notice 5 things you can see, hear, feel.</div>
-  <div class="coping-strategy">Say: “It’s okay to not be okay.” Repeat it kindly.</div>
-</section>
-
-<section class="card">
-  <h2>📘 Journaling Space</h2>
-  <label for="journal">Today I feel...</label>
-  <textarea id="journal" rows="5" placeholder="Type your thoughts here..."></textarea>
-  <button onclick="saveJournal()">Save</button>
-  <button onclick="exportPDF()">Export as PDF</button>
-</section>
-
-<section class="card">
-  <h2>🎨 Feelings Wheel</h2>
-  <div class="feelings-wheel">
-    <img src="https://i.imgur.com/PX1S2Ld.jpg" alt="Feelings Wheel"/>
+  <div class="section">
+    <h2>🌼 Understanding Grief</h2>
+    <p>Grief comes in waves. Sometimes it feels manageable, and other times it doesn't. All of it is valid. Your healing will not look like anyone else's — and that's okay.</p>
+    <button onclick="showModal()">Show Support Tip</button>
   </div>
-</section>
 
-<section class="card">
-  <h2>📍 Local Resources</h2>
-  <ul>
-    <li><strong>Canada:</strong> <a href="https://www.canada.ca/en/public-health/services/grief-support.html" target="_blank">Government Grief Resources</a></li>
-    <li><strong>Canada Crisis Line:</strong> <a href="tel:1-833-456-4566">1-833-456-4566</a></li>
-    <li><strong>U.S. Grief Resources:</strong> <a href="https://grief.com/resources/" target="_blank">Grief.com Resources</a></li>
-    <li><strong>U.S. Crisis Text Line:</strong> Text HOME to <strong>741741</strong></li>
-  </ul>
-</section>
+  <div class="section">
+    <h2>🌥️ Daily Check-In</h2>
+    <label for="feel">How are you feeling today?</label>
+    <textarea id="feel" rows="3" placeholder="Gentle honesty is enough..."></textarea>
+    <button onclick="saveFeel()">Save Entry</button>
+    <button onclick="exportFeel()">Download PDF</button>
+  </div>
 
-<section class="card">
-  <h2>📄 Free Downloadable Worksheets</h2>
-  <ul>
-    <li><a href="https://cdn.website-editor.net/2a317730b22442e3bcf3eab3ecad7bd5/files/uploaded/GriefJournal.pdf" target="_blank">Grief Journal PDF</a></li>
-    <li><a href="https://www.hopkinsmedicine.org/_includes/_cms/fileUploadHandler/GriefWorkbook.pdf" target="_blank">Grief Workbook by Johns Hopkins</a></li>
-  </ul>
-</section>
+  <div class="section">
+    <h2>🎨 Feelings Visual</h2>
+    <img class="feel-image" src="https://i.imgur.com/PX1S2Ld.jpg" alt="Feelings Wheel">
+  </div>
 
-<section class="card">
-  <h2>🧡 You're Not Alone</h2>
-  <p>Whether your loss is fresh or from long ago, you are not alone. Let others in, be kind to yourself, and take one breath at a time. Healing doesn’t mean forgetting. It means remembering with love.</p>
-</section>
+  <div class="section">
+    <h2>📚 Free Support PDFs</h2>
+    <div class="resources">
+      <a href="https://cdn.website-editor.net/2a317730b22442e3bcf3eab3ecad7bd5/files/uploaded/GriefJournal.pdf" target="_blank">📝 Grief Journal (Printable)</a>
+      <a href="https://www.hopkinsmedicine.org/_includes/_cms/fileUploadHandler/GriefWorkbook.pdf" target="_blank">📘 Johns Hopkins Grief Workbook</a>
+    </div>
+  </div>
 
-<footer>
-  Made with care for those who are grieving. All resources are free and public.
+  <div class="section">
+    <h2>🌎 Local Crisis Support</h2>
+    <p><strong>🇨🇦 Canada:</strong></p>
+    <ul>
+      <li><a href="https://griefsupport.ca/" target="_blank">Grief Support Canada</a></li>
+      <li>Talk Suicide Canada: <a href="tel:1-833-456-4566">1-833-456-4566</a></li>
+    </ul>
+    <p><strong>🇺🇸 United States:</strong></p>
+    <ul>
+      <li><a href="https://grief.com/resources/" target="_blank">Grief.com Resources</a></li>
+      <li>Crisis Text Line: Text <strong>HOME</strong> to <strong>741741</strong></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>💖 Final Thoughts</h2>
+    <p>Grief may never go away — but it transforms. You are allowed to cry, laugh, scream, or sit in silence. There is no shame in how you process your pain.</p>
+  </div>
+
+</div>
+
+<footer style="text-align:center; padding: 15px; font-size: 0.9rem; color: #777;">
+  Built with love for anyone grieving. You're not alone.
 </footer>
 
+<!-- Modal -->
+<div class="modal" id="supportModal">
+  <div class="modal-content">
+    <h3>🕊️ Gentle Reminder</h3>
+    <p>Be as kind to yourself as you would be to someone you love. If all you did today was breathe — that's enough.</p>
+    <button onclick="closeModal()">Close</button>
+  </div>
+</div>
+
 <script>
-  function saveJournal() {
-    const entry = document.getElementById('journal').value;
-    localStorage.setItem('griefJournal', entry);
-    alert("Entry saved.");
+  function showModal() {
+    document.getElementById("supportModal").classList.add("show");
   }
-
-  function loadJournal() {
-    const saved = localStorage.getItem('griefJournal');
-    if (saved) {
-      document.getElementById('journal').value = saved;
-    }
+  function closeModal() {
+    document.getElementById("supportModal").classList.remove("show");
   }
-
-  function exportPDF() {
-    const text = document.getElementById('journal').value;
-    const blob = new Blob([text], { type: 'application/pdf' });
+  function saveFeel() {
+    const text = document.getElementById('feel').value;
+    localStorage.setItem('griefFeel', text);
+    alert("Saved your entry.");
+  }
+  function exportFeel() {
+    const text = document.getElementById('feel').value;
+    const blob = new Blob([text], {type: 'application/pdf'});
     const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = "Grief-Journal.pdf";
+    link.href = URL.createObjectURL(blob);
+    link.download = "My-Grief-Entry.pdf";
     link.click();
   }
-
-  window.onload = loadJournal;
+  window.onload = function() {
+    const saved = localStorage.getItem('griefFeel');
+    if (saved) document.getElementById('feel').value = saved;
+  }
 </script>
 
 </body>
