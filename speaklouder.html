@@ -1,4 +1,4 @@
-<!-- File: speak-louder-toolkit.html -->
+<!-- Speak Louder Love Toolkit - Detailed Version -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,16 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Speak Louder Love Toolkit</title>
 
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-
-  <!-- html2pdf.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       background-size: 300% 300%;
       animation: gradientShift 25s ease infinite;
       margin: 0;
@@ -53,7 +50,6 @@
       padding: 1rem;
       border-radius: 12px;
       color: #fff;
-      margin-top: 0.5rem;
     }
 
     .btn-group {
@@ -73,11 +69,6 @@
       font-size: 1.1rem;
       cursor: pointer;
       box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
-    }
-
-    .control-btn:hover {
-      transform: scale(1.05);
     }
 
     .toolkit-grid {
@@ -92,13 +83,7 @@
       padding: 1.8rem;
       box-shadow: 0 10px 20px rgba(0,0,0,0.15);
       text-align: center;
-      transition: 0.3s ease;
       cursor: pointer;
-    }
-
-    .tool-card:hover {
-      transform: translateY(-10px);
-      background: #fffaf0;
     }
 
     .tool-card h3 {
@@ -119,6 +104,7 @@
       border-radius: 8px;
       font-size: 0.95rem;
       display: none;
+      text-align: left;
     }
 
     .tool-card.active .tool-usage {
@@ -147,12 +133,6 @@
       border-radius: 50px;
       font-size: 1.1rem;
       cursor: pointer;
-      box-shadow: 0 5px 20px rgba(240,101,149,0.4);
-      transition: transform 0.3s ease;
-    }
-
-    .generate-btn:hover {
-      transform: scale(1.05);
     }
 
     @media (max-width: 768px) {
@@ -166,7 +146,7 @@
   <div class="container" id="toolkitContent">
     <div class="header">
       <h1>🗣️ Speak Louder Love Toolkit</h1>
-      <p>Powerful tools to help you express love boldly, clearly, and kindly. Click a card to explore each one.</p>
+      <p>Tap each card to discover how to speak, love, and listen more boldly and authentically.</p>
     </div>
 
     <div class="btn-group">
@@ -177,31 +157,41 @@
       <div class="tool-card" onclick="toggleCard(this)">
         <h3>🔨 The Courage Hammer</h3>
         <p>Break through fear that holds you back from speaking your truth.</p>
-        <div class="tool-usage"><strong>How to use:</strong> Visualize a hammer smashing fear. Say: “I act with courage, not absence of fear.”</div>
+        <div class="tool-usage">
+          <strong>How to use:</strong> When you feel fear or hesitation, close your eyes and picture a powerful hammer breaking through walls. These walls represent your silence or self-doubt. Breathe deeply three times and say: “My truth matters. I choose to be brave.” Let the image energize you to speak, even if your voice shakes.
+        </div>
       </div>
 
       <div class="tool-card" onclick="toggleCard(this)">
         <h3>🔍 The Truth Lens</h3>
-        <p>See your feelings clearly. Focus on what really matters to you.</p>
-        <div class="tool-usage"><strong>How to use:</strong> Pause and reflect: “What is my heart really saying?”</div>
+        <p>See your feelings clearly and without judgment.</p>
+        <div class="tool-usage">
+          <strong>How to use:</strong> Take a moment to pause. Place your hand on your heart and ask: “What do I truly feel right now?” Use this lens to zoom past confusion or other people’s expectations. Trust that your truth doesn’t need to be perfect — just honest.
+        </div>
       </div>
 
       <div class="tool-card" onclick="toggleCard(this)">
         <h3>🎨 The Kindness Brush</h3>
-        <p>Speak firmly with care. Paint your truth with compassion.</p>
-        <div class="tool-usage"><strong>How to use:</strong> Before speaking, add love to your words. Be strong, not harsh.</div>
+        <p>Speak firmly with softness. Paint your words in love.</p>
+        <div class="tool-usage">
+          <strong>How to use:</strong> Imagine brushing each word with kindness before you speak. When expressing something hard, take a breath and say it as if you were talking to someone you deeply care for — even if that someone is you. Let warmth and clarity mix.
+        </div>
       </div>
 
       <div class="tool-card" onclick="toggleCard(this)">
         <h3>🚧 The Boundary Tape</h3>
-        <p>Mark what’s okay and not okay for you. Protect your peace.</p>
-        <div class="tool-usage"><strong>How to use:</strong> Say: “This is what I need.” Stand calmly and clearly in your truth.</div>
+        <p>Set limits that protect your peace and self-worth.</p>
+        <div class="tool-usage">
+          <strong>How to use:</strong> Visualize laying down boundary tape around your energy. Decide what’s okay for you and what’s not. Then speak it out loud. Say things like: “I need some space,” or “I’m not comfortable with that.” Boundaries are not walls — they are bridges to better understanding.
+        </div>
       </div>
 
       <div class="tool-card" onclick="toggleCard(this)">
         <h3>🪞 The Listening Mirror</h3>
-        <p>Make space for others by reflecting what you hear.</p>
-        <div class="tool-usage"><strong>How to use:</strong> Say: “What I hear you saying is…” Listen openly and with care.</div>
+        <p>Reflect back what you hear. Listening is powerful too.</p>
+        <div class="tool-usage">
+          <strong>How to use:</strong> After someone shares, gently reflect their words back with: “So what I’m hearing is…” This simple act builds trust. You don’t need to agree — just hear. Keep your mirror clean by staying present, without planning your reply.
+        </div>
       </div>
     </div>
 
@@ -228,11 +218,9 @@
     ];
 
     function toggleCard(card) {
-      const alreadyActive = card.classList.contains('active');
+      const isActive = card.classList.contains('active');
       document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-      if (!alreadyActive) {
-        card.classList.add('active');
-      }
+      if (!isActive) card.classList.add('active');
     }
 
     function generateAffirmation() {
@@ -244,7 +232,7 @@
     document.getElementById('pdfBtn').addEventListener('click', () => {
       const element = document.getElementById('toolkitContent');
       html2pdf().set({
-        margin: 0,
+        margin: 0.6,
         filename: 'SpeakLouderLoveToolkit.pdf',
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
