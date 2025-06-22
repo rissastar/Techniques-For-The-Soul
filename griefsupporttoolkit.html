@@ -1,1129 +1,211 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grief Support Toolkit</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-```
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        color: #333;
-        overflow-x: hidden;
-    }
-
-    .container {
-        max-width: 100%;
-        padding: 0;
-        background: white;
-        min-height: 100vh;
-        position: relative;
-    }
-
-    .header {
-        background: linear-gradient(135deg, #4a90e2, #6a5acd);
-        color: white;
-        padding: 20px;
-        text-align: center;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-
-    .header h1 {
-        font-size: 1.8rem;
-        margin-bottom: 8px;
-        font-weight: 300;
-    }
-
-    .header p {
-        opacity: 0.9;
-        font-size: 0.9rem;
-    }
-
-    .nav-tabs {
-        display: flex;
-        background: #f8f9fa;
-        border-bottom: 2px solid #e9ecef;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .nav-tab {
-        flex: 1;
-        padding: 15px 10px;
-        text-align: center;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: #666;
-        transition: all 0.3s ease;
-        white-space: nowrap;
-        min-width: 80px;
-    }
-
-    .nav-tab.active {
-        background: linear-gradient(135deg, #4a90e2, #6a5acd);
-        color: white;
-        transform: translateY(-2px);
-    }
-
-    .nav-tab:hover {
-        background: #e9ecef;
-        color: #333;
-    }
-
-    .nav-tab.active:hover {
-        background: linear-gradient(135deg, #4a90e2, #6a5acd);
-        color: white;
-    }
-
-    .tab-content {
-        display: none;
-        padding: 20px;
-        animation: fadeIn 0.3s ease-in;
-    }
-
-    .tab-content.active {
-        display: block;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .card {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border-left: 4px solid #4a90e2;
-        transition: transform 0.3s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-2px);
-    }
-
-    .card h3 {
-        color: #4a90e2;
-        margin-bottom: 15px;
-        font-size: 1.2rem;
-    }
-
-    .card p {
-        line-height: 1.6;
-        margin-bottom: 15px;
-        color: #555;
-    }
-
-    .emergency-card {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-        color: white;
-        border: none;
-        text-align: center;
-    }
-
-    .emergency-card h3 {
-        color: white;
-        font-size: 1.4rem;
-    }
-
-    .crisis-numbers {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 15px;
-        margin-top: 15px;
-    }
-
-    .crisis-number {
-        background: rgba(255,255,255,0.2);
-        padding: 15px;
-        border-radius: 8px;
-        backdrop-filter: blur(10px);
-    }
-
-    .crisis-number h4 {
-        margin-bottom: 8px;
-        font-size: 1rem;
-    }
-
-    .crisis-number a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1.1rem;
-    }
-
-    .interactive-tool {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .interactive-tool h3 {
-        color: white;
-        margin-bottom: 15px;
-    }
-
-    .mood-tracker {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 10px;
-        margin: 15px 0;
-    }
-
-    .mood-btn {
-        padding: 10px;
-        border: 2px solid rgba(255,255,255,0.3);
-        background: rgba(255,255,255,0.1);
-        color: white;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 1.2rem;
-        text-align: center;
-    }
-
-    .mood-btn:hover, .mood-btn.selected {
-        background: rgba(255,255,255,0.3);
-        border-color: white;
-        transform: scale(1.05);
-    }
-
-    .breathing-exercise {
-        text-align: center;
-        padding: 20px;
-    }
-
-    .breathing-circle {
-        width: 120px;
-        height: 120px;
-        border: 3px solid rgba(255,255,255,0.5);
-        border-radius: 50%;
-        margin: 20px auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-        transition: all 4s ease-in-out;
-    }
-
-    .breathing-circle.inhale {
-        transform: scale(1.3);
-        border-color: white;
-        background: rgba(255,255,255,0.2);
-    }
-
-    .breathing-circle.exhale {
-        transform: scale(0.8);
-        border-color: rgba(255,255,255,0.3);
-        background: transparent;
-    }
-
-    .btn {
-        background: linear-gradient(135deg, #4a90e2, #6a5acd);
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        width: 100%;
-        margin-top: 10px;
-    }
-
-    .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
-    }
-
-    .btn-secondary {
-        background: #6c757d;
-    }
-
-    .btn-secondary:hover {
-        background: #5a6268;
-    }
-
-    .resource-list {
-        list-style: none;
-    }
-
-    .resource-list li {
-        padding: 15px;
-        border-bottom: 1px solid #eee;
-        transition: background 0.3s ease;
-    }
-
-    .resource-list li:hover {
-        background: #f8f9fa;
-    }
-
-    .resource-list li:last-child {
-        border-bottom: none;
-    }
-
-    .resource-list a {
-        color: #4a90e2;
-        text-decoration: none;
-        font-weight: 500;
-    }
-
-    .resource-list .description {
-        color: #666;
-        font-size: 0.9rem;
-        margin-top: 5px;
-    }
-
-    .journal-entry {
-        width: 100%;
-        min-height: 120px;
-        padding: 15px;
-        border: 2px solid #e9ecef;
-        border-radius: 8px;
-        font-family: inherit;
-        font-size: 1rem;
-        resize: vertical;
-        transition: border-color 0.3s ease;
-    }
-
-    .journal-entry:focus {
-        outline: none;
-        border-color: #4a90e2;
-    }
-
-    .stages-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 15px;
-        margin-top: 20px;
-    }
-
-    .stage-card {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        padding: 20px;
-        border-radius: 12px;
-        border-left: 4px solid #4a90e2;
-    }
-
-    .stage-card h4 {
-        color: #4a90e2;
-        margin-bottom: 10px;
-        font-size: 1.1rem;
-    }
-
-    .stage-card p {
-        color: #555;
-        line-height: 1.5;
-        font-size: 0.9rem;
-    }
-
-    .floating-help {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        font-size: 1.2rem;
-        cursor: pointer;
-        z-index: 1000;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        transition: all 0.3s ease;
-    }
-
-    .floating-help:hover {
-        transform: scale(1.1);
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.8);
-        z-index: 1001;
-        animation: fadeIn 0.3s ease;
-    }
-
-    .modal-content {
-        background: white;
-        margin: 10% auto;
-        padding: 20px;
-        border-radius: 12px;
-        max-width: 90%;
-        max-height: 80%;
-        overflow-y: auto;
-        position: relative;
-    }
-
-    .close {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        font-size: 2rem;
-        cursor: pointer;
-        color: #666;
-    }
-
-    .progress-bar {
-        width: 100%;
-        height: 8px;
-        background: #e9ecef;
-        border-radius: 4px;
-        overflow: hidden;
-        margin: 15px 0;
-    }
-
-    .progress-fill {
-        height: 100%;
-        background: linear-gradient(135deg, #4a90e2, #6a5acd);
-        transition: width 0.3s ease;
-    }
-
-    .affirmation-card {
-        background: linear-gradient(135deg, #56ab2f, #a8e6cf);
-        color: white;
-        text-align: center;
-        padding: 25px;
-        border-radius: 12px;
-        margin: 15px 0;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .affirmation-text {
-        font-size: 1.1rem;
-        font-style: italic;
-        margin-bottom: 15px;
-    }
-
-    @media (max-width: 480px) {
-        .header h1 {
-            font-size: 1.5rem;
-        }
-        
-        .nav-tab {
-            font-size: 0.75rem;
-            padding: 12px 8px;
-        }
-        
-        .card {
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .mood-tracker {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grief Support Toolkit</title>
+<style>
+  :root {
+    --bg: #f7f7f7; --fg: #333;
+    --sec-bg: white; --sec-fg: #333;
+    --btn-bg: #4a6d7c; --btn-fg: white;
+    --link: #0066cc;
+  }
+  [data-theme="dark"] {
+    --bg: #2b2b2b; --fg: #ddd;
+    --sec-bg: #3a3a3a; --sec-fg: #eee;
+    --btn-bg: #556b79; --btn-fg: white;
+    --link: #66aaff;
+  }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--fg);
+    transition: background .3s, color .3s;
+  }
+  header, footer {
+    background: var(--btn-bg); color: var(--btn-fg);
+    text-align: center; padding: 1rem;
+  }
+  .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+  .section {
+    background: var(--sec-bg); color: var(--sec-fg);
+    margin-bottom: 1.5rem; border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  h2 { color: var(--btn-bg); }
+  .button {
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border: none; padding: .6rem 1rem;
+    border-radius: 6px; cursor: pointer;
+    font-size: 1rem;
+  }
+  textarea {
+    width: 100%; padding: 1rem;
+    border-radius: 6px; border: 1px solid #ccc;
+    background: var(--bg); color: var(--fg);
+    margin-bottom: .8rem;
+  }
+  #feelings-wheel {
+    width: 300px;
+    display: block; margin: .5rem auto;
+  }
+  .support-list a { color: var(--link); }
+  .toggle-switch {
+    position: absolute; top: 1rem; right: 1rem;
+  }
 </style>
-```
-
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🤗 Grief Support Toolkit</h1>
-            <p>You're not alone in your journey of healing</p>
-        </div>
+<header>
+  <h1>Grief Support Toolkit 🌿</h1>
+  <p>Comprehensive support, journaling, and coping tools for Canada & U.S.</p>
+  <button class="button toggle-switch" onclick="toggleTheme()">🌓 Dark Mode</button>
+</header>
+<div class="container">
 
-```
-    <div class="nav-tabs">
-        <button class="nav-tab active" onclick="showTab('crisis')">Crisis</button>
-        <button class="nav-tab" onclick="showTab('support')">Support</button>
-        <button class="nav-tab" onclick="showTab('tools')">Tools</button>
-        <button class="nav-tab" onclick="showTab('resources')">Resources</button>
-        <button class="nav-tab" onclick="showTab('journal')">Journal</button>
-        <button class="nav-tab" onclick="showTab('stages')">Stages</button>
+  <!-- 1. Understanding Grief -->
+  <div class="section">
+    <h2>Understanding Grief</h2>
+    <ul>
+      <li><strong>Physically:</strong> fatigue, appetite/sleep changes.</li>
+      <li><strong>Emotionally:</strong> sadness, guilt, relief.</li>
+      <li><strong>Cognitively:</strong> confusion, memory issues.</li>
+      <li><strong>Behaviorally:</strong> routines change, withdrawal.</li>
+      <li><strong>Spiritually:</strong> meaning, belief challenges.</li>
+    </ul>
+    <p><em>Tip:</em> Normal—even if persistent beyond 6 months. Seek help if overwhelming.</p>
+    <p><strong>Sudden vs. Anticipated Loss:</strong> Sudden = shock/trauma. Anticipated = prolonged stress.</p>
+    <p><strong>When to Seek Help:</strong> If grief stops daily life, causes self-harm thoughts, or leads to panic or severe depression.</p>
+  </div>
+
+  <!-- 2. Coping Strategies + Feelings Wheel -->
+  <div class="section">
+    <h2>Coping Tools & Feeling Wheel</h2>
+    <div>
+      🧘 Deep breathing: 4-sec inhale, hold 4, exhale 4 (repeat 3x).
+      <br>✍️ Journal without judgment.
+      <br>🎧 Use calming music, nature sounds.
     </div>
+    <canvas id="feelings-wheel"></canvas>
+  </div>
 
-    <!-- Crisis Support Tab -->
-    <div id="crisis" class="tab-content active">
-        <div class="emergency-card card">
-            <h3>🚨 Crisis Support</h3>
-            <p>If you're having thoughts of harming yourself or others, please reach out immediately:</p>
-            
-            <div class="crisis-numbers">
-                <div class="crisis-number">
-                    <h4>🇺🇸 USA Crisis Lines</h4>
-                    <a href="tel:988">988 - National Suicide Prevention Lifeline</a><br>
-                    <a href="tel:1-800-273-8255">1-800-273-TALK (8255)</a>
-                </div>
-                
-                <div class="crisis-number">
-                    <h4>🇨🇦 Canada Crisis Lines</h4>
-                    <a href="tel:1-833-456-4566">1-833-456-4566 - Talk Suicide Canada</a><br>
-                    <a href="tel:1-877-330-6366">1-877-330-6366 - Kids Help Phone</a>
-                </div>
-            </div>
-            
-            <p style="margin-top: 15px; font-size: 0.9rem;">
-                <strong>Online Support:</strong> Visit <a href="#" style="color: white;">suicidepreventionlifeline.org</a> (US) or <a href="#" style="color: white;">talksuicide.ca</a> (Canada)
-            </p>
-        </div>
+  <!-- 3. Support Resources -->
+  <div class="section support-list">
+    <h2>Support Resources</h2>
+    <p><strong>Canada:</strong> Crisis Services Canada – <a href="https://www.crisisservicescanada.ca/en/" target="_blank">1‑833‑456‑4566</a></p>
+    <p><strong>U.S.:</strong> 988 Suicide & Crisis Lifeline – <a href="https://www.988lifeline.org/" target="_blank">chat & call</a></p>
+    <p><strong>Find Local Support:</strong></p>
+    <ul>
+      <li><a href="https://findahelpline.com/" target="_blank">Find a Helpline (international)</a></li>
+      <li><a href="https://211.ca/" target="_blank">211 (Canada)</a></li>
+      <li><a href="https://findahelpline.org/" target="_blank">FindAHelpline (U.S.)</a></li>
+    </ul>
+  </div>
 
-        <div class="card">
-            <h3>📞 24/7 Grief Support Lines</h3>
-            <div style="margin-top: 15px;">
-                <p><strong>US:</strong> GriefShare Crisis Line: <a href="tel:1-800-395-5755">1-800-395-5755</a></p>
-                <p><strong>Canada:</strong> Canadian Grief Alliance: <a href="tel:1-855-823-7773">1-855-823-7773</a></p>
-            </div>
-        </div>
+  <!-- 4. Printable PDF Worksheet -->
+  <div class="section">
+    <h2>📝 Printable Worksheet</h2>
+    <button class="button" onclick="downloadJournalingPDF()">Download Blank PDF Worksheet</button>
+  </div>
 
-        <div class="card">
-            <h3>🏥 When to Seek Emergency Help</h3>
-            <p>Call 911 (US) or emergency services immediately if you or someone else:</p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>Has thoughts of suicide or self-harm</li>
-                <li>Is experiencing severe depression or anxiety</li>
-                <li>Shows signs of psychosis or severe mental distress</li>
-                <li>Has substance abuse issues affecting safety</li>
-                <li>Is unable to care for themselves or others</li>
-            </ul>
-        </div>
-    </div>
+  <!-- 5. Interactive Journaling -->
+  <div class="section">
+    <h2>Interactive Journaling</h2>
+    <textarea id="in1" placeholder="Today I feel..."></textarea>
+    <textarea id="in2" placeholder="A memory I cherish..."></textarea>
+    <textarea id="in3" placeholder="What I miss most is..."></textarea>
+    <textarea id="in4" placeholder="What helps me feel better..."></textarea>
+    <textarea id="in5" placeholder="Self-care goal this week..."></textarea>
+    <button class="button" onclick="exportNotesPDF()">Export Responses as PDF</button>
+  </div>
 
-    <!-- Support Tab -->
-    <div id="support" class="tab-content">
-        <div class="card">
-            <h3>🤝 Finding Support Groups</h3>
-            <p>Connecting with others who understand your experience can be incredibly healing.</p>
-            
-            <h4 style="color: #4a90e2; margin-top: 20px;">🇺🇸 United States</h4>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li><strong>GriefShare:</strong> Faith-based support groups nationwide</li>
-                <li><strong>Hospice Foundation of America:</strong> Local hospice support groups</li>
-                <li><strong>The Compassionate Friends:</strong> Support for bereaved parents</li>
-                <li><strong>AARP Grief & Loss:</strong> Support for older adults</li>
-            </ul>
-
-            <h4 style="color: #4a90e2; margin-top: 20px;">🇨🇦 Canada</h4>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li><strong>Canadian Hospice Palliative Care Association:</strong> Local support groups</li>
-                <li><strong>Bereaved Families of Ontario:</strong> Province-wide support</li>
-                <li><strong>Canuck Place:</strong> Pediatric hospice support</li>
-                <li><strong>Canadian Grief Alliance:</strong> National grief support network</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3>👥 Online Support Communities</h3>
-            <ul style="margin-left: 20px;">
-                <li><strong>GriefNet:</strong> Email support groups for various types of loss</li>
-                <li><strong>What's Your Grief:</strong> Online community and resources</li>
-                <li><strong>Grief Recovery Method:</strong> Structured online support</li>
-                <li><strong>Reddit r/GriefSupport:</strong> Peer support community</li>
-                <li><strong>Facebook Groups:</strong> Search for specific loss type groups</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3>💰 Financial Assistance</h3>
-            <p><strong>US Resources:</strong></p>
-            <ul style="margin-left: 20px;">
-                <li>Social Security survivor benefits</li>
-                <li>Funeral assistance programs</li>
-                <li>Local community assistance programs</li>
-                <li>United Way emergency assistance</li>
-            </ul>
-            
-            <p style="margin-top: 15px;"><strong>Canadian Resources:</strong></p>
-            <ul style="margin-left: 20px;">
-                <li>Canada Pension Plan survivor benefits</li>
-                <li>Provincial funeral assistance programs</li>
-                <li>Community foundation grants</li>
-                <li>Employment Insurance compassionate care benefits</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Interactive Tools Tab -->
-    <div id="tools" class="tab-content">
-        <div class="interactive-tool">
-            <h3>🎯 Daily Mood Tracker</h3>
-            <p>Track how you're feeling today. It's okay to have difficult days.</p>
-            <div class="mood-tracker">
-                <div class="mood-btn" onclick="selectMood(this, 'very-sad')">😢<br>Very Sad</div>
-                <div class="mood-btn" onclick="selectMood(this, 'sad')">😔<br>Sad</div>
-                <div class="mood-btn" onclick="selectMood(this, 'neutral')">😐<br>Neutral</div>
-                <div class="mood-btn" onclick="selectMood(this, 'okay')">🙂<br>Okay</div>
-                <div class="mood-btn" onclick="selectMood(this, 'good')">😊<br>Good</div>
-            </div>
-            <div id="mood-message" style="margin-top: 15px; font-style: italic;"></div>
-        </div>
-
-        <div class="interactive-tool">
-            <h3>🫁 Breathing Exercise</h3>
-            <p>Use this guided breathing exercise to help manage overwhelming emotions.</p>
-            <div class="breathing-exercise">
-                <div id="breathing-circle" class="breathing-circle">Click Start</div>
-                <button id="breathing-btn" class="btn" onclick="startBreathing()">Start Breathing Exercise</button>
-            </div>
-        </div>
-
-        <div class="affirmation-card">
-            <div class="affirmation-text" id="affirmation-text">
-                "Grief is the price we pay for love. Your feelings are valid, and healing happens one day at a time."
-            </div>
-            <button class="btn btn-secondary" onclick="newAffirmation()">New Affirmation</button>
-        </div>
-
-        <div class="card">
-            <h3>📊 Grief Progress Tracker</h3>
-            <p>Track your journey through grief. Progress isn't always linear, and that's perfectly normal.</p>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill" style="width: 25%;"></div>
-            </div>
-            <p style="text-align: center; margin-top: 10px;">Self-Assessment: 25% through processing</p>
-            <button class="btn" onclick="updateProgress()">Update Progress</button>
-        </div>
-
-        <div class="card">
-            <h3>🎵 Healing Playlist Creator</h3>
-            <p>Music can be incredibly therapeutic during grief. Create a personalized playlist.</p>
-            <div style="margin-top: 15px;">
-                <input type="text" id="song-input" placeholder="Add a song that brings you comfort..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px;">
-                <button class="btn" onclick="addSong()">Add Song</button>
-            </div>
-            <ul id="playlist" style="margin-top: 15px; list-style: none;"></ul>
-        </div>
-    </div>
-
-    <!-- Resources Tab -->
-    <div id="resources" class="tab-content">
-        <div class="card">
-            <h3>📚 Educational Resources</h3>
-            <ul class="resource-list">
-                <li>
-                    <a href="#">The Grief Recovery Handbook</a>
-                    <div class="description">Step-by-step program for moving beyond loss</div>
-                </li>
-                <li>
-                    <a href="#">Option B by Sheryl Sandberg</a>
-                    <div class="description">Building resilience in the face of adversity</div>
-                </li>
-                <li>
-                    <a href="#">A Grief Observed by C.S. Lewis</a>
-                    <div class="description">Personal account of loss and faith</div>
-                </li>
-                <li>
-                    <a href="#">The Year of Magical Thinking by Joan Didion</a>
-                    <div class="description">Memoir about sudden loss and recovery</div>
-                </li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3>🎧 Podcasts & Audio Support</h3>
-            <ul class="resource-list">
-                <li>
-                    <a href="#">Grief Out Loud</a>
-                    <div class="description">Honest conversations about grief and loss</div>
-                </li>
-                <li>
-                    <a href="#">The Grief Gang</a>
-                    <div class="description">Supporting young adults through loss</div>
-                </li>
-                <li>
-                    <a href="#">Terrible, Thanks for Asking</a>
-                    <div class="description">Real stories about life's difficult moments</div>
-                </li>
-                <li>
-                    <a href="#">What's Your Grief Podcast</a>
-                    <div class="description">Practical grief support and education</div>
-                </li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3>🌐 Online Therapy Platforms</h3>
-            <ul class="resource-list">
-                <li>
-                    <a href="#">BetterHelp</a>
-                    <div class="description">Professional counseling accessible online (US/Canada)</div>
-                </li>
-                <li>
-                    <a href="#">Talkspace</a>
-                    <div class="description">Text-based therapy with licensed therapists</div>
-                </li>
-                <li>
-                    <a href="#">MDLIVE</a>
-                    <div class="description">On-demand therapy and counseling</div>
-                </li>
-                <li>
-                    <a href="#">Psychology Today</a>
-                    <div class="description">Find local therapists specializing in grief</div>
-                </li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3>📱 Helpful Apps</h3>
-            <ul class="resource-list">
-                <li>
-                    <a href="#">GriefShare</a>
-                    <div class="description">Find local support groups and resources</div>
-                </li>
-                <li>
-                    <a href="#">Sanvello</a>
-                    <div class="description">Anxiety and mood tracking with coping tools</div>
-                </li>
-                <li>
-                    <a href="#">Headspace</a>
-                    <div class="description">Meditation and mindfulness for difficult times</div>
-                </li>
-                <li>
-                    <a href="#">Calm</a>
-                    <div class="description">Sleep stories and relaxation techniques</div>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Journal Tab -->
-    <div id="journal" class="tab-content">
-        <div class="card">
-            <h3>📝 Grief Journal</h3>
-            <p>Writing about your feelings can help process grief. There's no right or wrong way to journal.</p>
-            <textarea class="journal-entry" id="journal-text" placeholder="How are you feeling today? What's on your mind? Remember, this is a safe space for all your thoughts and emotions..."></textarea>
-            <button class="btn" onclick="saveJournalEntry()">Save Entry</button>
-            <button class="btn btn-secondary" onclick="clearJournal()">Clear</button>
-        </div>
-
-        <div class="card">
-            <h3>💭 Reflection Prompts</h3>
-            <p>If you're not sure what to write about, try these prompts:</p>
-            <div style="margin-top: 15px;">
-                <button class="btn" onclick="loadPrompt(0)" style="margin-bottom: 10px;">What would you want to say to your loved one today?</button>
-                <button class="btn" onclick="loadPrompt(1)" style="margin-bottom: 10px;">What's your favorite memory together?</button>
-                <button class="btn" onclick="loadPrompt(2)" style="margin-bottom: 10px;">How has grief changed you?</button>
-                <button class="btn" onclick="loadPrompt(3)" style="margin-bottom: 10px;">What are you grateful for today?</button>
-                <button class="btn" onclick="loadPrompt(4)" style="margin-bottom: 10px;">What would help you feel supported right now?</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>📅 Previous Entries</h3>
-            <p>Your journal entries are saved locally on your device.</p>
-            <div id="journal-history" style="margin-top: 15px;">
-                <p style="color: #666; font-style: italic;">No previous entries yet. Start writing to see your history here.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Stages Tab -->
-    <div id="stages" class="tab-content">
-        <div class="card">
-            <h3>🌊 Understanding Grief</h3>
-            <p>Grief is not a linear process. These stages are common experiences, but everyone grieves differently. You may experience them in any order, skip some, or revisit them multiple times.</p>
-        </div>
-
-        <div class="stages-grid">
-            <div class="stage-card">
-                <h4>1. Denial</h4>
-                <p>Shock and disbelief help us cope with overwhelming loss. This is your mind's way of protecting you from the full impact of the loss.</p>
-            </div>
-
-            <div class="stage-card">
-                <h4>2. Anger</h4>
-                <p>Anger at the situation, others, or even your loved one is normal. It's often easier to feel angry than to feel the pain underneath.</p>
-            </div>
-
-            <div class="stage-card">
-                <h4>3. Bargaining</h4>
-                <p>Trying to make deals or negotiate (with God, universe, etc.) to undo the loss. "What if" and "if only" thoughts are common.</p>
-            </div>
-
-            <div class="stage-card">
-                <h4>4. Depression</h4>
-                <p>Deep sadness and despair as the reality of loss sets in. This is a natural response to significant loss, not a sign of weakness.</p>
-            </div>
-
-            <div class="stage-card">
-                <h4>5. Acceptance</h4>
-                <p>Not "being okay" with the loss, but accepting the reality of it. Finding ways to move forward while honoring your loved one's memory.</p>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>🎯 Coping Strategies by Stage</h3>
-            <div style="margin-top: 15px;">
-                <h4 style="color: #4a90e2;">During Denial:</h4>
-                <ul style="margin-left: 20px; margin-bottom: 15px;">
-                    <li>Be patient with yourself</li>
-                    <li>Seek support from others</li>
-                    <li>Allow yourself to feel numb</li>
-                    <li>Don't rush the process</li>
-                </ul>
-
-                <h4 style="color: #4a90e2;">During Anger:</h4>
-                <ul style="margin-left: 20px; margin-bottom: 15px;">
-                    <li>Exercise or physical activity</li>
-                    <li>Journaling or creative expression</li>
-                    <li>Talk to trusted friends or counselors</li>
-                    <li>Practice deep breathing</li>
-                </ul>
-
-                <h4 style="color: #4a90e2;">During Bargaining:</h4>
-                <ul style="margin-left: 20px; margin-bottom: 15px;">
-                    <li>Focus on what you can control</li>
-                    <li>Practice mindfulness</li>
-                    <li>Consider therapy or counseling</li>
-                    <li>Connect with support groups</li>
-                </ul>
-
-                <h4 style="color: #4a90e2;">During Depression:</h4>
-                <ul style="margin-left: 20px; margin-bottom: 15px;">
-                    <li>Maintain basic self-care</li>
-                    <li>Seek professional help if needed</li>
-                    <li>Stay connected with supportive people</li>
-                    <li>Be gentle with yourself</li>
-                </ul>
-
-                <h4 style="color: #4a90e2;">During Acceptance:</h4>
-                <ul style="margin-left: 20px;">
-                    <li>Create meaningful rituals or memorials</li>
-                    <li>Find ways to honor your loved one</li>
-                    <li>Consider helping others in similar situations</li>
-                    <li>Focus on rebuilding and moving forward</li>
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
+<footer>
+  &copy; 2025 Grief Support Toolkit | Healing Together
+</footer>
 
-<button class="floating-help" onclick="showHelpModal()">?</button>
-
-<div id="helpModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>How to Use This Toolkit</h2>
-        <p><strong>Crisis Tab:</strong> Immediate help and emergency contacts</p>
-        <p><strong>Support Tab:</strong> Find local and online support groups</p>
-        <p><strong>Tools Tab:</strong> Interactive features for daily coping</p>
-        <p><strong>Resources Tab:</strong> Books, apps, and professional help</p>
-        <p><strong>Journal Tab:</strong> Private space for reflection and writing</p>
-        <p><strong>Stages Tab:</strong> Understanding the grief process</p>
-        <br>
-        <p><em>Remember: This toolkit is for support and information. If you're in crisis, please contact emergency services or a crisis helpline immediately.</em></p>
-    </div>
-</div>
-
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 <script>
-    // Global variables
-    let breathingActive = false;
-    let breathingInterval;
-    let journalEntries = [];
-    let currentProgress = 25;
-    let playlist = [];
-
-    // Load saved data on page load
-    window.onload = function() {
-        loadJournalEntries();
-        loadPlaylist();
-        loadProgress();
-    };
-
-    // Tab switching functionality
-    function showTab(tabName) {
-        // Hide all tabs
-        const tabs = document.querySelectorAll('.tab-content');
-        tabs.forEach(tab => tab.classList.remove('active'));
-        
-        // Remove active class from all nav tabs
-        const navTabs = document.querySelectorAll('.nav-tab');
-        navTabs.forEach(tab => tab.classList.remove('active'));
-        
-        // Show selected tab
-        document.getElementById(tabName).classList.add('active');
-        event.target.classList.add('active');
-    }
-
-    // Mood tracker functionality
-    function selectMood(element, mood) {
-        // Remove selection from other mood buttons
-        const moodBtns = document.querySelectorAll('.mood-btn');
-        moodBtns.forEach(btn => btn.classList.remove('selected'));
-        
-        // Select current mood
-        element.classList.add('selected');
-        
-        // Show supportive message
-        const messages = {
-            'very-sad': 'It\'s okay to feel very sad. Your emotions are valid. Consider reaching out to someone you trust.',
-            'sad': 'Sadness is a natural part of grief. Be gentle with yourself today.',
-            'neutral': 'Neutral days are part of the healing process. Take things one moment at a time.',
-            'okay': 'Having okay moments is progress. Celebrate these small victories.',
-            'good': 'It\'s wonderful that you\'re having a good day. Enjoy these moments of peace.'
-        };
-        
-        document.getElementById('mood-message').textContent = messages[mood];
-        
-        // Save mood with timestamp
-        const today = new Date().toDateString();
-        const savedMoods = JSON.parse(localStorage.getItem('moodTracker') || '{}');
-        savedMoods[today] = mood;
-        localStorage.setItem('moodTracker', JSON.stringify(savedMoods));
-    }
-
-    // Breathing exercise functionality
-    function startBreathing() {
-        const circle = document.getElementById('breathing-circle');
-        const btn = document.getElementById('breathing-btn');
-        
-        if (!breathingActive) {
-            breathingActive = true;
-            btn.textContent = 'Stop Exercise';
-            
-            let phase = 'inhale';
-            circle.textContent = 'Breathe In...';
-            circle.classList.add('inhale');
-            
-            breathingInterval = setInterval(() => {
-                if (phase === 'inhale') {
-                    circle.textContent = 'Hold...';
-                    circle.classList.remove('inhale');
-                    phase = 'hold';
-                } else if (phase === 'hold') {
-                    circle.textContent = 'Breathe Out...';
-                    circle.classList.add('exhale');
-                    phase = 'exhale';
-                } else {
-                    circle.textContent = 'Breathe In...';
-                    circle.classList.remove('exhale');
-                    circle.classList.add('inhale');
-                    phase = 'inhale';
-                }
-            }, 4000);
-        } else {
-            stopBreathing();
-        }
-    }
-
-    function stopBreathing() {
-        breathingActive = false;
-        clearInterval(breathingInterval);
-        const circle = document.getElementById('breathing-circle');
-        const btn = document.getElementById('breathing-btn');
-        
-        circle.textContent = 'Click Start';
-        circle.classList.remove('inhale', 'exhale');
-        btn.textContent = 'Start Breathing Exercise';
-    }
-
-    // Affirmations functionality
-    const affirmations = [
-        "Grief is the price we pay for love. Your feelings are valid, and healing happens one day at a time.",
-        "It's okay to not be okay. You are stronger than you know, and you will get through this.",
-        "Your loved one's memory lives on in the love you carry. That love is eternal.",
-        "Healing doesn't mean forgetting. It means learning to carry your love in a new way.",
-        "You are not alone in this journey. There are people who care and want to support you.",
-        "It's okay to laugh, to smile, to have good days. Joy doesn't dishonor your loved one's memory.",
-        "Grief has no timeline. Take as much time as you need, and be patient with yourself.",
-        "You are honoring your loved one by taking care of yourself and continuing to live.",
-        "Every day you choose to keep going is an act of courage. You are braver than you believe.",
-        "Your story isn't over. There are still beautiful chapters waiting to be written."
-    ];
-
-    function newAffirmation() {
-        const randomIndex = Math.floor(Math.random() * affirmations.length);
-        document.getElementById('affirmation-text').textContent = affirmations[randomIndex];
-    }
-
-    // Progress tracker functionality
-    function updateProgress() {
-        const progressOptions = [
-            { value: 10, text: "Just beginning to process" },
-            { value: 25, text: "Starting to understand my grief" },
-            { value: 40, text: "Learning to cope day by day" },
-            { value: 55, text: "Finding moments of peace" },
-            { value: 70, text: "Developing healthy coping strategies" },
-            { value: 85, text: "Rebuilding and moving forward" },
-            { value: 100, text: "Living fully while honoring memory" }
-        ];
-        
-        const currentIndex = progressOptions.findIndex(option => option.value === currentProgress);
-        const nextIndex = (currentIndex + 1) % progressOptions.length;
-        
-        currentProgress = progressOptions[nextIndex].value;
-        document.getElementById('progress-fill').style.width = currentProgress + '%';
-        document.querySelector('.progress-bar').nextElementSibling.textContent = 
-            `Self-Assessment: ${currentProgress}% - ${progressOptions[nextIndex].text}`;
-        
-        localStorage.setItem('griefProgress', currentProgress.toString());
-    }
-
-    function loadProgress() {
-        const saved = localStorage.getItem('griefProgress');
-        if (saved) {
-            currentProgress = parseInt(saved);
-            document.getElementById('progress-fill').style.width = currentProgress + '%';
-        }
-    }
-
-    // Playlist functionality
-    function addSong() {
-        const input = document.getElementById('song-input');
-        const songTitle = input.value.trim();
-        
-        if (songTitle) {
-            playlist.push(songTitle);
-            input.value = '';
-            updatePlaylistDisplay();
-            savePlaylist();
-        }
-    }
-
-    function updatePlaylistDisplay() {
-        const playlistElement = document.getElementById('playlist');
-        playlistElement.innerHTML = '';
-        
-        playlist.forEach((song, index) => {
-            const li = document.createElement('li');
-            li.style.cssText = 'padding: 10px; background: #f8f9fa; margin: 5px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;';
-            li.innerHTML = `
-                <span>🎵 ${song}</span>
-                <button onclick="removeSong(${index})" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Remove</button>
-            `;
-            playlistElement.appendChild(li);
-        });
-    }
-
-    function removeSong(index) {
-        playlist.splice(index, 1);
-        updatePlaylistDisplay();
-        savePlaylist();
-    }
-
-    function savePlaylist() {
-        localStorage.setItem('griefPlaylist', JSON.stringify(playlist));
-    }
-
-    function loadPlaylist() {
-        const saved = localStorage.getItem('griefPlaylist');
-        if (saved) {
-            playlist = JSON.parse(saved);
-            updatePlaylistDisplay();
-        }
-    }
-
-    // Journal functionality
-    const journalPrompts = [
-        "What would you want to say to your loved one today?",
-        "What's your favorite memory together?",
-        "How has grief changed you?",
-        "What are you grateful for today?",
-        "What would help you feel supported right now?"
-    ];
-
-    function loadPrompt(index) {
-        document.getElementById('journal-text').value = journalPrompts[index] + '\n\n';
-        document.getElementById('journal-text').focus();
-    }
-
-    function saveJournalEntry() {
-        const text = document.getElementById('journal-text').value.trim();
-        if (text) {
-            const entry = {
-                date: new Date().toLocaleString(),
-                text: text
-            };
-            journalEntries.unshift(entry);
-            localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
-            updateJournalHistory();
-            document.getElementById('journal-text').value = '';
-            alert('Journal entry saved!');
-        }
-    }
-
-    function clearJournal() {
-        document.getElementById('journal-text').value = '';
-    }
-
-    function loadJournalEntries() {
-        const saved = localStorage.getItem('journalEntries');
-        if (saved) {
-            journalEntries = JSON.parse(saved);
-            updateJournalHistory();
-        }
-    }
-
-    function updateJournalHistory() {
-        const historyElement = document.getElementById('journal-history');
-        
-        if (journalEntries.length === 0) {
-            historyElement.innerHTML = '<p style="color: #666; font-style: italic;">No previous entries yet. Start writing to see your history here.</p>';
-            return;
-        }
-        
-        historyElement.innerHTML = '';
-        journalEntries.slice(0, 5).forEach((entry, index) => {
-            const entryDiv = document.createElement('div');
-            entryDiv.style.cssText = 'border: 1px solid #eee; padding: 15px; margin-bottom: 10px; border-radius: 8px; background: #f9f9f9;';
-            entryDiv.innerHTML = `
-                <div style="font-weight: bold; color: #4a90e2; margin-bottom: 8px;">${entry.date}</div>
-                <div style="max-height: 100px; overflow-y: auto;">${entry.text.substring(0, 200)}${entry.text.length > 200 ? '...' : ''}</div>
-                <button onclick="deleteEntry(${index})" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-top: 10px; font-size: 0.8rem;">Delete</button>
-            `;
-            historyElement.appendChild(entryDiv);
-        });
-    }
-
-    function deleteEntry(index) {
-        if (confirm('Are you sure you want to delete this entry?')) {
-            journalEntries.splice(index, 1);
-            localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
-            updateJournalHistory();
-        }
-    }
-
-    // Modal functionality
-    function showHelpModal() {
-        document.getElementById('helpModal').style.display = 'block';
-    }
-
-    function closeModal() {
-        document.getElementById('helpModal').style.display = 'none';
-    }
-
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-        const modal = document.getElementById('helpModal');
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    }
-
-    // Handle enter key in song input
-    document.addEventListener('DOMContentLoaded', function() {
-        const songInput = document.getElementById('song-input');
-        if (songInput) {
-            songInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    addSong();
-                }
-            });
-        }
+// Dark Mode
+function toggleTheme(){
+  let t = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', t==='dark'?'':'dark');
+  localStorage.setItem('theme', t==='dark'?'light':'dark');
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  if(localStorage.getItem('theme')==='dark') document.documentElement.setAttribute('data-theme','dark');
+  ['in1','in2','in3','in4','in5'].forEach(id=>{
+    let v = localStorage.getItem(id)||'';
+    document.getElementById(id).value = v;
+    document.getElementById(id).addEventListener('input',()=>{
+      localStorage.setItem(id, document.getElementById(id).value);
     });
+  });
+});
+
+// PDF Generators
+function downloadJournalingPDF(){
+  const dd = {
+    pageMargins:[40,60,40,60],
+    header:{text:'Grief Journaling Worksheet',style:'header'},
+    styles:{header:{fontSize:22,bold:true,margin:[0,0,0,20]},prompt:{fontSize:14,margin:[0,5,0,5]}},
+    content:[
+      '1. Today I feel...', '_________________________________________',
+      '2. A memory I cherish...', '_________________________________________',
+      '3. What I miss most is...', '_________________________________________',
+      '4. What helps me feel better...', '_________________________________________',
+      '5. My self-care goal this week...', '_________________________________________'
+    ]
+  };
+  pdfMake.createPdf(dd).download('Grief_Journaling_Worksheet.pdf');
+}
+
+function exportNotesPDF(){
+  const inputs = [1,2,3,4,5].map(n=>document.getElementById('in'+n).value||'—');
+  const dd = {
+    pageMargins:[40,60,40,60],
+    header:{text:'My Grief Journal Entry',style:'header'},
+    styles:{header:{fontSize:20,bold:true,margin:[0,0,0,10]},field:{fontSize:14,margin:[0,5,0,5]}},
+    content:[
+      {text:'1. Today I feel...',style:'field'}, inputs[0],
+      {text:'2. A memory I cherish...',style:'field'}, inputs[1],
+      {text:'3. What I miss most is...',style:'field'}, inputs[2],
+      {text:'4. What helps me feel better...',style:'field'}, inputs[3],
+      {text:'5. Self-care goal this week...',style:'field'}, inputs[4],
+    ]
+  };
+  pdfMake.createPdf(dd).download('My_Grief_Journal.pdf');
+}
+
+// Feelings Wheel
+function drawWheel(){
+  const canvas = document.getElementById('feelings-wheel');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 300; canvas.height = 300;
+  const emotions = ['Sad','Angry','Anxious','Relieved','Lonely','Confused','Peaceful','Grateful'];
+  const colors = ['#4a90e2','#d0021b','#f5a623','#7ed321','#bd10e0','#f8e71c','#50e3c2','#f17e5d'];
+  const cx = 150, cy=150, r=140;
+  const slice = 2*Math.PI / emotions.length;
+  emotions.forEach((e,i)=>{
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,i*slice,(i+1)*slice);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.font = '14px sans-serif';
+    const ang = (i+0.5)*slice;
+    ctx.fillText(e, cx + Math.cos(ang)*(r*0.6), cy + Math.sin(ang)*(r*0.6));
+  });
+}
+document.addEventListener('DOMContentLoaded', drawWheel);
 </script>
-```
+</body>
+</html>
