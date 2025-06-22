@@ -17,837 +17,370 @@
         font-family: 'Georgia', serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
-        padding: 20px;
-        color: #fff;
+        color: #333;
         overflow-x: hidden;
     }
 
     .container {
         max-width: 1200px;
         margin: 0 auto;
+        padding: 2rem;
     }
 
     .header {
         text-align: center;
-        margin-bottom: 50px;
-        animation: fadeInDown 1s ease-in-out;
+        margin-bottom: 3rem;
+        animation: fadeInDown 1s ease-out;
     }
 
     .header h1 {
-        font-size: 3.5rem;
-        margin-bottom: 20px;
+        font-size: 3rem;
+        color: white;
+        margin-bottom: 1rem;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcf7f, #4ecdc4);
-        background-size: 400% 400%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: gradientShift 3s ease-in-out infinite;
-        cursor: pointer;
-        transition: transform 0.3s ease;
     }
 
-    .header h1:hover {
-        transform: scale(1.05);
-    }
-
-    .header .subtitle {
-        font-size: 1.3rem;
-        opacity: 0.9;
-        font-style: italic;
-        margin-bottom: 30px;
-    }
-
-    .intro {
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 30px;
-        margin-bottom: 40px;
-        border: 1px solid rgba(255,255,255,0.2);
-        animation: fadeIn 1.5s ease-in-out;
-        position: relative;
-    }
-
-    .progress-bar {
-        background: rgba(255,255,255,0.1);
-        height: 8px;
-        border-radius: 4px;
-        margin: 20px 0;
-        overflow: hidden;
-    }
-
-    .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #ff6b6b, #ffd93d);
-        width: 0%;
-        transition: width 0.8s ease;
-        border-radius: 4px;
+    .header p {
+        font-size: 1.2rem;
+        color: rgba(255,255,255,0.9);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
     }
 
     .toolkit-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 30px;
-        margin-bottom: 40px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
     }
 
     .tool-card {
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(15px);
+        background: rgba(255,255,255,0.95);
         border-radius: 20px;
-        padding: 30px;
-        border: 1px solid rgba(255,255,255,0.3);
-        transition: all 0.4s ease;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
         position: relative;
         overflow: hidden;
-        cursor: pointer;
-        animation: slideInUp 0.8s ease-in-out;
-        transform-style: preserve-3d;
-    }
-
-    .tool-card:nth-child(1) { animation-delay: 0.1s; }
-    .tool-card:nth-child(2) { animation-delay: 0.2s; }
-    .tool-card:nth-child(3) { animation-delay: 0.3s; }
-    .tool-card:nth-child(4) { animation-delay: 0.4s; }
-    .tool-card:nth-child(5) { animation-delay: 0.5s; }
-
-    .tool-card.flipped {
-        transform: rotateY(180deg);
-    }
-
-    .tool-card-front, .tool-card-back {
-        backface-visibility: hidden;
-        transition: transform 0.6s ease;
-    }
-
-    .tool-card-back {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        padding: 30px;
-        transform: rotateY(180deg);
-        background: rgba(255,255,255,0.15);
-        border-radius: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .tool-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-        transition: left 0.6s ease;
-    }
-
-    .tool-card:hover::before {
-        left: 100%;
     }
 
     .tool-card:hover {
-        transform: translateY(-10px) scale(1.02);
+        transform: translateY(-10px);
         box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        border-color: rgba(255,255,255,0.5);
     }
 
-    .tool-card.activated {
-        background: rgba(255,255,255,0.2);
-        border-color: #ffd93d;
-        box-shadow: 0 0 30px rgba(255,217,61,0.4);
+    .tool-card.active {
+        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        transform: scale(1.05);
     }
 
     .tool-icon {
         font-size: 3rem;
-        margin-bottom: 20px;
+        margin-bottom: 1rem;
         display: block;
-        animation: pulse 2s ease-in-out infinite;
-        transition: transform 0.3s ease;
+        animation: float 3s ease-in-out infinite;
     }
 
-    .tool-card:hover .tool-icon {
-        transform: scale(1.2) rotate(10deg);
-    }
+    .tool-card:nth-child(2) .tool-icon { animation-delay: 0.5s; }
+    .tool-card:nth-child(3) .tool-icon { animation-delay: 1s; }
+    .tool-card:nth-child(4) .tool-icon { animation-delay: 1.5s; }
+    .tool-card:nth-child(5) .tool-icon { animation-delay: 2s; }
 
     .tool-title {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         font-weight: bold;
-        margin-bottom: 15px;
-        color: #ffd93d;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        margin-bottom: 1rem;
+        color: #444;
     }
 
     .tool-description {
-        font-size: 1.1rem;
         line-height: 1.6;
-        opacity: 0.9;
+        color: #666;
+        margin-bottom: 1rem;
     }
 
-    .tool-actions {
-        margin-top: 20px;
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .action-btn {
-        background: rgba(255,255,255,0.2);
-        border: 1px solid rgba(255,255,255,0.3);
-        color: white;
-        padding: 8px 16px;
-        border-radius: 20px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 0.9rem;
-    }
-
-    .action-btn:hover {
-        background: rgba(255,255,255,0.3);
-        transform: translateY(-2px);
-    }
-
-    .interactive-quote {
-        background: rgba(255,217,61,0.1);
-        border-left: 4px solid #ffd93d;
-        padding: 15px;
-        margin: 15px 0;
-        border-radius: 0 10px 10px 0;
-        font-style: italic;
-    }
-
-    .reflection-area {
-        background: rgba(255,255,255,0.05);
+    .tool-usage {
+        background: rgba(255,255,255,0.7);
+        padding: 1rem;
         border-radius: 10px;
-        padding: 15px;
-        margin-top: 15px;
+        border-left: 4px solid #667eea;
+        margin-top: 1rem;
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.5s ease;
     }
 
-    .reflection-area textarea {
-        width: 100%;
-        min-height: 80px;
+    .tool-card.active .tool-usage {
+        opacity: 1;
+        max-height: 200px;
+    }
+
+    .affirmation-section {
         background: rgba(255,255,255,0.1);
-        border: 1px solid rgba(255,255,255,0.2);
-        border-radius: 8px;
-        padding: 12px;
-        color: white;
-        font-family: inherit;
-        resize: vertical;
-    }
-
-    .reflection-area textarea::placeholder {
-        color: rgba(255,255,255,0.6);
-    }
-
-    .mood-selector {
-        display: flex;
-        gap: 15px;
-        margin: 15px 0;
-        flex-wrap: wrap;
-    }
-
-    .mood-btn {
-        font-size: 2rem;
-        padding: 10px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        background: rgba(255,255,255,0.1);
-        border: 2px solid transparent;
-    }
-
-    .mood-btn:hover, .mood-btn.selected {
-        transform: scale(1.2);
-        border-color: #ffd93d;
-        background: rgba(255,217,61,0.2);
-    }
-
-    .closing {
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(10px);
         border-radius: 20px;
-        padding: 30px;
+        padding: 2rem;
         text-align: center;
-        border: 1px solid rgba(255,255,255,0.2);
-        animation: fadeIn 2s ease-in-out;
-    }
-
-    .closing p {
-        font-size: 1.2rem;
-        line-height: 1.7;
-        font-style: italic;
-    }
-
-    .floating-hearts {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: -1;
-    }
-
-    .heart {
-        position: absolute;
-        color: rgba(255,255,255,0.1);
-        font-size: 20px;
-        animation: float 8s ease-in-out infinite;
-    }
-
-    .celebration {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 4rem;
-        z-index: 1000;
-        pointer-events: none;
-        animation: celebrate 1s ease-in-out;
-    }
-
-    .stats-panel {
-        background: rgba(255,255,255,0.1);
         backdrop-filter: blur(10px);
-        border-radius: 15px;
-        padding: 20px;
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        gap: 20px;
+        border: 1px solid rgba(255,255,255,0.2);
     }
 
-    .stat-item {
-        text-align: center;
-    }
-
-    .stat-number {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #ffd93d;
-        display: block;
-    }
-
-    .stat-label {
-        font-size: 0.9rem;
-        opacity: 0.8;
-    }
-
-    .interactive-breathing {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.1);
-        border: 2px solid rgba(255,255,255,0.3);
-        cursor: pointer;
+    .affirmation-text {
+        font-size: 1.5rem;
+        color: white;
+        font-style: italic;
+        margin-bottom: 2rem;
+        min-height: 3rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.5rem;
-        z-index: 100;
+    }
+
+    .generate-btn {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        cursor: pointer;
         transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
-    .interactive-breathing:hover {
-        transform: scale(1.1);
+    .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
 
-    .breathing-active {
-        animation: breathe 4s ease-in-out infinite;
+    .pulse {
+        animation: pulse 2s infinite;
     }
 
     @keyframes fadeInDown {
         from {
             opacity: 0;
-            transform: translateY(-50px);
+            transform: translateY(-30px);
         }
         to {
             opacity: 1;
             transform: translateY(0);
         }
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
     }
 
     @keyframes float {
-        0% {
-            transform: translateY(100vh) rotate(0deg);
-            opacity: 0;
-        }
-        10% {
-            opacity: 0.3;
-        }
-        90% {
-            opacity: 0.3;
-        }
-        100% {
-            transform: translateY(-100px) rotate(360deg);
-            opacity: 0;
-        }
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
     }
 
-    @keyframes celebrate {
-        0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
-        50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-        100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
     }
 
-    @keyframes breathe {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.3); }
+    .sparkle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: gold;
+        border-radius: 50%;
+        animation: sparkle 2s linear infinite;
+    }
+
+    @keyframes sparkle {
+        0% { opacity: 0; transform: scale(0); }
+        50% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(0); }
     }
 
     @media (max-width: 768px) {
-        .header h1 {
-            font-size: 2.5rem;
-        }
-        
-        .toolkit-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .tool-card {
-            padding: 20px;
-        }
-
-        .stats-panel {
-            flex-direction: column;
-            text-align: center;
-        }
+        .header h1 { font-size: 2rem; }
+        .toolkit-grid { grid-template-columns: 1fr; }
+        .container { padding: 1rem; }
+        .tool-card { padding: 1.5rem; }
     }
 </style>
 ```
 
 </head>
 <body>
-    <div class="floating-hearts"></div>
+    <div class="container">
+        <div class="header">
+            <h1>🗣️ Speak Louder Love Toolkit</h1>
+            <p>Your powerful collection of tools to express love boldly and clearly. Click each tool to discover how to use it in your journey of authentic expression.</p>
+        </div>
 
 ```
-<!-- Interactive Breathing Circle -->
-<div class="interactive-breathing" onclick="toggleBreathing()" title="Click for mindful breathing">
-    🫁
-</div>
-
-<div class="container">
-    <header class="header">
-        <h1 onclick="titleClick()">Speak Louder Love Toolkit</h1>
-        <p class="subtitle">Powerful Tools to Express Your Love Boldly and Clearly</p>
-    </header>
-
-    <!-- Stats Panel -->
-    <div class="stats-panel">
-        <div class="stat-item">
-            <span class="stat-number" id="toolsUsed">0</span>
-            <span class="stat-label">Tools Explored</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-number" id="reflections">0</span>
-            <span class="stat-label">Reflections Written</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-number" id="breathingSessions">0</span>
-            <span class="stat-label">Mindful Moments</span>
-        </div>
-    </div>
-
-    <div class="intro">
-        <p>Today, on this Speak Louder Sunday, imagine you have a special toolkit. Inside, there are powerful tools to help you express your love boldly and clearly. Click on each tool to explore deeper and unlock interactive features!</p>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
-    </div>
-
-    <!-- Mood Selector -->
-    <div class="mood-selector">
-        <div class="mood-btn" onclick="selectMood(this, 'confident')" title="Feeling Confident">💪</div>
-        <div class="mood-btn" onclick="selectMood(this, 'nervous')" title="Feeling Nervous">😰</div>
-        <div class="mood-btn" onclick="selectMood(this, 'hopeful')" title="Feeling Hopeful">🌟</div>
-        <div class="mood-btn" onclick="selectMood(this, 'peaceful')" title="Feeling Peaceful">🧘</div>
-        <div class="mood-btn" onclick="selectMood(this, 'excited')" title="Feeling Excited">🎉</div>
-    </div>
-
     <div class="toolkit-grid">
-        <div class="tool-card" onclick="activateTool(this, 'courage')">
-            <div class="tool-card-front">
-                <span class="tool-icon">🔨</span>
-                <h2 class="tool-title">The Courage Hammer</h2>
-                <p class="tool-description">To break down walls of fear that keep you quiet. When you feel afraid to speak up, tap into this tool. Remind yourself that courage is not the absence of fear but the choice to act anyway.</p>
-                <div class="tool-actions">
-                    <button class="action-btn" onclick="event.stopPropagation(); showAffirmation(event, 'courage')">Daily Affirmation</button>
-                    <button class="action-btn" onclick="event.stopPropagation(); flipCard(event, this)">Explore Deeper</button>
-                </div>
-            </div>
-            <div class="tool-card-back">
-                <div class="interactive-quote">
-                    "Courage is not the absence of fear, but action in spite of it."
-                </div>
-                <p><strong>Practice Exercise:</strong> Think of one small brave thing you can do today. Write it down and commit to it.</p>
-                <div class="reflection-area">
-                    <textarea placeholder="What's one fear you're ready to face? Write about it here..." onchange="updateReflectionCount()"></textarea>
-                </div>
-                <button class="action-btn" onclick="event.stopPropagation(); flipCard(event, this)">Back to Tool</button>
+        <div class="tool-card" data-tool="courage">
+            <span class="tool-icon">🔨</span>
+            <h3 class="tool-title">The Courage Hammer</h3>
+            <p class="tool-description">Break down walls of fear that keep you quiet. When you feel afraid to speak up, tap into this tool.</p>
+            <div class="tool-usage">
+                <strong>How to use:</strong> When fear arises, take three deep breaths and remind yourself: "Courage is not the absence of fear but the choice to act anyway." Feel the hammer breaking through your walls of hesitation.
             </div>
         </div>
 
-        <div class="tool-card" onclick="activateTool(this, 'truth')">
-            <div class="tool-card-front">
-                <span class="tool-icon">🔍</span>
-                <h2 class="tool-title">The Truth Lens</h2>
-                <p class="tool-description">To help you see your feelings clearly. When emotions get tangled, use this tool to focus on your authentic truth without judgment or doubt.</p>
-                <div class="tool-actions">
-                    <button class="action-btn" onclick="event.stopPropagation(); showAffirmation(event, 'truth')">Daily Affirmation</button>
-                    <button class="action-btn" onclick="event.stopPropagation(); flipCard(event, this)">Explore Deeper</button>
-                </div>
-            </div>
-            <div class="tool-card-back">
-                <div class="interactive-quote">
-                    "Your authentic truth is your greatest power."
-                </div>
-                <p><strong>Clarity Exercise:</strong> Take three deep breaths and ask yourself: "What am I really feeling right now?"</p>
-                <div class="reflection-area">
-                    <textarea placeholder="What truth have you been avoiding? Explore it gently here..." onchange="updateReflectionCount()"></textarea>
-                </div>
-                <button class="action-btn" onclick="flipCard(event, this.parentElement)">Back to Tool</button>
+        <div class="tool-card" data-tool="truth">
+            <span class="tool-icon">🔍</span>
+            <h3 class="tool-title">The Truth Lens</h3>
+            <p class="tool-description">See your feelings clearly and focus on your authentic truth without judgment or doubt.</p>
+            <div class="tool-usage">
+                <strong>How to use:</strong> When emotions feel tangled, pause and look through your Truth Lens. Ask yourself: "What is my heart really trying to tell me?" Listen without judgment.
             </div>
         </div>
 
-        <div class="tool-card" onclick="activateTool(this, 'kindness')">
-            <div class="tool-card-front">
-                <span class="tool-icon">🎨</span>
-                <h2 class="tool-title">The Kindness Brush</h2>
-                <p class="tool-description">To paint your words with compassion, for yourself and those who listen. Speaking louder doesn't mean being harsh — it means being honest with a gentle heart.</p>
-                <div class="tool-actions">
-                    <button class="action-btn" onclick="event.stopPropagation(); showAffirmation(event, 'kindness')">Daily Affirmation</button>
-                    <button class="action-btn" onclick="event.stopPropagation(); flipCard(event, this)">Explore Deeper</button>
-                </div>
-            </div>
-            <div class="tool-card-back">
-                <div class="interactive-quote">
-                    "Kindness is the language which the deaf can hear and the blind can see."
-                </div>
-                <p><strong>Compassion Practice:</strong> Before speaking difficult truths, ask: "How can I say this with love?"</p>
-                <div class="reflection-area">
-                    <textarea placeholder="Write a kind message to yourself about a recent struggle..." onchange="updateReflectionCount()"></textarea>
-                </div>
-                <button class="action-btn" onclick="flipCard(event, this.parentElement)">Back to Tool</button>
+        <div class="tool-card" data-tool="kindness">
+            <span class="tool-icon">🎨</span>
+            <h3 class="tool-title">The Kindness Brush</h3>
+            <p class="tool-description">Paint your words with compassion, for yourself and those who listen. Speaking louder doesn't mean being harsh.</p>
+            <div class="tool-usage">
+                <strong>How to use:</strong> Before speaking, dip your words in kindness. Choose phrases that honor both your truth and the listener's humanity. Speak firmly but with love.
             </div>
         </div>
 
-        <div class="tool-card" onclick="activateTool(this, 'boundaries')">
-            <div class="tool-card-front">
-                <span class="tool-icon">🚧</span>
-                <h2 class="tool-title">The Boundary Tape</h2>
-                <p class="tool-description">To mark the lines of respect around your needs and limits. Use it to protect your peace and ask for what you deserve.</p>
-                <div class="tool-actions">
-                    <button class="action-btn" onclick="event.stopPropagation(); showAffirmation(event, 'boundaries')">Daily Affirmation</button>
-                    <button class="action-btn" onclick="event.stopPropagation(); flipCard(event, this)">Explore Deeper</button>
-                </div>
-            </div>
-            <div class="tool-card-back">
-                <div class="interactive-quote">
-                    "Boundaries are not walls; they are bridges to healthier relationships."
-                </div>
-                <p><strong>Boundary Check:</strong> What's one boundary you need to set or strengthen this week?</p>
-                <div class="reflection-area">
-                    <textarea placeholder="Describe a boundary you need to set. How will you communicate it with love?" onchange="updateReflectionCount()"></textarea>
-                </div>
-                <button class="action-btn" onclick="flipCard(event, this.parentElement)">Back to Tool</button>
+        <div class="tool-card" data-tool="boundary">
+            <span class="tool-icon">🚧</span>
+            <h3 class="tool-title">The Boundary Tape</h3>
+            <p class="tool-description">Mark the lines of respect around your needs and limits. Protect your peace and ask for what you deserve.</p>
+            <div class="tool-usage">
+                <strong>How to use:</strong> Visualize placing boundary tape around your needs. Say clearly: "This is what I need" or "This is my limit." Stand firm with loving conviction.
             </div>
         </div>
 
-        <div class="tool-card" onclick="activateTool(this, 'listening')">
-            <div class="tool-card-front">
-                <span class="tool-icon">🪞</span>
-                <h2 class="tool-title">The Listening Mirror</h2>
-                <p class="tool-description">Because speaking louder is also about opening space for others. Reflect back what you hear, and invite connection through empathy.</p>
-                <div class="tool-actions">
-                    <button class="action-btn" onclick="event.stopPropagation(); showAffirmation(event, 'listening')">Daily Affirmation</button>
-                    <button class="action-btn" onclick="event.stopPropagation(); flipCard(event, this)">Explore Deeper</button>
-                </div>
-            </div>
-            <div class="tool-card-back">
-                <div class="interactive-quote">
-                    "Listen with the intent to understand, not to reply."
-                </div>
-                <p><strong>Empathy Exercise:</strong> In your next conversation, reflect back what you hear before sharing your own thoughts.</p>
-                <div class="reflection-area">
-                    <textarea placeholder="Think of someone you need to listen to more deeply. What would that look like?" onchange="updateReflectionCount()"></textarea>
-                </div>
-                <button class="action-btn" onclick="flipCard(event, this.parentElement)">Back to Tool</button>
+        <div class="tool-card" data-tool="listening">
+            <span class="tool-icon">🪞</span>
+            <h3 class="tool-title">The Listening Mirror</h3>
+            <p class="tool-description">Speaking louder is also about opening space for others. Reflect back what you hear and invite connection.</p>
+            <div class="tool-usage">
+                <strong>How to use:</strong> After speaking your truth, hold up your Listening Mirror. Reflect back what others share: "What I hear you saying is..." Create space for dialogue.
             </div>
         </div>
     </div>
 
-    <div class="closing">
-        <p>This toolkit is always with you, ready to help you speak louder in love — whether you're sharing a difficult truth, asking for support, or simply reminding yourself that your voice matters.</p>
+    <div class="affirmation-section">
+        <div class="affirmation-text" id="affirmationText">
+            Your voice matters. Your truth deserves to be heard.
+        </div>
+        <button class="generate-btn" onclick="generateAffirmation()">
+            ✨ Generate Love Affirmation
+        </button>
     </div>
 </div>
 
 <script>
-    let toolsUsedCount = 0;
-    let reflectionCount = 0;
-    let breathingCount = 0;
-    let usedTools = new Set();
-    let selectedMood = null;
-    let isBreathing = false;
+    const affirmations = [
+        "Your voice matters. Your truth deserves to be heard.",
+        "Speaking with love takes courage, and you have that courage within you.",
+        "Your authentic expression is a gift to the world.",
+        "It's safe to speak your truth with kindness and conviction.",
+        "Your boundaries are sacred and worth protecting.",
+        "Love grows stronger when expressed honestly and openly.",
+        "You deserve to be heard, understood, and respected.",
+        "Your words have the power to heal and connect hearts.",
+        "Speaking louder in love means honoring both yourself and others.",
+        "Every time you speak your truth, you inspire others to do the same.",
+        "Your feelings are valid and worthy of gentle expression.",
+        "Courage is choosing love over fear, again and again."
+    ];
 
-    const affirmations = {
-        courage: [
-            "I am brave enough to speak my truth.",
-            "My voice matters and deserves to be heard.",
-            "I choose courage over comfort."
-        ],
-        truth: [
-            "I honor my authentic feelings.",
-            "My truth is valid and important.",
-            "I see myself with clarity and compassion."
-        ],
-        kindness: [
-            "I speak with love and understanding.",
-            "My words can heal and nurture.",
-            "I treat myself and others with gentle kindness."
-        ],
-        boundaries: [
-            "I deserve respect and healthy relationships.",
-            "My boundaries protect my peace.",
-            "I communicate my needs with confidence."
-        ],
-        listening: [
-            "I create space for others to be heard.",
-            "My presence is a gift to those around me.",
-            "I listen with my whole heart."
-        ]
-    };
+    let currentAffirmationIndex = 0;
 
-    // Create floating hearts animation
-    function createHeart() {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        const hearts = ['❤️', '💖', '💕', '💝'];
-        heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
-        heart.style.animationDelay = Math.random() * 2 + 's';
+    function generateAffirmation() {
+        const affirmationElement = document.getElementById('affirmationText');
+        const button = document.querySelector('.generate-btn');
         
-        document.querySelector('.floating-hearts').appendChild(heart);
+        button.classList.add('pulse');
+        affirmationElement.style.opacity = '0';
         
         setTimeout(() => {
-            heart.remove();
-        }, 8000);
-    }
-
-    // Create hearts periodically
-    setInterval(createHeart, 3000);
-
-    function activateTool(card, toolType) {
-        if (!usedTools.has(toolType)) {
-            usedTools.add(toolType);
-            toolsUsedCount++;
-            updateStats();
-            updateProgress();
+            currentAffirmationIndex = (currentAffirmationIndex + 1) % affirmations.length;
+            affirmationElement.textContent = affirmations[currentAffirmationIndex];
+            affirmationElement.style.opacity = '1';
             
-            card.classList.add('activated');
-            celebrate();
-        }
-    }
-
-    function flipCard(event, card) {
-        event.stopPropagation();
-        event.preventDefault();
-        
-        // Find the correct card element
-        let cardElement = card;
-        while (cardElement && !cardElement.classList.contains('tool-card')) {
-            cardElement = cardElement.parentElement;
-        }
-        
-        if (cardElement) {
-            cardElement.classList.toggle('flipped');
+            // Add sparkle effect
+            createSparkles(button);
             
-            // Add visual feedback
-            const icon = cardElement.querySelector('.tool-icon');
-            if (icon) {
-                icon.style.transform = 'scale(0.8) rotate(180deg)';
-                setTimeout(() => {
-                    icon.style.transform = '';
-                }, 600);
-            }
-        }
-    }
-
-    function showAffirmation(event, toolType) {
-        event.stopPropagation();
-        const affirmationList = affirmations[toolType];
-        const randomAffirmation = affirmationList[Math.floor(Math.random() * affirmationList.length)];
-        
-        // Create temporary affirmation display
-        const affirmationDiv = document.createElement('div');
-        affirmationDiv.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9);
-            color: #ffd93d;
-            padding: 30px;
-            border-radius: 15px;
-            font-size: 1.5rem;
-            text-align: center;
-            z-index: 1000;
-            max-width: 500px;
-            animation: fadeIn 0.5s ease-in-out;
-        `;
-        affirmationDiv.innerHTML = `
-            <p>"${randomAffirmation}"</p>
-            <button onclick="this.parentElement.remove()" style="
-                margin-top: 20px;
-                padding: 10px 20px;
-                background: #ffd93d;
-                color: #333;
-                border: none;
-                border-radius: 20px;
-                cursor: pointer;
-            ">Close</button>
-        `;
-        
-        document.body.appendChild(affirmationDiv);
-        setTimeout(() => {
-            if (affirmationDiv.parentElement) {
-                affirmationDiv.remove();
-            }
-        }, 5000);
-    }
-
-    function selectMood(btn, mood) {
-        document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedMood = mood;
-        
-        // Customize experience based on mood
-        if (mood === 'nervous') {
-            createExtraHearts();
-        } else if (mood === 'excited') {
-            celebrate();
-        }
-    }
-
-    function createExtraHearts() {
-        for (let i = 0; i < 5; i++) {
-            setTimeout(createHeart, i * 200);
-        }
-    }
-
-    function celebrate() {
-        const celebration = document.createElement('div');
-        celebration.className = 'celebration';
-        celebration.innerHTML = selectedMood === 'excited' ? '🎉' : '✨';
-        document.body.appendChild(celebration);
-        
-        setTimeout(() => {
-            celebration.remove();
-        }, 1000);
-    }
-
-    function updateStats() {
-        document.getElementById('toolsUsed').textContent = toolsUsedCount;
-        document.getElementById('reflections').textContent = reflectionCount;
-        document.getElementById('breathingSessions').textContent = breathingCount;
-    }
-
-    function updateProgress() {
-        const progress = (toolsUsedCount / 5) * 100;
-        document.getElementById('progressFill').style.width = progress + '%';
-    }
-
-    function updateReflectionCount() {
-        reflectionCount++;
-        updateStats();
-    }
-
-    function toggleBreathing() {
-        const breathingBtn = document.querySelector('.interactive-breathing');
-        isBreathing = !isBreathing;
-        
-        if (isBreathing) {
-            breathingBtn.classList.add('breathing-active');
-            breathingCount++;
-            updateStats();
-            
-            // Stop breathing after 1 minute
             setTimeout(() => {
-                breathingBtn.classList.remove('breathing-active');
-                isBreathing = false;
-            }, 60000);
-        } else {
-            breathingBtn.classList.remove('breathing-active');
-        }
-    }
-
-    function titleClick() {
-        const title = document.querySelector('.header h1');
-        title.style.transform = 'scale(1.1) rotate(5deg)';
-        setTimeout(() => {
-            title.style.transform = '';
+                button.classList.remove('pulse');
+            }, 2000);
         }, 300);
-        celebrate();
     }
 
-    // Add sparkle effect on hover
-    document.querySelectorAll('.tool-card').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            const sparkles = ['✨', '⭐', '💫', '🌟'];
-            const sparkle = document.createElement('div');
-            sparkle.innerHTML = sparkles[Math.floor(Math.random() * sparkles.length)];
-            sparkle.style.position = 'absolute';
-            sparkle.style.top = Math.random() * 100 + '%';
-            sparkle.style.left = Math.random() * 100 + '%';
-            sparkle.style.fontSize = '20px';
-            sparkle.style.pointerEvents = 'none';
-            sparkle.style.animation = 'fadeIn 0.5s ease-in-out forwards';
-            
-            this.appendChild(sparkle);
-            
+    function createSparkles(element) {
+        for (let i = 0; i < 5; i++) {
             setTimeout(() => {
-                sparkle.remove();
-            }, 1000);
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * element.offsetWidth + 'px';
+                sparkle.style.top = Math.random() * element.offsetHeight + 'px';
+                element.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 2000);
+            }, i * 100);
+        }
+    }
+
+    // Tool card interactions
+    document.querySelectorAll('.tool-card').forEach(card => {
+        card.addEventListener('click', () => {
+            // Remove active class from all cards
+            document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked card
+            card.classList.add('active');
+            
+            // Create sparkle effect
+            createSparkles(card);
+            
+            // Auto-close after 10 seconds
+            setTimeout(() => {
+                card.classList.remove('active');
+            }, 10000);
         });
     });
 
-    // Initialize progress
-    updateProgress();
+    // Initialize with first affirmation
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('affirmationText').textContent = affirmations[0];
+    });
+
+    // Add some floating animation to the background
+    function createFloatingElements() {
+        const container = document.body;
+        const symbols = ['💕', '✨', '🌟', '💖', '🌈'];
+        
+        setInterval(() => {
+            const element = document.createElement('div');
+            element.style.position = 'fixed';
+            element.style.left = Math.random() * window.innerWidth + 'px';
+            element.style.top = window.innerHeight + 'px';
+            element.style.fontSize = '20px';
+            element.style.pointerEvents = 'none';
+            element.style.zIndex = '-1';
+            element.style.opacity = '0.3';
+            element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            
+            container.appendChild(element);
+            
+            const animation = element.animate([
+                { transform: 'translateY(0px) rotate(0deg)', opacity: 0.3 },
+                { transform: `translateY(-${window.innerHeight + 100}px) rotate(360deg)`, opacity: 0 }
+            ], {
+                duration: 8000 + Math.random() * 4000,
+                easing: 'ease-out'
+            });
+            
+            animation.onfinish = () => element.remove();
+        }, 3000);
+    }
+
+    createFloatingElements();
 </script>
 ```
 
