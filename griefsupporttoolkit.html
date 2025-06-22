@@ -1,123 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Grief Support Toolkit</title>
   <style>
     /* Global Styles */
     body {
       font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       background: #f0f8ff;
       color: #333;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
     }
     h1, h2, h3 {
       color: #2c3e50;
+      margin-top: 0;
     }
     a {
       color: #3498db;
       text-decoration: none;
     }
-    a:hover {
+    a:hover,
+    a:focus {
       text-decoration: underline;
+      outline: none;
+    }
+    main {
+      max-width: 720px;
+      margin: 1.5rem auto 3rem;
+      background: rgba(255 255 255 / 0.9);
+      border-radius: 10px;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
     }
     section {
-      padding: 20px;
-      margin: 20px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2.5rem;
     }
-    /* Mood Tracker Styles */
+    ul {
+      padding-left: 1.3rem;
+    }
+    /* Mood Tracker */
     .mood-tracker {
       display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
     }
     .mood-tracker button {
       background: transparent;
       border: none;
-      font-size: 2rem;
+      font-size: 2.2rem;
       cursor: pointer;
+      transition: transform 0.2s ease, color 0.2s ease;
+      user-select: none;
+      color: #555;
     }
     .mood-tracker button.selected {
       color: #e74c3c;
+      transform: scale(1.3);
+      outline-offset: 3px;
+      outline: 2px solid #e74c3c;
+      border-radius: 8px;
     }
-    /* Journaling Styles */
+    /* Journaling */
     #journal {
       width: 100%;
-      height: 150px;
-      padding: 10px;
-      border: 1px solid #ccc;
+      height: 160px;
+      padding: 12px;
+      border: 1.5px solid #ccc;
       border-radius: 8px;
       font-size: 1rem;
+      resize: vertical;
       box-sizing: border-box;
+      font-family: inherit;
+      color: #222;
+      transition: border-color 0.3s ease;
     }
-    /* Dark Mode Styles */
+    #journal:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 8px rgba(52,152,219,0.5);
+    }
+    /* Dark Mode */
     body.dark {
       background: #2c3e50;
       color: #ecf0f1;
     }
-    body.dark a {
-      color: #ecf0f1;
-    }
-    body.dark section {
+    body.dark main {
       background: rgba(44, 62, 80, 0.9);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
     }
-    /* Cloud Animation */
+    body.dark a {
+      color: #80c3ff;
+    }
+    body.dark a:hover,
+    body.dark a:focus {
+      color: #c0ddff;
+    }
+    body.dark #journal {
+      background: #1c2a3a;
+      border-color: #3a599e;
+      color: #d3d9e4;
+    }
+    body.dark #journal:focus {
+      border-color: #80c3ff;
+      box-shadow: 0 0 10px rgba(128,195,255,0.8);
+    }
+    /* Dark Mode toggle */
+    #darkmode-toggle {
+      margin-left: 8px;
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+    label[for="darkmode-toggle"] {
+      font-weight: 600;
+      user-select: none;
+      cursor: pointer;
+    }
+    /* Header */
+    header {
+      text-align: center;
+      margin: 2rem auto 1rem;
+      max-width: 720px;
+      padding: 0 1rem;
+    }
+    header p {
+      font-style: italic;
+      color: #666;
+      margin-top: 0.25rem;
+    }
+    /* Cloud Background */
     .clouds {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://www.transparenttextures.com/patterns/clouds.png');
-      animation: moveClouds 60s linear infinite;
+      top: 0; left: 0; right: 0; bottom: 0;
       pointer-events: none;
       z-index: -1;
+      background: url('https://www.transparenttextures.com/patterns/clouds.png') repeat-x;
+      animation: moveClouds 60s linear infinite;
+      opacity: 0.3;
     }
     @keyframes moveClouds {
       from { background-position: 0 0; }
-      to { background-position: 100% 0; }
+      to { background-position: 1000px 0; }
+    }
+    /* Responsive */
+    @media (max-width: 480px) {
+      main {
+        padding: 1.5rem 1rem;
+      }
+      .mood-tracker button {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="clouds"></div>
+  <div class="clouds" aria-hidden="true"></div>
+
   <header>
     <h1>Grief Support Toolkit</h1>
     <p>Your companion on the journey through loss</p>
   </header>
 
   <main>
-    <section id="mood-tracker">
+    <section id="mood-tracker" aria-label="Mood Tracker">
       <h2>🌈 Mood Tracker</h2>
-      <div class="mood-tracker">
-        <button data-mood="😢">Sad</button>
-        <button data-mood="😐">Neutral</button>
-        <button data-mood="😊">Okay</button>
-        <button data-mood="😁">Happy</button>
+      <p>Select how you're feeling right now:</p>
+      <div class="mood-tracker" role="list">
+        <button role="listitem" aria-pressed="false" data-mood="😢 Sad" title="Sad">😢</button>
+        <button role="listitem" aria-pressed="false" data-mood="😐 Neutral" title="Neutral">😐</button>
+        <button role="listitem" aria-pressed="false" data-mood="😊 Okay" title="Okay">😊</button>
+        <button role="listitem" aria-pressed="false" data-mood="😁 Happy" title="Happy">😁</button>
       </div>
     </section>
 
     <section id="journal">
       <h2>📝 Journaling</h2>
-      <textarea id="journal" placeholder="Write your thoughts here..."></textarea>
+      <label for="journal-textarea" class="visually-hidden">Grief journaling area</label>
+      <textarea id="journal-textarea" placeholder="Write your thoughts and feelings here..."></textarea>
     </section>
 
     <section id="resources">
       <h2>📘 Grief Support Resources</h2>
-      <p>Explore these free resources for support and community:</p>
+      <p>Explore these free, trusted resources for support and community:</p>
       <ul>
-        <li><a href="https://www.mygrief.ca" target="_blank">MyGrief.ca</a> - Online resource offering modules on various aspects of grief.</li>
-        <li><a href="https://www.healingheartscanada.org/find-a-group" target="_blank">Healing Hearts Canada</a> - Free grief support groups available across Canada.</li>
-        <li><a href="https://www.griefshare.org" target="_blank">GriefShare</a> - Grief recovery support groups with a network of local groups.</li>
-        <li><a href="https://www.mygriefangels.org/free-virtual-grief-support-groups-by-type-of-loss.html" target="_blank">My Grief Angels</a> - Virtual grief support groups by type of loss.</li>
-        <li><a href="https://www.lumarasociety.org/virtual-grief-support-groups-available-across-canada/" target="_blank">Lumara Society</a> - Virtual grief support groups available across Canada.</li>
-        <li><a href="https://www.nshealth.ca/clinics-programs-and-services/palliative-care-bereavement-program-central-zone" target="_blank">Nova Scotia Health - Palliative Care Bereavement Program</a> - Offers grief support services including counseling and support groups.</li>
+        <li><a href="https://www.mygrief.ca" target="_blank" rel="noopener noreferrer">MyGrief.ca</a> - Self-paced online grief support modules.</li>
+        <li><a href="https://www.healingheartscanada.org/find-a-group" target="_blank" rel="noopener noreferrer">Healing Hearts Canada</a> - Free grief support groups for those affected by addiction loss.</li>
+        <li><a href="https://www.griefshare.org" target="_blank" rel="noopener noreferrer">GriefShare</a> - Worldwide network of grief recovery support groups.</li>
+        <li><a href="https://www.mygriefangels.org/free-virtual-grief-support-groups-by-type-of-loss.html" target="_blank" rel="noopener noreferrer">My Grief Angels</a> - Free virtual grief support groups by type of loss.</li>
+        <li><a href="https://www.lumarasociety.org/virtual-grief-support-groups-available-across-canada/" target="_blank" rel="noopener noreferrer">Lumara Society</a> - Virtual grief support groups available across Canada.</li>
+        <li><a href="https://www.nshealth.ca/clinics-programs-and-services/palliative-care-bereavement-program-central-zone" target="_blank" rel="noopener noreferrer">Nova Scotia Health Bereavement Program</a> - Counseling and support groups for grief.</li>
       </ul>
     </section>
 
@@ -125,14 +202,14 @@
       <h2>💆 Self-Care Tips</h2>
       <ul>
         <li>Allow yourself to grieve in your own way and time.</li>
-        <li>Engage in activities that bring you comfort and peace.</li>
-        <li>Stay connected with supportive friends and family.</li>
+        <li>Engage in comforting activities.</li>
+        <li>Stay connected with supportive people.</li>
         <li>Consider professional counseling if needed.</li>
         <li>Practice mindfulness or meditation to help manage stress.</li>
       </ul>
     </section>
 
-    <section id="dark-mode">
+    <section id="dark-mode-toggle">
       <h2>🌙 Dark Mode</h2>
       <label for="darkmode-toggle">
         <input type="checkbox" id="darkmode-toggle" aria-checked="false" role="switch" />
@@ -149,14 +226,13 @@
       toggle.setAttribute('aria-checked', toggle.checked);
       localStorage.setItem('griefToolkitDarkMode', toggle.checked);
     });
-
     if (localStorage.getItem('griefToolkitDarkMode') === 'true') {
       toggle.checked = true;
       document.body.classList.add('dark');
       toggle.setAttribute('aria-checked', 'true');
     }
 
-    // Mood Tracker
+    // Mood Tracker Buttons
     const moodButtons = document.querySelectorAll('.mood-tracker button');
     moodButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -169,7 +245,6 @@
         localStorage.setItem('griefToolkitMood', btn.dataset.mood);
       });
     });
-
     const lastMood = localStorage.getItem('griefToolkitMood');
     if (lastMood) {
       const lastBtn = [...moodButtons].find(b => b.dataset.mood === lastMood);
@@ -179,8 +254,8 @@
       }
     }
 
-    // Journaling
-    const journal = document.getElementById('journal');
+    // Journaling save/load
+    const journal = document.getElementById('journal-textarea');
     journal.value = localStorage.getItem('griefToolkitJournal') || '';
     journal.addEventListener('input', () => {
       localStorage.setItem('griefToolkitJournal', journal.value);
