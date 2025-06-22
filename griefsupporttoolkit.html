@@ -1,731 +1,539 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Grief Support Toolkit</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grief Support Toolkit</title>
+  <style>
+    /* ===== GOOGLE FONT ===== */
+    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
 
-  /* Background and body */
-  body {
-    margin: 0;
-    font-family: 'Comfortaa', cursive, sans-serif;
-    background: linear-gradient(135deg, #d9c1ff, #a4a4ff);
-    min-height: 100vh;
-    color: #3a1c6f;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-  }
-
-  /* Subtle abstract pattern overlay */
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle at 20% 20%, rgba(255 255 255 / 0.12), transparent 60%),
-                radial-gradient(circle at 80% 80%, rgba(255 255 255 / 0.12), transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  h1 {
-    font-weight: 700;
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    text-align: center;
-    color: #4b2ca9;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  }
-
-  .container {
-    max-width: 1200px;
-    width: 100%;
-    z-index: 1;
-  }
-
-  /* Grid layout */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
-    gap: 2rem;
-  }
-
-  /* Section Cards */
-  section {
-    background: white;
-    border-radius: 14px;
-    box-shadow: 0 8px 25px rgb(102 84 204 / 0.25);
-    padding: 1.8rem 2rem;
-    position: relative;
-    transition: box-shadow 0.3s ease;
-  }
-  section:hover,
-  section:focus-within {
-    box-shadow: 0 12px 30px rgb(102 84 204 / 0.4);
-  }
-
-  /* Section Header with icon background */
-  section h2 {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    font-weight: 700;
-    font-size: 1.4rem;
-    margin-top: 0;
-    margin-bottom: 1rem;
-    user-select: none;
-  }
-  section h2 .icon {
-    font-size: 1.8rem;
-    background: linear-gradient(45deg, #7f5af0, #a865f9);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  /* Mood Tracker Buttons */
-  .mood-buttons {
-    display: flex;
-    justify-content: space-between;
-  }
-  .mood-btn {
-    background: #ddd;
-    border-radius: 10px;
-    font-size: 2.2rem;
-    border: none;
-    cursor: pointer;
-    padding: 0.4rem 0.7rem;
-    flex-grow: 1;
-    margin: 0 0.2rem;
-    transition: background 0.3s ease, transform 0.2s ease;
-  }
-  .mood-btn[aria-checked="true"],
-  .mood-btn:hover,
-  .mood-btn:focus {
-    background: #7f5af0;
-    color: white;
-    transform: scale(1.1);
-    outline: none;
-    box-shadow: 0 0 12px #7f5af0aa;
-    z-index: 1;
-  }
-
-  .progress-bar {
-    background: #eee;
-    border-radius: 20px;
-    height: 10px;
-    margin-top: 0.7rem;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: #a865f9;
-    width: 0%;
-    border-radius: 20px 0 0 20px;
-    transition: width 0.4s ease;
-  }
-
-  /* Text Feedback */
-  #moodMessage {
-    margin-top: 0.8rem;
-    font-style: italic;
-    font-weight: 600;
-    color: #4b2ca9;
-  }
-
-  /* Emergency Support style */
-  .emergency-section p,
-  .emergency-section a {
-    font-weight: 600;
-  }
-  .emergency-number a {
-    color: #e03e3e;
-    font-size: 1.2rem;
-    font-weight: 700;
-    text-decoration: none;
-  }
-  .emergency-number a:hover,
-  .emergency-number a:focus {
-    text-decoration: underline;
-    outline: none;
-  }
-
-  /* Additional Resources and Support Contacts lists */
-  ul {
-    padding-left: 1.2rem;
-    margin-top: 0;
-  }
-  ul li {
-    margin-bottom: 0.5rem;
-  }
-  ul li a {
-    color: #6e42c1;
-    font-weight: 600;
-    text-decoration: none;
-  }
-  ul li a:hover,
-  ul li a:focus {
-    text-decoration: underline;
-    outline: none;
-  }
-
-  /* Buttons */
-  button {
-    font-family: 'Comfortaa', cursive, sans-serif;
-    background: #7f5af0;
-    color: white;
-    border: none;
-    padding: 0.6rem 1.1rem;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: 700;
-    transition: background 0.3s ease;
-  }
-  button:hover,
-  button:focus {
-    background: #a865f9;
-    outline: none;
-  }
-
-  /* Journal */
-  #journalEntry {
-    width: 100%;
-    height: 130px;
-    border-radius: 10px;
-    border: 2px solid #dcd7ff;
-    padding: 0.8rem;
-    font-size: 1rem;
-    font-family: 'Comfortaa', cursive, sans-serif;
-    resize: vertical;
-    transition: border-color 0.3s ease;
-  }
-  #journalEntry:focus {
-    border-color: #7f5af0;
-    outline: none;
-  }
-  #journalMessage {
-    margin-top: 0.5rem;
-    font-weight: 600;
-    color: #4b2ca9;
-    min-height: 1.2em;
-  }
-
-  /* Modal styles */
-  .modal-overlay {
-    background: rgba(40, 17, 78, 0.85);
-    backdrop-filter: blur(7px);
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    z-index: 10000;
-  }
-  .modal-overlay.active {
-    display: flex;
-  }
-  .modal-content {
-    background: #fff;
-    color: #3a1c6f;
-    border-radius: 14px;
-    max-width: 500px;
-    max-height: 80vh;
-    overflow-y: auto;
-    padding: 1.6rem 2rem;
-    box-shadow: 0 8px 40px rgb(102 84 204 / 0.4);
-    position: relative;
-  }
-  .modal-close {
-    position: absolute;
-    top: 0.5rem;
-    right: 1rem;
-    background: transparent;
-    border: none;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #7f5af0;
-    cursor: pointer;
-    line-height: 1;
-  }
-  .modal-close:hover,
-  .modal-close:focus {
-    color: #a865f9;
-    outline: none;
-  }
-  .modal-body p,
-  .modal-body ul {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    line-height: 1.4;
-    font-size: 1rem;
-  }
-  .modal-body ul li {
-    margin-bottom: 0.4rem;
-  }
-
-  /* Breathing circle animation */
-  .breathing-circle {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 1rem auto;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #7f5af0, #a865f9);
-    animation: breathe 4s ease-in-out infinite;
-  }
-  @keyframes breathe {
-    0%, 100% { transform: scale(1); opacity: 0.85; }
-    50% { transform: scale(1.3); opacity: 0.55; }
-  }
-
-  /* Analytics button and panel */
-  #showAnalytics {
-    position: fixed;
-    bottom: 1.4rem;
-    right: 1.4rem;
-    font-size: 2.1rem;
-    background: #7f5af0;
-    color: white;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgb(127 90 240 / 0.6);
-    transition: background 0.3s ease;
-    z-index: 1001;
-  }
-  #showAnalytics:hover,
-  #showAnalytics:focus {
-    background: #a865f9;
-    outline: none;
-  }
-
-  #analyticsPanel {
-    display: none;
-    position: fixed;
-    bottom: 75px;
-    right: 1rem;
-    background: white;
-    color: #3a1c6f;
-    border-radius: 14px;
-    padding: 1rem 1.5rem;
-    max-width: 320px;
-    max-height: 400px;
-    overflow-y: auto;
-    box-shadow: 0 8px 30px rgb(102 84 204 / 0.5);
-    z-index: 1001;
-  }
-  #analyticsPanel h4 {
-    margin-top: 0;
-    margin-bottom: 0.8rem;
-  }
-  #analyticsPanel ul {
-    padding-left: 1.2rem;
-    margin-top: 0;
-    margin-bottom: 1rem;
-  }
-  #analyticsPanel button {
-    background: #7f5af0;
-    width: 100%;
-  }
-
-  /* Responsive tweaks */
-  @media (max-width: 700px) {
-    body::before {
-      background: radial-gradient(circle at 20% 20%, rgba(255 255 255 / 0.07), transparent 60%),
-                  radial-gradient(circle at 80% 80%, rgba(255 255 255 / 0.07), transparent 60%);
+    /* ===== CSS VARIABLES for Themes ===== */
+    :root {
+      --bg-gradient: linear-gradient(135deg, #d9c1ff, #a4a4ff);
+      --text-color: #3a1c6f;
+      --card-bg: #fff;
+      --card-shadow: rgba(102,84,204,0.25);
+      --primary: #7f5af0;
+      --primary-light: #a865f9;
+      --accent: #4b2ca9;
     }
-    section {
-      padding: 1.4rem 1.5rem;
+    body.theme-dark {
+      --bg-gradient: #121212;
+      --text-color: #ddd;
+      --card-bg: #1e1e1e;
+      --card-shadow: rgba(0,0,0,0.7);
+      --primary: #4a90e2;
+      --primary-light: #72b5f9;
+      --accent: #aad1f7;
     }
-  }
-</style>
+    body.theme-calm {
+      --bg-gradient: linear-gradient(135deg, #f0f4f8, #c8d8e5);
+      --text-color: #333;
+      --card-bg: #fff;
+      --card-shadow: rgba(100,100,120,0.15);
+      --primary: #88c0d0;
+      --primary-light: #b0dfee;
+      --accent: #5e81ac;
+    }
+
+    /* ===== RESET & BASE ===== */
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: 'Comfortaa', cursive, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-color);
+      min-height: 100vh;
+      padding: 1rem;
+      transition: background 0.5s, color 0.5s;
+    }
+    h1 { text-align:center; font-size:2.6rem; margin-bottom:1rem; color:var(--accent); }
+    button, select, textarea {
+      font-family: inherit;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+    }
+    button, select {
+      background: var(--primary);
+      color: #fff;
+      padding:0.6rem 1rem;
+      transition: background 0.3s;
+    }
+    button:hover, select:hover { background: var(--primary-light); }
+    button:focus, select:focus, textarea:focus { outline:2px solid var(--accent); }
+
+    /* ===== Layout ===== */
+    .container { max-width:1100px; margin:0 auto; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; }
+
+    section.card {
+      background: var(--card-bg);
+      border-radius:12px;
+      padding:1.5rem;
+      box-shadow: 0 8px 25px var(--card-shadow);
+      position: relative;
+      transition: box-shadow 0.3s;
+    }
+    section.card:hover { box-shadow: 0 12px 30px var(--card-shadow); }
+    section.card h2 {
+      display:flex; align-items:center; gap:0.6rem;
+      font-size:1.4rem; margin-bottom:1rem; color:var(--accent);
+    }
+    .icon { font-size:1.8rem; }
+
+    /* ===== THEME SELECTOR ===== */
+    #themeSelector {
+      position: fixed; top:1rem; left:1rem; z-index:100;
+    }
+
+    /* ===== SOS BUTTON ===== */
+    #sosBtn {
+      position: fixed; bottom:1rem; left:1rem;
+      background:#e03e3e; color:#fff; width:52px; height:52px; 
+      border-radius:50%; font-size:1.8rem; display:flex; align-items:center; justify-content:center;
+      z-index:100;
+    }
+    #sosBtn:hover { background:#c13030; }
+
+    /* ===== Sections Styles ===== */
+    /* Memory Garden */
+    #garden { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1rem; }
+    .garden-item {
+      background: var(--primary-light); color:white; padding:0.6rem 0.8rem;
+      border-radius:20px; cursor:pointer; transition:transform 0.2s;
+    }
+    .garden-item:hover { transform:scale(1.1); }
+
+    /* Grief-in-Body Explorer */
+    .body-map { background:url('https://i.imgur.com/YOuYWbS.png') center/contain no-repeat;
+      width:100%; height:260px; position:relative; margin-bottom:1rem;
+    }
+    .body-spot { position:absolute; width:20px; height:20px;
+      background:rgba(255,0,0,0.6); border-radius:50%; cursor:pointer; transition:background 0.3s;
+    }
+    .body-spot:hover { background:red; }
+
+    /* Letters to Loved Ones */
+    #loveLetter { width:100%; min-height:120px; border:2px solid var(--primary);
+      border-radius:8px; padding:0.8rem; resize:vertical; margin-bottom:0.6rem;
+    }
+
+    /* Comfort Plan Builder */
+    .plan-builder label { display:block; margin-top:0.8rem; font-weight:600; }
+    .plan-builder input, .plan-builder textarea {
+      width:100%; padding:0.6rem; border-radius:6px; border:1px solid #ccc; margin-top:0.4rem;
+    }
+
+    /* Myth Busters Carousel */
+    .carousel { overflow:hidden; }
+    .carousel-track {
+      display:flex; transition:transform 0.4s ease;
+    }
+    .carousel-card {
+      min-width:280px; flex-shrink:0; background:var(--card-bg);
+      border-radius:10px; padding:1rem; margin-right:1rem; box-shadow:0 4px 16px var(--card-shadow);
+    }
+    .carousel-controls { text-align:center; margin-top:0.6rem; }
+    .carousel-btn { background: var(--primary); margin:0 0.2rem; }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);
+      justify-content:center; align-items:center; padding:1rem; z-index:500;
+    }
+    .modal-overlay.active { display:flex; }
+    .modal-content {
+      background:white; padding:1.5rem; border-radius:12px;
+      max-width:500px; max-height:80vh; overflow-y:auto;
+      box-shadow:0 8px 30px var(--card-shadow); position:relative;
+    }
+    .modal-close {
+      position:absolute; top:0.6rem; right:0.8rem;
+      background:transparent; font-size:1.6rem; cursor:pointer; color:var(--accent);
+    }
+
+    /* Mood Tracker */
+    .mood-buttons { display:flex; justify-content:space-between; margin-bottom:1rem; }
+    .mood-btn {
+      flex-grow:1; margin:0 0.2rem; font-size:2.2rem; background:#ddd; border-radius:10px;
+      display:flex; align-items:center; justify-content:center; transition:transform 0.2s,background 0.3s;
+    }
+    .mood-btn[aria-checked="true"], .mood-btn:hover, .mood-btn:focus {
+      background: var(--primary); color:#fff; transform:scale(1.1); outline:none;
+      box-shadow:0 0 12px var(--card-shadow);
+    }
+    .progress-bar { background:#eee; border-radius:20px; height:10px; overflow:hidden; }
+    .progress-fill { height:100%; background:var(--primary-light); width:0; transition:width 0.4s; }
+    #moodMessage { margin-top:0.8rem; font-style:italic; font-weight:600; color:var(--accent); }
+
+    /* Journal */
+    #journalEntry { width:100%; height:120px; border:2px solid #dcd7ff; border-radius:10px;
+      padding:0.8rem; margin-bottom:0.6rem; resize:vertical; }
+    #journalEntry:focus { border-color:var(--primary); }
+    #journalMessage { font-weight:600; color:var(--accent); }
+
+    /* Additional Resources & Contacts */
+    ul { padding-left:1.2rem; margin-top:0; }
+    ul li { margin-bottom:0.5rem; }
+    ul li a { color:var(--primary); font-weight:600; text-decoration:none; }
+    ul li a:hover, ul li a:focus { text-decoration:underline; outline:none; }
+
+    /* Responsive */
+    @media (max-width:600px) {
+      .grid { display:block; }
+      #themeSelector { top:0.5rem; left:0.5rem; }
+      #sosBtn { bottom:0.5rem; left:0.5rem; }
+    }
+  </style>
 </head>
 <body>
 
-<h1>Grief Support Toolkit</h1>
-<div class="container">
+  <!-- Theme Selector -->
+  <select id="themeSelector">
+    <option value="light">Light Theme</option>
+    <option value="dark">Dark Theme</option>
+    <option value="calm">Calm Pastel</option>
+  </select>
 
-  <div class="grid">
+  <!-- SOS Button -->
+  <button id="sosBtn" aria-label="SOS Button">🆘</button>
 
-    <!-- Section 1: Understanding Grief -->
-    <section tabindex="0" aria-labelledby="section1-title">
-      <h2 id="section1-title"><span class="icon" aria-hidden="true">🧠</span>Understanding Grief</h2>
-      <p>Grief is a natural response to loss, involving a range of emotions including sadness, anger, confusion, and loneliness. Everyone experiences grief differently and there is no right or wrong way to grieve.</p>
-      <p>It’s important to allow yourself to feel these emotions and seek support when needed. Grief can affect your mental, physical, and emotional well-being.</p>
-      <p>Common stages include:</p>
-      <ul>
-        <li>Denial &amp; Isolation</li>
-        <li>Anger</li>
-        <li>Bargaining</li>
-        <li>Depression</li>
-        <li>Acceptance</li>
-      </ul>
-      <button id="openGriefModal" aria-haspopup="dialog" aria-expanded="false">Read More</button>
-    </section>
+  <h1>Grief Support Toolkit</h1>
+  <div class="container">
+    <div class="grid">
 
-    <!-- Section 2: Coping Strategies -->
-    <section tabindex="0" aria-labelledby="section2-title">
-      <h2 id="section2-title"><span class="icon" aria-hidden="true">🛠️</span>Coping Strategies</h2>
-      <div class="strategy-list" role="list">
-        <button class="strategy-card" data-strategy="Breathing" role="listitem">Breathing Exercise</button>
-        <button class="strategy-card" data-strategy="Journaling" role="listitem">Journaling</button>
-        <button class="strategy-card" data-strategy="Exercise" role="listitem">Exercise</button>
-        <button class="strategy-card" data-strategy="Connection" role="listitem">Connection</button>
-        <button class="strategy-card" data-strategy="Mindfulness" role="listitem">Mindfulness</button>
-        <button class="strategy-card" data-strategy="Help" role="listitem">Seeking Help</button>
-      </div>
-    </section>
+      <!-- Section: Memory Garden -->
+      <section class="card" aria-labelledby="garden-title">
+        <h2 id="garden-title"><span class="icon">🌺</span>Memory Garden</h2>
+        <p>Plant a tribute for someone you miss.</p>
+        <button id="plantBtn">Plant Tribute</button>
+        <div id="garden"></div>
+      </section>
 
-    <!-- Section 3: Journaling -->
-    <section tabindex="0" aria-labelledby="section3-title">
-      <h2 id="section3-title"><span class="icon" aria-hidden="true">✍️</span>Journaling</h2>
-      <textarea id="journalEntry" aria-label="Write your journal entry here" placeholder="Write your feelings and thoughts here..."></textarea>
-      <button id="saveJournalBtn">Save Entry</button>
-      <p id="journalMessage" role="status" aria-live="polite"></p>
-    </section>
+      <!-- Section: Grief in Your Body Explorer -->
+      <section class="card" aria-labelledby="body-title">
+        <h2 id="body-title"><span class="icon">🗺️</span>Grief in Your Body</h2>
+        <p>Click areas to learn how grief can show physically.</p>
+        <div class="body-map" id="bodyMap"></div>
+      </section>
 
-    <!-- Section 5: Mood Tracker -->
-    <section tabindex="0" aria-labelledby="section5-title">
-      <h2 id="section5-title"><span class="icon" aria-hidden="true">😊</span>Mood Tracker</h2>
-      <div class="mood-buttons" role="radiogroup" aria-label="Mood selection">
-        <button class="mood-btn" data-mood="1" aria-label="Very Sad" role="radio" tabindex="0">😞</button>
-        <button class="mood-btn" data-mood="2" aria-label="Sad" role="radio" tabindex="-1">😟</button>
-        <button class="mood-btn" data-mood="3" aria-label="Neutral" role="radio" tabindex="-1">😐</button>
-        <button class="mood-btn" data-mood="4" aria-label="Happy" role="radio" tabindex="-1">🙂</button>
-        <button class="mood-btn" data-mood="5" aria-label="Very Happy" role="radio" tabindex="-1">😄</button>
-      </div>
-      <div class="progress-bar" aria-hidden="true">
-        <div class="progress-fill"></div>
-      </div>
-      <p id="moodMessage" aria-live="polite" aria-atomic="true"></p>
-    </section>
+      <!-- Section: Letters to Loved Ones -->
+      <section class="card" aria-labelledby="letter-title">
+        <h2 id="letter-title"><span class="icon">💌</span>Letters to Loved Ones</h2>
+        <textarea id="loveLetter" placeholder="Write a letter..."></textarea>
+        <button id="saveLetterBtn">Save Letter</button>
+      </section>
 
-    <!-- Section 6: Emergency Support -->
-    <section tabindex="0" aria-labelledby="section6-title" class="emergency-section">
-      <h2 id="section6-title"><span class="icon" aria-hidden="true">🚨</span>Emergency Support</h2>
-      <p>If you or someone you know is in crisis, please reach out immediately:</p>
-      <p class="emergency-number" tabindex="0" role="text">Canada Suicide Prevention Service (CSPS): <a href="tel:1-833-456-4566" rel="noopener noreferrer" target="_blank">1-833-456-4566</a></p>
-      <p><a href="https://www.crisisservicescanada.ca/en/" target="_blank" rel="noopener noreferrer">Visit Crisis Services Canada</a></p>
-    </section>
+      <!-- Section: Comfort Plan Builder -->
+      <section class="card" aria-labelledby="plan-title">
+        <h2 id="plan-title"><span class="icon">🛡️</span>Comfort Plan Builder</h2>
+        <div class="plan-builder">
+          <label for="helpContact">Who to call:</label>
+          <input id="helpContact" placeholder="Name & phone/email" />
+          <label for="soothingActivities">Soothing activities:</label>
+          <textarea id="soothingActivities" placeholder="e.g. music, walk"></textarea>
+          <label for="avoidList">What to avoid:</label>
+          <textarea id="avoidList" placeholder="e.g. social media"></textarea>
+          <label for="affirmations">My affirmations:</label>
+          <textarea id="affirmations" placeholder="e.g. I am allowed to feel"></textarea>
+          <button id="savePlanBtn">Save My Plan</button>
+        </div>
+      </section>
 
-    <!-- Section 7: Additional Resources -->
-    <section tabindex="0" aria-labelledby="section7-title">
-      <h2 id="section7-title"><span class="icon" aria-hidden="true">📚</span>Additional Resources</h2>
-      <ul>
-        <li><a href="https://www.griefshare.org/" target="_blank" rel="noopener noreferrer">GriefShare Support Groups</a></li>
-        <li><a href="https://www.psychologytoday.com/us/therapists/grief" target="_blank" rel="noopener noreferrer">Find a Grief Therapist (US)</a></li>
-        <li><a href="https://www.cmha.ca/" target="_blank" rel="noopener noreferrer">Canadian Mental Health Association</a></li>
-        <li><a href="https://www.ementalhealth.ca/" target="_blank" rel="noopener noreferrer">eMentalHealth.ca</a></li>
-        <li><a href="https://www.bereavedfamilies.net/" target="_blank" rel="noopener noreferrer">Bereaved Families of Ontario</a></li>
-      </ul>
-    </section>
+      <!-- Section: Grief Myth Busters Carousel -->
+      <section class="card" aria-labelledby="myth-title">
+        <h2 id="myth-title"><span class="icon">❌</span>Grief Myth Busters</h2>
+        <div class="carousel" tabindex="0">
+          <div class="carousel-track" id="mythTrack">
+            <div class="carousel-card">
+              <p><strong>Myth:</strong> Time heals all wounds.</p>
+              <p><em>Reality:</em> Healing is ongoing; you learn to live with pain.</p>
+            </div>
+            <div class="carousel-card">
+              <p><strong>Myth:</strong> You should be “over it” by now.</p>
+              <p><em>Reality:</em> Grief has no timeline—every journey is unique.</p>
+            </div>
+            <div class="carousel-card">
+              <p><strong>Myth:</strong> Crying means weakness.</p>
+              <p><em>Reality:</em> Tears are healing, not a sign of weakness.</p>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-btn" id="prevMyth">⟨</button>
+          <button class="carousel-btn" id="nextMyth">⟩</button>
+        </div>
+      </section>
 
-    <!-- Section 10: Support Contacts -->
-    <section tabindex="0" aria-labelledby="section10-title">
-      <h2 id="section10-title"><span class="icon" aria-hidden="true">☎️</span>Support Contacts</h2>
-      <ul>
-        <li><a href="https://www.suicideprevention.ca/" target="_blank" rel="noopener noreferrer">Canadian Suicide Prevention Service</a></li>
-        <li><a href="https://www.nimh.nih.gov/health/topics/coping-with-traumatic-events" target="_blank" rel="noopener noreferrer">US National Institute of Mental Health</a></li>
-        <li><a href="https://www.crisistextline.org/" target="_blank" rel="noopener noreferrer">Crisis Text Line</a></li>
-        <li><a href="https://www.samaritans.org/" target="_blank" rel="noopener noreferrer">Samaritans (UK)</a></li>
-      </ul>
-    </section>
+    </div>
 
+    <h2 style="margin-top:2rem; color:var(--accent);">Core Toolkit</h2>
+    <div class="grid">
+
+      <!-- Understanding Grief -->
+      <section class="card" aria-labelledby="ugb-title">
+        <h2 id="ugb-title"><span class="icon">💡</span>Understanding Grief</h2>
+        <p>Grief is a natural response to loss with many emotions and stages.</p>
+        <button id="openGriefModal">Read More</button>
+      </section>
+
+      <!-- Coping Strategies -->
+      <section class="card" aria-labelledby="cs-title">
+        <h2 id="cs-title"><span class="icon">🛠️</span>Coping Strategies</h2>
+        <div class="strategy-list">
+          <button class="strategy-card" data-strategy="Breathing">Breathing</button>
+          <button class="strategy-card" data-strategy="Journaling">Journaling</button>
+          <button class="strategy-card" data-strategy="Exercise">Exercise</button>
+          <button class="strategy-card" data-strategy="Connection">Connection</button>
+          <button class="strategy-card" data-strategy="Mindfulness">Mindfulness</button>
+          <button class="strategy-card" data-strategy="Help">Help</button>
+        </div>
+      </section>
+
+      <!-- Journaling -->
+      <section class="card" aria-labelledby="jr-title">
+        <h2 id="jr-title"><span class="icon">✍️</span>Journaling</h2>
+        <textarea id="journalEntry" placeholder="Write your thoughts..."></textarea>
+        <button id="saveJournalBtn">Save Entry</button>
+        <p id="journalMessage"></p>
+      </section>
+
+      <!-- Mood Tracker -->
+      <section class="card" aria-labelledby="mt-title">
+        <h2 id="mt-title"><span class="icon">😊</span>Mood Tracker</h2>
+        <div class="mood-buttons" role="radiogroup">
+          <button class="mood-btn" data-mood="1" aria-checked="false" role="radio">😞</button>
+          <button class="mood-btn" data-mood="2" aria-checked="false" role="radio">😟</button>
+          <button class="mood-btn" data-mood="3" aria-checked="false" role="radio">😐</button>
+          <button class="mood-btn" data-mood="4" aria-checked="false" role="radio">🙂</button>
+          <button class="mood-btn" data-mood="5" aria-checked="false" role="radio">😄</button>
+        </div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <p id="moodMessage"></p>
+      </section>
+
+      <!-- Emergency Support -->
+      <section class="card emergency-section" aria-labelledby="es-title">
+        <h2 id="es-title"><span class="icon">🚨</span>Emergency Support</h2>
+        <p>If you or someone you know is in crisis:</p>
+        <p class="emergency-number"><a href="tel:1-833-456-4566">Canada Suicide Prevention: 1-833-456-4566</a></p>
+        <p><a href="https://www.crisisservicescanada.ca/en/" target="_blank">Visit Crisis Services Canada</a></p>
+      </section>
+
+      <!-- Additional Resources -->
+      <section class="card" aria-labelledby="ar-title">
+        <h2 id="ar-title"><span class="icon">📚</span>Additional Resources</h2>
+        <ul>
+          <li><a href="https://www.griefshare.org/" target="_blank">GriefShare</a></li>
+          <li><a href="https://www.cmha.ca/" target="_blank">Canadian Mental Health Assoc.</a></li>
+          <li><a href="https://suicidepreventionlifeline.org/" target="_blank">US Suicide Lifeline</a></li>
+          <li><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">SAMHSA Helpline (US)</a></li>
+        </ul>
+      </section>
+
+      <!-- Support Contacts -->
+      <section class="card" aria-labelledby="sc-title">
+        <h2 id="sc-title"><span class="icon">☎️</span>Support Contacts</h2>
+        <ul>
+          <li><a href="https://www.suicideprevention.ca/" target="_blank">Canadian Suicide Prevention</a></li>
+          <li><a href="https://www.nimh.nih.gov" target="_blank">NIMH Coping Resources</a></li>
+          <li><a href="https://www.bereavedfamilies.net/" target="_blank">Bereaved Families of Ontario</a></li>
+        </ul>
+      </section>
+
+    </div>
   </div>
 
-</div>
-
-<!-- Modal container -->
-<div id="modalOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1" hidden>
-  <div class="modal-content">
-    <button class="modal-close" aria-label="Close modal">&times;</button>
-    <h3 id="modalTitle"></h3>
-    <div class="modal-body"></div>
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <button class="modal-close" aria-label="Close">&times;</button>
+      <h3 id="modalTitle"></h3>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
   </div>
-</div>
 
-<!-- Analytics toggle -->
-<button id="showAnalytics" aria-label="Show analytics">📊</button>
-<div id="analyticsPanel" role="region" aria-live="polite" aria-label="User Interaction Analytics">
-  <h4>User Interaction Analytics</h4>
-  <ul id="analyticsList"></ul>
-  <button id="closeAnalyticsBtn">Close</button>
-</div>
+  <!-- Analytics Button & Panel -->
+  <button id="showAnalytics" aria-label="Show analytics">📊</button>
+  <div id="analyticsPanel" role="region" aria-live="polite" style="display:none;position:fixed;bottom:80px;right:1rem;background:var(--card-bg);padding:1rem;border-radius:8px;box-shadow:0 8px 24px var(--card-shadow);max-width:280px;z-index:100;">
+    <h4 style="margin-top:0;color:var(--accent);">Usage Analytics</h4>
+    <ul id="analyticsList" style="padding-left:1.2rem;margin:0 0 1rem;"></ul>
+    <button id="closeAnalyticsBtn" style="width:100%;">Close</button>
+  </div>
 
-<script>
-  // Modal logic
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = modalOverlay.querySelector('.modal-body');
-  const closeModalBtn = modalOverlay.querySelector('.modal-close');
-  let lastFocusedElement = null;
-
-  function openModal(title, content) {
-    lastFocusedElement = document.activeElement;
-    modalTitle.textContent = title;
-    modalBody.innerHTML = content;
-    modalOverlay.hidden = false;
-    modalOverlay.classList.add('active');
-    modalOverlay.focus();
-    modalOverlay.setAttribute('aria-expanded', 'true');
-  }
-
-  function closeModal() {
-    modalOverlay.classList.remove('active');
-    modalOverlay.hidden = true;
-    modalOverlay.setAttribute('aria-expanded', 'false');
-    if(lastFocusedElement) lastFocusedElement.focus();
-  }
-
-  closeModalBtn.addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', e => {
-    if(e.target === modalOverlay) closeModal();
-  });
-  document.addEventListener('keydown', e => {
-    if(e.key === 'Escape' && modalOverlay.classList.contains('active')) closeModal();
-  });
-
-  // Understanding Grief modal content
-  const griefModalBtn = document.getElementById('openGriefModal');
-  griefModalBtn.addEventListener('click', () => {
-    const content = `
-      <p><strong>Understanding Grief</strong> is key to navigating the journey after loss. It’s a deeply personal process and can affect every aspect of your life.</p>
-      <p><strong>Common Emotions:</strong> sadness, anger, guilt, confusion, loneliness, relief, anxiety.</p>
-      <p><strong>Physical Symptoms:</strong> fatigue, nausea, insomnia, aches.</p>
-      <p><strong>Stages of Grief (Kubler-Ross Model):</strong></p>
-      <ul>
-        <li><strong>Denial:</strong> Refusal to accept the reality of loss.</li>
-        <li><strong>Anger:</strong> Feelings of frustration and helplessness.</li>
-        <li><strong>Bargaining:</strong> Trying to negotiate or make deals to reverse loss.</li>
-        <li><strong>Depression:</strong> Deep sadness and withdrawal.</li>
-        <li><strong>Acceptance:</strong> Coming to terms with the loss and moving forward.</li>
-      </ul>
-      <p>Everyone grieves differently, and there is no timeline or right way to grieve.</p>
-      <p>Seeking support through friends, family, or professionals can help you cope better.</p>
-      <p>For further reading, consider these free, trustworthy resources:</p>
-      <ul>
-        <li><a href="https://www.who.int/news-room/fact-sheets/detail/mental-health-strengthening-our-response" target="_blank" rel="noopener noreferrer">World Health Organization: Mental Health</a></li>
-        <li><a href="https://www.psychologytools.com/professional/grief-and-loss/" target="_blank" rel="noopener noreferrer">Psychology Tools: Grief and Loss</a></li>
-        <li><a href="https://www.nimh.nih.gov/health/topics/coping-with-traumatic-events" target="_blank" rel="noopener noreferrer">National Institute of Mental Health</a></li>
-      </ul>
-    `;
-    openModal('Understanding Grief', content);
-  });
-
-  // Coping Strategies modal contents with examples/guidance
-  const strategies = {
-    Breathing: `
-      <div class="breathing-circle" aria-hidden="true"></div>
-      <p><strong>Breathing Exercise:</strong> Try deep, slow breathing to calm your mind and body.</p>
-      <p>Instructions:</p>
-      <ul>
-        <li>Inhale slowly for 4 seconds.</li>
-        <li>Hold your breath for 7 seconds.</li>
-        <li>Exhale slowly for 8 seconds.</li>
-        <li>Repeat 4-5 times.</li>
-      </ul>
-      <p>This technique helps reduce anxiety and stress.</p>
-    `,
-    Journaling: `
-      <p><strong>Journaling:</strong> Writing down your feelings can help process grief.</p>
-      <p>Try these prompts:</p>
-      <ul>
-        <li>What do you miss most?</li>
-        <li>What memories bring you comfort?</li>
-        <li>How are you feeling today?</li>
-      </ul>
-      <p>Set aside 10-15 minutes daily to write freely.</p>
-    `,
-    Exercise: `
-      <p><strong>Exercise:</strong> Physical activity can boost mood and energy.</p>
-      <p>Examples:</p>
-      <ul>
-        <li>Take a daily walk outside.</li>
-        <li>Try gentle yoga or stretching.</li>
-        <li>Dance to your favorite music.</li>
-      </ul>
-      <p>Choose what feels right for you.</p>
-    `,
-    Connection: `
-      <p><strong>Connection:</strong> Reach out to friends, family, or support groups.</p>
-      <p>Examples:</p>
-      <ul>
-        <li>Call or video chat with loved ones.</li>
-        <li>Join a local grief support group.</li>
-        <li>Attend community events or workshops.</li>
-      </ul>
-      <p>Human connection is vital for healing.</p>
-    `,
-    Mindfulness: `
-      <p><strong>Mindfulness:</strong> Practice being present in the moment to reduce anxiety.</p>
-      <p>Try:</p>
-      <ul>
-        <li>Mindful meditation for 5-10 minutes.</li>
-        <li>Focus on your senses — what you see, hear, smell.</li>
-        <li>Use guided mindfulness apps (many free options available).</li>
-      </ul>
-    `,
-    Help: `
-      <p><strong>Seeking Help:</strong> Professional help can provide tailored support.</p>
-      <p>If grief feels overwhelming, consider:</p>
-      <ul>
-        <li>Contacting a therapist or counselor.</li>
-        <li>Using telehealth services for convenience.</li>
-        <li>Talking to your doctor about mental health resources.</li>
-      </ul>
-      <p>There’s no shame in asking for help.</p>
-    `
-  };
-
-  // Open coping strategy modal
-  document.querySelectorAll('.strategy-card').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const strat = btn.getAttribute('data-strategy');
-      openModal(strat, strategies[strat] || '<p>Information not available.</p>');
-      incrementAnalytics(strat);
+  <script>
+    // Theme Switcher
+    const themeSelector = document.getElementById('themeSelector');
+    themeSelector.addEventListener('change', e => {
+      document.body.className = 'theme-' + e.target.value;
     });
-  });
 
-  // Mood Tracker logic
-  const moodButtons = document.querySelectorAll('.mood-btn');
-  const progressFill = document.querySelector('.progress-fill');
-  const moodMessage = document.getElementById('moodMessage');
-
-  let selectedMood = null;
-
-  const moodTexts = {
-    1: "Very Sad - It's okay to feel this way sometimes.",
-    2: "Sad - Remember, you're not alone.",
-    3: "Neutral - A balanced day.",
-    4: "Happy - Good to see you feeling positive.",
-    5: "Very Happy - Keep shining!"
-  };
-
-  moodButtons.forEach((btn, i) => {
-    btn.addEventListener('click', () => {
-      selectMood(i + 1);
+    // SOS Button
+    document.getElementById('sosBtn').addEventListener('click', () => {
+      openModal('SOS & Grounding', `
+        <p><strong>Canada Suicide Prevention Service:</strong> <a href="tel:1-833-456-4566">1-833-456-4566</a></p>
+        <p><strong>Emergency:</strong> Call 911</p>
+        <p><strong>Grounding:</strong></p>
+        <ul><li>Name 5 things you see</li><li>Name 4 things you touch</li><li>Name 3 things you hear</li><li>Name 2 things you smell</li><li>Name 1 thing you taste</li></ul>
+      `);
+      incrementAnalytics('SOS');
     });
-    btn.addEventListener('keydown', e => {
-      if(e.key === 'ArrowRight') {
-        e.preventDefault();
-        const next = (i + 1) % moodButtons.length;
-        moodButtons[next].focus();
-      } else if(e.key === 'ArrowLeft') {
-        e.preventDefault();
-        const prev = (i - 1 + moodButtons.length) % moodButtons.length;
-        moodButtons[prev].focus();
-      } else if(e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        selectMood(i + 1);
-      }
-    });
-  });
 
-  function selectMood(mood) {
-    selectedMood = mood;
-    moodButtons.forEach((btn, i) => {
-      btn.setAttribute('aria-checked', i + 1 === mood ? 'true' : 'false');
-      btn.tabIndex = i + 1 === mood ? 0 : -1;
-    });
-    progressFill.style.width = (mood * 20) + '%';
-    moodMessage.textContent = moodTexts[mood] || '';
-    incrementAnalytics(`Mood ${mood}`);
-  }
-
-  // Initialize mood selection from localStorage if present
-  const savedMood = localStorage.getItem('selectedMood');
-  if(savedMood) {
-    selectMood(parseInt(savedMood));
-  }
-
-  // Save mood selection
-  moodButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      localStorage.setItem('selectedMood', selectedMood);
-    });
-  });
-
-  // Journaling save logic
-  const journalEntry = document.getElementById('journalEntry');
-  const saveJournalBtn = document.getElementById('saveJournalBtn');
-  const journalMessage = document.getElementById('journalMessage');
-
-  saveJournalBtn.addEventListener('click', () => {
-    const text = journalEntry.value.trim();
-    if(text.length === 0) {
-      journalMessage.textContent = "Please write something before saving.";
-      return;
+    // Modal Logic
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeModalBtn = modalOverlay.querySelector('.modal-close');
+    let lastFocus;
+    function openModal(title, content) {
+      lastFocus = document.activeElement;
+      modalTitle.textContent = title;
+      modalBody.innerHTML = content;
+      modalOverlay.setAttribute('aria-hidden','false');
+      modalOverlay.style.display = 'flex';
+      closeModalBtn.focus();
     }
-    localStorage.setItem('journalEntry', text);
-    journalMessage.textContent = "Journal entry saved!";
-    incrementAnalytics('Journal Saved');
-  });
-
-  // Load saved journal
-  const savedJournal = localStorage.getItem('journalEntry');
-  if(savedJournal) {
-    journalEntry.value = savedJournal;
-  }
-
-  // Analytics system
-  const analyticsBtn = document.getElementById('showAnalytics');
-  const analyticsPanel = document.getElementById('analyticsPanel');
-  const analyticsList = document.getElementById('analyticsList');
-  const closeAnalyticsBtn = document.getElementById('closeAnalyticsBtn');
-
-  let analyticsData = {};
-
-  function incrementAnalytics(key) {
-    analyticsData[key] = (analyticsData[key] || 0) + 1;
-  }
-
-  analyticsBtn.addEventListener('click', () => {
-    updateAnalyticsPanel();
-    analyticsPanel.style.display = 'block';
-    analyticsBtn.style.display = 'none';
-  });
-  closeAnalyticsBtn.addEventListener('click', () => {
-    analyticsPanel.style.display = 'none';
-    analyticsBtn.style.display = 'inline-block';
-  });
-
-  function updateAnalyticsPanel() {
-    analyticsList.innerHTML = '';
-    if(Object.keys(analyticsData).length === 0) {
-      analyticsList.innerHTML = '<li>No interactions yet.</li>';
-      return;
+    function closeModal() {
+      modalOverlay.setAttribute('aria-hidden','true');
+      modalOverlay.style.display = 'none';
+      if(lastFocus) lastFocus.focus();
     }
-    for(const key in analyticsData) {
-      const li = document.createElement('li');
-      li.textContent = `${key}: ${analyticsData[key]} time(s)`;
-      analyticsList.appendChild(li);
-    }
-  }
+    closeModalBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', e => {
+      if(e.target === modalOverlay) closeModal();
+    });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modalOverlay.style.display==='flex') closeModal(); });
 
-  // Accessibility: trap focus in modal
-  modalOverlay.addEventListener('keydown', e => {
-    if(e.key === 'Tab') {
-      const focusableElements = modalOverlay.querySelectorAll('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])');
-      const first = focusableElements[0];
-      const last = focusableElements[focusableElements.length -1];
-      if(e.shiftKey) {
-        if(document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else {
-        if(document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    }
-  });
-</script>
+    // Memory Garden
+    document.getElementById('plantBtn').addEventListener('click', ()=>{
+      const type = prompt('Enter tribute (e.g. 🌸 Flower):');
+      if(!type) return;
+      const item = document.createElement('div');
+      item.className='garden-item';
+      item.textContent=type;
+      document.getElementById('garden').appendChild(item);
+      incrementAnalytics('Plant ' + type);
+    });
 
+    // Grief-in-Body Explorer
+    const spots = [
+      {top:'20%',left:'50%',label:'Chest tightness'},
+      {top:'50%',left:'60%',label:'Headache'},
+      {top:'70%',left:'45%',label:'Stomach ache'}
+    ];
+    spots.forEach(s=>{
+      const el=document.createElement('div');
+      el.className='body-spot';
+      el.style.top=s.top; el.style.left=s.left;
+      el.title=s.label; el.tabIndex=0;
+      el.addEventListener('click',()=>{
+        openModal('Physical Sensation', `<p><strong>${s.label}:</strong> Common in grief. Try gentle breathing or warmth.</p>`);
+        incrementAnalytics('Body ' + s.label);
+      });
+      document.getElementById('bodyMap').appendChild(el);
+    });
+
+    // Letters to Loved Ones
+    const loveLetter=document.getElementById('loveLetter');
+    document.getElementById('saveLetterBtn').addEventListener('click',()=>{
+      localStorage.setItem('loveLetter', loveLetter.value);
+      alert('Letter saved.');
+      incrementAnalytics('Save Letter');
+    });
+    if(localStorage.getItem('loveLetter')) loveLetter.value = localStorage.getItem('loveLetter');
+
+    // Comfort Plan Builder
+    document.getElementById('savePlanBtn').addEventListener('click',()=>{
+      const plan={
+        call:document.getElementById('helpContact').value,
+        activity:document.getElementById('soothingActivities').value,
+        avoid:document.getElementById('avoidList').value,
+        affirm:document.getElementById('affirmations').value
+      };
+      localStorage.setItem('comfortPlan', JSON.stringify(plan));
+      alert('Comfort plan saved.');
+      incrementAnalytics('Save Plan');
+    });
+
+    // Myth Busters Carousel
+    const track=document.getElementById('mythTrack');
+    const prevBtn=document.getElementById('prevMyth');
+    const nextBtn=document.getElementById('nextMyth');
+    let idx=0;
+    function updateCarousel(){
+      const w=track.children[0].offsetWidth+16;
+      track.style.transform=`translateX(-${idx*w}px)`;
+    }
+    prevBtn.addEventListener('click',()=>{ idx=Math.max(0,idx-1); updateCarousel(); incrementAnalytics('Myth Prev'); });
+    nextBtn.addEventListener('click',()=>{ idx=Math.min(track.children.length-1,idx+1); updateCarousel(); incrementAnalytics('Myth Next'); });
+
+    // Basic Analytics
+    const analyticsBtn=document.getElementById('showAnalytics');
+    const analyticsPanel=document.getElementById('analyticsPanel');
+    const analyticsList=document.getElementById('analyticsList');
+    document.getElementById('closeAnalyticsBtn').addEventListener('click',()=>{
+      analyticsPanel.style.display='none'; analyticsBtn.style.display='inline-block';
+    });
+    analyticsBtn.addEventListener('click',()=>{
+      analyticsPanel.style.display='block'; analyticsBtn.style.display='none';
+      analyticsList.innerHTML=Object.keys(analytics).length
+        ? Object.entries(analytics).map(([k,v])=>`<li>${k}: ${v}</li>`).join('')
+        : '<li>No interactions yet.</li>';
+    });
+    let analytics={};
+    function incrementAnalytics(k){ analytics[k]=(analytics[k]||0)+1; }
+
+    // Core Toolkit: Understanding Grief
+    document.getElementById('openGriefModal').addEventListener('click',()=>{
+      openModal('Understanding Grief', `
+        <p>Grief is your natural response to loss. You may feel many emotions and physical sensations.</p>
+        <p><strong>Stages:</strong> Denial, Anger, Bargaining, Depression, Acceptance.</p>
+        <p>Everyone’s grief is unique—give yourself time and permission to feel.</p>
+      `); incrementAnalytics('Read Grief Info');
+    });
+
+    // Coping Strategies
+    const strategies={
+      Breathing:`<div class="breathing-circle"></div><p>Deep breathing: inhale 4s, hold 4s, exhale 4s. Repeat.</p>`,
+      Journaling:`<p>Write daily prompts: “What helped today?” “What do I miss?”</p>`,
+      Exercise:`<p>Gentle walk or stretch for 10 minutes.</p>`,
+      Connection:`<p>Call a friend or join a support group online.</p>`,
+      Mindfulness:`<p>Focus on the present moment with a 5-minute meditation.</p>`,
+      Help:`<p>Reach out to a counselor or call crisis lines if needed.</p>`
+    };
+    document.querySelectorAll('.strategy-card').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const s=btn.getAttribute('data-strategy');
+        openModal(s, strategies[s]||'<p>Info coming soon.</p>');
+        incrementAnalytics('Strategy ' + s);
+      });
+    });
+
+    // Journaling
+    const journalEntry=document.getElementById('journalEntry');
+    document.getElementById('saveJournalBtn').addEventListener('click',()=>{
+      if(!journalEntry.value.trim()){ document.getElementById('journalMessage').textContent='Write something first.'; return; }
+      localStorage.setItem('journalEntry', journalEntry.value);
+      document.getElementById('journalMessage').textContent='Entry saved!';
+      incrementAnalytics('Save Journal');
+    });
+    if(localStorage.getItem('journalEntry')) journalEntry.value=localStorage.getItem('journalEntry');
+
+    // Mood Tracker
+    const moodBtns=document.querySelectorAll('.mood-btn');
+    const prog=document.querySelector('.progress-fill');
+    const moodMsg=document.getElementById('moodMessage');
+    const texts={1:"Very Sad",2:"Sad",3:"Neutral",4:"Happy",5:"Very Happy"};
+    moodBtns.forEach((btn,i)=>{
+      btn.addEventListener('click',()=>{
+        moodBtns.forEach(b=>b.setAttribute('aria-checked','false'));
+        btn.setAttribute('aria-checked','true');
+        const val=i+1; prog.style.width=val*20+'%';
+        moodMsg.textContent=texts[val];
+        incrementAnalytics('Mood '+val);
+      });
+    });
+  </script>
 </body>
 </html>
