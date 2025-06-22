@@ -1,498 +1,593 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memorial Candles - Light a Candle for Your Loved One</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/supabase/2.39.0/supabase.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Light a Candle - In Memory</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            min-height: 100vh;
-            color: #fff;
-            overflow-x: hidden;
-        }
+    body {
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+      min-height: 100vh;
+      color: #f4f4f4;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
 
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 3s infinite alternate;
-        }
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite alternate;
+    }
 
-        @keyframes twinkle {
-            0% { opacity: 0.3; }
-            100% { opacity: 1; }
-        }
+    @keyframes twinkle {
+      0% { opacity: 0.3; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
 
-        .header {
-            text-align: center;
-            padding: 40px 20px;
-            position: relative;
-            z-index: 10;
-        }
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
 
-        .title {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+    .header {
+      margin-bottom: 40px;
+      padding: 40px 0;
+    }
 
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.8;
-            margin-bottom: 30px;
-        }
+    .header h1 {
+      font-size: 3.5em;
+      color: #ffd700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      margin-bottom: 20px;
+      animation: glow 3s ease-in-out infinite alternate;
+    }
 
-        .light-candle-btn {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            color: white;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-            font-family: 'Georgia', serif;
-        }
+    @keyframes glow {
+      from { text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 10px #ffd700; }
+      to { text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 20px #ffd700, 0 0 30px #ffd700; }
+    }
 
-        .light-candle-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        }
+    .subtitle {
+      font-size: 1.3em;
+      color: #e0e0e0;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
+    .memorial-form {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 50px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
 
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            max-width: 500px;
-            width: 90%;
-        }
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
 
-        .modal h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #ffd700;
-        }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #ffd700;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #f4f4f4;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #ecf0f1;
-        }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #ffd700;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
 
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-family: 'Georgia', serif;
-        }
+    .light-candle-btn {
+      background: linear-gradient(45deg, #ff6b35, #ff8e53);
+      border: none;
+      color: white;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+      font-weight: bold;
+    }
 
-        .form-group input::placeholder, .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
+    .light-candle-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 107, 53, 0.6);
+    }
 
-        .form-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
+    .candles-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
 
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-family: 'Georgia', serif;
-            transition: all 0.3s ease;
-        }
+    .candle-memorial {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .btn-primary {
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            color: #333;
-        }
+    .candle-memorial:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+    }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
+    .candle {
+      width: 60px;
+      height: 120px;
+      background: linear-gradient(to bottom, #8B4513 0%, #A0522D 100%);
+      border-radius: 5px;
+      margin: 0 auto 20px;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
 
-        .btn:hover {
-            transform: translateY(-2px);
-        }
+    .candle-top {
+      width: 60px;
+      height: 10px;
+      background: #654321;
+      border-radius: 50%;
+      position: absolute;
+      top: -5px;
+    }
 
-        .candles-field {
-            position: relative;
-            min-height: 60vh;
-            padding: 40px 20px;
-            z-index: 5;
-        }
+    .wick {
+      width: 2px;
+      height: 8px;
+      background: #333;
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
 
-        .candle {
-            position: absolute;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .flame {
+      width: 20px;
+      height: 25px;
+      background: radial-gradient(circle, #ffeb3b 0%, #ff9800 40%, #ff5722 100%);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: flicker 1.5s ease-in-out infinite alternate;
+      box-shadow: 0 0 20px #ff9800, 0 0 40px #ff5722;
+    }
 
-        .candle:hover {
-            transform: scale(1.1);
-        }
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1) rotate(-1deg); }
+      50% { transform: translateX(-50%) scale(1.1) rotate(1deg); }
+      100% { transform: translateX(-50%) scale(0.95) rotate(-0.5deg); }
+    }
 
-        .candle-body {
-            width: 12px;
-            height: 40px;
-            background: linear-gradient(to bottom, #8B4513, #A0522D);
-            border-radius: 0 0 6px 6px;
-            position: relative;
-        }
+    .memorial-text {
+      color: #e0e0e0;
+      margin-bottom: 10px;
+    }
 
-        .candle-flame {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 8px;
-            height: 15px;
-            background: radial-gradient(circle, #ffff00 0%, #ff6600 70%, #ff0000 100%);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            animation: flicker 1.5s ease-in-out infinite alternate;
-        }
+    .memorial-name {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ffd700;
+      margin-bottom: 10px;
+    }
 
-        .candle-glow {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(circle, rgba(255, 255, 0, 0.3) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
+    .memorial-message {
+      font-style: italic;
+      font-size: 0.9em;
+      line-height: 1.4;
+      color: #ccc;
+    }
 
-        @keyframes flicker {
-            0% { transform: translateX(-50%) scale(1) rotate(-1deg); }
-            50% { transform: translateX(-50%) scale(1.1) rotate(1deg); }
-            100% { transform: translateX(-50%) scale(0.9) rotate(-1deg); }
-        }
+    .memorial-date {
+      font-size: 0.8em;
+      color: #999;
+      margin-top: 10px;
+    }
 
-        @keyframes glow {
-            0% { opacity: 0.5; transform: translateX(-50%) scale(1); }
-            100% { opacity: 0.8; transform: translateX(-50%) scale(1.2); }
-        }
+    .floating-hearts {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 3;
+    }
 
-        .candle-tooltip {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 100;
-        }
+    .heart {
+      position: absolute;
+      color: #ff69b4;
+      font-size: 20px;
+      animation: float-up 4s linear infinite;
+      opacity: 0;
+    }
 
-        .candle:hover .candle-tooltip {
-            opacity: 1;
-        }
+    @keyframes float-up {
+      0% {
+        opacity: 1;
+        transform: translateY(100vh) scale(0);
+      }
+      10% {
+        opacity: 1;
+        transform: translateY(90vh) scale(1);
+      }
+      90% {
+        opacity: 1;
+        transform: translateY(10vh) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-10vh) scale(0);
+      }
+    }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #ffd700;
-        }
+    .stats {
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 2;
+      position: relative;
+    }
 
-        .stats {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            z-index: 100;
-        }
+    .stats h3 {
+      color: #ffd700;
+      margin-bottom: 15px;
+      font-size: 1.5em;
+    }
 
-        @media (max-width: 768px) {
-            .title {
-                font-size: 2rem;
-            }
-            
-            .modal-content {
-                padding: 20px;
-            }
-        }
-    </style>
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    .stat-number {
+      font-size: 2em;
+      font-weight: bold;
+      color: #ff6b35;
+    }
+
+    .stat-label {
+      color: #ccc;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2.5em;
+      }
+      
+      .candles-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
-    
+  <div class="stars"></div>
+  <div class="floating-hearts"></div>
+
+  <div class="container">
     <div class="header">
-        <h1 class="title">Memorial Candles</h1>
-        <p class="subtitle">Light a candle in memory of your loved one</p>
-        <button class="light-candle-btn" onclick="openModal()">Light a Candle</button>
+      <h1>Light a Candle</h1>
+      <p class="subtitle">In loving memory of those who live forever in our hearts.<br>
+      Each candle represents a beautiful soul and the love that remains eternal.</p>
     </div>
 
-    <div class="candles-field" id="candlesField">
-        <div class="loading" id="loading">Loading candles...</div>
-    </div>
-
-    <div class="stats" id="stats">
-        <div>Candles lit: <span id="candleCount">0</span></div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal" id="candleModal">
-        <div class="modal-content">
-            <h2>Light a Candle</h2>
-            <form id="candleForm">
-                <div class="form-group">
-                    <label for="lovedOneName">Name of your loved one *</label>
-                    <input type="text" id="lovedOneName" required placeholder="Enter their name...">
-                </div>
-                <div class="form-group">
-                    <label for="yourName">Your name (optional)</label>
-                    <input type="text" id="yourName" placeholder="Your name...">
-                </div>
-                <div class="form-group">
-                    <label for="message">Message (optional)</label>
-                    <textarea id="message" rows="3" placeholder="Share a memory or message..."></textarea>
-                </div>
-                <div class="form-buttons">
-                    <button type="submit" class="btn btn-primary">Light Candle</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                </div>
-            </form>
+    <div class="memorial-form">
+      <h2 style="color: #ffd700; margin-bottom: 25px;">Light a Candle for Your Loved One</h2>
+      <form id="memorialForm">
+        <div class="form-group">
+          <label for="name">Name of your loved one:</label>
+          <input type="text" id="name" name="name" required />
         </div>
+        <div class="form-group">
+          <label for="message">Your message or memory:</label>
+          <textarea id="message" name="message" rows="4" placeholder="Share a beautiful memory or message..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="yourName">Your name (optional):</label>
+          <input type="text" id="yourName" name="yourName" placeholder="From..." />
+        </div>
+        <button type="submit" class="light-candle-btn">Light a Candle ✨</button>
+      </form>
     </div>
 
-    <script>
-        const SUPABASE_URL = 'https://ytgrzhtntwzefwjmhgjj.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <div class="stats">
+      <h3>Memorial Statistics</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number" id="totalCandles">0</div>
+          <div class="stat-label">Candles Lit</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="totalMemories">0</div>
+          <div class="stat-label">Memories Shared</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="totalLove">∞</div>
+          <div class="stat-label">Love Eternal</div>
+        </div>
+      </div>
+    </div>
 
-        let candles = [];
+    <div class="candles-container" id="candlesContainer">
+      <!-- Candles will be dynamically added here -->
+    </div>
+  </div>
 
-        // Create stars background
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                starsContainer.appendChild(star);
-            }
+  <script>
+    const SUPABASE_URL = 'https://ytgrzhtntwzefwjmhgjj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
+
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const memorialForm = document.getElementById('memorialForm');
+    const candlesContainer = document.getElementById('candlesContainer');
+    const totalCandles = document.getElementById('totalCandles');
+    const totalMemories = document.getElementById('totalMemories');
+
+    // Format date for display
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    }
+
+    // Load memorials from Supabase
+    async function loadMemorials() {
+      const { data, error } = await supabase
+        .from('memorials')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) {
+        console.error('Error loading memorials:', error);
+        return;
+      }
+
+      window.memorials = data || [];
+      renderMemorials();
+    }
+
+    // Render candles
+    function renderMemorials() {
+      candlesContainer.innerHTML = '';
+      window.memorials.forEach((m, i) => {
+        const div = document.createElement('div');
+        div.className = 'candle-memorial';
+        div.style.animationDelay = `${i * 0.1}s`;
+        div.innerHTML = `
+          <div class="candle">
+            <div class="candle-top"></div>
+            <div class="wick"></div>
+            <div class="flame"></div>
+          </div>
+          <div class="memorial-name">${escapeHtml(m.name)}</div>
+          <div class="memorial-message">${escapeHtml(m.message)}</div>
+          <div class="memorial-date">Remembered by ${escapeHtml(m.from)}<br>${formatDate(m.created_at)}</div>
+        `;
+        candlesContainer.appendChild(div);
+      });
+
+      totalCandles.textContent = window.memorials.length;
+      totalMemories.textContent = window.memorials.filter(m => m.message && m.message !== 'In loving memory').length;
+    }
+
+    // Escape HTML to prevent injection
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Listen for new memorial inserts (realtime)
+    supabase
+      .channel('memorial-insert')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'memorials' },
+        (payload) => {
+          window.memorials.unshift(payload.new);
+          renderMemorials();
+          createFloatingHearts();
         }
+      )
+      .subscribe();
 
-        // Initialize the database table
-        async function initializeDatabase() {
-            try {
-                // Create table if it doesn't exist
-                const { error } = await supabase.rpc('create_candles_table');
-                if (error && !error.message.includes('already exists')) {
-                    console.log('Creating table manually...');
-                }
-            } catch (error) {
-                console.log('Table creation handled by Supabase');
-            }
+    // Form submit to add new candle/memorial
+    memorialForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = e.target.name.value.trim();
+      const message = e.target.message.value.trim() || 'In loving memory';
+      const from = e.target.yourName.value.trim() || 'Anonymous';
+
+      if (!name) return;
+
+      const { error } = await supabase.from('memorials').insert([
+        {
+          name,
+          message,
+          from,
+        },
+      ]);
+
+      if (error) {
+        console.error('Insert error:', error);
+        alert('There was an error lighting your candle. Please try again.');
+        return;
+      }
+
+      memorialForm.reset();
+      showSuccessMessage();
+    });
+
+    // Show success toast
+    function showSuccessMessage() {
+      const message = document.createElement('div');
+      message.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(45deg, #4CAF50, #45a049);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        z-index: 1000;
+        animation: slideIn 0.5s ease-out;
+      `;
+      message.textContent = '✨ Candle lit with love';
+
+      document.body.appendChild(message);
+
+      setTimeout(() => {
+        message.style.animation = 'slideOut 0.5s ease-in';
+        setTimeout(() => message.remove(), 500);
+      }, 3000);
+    }
+
+    // Create floating hearts animation
+    function createFloatingHearts() {
+      const heartsContainer = document.querySelector('.floating-hearts');
+
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          const heart = document.createElement('div');
+          heart.className = 'heart';
+          heart.innerHTML = '💝';
+          heart.style.left = Math.random() * 100 + '%';
+          heart.style.animationDelay = Math.random() * 1 + 's';
+          heartsContainer.appendChild(heart);
+
+          setTimeout(() => heart.remove(), 4000);
+        }, i * 200);
+      }
+    }
+
+    // Start continuous heart animation
+    function startHeartAnimation() {
+      setInterval(() => {
+        if (Math.random() < 0.3) { // 30% chance every interval
+          const heartsContainer = document.querySelector('.floating-hearts');
+          const heart = document.createElement('div');
+          heart.className = 'heart';
+          heart.innerHTML = '💖';
+          heart.style.left = Math.random() * 100 + '%';
+          heart.style.fontSize = Math.random() * 10 + 15 + 'px';
+          heartsContainer.appendChild(heart);
+
+          setTimeout(() => heart.remove(), 4000);
         }
+      }, 2000);
+    }
 
-        // Load candles from database
-        async function loadCandles() {
-            try {
-                const { data, error } = await supabase
-                    .from('memorial_candles')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+    // Create twinkling stars background
+    function createStars() {
+      const starsContainer = document.querySelector('.stars');
+      const numStars = 100;
 
-                if (error) {
-                    console.error('Error loading candles:', error);
-                    return;
-                }
+      for (let i = 0; i < numStars; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        const size = Math.random() * 3 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        starsContainer.appendChild(star);
+      }
+    }
 
-                candles = data || [];
-                renderCandles();
-                updateStats();
-            } catch (error) {
-                console.error('Error loading candles:', error);
-            }
-        }
+    // Add CSS animations for toast
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
 
-        // Render candles in the field
-        function renderCandles() {
-            const field = document.getElementById('candlesField');
-            const loading = document.getElementById('loading');
-            loading.style.display = 'none';
-
-            // Clear existing candles
-            const existingCandles = field.querySelectorAll('.candle');
-            existingCandles.forEach(candle => candle.remove());
-
-            // Add new candles
-            candles.forEach((candleData, index) => {
-                const candleElement = createCandleElement(candleData, index);
-                field.appendChild(candleElement);
-            });
-        }
-
-        // Create a candle element
-        function createCandleElement(candleData, index) {
-            const candle = document.createElement('div');
-            candle.className = 'candle';
-            
-            // Random positioning
-            const x = Math.random() * 80 + 5; // 5% to 85% to avoid edges
-            const y = Math.random() * 60 + 20; // 20% to 80% vertical space
-            candle.style.left = x + '%';
-            candle.style.top = y + '%';
-            
-            // Add slight delay for animation
-            candle.style.animationDelay = (index * 0.1) + 's';
-
-            const tooltipText = candleData.message 
-                ? `${candleData.loved_one_name} - ${candleData.message.substring(0, 50)}${candleData.message.length > 50 ? '...' : ''}`
-                : candleData.loved_one_name;
-
-            candle.innerHTML = `
-                <div class="candle-body">
-                    <div class="candle-glow"></div>
-                    <div class="candle-flame"></div>
-                </div>
-                <div class="candle-tooltip">${tooltipText}</div>
-            `;
-
-            return candle;
-        }
-
-        // Update statistics
-        function updateStats() {
-            document.getElementById('candleCount').textContent = candles.length;
-        }
-
-        // Modal functions
-        function openModal() {
-            document.getElementById('candleModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('candleModal').style.display = 'none';
-            document.getElementById('candleForm').reset();
-        }
-
-        // Handle form submission
-        document.getElementById('candleForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const lovedOneName = document.getElementById('lovedOneName').value;
-            const yourName = document.getElementById('yourName').value;
-            const message = document.getElementById('message').value;
-
-            try {
-                const { data, error } = await supabase
-                    .from('memorial_candles')
-                    .insert([
-                        {
-                            loved_one_name: lovedOneName,
-                            lit_by: yourName || 'Anonymous',
-                            message: message || null
-                        }
-                    ]);
-
-                if (error) {
-                    console.error('Error lighting candle:', error);
-                    alert('There was an error lighting your candle. Please try again.');
-                    return;
-                }
-
-                // Reload candles
-                await loadCandles();
-                closeModal();
-                
-                // Show success message
-                alert(`Candle lit for ${lovedOneName}. May their memory be a blessing.`);
-                
-            } catch (error) {
-                console.error('Error:', error);
-                alert('There was an error lighting your candle. Please try again.');
-            }
-        });
-
-        // Close modal when clicking outside
-        document.getElementById('candleModal').addEventListener('click', (e) => {
-            if (e.target.id === 'candleModal') {
-                closeModal();
-            }
-        });
-
-        // Initialize everything
-        async function init() {
-            createStars();
-            await initializeDatabase();
-            await loadCandles();
-        }
-
-        // Start the application
-        init();
-
-        // Auto-refresh candles every 30 seconds
-        setInterval(loadCandles, 30000);
-    </script>
+    // Initialize everything on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      createStars();
+      loadMemorials();
+      startHeartAnimation();
+    });
+  </script>
 </body>
 </html>
