@@ -1,489 +1,255 @@
+<!-- File: speak-louder-toolkit.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Speak Louder Love Toolkit</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Speak Louder Love Toolkit</title>
 
-<!-- Google Fonts: Poppins -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
-<!-- html2pdf library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <!-- html2pdf.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
-<style>
-  /* Reset & basics */
-  * {
-    margin: 0; padding: 0; box-sizing: border-box;
-  }
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
-    background-size: 300% 300%;
-    animation: gradientShift 25s ease infinite;
-    min-height: 100vh;
-    color: #222;
-    overflow-x: hidden;
-    line-height: 1.6;
-  }
-  @keyframes gradientShift {
-    0% { background-position: 0% 50% }
-    50% { background-position: 100% 50% }
-    100% { background-position: 0% 50% }
-  }
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+      background-size: 300% 300%;
+      animation: gradientShift 25s ease infinite;
+      margin: 0;
+      color: #222;
+      overflow-x: hidden;
+    }
 
-  /* Container */
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-    position: relative;
-    z-index: 2;
-  }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50% }
+      50% { background-position: 100% 50% }
+      100% { background-position: 0% 50% }
+    }
 
-  /* Header */
-  .header {
-    text-align: center;
-    margin-bottom: 3rem;
-    animation: fadeInDown 1.2s ease forwards;
-  }
-  .header h1 {
-    font-size: 3.5rem;
-    background: linear-gradient(90deg, #ff6b6b, #ffcc70, #6bc1ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 700;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-    margin-bottom: 0.5rem;
-  }
-  .header p {
-    font-size: 1.2rem;
-    max-width: 700px;
-    margin: 0 auto;
-    color: #fff;
-    background: rgba(0,0,0,0.15);
-    padding: 1rem 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
 
-  /* Buttons container */
-  .btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 1.2rem;
-    margin: 2rem 0 3rem 0;
-    flex-wrap: wrap;
-  }
-  .control-btn {
-    background: linear-gradient(45deg, #74ebd5, #acb6e5);
-    color: #fff;
-    border: none;
-    padding: 0.9rem 2rem;
-    border-radius: 40px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-    transition: all 0.35s ease;
-  }
-  .control-btn:hover,
-  .control-btn:focus {
-    transform: scale(1.08);
-    background: linear-gradient(45deg, #acb6e5, #74ebd5);
-    outline: none;
-  }
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
 
-  /* Toolkit Grid */
-  .toolkit-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2.5rem;
-  }
-  /* Card styles */
-  .tool-card {
-    background: rgba(255,255,255,0.97);
-    border-radius: 24px;
-    padding: 2.5rem 2rem 2rem 2rem;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    cursor: pointer;
-    overflow: visible;
-  }
-  .tool-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 30px 50px rgba(0,0,0,0.25);
-    background: linear-gradient(135deg, #fff8e1, #ffe0b2);
-  }
-  .tool-card.active {
-    background: linear-gradient(135deg, #fff3e0, #ffd54f);
-    box-shadow: 0 25px 45px rgba(0,0,0,0.35);
-    transform: scale(1.05);
-    z-index: 3;
-  }
-
-  /* Tool Icon */
-  .tool-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1.5rem auto;
-    display: block;
-    animation: float 3s ease-in-out infinite;
-    filter: drop-shadow(0 3px 3px rgba(0,0,0,0.1));
-  }
-
-  /* Titles & Text */
-  .tool-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #3e3e3e;
-    margin-bottom: 0.8rem;
-    text-align: center;
-    letter-spacing: 0.04em;
-  }
-  .tool-description {
-    font-size: 1.05rem;
-    color: #555;
-    line-height: 1.5;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  .tool-usage {
-    background: #fff8dc;
-    border-left: 6px solid #ffb300;
-    border-radius: 12px;
-    padding: 1.25rem 1.5rem;
-    font-size: 1rem;
-    color: #5a3e00;
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.5s ease;
-    line-height: 1.4;
-  }
-  .tool-card.active .tool-usage {
-    opacity: 1;
-    max-height: 280px;
-  }
-
-  /* Affirmation Section */
-  .affirmation-section {
-    background: linear-gradient(90deg, #a1c4fd, #c2e9fb);
-    padding: 3rem 2rem;
-    margin-top: 4rem;
-    border-radius: 24px;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.12);
-    text-align: center;
-  }
-  .affirmation-text {
-    font-size: 1.6rem;
-    font-style: italic;
-    color: #1a1a1a;
-    min-height: 3.5rem;
-    margin-bottom: 2rem;
-    transition: opacity 0.3s ease;
-    letter-spacing: 0.02em;
-  }
-  .generate-btn {
-    background: linear-gradient(45deg, #ff6b81, #f06595);
-    color: white;
-    border: none;
-    padding: 1rem 2.5rem;
-    border-radius: 50px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 8px 30px rgba(240,101,149,0.6);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .generate-btn:hover,
-  .generate-btn:focus {
-    transform: scale(1.07);
-    box-shadow: 0 12px 40px rgba(240,101,149,0.9);
-    outline: none;
-  }
-
-  /* Animations */
-  @keyframes fadeInDown {
-    from {opacity: 0; transform: translateY(-25px);}
-    to {opacity: 1; transform: translateY(0);}
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-  }
-  @keyframes pulse {
-    0% {transform: scale(1);}
-    50% {transform: scale(1.07);}
-    100% {transform: scale(1);}
-  }
-  .pulse {
-    animation: pulse 1.5s infinite;
-  }
-
-  /* Sparkles */
-  .sparkle {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background: gold;
-    border-radius: 50%;
-    animation: sparkle 2s linear forwards;
-    pointer-events: none;
-    filter: drop-shadow(0 0 5px gold);
-  }
-  @keyframes sparkle {
-    0% {opacity: 0; transform: scale(0);}
-    50% {opacity: 1; transform: scale(1.3);}
-    100% {opacity: 0; transform: scale(0);}
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
     .header h1 {
-      font-size: 2.8rem;
+      font-size: 3rem;
+      background: linear-gradient(90deg, #ff6b6b, #ffcc70, #6bc1ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
+
     .header p {
-      font-size: 1rem;
-      max-width: 90%;
-    }
-    .toolkit-grid {
-      grid-template-columns: 1fr;
-      gap: 1.8rem;
-    }
-    .tool-card {
-      padding: 2rem 1.5rem;
-    }
-    .btn-group {
-      flex-direction: column;
-      gap: 1rem;
-      margin: 2rem auto 3rem auto;
-      max-width: 320px;
-    }
-    .control-btn {
-      width: 100%;
       font-size: 1.1rem;
+      background: rgba(255,255,255,0.2);
       padding: 1rem;
+      border-radius: 12px;
+      color: #fff;
+      margin-top: 0.5rem;
     }
-  }
-</style>
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .control-btn {
+      background: linear-gradient(45deg, #74ebd5, #acb6e5);
+      color: #fff;
+      padding: 0.8rem 1.6rem;
+      border: none;
+      border-radius: 40px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .control-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .toolkit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .tool-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.8rem;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      text-align: center;
+      transition: 0.3s ease;
+      cursor: pointer;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-10px);
+      background: #fffaf0;
+    }
+
+    .tool-card h3 {
+      font-size: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .tool-card p {
+      font-size: 1rem;
+      color: #444;
+    }
+
+    .tool-usage {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fff3cd;
+      border-left: 5px solid #ffc107;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      display: none;
+    }
+
+    .tool-card.active .tool-usage {
+      display: block;
+    }
+
+    .affirmation-section {
+      background: linear-gradient(90deg, #a1c4fd, #c2e9fb);
+      padding: 2rem;
+      border-radius: 20px;
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    .affirmation-text {
+      font-size: 1.4rem;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    .generate-btn {
+      background: linear-gradient(45deg, #ff6b81, #f06595);
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(240,101,149,0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .generate-btn:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-
-<div class="container" id="toolkitContent">
-  <header class="header">
-    <h1>🗣️ Speak Louder Love Toolkit</h1>
-    <p>Discover powerful, compassionate tools that help you express your love boldly, kindly, and with confidence. Click a card to explore how to use each tool on your journey toward authentic and brave communication.</p>
-
-    <div class="btn-group" role="group" aria-label="Toolkit controls">
-      <button class="control-btn" id="pdfBtn" aria-label="Save toolkit page as PDF">💾 Save as PDF</button>
+  <div class="container" id="toolkitContent">
+    <div class="header">
+      <h1>🗣️ Speak Louder Love Toolkit</h1>
+      <p>Powerful tools to help you express love boldly, clearly, and kindly. Click a card to explore each one.</p>
     </div>
-  </header>
 
-  <section class="toolkit-grid" id="toolkitGrid" aria-label="Toolkit cards">
-    <!-- Cards injected here -->
-  </section>
+    <div class="btn-group">
+      <button class="control-btn" id="pdfBtn">💾 Save as PDF</button>
+    </div>
 
-  <section class="affirmation-section" aria-live="polite" aria-atomic="true">
-    <div class="affirmation-text" id="affirmationText">Your voice matters. Your truth deserves to be heard.</div>
-    <button class="generate-btn" id="affirmBtnBottom" aria-label="Generate new love affirmation">✨ Generate Love Affirmation</button>
-  </section>
-</div>
+    <div class="toolkit-grid">
+      <div class="tool-card" onclick="toggleCard(this)">
+        <h3>🔨 The Courage Hammer</h3>
+        <p>Break through fear that holds you back from speaking your truth.</p>
+        <div class="tool-usage"><strong>How to use:</strong> Visualize a hammer smashing fear. Say: “I act with courage, not absence of fear.”</div>
+      </div>
 
-<script>
-  const cards = [
-    {
-      id: "courage",
-      icon: `<svg class="tool-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false" role="img" aria-label="Hammer icon">
-        <path fill="#ff7043" d="M18 44l-6-6 18-18 6 6-18 18z"/>
-        <path fill="#bf360c" d="M40 20l6 6-18 18-6-6 18-18z"/>
-        <rect x="27" y="24" width="10" height="16" fill="#ef6c00" rx="3"/>
-      </svg>`,
-      title: "The Courage Hammer",
-      description: "Break down walls of fear that keep you silent. Courage is not the absence of fear but the choice to act in spite of it.",
-      usage: `When you feel afraid to speak up, take three deep breaths. Tell yourself: <em>"Courage is not the absence of fear, but the decision to act anyway."</em> Visualize a hammer breaking through your walls of hesitation, empowering your voice to be heard.`
-    },
-    {
-      id: "truth",
-      icon: `<svg class="tool-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false" role="img" aria-label="Magnifying glass icon">
-        <circle cx="28" cy="28" r="14" stroke="#29b6f6" stroke-width="4" fill="none"/>
-        <line x1="39" y1="39" x2="52" y2="52" stroke="#29b6f6" stroke-width="4" stroke-linecap="round"/>
-      </svg>`,
-      title: "The Truth Lens",
-      description: "See your feelings clearly without judgment or doubt. Gain clarity on what your heart truly wants to say.",
-      usage: `When emotions feel tangled, pause and look through your Truth Lens. Ask yourself: <em>"What is my heart really trying to tell me?"</em> Listen deeply and without judgment to uncover your authentic truth.`
-    },
-    {
-      id: "kindness",
-      icon: `<svg class="tool-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false" role="img" aria-label="Paint brush icon">
-        <path fill="#fdd835" d="M20 44l24-24 6 6-24 24-6-6z"/>
-        <path fill="#fbc02d" d="M40 20l-6 6 6 6 6-6-6-6z"/>
-      </svg>`,
-      title: "The Kindness Brush",
-      description: "Paint your words with compassion for yourself and others. Bold love is gentle and firm, not harsh.",
-      usage: `Before speaking, dip your words in kindness. Choose phrases that honor both your truth and the listener’s humanity. Speak firmly, yet with warmth and love.`
-    },
-    {
-      id: "boundary",
-      icon: `<svg class="tool-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false" role="img" aria-label="Barrier tape icon">
-        <rect x="12" y="24" width="40" height="16" fill="#ffca28" rx="3"/>
-        <line x1="12" y1="24" x2="52" y2="40" stroke="#ffa000" stroke-width="3"/>
-      </svg>`,
-      title: "The Boundary Tape",
-      description: "Mark lines of respect around your needs and limits. Healthy boundaries protect your peace and well-being.",
-      usage: `Visualize placing bright tape around your emotional and physical needs. Say clearly: <em>"This is what I need."</em> or <em>"This is my limit."</em> Stand firm, loving yourself and others with conviction.`
-    },
-    {
-      id: "listening",
-      icon: `<svg class="tool-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false" role="img" aria-label="Mirror icon">
-        <circle cx="32" cy="32" r="20" fill="#64b5f6"/>
-        <path fill="#bbdefb" d="M26 28h12v8H26z"/>
-      </svg>`,
-      title: "The Listening Mirror",
-      description: "Open space for others by reflecting what you hear. Listening deeply builds connection and understanding.",
-      usage: `After speaking your truth, hold up your Listening Mirror. Reflect back: <em>"What I hear you saying is…"</em> Invite dialogue and connection with open, empathetic listening.`
+      <div class="tool-card" onclick="toggleCard(this)">
+        <h3>🔍 The Truth Lens</h3>
+        <p>See your feelings clearly. Focus on what really matters to you.</p>
+        <div class="tool-usage"><strong>How to use:</strong> Pause and reflect: “What is my heart really saying?”</div>
+      </div>
+
+      <div class="tool-card" onclick="toggleCard(this)">
+        <h3>🎨 The Kindness Brush</h3>
+        <p>Speak firmly with care. Paint your truth with compassion.</p>
+        <div class="tool-usage"><strong>How to use:</strong> Before speaking, add love to your words. Be strong, not harsh.</div>
+      </div>
+
+      <div class="tool-card" onclick="toggleCard(this)">
+        <h3>🚧 The Boundary Tape</h3>
+        <p>Mark what’s okay and not okay for you. Protect your peace.</p>
+        <div class="tool-usage"><strong>How to use:</strong> Say: “This is what I need.” Stand calmly and clearly in your truth.</div>
+      </div>
+
+      <div class="tool-card" onclick="toggleCard(this)">
+        <h3>🪞 The Listening Mirror</h3>
+        <p>Make space for others by reflecting what you hear.</p>
+        <div class="tool-usage"><strong>How to use:</strong> Say: “What I hear you saying is…” Listen openly and with care.</div>
+      </div>
+    </div>
+
+    <div class="affirmation-section">
+      <div class="affirmation-text" id="affirmationText">
+        Your voice matters. Your truth deserves to be heard.
+      </div>
+      <button class="generate-btn" onclick="generateAffirmation()">✨ Generate Love Affirmation</button>
+    </div>
+  </div>
+
+  <script>
+    const affirmations = [
+      "Your voice matters. Your truth deserves to be heard.",
+      "Speaking with love takes courage — and you have that courage.",
+      "Your authentic expression is a gift to the world.",
+      "It’s safe to speak your truth with kindness.",
+      "Your boundaries are worth protecting.",
+      "You deserve to be heard and understood.",
+      "Love grows when spoken clearly.",
+      "Your words can heal, connect, and empower.",
+      "Every time you speak, you invite honesty.",
+      "Your truth is valid. Speak it with heart."
+    ];
+
+    function toggleCard(card) {
+      const alreadyActive = card.classList.contains('active');
+      document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+      if (!alreadyActive) {
+        card.classList.add('active');
+      }
     }
-  ];
 
-  const affirmations = [
-    "Your voice matters. Your truth deserves to be heard.",
-    "Speaking with love takes courage, and you have that courage within you.",
-    "Your authentic expression is a gift to the world.",
-    "It's safe to speak your truth with kindness and conviction.",
-    "Your boundaries are sacred and worth protecting.",
-    "Love grows stronger when expressed honestly and openly.",
-    "You deserve to be heard, understood, and respected.",
-    "Your words have the power to heal and connect hearts.",
-    "Speaking louder in love means honoring both yourself and others.",
-    "Every time you speak your truth, you inspire others to do the same.",
-    "Your feelings are valid and worthy of gentle expression.",
-    "Courage is choosing love over fear, again and again."
-  ];
+    function generateAffirmation() {
+      const textEl = document.getElementById("affirmationText");
+      const randomIndex = Math.floor(Math.random() * affirmations.length);
+      textEl.textContent = affirmations[randomIndex];
+    }
 
-  let currentAffirmationIndex = 0;
-
-  const toolkitGrid = document.getElementById('toolkitGrid');
-  const affirmationText = document.getElementById('affirmationText');
-  const affirmBtnTop = document.getElementById('affirmBtn');
-  const affirmBtnBottom = document.getElementById('affirmBtnBottom');
-  const pdfBtn = document.getElementById('pdfBtn');
-
-  // Render all tool cards
-  function renderCards() {
-    toolkitGrid.innerHTML = '';
-    cards.forEach(card => {
-      const cardEl = document.createElement('article');
-      cardEl.className = 'tool-card';
-      cardEl.setAttribute('tabindex', '0');
-      cardEl.setAttribute('role', 'button');
-      cardEl.setAttribute('aria-expanded', 'false');
-      cardEl.setAttribute('aria-controls', `${card.id}-usage`);
-      cardEl.dataset.tool = card.id;
-
-      cardEl.innerHTML = `
-        ${card.icon}
-        <h3 class="tool-title">${card.title}</h3>
-        <p class="tool-description">${card.description}</p>
-        <div class="tool-usage" id="${card.id}-usage" aria-hidden="true"><strong>How to use:</strong> ${card.usage}</div>
-      `;
-      toolkitGrid.appendChild(cardEl);
-
-      // Toggle usage info on click or enter
-      cardEl.addEventListener('click', () => toggleCard(cardEl));
-      cardEl.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          toggleCard(cardEl);
-        }
-      });
+    document.getElementById('pdfBtn').addEventListener('click', () => {
+      const element = document.getElementById('toolkitContent');
+      html2pdf().set({
+        margin: 0,
+        filename: 'SpeakLouderLoveToolkit.pdf',
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      }).from(element).save();
     });
-  }
-
-  function toggleCard(card) {
-    const currentlyActive = document.querySelector('.tool-card.active');
-    if (currentlyActive && currentlyActive !== card) {
-      deactivateCard(currentlyActive);
-    }
-
-    if (card.classList.contains('active')) {
-      deactivateCard(card);
-    } else {
-      activateCard(card);
-    }
-  }
-
-  function activateCard(card) {
-    card.classList.add('active');
-    card.setAttribute('aria-expanded', 'true');
-    const usage = card.querySelector('.tool-usage');
-    usage.setAttribute('aria-hidden', 'false');
-    createSparkles(card);
-    // Auto close after 12 seconds
-    setTimeout(() => {
-      deactivateCard(card);
-    }, 12000);
-  }
-  function deactivateCard(card) {
-    card.classList.remove('active');
-    card.setAttribute('aria-expanded', 'false');
-    const usage = card.querySelector('.tool-usage');
-    usage.setAttribute('aria-hidden', 'true');
-  }
-
-  // Create sparkle effect
-  function createSparkles(element) {
-    for(let i = 0; i < 6; i++) {
-      setTimeout(() => {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.left = Math.random() * element.offsetWidth + 'px';
-        sparkle.style.top = Math.random() * element.offsetHeight + 'px';
-        element.appendChild(sparkle);
-        setTimeout(() => sparkle.remove(), 2200);
-      }, i * 120);
-    }
-  }
-
-  // Generate next affirmation with fade and sparkle
-  function generateAffirmation() {
-    affirmationText.style.opacity = '0';
-    currentAffirmationIndex = (currentAffirmationIndex + 1) % affirmations.length;
-    setTimeout(() => {
-      affirmationText.textContent = affirmations[currentAffirmationIndex];
-      affirmationText.style.opacity = '1';
-      createSparkles(affirmationText);
-    }, 350);
-  }
-
-  // Save page as PDF
-  function saveAsPDF() {
-    const element = document.getElementById('toolkitContent');
-    html2pdf().set({
-      margin: 0.6,
-      filename: 'SpeakLouderLoveToolkit.pdf',
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    }).from(element).save();
-  }
-
-  // Initialize
-  renderCards();
-  affirmBtnTop.addEventListener('click', generateAffirmation);
-  affirmBtnBottom.addEventListener('click', generateAffirmation);
-  pdfBtn.addEventListener('click', saveAsPDF);
-
-  // Accessibility: focus ring on keyboard navigation
-  document.body.addEventListener('keydown', (e) => {
-    if(e.key === 'Tab') {
-      document.body.classList.add('show-focus');
-    }
-  });
-  document.body.addEventListener('mousedown', () => {
-    document.body.classList.remove('show-focus');
-  });
-
-</script>
-
+  </script>
 </body>
 </html>
