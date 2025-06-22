@@ -1,11 +1,9 @@
-<!-- Speak Louder Love Toolkit - Detailed Version -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Speak Louder Love Toolkit</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
@@ -13,17 +11,9 @@
     body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      background-size: 300% 300%;
-      animation: gradientShift 25s ease infinite;
       margin: 0;
       color: #222;
       overflow-x: hidden;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50% }
-      50% { background-position: 100% 50% }
-      100% { background-position: 0% 50% }
     }
 
     .container {
@@ -84,6 +74,11 @@
       box-shadow: 0 10px 20px rgba(0,0,0,0.15);
       text-align: center;
       cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
     }
 
     .tool-card h3 {
@@ -94,21 +89,6 @@
     .tool-card p {
       font-size: 1rem;
       color: #444;
-    }
-
-    .tool-usage {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: #fff3cd;
-      border-left: 5px solid #ffc107;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      display: none;
-      text-align: left;
-    }
-
-    .tool-card.active .tool-usage {
-      display: block;
     }
 
     .affirmation-section {
@@ -135,6 +115,50 @@
       cursor: pointer;
     }
 
+    /* Modal Styling */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-content {
+      background: white;
+      margin: 10% auto;
+      padding: 2rem;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 600px;
+      position: relative;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      font-size: 1.8rem;
+      color: #ff6b81;
+    }
+
+    .modal-content p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 1.8rem;
+      color: #888;
+      cursor: pointer;
+    }
+
     @media (max-width: 768px) {
       .header h1 {
         font-size: 2.2rem;
@@ -146,7 +170,7 @@
   <div class="container" id="toolkitContent">
     <div class="header">
       <h1>🗣️ Speak Louder Love Toolkit</h1>
-      <p>Tap each card to discover how to speak, love, and listen more boldly and authentically.</p>
+      <p>Tap a tool to open a guided walkthrough on how to use it meaningfully.</p>
     </div>
 
     <div class="btn-group">
@@ -154,44 +178,29 @@
     </div>
 
     <div class="toolkit-grid">
-      <div class="tool-card" onclick="toggleCard(this)">
+      <div class="tool-card" onclick="openModal('courage')">
         <h3>🔨 The Courage Hammer</h3>
-        <p>Break through fear that holds you back from speaking your truth.</p>
-        <div class="tool-usage">
-          <strong>How to use:</strong> When you feel fear or hesitation, close your eyes and picture a powerful hammer breaking through walls. These walls represent your silence or self-doubt. Breathe deeply three times and say: “My truth matters. I choose to be brave.” Let the image energize you to speak, even if your voice shakes.
-        </div>
+        <p>Break through fear and speak with strength.</p>
       </div>
 
-      <div class="tool-card" onclick="toggleCard(this)">
+      <div class="tool-card" onclick="openModal('truth')">
         <h3>🔍 The Truth Lens</h3>
         <p>See your feelings clearly and without judgment.</p>
-        <div class="tool-usage">
-          <strong>How to use:</strong> Take a moment to pause. Place your hand on your heart and ask: “What do I truly feel right now?” Use this lens to zoom past confusion or other people’s expectations. Trust that your truth doesn’t need to be perfect — just honest.
-        </div>
       </div>
 
-      <div class="tool-card" onclick="toggleCard(this)">
+      <div class="tool-card" onclick="openModal('kindness')">
         <h3>🎨 The Kindness Brush</h3>
-        <p>Speak firmly with softness. Paint your words in love.</p>
-        <div class="tool-usage">
-          <strong>How to use:</strong> Imagine brushing each word with kindness before you speak. When expressing something hard, take a breath and say it as if you were talking to someone you deeply care for — even if that someone is you. Let warmth and clarity mix.
-        </div>
+        <p>Paint your words with softness and care.</p>
       </div>
 
-      <div class="tool-card" onclick="toggleCard(this)">
+      <div class="tool-card" onclick="openModal('boundary')">
         <h3>🚧 The Boundary Tape</h3>
-        <p>Set limits that protect your peace and self-worth.</p>
-        <div class="tool-usage">
-          <strong>How to use:</strong> Visualize laying down boundary tape around your energy. Decide what’s okay for you and what’s not. Then speak it out loud. Say things like: “I need some space,” or “I’m not comfortable with that.” Boundaries are not walls — they are bridges to better understanding.
-        </div>
+        <p>Protect your peace with clear communication.</p>
       </div>
 
-      <div class="tool-card" onclick="toggleCard(this)">
+      <div class="tool-card" onclick="openModal('listening')">
         <h3>🪞 The Listening Mirror</h3>
-        <p>Reflect back what you hear. Listening is powerful too.</p>
-        <div class="tool-usage">
-          <strong>How to use:</strong> After someone shares, gently reflect their words back with: “So what I’m hearing is…” This simple act builds trust. You don’t need to agree — just hear. Keep your mirror clean by staying present, without planning your reply.
-        </div>
+        <p>Reflect and listen with empathy.</p>
       </div>
     </div>
 
@@ -203,30 +212,101 @@
     </div>
   </div>
 
+  <!-- Modals -->
+  <div id="courage" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('courage')">&times;</span>
+      <h2>🔨 The Courage Hammer</h2>
+      <p>
+        Close your eyes. Breathe deeply three times. Imagine a glowing hammer in your hand, smashing through a wall made of fear, silence, or self-doubt. Every strike clears a path for your voice.<br><br>
+        Say aloud: <strong>“My words matter. I am brave enough to speak up.”</strong><br><br>
+        Use this tool when you feel nervous to be honest, or fear how others might react.
+      </p>
+    </div>
+  </div>
+
+  <div id="truth" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('truth')">&times;</span>
+      <h2>🔍 The Truth Lens</h2>
+      <p>
+        Pause and place your hand over your heart. Ask gently: <strong>“What is really going on inside me?”</strong><br><br>
+        Use this lens to cut through confusion. Look clearly at your feelings — without judgment.<br><br>
+        Write your thoughts out, or say them in a mirror. Use this when you're unsure what’s true for you.
+      </p>
+    </div>
+  </div>
+
+  <div id="kindness" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('kindness')">&times;</span>
+      <h2>🎨 The Kindness Brush</h2>
+      <p>
+        Before speaking, imagine dipping your words into warm color — soft, yet strong. Your truth deserves care.<br><br>
+        Try phrases like: <strong>“This is hard for me to say, but I care too much to stay silent.”</strong><br><br>
+        This tool helps you say what’s real, without causing unnecessary harm.
+      </p>
+    </div>
+  </div>
+
+  <div id="boundary" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('boundary')">&times;</span>
+      <h2>🚧 The Boundary Tape</h2>
+      <p>
+        Visualize unrolling bright tape around your energy. You decide who and what crosses it.<br><br>
+        Use statements like:<br>
+        <strong>“I need some time for myself.”</strong><br>
+        <strong>“That doesn't feel okay to me.”</strong><br><br>
+        Boundaries protect your well-being. Set them calmly and consistently.
+      </p>
+    </div>
+  </div>
+
+  <div id="listening" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('listening')">&times;</span>
+      <h2>🪞 The Listening Mirror</h2>
+      <p>
+        Listen without interrupting. Let your heart reflect their words.<br><br>
+        Try saying: <strong>“What I hear you saying is…”</strong><br>
+        This invites understanding, even when you disagree.<br><br>
+        This tool is powerful when building bridges or resolving tension.
+      </p>
+    </div>
+  </div>
+
   <script>
     const affirmations = [
       "Your voice matters. Your truth deserves to be heard.",
-      "Speaking with love takes courage — and you have that courage.",
-      "Your authentic expression is a gift to the world.",
-      "It’s safe to speak your truth with kindness.",
-      "Your boundaries are worth protecting.",
-      "You deserve to be heard and understood.",
-      "Love grows when spoken clearly.",
-      "Your words can heal, connect, and empower.",
-      "Every time you speak, you invite honesty.",
-      "Your truth is valid. Speak it with heart."
+      "You have the courage to speak from the heart.",
+      "Your words are kind, clear, and powerful.",
+      "You are allowed to set boundaries that honor your peace.",
+      "You speak with love and listen with care.",
+      "Every word you speak brings you closer to truth.",
     ];
-
-    function toggleCard(card) {
-      const isActive = card.classList.contains('active');
-      document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-      if (!isActive) card.classList.add('active');
-    }
 
     function generateAffirmation() {
       const textEl = document.getElementById("affirmationText");
       const randomIndex = Math.floor(Math.random() * affirmations.length);
       textEl.textContent = affirmations[randomIndex];
+    }
+
+    function openModal(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+      document.querySelectorAll('.modal').forEach(modal => {
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+      });
     }
 
     document.getElementById('pdfBtn').addEventListener('click', () => {
