@@ -1,147 +1,246 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Truth Talk Tuesday — Teaching Toolkit</title>
-<style>
-  /* Reset and base */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f7fa;
-    color: #2c3e50;
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
-  header {
-    background: #34495e;
-    color: #ecf0f1;
-    text-align: center;
-    padding: 2rem 1rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-  header h1 {
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-  }
-  main {
-    max-width: 800px;
-    margin: 2rem auto 4rem;
-    padding: 0 1rem;
-  }
-  button#pdf-btn {
-    display: block;
-    margin: 0 auto 2rem;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    background-color: #2980b9;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(41,128,185,0.4);
-    transition: background-color 0.3s ease;
-  }
-  button#pdf-btn:hover {
-    background-color: #1f6391;
-  }
-  section.post {
-    background: #fff;
-    border-radius: 10px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-    overflow: hidden;
-  }
-  section.post summary {
-    cursor: pointer;
-    list-style: none;
-    padding: 1.3rem 1.75rem;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #2980b9;
-    user-select: none;
-    border-bottom: 2px solid #2980b9;
-    outline-offset: 4px;
-    transition: background-color 0.3s ease;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  section.post summary:hover {
-    background-color: #ecf0f1;
-  }
-  section.post[open] summary {
-    background-color: #dff9fb;
-  }
-  /* Arrow style for details */
-  summary::-webkit-details-marker {
-    display: none;
-  }
-  summary::after {
-    content: "▼";
-    font-size: 0.8rem;
-    color: #2980b9;
-    transition: transform 0.3s ease;
-  }
-  section.post[open] summary::after {
-    transform: rotate(-180deg);
-  }
-  section.post .content {
-    padding: 1rem 2rem 1.8rem;
-    font-size: 1rem;
-    color: #2c3e50;
-  }
-  section.post .tip {
-    background: #dff9fb;
-    border-left: 5px solid #22a6b3;
-    margin: 1rem 0;
-    padding: 0.75rem 1rem;
-    font-style: italic;
-    color: #130f40;
-    border-radius: 4px;
-  }
-  section.post .example {
-    background: #f6e58d;
-    border-left: 5px solid #f9ca24;
-    margin: 1rem 0;
-    padding: 0.75rem 1rem;
-    font-family: monospace;
-    white-space: pre-wrap;
-    color: #2d3436;
-    border-radius: 4px;
-  }
-  footer {
-    text-align: center;
-    padding: 2rem 1rem;
-    color: #7f8c8d;
-    font-size: 0.9rem;
-  }
-  @media (max-width: 480px) {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Truth Talk Tuesday — Colorful Teaching Toolkit</title>
+  
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      color: #3a3a3a;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      animation: fadeIn 1.2s ease forwards;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    header {
+      background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+      color: #fff;
+      text-align: center;
+      padding: 2.5rem 1rem;
+      box-shadow: 0 5px 20px rgba(106,17,203,0.6);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      user-select: none;
+      font-weight: 600;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #7f56f3;
+    }
     main {
-      margin: 1rem auto 3rem;
-      padding: 0 0.75rem;
+      max-width: 900px;
+      margin: 2.5rem auto 4rem;
+      padding: 0 1.2rem;
+      background: #fffefc;
+      border-radius: 24px;
+      box-shadow: 0 14px 40px rgba(255, 182, 193, 0.3);
+      transition: box-shadow 0.4s ease;
     }
+    main:hover {
+      box-shadow: 0 20px 55px rgba(255, 126, 172, 0.6);
+    }
+    button#pdf-btn {
+      display: block;
+      margin: 1.8rem auto 2.5rem;
+      padding: 0.85rem 2rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(255, 75, 43, 0.7);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.5s ease, box-shadow 0.3s ease;
+    }
+    button#pdf-btn:hover {
+      background: linear-gradient(45deg, #ff4b2b, #ff416c);
+      box-shadow: 0 8px 26px rgba(255, 65, 59, 0.9);
+    }
+    button#pdf-btn:focus {
+      outline: 3px solid #ff4b2b;
+      outline-offset: 3px;
+    }
+    button#pdf-btn::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: -100%;
+      background: rgba(255, 255, 255, 0.5);
+      transform: skewX(-20deg);
+      transition: left 0.5s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+    button#pdf-btn:hover::after {
+      left: 100%;
+    }
+    
+    section.post {
+      background: #fff;
+      border-radius: 20px;
+      margin-bottom: 1.6rem;
+      box-shadow: 0 14px 35px rgba(255, 105, 180, 0.15);
+      overflow: hidden;
+      transform-origin: top center;
+      transition: transform 0.45s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease;
+    }
+    section.post:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 22px 48px rgba(255, 105, 180, 0.3);
+    }
+    
+    /* details summary style */
+    details {
+      border-radius: 20px;
+    }
+    summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 1.5rem 2rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #833ab4;
+      user-select: none;
+      border-bottom: 4px solid transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(45deg, #fbc7f2, #a18cd1);
+      box-shadow: inset 0 0 12px #f8a1f1;
+      border-radius: 20px 20px 0 0;
+      transition: background 0.5s ease, color 0.4s ease, border-bottom 0.3s ease;
+      position: relative;
+    }
+    summary:hover {
+      background: linear-gradient(45deg, #a18cd1, #fbc7f2);
+      color: #5c0573;
+      border-bottom: 4px solid #ff4b2b;
+      text-shadow: 0 0 10px #ff4b2baa;
+    }
+    details[open] summary {
+      background: linear-gradient(45deg, #ff4b2b, #ff416c);
+      color: #fff;
+      border-bottom: 4px solid #fff;
+      text-shadow: 0 0 14px #fff8ea;
+      box-shadow: inset 0 0 18px #ff4b2b;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::after {
+      content: "▼";
+      font-size: 1.1rem;
+      color: #833ab4;
+      transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+      user-select: none;
+      margin-left: 1rem;
+      filter: drop-shadow(0 0 0.6px #833ab4);
+      transform-origin: center;
+    }
+    details[open] summary::after {
+      transform: rotate(-180deg);
+      color: #fff;
+      filter: drop-shadow(0 0 1.8px #fff8ea);
+    }
+    
     section.post .content {
-      padding: 1rem 1rem 1.5rem;
-      font-size: 0.95rem;
+      padding: 1.25rem 2.5rem 2.5rem;
+      font-size: 1.1rem;
+      color: #42275a;
+      animation: fadeContent 0.4s ease forwards;
+      user-select: text;
+      background: linear-gradient(45deg, #fcefee, #fff6fb);
+      border-radius: 0 0 20px 20px;
+      box-shadow: inset 0 5px 20px #fbc7f2aa;
     }
-  }
-</style>
+    @keyframes fadeContent {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    
+    .tip {
+      background: #e0f7fa;
+      border-left: 6px solid #00bcd4;
+      margin: 1.4rem 0;
+      padding: 1rem 1.5rem;
+      font-style: italic;
+      color: #006064;
+      border-radius: 10px;
+      box-shadow: inset 1px 1px 8px rgba(0, 188, 212, 0.2);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .example {
+      background: #fff3e0;
+      border-left: 6px solid #ffb300;
+      margin: 1.4rem 0;
+      padding: 1rem 1.5rem;
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+      color: #6d4c41;
+      border-radius: 10px;
+      box-shadow: inset 1px 1px 10px rgba(255, 179, 0, 0.25);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: #5a2a6b;
+      font-size: 1rem;
+      user-select: none;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-shadow: 0 0 6px #b774c9cc;
+    }
+    
+    @media (max-width: 600px) {
+      main {
+        margin: 1.5rem auto 3rem;
+        padding: 1rem 1rem;
+        border-radius: 16px;
+      }
+      section.post .content {
+        padding: 1rem 1.4rem 1.8rem;
+        font-size: 1rem;
+      }
+      summary {
+        font-size: 1.3rem;
+        padding: 1rem 1.2rem;
+      }
+      button#pdf-btn {
+        font-size: 1rem;
+        padding: 0.7rem 1.8rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
 <header>
-  <h1>Truth Talk Tuesday — Teaching Toolkit</h1>
+  Truth Talk Tuesday — Colorful Teaching Toolkit
 </header>
 
 <main>
@@ -262,43 +361,66 @@
   &copy; 2025 Truth Talk Tuesday Toolkit | Created by Larissa Wood
 </footer>
 
-<!-- jsPDF and html2canvas libraries for PDF generation -->
+<!-- Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-IqIK5NXmQ6Uda7EmgtlBq5UcqR1EvN+1nJrSYDVWfVjI3A6WuRXJAmEmdV2qxDtykXVcpG+3npklChqpxTFvSA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5XqDw6Ewhs8PZzqM0M1NctHZdyBESnZgjuj35QU2gE8EeU8vhH3O7U5AXhI76nztyDWVGdSn9ecDXDZjpZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
   const { jsPDF } = window.jspdf;
 
-  document.getElementById('pdf-btn').addEventListener('click', () => {
+  const pdfButton = document.getElementById('pdf-btn');
+  pdfButton.addEventListener('click', async () => {
+    pdfButton.disabled = true;
+    pdfButton.textContent = '⏳ Preparing PDF...';
+
     const mainContent = document.querySelector('main');
 
-    // Temporarily open all details for full content in PDF
+    // Open all details so all content shows in PDF
     const detailsElems = document.querySelectorAll('details');
     detailsElems.forEach(d => d.open = true);
 
-    // Give browser a moment to render all open content
-    setTimeout(() => {
-      html2canvas(mainContent, { scale: 2 }).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'pt', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-        // Calculate the ratio to fit page width
-        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-        const imgScaledWidth = imgWidth * ratio;
-        const imgScaledHeight = imgHeight * ratio;
+    // Wait for DOM update & repaint
+    await new Promise(resolve => setTimeout(resolve, 400));
 
-        pdf.addImage(imgData, 'PNG', (pdfWidth - imgScaledWidth) / 2, 20, imgScaledWidth, imgScaledHeight);
-        pdf.save('Truth_Talk_Tuesday_Toolkit.pdf');
-
-        // Close details back to original state (all closed except first open)
-        detailsElems.forEach((d, i) => {
-          d.open = (i === 0);
-        });
+    try {
+      // Use html2canvas to capture content as image
+      const canvas = await html2canvas(mainContent, {
+        scale: 2,
+        useCORS: true,
+        scrollY: -window.scrollY,
+        scrollX: -window.scrollX,
+        backgroundColor: null
       });
-    }, 300);
+      const imgData = canvas.toDataURL('image/png');
+
+      // Create PDF and add image
+      const pdf = new jsPDF('p', 'pt', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+
+      // Calculate image dimensions to fit inside PDF page while maintaining aspect ratio
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgScaledWidth = imgWidth * ratio;
+      const imgScaledHeight = imgHeight * ratio;
+
+      // Center image vertically and horizontally with a top margin of 20pt
+      pdf.addImage(imgData, 'PNG', (pdfWidth - imgScaledWidth) / 2, 20, imgScaledWidth, imgScaledHeight);
+
+      pdf.save('Truth_Talk_Tuesday_Toolkit.pdf');
+    } catch (error) {
+      alert('Sorry, there was an error generating the PDF. Please try again.');
+      console.error(error);
+    } finally {
+      // Reset button and close all but first details
+      pdfButton.disabled = false;
+      pdfButton.textContent = '💾 Save as PDF';
+      detailsElems.forEach((d, i) => {
+        d.open = i === 0;
+      });
+    }
   });
 </script>
 
