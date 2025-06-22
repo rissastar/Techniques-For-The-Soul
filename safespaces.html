@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speak Louder Love Toolkit</title>
+    <title>Safe Space Toolkit - Nurture Your Well-being</title>
     <style>
         * {
             margin: 0;
@@ -15,10 +15,10 @@
 ```
     body {
         font-family: 'Georgia', serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #f5f3f0 0%, #faf8f5 50%, #f0ede8 100%);
+        color: #4a4a4a;
+        line-height: 1.7;
         min-height: 100vh;
-        color: #333;
-        overflow-x: hidden;
     }
 
     .container {
@@ -35,128 +35,219 @@
 
     .header h1 {
         font-size: 3rem;
-        color: white;
+        color: #8b6f47;
         margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        text-shadow: 0 2px 4px rgba(139, 111, 71, 0.1);
     }
 
     .header p {
         font-size: 1.2rem;
-        color: rgba(255,255,255,0.9);
+        color: #6b5b73;
         max-width: 600px;
         margin: 0 auto;
-        line-height: 1.6;
+        opacity: 0.9;
+    }
+
+    .heart {
+        color: #d4a574;
+        font-size: 1.5rem;
+        display: inline-block;
+        animation: heartbeat 2s ease-in-out infinite;
     }
 
     .toolkit-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
         gap: 2rem;
         margin-bottom: 3rem;
     }
 
-    .tool-card {
-        background: rgba(255,255,255,0.95);
+    .toolkit-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
         border-radius: 20px;
         padding: 2rem;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        box-shadow: 0 8px 32px rgba(139, 111, 71, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         transition: all 0.3s ease;
-        cursor: pointer;
         position: relative;
         overflow: hidden;
     }
 
-    .tool-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    .toolkit-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #d4a574, #8b6f47, #6b5b73);
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
-    .tool-card.active {
-        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-        transform: scale(1.05);
+    .toolkit-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(139, 111, 71, 0.15);
     }
 
-    .tool-icon {
-        font-size: 3rem;
+    .toolkit-card:hover::before {
+        opacity: 1;
+    }
+
+    .card-icon {
+        font-size: 2.5rem;
         margin-bottom: 1rem;
         display: block;
-        animation: float 3s ease-in-out infinite;
     }
 
-    .tool-card:nth-child(2) .tool-icon { animation-delay: 0.5s; }
-    .tool-card:nth-child(3) .tool-icon { animation-delay: 1s; }
-    .tool-card:nth-child(4) .tool-icon { animation-delay: 1.5s; }
-    .tool-card:nth-child(5) .tool-icon { animation-delay: 2s; }
-
-    .tool-title {
+    .card-title {
         font-size: 1.5rem;
+        color: #8b6f47;
+        margin-bottom: 1rem;
         font-weight: bold;
-        margin-bottom: 1rem;
-        color: #444;
     }
 
-    .tool-description {
-        line-height: 1.6;
-        color: #666;
-        margin-bottom: 1rem;
+    .card-content {
+        color: #5a5a5a;
+        margin-bottom: 1.5rem;
     }
 
-    .tool-usage {
-        background: rgba(255,255,255,0.7);
-        padding: 1rem;
-        border-radius: 10px;
-        border-left: 4px solid #667eea;
-        margin-top: 1rem;
+    .tips-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .tips-list li {
+        margin-bottom: 0.8rem;
+        padding-left: 1.5rem;
+        position: relative;
         opacity: 0;
-        max-height: 0;
-        overflow: hidden;
-        transition: all 0.5s ease;
+        animation: fadeInLeft 0.6s ease-out forwards;
     }
 
-    .tool-card.active .tool-usage {
-        opacity: 1;
-        max-height: 200px;
+    .tips-list li::before {
+        content: '🌿';
+        position: absolute;
+        left: 0;
+        top: 0;
     }
 
-    .affirmation-section {
-        background: rgba(255,255,255,0.1);
+    .interactive-section {
+        background: rgba(255, 255, 255, 0.9);
         border-radius: 20px;
         padding: 2rem;
+        margin: 2rem 0;
         text-align: center;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.2);
+        box-shadow: 0 8px 32px rgba(139, 111, 71, 0.1);
     }
 
-    .affirmation-text {
-        font-size: 1.5rem;
-        color: white;
-        font-style: italic;
-        margin-bottom: 2rem;
-        min-height: 3rem;
+    .breathing-exercise {
+        margin: 2rem 0;
+    }
+
+    .breathing-circle {
+        width: 200px;
+        height: 200px;
+        border: 3px solid #d4a574;
+        border-radius: 50%;
+        margin: 2rem auto;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 1.2rem;
+        color: #8b6f47;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
     }
 
-    .generate-btn {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    .breathing-circle::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: radial-gradient(circle, rgba(212, 165, 116, 0.2), transparent);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 4s ease;
+    }
+
+    .breathing-circle.active::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .breathing-circle:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(212, 165, 116, 0.3);
+    }
+
+    .affirmations {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .affirmation-card {
+        background: linear-gradient(135deg, #f9f7f4, #f5f3f0);
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        font-style: italic;
+        color: #6b5b73;
+        box-shadow: 0 4px 16px rgba(139, 111, 71, 0.08);
+        transition: transform 0.3s ease;
+    }
+
+    .affirmation-card:hover {
+        transform: scale(1.02);
+    }
+
+    .resources-section {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
+
+    .emergency-contacts {
+        background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+        color: #2d3436;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .btn {
+        background: linear-gradient(135deg, #d4a574, #8b6f47);
         color: white;
         border: none;
         padding: 1rem 2rem;
-        border-radius: 50px;
-        font-size: 1.1rem;
+        border-radius: 25px;
         cursor: pointer;
+        font-size: 1rem;
         transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 16px rgba(139, 111, 71, 0.2);
     }
 
-    .generate-btn:hover {
+    .btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 24px rgba(139, 111, 71, 0.3);
     }
 
-    .pulse {
-        animation: pulse 2s infinite;
+    .footer {
+        text-align: center;
+        margin-top: 3rem;
+        padding: 2rem;
+        color: #8b6f47;
+        font-style: italic;
     }
 
     @keyframes fadeInDown {
@@ -170,37 +261,70 @@
         }
     }
 
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
     }
 
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
-
-    .sparkle {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background: gold;
-        border-radius: 50%;
-        animation: sparkle 2s linear infinite;
-    }
-
-    @keyframes sparkle {
-        0% { opacity: 0; transform: scale(0); }
-        50% { opacity: 1; transform: scale(1); }
-        100% { opacity: 0; transform: scale(0); }
+    @keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
     }
 
     @media (max-width: 768px) {
-        .header h1 { font-size: 2rem; }
-        .toolkit-grid { grid-template-columns: 1fr; }
-        .container { padding: 1rem; }
-        .tool-card { padding: 1.5rem; }
+        .container {
+            padding: 1rem;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+        }
+        
+        .toolkit-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: background-color 0.2s ease;
+    }
+
+    .checkbox-item:hover {
+        background-color: rgba(212, 165, 116, 0.1);
+    }
+
+    .checkbox-item input[type="checkbox"] {
+        margin-right: 0.8rem;
+        transform: scale(1.2);
+        accent-color: #d4a574;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        margin: 1rem 0;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #d4a574, #8b6f47);
+        width: 0%;
+        transition: width 0.3s ease;
+        border-radius: 4px;
     }
 </style>
 ```
@@ -208,179 +332,266 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🗣️ Speak Louder Love Toolkit</h1>
-            <p>Your powerful collection of tools to express love boldly and clearly. Click each tool to discover how to use it in your journey of authentic expression.</p>
-        </div>
+        <header class="header">
+            <h1>Safe Space Toolkit</h1>
+            <p>Simple ways to build comfort zones where your mind and heart can rest <span class="heart">💛</span></p>
+        </header>
 
 ```
     <div class="toolkit-grid">
-        <div class="tool-card" data-tool="courage">
-            <span class="tool-icon">🔨</span>
-            <h3 class="tool-title">The Courage Hammer</h3>
-            <p class="tool-description">Break down walls of fear that keep you quiet. When you feel afraid to speak up, tap into this tool.</p>
-            <div class="tool-usage">
-                <strong>How to use:</strong> When fear arises, take three deep breaths and remind yourself: "Courage is not the absence of fear but the choice to act anyway." Feel the hammer breaking through your walls of hesitation.
-            </div>
+        <div class="toolkit-card">
+            <span class="card-icon">🏡</span>
+            <h2 class="card-title">Physical Safe Space</h2>
+            <p class="card-content">Create a comforting environment that nurtures your well-being</p>
+            <ul class="tips-list">
+                <li style="animation-delay: 0.1s">Choose soft, warm lighting over harsh fluorescents</li>
+                <li style="animation-delay: 0.2s">Add plants or natural elements for grounding</li>
+                <li style="animation-delay: 0.3s">Keep comfort items within reach (blankets, pillows)</li>
+                <li style="animation-delay: 0.4s">Minimize clutter for mental clarity</li>
+                <li style="animation-delay: 0.5s">Use calming scents like lavender or vanilla</li>
+                <li style="animation-delay: 0.6s">Display meaningful photos or artwork</li>
+            </ul>
         </div>
 
-        <div class="tool-card" data-tool="truth">
-            <span class="tool-icon">🔍</span>
-            <h3 class="tool-title">The Truth Lens</h3>
-            <p class="tool-description">See your feelings clearly and focus on your authentic truth without judgment or doubt.</p>
-            <div class="tool-usage">
-                <strong>How to use:</strong> When emotions feel tangled, pause and look through your Truth Lens. Ask yourself: "What is my heart really trying to tell me?" Listen without judgment.
-            </div>
+        <div class="toolkit-card">
+            <span class="card-icon">🛡️</span>
+            <h2 class="card-title">Setting Boundaries</h2>
+            <p class="card-content">Protect your energy and peace of mind with healthy limits</p>
+            <ul class="tips-list">
+                <li style="animation-delay: 0.1s">Practice saying "no" without over-explaining</li>
+                <li style="animation-delay: 0.2s">Set specific times for checking messages/emails</li>
+                <li style="animation-delay: 0.3s">Create phone-free zones in your home</li>
+                <li style="animation-delay: 0.4s">Limit time with energy-draining people</li>
+                <li style="animation-delay: 0.5s">Communicate your needs clearly and kindly</li>
+                <li style="animation-delay: 0.6s">Honor your own limits without guilt</li>
+            </ul>
         </div>
 
-        <div class="tool-card" data-tool="kindness">
-            <span class="tool-icon">🎨</span>
-            <h3 class="tool-title">The Kindness Brush</h3>
-            <p class="tool-description">Paint your words with compassion, for yourself and those who listen. Speaking louder doesn't mean being harsh.</p>
-            <div class="tool-usage">
-                <strong>How to use:</strong> Before speaking, dip your words in kindness. Choose phrases that honor both your truth and the listener's humanity. Speak firmly but with love.
-            </div>
+        <div class="toolkit-card">
+            <span class="card-icon">🧘</span>
+            <h2 class="card-title">Emotional Regulation</h2>
+            <p class="card-content">Tools to navigate and process your emotions safely</p>
+            <ul class="tips-list">
+                <li style="animation-delay: 0.1s">Practice deep breathing when overwhelmed</li>
+                <li style="animation-delay: 0.2s">Name your emotions without judgment</li>
+                <li style="animation-delay: 0.3s">Use journaling to process feelings</li>
+                <li style="animation-delay: 0.4s">Try progressive muscle relaxation</li>
+                <li style="animation-delay: 0.5s">Create a feelings vocabulary list</li>
+                <li style="animation-delay: 0.6s">Practice self-compassion daily</li>
+            </ul>
         </div>
 
-        <div class="tool-card" data-tool="boundary">
-            <span class="tool-icon">🚧</span>
-            <h3 class="tool-title">The Boundary Tape</h3>
-            <p class="tool-description">Mark the lines of respect around your needs and limits. Protect your peace and ask for what you deserve.</p>
-            <div class="tool-usage">
-                <strong>How to use:</strong> Visualize placing boundary tape around your needs. Say clearly: "This is what I need" or "This is my limit." Stand firm with loving conviction.
-            </div>
+        <div class="toolkit-card">
+            <span class="card-icon">🤝</span>
+            <h2 class="card-title">Support Network</h2>
+            <p class="card-content">Build and maintain connections that uplift and support you</p>
+            <ul class="tips-list">
+                <li style="animation-delay: 0.1s">Identify trusted people you can talk to</li>
+                <li style="animation-delay: 0.2s">Join supportive communities or groups</li>
+                <li style="animation-delay: 0.3s">Practice vulnerability with safe people</li>
+                <li style="animation-delay: 0.4s">Offer support to others when you can</li>
+                <li style="animation-delay: 0.5s">Consider professional counseling support</li>
+                <li style="animation-delay: 0.6s">Create regular check-ins with loved ones</li>
+            </ul>
         </div>
+    </div>
 
-        <div class="tool-card" data-tool="listening">
-            <span class="tool-icon">🪞</span>
-            <h3 class="tool-title">The Listening Mirror</h3>
-            <p class="tool-description">Speaking louder is also about opening space for others. Reflect back what you hear and invite connection.</p>
-            <div class="tool-usage">
-                <strong>How to use:</strong> After speaking your truth, hold up your Listening Mirror. Reflect back what others share: "What I hear you saying is..." Create space for dialogue.
+    <div class="interactive-section">
+        <h2 style="color: #8b6f47; margin-bottom: 1rem;">Breathing Exercise</h2>
+        <p>Click the circle below to start a guided breathing exercise</p>
+        <div class="breathing-circle" id="breathingCircle" onclick="startBreathing()">
+            <span id="breathingText">Click to Begin</span>
+        </div>
+        <p id="breathingInstructions" style="color: #6b5b73; font-style: italic;"></p>
+    </div>
+
+    <div class="interactive-section">
+        <h2 style="color: #8b6f47; margin-bottom: 1rem;">Daily Self-Care Checklist</h2>
+        <p>Check off items as you complete them to track your self-care progress</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div id="checklistContainer">
+            <div class="checkbox-item">
+                <input type="checkbox" id="hydrate" onchange="updateProgress()">
+                <label for="hydrate">Drink enough water today</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="breathe" onchange="updateProgress()">
+                <label for="breathe">Take 5 deep breaths</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="move" onchange="updateProgress()">
+                <label for="move">Move your body gently</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="rest" onchange="updateProgress()">
+                <label for="rest">Take a meaningful break</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="connect" onchange="updateProgress()">
+                <label for="connect">Connect with someone you care about</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="gratitude" onchange="updateProgress()">
+                <label for="gratitude">Write down one thing you're grateful for</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="boundary" onchange="updateProgress()">
+                <label for="boundary">Honor a personal boundary</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="kindness" onchange="updateProgress()">
+                <label for="kindness">Show yourself kindness</label>
             </div>
         </div>
     </div>
 
-    <div class="affirmation-section">
-        <div class="affirmation-text" id="affirmationText">
-            Your voice matters. Your truth deserves to be heard.
+    <div class="interactive-section">
+        <h2 style="color: #8b6f47; margin-bottom: 1rem;">Gentle Affirmations</h2>
+        <p>Read these reminders of your worth and strength</p>
+        <div class="affirmations">
+            <div class="affirmation-card">"I am worthy of love and respect, starting with my own."</div>
+            <div class="affirmation-card">"It's okay to take up space and have needs."</div>
+            <div class="affirmation-card">"I choose peace over perfection."</div>
+            <div class="affirmation-card">"My feelings are valid and deserve acknowledgment."</div>
+            <div class="affirmation-card">"I am learning and growing at my own pace."</div>
+            <div class="affirmation-card">"I deserve gentleness, especially from myself."</div>
         </div>
-        <button class="generate-btn" onclick="generateAffirmation()">
-            ✨ Generate Love Affirmation
-        </button>
+        <button class="btn" onclick="showRandomAffirmation()">Show Me an Affirmation</button>
+        <p id="randomAffirmation" style="margin-top: 1rem; font-style: italic; color: #8b6f47; font-size: 1.1rem;"></p>
     </div>
+
+    <div class="resources-section">
+        <h2 style="color: #8b6f47; margin-bottom: 1rem;">Support Resources</h2>
+        <div class="emergency-contacts">
+            <strong>Crisis Support:</strong><br>
+            National Suicide Prevention Lifeline: 988<br>
+            Crisis Text Line: Text HOME to 741741<br>
+            International Association for Suicide Prevention: <a href="https://www.iasp.info/resources/Crisis_Centres/" target="_blank">Find local resources</a>
+        </div>
+        <p style="margin-top: 1rem; color: #6b5b73;">
+            Remember: Seeking help is a sign of strength, not weakness. Professional support can provide valuable tools and perspectives for your healing journey.
+        </p>
+    </div>
+
+    <footer class="footer">
+        <p>You deserve gentleness, compassion, and a space where you can simply be. <span class="heart">💛</span></p>
+        <p>Take what serves you, leave what doesn't. Your well-being matters.</p>
+    </footer>
 </div>
 
 <script>
-    const affirmations = [
-        "Your voice matters. Your truth deserves to be heard.",
-        "Speaking with love takes courage, and you have that courage within you.",
-        "Your authentic expression is a gift to the world.",
-        "It's safe to speak your truth with kindness and conviction.",
-        "Your boundaries are sacred and worth protecting.",
-        "Love grows stronger when expressed honestly and openly.",
-        "You deserve to be heard, understood, and respected.",
-        "Your words have the power to heal and connect hearts.",
-        "Speaking louder in love means honoring both yourself and others.",
-        "Every time you speak your truth, you inspire others to do the same.",
-        "Your feelings are valid and worthy of gentle expression.",
-        "Courage is choosing love over fear, again and again."
-    ];
-
-    let currentAffirmationIndex = 0;
-
-    function generateAffirmation() {
-        const affirmationElement = document.getElementById('affirmationText');
-        const button = document.querySelector('.generate-btn');
+    let breathingActive = false;
+    
+    function startBreathing() {
+        if (breathingActive) return;
         
-        button.classList.add('pulse');
+        breathingActive = true;
+        const circle = document.getElementById('breathingCircle');
+        const text = document.getElementById('breathingText');
+        const instructions = document.getElementById('breathingInstructions');
+        
+        circle.classList.add('active');
+        
+        // 4-7-8 breathing pattern
+        const breathingPattern = [
+            { text: "Breathe in...", instruction: "Inhale slowly through your nose for 4 counts", duration: 4000 },
+            { text: "Hold...", instruction: "Hold your breath gently for 7 counts", duration: 7000 },
+            { text: "Breathe out...", instruction: "Exhale slowly through your mouth for 8 counts", duration: 8000 }
+        ];
+        
+        let currentStep = 0;
+        let cycles = 0;
+        const maxCycles = 3;
+        
+        function nextStep() {
+            if (cycles >= maxCycles) {
+                text.textContent = "Complete ✨";
+                instructions.textContent = "Take a moment to notice how you feel";
+                circle.classList.remove('active');
+                setTimeout(() => {
+                    text.textContent = "Click to Begin";
+                    instructions.textContent = "";
+                    breathingActive = false;
+                }, 3000);
+                return;
+            }
+            
+            const step = breathingPattern[currentStep];
+            text.textContent = step.text;
+            instructions.textContent = step.instruction;
+            
+            setTimeout(() => {
+                currentStep++;
+                if (currentStep >= breathingPattern.length) {
+                    currentStep = 0;
+                    cycles++;
+                }
+                nextStep();
+            }, step.duration);
+        }
+        
+        nextStep();
+    }
+    
+    function updateProgress() {
+        const checkboxes = document.querySelectorAll('#checklistContainer input[type="checkbox"]');
+        const checked = document.querySelectorAll('#checklistContainer input[type="checkbox"]:checked');
+        const percentage = (checked.length / checkboxes.length) * 100;
+        
+        document.getElementById('progressFill').style.width = percentage + '%';
+        
+        if (percentage === 100) {
+            setTimeout(() => {
+                alert('🎉 Wonderful! You\'ve completed your self-care checklist today. You\'re taking such good care of yourself!');
+            }, 300);
+        }
+    }
+    
+    const affirmations = [
+        "You are enough, exactly as you are right now.",
+        "Your pace is perfect for your journey.",
+        "It's brave to ask for what you need.",
+        "You deserve the same kindness you give others.",
+        "Your feelings matter and are worthy of attention.",
+        "You are allowed to change your mind.",
+        "Rest is productive and necessary.",
+        "You don't have to earn your worth.",
+        "Your boundaries are valid and important.",
+        "You are allowed to take up space.",
+        "Healing isn't linear, and that's okay.",
+        "You are worthy of gentle treatment."
+    ];
+    
+    function showRandomAffirmation() {
+        const randomIndex = Math.floor(Math.random() * affirmations.length);
+        const affirmationElement = document.getElementById('randomAffirmation');
+        affirmationElement.textContent = affirmations[randomIndex];
         affirmationElement.style.opacity = '0';
         
         setTimeout(() => {
-            currentAffirmationIndex = (currentAffirmationIndex + 1) % affirmations.length;
-            affirmationElement.textContent = affirmations[currentAffirmationIndex];
+            affirmationElement.style.transition = 'opacity 0.5s ease';
             affirmationElement.style.opacity = '1';
-            
-            // Add sparkle effect
-            createSparkles(button);
-            
-            setTimeout(() => {
-                button.classList.remove('pulse');
-            }, 2000);
-        }, 300);
+        }, 100);
     }
-
-    function createSparkles(element) {
-        for (let i = 0; i < 5; i++) {
+    
+    // Initialize progress bar
+    updateProgress();
+    
+    // Add gentle entrance animations for cards
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.toolkit-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
             setTimeout(() => {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = Math.random() * element.offsetWidth + 'px';
-                sparkle.style.top = Math.random() * element.offsetHeight + 'px';
-                element.appendChild(sparkle);
-                
-                setTimeout(() => {
-                    sparkle.remove();
-                }, 2000);
-            }, i * 100);
-        }
-    }
-
-    // Tool card interactions
-    document.querySelectorAll('.tool-card').forEach(card => {
-        card.addEventListener('click', () => {
-            // Remove active class from all cards
-            document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-            
-            // Add active class to clicked card
-            card.classList.add('active');
-            
-            // Create sparkle effect
-            createSparkles(card);
-            
-            // Auto-close after 10 seconds
-            setTimeout(() => {
-                card.classList.remove('active');
-            }, 10000);
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 200);
         });
     });
-
-    // Initialize with first affirmation
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('affirmationText').textContent = affirmations[0];
-    });
-
-    // Add some floating animation to the background
-    function createFloatingElements() {
-        const container = document.body;
-        const symbols = ['💕', '✨', '🌟', '💖', '🌈'];
-        
-        setInterval(() => {
-            const element = document.createElement('div');
-            element.style.position = 'fixed';
-            element.style.left = Math.random() * window.innerWidth + 'px';
-            element.style.top = window.innerHeight + 'px';
-            element.style.fontSize = '20px';
-            element.style.pointerEvents = 'none';
-            element.style.zIndex = '-1';
-            element.style.opacity = '0.3';
-            element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-            
-            container.appendChild(element);
-            
-            const animation = element.animate([
-                { transform: 'translateY(0px) rotate(0deg)', opacity: 0.3 },
-                { transform: `translateY(-${window.innerHeight + 100}px) rotate(360deg)`, opacity: 0 }
-            ], {
-                duration: 8000 + Math.random() * 4000,
-                easing: 'ease-out'
-            });
-            
-            animation.onfinish = () => element.remove();
-        }, 3000);
-    }
-
-    createFloatingElements();
 </script>
 ```
 
