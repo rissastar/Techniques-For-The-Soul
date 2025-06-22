@@ -1,521 +1,1238 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Grief Support Toolkit</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <title>Grief Toolkit - Support & Resources / Boîte à outils du deuil</title>
 
+  <style>
+    /* Reset & basics */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.6;
-      color: #333;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
+      color: #333;
+      transition: background 0.5s ease;
+      padding-bottom: 60px;
     }
-
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
     }
-
-    .header {
+    header {
       text-align: center;
-      margin-bottom: 40px;
-      background: rgba(255, 255, 255, 0.95);
+      margin-bottom: 30px;
+      color: white;
+      padding: 30px 10px;
+      user-select: none;
+      position: relative;
+    }
+    .header-content {
+      background: rgba(255 255 255 / 0.12);
       backdrop-filter: blur(10px);
       border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: 30px 20px;
+      border: 1px solid rgba(255 255 255 / 0.25);
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+      animation: fadeInUp 1s ease-out;
+    }
+    .subtitle {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      animation: fadeInUp 1s ease-out 0.3s both;
     }
 
-    .header h1 {
-      font-size: 2.5rem;
-      color: #4a5568;
-      margin-bottom: 15px;
-      background: linear-gradient(45deg, #667eea, #764ba2);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    /* Language toggle button */
+    #langToggle {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255 255 255 / 0.3);
+      border: none;
+      color: #333;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s ease;
+      z-index: 100;
+    }
+    #langToggle:hover {
+      background: rgba(255 255 255 / 0.5);
     }
 
-    .header p {
-      font-size: 1.2rem;
-      color: #666;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .toolkit-grid {
+    /* Main content grid */
+    .main-content {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 30px;
-      margin-bottom: 40px;
+      gap: 25px;
+      margin-bottom: 30px;
     }
 
-    .toolkit-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+    /* Cards */
+    .card {
+      background: rgba(255 255 255 / 0.95);
+      border-radius: 15px;
+      padding: 25px 30px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(255 255 255 / 0.3);
+      cursor: default;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
-    .toolkit-card.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     }
-
-    .toolkit-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .card-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 15px;
-      font-size: 24px;
-      background: linear-gradient(45deg, #667eea, #764ba2);
-      color: white;
-    }
-
-    .card-title {
-      font-size: 1.5rem;
+    .card h2 {
       color: #4a5568;
-      font-weight: 600;
-    }
-
-    .card-content {
-      color: #666;
-      line-height: 1.7;
-    }
-
-    .stages-list {
-      list-style: none;
-      margin-top: 15px;
-    }
-
-    .stages-list li {
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
+      font-size: 1.6rem;
+      margin-bottom: 18px;
       display: flex;
       align-items: center;
-    }
-
-    .stages-list li:last-child {
-      border-bottom: none;
-    }
-
-    .stage-number {
-      background: linear-gradient(45deg, #667eea, #764ba2);
-      color: white;
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: bold;
-      margin-right: 15px;
-      flex-shrink: 0;
-    }
-
-    .coping-strategies {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .strategy-item {
-      background: linear-gradient(45deg, #f8f9ff, #e6f3ff);
-      padding: 15px;
-      border-radius: 12px;
-      border-left: 4px solid #667eea;
-      transition: all 0.3s ease;
-    }
-
-    .strategy-item:hover {
-      transform: translateX(5px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-    }
-
-    .resource-links {
-      margin-top: 20px;
-    }
-
-    .resource-link {
-      display: inline-block;
-      background: linear-gradient(45deg, #667eea, #764ba2);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 25px;
-      text-decoration: none;
-      margin: 5px;
-      font-weight: 500;
-      transition: all 0.3s ease;
-    }
-
-    .resource-link:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-    }
-
-    .emergency-section {
-      background: linear-gradient(45deg, #ff6b6b, #ee5a52);
-      color: white;
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      margin-top: 40px;
-      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
-    }
-
-    .emergency-section h3 {
-      font-size: 1.5rem;
-      margin-bottom: 15px;
-    }
-
-    .emergency-number {
-      font-size: 2rem;
-      font-weight: bold;
-      margin: 10px 0;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .breathing-exercise {
-      background: linear-gradient(45deg, #4ecdc4, #44a08d);
-      color: white;
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .breathing-circle {
-      width: 150px;
-      height: 150px;
-      border: 4px solid white;
-      border-radius: 50%;
-      margin: 20px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 4s ease;
+      gap: 12px;
       user-select: none;
     }
 
-    .breathing-circle.active {
-      transform: scale(1.3);
-    }
-
-    .quote-section {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      margin-top: 40px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    }
-
-    .quote {
+    /* Card icons */
+    .card-icon {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
       font-size: 1.3rem;
-      font-style: italic;
-      color: #4a5568;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+
+    /* Resource lists */
+    .resource-list {
+      list-style: none;
+    }
+    .resource-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      transition: padding-left 0.3s ease;
+    }
+    .resource-list li:hover {
+      padding-left: 12px;
+      background: rgba(102, 126, 234, 0.07);
+    }
+    .resource-list a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.25s ease;
+    }
+    .resource-list a:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+
+    /* Interactive sections */
+    .interactive-section {
+      background: rgba(255 255 255 / 0.95);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 25px 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      user-select: none;
+    }
+
+    /* Mood tracker */
+    .mood-tracker {
+      text-align: center;
+      user-select: none;
+    }
+    .mood-tracker h2 {
       margin-bottom: 15px;
-      line-height: 1.8;
+      color: #333;
+      font-size: 2rem;
+    }
+    .mood-tracker p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    .mood-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+    .mood-btn {
+      padding: 15px 28px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      user-select: none;
+      flex: 1 1 110px;
+      max-width: 140px;
+      text-align: center;
+    }
+    .mood-btn:hover,
+    .mood-btn:focus {
+      transform: scale(1.07);
+      box-shadow: 0 6px 22px rgba(118, 75, 162, 0.6);
+      outline: none;
     }
 
-    .quote-author {
-      color: #666;
-      font-weight: 500;
+    /* Progress bar */
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 15px;
+      user-select: none;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      width: 0%;
+      border-radius: 6px;
+      transition: width 0.5s ease;
     }
 
+    /* Mood message */
+    #moodMessage {
+      font-style: italic;
+      font-size: 1.1rem;
+      color: #444;
+      min-height: 30px;
+      user-select: none;
+      margin-top: 10px;
+    }
+
+    /* Journal */
+    .journal-section h2 {
+      margin-bottom: 15px;
+      font-size: 2rem;
+      color: #333;
+      user-select: none;
+    }
+    .journal-section p {
+      margin-bottom: 18px;
+      font-size: 1.1rem;
+      color: #555;
+    }
+    .journal-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 18px 20px;
+      border: 2px solid #cbd5e0;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      transition: border-color 0.3s ease;
+      user-select: text;
+    }
+    .journal-textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+    .save-btn {
+      background: linear-gradient(135deg, #48bb78, #38a169);
+      color: white;
+      border: none;
+      padding: 14px 38px;
+      border-radius: 30px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      margin-top: 18px;
+      transition: all 0.3s ease;
+      user-select: none;
+      box-shadow: 0 4px 15px rgba(56, 161, 105, 0.5);
+    }
+    .save-btn:hover,
+    .save-btn:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(56, 161, 105, 0.7);
+      outline: none;
+    }
+    #journalMessage {
+      margin-top: 12px;
+      font-style: italic;
+      color: #38a169;
+      min-height: 24px;
+      user-select: none;
+    }
+
+    /* Coping strategies */
+    .coping-strategies {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+      user-select: none;
+    }
+    .strategy-card {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
+      padding: 18px 22px;
+      border-radius: 14px;
+      border-left: 5px solid #667eea;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 0 12px transparent;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+    .strategy-card:hover,
+    .strategy-card:focus {
+      transform: translateX(6px);
+      box-shadow: 0 12px 24px rgba(102, 126, 234, 0.25);
+      outline: none;
+    }
+    .strategy-card h3 {
+      margin-bottom: 8px;
+      user-select: none;
+    }
+    .strategy-card p {
+      color: #555;
+      user-select: none;
+    }
+
+    /* Emergency section */
+    .emergency-section {
+      background: linear-gradient(135deg, #fc8181, #f56565);
+      color: white;
+      border-radius: 15px;
+      padding: 30px;
+      margin: 30px 0;
+      text-align: center;
+      user-select: none;
+      box-shadow: 0 10px 35px rgba(245, 101, 101, 0.7);
+    }
+    .emergency-section h2 {
+      margin-bottom: 15px;
+      font-size: 2.2rem;
+    }
+    .emergency-number {
+      font-size: 3rem;
+      font-weight: 700;
+      margin: 15px 0;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+      user-select: text;
+    }
+    .emergency-section p {
+      font-size: 1.1rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: white;
+      padding: 35px 15px;
+      background: rgba(255 255 255 / 0.12);
+      border-radius: 15px;
+      margin-top: 40px;
+      user-select: none;
+      font-size: 1.05rem;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .footer p:last-child {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-top: 10px;
+      user-select: none;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .fade-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Notifications */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #48bb78;
+      color: white;
+      padding: 15px 28px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.22);
+      transform: translateX(110%);
+      transition: transform 0.3s ease;
+      z-index: 1200;
+      user-select: none;
+      max-width: 320px;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    /* Breathing modal */
+    #breathingModal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1400;
+    }
+    #breathingModal.active {
+      display: flex;
+    }
+    .breathing-modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 320px;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(102, 126, 234, 0.6);
+      user-select: none;
+    }
+    .breathing-modal-content h2 {
+      margin-bottom: 20px;
+      color: #667eea;
+      font-size: 1.8rem;
+    }
+    .breathing-circle {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 8px solid #667eea;
+      margin: 0 auto;
+      animation: breathe 8s infinite;
+      box-shadow: 0 0 25px rgba(102, 126, 234, 0.7);
+      user-select: none;
+    }
+    @keyframes breathe {
+      0%, 100% {
+        transform: scale(1);
+        border-color: #667eea;
+      }
+      50% {
+        transform: scale(1.4);
+        border-color: #764ba2;
+      }
+    }
+    .breathing-modal-content p {
+      margin-top: 20px;
+      color: #333;
+      font-size: 1.1rem;
+      user-select: none;
+    }
+    .breathing-close-btn {
+      margin-top: 22px;
+      background: #764ba2;
+      border: none;
+      padding: 12px 28px;
+      color: white;
+      border-radius: 14px;
+      font-size: 1rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    .breathing-close-btn:hover,
+    .breathing-close-btn:focus {
+      background: #5a3790;
+      outline: none;
+    }
+
+    /* Pop-up modal overlay */
+    #modalOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.65);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1500;
+      padding: 15px;
+    }
+    #modalOverlay.active {
+      display: flex;
+    }
+    #modalContent {
+      background: white;
+      border-radius: 18px;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 30px 35px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.25);
+      font-size: 1rem;
+      color: #222;
+      line-height: 1.55;
+      user-select: text;
+    }
+    #modalContent h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #764ba2;
+    }
+    #modalCloseBtn {
+      position: absolute;
+      top: 18px;
+      right: 25px;
+      background: transparent;
+      border: none;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #764ba2;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.3s ease;
+    }
+    #modalCloseBtn:hover,
+    #modalCloseBtn:focus {
+      color: #4a3265;
+      outline: none;
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
-      .toolkit-grid {
-        grid-template-columns: 1fr;
+      h1 {
+        font-size: 2.2rem;
       }
-
-      .header h1 {
-        font-size: 2rem;
-      }
-
       .container {
         padding: 15px;
+      }
+      .mood-btn {
+        font-size: 1rem;
+        padding: 12px 22px;
+        max-width: 110px;
+      }
+      .coping-strategies {
+        grid-template-columns: 1fr;
+      }
+      #modalContent {
+        max-width: 90vw;
+        max-height: 90vh;
+        padding: 20px;
       }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>🤗 Grief Support Toolkit</h1>
-      <p>
-        A comprehensive resource to help you navigate through grief with
-        compassion, understanding, and practical support.
+
+  <header>
+    <button id="langToggle" aria-label="Switch language to French">Français</button>
+    <div class="header-content" role="banner">
+      <h1 data-en="Grief Toolkit" data-fr="Boîte à outils du deuil">Grief Toolkit</h1>
+      <p class="subtitle" data-en="A gentle guide for understanding and coping with grief" data-fr="Un guide doux pour comprendre et faire face au deuil">
+        A gentle guide for understanding and coping with grief
       </p>
+      <div id="dailyQuote" aria-live="polite" aria-atomic="true" style="margin-top: 12px; font-style: italic; color: #e0e7ff; user-select:none;"></div>
     </div>
+  </header>
 
-    <div class="toolkit-grid">
-      <div class="toolkit-card">
-        <div class="card-header">
-          <div class="card-icon">💙</div>
-          <h2 class="card-title">Understanding Grief</h2>
-        </div>
-        <div class="card-content">
-          <p>
-            Grief is a natural response to loss. It's important to know that
-            there's no "right" way to grieve, and everyone's journey is unique.
-          </p>
-          <ul class="stages-list">
-            <li>
-              <span class="stage-number">1</span
-              ><strong>Denial:</strong> "This can't be happening"
-            </li>
-            <li>
-              <span class="stage-number">2</span
-              ><strong>Anger:</strong> Feeling frustrated or upset
-            </li>
-            <li>
-              <span class="stage-number">3</span
-              ><strong>Bargaining:</strong> "What if..." thoughts
-            </li>
-            <li>
-              <span class="stage-number">4</span
-              ><strong>Depression:</strong> Deep sadness and withdrawal
-            </li>
-            <li>
-              <span class="stage-number">5</span
-              ><strong>Acceptance:</strong> Finding peace with the loss
-            </li>
+  <main class="container" role="main">
+
+    <!-- Understanding Grief Section -->
+    <section class="card fade-in" aria-labelledby="understandingGriefTitle">
+      <h2 id="understandingGriefTitle">
+        <span class="card-icon">💔</span>
+        <span data-en="Understanding Grief" data-fr="Comprendre le deuil">Understanding Grief</span>
+      </h2>
+      <p data-en="Grief is a natural response to loss. It can affect us emotionally, physically, and mentally. Everyone experiences grief differently." data-fr="Le deuil est une réponse naturelle à la perte. Il peut nous affecter émotionnellement, physiquement et mentalement. Chacun vit le deuil différemment."></p>
+      <ul class="resource-list" role="list" aria-label="Resources on Understanding Grief">
+        <li><a href="#" class="info-link" data-topic="griefPhases" tabindex="0" data-en="Phases of Grief" data-fr="Les phases du deuil" aria-describedby="descPhases">Phases of Grief</a></li>
+        <li><a href="#" class="info-link" data-topic="typesOfGrief" tabindex="0" data-en="Types of Grief" data-fr="Types de deuil" aria-describedby="descTypes">Types of Grief</a></li>
+        <li><a href="#" class="info-link" data-topic="complicatedGrief" tabindex="0" data-en="Complicated Grief" data-fr="Deuil compliqué" aria-describedby="descComplicated">Complicated Grief</a></li>
+        <li><a href="#" class="info-link" data-topic="supportGroups" tabindex="0" data-en="Support Groups" data-fr="Groupes de soutien" aria-describedby="descSupport">Support Groups</a></li>
+      </ul>
+    </section>
+
+    <!-- Coping Strategies Section -->
+    <section class="card fade-in" aria-labelledby="copingStrategiesTitle">
+      <h2 id="copingStrategiesTitle">
+        <span class="card-icon">🛠️</span>
+        <span data-en="Coping Strategies" data-fr="Stratégies d'adaptation">Coping Strategies</span>
+      </h2>
+      <p data-en="Explore practical ways to cope with grief. Click a strategy below to learn how to do it with an example." data-fr="Découvrez des moyens pratiques de faire face au deuil. Cliquez sur une stratégie ci-dessous pour apprendre comment faire avec un exemple."></p>
+      <div class="coping-strategies" role="list">
+        <button class="strategy-card" data-strategy="breathing" tabindex="0" aria-describedby="descBreathing" data-en="Deep Breathing" data-fr="Respiration profonde">
+          <h3>Deep Breathing</h3>
+          <p>Focus on your breath to calm your mind.</p>
+        </button>
+        <button class="strategy-card" data-strategy="grounding" tabindex="0" aria-describedby="descGrounding" data-en="Grounding" data-fr="Ancrage">
+          <h3>Grounding</h3>
+          <p>Connect with the present moment.</p>
+        </button>
+        <button class="strategy-card" data-strategy="movement" tabindex="0" aria-describedby="descMovement" data-en="Movement" data-fr="Mouvement">
+          <h3>Movement</h3>
+          <p>Use gentle physical activity.</p>
+        </button>
+        <button class="strategy-card" data-strategy="creativity" tabindex="0" aria-describedby="descCreativity" data-en="Creativity" data-fr="Créativité">
+          <h3>Creativity</h3>
+          <p>Express your feelings artistically.</p>
+        </button>
+        <button class="strategy-card" data-strategy="nature" tabindex="0" aria-describedby="descNature" data-en="Nature" data-fr="Nature">
+          <h3>Nature</h3>
+          <p>Spend time outdoors or with plants.</p>
+        </button>
+        <button class="strategy-card" data-strategy="meditation" tabindex="0" aria-describedby="descMeditation" data-en="Meditation" data-fr="Méditation">
+          <h3>Meditation</h3>
+          <p>Practice mindfulness meditation.</p>
+        </button>
+      </div>
+    </section>
+
+    <!-- Mood Tracker Section -->
+    <section class="interactive-section mood-tracker" aria-labelledby="moodTrackerTitle">
+      <h2 id="moodTrackerTitle" data-en="Mood Tracker" data-fr="Suivi de l'humeur">Mood Tracker</h2>
+      <p data-en="Select how you're feeling today:" data-fr="Sélectionnez comment vous vous sentez aujourd'hui :"></p>
+      <div class="mood-buttons" role="list" aria-label="Mood options">
+        <button class="mood-btn" data-mood="Happy" aria-label="Happy" tabindex="0">😊</button>
+        <button class="mood-btn" data-mood="Sad" aria-label="Sad" tabindex="0">😢</button>
+        <button class="mood-btn" data-mood="Angry" aria-label="Angry" tabindex="0">😠</button>
+        <button class="mood-btn" data-mood="Anxious" aria-label="Anxious" tabindex="0">😰</button>
+        <button class="mood-btn" data-mood="Calm" aria-label="Calm" tabindex="0">😌</button>
+      </div>
+      <div class="progress-bar" aria-hidden="true">
+        <div class="progress-fill"></div>
+      </div>
+      <div id="moodMessage" aria-live="polite" aria-atomic="true"></div>
+    </section>
+
+    <!-- Journal Section -->
+    <section class="journal-section interactive-section" aria-labelledby="journalTitle">
+      <h2 id="journalTitle" data-en="Grief Journal" data-fr="Journal du deuil">Grief Journal</h2>
+      <p data-en="Write your thoughts and feelings here. Your entries will be saved on this device." data-fr="Écrivez vos pensées et sentiments ici. Vos entrées seront enregistrées sur cet appareil."></p>
+      <textarea id="journalEntry" class="journal-textarea" aria-label="Write your grief journal entry"></textarea>
+      <button class="save-btn" id="saveJournalBtn" data-en="Save Entry" data-fr="Enregistrer">Save Entry</button>
+      <div id="journalMessage" role="alert" aria-live="assertive" aria-atomic="true"></div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="card fade-in" aria-labelledby="resourcesTitle">
+      <h2 id="resourcesTitle">
+        <span class="card-icon">📚</span>
+        <span data-en="Resources & Help" data-fr="Ressources & Aide">Resources & Help</span>
+      </h2>
+      <p data-en="Here are trusted free resources available in Canada and the US for grief support and mental health help." data-fr="Voici des ressources gratuites et fiables disponibles au Canada et aux États-Unis pour le soutien au deuil et la santé mentale."></p>
+      <ul class="resource-list" role="list" aria-label="Grief Support Resources">
+        <li>
+          <strong data-en="Canada:" data-fr="Canada:"></strong>
+          <ul>
+            <li><a href="https://www.crisisservicescanada.ca/en/" target="_blank" rel="noopener" data-en="Crisis Services Canada" data-fr="Services de crise Canada">Crisis Services Canada</a></li>
+            <li><a href="https://www.suicideprevention.ca/" target="_blank" rel="noopener" data-en="Canadian Suicide Prevention Service" data-fr="Service canadien de prévention du suicide">Canadian Suicide Prevention Service</a></li>
+            <li><a href="https://cmha.ca/find-help" target="_blank" rel="noopener" data-en="Canadian Mental Health Association" data-fr="Association canadienne pour la santé mentale">Canadian Mental Health Association</a></li>
+            <li><a href="https://kidshelpphone.ca/" target="_blank" rel="noopener" data-en="Kids Help Phone" data-fr="Jeunesse, J'écoute">Kids Help Phone</a></li>
           </ul>
-          <p style="margin-top: 15px; font-style: italic; color: #888;">
-            Remember: These stages don't happen in order, and you may experience
-            them multiple times.
-          </p>
-        </div>
-      </div>
-
-      <div class="toolkit-card">
-        <div class="card-header">
-          <div class="card-icon">🛠️</div>
-          <h2 class="card-title">Coping Strategies</h2>
-        </div>
-        <div class="card-content">
-          <p>Practical ways to help you through difficult moments:</p>
-          <div class="coping-strategies">
-            <div class="strategy-item">
-              <strong>🌱 Self-Care</strong><br />
-              Maintain basic needs: sleep, nutrition, hygiene
-            </div>
-            <div class="strategy-item">
-              <strong>📝 Journaling</strong><br />
-              Write down your thoughts and feelings
-            </div>
-            <div class="strategy-item">
-              <strong>🚶‍♀️ Gentle Exercise</strong><br />
-              Walking, yoga, or light movement
-            </div>
-            <div class="strategy-item">
-              <strong>🎨 Creative Expression</strong><br />
-              Art, music, or crafts as outlets
-            </div>
-            <div class="strategy-item">
-              <strong>🤝 Social Support</strong><br />
-              Connect with friends, family, or support groups
-            </div>
-            <div class="strategy-item">
-              <strong>🧘‍♀️ Mindfulness</strong><br />
-              Meditation and breathing exercises
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="toolkit-card">
-        <div class="card-header">
-          <div class="card-icon">🌟</div>
-          <h2 class="card-title">Memory Keeping</h2>
-        </div>
-        <div class="card-content">
-          <p>Ways to honor and remember your loved one:</p>
-          <ul style="margin-top: 15px; list-style-type: none;">
-            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
-              📸 Create a photo album or memory book
-            </li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
-              🕯️ Light a candle on special occasions
-            </li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
-              🌳 Plant a tree or garden in their memory
-            </li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
-              💝 Donate to a cause they cared about
-            </li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
-              📖 Write letters to them
-            </li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
-              🎵 Create a playlist of meaningful songs
-            </li>
-            <li style="padding: 8px 0;">🌟 Continue traditions they loved</li>
+        </li>
+        <li>
+          <strong data-en="United States:" data-fr="États-Unis:"></strong>
+          <ul>
+            <li><a href="https://suicidepreventionlifeline.org/" target="_blank" rel="noopener" data-en="Suicide Prevention Lifeline" data-fr="Ligne de prévention du suicide">Suicide Prevention Lifeline</a></li>
+            <li><a href="https://www.nimh.nih.gov/health/topics/grief" target="_blank" rel="noopener" data-en="National Institute of Mental Health Grief Resources" data-fr="Ressources sur le deuil de l'Institut national de la santé mentale">National Institute of Mental Health Grief Resources</a></li>
+            <li><a href="https://www.griefshare.org/" target="_blank" rel="noopener" data-en="GriefShare Support Groups" data-fr="Groupes de soutien GriefShare">GriefShare Support Groups</a></li>
+            <li><a href="https://www.nami.org/Home" target="_blank" rel="noopener" data-en="National Alliance on Mental Illness (NAMI)" data-fr="Alliance nationale pour les maladies mentales (NAMI)">National Alliance on Mental Illness (NAMI)</a></li>
           </ul>
-        </div>
-      </div>
+        </li>
+      </ul>
+    </section>
 
-      <div class="toolkit-card">
-        <div class="card-header">
-          <div class="card-icon">📞</div>
-          <h2 class="card-title">Support Resources</h2>
-        </div>
-        <div class="card-content">
-          <p>Professional support and helplines:</p>
-          <div class="resource-links">
-            <a href="#" class="resource-link">Crisis Text Line</a>
-            <a href="#" class="resource-link">GriefShare</a>
-            <a href="#" class="resource-link">National Suicide Prevention Lifeline</a>
-            <a href="#" class="resource-link">Psychology Today Therapist Finder</a>
-            <a href="#" class="resource-link">SAMHSA Treatment Locator</a>
-          </div>
-          <p style="margin-top: 20px; font-style: italic;">
-            Consider reaching out to a grief counselor, therapist, or joining a
-            support group in your area.
-          </p>
-        </div>
-      </div>
-    </div>
+    <!-- Emergency Section -->
+    <section class="emergency-section" aria-labelledby="emergencyTitle">
+      <h2 id="emergencyTitle" data-en="If you or someone you know is in crisis" data-fr="Si vous ou quelqu'un que vous connaissez êtes en crise">If you or someone you know is in crisis</h2>
+      <div class="emergency-number" role="text" aria-label="Emergency phone number">1-800-273-8255</div>
+      <p data-en="Call this number immediately if you are feeling suicidal or unsafe." data-fr="Appelez ce numéro immédiatement si vous vous sentez suicidaire ou en danger."></p>
+    </section>
 
-    <div class="breathing-exercise">
-      <h3>🌬️ Breathing Exercise</h3>
-      <p>Click the circle and breathe with the animation</p>
-      <div class="breathing-circle" id="breathingCircle" onclick="startBreathing()">
-        Click to Start
-      </div>
-      <p id="breathingText">Inhale for 4 counts, hold for 4 counts, exhale for 4 counts</p>
-    </div>
+  </main>
 
-    <div class="emergency-section">
-      <h3>🚨 If You're in Crisis</h3>
-      <p>If you're having thoughts of self-harm or suicide, please reach out immediately:</p>
-      <div class="emergency-number">988</div>
-      <p>Suicide & Crisis Lifeline (US)</p>
-      <p style="margin-top: 15px;">
-        You can also text "HELLO" to 741741 for the Crisis Text Line
-      </p>
-      <p><strong>Remember: You are not alone, and help is available 24/7.</strong></p>
-    </div>
+  <footer class="footer" role="contentinfo">
+    <p data-en="Created with care by Larissa Wood" data-fr="Créé avec soin par Larissa Wood">Created with care by Larissa Wood</p>
+    <p data-en="© 2025 Speak Louder Love" data-fr="© 2025 Speak Louder Love">© 2025 Speak Louder Love</p>
+  </footer>
 
-    <div class="quote-section">
-      <div class="quote">
-        "Grief is the price we pay for love. It is also the source of our greatest
-        hope."
-      </div>
-      <div class="quote-author">— Anonymous</div>
+  <!-- Notifications -->
+  <div id="notification" class="notification" aria-live="assertive" role="alert" aria-atomic="true" style="display:none;"></div>
+
+  <!-- Breathing Modal -->
+  <div id="breathingModal" role="dialog" aria-modal="true" aria-labelledby="breathingTitle" tabindex="-1">
+    <div class="breathing-modal-content">
+      <h2 id="breathingTitle" data-en="🫁 Deep Breathing Exercise" data-fr="🫁 Exercice de respiration profonde">🫁 Deep Breathing Exercise</h2>
+      <div class="breathing-circle" aria-label="Breathing guide circle"></div>
+      <p data-en="Breathe in for 4 seconds, hold for 7 seconds, exhale for 8 seconds. Repeat several times." data-fr="Inspirez pendant 4 secondes, retenez pendant 7 secondes, expirez pendant 8 secondes. Répétez plusieurs fois."></p>
+      <button class="breathing-close-btn" id="closeBreathingBtn" aria-label="Close breathing exercise modal">Close</button>
     </div>
   </div>
 
-  <script>
-    let breathingActive = false;
-    let breathingInterval;
+  <!-- Info Modal -->
+  <div id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+    <button id="modalCloseBtn" aria-label="Close modal">&times;</button>
+    <div id="modalContent">
+      <h3 id="modalTitle"></h3>
+      <div id="modalBody"></div>
+    </div>
+  </div>
 
-    function startBreathing() {
-      const circle = document.getElementById('breathingCircle');
-      const text = document.getElementById('breathingText');
+<script>
+(() => {
+  // Language toggle
+  const langToggleBtn = document.getElementById('langToggle');
+  let currentLang = 'en';
 
-      if (breathingActive) {
-        clearInterval(breathingInterval);
-        circle.classList.remove('active');
-        circle.textContent = 'Click to Start';
-        text.textContent = 'Inhale for 4 counts, hold for 4 counts, exhale for 4 counts';
-        breathingActive = false;
-        return;
+  function switchLanguage() {
+    currentLang = currentLang === 'en' ? 'fr' : 'en';
+    langToggleBtn.textContent = currentLang === 'en' ? 'Français' : 'English';
+    langToggleBtn.setAttribute('aria-label', currentLang === 'en' ? 'Switch language to French' : 'Passer la langue en anglais');
+
+    // Change all elements with data-en and data-fr
+    document.querySelectorAll('[data-en]').forEach(el => {
+      el.textContent = el.getAttribute(`data-${currentLang}`);
+    });
+  }
+  langToggleBtn.addEventListener('click', switchLanguage);
+  switchLanguage(); // initialize
+
+  // Daily rotating grief quotes EN/FR
+  const quotes = {
+    en: [
+      "“Grief is the price we pay for love.” – Queen Elizabeth II",
+      "“The reality is that you will grieve forever.” – Elisabeth Kübler-Ross",
+      "“Healing takes time, and asking for help is a courageous step.”",
+      "“What we have once enjoyed deeply we can never lose.” – Helen Keller",
+      "“Sometimes, the best way to heal is to simply allow yourself to feel.”"
+    ],
+    fr: [
+      "« Le chagrin est le prix que nous payons pour l'amour. » – Reine Elizabeth II",
+      "« La réalité est que vous allez pleurer pour toujours. » – Elisabeth Kübler-Ross",
+      "« La guérison prend du temps, et demander de l'aide est une étape courageuse. »",
+      "« Ce que nous avons profondément apprécié, nous ne pouvons jamais le perdre. » – Helen Keller",
+      "« Parfois, la meilleure façon de guérir est de simplement vous permettre de ressentir. »"
+    ]
+  };
+  function showDailyQuote() {
+    const quoteElem = document.getElementById('dailyQuote');
+    const today = new Date().getDate();
+    const quote = quotes[currentLang][today % quotes[currentLang].length];
+    quoteElem.textContent = quote;
+  }
+  showDailyQuote();
+  langToggleBtn.addEventListener('click', () => {
+    showDailyQuote();
+  });
+
+  // Notification system
+  const notification = document.getElementById('notification');
+  let notifyTimeout;
+  function showNotification(msg) {
+    notification.textContent = msg;
+    notification.style.display = 'block';
+    notification.classList.add('show');
+    clearTimeout(notifyTimeout);
+    notifyTimeout = setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => notification.style.display = 'none', 300);
+    }, 4000);
+  }
+
+  // Pop-up modal for info (Understanding grief links & coping strategy details)
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalContentTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+  // Content for Understanding Grief topics
+  const griefInfoContent = {
+    griefPhases: {
+      en: {
+        title: 'Phases of Grief',
+        body: `
+          <p>Grief can involve several phases, though not everyone experiences them the same way or in order. Common phases include:</p>
+          <ul>
+            <li><strong>Denial:</strong> Difficulty accepting the loss.</li>
+            <li><strong>Anger:</strong> Frustration and feelings of injustice.</li>
+            <li><strong>Bargaining:</strong> Trying to negotiate or make deals to change the outcome.</li>
+            <li><strong>Depression:</strong> Sadness and withdrawal from activities.</li>
+            <li><strong>Acceptance:</strong> Coming to terms with the loss and finding ways to move forward.</li>
+          </ul>
+          <p>Everyone’s grieving process is unique and may not include all phases.</p>
+        `
+      },
+      fr: {
+        title: 'Les phases du deuil',
+        body: `
+          <p>Le deuil peut impliquer plusieurs phases, bien que tout le monde ne les vive pas de la même manière ou dans cet ordre. Les phases courantes incluent :</p>
+          <ul>
+            <li><strong>Déni :</strong> Difficulté à accepter la perte.</li>
+            <li><strong>Colère :</strong> Frustration et sentiment d'injustice.</li>
+            <li><strong>Négociation :</strong> Tentative de négocier ou de faire des accords pour changer le résultat.</li>
+            <li><strong>Dépression :</strong> Tristesse et retrait des activités.</li>
+            <li><strong>Acceptation :</strong> Accepter la perte et trouver des moyens d'avancer.</li>
+          </ul>
+          <p>Le processus de deuil est unique pour chacun et peut ne pas inclure toutes les phases.</p>
+        `
       }
-
-      breathingActive = true;
-      let phase = 0; // 0: inhale, 1: hold, 2: exhale, 3: hold
-      let count = 0;
-
-      const phases = ['Inhale', 'Hold', 'Exhale', 'Hold'];
-      const durations = [4, 4, 4, 4];
-
-      breathingInterval = setInterval(() => {
-        if (count === 0) {
-          text.textContent = `${phases[phase]}...`;
-          if (phase === 0) {
-            circle.classList.add('active');
-          } else if (phase === 2) {
-            circle.classList.remove('active');
-          }
-        }
-
-        circle.textContent = durations[phase] - count;
-        count++;
-
-        if (count >= durations[phase]) {
-          count = 0;
-          phase = (phase + 1) % 4;
-        }
-      }, 1000);
+    },
+    typesOfGrief: {
+      en: {
+        title: 'Types of Grief',
+        body: `
+          <p>Grief can take different forms including:</p>
+          <ul>
+            <li><strong>Normal grief:</strong> The usual emotional response to loss.</li>
+            <li><strong>Anticipatory grief:</strong> Grieving before an expected loss.</li>
+            <li><strong>Disenfranchised grief:</strong> Grief not openly acknowledged or socially supported.</li>
+            <li><strong>Complicated grief:</strong> Intense, prolonged grief interfering with daily life.</li>
+          </ul>
+        `
+      },
+      fr: {
+        title: 'Types de deuil',
+        body: `
+          <p>Le deuil peut prendre différentes formes, notamment :</p>
+          <ul>
+            <li><strong>Deuil normal :</strong> Réaction émotionnelle habituelle à la perte.</li>
+            <li><strong>Deuil anticipé :</strong> Deuil avant une perte prévue.</li>
+            <li><strong>Deuil non reconnu :</strong> Deuil non reconnu ou socialement soutenu.</li>
+            <li><strong>Deuil compliqué :</strong> Deuil intense et prolongé qui interfère avec la vie quotidienne.</li>
+          </ul>
+        `
+      }
+    },
+    complicatedGrief: {
+      en: {
+        title: 'Complicated Grief',
+        body: `
+          <p>Complicated grief involves prolonged and intense symptoms that disrupt daily life and functioning. It may include:</p>
+          <ul>
+            <li>Persistent intense sorrow</li>
+            <li>Difficulty moving on</li>
+            <li>Strong feelings of loneliness</li>
+            <li>Problems trusting others</li>
+          </ul>
+          <p>It is important to seek professional help if you suspect complicated grief.</p>
+        `
+      },
+      fr: {
+        title: 'Deuil compliqué',
+        body: `
+          <p>Le deuil compliqué implique des symptômes prolongés et intenses qui perturbent la vie quotidienne et le fonctionnement. Cela peut inclure :</p>
+          <ul>
+            <li>Chagrin intense persistant</li>
+            <li>Difficulté à avancer</li>
+            <li>Forte sensation de solitude</li>
+            <li>Problèmes de confiance envers les autres</li>
+          </ul>
+          <p>Il est important de demander de l'aide professionnelle si vous suspectez un deuil compliqué.</p>
+        `
+      }
+    },
+    supportGroups: {
+      en: {
+        title: 'Support Groups',
+        body: `
+          <p>Joining a support group can help you share your experience and feel less alone.</p>
+          <ul>
+            <li>Look for local grief support groups through community centers or healthcare providers.</li>
+            <li>Online support groups offer flexibility and anonymity.</li>
+            <li>Many groups focus on specific losses, such as loss of a parent, child, or spouse.</li>
+          </ul>
+          <p>Find one that feels safe and supportive for you.</p>
+        `
+      },
+      fr: {
+        title: 'Groupes de soutien',
+        body: `
+          <p>Rejoindre un groupe de soutien peut vous aider à partager votre expérience et à vous sentir moins seul.</p>
+          <ul>
+            <li>Recherchez des groupes de soutien locaux dans les centres communautaires ou auprès des professionnels de santé.</li>
+            <li>Les groupes de soutien en ligne offrent flexibilité et anonymat.</li>
+            <li>Beaucoup se concentrent sur des pertes spécifiques, comme la perte d'un parent, d'un enfant ou d'un conjoint.</li>
+          </ul>
+          <p>Trouvez celui qui vous semble sûr et encourageant.</p>
+        `
+      }
     }
+  };
 
-    // Smooth scroll for anchor links (if any)
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-          });
-        }
-      });
+  // Content for Coping Strategies
+  const copingStrategiesContent = {
+    breathing: {
+      en: {
+        title: "Deep Breathing",
+        body: `
+          <p>Deep breathing helps calm your nervous system and reduce stress.</p>
+          <p><strong>Try this:</strong> Breathe in slowly through your nose for 4 seconds, hold your breath for 7 seconds, then breathe out slowly through your mouth for 8 seconds.</p>
+          <p>Repeat this cycle 4-6 times. Focus on the rhythm and feel your body relax.</p>
+          <p>You can also try the built-in <button id="startBreathing" style="background:#667eea; color:white; border:none; border-radius:6px; padding:6px 12px; cursor:pointer;">Breathing Exercise</button> for guidance.</p>
+        `
+      },
+      fr: {
+        title: "Respiration profonde",
+        body: `
+          <p>La respiration profonde aide à calmer votre système nerveux et à réduire le stress.</p>
+          <p><strong>Essayez ceci :</strong> Inspirez lentement par le nez pendant 4 secondes, retenez votre souffle pendant 7 secondes, puis expirez lentement par la bouche pendant 8 secondes.</p>
+          <p>Répétez ce cycle 4 à 6 fois. Concentrez-vous sur le rythme et sentez votre corps se détendre.</p>
+          <p>Vous pouvez aussi essayer l'<button id="startBreathingFr" style="background:#667eea; color:white; border:none; border-radius:6px; padding:6px 12px; cursor:pointer;">exercice de respiration</button> intégré pour vous guider.</p>
+        `
+      }
+    },
+    grounding: {
+      en: {
+        title: "Grounding",
+        body: `
+          <p>Grounding techniques help you reconnect with the present moment and reduce overwhelming feelings.</p>
+          <p><strong>Try this 5-4-3-2-1 exercise:</strong></p>
+          <ul>
+            <li>5 things you can see</li>
+            <li>4 things you can touch</li>
+            <li>3 things you can hear</li>
+            <li>2 things you can smell</li>
+            <li>1 thing you can taste</li>
+          </ul>
+          <p>Focus on naming each thing slowly and mindfully.</p>
+        `
+      },
+      fr: {
+        title: "Ancrage",
+        body: `
+          <p>Les techniques d'ancrage vous aident à vous reconnecter au moment présent et à réduire les sentiments accablants.</p>
+          <p><strong>Essayez cet exercice 5-4-3-2-1 :</strong></p>
+          <ul>
+            <li>5 choses que vous pouvez voir</li>
+            <li>4 choses que vous pouvez toucher</li>
+            <li>3 choses que vous pouvez entendre</li>
+            <li>2 choses que vous pouvez sentir</li>
+            <li>1 chose que vous pouvez goûter</li>
+          </ul>
+          <p>Concentrez-vous sur chaque élément lentement et avec attention.</p>
+        `
+      }
+    },
+    movement: {
+      en: {
+        title: "Movement",
+        body: `
+          <p>Gentle movement can help release tension and improve mood.</p>
+          <p><strong>Try this:</strong> Take a slow walk, stretch, or do some light yoga for 10 minutes.</p>
+          <p>Notice how your body feels before and after.</p>
+        `
+      },
+      fr: {
+        title: "Mouvement",
+        body: `
+          <p>Un mouvement doux peut aider à libérer la tension et améliorer l'humeur.</p>
+          <p><strong>Essayez ceci :</strong> Faites une promenade lente, des étirements ou du yoga léger pendant 10 minutes.</p>
+          <p>Observez comment votre corps se sent avant et après.</p>
+        `
+      }
+    },
+    creativity: {
+      en: {
+        title: "Creativity",
+        body: `
+          <p>Expressing your feelings through art can be healing.</p>
+          <p><strong>Try this:</strong> Write, draw, paint, or create music to express your emotions.</p>
+          <p>There is no right or wrong — just let your feelings flow.</p>
+        `
+      },
+      fr: {
+        title: "Créativité",
+        body: `
+          <p>Exprimer vos sentiments par l'art peut être guérissant.</p>
+          <p><strong>Essayez ceci :</strong> Écrivez, dessinez, peignez ou créez de la musique pour exprimer vos émotions.</p>
+          <p>Il n'y a pas de bonne ou mauvaise façon — laissez simplement vos sentiments s'exprimer.</p>
+        `
+      }
+    },
+    nature: {
+      en: {
+        title: "Nature",
+        body: `
+          <p>Spending time in nature can provide comfort and peace.</p>
+          <p><strong>Try this:</strong> Sit outside, go for a walk in a park, or care for a plant.</p>
+          <p>Notice the sights, sounds, and smells around you.</p>
+        `
+      },
+      fr: {
+        title: "Nature",
+        body: `
+          <p>Passer du temps dans la nature peut apporter du réconfort et de la paix.</p>
+          <p><strong>Essayez ceci :</strong> Asseyez-vous dehors, promenez-vous dans un parc ou prenez soin d'une plante.</p>
+          <p>Observez les vues, les sons et les odeurs autour de vous.</p>
+        `
+      }
+    },
+    meditation: {
+      en: {
+        title: "Meditation",
+        body: `
+          <p>Mindfulness meditation helps calm the mind and build acceptance.</p>
+          <p><strong>Try this:</strong> Sit quietly, focus on your breath, and gently bring your attention back when it wanders.</p>
+          <p>Start with 5 minutes and increase as comfortable.</p>
+        `
+      },
+      fr: {
+        title: "Méditation",
+        body: `
+          <p>La méditation de pleine conscience aide à calmer l'esprit et à favoriser l'acceptation.</p>
+          <p><strong>Essayez ceci :</strong> Asseyez-vous calmement, concentrez-vous sur votre respiration et ramenez doucement votre attention quand elle s'égare.</p>
+          <p>Commencez par 5 minutes et augmentez selon votre confort.</p>
+        `
+      }
+    }
+  };
+
+  // Modal open function for grief info or coping strategies
+  function openModal(topicKey, isCoping = false) {
+    const lang = currentLang;
+    let contentObj = isCoping ? copingStrategiesContent[topicKey] : griefInfoContent[topicKey];
+    if (!contentObj) return;
+
+    modalContentTitle.textContent = contentObj[lang].title;
+    modalBody.innerHTML = contentObj[lang].body;
+
+    modalOverlay.classList.add('active');
+    modalOverlay.focus();
+
+    // Add event listener for breathing exercise start button inside coping strategies modal
+    const startBtn = document.getElementById(lang === 'en' ? 'startBreathing' : 'startBreathingFr');
+    if (startBtn) {
+      startBtn.onclick = () => {
+        openBreathingModal();
+        closeModal();
+      };
+    }
+  }
+
+  // Close modal function
+  function closeModal() {
+    modalOverlay.classList.remove('active');
+    modalContentTitle.textContent = '';
+    modalBody.innerHTML = '';
+  }
+  modalCloseBtn.addEventListener('click', closeModal);
+
+  // Close modal on click outside content
+  modalOverlay.addEventListener('click', e => {
+    if (e.target === modalOverlay) {
+      closeModal();
+    }
+  });
+
+  // Keyboard support for modal close (Esc)
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // Attach event listeners to grief info links
+  document.querySelectorAll('.info-link').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const topic = e.target.getAttribute('data-topic');
+      openModal(topic);
     });
+  });
 
-    // Fade-in on scroll
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px',
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.toolkit-card').forEach((card) => {
-      observer.observe(card);
+  // Attach event listeners to coping strategy cards
+  document.querySelectorAll('.strategy-card').forEach(card => {
+    card.addEventListener('click', e => {
+      const strat = card.getAttribute('data-strategy');
+      openModal(strat, true);
     });
-  </script>
+  });
+
+  // Mood Tracker
+  const moodBtns = document.querySelectorAll('.mood-btn');
+  const progressFill = document.querySelector('.progress-fill');
+  const moodMessage = document.getElementById('moodMessage');
+
+  // Stored mood counts
+  let moodCounts = JSON.parse(localStorage.getItem('moodCounts')) || {
+    Happy: 0,
+    Sad: 0,
+    Angry: 0,
+    Anxious: 0,
+    Calm: 0,
+  };
+
+  // Display mood message
+  const moodMessages = {
+    en: {
+      Happy: "Glad to see your happiness today! Keep shining! 😊",
+      Sad: "It's okay to feel sad. Allow yourself to grieve. 💙",
+      Angry: "Anger is a natural feeling. Try to breathe deeply. 🔥",
+      Anxious: "Feeling anxious? Ground yourself with your senses. 🌿",
+      Calm: "Peaceful moments are precious. Stay calm and centered. 🌸"
+    },
+    fr: {
+      Happy: "Content de voir votre bonheur aujourd'hui ! Continuez à briller ! 😊",
+      Sad: "C'est normal d'être triste. Permettez-vous de faire votre deuil. 💙",
+      Angry: "La colère est un sentiment naturel. Essayez de respirer profondément. 🔥",
+      Anxious: "Anxieux ? Ancrez-vous avec vos sens. 🌿",
+      Calm: "Les moments paisibles sont précieux. Restez calme et centré. 🌸"
+    }
+  };
+
+  // Update progress bar and message
+  function updateMoodUI() {
+    const total = Object.values(moodCounts).reduce((a, b) => a + b, 0);
+    if (total === 0) {
+      progressFill.style.width = '0%';
+      moodMessage.textContent = '';
+      return;
+    }
+    // Find most selected mood percentage for progress bar
+    let maxMoodCount = 0;
+    let maxMood = null;
+    for (const mood in moodCounts) {
+      if (moodCounts[mood] > maxMoodCount) {
+        maxMoodCount = moodCounts[mood];
+        maxMood = mood;
+      }
+    }
+    const percent = Math.min(100, (maxMoodCount / total) * 100);
+    progressFill.style.width = percent + '%';
+
+    // Show message in current language
+    moodMessage.textContent = moodMessages[currentLang][maxMood];
+  }
+
+  updateMoodUI();
+
+  moodBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mood = btn.getAttribute('data-mood');
+      moodCounts[mood]++;
+      localStorage.setItem('moodCounts', JSON.stringify(moodCounts));
+      updateMoodUI();
+      showNotification(currentLang === 'en' ? `Mood "${mood}" recorded.` : `Humeur "${mood}" enregistrée.`);
+    });
+  });
+
+  // Journal saving
+  const journalEntry = document.getElementById('journalEntry');
+  const saveJournalBtn = document.getElementById('saveJournalBtn');
+  const journalMessage = document.getElementById('journalMessage');
+
+  // Load saved journal on start
+  function loadJournal() {
+    const saved = localStorage.getItem('griefJournal');
+    if (saved) journalEntry.value = saved;
+  }
+  loadJournal();
+
+  saveJournalBtn.addEventListener('click', () => {
+    const val = journalEntry.value.trim();
+    if (!val) {
+      journalMessage.textContent = currentLang === 'en' ? 'Please write something before saving.' : 'Veuillez écrire quelque chose avant d\'enregistrer.';
+      return;
+    }
+    localStorage.setItem('griefJournal', val);
+    journalMessage.textContent = currentLang === 'en' ? 'Your journal entry has been saved.' : 'Votre entrée de journal a été enregistrée.';
+    setTimeout(() => { journalMessage.textContent = ''; }, 3500);
+  });
+
+  // Breathing Modal controls
+  const breathingModal = document.getElementById('breathingModal');
+  const closeBreathingBtn = document.getElementById('closeBreathingBtn');
+
+  function openBreathingModal() {
+    breathingModal.classList.add('active');
+    breathingModal.focus();
+  }
+  function closeBreathingModal() {
+    breathingModal.classList.remove('active');
+  }
+  closeBreathingBtn.addEventListener('click', closeBreathingModal);
+
+  // Close breathing modal on ESC
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && breathingModal.classList.contains('active')) {
+      closeBreathingModal();
+    }
+  });
+
+  // Keyboard accessibility for modal & buttons
+  // Focus trap for modal (basic)
+  modalOverlay.addEventListener('keydown', e => {
+    if (e.key === 'Tab') {
+      const focusable = modalOverlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const first = focusable[0];
+      const last = focusable[focusable.length -1];
+      if (e.shiftKey) { // Shift + Tab
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else { // Tab
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  });
+
+  // Focus trap for breathing modal
+  breathingModal.addEventListener('keydown', e => {
+    if (e.key === 'Tab') {
+      const focusable = breathingModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const first = focusable[0];
+      const last = focusable[focusable.length -1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
