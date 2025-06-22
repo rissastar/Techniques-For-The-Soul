@@ -311,6 +311,9 @@
   </header>
   <main>
 
+    <!-- Download full toolkit PDF -->
+    <button id="downloadFullPdfBtn" aria-label="Download the entire Mindfulness Toolkit as PDF">Download Full Toolkit as PDF</button>
+
     <!-- Introduction -->
     <section id="intro">
       <h2>What is Mindfulness?</h2>
@@ -353,85 +356,92 @@
         <li>Notice your abdomen and chest rising and falling with breath.</li>
         <li>Scan your shoulders, arms, hands, neck, and head.</li>
         <li>If your mind wanders, gently bring it back to the sensations in your body.</li>
-        <li>Finish with a few deep breaths and open your eyes slowly.</li>
       </ol>
     </section>
 
     <!-- Feelings Wheel -->
     <section id="feelings">
-      <h2>Check In: How Are You Feeling?</h2>
-      <p>Select any feeling(s) that best describe your current emotions. Naming feelings helps increase awareness and self-compassion.</p>
+      <h2>How Are You Feeling?</h2>
+      <p>Tap or select a feeling that best matches your current mood:</p>
       <div id="feelingsWheel" role="list" aria-label="Feelings wheel">
-        <div class="feeling" role="listitem" tabindex="0">Calm</div>
-        <div class="feeling" role="listitem" tabindex="0">Anxious</div>
-        <div class="feeling" role="listitem" tabindex="0">Happy</div>
-        <div class="feeling" role="listitem" tabindex="0">Sad</div>
-        <div class="feeling" role="listitem" tabindex="0">Frustrated</div>
-        <div class="feeling" role="listitem" tabindex="0">Grateful</div>
-        <div class="feeling" role="listitem" tabindex="0">Tired</div>
-        <div class="feeling" role="listitem" tabindex="0">Hopeful</div>
-        <div class="feeling" role="listitem" tabindex="0">Confused</div>
-        <div class="feeling" role="listitem" tabindex="0">Peaceful</div>
+        <div tabindex="0" class="feeling" role="listitem">Calm</div>
+        <div tabindex="0" class="feeling" role="listitem">Anxious</div>
+        <div tabindex="0" class="feeling" role="listitem">Joyful</div>
+        <div tabindex="0" class="feeling" role="listitem">Sad</div>
+        <div tabindex="0" class="feeling" role="listitem">Focused</div>
+        <div tabindex="0" class="feeling" role="listitem">Frustrated</div>
+        <div tabindex="0" class="feeling" role="listitem">Hopeful</div>
+        <div tabindex="0" class="feeling" role="listitem">Peaceful</div>
       </div>
     </section>
 
-    <!-- Daily Mindfulness Tips -->
-    <section id="dailyTips">
-      <h2>Daily Mindfulness Tips</h2>
-      <ul>
-        <li>Start your day with a few deep breaths to set an intention.</li>
-        <li>Try to notice the small details during everyday activities like eating or walking.</li>
-        <li>Use reminders (alarms or sticky notes) to pause and breathe throughout your day.</li>
-        <li>Practice self-compassion — kindness to yourself is key.</li>
-        <li>End the day by reflecting on three things you are grateful for.</li>
-      </ul>
-    </section>
-
-    <!-- Journal Prompt -->
+    <!-- Journal Section -->
     <section id="journal">
       <h2>Mindfulness Journal</h2>
       <label for="journalInput">Take a moment to write your thoughts or observations about your mindfulness practice today:</label>
-      <textarea id="journalInput" placeholder="Write your reflections here..."></textarea>
-      <button id="saveJournalBtn">Save Entry</button>
+      <textarea id="journalInput" placeholder="Write your reflections here..." aria-label="Mindfulness journal entry"></textarea>
+      
+      <button id="saveJournalPdfBtn" aria-label="Save your mindfulness journal entry as a PDF">Save Journal as PDF</button>
       <p id="saveMsg" aria-live="polite" role="status"></p>
+
+      <details style="margin-top: 1rem; background:#fff0f0; padding: 0.7rem 1rem; border-radius:12px; box-shadow: 0 3px 8px #f2848233;">
+        <summary style="font-weight:700; cursor:pointer; color:#e07a5f;">Helpful Journal Prompts (click to expand)</summary>
+        <ul style="margin-top: 0.5rem; color:#6a515e; font-size: 0.95rem;">
+          <li>What did I notice about my breath and body during practice?</li>
+          <li>Which thoughts or feelings came up and how did I respond?</li>
+          <li>What made me feel calm or uneasy?</li>
+          <li>How can I bring this calmness into my day?</li>
+          <li>What’s one kind thing I can say to myself right now?</li>
+        </ul>
+      </details>
     </section>
 
-    <!-- Extras: PDF, Audio, Video -->
-    <section id="extras">
-      <h2>Extras for Your Practice</h2>
+    <!-- Audio Guided Meditation -->
+    <section id="audioMeditation">
+      <h2>Audio Guided Meditation</h2>
+      <audio controls preload="metadata" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(224, 122, 95, 0.5);">
+        <source src="https://cdn.simplecast.com/audio/6a6f5f0c-9839-4c93-81b5-f8a7a5c2735b/episodes/6d8355a2-7189-4d19-bb1a-46278d2e3f88/audio/stream.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+    </section>
 
-      <!-- PDF Worksheet Download -->
-      <button id="downloadPdfBtn" aria-label="Download printable mindfulness journaling worksheet">Download Printable Journaling Worksheet (PDF)</button>
+    <!-- Embedded YouTube Video -->
+    <section id="youtubeVideo" style="margin-top: 1.5rem; text-align:center;">
+      <h3>Mindfulness Video</h3>
+      <iframe 
+        width="100%" 
+        height="215" 
+        src="https://www.youtube-nocookie.com/embed/inpok4MKVLM" 
+        title="Guided Mindfulness Meditation" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen 
+        style="border-radius:12px; box-shadow: 0 6px 18px rgba(224, 122, 95, 0.5);"
+      ></iframe>
+    </section>
 
-      <!-- Audio Guided Meditation -->
-      <div style="margin-top: 1rem; text-align:center;">
-        <h3>Audio Guided Meditation</h3>
-        <audio controls preload="none" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 10px rgba(224, 122, 95, 0.4);">
-          <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_9183626f7f.mp3?filename=calm-meditation-10806.mp3" type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio>
+    <!-- Mini Meditation Timer -->
+    <section id="meditationTimer">
+      <h2>Mini Meditation Timer ⏳</h2>
+      <p>Set a timer for your mindfulness meditation. Default is 5 minutes.</p>
+      <div style="text-align:center; margin: 1rem 0;">
+        <input type="number" id="timerMinutes" min="1" max="60" value="5" aria-label="Set meditation minutes" style="width: 4.5rem; font-size: 1.3rem; padding: 0.3rem 0.5rem; border-radius: 12px; border: 2px solid #f28482; text-align: center;" />
+        <span style="font-size:1.3rem; margin-left: 0.3rem;">minutes</span>
       </div>
-
-      <!-- Embedded YouTube Video -->
-      <div style="margin-top: 1.5rem; text-align:center;">
-        <h3>Mindfulness Video</h3>
-        <iframe 
-          width="100%" 
-          height="215" 
-          src="https://www.youtube-nocookie.com/embed/inpok4MKVLM" 
-          title="Guided Mindfulness Meditation" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen 
-          style="border-radius:12px; box-shadow: 0 6px 18px rgba(224, 122, 95, 0.5);"
-          >
-        </iframe>
+      <div id="timerDisplay" style="font-size: 3.2rem; font-weight: 900; color: #e07a5f; text-align: center; user-select: none; margin-bottom: 1rem;">05:00</div>
+      <div style="display: flex; justify-content: center; gap: 1rem;">
+        <button id="startTimerBtn">Start</button>
+        <button id="pauseTimerBtn" disabled>Pause</button>
+        <button id="resetTimerBtn">Reset</button>
       </div>
+      <audio id="bellSound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
     </section>
 
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
   <script>
     // Dark mode toggle
     const toggleThemeBtn = document.getElementById('toggleThemeBtn');
@@ -444,7 +454,6 @@
     const breathCircle = document.getElementById('breathCircle');
     const startBreathBtn = document.getElementById('startBreathBtn');
 
-    // Breathing phases
     const phases = [
       { text: 'Breathe In', duration: 4000 },
       { text: 'Hold', duration: 7000 },
@@ -503,69 +512,140 @@
       });
     });
 
-    // Journal Save to localStorage
+    // Journal Save as PDF
     const journalInput = document.getElementById('journalInput');
-    const saveJournalBtn = document.getElementById('saveJournalBtn');
+    const saveJournalPdfBtn = document.getElementById('saveJournalPdfBtn');
     const saveMsg = document.getElementById('saveMsg');
 
-    // Load saved journal entry on page load
-    window.addEventListener('load', () => {
-      const savedEntry = localStorage.getItem('mindfulnessJournalEntry');
-      if (savedEntry) {
-        journalInput.value = savedEntry;
-      }
-    });
-
-    saveJournalBtn.addEventListener('click', () => {
-      const text = journalInput.value.trim();
-      if (text) {
-        localStorage.setItem('mindfulnessJournalEntry', text);
-        saveMsg.textContent = 'Your entry has been saved!';
-        setTimeout(() => { saveMsg.textContent = ''; }, 4000);
-      } else {
-        saveMsg.textContent = 'Please write something before saving.';
-        setTimeout(() => { saveMsg.textContent = ''; }, 3000);
-      }
-    });
-
-    // PDF generation for journaling worksheet
-    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-    downloadPdfBtn.addEventListener('click', () => {
+    saveJournalPdfBtn.addEventListener('click', () => {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
 
+      const title = "My Mindfulness Journal Entry";
+      const content = journalInput.value.trim();
+
+      if (!content) {
+        saveMsg.textContent = "Please write something before saving your journal as PDF.";
+        setTimeout(() => { saveMsg.textContent = ""; }, 3000);
+        return;
+      }
+
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(20);
+      doc.setFontSize(18);
       doc.setTextColor("#e07a5f");
-      doc.text("Mindfulness Journaling Worksheet", 20, 20);
+      doc.text(title, 20, 20);
 
-      doc.setFontSize(14);
       doc.setFont("helvetica", "normal");
+      doc.setFontSize(12);
       doc.setTextColor("#3b3a39");
-      doc.text("Reflect on your mindfulness practice today with these prompts:", 20, 40);
 
-      const prompts = [
-        "1. What sensations did you notice during your mindfulness practice?",
-        "2. How did focusing on your breath affect your mood?",
-        "3. Did any thoughts or feelings come up? How did you respond to them?",
-        "4. What did you learn about yourself today?",
-        "5. How can you bring mindfulness into your daily life tomorrow?"
-      ];
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 20;
+      const maxLineWidth = pageWidth - margin * 2;
+      const splitText = doc.splitTextToSize(content, maxLineWidth);
 
-      let y = 55;
-      prompts.forEach((line) => {
-        doc.text(line, 20, y);
-        y += 15;
-        doc.rect(20, y - 12, 170, 12); // empty box for writing
-        y += 18;
-      });
+      doc.text(splitText, margin, 40);
 
       doc.setTextColor("#f28482");
       doc.setFontSize(10);
-      doc.text("Download and print this worksheet to support your mindfulness journey.", 20, y + 10);
+      doc.text("Generated with your Mindfulness Toolkit 🌈", margin, doc.internal.pageSize.getHeight() - 15);
 
-      doc.save("Mindfulness_Journaling_Worksheet.pdf");
+      doc.save("Mindfulness_Journal_Entry.pdf");
+      saveMsg.textContent = "Your journal has been saved as a PDF!";
+      setTimeout(() => { saveMsg.textContent = ""; }, 4000);
     });
+
+    // Download full toolkit as PDF
+    const downloadFullPdfBtn = document.getElementById('downloadFullPdfBtn');
+    downloadFullPdfBtn.addEventListener('click', () => {
+      const element = document.querySelector('main');
+      const opt = {
+        margin:       0.4,
+        filename:     'Mindfulness_Toolkit_Full.pdf',
+        image:        { type: 'jpeg', quality: 0.95 },
+        html2canvas:  { scale: 2, logging: false, dpi: 300, letterRendering: true },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    });
+
+    // Mini Meditation Timer
+    const timerMinutesInput = document.getElementById('timerMinutes');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const startTimerBtn = document.getElementById('startTimerBtn');
+    const pauseTimerBtn = document.getElementById('pauseTimerBtn');
+    const resetTimerBtn = document.getElementById('resetTimerBtn');
+    const bellSound = document.getElementById('bellSound');
+
+    let timerDuration = 300; // default 5 min in seconds
+    let timerRemaining = timerDuration;
+    let timerInterval = null;
+    let isRunning = false;
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+      const s = (seconds % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function updateDisplay() {
+      timerDisplay.textContent = formatTime(timerRemaining);
+    }
+
+    function startTimer() {
+      if (isRunning) return;
+      if (timerRemaining <= 0) {
+        timerRemaining = timerDuration;
+      }
+      isRunning = true;
+      startTimerBtn.disabled = true;
+      pauseTimerBtn.disabled = false;
+      timerInterval = setInterval(() => {
+        timerRemaining--;
+        updateDisplay();
+        if (timerRemaining <= 0) {
+          clearInterval(timerInterval);
+          isRunning = false;
+          bellSound.play();
+          startTimerBtn.disabled = false;
+          pauseTimerBtn.disabled = true;
+          alert('Time is up! 🧘‍♀️');
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      if (!isRunning) return;
+      clearInterval(timerInterval);
+      isRunning = false;
+      startTimerBtn.disabled = false;
+      pauseTimerBtn.disabled = true;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      timerDuration = parseInt(timerMinutesInput.value, 10) * 60 || 300;
+      timerRemaining = timerDuration;
+      updateDisplay();
+      startTimerBtn.disabled = false;
+      pauseTimerBtn.disabled = true;
+    }
+
+    timerMinutesInput.addEventListener('change', () => {
+      let val = parseInt(timerMinutesInput.value, 10);
+      if (isNaN(val) || val < 1) val = 1;
+      if (val > 60) val = 60;
+      timerMinutesInput.value = val;
+      resetTimer();
+    });
+
+    startTimerBtn.addEventListener('click', startTimer);
+    pauseTimerBtn.addEventListener('click', pauseTimer);
+    resetTimerBtn.addEventListener('click', resetTimer);
+
+    // Initialize display
+    updateDisplay();
   </script>
 </body>
 </html>
