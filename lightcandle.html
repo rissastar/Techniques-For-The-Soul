@@ -413,29 +413,22 @@
       bottom: 20px;
       left: 20px;
       background: rgba(0, 0, 0, 0.5);
-      padding: 0.7rem 1rem;
-      border-radius: 30px;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      user-select: none;
+      font-size: 1rem;
       display: flex;
       align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      color: white;
-      font-weight: 600;
-      user-select: none;
-      transition: background 0.3s;
-      z-index: 15;
+      gap: 0.7rem;
+      z-index: 20;
+      transition: background 0.5s;
     }
     body.light .music-control {
       background: rgba(255 255 255 / 0.7);
       color: #420000;
     }
-    .music-control:hover {
-      background: rgba(0, 0, 0, 0.75);
-    }
-    body.light .music-control:hover {
-      background: rgba(255 255 255, 0.9);
-    }
-    .music-control button {
+    #musicToggleBtn {
       background: transparent;
       border: none;
       color: inherit;
@@ -443,101 +436,28 @@
       cursor: pointer;
       user-select: none;
       padding: 0;
-      margin: 0;
     }
-
-    /* Starry background */
-    #stars {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
-      background: radial-gradient(ellipse at center, #1a1a2e, #0f0f1c);
-      overflow: hidden;
-    }
-    .star {
-      position: absolute;
-      background: white;
-      border-radius: 50%;
-      opacity: 0.8;
-      animation: twinkle 3s infinite alternate ease-in-out;
-    }
-    @keyframes twinkle {
-      0% {
-        opacity: 0.3;
-        transform: scale(1);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1.3);
-      }
-    }
-
-    /* Responsive */
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 2.4rem;
-      }
-      main {
-        margin: 1rem 1rem 3rem;
-        padding: 0;
-      }
-      .tribute-message {
-        padding: 1rem 1.2rem;
-      }
-      .memory-input textarea {
-        height: 100px;
-      }
-      .memories {
-        max-height: 250px;
-      }
-      .candle-container {
-        bottom: 70px;
-        right: 10px;
-        padding: 0.7rem 1rem;
-      }
-      .music-control {
-        bottom: 15px;
-        left: 10px;
-        padding: 0.5rem 0.8rem;
-      }
+    #musicToggleBtn:focus {
+      outline: 2px solid #c75a5a;
+      outline-offset: 2px;
     }
   </style>
 </head>
 <body>
-
-  <div id="stars"></div>
-
   <header>
-    <h1>In Loving Memory</h1>
-    <p>A space to remember, reflect, and celebrate a special soul.</p>
+    <h1>Personal Tribute Room</h1>
+    <p>Share your memories and light a candle in remembrance</p>
   </header>
 
-  <div class="controls" role="region" aria-label="Theme and language toggles">
-    <button class="btn toggle" id="themeToggle" aria-pressed="false" title="Toggle dark/light theme">Light Mode</button>
+  <div class="controls" role="region" aria-label="Page settings and toggles">
+    <button id="themeToggle" class="btn toggle" aria-pressed="false">Light Mode</button>
+    <button id="musicToggleBtn" class="btn toggle" aria-pressed="false" title="Play / pause ambient music">▶️ Ambient Music</button>
   </div>
 
   <main>
-    <section class="tribute-message" aria-label="Tribute message">
-      <h2>For Someone Dear</h2>
-      <p>
-        You are forever in our hearts. Your light continues to guide us through every moment.
-        This room is a small reflection of your big impact on our lives.
-      </p>
-    </section>
-
-    <section class="photo-upload" aria-label="Photo memory upload">
-      <label for="photoUpload">Upload a photo memory:</label>
-      <input
-        type="file"
-        accept="image/*"
-        id="photoUpload"
-        aria-describedby="photoHelp"
-        aria-label="Upload photo memory"
-      />
+    <section class="photo-upload" aria-label="Upload tribute photo">
+      <label for="photoUpload">Upload a photo (optional):</label>
+      <input type="file" id="photoUpload" accept="image/png, image/jpeg, image/gif" aria-describedby="photoHelp" />
       <div id="photoPreviewContainer" style="margin-top:1rem; text-align:center;"></div>
       <small id="photoHelp" style="color:#ccc;">Supported formats: JPG, PNG, GIF</small>
     </section>
@@ -570,17 +490,13 @@
     <div class="flame"></div>
   </div>
 
-  <div class="music-control" role="region" aria-label="Ambient music controls">
-    <button id="musicToggleBtn" aria-pressed="false" title="Play / pause ambient music">▶️</button>
-    <span id="musicStatus" aria-live="polite">Ambient Music Off</span>
-  </div>
-
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
   <script>
-    // Supabase config - replace with your project info
+    // Supabase config - your project info
     const SUPABASE_URL = 'https://ndoagusrhcxxluwskilc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kb2FndXNyaGN4eGx1d3NraWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA1NjAxMDIsImV4cCI6MjA2NjEzNjEwMn0.u4z9GsZEzrlYIrYNyULnloo4J9D-ki0zdOyau8AdxTA';
+
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // DOM refs
@@ -593,7 +509,6 @@
     const lightCandleBtn = document.getElementById('lightCandleBtn');
     const themeToggle = document.getElementById('themeToggle');
     const musicToggleBtn = document.getElementById('musicToggleBtn');
-    const musicStatus = document.getElementById('musicStatus');
 
     // State
     let uploadedPhotoFile = null;
@@ -601,7 +516,7 @@
     let isDarkTheme = true;
     let isMusicPlaying = false;
 
-    // Initialize theme
+    // Initialize theme from localStorage
     if(localStorage.getItem('tributeRoomTheme') === 'light') {
       document.body.classList.add('light');
       isDarkTheme = false;
@@ -620,13 +535,11 @@
     musicToggleBtn.addEventListener('click', () => {
       if (isMusicPlaying) {
         ambientAudio.pause();
-        musicToggleBtn.textContent = '▶️';
-        musicStatus.textContent = 'Ambient Music Off';
+        musicToggleBtn.textContent = '▶️ Ambient Music';
         musicToggleBtn.setAttribute('aria-pressed', 'false');
       } else {
         ambientAudio.play();
-        musicToggleBtn.textContent = '⏸️';
-        musicStatus.textContent = 'Ambient Music On';
+        musicToggleBtn.textContent = '⏸️ Ambient Music';
         musicToggleBtn.setAttribute('aria-pressed', 'true');
       }
       isMusicPlaying = !isMusicPlaying;
@@ -648,21 +561,34 @@
       isDarkTheme = !isDarkTheme;
     });
 
-    // Generate random star positions for background
+    // Generate stars background (optional)
     function createStars(count = 100) {
-      const starsContainer = document.getElementById('stars');
+      const starsContainer = document.createElement('div');
+      starsContainer.id = 'stars';
+      starsContainer.style.position = 'fixed';
+      starsContainer.style.top = '0';
+      starsContainer.style.left = '0';
+      starsContainer.style.width = '100%';
+      starsContainer.style.height = '100%';
+      starsContainer.style.zIndex = '-1';
+      starsContainer.style.pointerEvents = 'none';
+
       for(let i = 0; i < count; i++) {
         const star = document.createElement('div');
-        star.classList.add('star');
+        star.style.position = 'absolute';
+        star.style.borderRadius = '50%';
         const size = Math.random() * 2 + 1;
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
         star.style.top = `${Math.random() * 100}%`;
         star.style.left = `${Math.random() * 100}%`;
-        star.style.animationDuration = `${2 + Math.random() * 3}s`;
+        star.style.backgroundColor = 'white';
+        star.style.opacity = 0.8;
+        star.style.animation = `twinkle ${2 + Math.random() * 3}s ease-in-out infinite`;
         star.style.animationDelay = `${Math.random() * 3}s`;
         starsContainer.appendChild(star);
       }
+      document.body.appendChild(starsContainer);
     }
     createStars();
 
@@ -885,5 +811,16 @@
     loadTributes();
     fetchCandleCount();
   </script>
+
+  <style>
+    @keyframes twinkle {
+      0%, 100% {
+        opacity: 0.8;
+      }
+      50% {
+        opacity: 0.3;
+      }
+    }
+  </style>
 </body>
 </html>
