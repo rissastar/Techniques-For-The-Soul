@@ -1,499 +1,522 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Personal Tribute Room</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
-  <style>
-    /* Reset & base */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: 'Open Sans', sans-serif;
-      background: #0a0a23;
-      color: white;
-      overflow-x: hidden;
-      transition: background 0.5s, color 0.5s;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Personal Tribute Room</title>
 
-    /* Light theme */
-    body.light {
-      background: #fdf6f0;
-      color: #333;
-    }
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
 
-    header {
-      text-align: center;
-      padding: 2rem 1rem;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      box-shadow: 0 2px 8px rgb(0 0 0 / 0.4);
-      transition: background 0.5s, color 0.5s;
-    }
-    body.light header {
-      background: rgba(255 255 255 / 0.6);
-      color: #333;
-      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
-    }
+<style>
+  /* Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    background: linear-gradient(135deg, #232526, #1c1c2a);
+    color: #f0e6f6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s, color 0.5s;
+  }
+  body.light {
+    background: linear-gradient(135deg, #f7f1f0, #d8cfcf);
+    color: #3a2f2f;
+  }
 
+  /* Header */
+  header {
+    text-align: center;
+    padding: 3rem 1rem 1.5rem;
+    background: rgba(255 255 255 / 0.05);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.6);
+  }
+  body.light header {
+    background: rgba(255 255 255, 0.9);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  }
+  header h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.8rem;
+    margin: 0 0 0.25rem;
+    color: #d7a3c4;
+  }
+  body.light header h1 {
+    color: #b75a7a;
+  }
+  header p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #ceacd8;
+  }
+  body.light header p {
+    color: #7e5b6a;
+  }
+
+  /* Controls */
+  .controls {
+    margin: 1rem auto 2rem;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .btn {
+    background: #d7a3c4;
+    border: none;
+    border-radius: 25px;
+    padding: 0.55rem 1.4rem;
+    font-weight: 700;
+    color: #3a1f3e;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 3px 8px rgb(215 163 196 / 0.6);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  .btn:focus-visible {
+    outline: 3px solid #b75a7a;
+    outline-offset: 2px;
+  }
+  .btn:hover {
+    background-color: #b75a7a;
+    color: #f7f1f0;
+    box-shadow: 0 5px 15px rgb(183 90 122 / 0.75);
+  }
+  .btn.toggle {
+    background: transparent;
+    border: 2px solid #d7a3c4;
+    color: #d7a3c4;
+    font-weight: 600;
+    padding: 0.45rem 1.1rem;
+    font-size: 0.9rem;
+    box-shadow: none;
+  }
+  .btn.toggle:hover {
+    background: #d7a3c4;
+    color: #3a1f3e;
+    box-shadow: 0 3px 10px rgb(215 163 196 / 0.5);
+  }
+  body.light .btn.toggle {
+    border-color: #b75a7a;
+    color: #b75a7a;
+  }
+  body.light .btn.toggle:hover {
+    background-color: #b75a7a;
+    color: #f7f1f0;
+    box-shadow: 0 3px 10px rgb(183 90 122 / 0.5);
+  }
+
+  /* Main container */
+  main {
+    flex-grow: 1;
+    max-width: 720px;
+    margin: 0 auto 4rem;
+    width: 90%;
+  }
+
+  /* Photo upload */
+  .photo-upload {
+    margin-bottom: 2rem;
+  }
+  .photo-upload label {
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .photo-upload input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 0.3rem;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+  .photo-upload input[type="file"]:focus-visible {
+    outline: none;
+    border-color: #d7a3c4;
+    box-shadow: 0 0 5px #d7a3c4;
+  }
+  .photo-preview {
+    margin-top: 1rem;
+    border-radius: 12px;
+    max-height: 280px;
+    width: auto;
+    box-shadow: 0 0 20px rgba(215, 163, 196, 0.7);
+    border: 3px solid #d7a3c4;
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Memory input */
+  .memory-input {
+    background: rgba(255 255 255 / 0.08);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 0 15px rgb(215 163 196 / 0.25);
+    transition: background 0.5s;
+  }
+  body.light .memory-input {
+    background: #f5d9e7;
+    box-shadow: 0 0 15px rgb(183 90 122 / 0.25);
+  }
+  .memory-input label {
+    display: block;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 0.6rem;
+    color: inherit;
+  }
+  .memory-input textarea {
+    width: 100%;
+    min-height: 130px;
+    border-radius: 14px;
+    border: none;
+    padding: 1rem 1.2rem;
+    font-size: 1.1rem;
+    font-family: inherit;
+    resize: vertical;
+    background: rgba(255 255 255 / 0.15);
+    color: inherit;
+    box-shadow: inset 0 0 6px rgb(215 163 196 / 0.5);
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+  body.light .memory-input textarea {
+    background: #fbe6ef;
+    color: #3a1f3e;
+    box-shadow: inset 0 0 6px rgb(183 90 122 / 0.5);
+  }
+  .memory-input textarea:focus {
+    outline: none;
+    background: rgba(255 255 255 / 0.35);
+    box-shadow: inset 0 0 10px rgb(215 163 196 / 0.9);
+  }
+  body.light .memory-input textarea:focus {
+    background: #fedfeb;
+    box-shadow: inset 0 0 10px rgb(183 90 122 / 0.9);
+  }
+
+  /* Memories list */
+  .memories {
+    margin-top: 3rem;
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 8px;
+    border-radius: 12px;
+    border: 2px solid rgba(215, 163, 196, 0.3);
+    box-shadow: 0 0 12px rgb(215 163 196 / 0.3);
+    transition: border-color 0.5s;
+  }
+  body.light .memories {
+    border-color: rgb(183 90 122 / 0.3);
+    box-shadow: 0 0 12px rgb(183 90 122 / 0.3);
+  }
+  .memories::-webkit-scrollbar {
+    width: 8px;
+  }
+  .memories::-webkit-scrollbar-thumb {
+    background: #d7a3c4;
+    border-radius: 10px;
+  }
+  body.light .memories::-webkit-scrollbar-thumb {
+    background: #b75a7a;
+  }
+  .memory {
+    background: rgba(255 255 255 / 0.07);
+    margin: 1rem 1.2rem;
+    padding: 1rem 1.3rem;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgb(215 163 196 / 0.3);
+    position: relative;
+    transition: background 0.4s ease;
+  }
+  body.light .memory {
+    background: #fce9f2;
+    color: #3a1f3e;
+    box-shadow: 0 2px 10px rgb(183 90 122 / 0.3);
+  }
+  .memory p {
+    margin: 0 0 0.75rem 0;
+    white-space: pre-wrap;
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+  .memory time {
+    font-size: 0.85rem;
+    color: #d7a3c4cc;
+    position: absolute;
+    bottom: 8px;
+    right: 15px;
+  }
+  body.light .memory time {
+    color: #b75a7acc;
+  }
+
+  /* Memory photo */
+  .memory img {
+    max-width: 140px;
+    border-radius: 10px;
+    margin-top: 0.6rem;
+    box-shadow: 0 0 12px rgb(215 163 196 / 0.6);
+    cursor: pointer;
+    transition: transform 0.25s ease;
+  }
+  .memory img:hover,
+  .memory img:focus {
+    transform: scale(1.05);
+    outline: none;
+  }
+
+  /* Candle container */
+  .candle-container {
+    position: fixed;
+    bottom: 50px;
+    right: 30px;
+    background: rgba(215, 163, 196, 0.85);
+    padding: 0.9rem 1.3rem;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    user-select: none;
+    cursor: pointer;
+    box-shadow: 0 0 25px rgb(215 163 196 / 0.8);
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+    z-index: 20;
+  }
+  .candle-container:hover,
+  .candle-container:focus-within {
+    background: #d788b1;
+    box-shadow: 0 0 40px #d788b1cc;
+  }
+  body.light .candle-container {
+    background: #b75a7acc;
+    box-shadow: 0 0 25px #b75a7acc;
+  }
+  body.light .candle-container:hover,
+  body.light .candle-container:focus-within {
+    background: #9a435e;
+    box-shadow: 0 0 40px #9a435ecc;
+  }
+
+  .candle-count {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #4f1a3e;
+    user-select: text;
+  }
+  body:not(.light) .candle-count {
+    color: #4f1a3e;
+  }
+  body.light .candle-count {
+    color: #fbe6ef;
+  }
+
+  .candle-label {
+    font-weight: 600;
+    color: #4f1a3e;
+    user-select: none;
+    font-size: 1.1rem;
+  }
+  body.light .candle-label {
+    color: #f7cce3;
+  }
+
+  .light-candle-btn {
+    all: unset;
+    font-size: 1.8rem;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    color: #4f1a3e;
+    background: white;
+    box-shadow: 0 0 15px #d7a3c4bb;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .light-candle-btn:hover,
+  .light-candle-btn:focus-visible {
+    background: #b75a7a;
+    color: #fbe6ef;
+    box-shadow: 0 0 25px #b75a7acc;
+    outline-offset: 3px;
+    outline: 3px solid #fbe6ef;
+  }
+  body.light .light-candle-btn {
+    background: white;
+    color: #b75a7a;
+    box-shadow: 0 0 15px #b75a7abb;
+  }
+  body.light .light-candle-btn:hover,
+  body.light .light-candle-btn:focus-visible {
+    background: #d788b1;
+    color: white;
+    box-shadow: 0 0 25px #d788b1cc;
+    outline: 3px solid white;
+  }
+
+  /* Candle flame animation */
+  .candle-flame {
+    position: fixed;
+    bottom: 120px;
+    right: 42px;
+    width: 36px;
+    height: 60px;
+    background: linear-gradient(45deg, #fff0bb, #ffb85f);
+    border-radius: 50% 50% 60% 60% / 80% 80% 60% 60%;
+    filter: drop-shadow(0 0 6px #ffb85faa);
+    animation: flicker 1.6s infinite alternate ease-in-out;
+    pointer-events: none;
+    z-index: 19;
+  }
+
+  @keyframes flicker {
+    0% { filter: drop-shadow(0 0 8px #ffb85fcc); transform: translateY(0) scale(1); }
+    50% { filter: drop-shadow(0 0 14px #ffb85f); transform: translateY(-3px) scale(1.05); }
+    100% { filter: drop-shadow(0 0 8px #ffb85fcc); transform: translateY(0) scale(1); }
+  }
+
+  /* Ambient music control */
+  .music-control {
+    position: fixed;
+    bottom: 50px;
+    left: 30px;
+    background: rgba(215, 163, 196, 0.85);
+    padding: 0.7rem 1.3rem;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    user-select: none;
+    cursor: pointer;
+    box-shadow: 0 0 25px rgb(215 163 196 / 0.8);
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+    z-index: 20;
+  }
+  .music-control:hover,
+  .music-control:focus-within {
+    background: #d788b1;
+    box-shadow: 0 0 40px #d788b1cc;
+  }
+  body.light .music-control {
+    background: #b75a7acc;
+    box-shadow: 0 0 25px #b75a7acc;
+  }
+  body.light .music-control:hover,
+  body.light .music-control:focus-within {
+    background: #9a435e;
+    box-shadow: 0 0 40px #9a435ecc;
+  }
+  #musicToggleBtn {
+    all: unset;
+    font-size: 1.6rem;
+    color: #4f1a3e;
+    cursor: pointer;
+    user-select: none;
+  }
+  #musicToggleBtn:hover,
+  #musicToggleBtn:focus-visible {
+    color: #fbe6ef;
+    outline-offset: 3px;
+    outline: 3px solid #fbe6ef;
+  }
+  body.light #musicToggleBtn {
+    color: #b75a7a;
+  }
+  body.light #musicToggleBtn:hover,
+  body.light #musicToggleBtn:focus-visible {
+    color: white;
+    outline: 3px solid white;
+  }
+
+  /* Responsive */
+  @media (max-width: 500px) {
     header h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 3.2rem;
-      margin-bottom: 0.25rem;
-      color: #f6c1c1;
-      transition: color 0.5s;
+      font-size: 2.8rem;
     }
-    body.light header h1 {
-      color: #c45656;
-    }
-    header p {
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin: 0;
-      opacity: 0.85;
-      transition: color 0.5s;
-    }
-    body.light header p {
-      color: #555;
-    }
-
-    /* Controls bar */
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      padding: 1rem 0;
-      background: rgba(0, 0, 0, 0.25);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 80px;
-      z-index: 9;
-    }
-    body.light .controls {
-      background: rgba(255 255 255 / 0.8);
-    }
-    .btn {
-      background: #f6c1c1;
-      border: none;
-      border-radius: 8px;
-      padding: 0.5rem 1rem;
-      font-weight: 700;
-      color: #450505;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.3s;
-      font-size: 1rem;
-    }
-    .btn:hover,
-    .btn:focus {
-      background: #c75a5a;
-      color: white;
-      outline: none;
-    }
-    .btn.toggle {
-      background: transparent;
-      color: white;
-      font-weight: 600;
-      font-size: 0.9rem;
-      padding: 0.5rem 0.8rem;
-      border: 2px solid white;
-      border-radius: 20px;
-    }
-    body.light .btn.toggle {
-      color: #c45656;
-      border-color: #c45656;
-    }
-    .btn.toggle:hover {
-      background: white;
-      color: #c45656;
-      font-weight: 700;
-    }
-
     main {
-      flex: 1 0 auto;
-      max-width: 900px;
-      margin: 1.5rem auto 3rem;
-      padding: 0 1rem;
-    }
-
-    .tribute-message {
-      background: rgba(255 255 255 / 0.05);
-      padding: 1.5rem 2rem;
-      border-radius: 12px;
-      border-left: 5px solid #f6c1c1;
-      margin-bottom: 2rem;
-      box-shadow: 0 2px 6px rgba(246, 193, 193, 0.4);
-      transition: background 0.5s, border-color 0.5s;
-    }
-    body.light .tribute-message {
-      background: #ffe8e8;
-      border-left-color: #c45656;
-      color: #3d0000;
-      box-shadow: 0 2px 6px #c45656aa;
-    }
-
-    .tribute-message h2 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 2.4rem;
-      margin-top: 0;
-      margin-bottom: 0.5rem;
-      color: #ffd1dc;
-      transition: color 0.5s;
-    }
-    body.light .tribute-message h2 {
-      color: #b04141;
-    }
-    .tribute-message p {
-      font-size: 1.15rem;
-      line-height: 1.6;
-      color: #fff;
-      margin: 0;
-      transition: color 0.5s;
-    }
-    body.light .tribute-message p {
-      color: #4b1c1c;
-    }
-
-    /* Upload photo section */
-    .photo-upload {
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    .photo-upload label {
-      font-weight: 600;
-      font-size: 1.1rem;
-      display: block;
-      margin-bottom: 0.6rem;
-      user-select: none;
-    }
-    .photo-upload input[type="file"] {
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 0.3rem;
-    }
-    .uploaded-photo {
       max-width: 100%;
-      max-height: 300px;
-      margin-top: 1rem;
-      border: 3px solid #f6c1c1;
-      border-radius: 12px;
-      object-fit: contain;
-      box-shadow: 0 0 10px #f6c1c1aa;
-      transition: box-shadow 0.3s;
     }
-    body.light .uploaded-photo {
-      border-color: #c45656;
-      box-shadow: 0 0 10px #c45656cc;
-    }
-
-    /* Memory input & list */
-    .memory-input {
-      background: rgba(255 255 255 / 0.05);
-      padding: 1rem;
-      border-radius: 10px;
-      color: white;
-      margin-bottom: 2rem;
-      box-shadow: 0 0 8px rgba(246, 193, 193, 0.3);
-      transition: background 0.5s, color 0.5s;
-    }
-    body.light .memory-input {
-      background: #ffe8e8;
-      color: #3d0000;
-      box-shadow: 0 0 8px #c45656aa;
-    }
-    .memory-input label {
-      font-weight: 600;
-      display: block;
-      margin-bottom: 0.5rem;
-      user-select: none;
-    }
-    .memory-input textarea {
-      width: 100%;
-      height: 120px;
-      border-radius: 8px;
-      padding: 1rem;
-      font-size: 1.05rem;
-      border: none;
-      resize: vertical;
-      font-family: inherit;
-      transition: background 0.5s, color 0.5s;
-    }
-    body:not(.light) .memory-input textarea {
-      background: #240505;
-      color: #ffe8e8;
-    }
-    body.light .memory-input textarea {
-      background: #fff5f5;
-      color: #4b1c1c;
-    }
-    .memory-input button {
-      margin-top: 1rem;
-      background: #f6c1c1;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.3s;
-      color: #450505;
-      font-size: 1rem;
-      user-select: none;
-    }
-    .memory-input button:hover,
-    .memory-input button:focus {
-      background: #c75a5a;
-      color: white;
-      outline: none;
-    }
-
     .memories {
-      margin-top: 2rem;
-      max-height: 350px;
-      overflow-y: auto;
-      padding-right: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: #f6c1c1 transparent;
-      border-radius: 8px;
+      max-height: 320px;
     }
-    .memories::-webkit-scrollbar {
-      width: 6px;
+    .memory img {
+      max-width: 100px;
     }
-    .memories::-webkit-scrollbar-thumb {
-      background-color: #f6c1c1;
-      border-radius: 10px;
-    }
-
-    .memory {
-      background: rgba(255 255 255 / 0.05);
-      margin-bottom: 1rem;
-      padding: 1rem 1.2rem;
-      border-left: 5px solid #ffd1dc;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(246, 193, 193, 0.25);
-      font-size: 1.05rem;
-      line-height: 1.4;
-      color: #fff;
-      transition: background 0.5s, color 0.5s, border-color 0.5s;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    body.light .memory {
-      background: #ffe8e8;
-      color: #4b1c1c;
-      border-left-color: #c45656;
-      box-shadow: 0 2px 5px #c45656bb;
-    }
-
-    /* Candle container & count */
     .candle-container {
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 1rem 1.3rem;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      user-select: none;
-      cursor: default;
-      z-index: 20;
-      transition: background 0.5s;
+      bottom: 15px;
+      right: 15px;
+      padding: 0.7rem 1rem;
     }
-    body.light .candle-container {
-      background: rgba(255 255 255 / 0.7);
-      color: #420000;
-    }
-    .candle-count {
-      font-weight: 700;
-      font-size: 1.3rem;
-      color: #f6c1c1;
-    }
-    body.light .candle-count {
-      color: #c45656;
-    }
-    .candle-label {
-      font-weight: 600;
-      font-size: 1rem;
-      color: white;
-      opacity: 0.9;
-    }
-    body.light .candle-label {
-      color: #420000;
-    }
-    .light-candle-btn {
-      background: #f6c1c1;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-      transition: background 0.3s;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      user-select: none;
-      font-size: 1.2rem;
-      color: #420000;
-      box-shadow: 0 0 10px #f6c1c1aa;
-    }
-    .light-candle-btn:hover {
-      background: #c75a5a;
-      color: white;
-      box-shadow: 0 0 20px #c75a5a;
-      outline: none;
-    }
-    .light-candle-btn:focus {
-      outline: 3px solid #c75a5a;
-    }
-
-    /* Floating candle animation */
-    .candle {
-      position: fixed;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: flicker 2s infinite;
-      height: 60px;
-      width: 30px;
-      background: #f6c1c1;
-      border-radius: 5px 5px 0 0;
-      box-shadow: 0 0 20px #f6c1c1aa;
-      z-index: 5;
-    }
-
-    .flame {
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 20px;
-      background: radial-gradient(ellipse at center, #fffacd, #ffa07a);
-      border-radius: 50%;
-      animation: flameMove 1.5s infinite ease-in-out;
-      box-shadow: 0 0 15px #ffb07a;
-    }
-
-    @keyframes flameMove {
-      0%,
-      100% {
-        transform: translateX(-50%) scale(1);
-      }
-      50% {
-        transform: translateX(-50%) scale(1.2);
-      }
-    }
-
-    @keyframes flicker {
-      0%,
-      100% {
-        opacity: 0.95;
-      }
-      50% {
-        opacity: 0.85;
-      }
-    }
-
-    /* Ambient music control */
     .music-control {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      user-select: none;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      z-index: 20;
-      transition: background 0.5s;
+      bottom: 15px;
+      left: 15px;
+      padding: 0.7rem 1rem;
     }
-    body.light .music-control {
-      background: rgba(255 255 255 / 0.7);
-      color: #420000;
-    }
-    #musicToggleBtn {
-      background: transparent;
-      border: none;
-      color: inherit;
-      font-size: 1.3rem;
-      cursor: pointer;
-      user-select: none;
-      padding: 0;
-    }
-    #musicToggleBtn:focus {
-      outline: 2px solid #c75a5a;
-      outline-offset: 2px;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <header>
-    <h1>Personal Tribute Room</h1>
-    <p>Share your memories and light a candle in remembrance</p>
-  </header>
 
-  <div class="controls" role="region" aria-label="Page settings and toggles">
-    <button id="themeToggle" class="btn toggle" aria-pressed="false">Light Mode</button>
-    <button id="musicToggleBtn" class="btn toggle" aria-pressed="false" title="Play / pause ambient music">▶️ Ambient Music</button>
+<header role="banner">
+  <h1>Personal Tribute Room</h1>
+  <p>Share your memories and light a candle in remembrance</p>
+</header>
+
+<div class="controls" role="region" aria-label="Theme and music controls">
+  <button id="themeToggle" class="btn toggle" aria-pressed="false" aria-label="Toggle light and dark theme">Light Mode</button>
+  <div class="music-control" role="region" aria-label="Ambient music player">
+    <button id="musicToggleBtn" aria-pressed="false" aria-label="Play or pause ambient music" title="Play/Pause Ambient Music">▶️</button>
+    <span>Ambient Music</span>
   </div>
+</div>
 
-  <main>
-    <section class="photo-upload" aria-label="Upload tribute photo">
-      <label for="photoUpload">Upload a photo (optional):</label>
-      <input type="file" id="photoUpload" accept="image/png, image/jpeg, image/gif" aria-describedby="photoHelp" />
-      <div id="photoPreviewContainer" style="margin-top:1rem; text-align:center;"></div>
-      <small id="photoHelp" style="color:#ccc;">Supported formats: JPG, PNG, GIF</small>
-    </section>
+<main>
+  <section class="photo-upload" aria-labelledby="uploadLabel" aria-describedby="photoHelp">
+    <label id="uploadLabel" for="photoUpload">Upload a photo (optional):</label>
+    <input type="file" id="photoUpload" accept="image/png, image/jpeg, image/gif" />
+    <div id="photoPreviewContainer" aria-live="polite" aria-atomic="true"></div>
+    <small id="photoHelp" style="color:#ccc;">Supported formats: JPG, PNG, GIF. Max size: 4MB</small>
+  </section>
 
-    <section class="memory-input" aria-label="Memory message input">
-      <label for="memoryText">Share a memory or message:</label>
-      <textarea
-        id="memoryText"
-        placeholder="Write your tribute..."
-        aria-multiline="true"
-        rows="5"
-      ></textarea>
-      <button id="postMemoryBtn" class="btn" aria-label="Post tribute message">Post Tribute</button>
-    </section>
+  <section class="memory-input" aria-labelledby="memoryLabel">
+    <label id="memoryLabel" for="memoryText">Share a memory or message:</label>
+    <textarea id="memoryText" placeholder="Write your tribute..." rows="5" aria-multiline="true"></textarea>
+    <button id="postMemoryBtn" class="btn" aria-label="Post tribute message">Post Tribute</button>
+    <p id="postFeedback" aria-live="polite" style="margin-top:0.5rem; font-weight:600;"></p>
+  </section>
 
-    <section class="memories" id="memories" tabindex="0" aria-live="polite" aria-label="Tribute messages">
-      <!-- Loaded tribute messages appear here -->
-    </section>
-  </main>
+  <section class="memories" id="memories" tabindex="0" aria-live="polite" aria-label="Tribute messages">
+    <!-- Loaded tribute messages will appear here -->
+  </section>
+</main>
 
-  <div class="candle-container" aria-label="Light a candle and see total candles lit">
-    <button id="lightCandleBtn" class="light-candle-btn" aria-pressed="false" aria-label="Light a candle">
-      🕯️
-    </button>
-    <span class="candle-count" id="candleCount" aria-live="polite" aria-atomic="true">0</span>
-    <span class="candle-label">candles lit</span>
-  </div>
+<div class="candle-container" role="region" aria-label="Light a candle and see total candles lit" tabindex="0">
+  <button id="lightCandleBtn" class="light-candle-btn" aria-pressed="false" aria-label="Light a candle">🕯️</button>
+  <span class="candle-count" id="candleCount" aria-live="polite" aria-atomic="true">0</span>
+  <span class="candle-label">candles lit</span>
+</div>
 
-  <div class="candle" aria-hidden="true">
-    <div class="flame"></div>
-  </div>
+<div class="candle-flame" aria-hidden="true"></div>
 
-  <!-- Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
-  <script>
-    // Supabase config - your project info
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+
+<script>
+  (() => {
+    // Supabase config
     const SUPABASE_URL = 'https://ndoagusrhcxxluwskilc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kb2FndXNyaGN4eGx1d3NraWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA1NjAxMDIsImV4cCI6MjA2NjEzNjEwMn0.u4z9GsZEzrlYIrYNyULnloo4J9D-ki0zdOyau8AdxTA';
 
@@ -504,6 +527,7 @@
     const photoPreviewContainer = document.getElementById('photoPreviewContainer');
     const memoryText = document.getElementById('memoryText');
     const postMemoryBtn = document.getElementById('postMemoryBtn');
+    const postFeedback = document.getElementById('postFeedback');
     const memoriesContainer = document.getElementById('memories');
     const candleCountElem = document.getElementById('candleCount');
     const lightCandleBtn = document.getElementById('lightCandleBtn');
@@ -515,31 +539,42 @@
     let candleCount = 0;
     let isDarkTheme = true;
     let isMusicPlaying = false;
+    let ambientAudio = null;
 
     // Initialize theme from localStorage
-    if(localStorage.getItem('tributeRoomTheme') === 'light') {
-      document.body.classList.add('light');
-      isDarkTheme = false;
-      themeToggle.textContent = 'Dark Mode';
-      themeToggle.setAttribute('aria-pressed', 'true');
-    } else {
-      themeToggle.textContent = 'Light Mode';
-      themeToggle.setAttribute('aria-pressed', 'false');
+    function initTheme() {
+      const saved = localStorage.getItem('tributeRoomTheme');
+      if (saved === 'light') {
+        document.body.classList.add('light');
+        isDarkTheme = false;
+        themeToggle.textContent = 'Dark Mode';
+        themeToggle.setAttribute('aria-pressed', 'true');
+      } else {
+        isDarkTheme = true;
+        themeToggle.textContent = 'Light Mode';
+        themeToggle.setAttribute('aria-pressed', 'false');
+      }
     }
+    initTheme();
 
     // Ambient music setup
-    const ambientAudio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/02/audio_3c77ebca3d.mp3?filename=soft-piano-ambient-6437.mp3');
-    ambientAudio.loop = true;
-    ambientAudio.volume = 0.1;
+    function setupAmbientAudio() {
+      ambientAudio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/02/audio_3c77ebca3d.mp3?filename=soft-piano-ambient-6437.mp3');
+      ambientAudio.loop = true;
+      ambientAudio.volume = 0.1;
+    }
+    setupAmbientAudio();
 
     musicToggleBtn.addEventListener('click', () => {
       if (isMusicPlaying) {
         ambientAudio.pause();
-        musicToggleBtn.textContent = '▶️ Ambient Music';
+        musicToggleBtn.textContent = '▶️';
         musicToggleBtn.setAttribute('aria-pressed', 'false');
       } else {
-        ambientAudio.play();
-        musicToggleBtn.textContent = '⏸️ Ambient Music';
+        ambientAudio.play().catch(() => {
+          alert('Music playback failed, please interact with the page first.');
+        });
+        musicToggleBtn.textContent = '⏸️';
         musicToggleBtn.setAttribute('aria-pressed', 'true');
       }
       isMusicPlaying = !isMusicPlaying;
@@ -561,161 +596,138 @@
       isDarkTheme = !isDarkTheme;
     });
 
-    // Generate stars background (optional)
-    function createStars(count = 100) {
-      const starsContainer = document.createElement('div');
-      starsContainer.id = 'stars';
-      starsContainer.style.position = 'fixed';
-      starsContainer.style.top = '0';
-      starsContainer.style.left = '0';
-      starsContainer.style.width = '100%';
-      starsContainer.style.height = '100%';
-      starsContainer.style.zIndex = '-1';
-      starsContainer.style.pointerEvents = 'none';
-
-      for(let i = 0; i < count; i++) {
-        const star = document.createElement('div');
-        star.style.position = 'absolute';
-        star.style.borderRadius = '50%';
-        const size = Math.random() * 2 + 1;
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-        star.style.top = `${Math.random() * 100}%`;
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.backgroundColor = 'white';
-        star.style.opacity = 0.8;
-        star.style.animation = `twinkle ${2 + Math.random() * 3}s ease-in-out infinite`;
-        star.style.animationDelay = `${Math.random() * 3}s`;
-        starsContainer.appendChild(star);
+    // Photo upload preview + file validation
+    photoUpload.addEventListener('change', () => {
+      postFeedback.textContent = '';
+      const file = photoUpload.files[0];
+      if (!file) {
+        uploadedPhotoFile = null;
+        photoPreviewContainer.innerHTML = '';
+        return;
       }
-      document.body.appendChild(starsContainer);
-    }
-    createStars();
 
-    // Upload photo preview + keep file ref
-    photoUpload.addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if(!file) return;
-
-      if(!file.type.startsWith('image/')) {
-        alert('Please upload a valid image file.');
+      // Max file size 4MB
+      if (file.size > 4 * 1024 * 1024) {
+        alert('Photo must be less than 4MB.');
         photoUpload.value = '';
+        uploadedPhotoFile = null;
+        photoPreviewContainer.innerHTML = '';
+        return;
+      }
+
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload a valid image file (jpg, png, gif).');
+        photoUpload.value = '';
+        uploadedPhotoFile = null;
+        photoPreviewContainer.innerHTML = '';
         return;
       }
 
       uploadedPhotoFile = file;
 
-      const img = document.createElement('img');
-      img.className = 'uploaded-photo';
-      img.alt = 'Photo memory preview';
-
       const reader = new FileReader();
-      reader.onload = (ev) => {
-        img.src = ev.target.result;
+      reader.onload = (e) => {
+        photoPreviewContainer.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.alt = 'Photo preview';
+        img.className = 'photo-preview';
+        photoPreviewContainer.appendChild(img);
       };
       reader.readAsDataURL(file);
-
-      photoPreviewContainer.innerHTML = '';
-      photoPreviewContainer.appendChild(img);
     });
+
+    // Display tribute memory card
+    function displayMemory(memory) {
+      const div = document.createElement('article');
+      div.className = 'memory';
+      div.tabIndex = 0;
+      div.setAttribute('aria-label', 'Tribute message');
+
+      // Message text
+      const p = document.createElement('p');
+      p.textContent = memory.message;
+      div.appendChild(p);
+
+      // Photo (optional)
+      if (memory.photo_url) {
+        const link = document.createElement('a');
+        link.href = memory.photo_url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.title = 'Open photo in new tab';
+
+        const img = document.createElement('img');
+        img.src = memory.photo_url;
+        img.alt = 'Memory photo';
+        img.tabIndex = -1;
+
+        link.appendChild(img);
+        div.appendChild(link);
+      }
+
+      // Date
+      const time = document.createElement('time');
+      time.dateTime = memory.created_at;
+      const date = new Date(memory.created_at);
+      time.textContent = date.toLocaleString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+      div.appendChild(time);
+
+      memoriesContainer.appendChild(div);
+    }
 
     // Load tributes from Supabase
     async function loadTributes() {
+      memoriesContainer.innerHTML = '<p>Loading tributes...</p>';
       try {
-        memoriesContainer.innerHTML = '<p>Loading tributes...</p>';
-
-        const { data: memories, error } = await supabase
+        const { data, error } = await supabase
           .from('tributes')
           .select('*')
           .order('created_at', { ascending: false })
           .limit(50);
-
         if (error) throw error;
 
         memoriesContainer.innerHTML = '';
-        if (!memories.length) {
+
+        if (!data.length) {
           memoriesContainer.innerHTML = '<p>No tributes posted yet. Be the first to share a memory.</p>';
           return;
         }
-
-        memories.forEach((memory) => {
-          displayMemory(memory);
-        });
-
+        data.forEach(displayMemory);
       } catch (err) {
         memoriesContainer.innerHTML = `<p style="color:#f66;">Failed to load tributes: ${err.message}</p>`;
       }
     }
 
-    // Display single memory
-    function displayMemory(memory) {
-      const div = document.createElement('div');
-      div.className = 'memory';
-
-      // Memory text
-      const textP = document.createElement('p');
-      textP.textContent = memory.message;
-
-      // Optional photo thumbnail with clickable full image
-      if(memory.photo_url) {
-        const photoLink = document.createElement('a');
-        photoLink.href = memory.photo_url;
-        photoLink.target = '_blank';
-        photoLink.rel = 'noopener noreferrer';
-
-        const photoThumb = document.createElement('img');
-        photoThumb.src = memory.photo_url;
-        photoThumb.alt = 'Memory photo';
-        photoThumb.style.maxWidth = '150px';
-        photoThumb.style.borderRadius = '8px';
-        photoThumb.style.marginTop = '8px';
-        photoThumb.style.cursor = 'pointer';
-        photoThumb.style.boxShadow = '0 0 10px #f6c1c1bb';
-
-        photoLink.appendChild(photoThumb);
-        div.appendChild(photoLink);
-      }
-
-      div.appendChild(textP);
-
-      // Date
-      const dateP = document.createElement('small');
-      const date = new Date(memory.created_at);
-      dateP.textContent = `Posted on ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-      dateP.style.display = 'block';
-      dateP.style.marginTop = '8px';
-      dateP.style.opacity = '0.7';
-      div.appendChild(dateP);
-
-      memoriesContainer.appendChild(div);
-    }
-
     // Upload photo to Supabase Storage
-    async function uploadPhotoToSupabase(file) {
-      const BUCKET_NAME = 'tribute-photos'; // your bucket name
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `uploads/${fileName}`;
+    async function uploadPhoto(file) {
+      const bucket = 'tribute-photos';
+      const ext = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.floor(Math.random() * 1e6)}.${ext}`;
+      const path = `uploads/${fileName}`;
+      try {
+        const { data, error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false });
+        if (error) throw error;
 
-      const { data, error } = await supabase.storage
-        .from(BUCKET_NAME)
-        .upload(filePath, file, { upsert: false });
-
-      if (error) {
-        alert('Failed to upload photo: ' + error.message);
+        const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(path);
+        return urlData.publicUrl;
+      } catch (err) {
+        alert('Photo upload failed: ' + err.message);
         return null;
       }
-
-      const { data: urlData } = supabase.storage
-        .from(BUCKET_NAME)
-        .getPublicUrl(filePath);
-
-      return urlData.publicUrl;
     }
 
-    // Post tribute memory (with optional photo)
+    // Post tribute (message + optional photo)
     postMemoryBtn.addEventListener('click', async () => {
+      postFeedback.textContent = '';
       const text = memoryText.value.trim();
+
       if (!text) {
         alert('Please enter a tribute message.');
         return;
@@ -726,7 +738,7 @@
 
       let photoUrl = null;
       if (uploadedPhotoFile) {
-        photoUrl = await uploadPhotoToSupabase(uploadedPhotoFile);
+        photoUrl = await uploadPhoto(uploadedPhotoFile);
         if (!photoUrl) {
           postMemoryBtn.disabled = false;
           postMemoryBtn.textContent = 'Post Tribute';
@@ -735,19 +747,16 @@
       }
 
       try {
-        const { data, error } = await supabase
-          .from('tributes')
-          .insert([{ message: text, photo_url: photoUrl }]);
-
+        const { error } = await supabase.from('tributes').insert([{ message: text, photo_url: photoUrl }]);
         if (error) throw error;
 
-        // Clear input and preview
         memoryText.value = '';
-        photoPreviewContainer.innerHTML = '';
-        photoUpload.value = '';
         uploadedPhotoFile = null;
+        photoUpload.value = '';
+        photoPreviewContainer.innerHTML = '';
+        postFeedback.style.color = '#d7a3c4';
+        postFeedback.textContent = 'Tribute posted successfully!';
 
-        // Reload tributes
         await loadTributes();
       } catch (err) {
         alert('Failed to post tribute: ' + err.message);
@@ -757,31 +766,24 @@
       }
     });
 
-    // Candle lighting
+    // Candle count management
     async function fetchCandleCount() {
       try {
-        const { data, error } = await supabase
-          .from('candles')
-          .select('count')
-          .limit(1)
-          .single();
-
+        const { data, error } = await supabase.from('candles').select('count').limit(1).single();
         if (error && error.code !== 'PGRST116') throw error;
-
         candleCount = data?.count || 0;
         candleCountElem.textContent = candleCount;
       } catch (err) {
-        console.error('Failed to fetch candle count:', err.message);
         candleCountElem.textContent = '0';
+        console.error('Failed to fetch candle count:', err.message);
       }
     }
 
     async function incrementCandleCount() {
       try {
-        // Check if row exists
         const { data, error } = await supabase.from('candles').select('count').limit(1).single();
         if (error && error.code === 'PGRST116') {
-          // No row exists, insert one
+          // No row exists; insert initial count = 1
           await supabase.from('candles').insert([{ id: 1, count: 1 }]);
           candleCount = 1;
           candleCountElem.textContent = candleCount;
@@ -789,11 +791,9 @@
         }
         if (error) throw error;
 
-        // Update count
         candleCount = data.count + 1;
         const { error: updateError } = await supabase.from('candles').update({ count: candleCount }).eq('id', 1);
         if (updateError) throw updateError;
-
         candleCountElem.textContent = candleCount;
       } catch (err) {
         alert('Failed to light candle: ' + err.message);
@@ -804,23 +804,18 @@
       lightCandleBtn.disabled = true;
       lightCandleBtn.setAttribute('aria-pressed', 'true');
       await incrementCandleCount();
-      lightCandleBtn.disabled = false;
+      setTimeout(() => {
+        lightCandleBtn.disabled = false;
+        lightCandleBtn.setAttribute('aria-pressed', 'false');
+      }, 1500);
     });
 
-    // Initial load
+    // Initialize
     loadTributes();
     fetchCandleCount();
-  </script>
 
-  <style>
-    @keyframes twinkle {
-      0%, 100% {
-        opacity: 0.8;
-      }
-      50% {
-        opacity: 0.3;
-      }
-    }
-  </style>
+  })();
+</script>
+
 </body>
 </html>
