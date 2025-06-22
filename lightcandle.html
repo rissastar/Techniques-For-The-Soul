@@ -6,11 +6,8 @@
   <title>Light a Candle - In Memory</title>
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
-
     body {
       font-family: 'Georgia', serif;
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
@@ -19,43 +16,26 @@
       overflow-x: hidden;
       position: relative;
     }
-
     .stars {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 1;
     }
-
     .star {
-      position: absolute;
-      background: white;
-      border-radius: 50%;
+      position: absolute; background: white; border-radius: 50%;
       animation: twinkle 2s infinite alternate;
     }
-
     @keyframes twinkle {
       0% { opacity: 0.3; transform: scale(0.8); }
       100% { opacity: 1; transform: scale(1); }
     }
-
     .container {
-      position: relative;
-      z-index: 2;
+      position: relative; z-index: 2;
       max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-      text-align: center;
+      margin: 0 auto; padding: 20px; text-align: center;
     }
-
     .header {
-      margin-bottom: 40px;
-      padding: 40px 0;
+      margin-bottom: 40px; padding: 40px 0;
     }
-
     .header h1 {
       font-size: 3.5em;
       color: #ffd700;
@@ -63,19 +43,14 @@
       margin-bottom: 20px;
       animation: glow 3s ease-in-out infinite alternate;
     }
-
     @keyframes glow {
       from { text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 10px #ffd700; }
       to { text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 20px #ffd700, 0 0 30px #ffd700; }
     }
-
     .subtitle {
-      font-size: 1.3em;
-      color: #e0e0e0;
-      margin-bottom: 30px;
-      line-height: 1.6;
+      font-size: 1.3em; color: #e0e0e0;
+      margin-bottom: 30px; line-height: 1.6;
     }
-
     .memorial-form {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
@@ -85,19 +60,15 @@
       margin-bottom: 50px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
-
     .form-group {
-      margin-bottom: 20px;
-      text-align: left;
+      margin-bottom: 20px; text-align: left;
     }
-
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: bold;
       color: #ffd700;
     }
-
     input, textarea {
       width: 100%;
       padding: 12px;
@@ -108,13 +79,11 @@
       font-size: 16px;
       transition: all 0.3s ease;
     }
-
     input:focus, textarea:focus {
       outline: none;
       border-color: #ffd700;
       box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
     }
-
     .light-candle-btn {
       background: linear-gradient(45deg, #ff6b35, #ff8e53);
       border: none;
@@ -127,19 +96,16 @@
       box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
       font-weight: bold;
     }
-
     .light-candle-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(255, 107, 53, 0.6);
     }
-
     .candles-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 30px;
       margin-top: 50px;
     }
-
     .candle-memorial {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
@@ -151,168 +117,106 @@
       position: relative;
       overflow: hidden;
     }
-
     .candle-memorial:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
     }
-
     .candle {
-      width: 60px;
-      height: 120px;
+      width: 60px; height: 120px;
       background: linear-gradient(to bottom, #8B4513 0%, #A0522D 100%);
       border-radius: 5px;
       margin: 0 auto 20px;
       position: relative;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
-
     .candle-top {
-      width: 60px;
-      height: 10px;
+      width: 60px; height: 10px;
       background: #654321;
       border-radius: 50%;
       position: absolute;
       top: -5px;
     }
-
     .wick {
-      width: 2px;
-      height: 8px;
+      width: 2px; height: 8px;
       background: #333;
       position: absolute;
       top: -8px;
       left: 50%;
       transform: translateX(-50%);
     }
-
     .flame {
-      width: 20px;
-      height: 25px;
+      width: 20px; height: 25px;
       background: radial-gradient(circle, #ffeb3b 0%, #ff9800 40%, #ff5722 100%);
       border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
       position: absolute;
-      top: -25px;
-      left: 50%;
+      top: -25px; left: 50%;
       transform: translateX(-50%);
       animation: flicker 1.5s ease-in-out infinite alternate;
       box-shadow: 0 0 20px #ff9800, 0 0 40px #ff5722;
     }
-
     @keyframes flicker {
       0% { transform: translateX(-50%) scale(1) rotate(-1deg); }
       50% { transform: translateX(-50%) scale(1.1) rotate(1deg); }
       100% { transform: translateX(-50%) scale(0.95) rotate(-0.5deg); }
     }
-
-    .memorial-text {
-      color: #e0e0e0;
-      margin-bottom: 10px;
-    }
-
     .memorial-name {
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #ffd700;
+      font-size: 1.2em; font-weight: bold; color: #ffd700;
       margin-bottom: 10px;
     }
-
     .memorial-message {
-      font-style: italic;
-      font-size: 0.9em;
-      line-height: 1.4;
-      color: #ccc;
+      font-style: italic; font-size: 0.9em; line-height: 1.4; color: #ccc;
     }
-
     .memorial-date {
-      font-size: 0.8em;
-      color: #999;
-      margin-top: 10px;
+      font-size: 0.8em; color: #999; margin-top: 10px;
     }
-
     .floating-hearts {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 3;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; overflow: hidden;
     }
-
     .heart {
-      position: absolute;
-      color: #ff69b4;
-      font-size: 20px;
-      animation: float-up 4s linear infinite;
-      opacity: 0;
+      position: absolute; color: #ff69b4; font-size: 20px;
+      animation: float-up 4s linear infinite; opacity: 0;
     }
-
     @keyframes float-up {
-      0% {
-        opacity: 1;
-        transform: translateY(100vh) scale(0);
-      }
-      10% {
-        opacity: 1;
-        transform: translateY(90vh) scale(1);
-      }
-      90% {
-        opacity: 1;
-        transform: translateY(10vh) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translateY(-10vh) scale(0);
-      }
+      0% { opacity: 1; transform: translateY(100vh) scale(0); }
+      10% { opacity: 1; transform: translateY(90vh) scale(1); }
+      90% { opacity: 1; transform: translateY(10vh) scale(1); }
+      100% { opacity: 0; transform: translateY(-10vh) scale(0); }
     }
-
     .stats {
       margin-top: 40px;
       padding: 20px;
       background: rgba(255, 255, 255, 0.05);
       border-radius: 15px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      z-index: 2;
-      position: relative;
     }
-
     .stats h3 {
       color: #ffd700;
       margin-bottom: 15px;
       font-size: 1.5em;
     }
-
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
     }
-
     .stat-item {
       text-align: center;
       padding: 15px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 10px;
     }
-
     .stat-number {
       font-size: 2em;
       font-weight: bold;
       color: #ff6b35;
     }
-
     .stat-label {
       color: #ccc;
       font-size: 0.9em;
     }
-
     @media (max-width: 768px) {
-      .header h1 {
-        font-size: 2.5em;
-      }
-      
+      .header h1 { font-size: 2.5em; }
       .candles-container {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 20px;
@@ -324,12 +228,11 @@
 <body>
   <div class="stars"></div>
   <div class="floating-hearts"></div>
-
   <div class="container">
     <div class="header">
       <h1>Light a Candle</h1>
       <p class="subtitle">In loving memory of those who live forever in our hearts.<br>
-      Each candle represents a beautiful soul and the love that remains eternal.</p>
+        Each candle represents a beautiful soul and the love that remains eternal.</p>
     </div>
 
     <div class="memorial-form">
@@ -375,17 +278,66 @@
   </div>
 
   <script>
+    // Initialize Supabase client
     const SUPABASE_URL = 'https://ytgrzhtntwzefwjmhgjj.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
+    const SUPABASE_ANON_KEY =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0Z3J6aHRudHd6ZWZ3am1oZ2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2MTA4NjYsImV4cCI6MjA2NTE4Njg2Nn0.wx89qV1s1jePtZhuP5hnViu1KfPjMCnNrtUBW4bdbL8';
 
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const memorialForm = document.getElementById('memorialForm');
-    const candlesContainer = document.getElementById('candlesContainer');
-    const totalCandles = document.getElementById('totalCandles');
-    const totalMemories = document.getElementById('totalMemories');
+    // Load memorials from Supabase and display
+    async function loadMemorials() {
+      const { data, error } = await supabase
+        .from('memorials')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    // Format date for display
+      if (error) {
+        console.error('Error loading memorials:', error);
+        return;
+      }
+
+      displayMemorials(data);
+      updateStats(data);
+    }
+
+    // Display memorial candles on page
+    function displayMemorials(memorials) {
+      const container = document.getElementById('candlesContainer');
+      container.innerHTML = '';
+
+      memorials.forEach((memorial) => {
+        const div = document.createElement('div');
+        div.className = 'candle-memorial';
+
+        div.innerHTML = `
+          <div class="candle">
+            <div class="candle-top"></div>
+            <div class="wick"></div>
+            <div class="flame"></div>
+          </div>
+          <div class="memorial-name">${escapeHtml(memorial.name)}</div>
+          <div class="memorial-message">${escapeHtml(memorial.message || '')}</div>
+          <div class="memorial-date">
+            Remembered by ${escapeHtml(memorial.from || 'Anonymous')}<br>
+            ${formatDate(memorial.created_at)}
+          </div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    // Update stats numbers
+    function updateStats(memorials) {
+      document.getElementById('totalCandles').textContent = memorials.length;
+      const memoriesCount = memorials.filter(
+        (m) => m.message && m.message.trim() !== ''
+      ).length;
+      document.getElementById('totalMemories').textContent = memoriesCount;
+    }
+
+    // Format date nicely
     function formatDate(dateString) {
       const date = new Date(dateString);
       return date.toLocaleDateString('en-US', {
@@ -395,99 +347,16 @@
       });
     }
 
-    // Load memorials from Supabase
-    async function loadMemorials() {
-      const { data, error } = await supabase
-        .from('memorials')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(100);
-
-      if (error) {
-        console.error('Error loading memorials:', error);
-        return;
-      }
-
-      window.memorials = data || [];
-      renderMemorials();
-    }
-
-    // Render candles
-    function renderMemorials() {
-      candlesContainer.innerHTML = '';
-      window.memorials.forEach((m, i) => {
-        const div = document.createElement('div');
-        div.className = 'candle-memorial';
-        div.style.animationDelay = `${i * 0.1}s`;
-        div.innerHTML = `
-          <div class="candle">
-            <div class="candle-top"></div>
-            <div class="wick"></div>
-            <div class="flame"></div>
-          </div>
-          <div class="memorial-name">${escapeHtml(m.name)}</div>
-          <div class="memorial-message">${escapeHtml(m.message)}</div>
-          <div class="memorial-date">Remembered by ${escapeHtml(m.from)}<br>${formatDate(m.created_at)}</div>
-        `;
-        candlesContainer.appendChild(div);
-      });
-
-      totalCandles.textContent = window.memorials.length;
-      totalMemories.textContent = window.memorials.filter(m => m.message && m.message !== 'In loving memory').length;
-    }
-
-    // Escape HTML to prevent injection
+    // Escape HTML to avoid injection
     function escapeHtml(text) {
       if (!text) return '';
       return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
-
-    // Listen for new memorial inserts (realtime)
-    supabase
-      .channel('memorial-insert')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'memorials' },
-        (payload) => {
-          window.memorials.unshift(payload.new);
-          renderMemorials();
-          createFloatingHearts();
-        }
-      )
-      .subscribe();
-
-    // Form submit to add new candle/memorial
-    memorialForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const name = e.target.name.value.trim();
-      const message = e.target.message.value.trim() || 'In loving memory';
-      const from = e.target.yourName.value.trim() || 'Anonymous';
-
-      if (!name) return;
-
-      const { error } = await supabase.from('memorials').insert([
-        {
-          name,
-          message,
-          from,
-        },
-      ]);
-
-      if (error) {
-        console.error('Insert error:', error);
-        alert('There was an error lighting your candle. Please try again.');
-        return;
-      }
-
-      memorialForm.reset();
-      showSuccessMessage();
-    });
 
     // Show success toast
     function showSuccessMessage() {
@@ -535,7 +404,7 @@
     // Start continuous heart animation
     function startHeartAnimation() {
       setInterval(() => {
-        if (Math.random() < 0.3) { // 30% chance every interval
+        if (Math.random() < 0.3) {
           const heartsContainer = document.querySelector('.floating-hearts');
           const heart = document.createElement('div');
           heart.className = 'heart';
@@ -546,48 +415,91 @@
 
           setTimeout(() => heart.remove(), 4000);
         }
-      }, 2000);
+      }, 800);
     }
 
-    // Create twinkling stars background
-    function createStars() {
-      const starsContainer = document.querySelector('.stars');
-      const numStars = 100;
+    // Handle form submit
+    document
+      .getElementById('memorialForm')
+      .addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-      for (let i = 0; i < numStars; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        const size = Math.random() * 3 + 1;
-        star.style.width = size + 'px';
-        star.style.height = size + 'px';
-        star.style.animationDelay = Math.random() * 2 + 's';
-        starsContainer.appendChild(star);
-      }
-    }
+        const nameInput = document.getElementById('name');
+        const messageInput = document.getElementById('message');
+        const fromInput = document.getElementById('yourName');
 
-    // Add CSS animations for toast
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-      }
-      
-      @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-      }
-    `;
-    document.head.appendChild(style);
+        const newMemorial = {
+          name: nameInput.value.trim(),
+          message: messageInput.value.trim(),
+          from: fromInput.value.trim() || null,
+        };
 
-    // Initialize everything on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      createStars();
+        if (!newMemorial.name) {
+          alert('Please enter the name of your loved one.');
+          return;
+        }
+
+        // Insert into Supabase
+        const { data, error } = await supabase
+          .from('memorials')
+          .insert(newMemorial);
+
+        if (error) {
+          console.error('Error saving candle:', error);
+          alert('Sorry, there was an error lighting your candle. Please try again.');
+          return;
+        }
+
+        // Clear form
+        nameInput.value = '';
+        messageInput.value = '';
+        fromInput.value = '';
+
+        showSuccessMessage();
+        createFloatingHearts();
+        loadMemorials();
+      });
+
+    // Load memorials on page load
+    window.onload = () => {
       loadMemorials();
       startHeartAnimation();
-    });
+
+      // Create random stars
+      const starsContainer = document.querySelector('.stars');
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.top = Math.random() * 100 + 'vh';
+        star.style.left = Math.random() * 100 + 'vw';
+        star.style.width = star.style.height = Math.random() * 2 + 1 + 'px';
+        star.style.animationDuration = 1 + Math.random() * 3 + 's';
+        starsContainer.appendChild(star);
+      }
+    };
   </script>
+
+  <style>
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+  </style>
 </body>
 </html>
