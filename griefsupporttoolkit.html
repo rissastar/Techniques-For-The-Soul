@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>Mobile Grief Support Toolkit with Audio, Video & Worksheets</title>
+  <title>Mobile Grief Support Toolkit with Info, Videos & Custom Worksheet</title>
   <style>
     /* MOBILE ONLY STYLING */
     @media (min-width: 601px) {
@@ -321,7 +321,7 @@
     }
 
     /* Responsive Iframes */
-    .video-wrapper, .audio-wrapper {
+    .video-wrapper {
       position: relative;
       padding-bottom: 56.25%;
       height: 0;
@@ -330,20 +330,13 @@
       box-shadow: 0 3px 10px rgba(0,0,0,0.12);
       margin-bottom: 1.8rem;
     }
-    .video-wrapper iframe,
-    .audio-wrapper iframe,
-    .audio-wrapper audio {
+    .video-wrapper iframe {
       position: absolute;
       top: 0; left: 0;
       width: 100%;
       height: 100%;
       border: none;
       border-radius: 12px;
-    }
-    /* Audio: smaller height */
-    .audio-wrapper {
-      padding-bottom: 50px;
-      height: auto;
     }
   </style>
 </head>
@@ -353,7 +346,7 @@
   <div class="container" role="main" aria-label="Grief Support Toolkit">
     <header>
       <h1>Mobile Grief Support Toolkit</h1>
-      <p>Your companion for healing, with audio, video, and worksheets</p>
+      <p>Your companion for understanding and healing</p>
     </header>
 
     <section id="mood-tracker" aria-label="Mood Tracker">
@@ -375,48 +368,78 @@
       <button class="btn" id="export-pdf-btn" aria-label="Export journal entries to PDF">Export Journal as PDF</button>
     </section>
 
-    <section id="printable-worksheets">
-      <h2>📄 Printable Worksheets</h2>
-      <p>Download and print these helpful grief worksheets for reflection and healing:</p>
+    <section id="what-is-grief">
+      <h2>What is Grief?</h2>
+      <p>Grief is a natural, emotional response to loss, especially the loss of someone or something deeply important to us. It can affect the mind, body, and spirit in many ways, often including sadness, confusion, anger, and even physical symptoms like fatigue or changes in appetite.</p>
+      <p>Everyone experiences grief differently, and there is no "right" way to grieve. Grief can happen not only after death but also after other kinds of loss, such as relationship breakups, job loss, or major life changes.</p>
+    </section>
+
+    <section id="how-grief-works">
+      <h2>How Grief Works</h2>
+      <p>Grief typically unfolds in waves, where emotions can be intense and then subside, sometimes unexpectedly. These waves may last for seconds or hours and can come and go for months or even years.</p>
+      <p>Grief affects people emotionally, physically, cognitively, and socially. It's common to feel:</p>
       <ul>
-        <li><a href="https://www.mygrief.ca/files/MyGrief_Reflection_Sheet.pdf" target="_blank" rel="noopener noreferrer">MyGrief Reflection Sheet (PDF)</a></li>
-        <li><a href="https://www.kidsaid.com.au/assets/files/resources/Tool_3_Grief_Writing_Activity.pdf" target="_blank" rel="noopener noreferrer">Grief Writing Activity (KidsAid, PDF)</a></li>
-        <li><a href="https://www.griefsupport.org/wp-content/uploads/2019/05/Grief-Workbook.pdf" target="_blank" rel="noopener noreferrer">Grief Support Workbook (PDF)</a></li>
+        <li>Deep sadness and crying</li>
+        <li>Anger or irritability</li>
+        <li>Confusion or trouble concentrating</li>
+        <li>Physical symptoms like headaches or stomach aches</li>
+        <li>Loneliness or withdrawal from social activities</li>
+        <li>Moments of peace or acceptance, mixed with pain</li>
+      </ul>
+      <p>It's important to allow yourself to feel your grief, and seek support when needed.</p>
+    </section>
+
+    <section id="stages-of-grief">
+      <h2>Stages of Grief</h2>
+      <p>Many people find the model of 5 stages helpful, though not everyone experiences them in order or at all:</p>
+      <ul>
+        <li><strong>Denial:</strong> Difficulty accepting the reality of the loss.</li>
+        <li><strong>Anger:</strong> Frustration and resentment about the loss.</li>
+        <li><strong>Bargaining:</strong> Trying to negotiate or make deals to reverse or lessen the loss.</li>
+        <li><strong>Depression:</strong> Deep sadness and withdrawal.</li>
+        <li><strong>Acceptance:</strong> Coming to terms with the loss and finding a way forward.</li>
+      </ul>
+      <p>Remember, these stages are not linear and everyone grieves uniquely.</p>
+    </section>
+
+    <section id="tips-for-grieving">
+      <h2>Tips for Grieving</h2>
+      <ul>
+        <li><strong>Be patient with yourself:</strong> Grief takes time and healing is a gradual process.</li>
+        <li><strong>Express your feelings:</strong> Talk, write, cry, or find creative outlets.</li>
+        <li><strong>Seek support:</strong> Reach out to friends, family, or support groups.</li>
+        <li><strong>Take care of your body:</strong> Eat well, rest, and get gentle exercise.</li>
+        <li><strong>Create rituals or memorials:</strong> Lighting candles, planting trees, or other personal acts can help honor your loved one.</li>
+        <li><strong>Limit major decisions:</strong> Give yourself space before making big life changes.</li>
+        <li><strong>Consider professional help:</strong> Therapists or counselors can provide guidance when grief feels overwhelming.</li>
       </ul>
     </section>
 
-    <section id="audio-meditations">
-      <h2>🎧 Guided Mindfulness & Meditation</h2>
-      <p>Listen to these free grief meditation audios to support healing and calm:</p>
-      <div class="audio-wrapper" role="region" aria-label="Guided meditation audio player 1">
-        <audio controls preload="none" src="https://cdn.pixabay.com/download/audio/2022/03/17/audio_0b9a028c4e.mp3?filename=calm-meditation-ambient-11792.mp3">
-          Your browser does not support the audio element.
-        </audio>
-        <p style="font-size:0.9rem; margin-top:-1rem; color:#555;">Calm Meditation Ambient (Pixabay)</p>
-      </div>
-      <div class="audio-wrapper" role="region" aria-label="Guided meditation audio player 2">
-        <audio controls preload="none" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_9e917ae0ee.mp3?filename=peaceful-meditation-ambient-10969.mp3">
-          Your browser does not support the audio element.
-        </audio>
-        <p style="font-size:0.9rem; margin-top:-1rem; color:#555;">Peaceful Meditation Ambient (Pixabay)</p>
-      </div>
-    </section>
-
     <section id="video-guidance">
-      <h2>📺 Video Guidance</h2>
-      <p>Watch these curated grief support and mindfulness videos:</p>
+      <h2>📺 Helpful Videos</h2>
+      <p>Watch these videos on grief, healing, and mindfulness to support your journey:</p>
 
-      <div class="video-wrapper" role="region" aria-label="Grief Awareness Video">
+      <div class="video-wrapper" role="region" aria-label="What is Grief? - Animated Explanation">
         <iframe
-          src="https://www.youtube-nocookie.com/embed/j0Tmr7jGqO8"
-          title="Grief Awareness and Healing"
+          src="https://www.youtube-nocookie.com/embed/D0g4pHMTG7w"
+          title="What is Grief? | Animated Explanation"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
           loading="lazy"
           ></iframe>
       </div>
 
-      <div class="video-wrapper" role="region" aria-label="Mindfulness for Grief Video">
+      <div class="video-wrapper" role="region" aria-label="Coping with Grief - Practical Tips">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/T8_X3HtUq1o"
+          title="Coping with Grief - Practical Tips"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+          ></iframe>
+      </div>
+
+      <div class="video-wrapper" role="region" aria-label="Mindfulness for Grief - Guided Practice">
         <iframe
           src="https://www.youtube-nocookie.com/embed/IvIiXtEtlzI"
           title="Mindfulness Practice for Grief"
@@ -441,7 +464,13 @@
       </ul>
     </section>
 
-    <section id="darkmode-toggle-container" style="margin-top: 1rem;">
+    <section id="printable-worksheets">
+      <h2>📄 Printable Worksheets</h2>
+      <p>Download your personal grief support journaling and reflection worksheet:</p>
+      <a href="grief_support_custom_worksheet.pdf" target="_blank" class="btn" aria-label="Download grief support custom worksheet PDF">Download Custom Grief Worksheet (PDF)</a>
+    </section>
+
+    <section id="darkmode-toggle-container">
       <label for="darkmode-toggle" aria-live="polite" aria-atomic="true" aria-relevant="additions removals">
         <input type="checkbox" id="darkmode-toggle" role="switch" aria-checked="false" />
         Enable Dark Mode
@@ -449,11 +478,11 @@
     </section>
   </div>
 
-  <!-- JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-Hq4qNizQ4Xw6VNyzo82Mk2GxR4f5bD4FHQWcTr+9VnGgEOz/RshYczGwmPqLSwOY5rLPvH9NZByUg8sc2XoEFw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous"></script>
   <script>
     (() => {
-      // Dark mode toggle + persist
+      // Dark mode toggle + persistence
       const toggle = document.getElementById('darkmode-toggle');
       const body = document.body;
       const DARK_KEY = 'griefToolkitDarkMode';
@@ -463,17 +492,14 @@
         toggle.setAttribute('aria-checked', enabled);
         localStorage.setItem(DARK_KEY, enabled);
       }
-
       toggle.addEventListener('change', () => {
         applyDarkMode(toggle.checked);
       });
-
-      // On load set dark mode if saved
       const savedDark = localStorage.getItem(DARK_KEY) === 'true';
       toggle.checked = savedDark;
       applyDarkMode(savedDark);
 
-      // Mood Tracker
+      // Mood tracker persistence
       const moodButtons = document.querySelectorAll('.mood-tracker button');
       const MOOD_KEY = 'griefToolkitMood';
 
@@ -488,7 +514,6 @@
           localStorage.setItem(MOOD_KEY, btn.dataset.mood);
         });
       });
-
       const savedMood = localStorage.getItem(MOOD_KEY);
       if (savedMood) {
         const selectedBtn = [...moodButtons].find(b => b.dataset.mood === savedMood);
@@ -498,19 +523,17 @@
         }
       }
 
-      // Journaling localStorage
+      // Journaling autosave
       const journal = document.getElementById('journal-textarea');
       const JOURNAL_KEY = 'griefToolkitJournal';
       journal.value = localStorage.getItem(JOURNAL_KEY) || '';
-
       journal.addEventListener('input', () => {
         localStorage.setItem(JOURNAL_KEY, journal.value);
       });
 
-      // Export journal as PDF using jsPDF
+      // Export journaling to PDF
       const { jsPDF } = window.jspdf;
       const exportBtn = document.getElementById('export-pdf-btn');
-
       exportBtn.addEventListener('click', () => {
         if (!journal.value.trim()) {
           alert('Your journal is empty. Please write something before exporting.');
@@ -529,7 +552,6 @@
         doc.setFontSize(12);
         doc.text('Grief Support Journal Entry', margin, 50);
         let y = 80;
-
         lines.forEach(line => {
           if (y > doc.internal.pageSize.getHeight() - margin) {
             doc.addPage();
@@ -538,7 +560,6 @@
           doc.text(line, margin, y);
           y += lineHeight;
         });
-
         doc.save('Grief_Support_Journal.pdf');
       });
     })();
