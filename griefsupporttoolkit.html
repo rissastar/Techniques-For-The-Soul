@@ -2,538 +2,614 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Grief Support Toolkit</title>
   <link
-    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap"
     rel="stylesheet"
   />
   <style>
-    /* ━━━━━━━━━ Theme Variables ━━━━━━━━━ */
-    :root {
-      --bg-img: url('https://images.pexels.com/photos/5886048/pexels-photo-5886048.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
-      --bg-dark: #18191a;
-      --text-light: #f5f5f5;
-      --text-dark: #333;
-      --card-bg: rgba(255,255,255,0.95);
-      --shadow: rgba(0,0,0,0.1);
-      --accent: #5A3E99;
-      --primary: #7f5af0;
-      --primary-light: #a865f9;
+    /* Reset & basics */
+    * {
+      box-sizing: border-box;
     }
-
     body {
       margin: 0; padding: 0;
-      font-family: 'Quicksand', sans-serif;
-      background: var(--bg-img) center/cover no-repeat fixed;
-      color: var(--text-dark);
+      font-family: 'Comfortaa', cursive, sans-serif;
+      background: linear-gradient(135deg, #fcefee, #e1f0f7);
+      color: #4a4a4a;
       min-height: 100vh;
-      transition: background 0.5s, color 0.5s;
-    }
-
-    body.theme-dark {
-      background: var(--bg-dark);
-      color: var(--text-light);
-    }
-
-    h1,h2 {
-      margin-bottom: 0.6rem;
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-      transition: opacity 0.2s;
-    }
-
-    a:hover {
-      opacity: 0.8;
-    }
-
-    button, select, textarea, input {
-      font-family: inherit;
-      outline: none;
-    }
-
-    /* ━━━━━━━━━ Layout & Components ━━━━━━━━━ */
-
-    .theme-picker {
-      position: fixed; top: 1rem; left: 1rem; z-index: 1000;
-      background: rgba(255,255,255,0.8); padding:0.3rem 0.5rem;
-      border-radius: 8px;
-    }
-
-    #sosBtn {
-      position: fixed; bottom: 1rem; left: 1rem;
-      background: #e73c7e; color: white; width: 50px; height: 50px;
-      border: none; border-radius: 50%; font-size: 1.4rem;
-      cursor: pointer; box-shadow: 0 4px 12px var(--shadow);
-      transition: transform 0.2s;
-      z-index: 1000;
-    }
-    #sosBtn:hover {
-      transform: scale(1.1);
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 2rem auto 4rem;
-      padding: 1rem 2rem;
-      backdrop-filter: blur(10px);
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 8px 24px var(--shadow);
-    }
-
-    .grid {
-      display: grid;
-      gap: 1.5rem;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 16px var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      align-items: center;
+      padding: 2rem 1rem;
     }
 
+    h1 {
+      margin-bottom: 0.3rem;
+      color: #d6637a;
+      font-weight: 700;
+      text-align: center;
+      font-size: 2.8rem;
+      text-shadow: 0 2px 6px rgba(214, 99, 122, 0.5);
+    }
+    p.subtitle {
+      margin-top: 0;
+      font-weight: 400;
+      font-size: 1.2rem;
+      color: #666;
+      text-align: center;
+      max-width: 480px;
+      margin-bottom: 2rem;
+    }
+
+    /* Container for all cards */
+    .grid {
+      display: grid;
+      max-width: 1100px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      width: 100%;
+    }
+
+    /* Cards */
+    .card {
+      background: linear-gradient(145deg, #fff1f3, #ffe3ea);
+      border-radius: 16px;
+      box-shadow: 0 8px 18px rgba(214, 99, 122, 0.25);
+      padding: 1.6rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      transition: box-shadow 0.3s ease;
+      cursor: default;
+    }
     .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px var(--shadow);
+      box-shadow: 0 15px 30px rgba(214, 99, 122, 0.45);
     }
 
     .card h2 {
-      margin: 0;
+      font-weight: 700;
+      font-size: 1.7rem;
+      color: #cc3e59;
+      margin-bottom: 0.7rem;
+      user-select: none;
     }
 
-    .card button, .card textarea, .card input, .card select {
-      margin-top: 0.5rem;
-    }
-
+    /* Buttons */
     button, select {
-      background: var(--primary);
-      color: white;
+      background: #cc3e59;
+      color: #fff;
       border: none;
-      border-radius: 6px;
-      padding: 0.6rem 1rem;
+      border-radius: 24px;
+      padding: 0.5rem 1.3rem;
+      font-weight: 700;
+      font-size: 1rem;
       cursor: pointer;
-      transition: background 0.3s;
+      margin-top: 0.7rem;
+      align-self: flex-start;
+      box-shadow: 0 4px 12px rgba(204, 62, 89, 0.4);
+      transition: background-color 0.3s ease;
+      user-select: none;
     }
-
     button:hover, select:hover {
-      background: var(--primary-light);
+      background: #de4c67;
     }
 
+    /* Inputs & textareas */
     textarea, input {
-      width: 100%;
-      padding: 0.7rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      font-family: 'Comfortaa', cursive, sans-serif;
+      padding: 0.8rem;
+      border-radius: 14px;
+      border: 1.8px solid #f8c7ce;
+      background: #fff7f9;
       resize: vertical;
+      font-size: 1rem;
+      color: #5e5e5e;
+      transition: border-color 0.3s ease;
+    }
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: #cc3e59;
+      background: #fff1f3;
+    }
+    textarea {
+      min-height: 100px;
     }
 
-    /* ━━━━━━━━━ Body Map ━━━━━━━━━ */
-
-    .body-map {
-      position: relative;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/1/17/Human_body_outline.png')
-        center/contain no-repeat;
-      width: 100%;
-      height: 320px;
-      border-radius: 10px;
-      background-color: #f4f4f4;
+    /* Lists */
+    ul {
+      padding-left: 1.2rem;
+      margin: 0;
+      color: #7a3a47;
+      font-size: 1rem;
+      user-select: text;
     }
-
-    .body-spot {
-      position: absolute;
-      width: 20px; height: 20px;
-      background: rgba(255,87,34,0.8);
-      border: 2px solid white;
-      border-radius: 50%;
+    li {
+      margin-bottom: 0.6rem;
+    }
+    a {
+      color: #d6637a;
+      text-decoration: none;
+      font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s;
+      user-select: text;
+      transition: color 0.25s ease;
     }
-    .body-spot:hover {
-      transform: scale(1.2);
-    }
-
-    /* Carousel */
-    .carousel { overflow: hidden; }
-    .carousel-track {
-      display: flex;
-      transition: transform 0.4s ease;
-    }
-    .carousel-item {
-      min-width: 260px;
-      background: var(--card-bg);
-      border-radius: 8px;
-      padding: 1rem;
-      margin-right: 1rem;
-      box-shadow: 0 4px 12px var(--shadow);
-    }
-    .carousel-controls {
-      text-align: center;
-      margin-top: 0.5rem;
-    }
-    .carousel-controls button {
-      margin: 0 0.3rem;
-      font-size: 1.2rem;
-      background: var(--primary);
-      border: none;
-      color: white;
-      border-radius: 50%;
-      width: 30px; height: 30px;
-      cursor: pointer;
+    a:hover {
+      color: #cc3e59;
     }
 
-    /* Modals */
+    /* Modal Styles */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.4);
+      background: rgba(217, 99, 113, 0.75);
       display: none;
-      z-index: 1000;
+      z-index: 9999;
     }
     .modal {
       position: fixed;
-      top: 50%; left: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
-      background: var(--card-bg);
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 20px 40px var(--shadow);
+      background: #fff0f3;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 12px 28px rgba(204, 62, 89, 0.45);
+      max-width: 440px;
       width: 90%;
-      max-width: 400px;
       display: none;
-      z-index: 1001;
+      z-index: 10000;
+      user-select: text;
     }
-    .modal h3 { margin-top: 0; }
-    .modal p { line-height: 1.4; margin-bottom: 1rem; }
-    .close-btn {
-      background: #e73c7e;
-      color: white;
+    .modal h3 {
+      margin-top: 0;
+      margin-bottom: 0.7rem;
+      color: #cc3e59;
+      font-weight: 700;
+      font-size: 1.6rem;
+    }
+    .modal p {
+      line-height: 1.4;
+      font-size: 1rem;
+      color: #6b3a46;
+      white-space: pre-wrap;
+    }
+    .modal button.close-btn {
+      margin-top: 1.4rem;
+      padding: 0.6rem 1.3rem;
+      background: #cc3e59;
       border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
+      border-radius: 24px;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(204, 62, 89, 0.6);
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .modal button.close-btn:hover {
+      background: #de4c67;
     }
 
-    /* Mood Tracker */
+    /* Body Map container */
+    .body-map {
+      position: relative;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/1/17/Human_body_outline.png') no-repeat center;
+      background-size: contain;
+      height: 300px;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(204, 62, 89, 0.2);
+      cursor: default;
+    }
+    .body-spot {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid white;
+      background: #de4c67cc;
+      box-shadow: 0 0 8px 1px #d6637a88;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+    .body-spot:hover {
+      transform: scale(1.3);
+      box-shadow: 0 0 14px 3px #cc3e59cc;
+    }
+
+    /* Mood tracker */
     .mood-buttons {
       display: flex;
       justify-content: space-between;
-      margin-top: 0.5rem;
+      margin-top: 0.7rem;
     }
     .mood-buttons button {
       flex-grow: 1;
       font-size: 1.6rem;
       margin: 0 0.3rem;
-      background: #eee;
-      border-radius: 8px;
-      padding: 0.5rem;
-      transition: transform 0.2s, background 0.3s;
+      background: #ffd9df;
+      border-radius: 20px;
+      padding: 0.6rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(214, 99, 122, 0.3);
+      transition: background-color 0.3s ease;
+      user-select: none;
     }
     .mood-buttons button[aria-checked="true"] {
-      background: var(--primary);
+      background: #cc3e59;
       color: white;
+      box-shadow: 0 6px 20px rgba(204, 62, 89, 0.7);
       transform: scale(1.1);
     }
+
     .progress-bar {
-      background: #ddd;
+      background: #f8c7ce;
       width: 100%;
-      height: 10px;
-      border-radius: 5px;
+      height: 12px;
+      border-radius: 12px;
       overflow: hidden;
-      margin-top: 0.5rem;
+      margin-top: 0.8rem;
+      box-shadow: inset 0 2px 5px rgba(204, 62, 89, 0.2);
     }
     .progress-fill {
-      background: var(--primary-light);
+      background: #cc3e59;
       height: 100%;
       width: 0;
-      transition: width 0.4s;
+      transition: width 0.5s ease;
+      border-radius: 12px 0 0 12px;
     }
 
-    @media (max-width: 600px) {
-      .body-map { height: 240px; }
+    /* Carousel myth busters */
+    .carousel {
+      position: relative;
+      overflow: hidden;
+      margin-top: 0.8rem;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(204, 62, 89, 0.1);
+      background: #fff0f3;
+      user-select: none;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.35s ease;
+    }
+    .carousel-item {
+      min-width: 260px;
+      padding: 1rem;
+      box-sizing: border-box;
+      font-size: 1rem;
+      color: #7a3a47;
+      user-select: text;
+    }
+    .carousel-item strong {
+      color: #cc3e59;
+    }
+    .carousel-item em {
+      font-style: normal;
+      color: #a0455a;
+      font-weight: 600;
+    }
+    .carousel-controls {
+      text-align: center;
+      margin-top: 0.4rem;
+    }
+    .carousel-controls button {
+      background: #cc3e59;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      margin: 0 0.4rem;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.1rem;
+      user-select: none;
+      box-shadow: 0 4px 10px rgba(204, 62, 89, 0.4);
+      transition: background-color 0.3s ease;
+    }
+    .carousel-controls button:hover {
+      background: #de4c67;
+    }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      body {
+        padding: 1rem 0.5rem 3rem;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Theme selector and SOS -->
-  <select class="theme-picker" id="themeSelector">
-    <option value="light">Light</option>
-    <option value="dark">Dark</option>
-    <option value="calm">Calm</option>
-  </select>
-  <button id="sosBtn" title="SOS / Grounding">🆘</button>
+  <h1>Grief Support Toolkit</h1>
+  <p class="subtitle">A warm, supportive space with tools to guide your healing journey.</p>
 
-  <div class="container">
-    <h1>Grief Support Toolkit</h1>
-    <p style="text-align:center; font-weight:300;">
-      Supportive tools for healing—mind, body, and heart.
-    </p>
+  <div class="grid">
 
-    <div class="grid">
-      <!-- Memory Garden -->
-      <div class="card">
-        <h2>Memory Garden 🌺</h2>
-        <button onclick="plantTribute()">Add Tribute</button>
-        <div id="garden"></div>
-      </div>
+    <!-- Memory Garden -->
+    <section class="card" aria-label="Memory Garden">
+      <h2>Memory Garden 🌸</h2>
+      <button type="button" id="addTributeBtn">Add Tribute</button>
+      <div id="memoryGarden" aria-live="polite" style="margin-top:1rem;min-height:60px;"></div>
+    </section>
 
-      <!-- Body Map -->
-      <div class="card">
-        <h2>Grief in Your Body 🗺️</h2>
-        <div class="body-map" id="bodyMap"></div>
-      </div>
+    <!-- Body Map -->
+    <section class="card" aria-label="Grief in Your Body">
+      <h2>Grief in Your Body 🗺️</h2>
+      <div class="body-map" id="bodyMap" role="img" aria-label="Body outline with grief points"></div>
+    </section>
 
-      <!-- Letters -->
-      <div class="card">
-        <h2>Letters to Loved Ones 💌</h2>
-        <textarea id="loveLetter" placeholder="Write an unsent letter..."></textarea>
-        <button onclick="saveLetter()">Save Letter</button>
-      </div>
+    <!-- Letters -->
+    <section class="card" aria-label="Letters to Loved Ones">
+      <h2>Letters to Loved Ones 💌</h2>
+      <textarea id="letterInput" placeholder="Write an unsent letter..." aria-label="Write an unsent letter"></textarea>
+      <button id="saveLetterBtn" type="button">Save Letter</button>
+    </section>
 
-      <!-- Comfort Plan -->
-      <div class="card">
-        <h2>Comfort Plan 🛡️</h2>
-        <div class="plan-builder">
-          <label>Who to Call</label>
-          <input id="helpContact" placeholder="Name & contact details">
-          <label>Soothing Activities</label>
-          <textarea id="soothingActivities" placeholder="e.g., music, walk"></textarea>
-          <label>Avoid List</label>
-          <textarea id="avoidList" placeholder="e.g., social media"></textarea>
-          <label>My Affirmations</label>
-          <textarea id="affirmations" placeholder="e.g., I deserve compassion"></textarea>
-          <button onclick="savePlan()">Save Plan</button>
+    <!-- Comfort Plan -->
+    <section class="card" aria-label="Comfort Plan">
+      <h2>Comfort Plan 🛡️</h2>
+      <label for="contactInput">Who to Call</label>
+      <input id="contactInput" type="text" placeholder="Name & contact info" />
+      <label for="activitiesInput">Soothing Activities</label>
+      <textarea id="activitiesInput" placeholder="e.g., music, walk"></textarea>
+      <label for="avoidInput">Avoid List</label>
+      <textarea id="avoidInput" placeholder="e.g., social media"></textarea>
+      <label for="affirmationsInput">My Affirmations</label>
+      <textarea id="affirmationsInput" placeholder="e.g., I deserve compassion"></textarea>
+      <button id="savePlanBtn" type="button">Save Plan</button>
+    </section>
+
+    <!-- Myth Busters Carousel -->
+    <section class="card" aria-label="Myth Busters">
+      <h2>Myth Busters ❌</h2>
+      <div class="carousel" aria-live="polite">
+        <div class="carousel-track" id="mythTrack" role="list">
+          <article class="carousel-item" role="listitem">
+            <strong>Myth:</strong> Time heals all wounds.<br>
+            <em>Truth:</em> Healing requires support and time.
+          </article>
+          <article class="carousel-item" role="listitem">
+            <strong>Myth:</strong> You should be over it by now.<br>
+            <em>Truth:</em> Each grief journey is unique.
+          </article>
+          <article class="carousel-item" role="listitem">
+            <strong>Myth:</strong> Crying is weakness.<br>
+            <em>Truth:</em> Tears are healing.
+          </article>
         </div>
       </div>
+      <div class="carousel-controls" aria-label="Myth carousel navigation">
+        <button id="prevMythBtn" aria-label="Previous myth">‹</button>
+        <button id="nextMythBtn" aria-label="Next myth">›</button>
+      </div>
+    </section>
 
-      <!-- Myth Busters -->
-      <div class="card">
-        <h2>Myth Busters ❌</h2>
-        <div class="carousel">
-          <div class="carousel-track" id="mythTrack">
-            <div class="carousel-item">
-              <strong>Myth:</strong> Time heals all wounds.<br>
-              <em>Truth:</em> Healing requires support and time.
-            </div>
-            <div class="carousel-item">
-              <strong>Myth:</strong> You should be over it by now.<br>
-              <em>Truth:</em> Each grief journey is unique.
-            </div>
-            <div class="carousel-item">
-              <strong>Myth:</strong> Crying is weakness.<br>
-              <em>Truth:</em> Tears are healing.
-            </div>
-          </div>
-        </div>
-        <div class="carousel-controls">
-          <button id="prevMyth">‹</button>
-          <button id="nextMyth">›</button>
-        </div>
-      </div>
+    <!-- Understanding Grief -->
+    <section class="card" aria-label="Understanding Grief">
+      <h2>Understanding Grief 💡</h2>
+      <ul>
+        <li><a href="#" data-title="Five Stages" data-content="Denial, Anger, Bargaining, Depression, Acceptance.">Five Stages</a></li>
+        <li><a href="#" data-title="Types of Grief" data-content="Anticipatory, Complicated, Disenfranchised, and more.">Types</a></li>
+        <li><a href="#" data-title="Grief Myths" data-content="Common myths about grief and truths that can help healing.">Myths</a></li>
+      </ul>
+    </section>
 
-      <!-- Understanding Grief -->
-      <div class="card">
-        <h2>Understanding Grief 💡</h2>
-        <ul style="list-style:disc inside;">
-          <li><a href="#" onclick="openModal('Five Stages','Denial, Anger, Bargaining, Depression, Acceptance.')">Five Stages</a></li>
-          <li><a href="#" onclick="openModal('Types of Grief','Anticipatory, Complicated, Disenfranchised...')">Types</a></li>
-          <li><a href="#" onclick="openModal('Grief Myths','Time heals all? Not alone—support helps.')">Myths</a></li>
-        </ul>
-      </div>
+    <!-- Coping Strategies -->
+    <section class="card" aria-label="Coping Strategies">
+      <h2>Coping Strategies 🛠️</h2>
+      <ul>
+        <li><a href="#" data-title="Breathing" data-content="Try this: Inhale for 4 seconds, hold for 7 seconds, then exhale for 8 seconds. Repeat slowly.">Breathing</a></li>
+        <li><a href="#" data-title="Grounding" data-content="Use your senses: 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste.">Grounding</a></li>
+        <li><a href="#" data-title="Walk" data-content="Take a gentle walk outside for 5–10 minutes to soothe your mind and body.">Walk</a></li>
+      </ul>
+    </section>
 
-      <!-- Coping -->
-      <div class="card">
-        <h2>Coping Strategies 🛠️</h2>
-        <ul style="list-style:disc inside;">
-          <li><a href="#" onclick="openModal('Breathing','Inhale 4s, hold 7s, exhale 8s.')">Breathing</a></li>
-          <li><a href="#" onclick="openModal('Grounding','5-4-3-2-1 senses.')">Grounding</a></li>
-          <li><a href="#" onclick="openModal('Walk','Gentle walk for 5–10 minutes.')">Walk</a></li>
-        </ul>
-      </div>
+    <!-- Journal -->
+    <section class="card" aria-label="Journal Space">
+      <h2>Journal Space 📓</h2>
+      <textarea id="journalInput" placeholder="Write your thoughts..." aria-label="Write your thoughts"></textarea>
+      <button id="saveJournalBtn" type="button">Save Entry</button>
+    </section>
 
-      <!-- Journal -->
-      <div class="card">
-        <h2>Journal Space 📓</h2>
-        <textarea id="journalEntry" placeholder="Write your thoughts..."></textarea>
-        <button onclick="saveJournal()">Save Entry</button>
+    <!-- Mood Tracker -->
+    <section class="card" aria-label="Mood Tracker">
+      <h2>Mood Tracker 😊</h2>
+      <div class="mood-buttons" role="radiogroup" aria-label="Select your mood">
+        <button data-mood="1" aria-checked="false" role="radio" aria-label="Very sad">😞</button>
+        <button data-mood="2" aria-checked="false" role="radio" aria-label="Sad">😟</button>
+        <button data-mood="3" aria-checked="false" role="radio" aria-label="Neutral">😐</button>
+        <button data-mood="4" aria-checked="false" role="radio" aria-label="Happy">🙂</button>
+        <button data-mood="5" aria-checked="false" role="radio" aria-label="Very happy">😄</button>
       </div>
+      <div class="progress-bar" aria-hidden="true">
+        <div class="progress-fill" id="moodProgress"></div>
+      </div>
+      <p id="moodLabel" aria-live="polite" style="margin-top: 0.6rem; font-weight: 600;"></p>
+    </section>
 
-      <!-- Mood Tracker -->
-      <div class="card">
-        <h2>Mood Tracker 😊</h2>
-        <div class="mood-buttons" id="moodBtns">
-          <button data-m="1" aria-checked="false">😞</button>
-          <button data-m="2" aria-checked="false">😟</button>
-          <button data-m="3" aria-checked="false">😐</button>
-          <button data-m="4" aria-checked="false">🙂</button>
-          <button data-m="5" aria-checked="false">😄</button>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" id="moodFill"></div></div>
-        <p id="moodMsg"></p>
-      </div>
+    <!-- Emergency and Resources -->
+    <section class="card" aria-label="Emergency Resources">
+      <h2>Emergency & Resources 🚨</h2>
+      <ul>
+        <li><a href="https://suicidepreventionlifeline.org" target="_blank" rel="noopener noreferrer">Suicide Prevention Lifeline</a></li>
+        <li><a href="https://www.crisisservicescanada.ca/en/" target="_blank" rel="noopener noreferrer">Crisis Services Canada</a></li>
+        <li><a href="https://www.211.org/" target="_blank" rel="noopener noreferrer">Community Resource 211</a></li>
+      </ul>
+    </section>
 
-      <!-- Emergency & Resources -->
-      <div class="card" style="flex-direction:column;align-items:center;">
-        <h2>Emergency Support 🚨</h2>
-        <p>If in crisis, call <strong>1‑833‑456‑4566</strong> or 911.</p>
-        <p><a href="https://www.crisisservicescanada.ca" target="_blank">Visit Crisis Services Canada</a></p>
-      </div>
-      <div class="card">
-        <h2>Resources 📚</h2>
-        <ul style="list-style:disc inside;">
-          <li><a href="https://www.dougy.org" target="_blank">Dougy Center</a></li>
-          <li><a href="https://www.griefshare.org" target="_blank">GriefShare</a></li>
-          <li><a href="https://www.psychologytoday.com/ca" target="_blank">Therapists (Canada)</a></li>
-        </ul>
-      </div>
-
-      <!-- Analytics Trigger -->
-      <button id="showAnalytics" style="grid-column:1/-1;justify-self:center;">📊 View Analytics</button>
-      <div id="analyticsPanel" style="display:none; grid-column:1/-1; background:var(--card-bg); border-radius:8px; box-shadow:0 8px 20px var(--shadow); padding:1rem;">
-        <h2>Analytics</h2>
-        <ul id="analyticsList" style="padding-left:1.2rem;"></ul>
-        <button onclick="toggleAnalytics()">Close</button>
-      </div>
-    </div>
   </div>
 
   <!-- Modal Overlay -->
   <div class="overlay" id="overlay"></div>
-  <div class="modal" id="modal">
-    <h3 id="modalTitle"></h3>
-    <p id="modalContent"></p>
-    <button class="close-btn" onclick="closeModal()">Close</button>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+    <h3 id="modalTitle">Title</h3>
+    <p id="modalContent">Content</p>
+    <button class="close-btn" id="closeModalBtn" aria-label="Close modal">Close</button>
   </div>
 
   <script>
-    /* ━━━ Interactive Logic ━━━ */
-    const overlay = document.getElementById('overlay'),
-          modal = document.getElementById('modal');
+    // Modal handling
+    const overlay = document.getElementById('overlay');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalContent = document.getElementById('modalContent');
+    const closeModalBtn = document.getElementById('closeModalBtn');
 
-    window.openModal = (t,c) => {
-      document.getElementById('modalTitle').innerText = t;
-      document.getElementById('modalContent').innerText = c;
-      overlay.style.display = modal.style.display = 'block';
-      log('OpenModal ' + t);
-    };
-
-    window.closeModal = () => {
-      overlay.style.display = modal.style.display = 'none';
-    };
-
-    document.getElementById('themeSelector').addEventListener('change', e => {
-      document.body.className = e.target.value === 'light' ? '' : 'theme-' + e.target.value;
-    });
-
-    document.getElementById('sosBtn').addEventListener('click', () => {
-      openModal('SOS / Grounding', 'Call 1‑833‑456‑4566 or 911. Ground with 5‑4‑3‑2‑1 senses.');
-    });
-
-    // Garden
-    window.plantTribute = () => {
-      const t = prompt('Enter tribute (emoji/text):');
-      if (!t) return;
-      const el = document.createElement('div');
-      el.className = 'garden-item';
-      el.textContent = t;
-      document.getElementById('garden').appendChild(el);
-      log('Plant ' + t);
-    };
-
-    // Body Spots
-    const spots = [
-      { top:'18%', left:'48%', tip:'Chest tightness – try slow breathing.' },
-      { top:'35%', left:'50%', tip:'Stomach ache – sip warm tea.' },
-      { top:'60%', left:'47%', tip:'Leg heaviness – consider gentle movement.' },
-    ];
-    spots.forEach(s => {
-      const el = document.createElement('div');
-      el.className = 'body-spot';
-      el.style.top = s.top;
-      el.style.left = s.left;
-      el.onclick = () => openModal('Physical Sign', s.tip);
-      document.getElementById('bodyMap').appendChild(el);
-    });
-
-    // Save letter & plan
-    window.saveLetter = () => {
-      localStorage.setItem('loveLetter', document.getElementById('loveLetter').value);
-      alert('Letter saved.'); log('Save Letter');
-    };
-    if (localStorage.getItem('loveLetter'))
-      document.getElementById('loveLetter').value = localStorage.getItem('loveLetter');
-
-    window.savePlan = () => {
-      const plan = {
-        call: document.getElementById('helpContact').value,
-        act: document.getElementById('soothingActivities').value,
-        avoid: document.getElementById('avoidList').value,
-        aff: document.getElementById('affirmations').value
-      };
-      localStorage.setItem('comfortPlan', JSON.stringify(plan));
-      alert('Plan saved.'); log('Save Plan');
-    };
-
-    // Journal
-    window.saveJournal = () => {
-      localStorage.setItem('journalEntry', document.getElementById('journalEntry').value);
-      alert('Journal saved.'); log('Save Journal');
-    };
-    if (localStorage.getItem('journalEntry'))
-      document.getElementById('journalEntry').value = localStorage.getItem('journalEntry');
-
-    // Mood tracker
-    const moodBtns = document.getElementById('moodBtns').children;
-    const fill = document.getElementById('moodFill'),
-          msg = document.getElementById('moodMsg');
-    Array.from(moodBtns).forEach((b,i) => {
-      b.onclick = () => {
-        Array.from(moodBtns).forEach(x => x.setAttribute('aria-checked','false'));
-        b.setAttribute('aria-checked','true');
-        const pct = (i+1)*20;
-        fill.style.width = pct+'%';
-        msg.innerText = ['Very Sad','Sad','Neutral','Happy','Very Happy'][i];
-        log('Mood ' + (i+1));
-      };
-    });
-
-    // Myth carousel
-    let idx = 0;
-    const track = document.getElementById('mythTrack');
-    document.getElementById('prevMyth').onclick = () => { idx = Math.max(0, idx-1); updateCarousel(); log('Myth Prev'); };
-    document.getElementById('nextMyth').onclick = () => { idx = Math.min(track.children.length-1, idx+1); updateCarousel(); log('Myth Next'); };
-    function updateCarousel() {
-      const w = track.children[0].offsetWidth + 16;
-      track.style.transform = `translateX(-${idx * w}px)`;
+    function openModal(title, content) {
+      modalTitle.textContent = title;
+      modalContent.textContent = content;
+      overlay.style.display = 'block';
+      modal.style.display = 'block';
+      modal.focus();
     }
+    function closeModal() {
+      overlay.style.display = 'none';
+      modal.style.display = 'none';
+    }
+    closeModalBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display === 'block') {
+        closeModal();
+      }
+    });
 
-    // Analytics
-    const analytics = {};
-    function log(key) { analytics[key] = (analytics[key]||0) + 1; }
-    const aBtn = document.getElementById('showAnalytics'),
-          aPanel = document.getElementById('analyticsPanel'),
-          aList = document.getElementById('analyticsList');
-    aBtn.onclick = () => {
-      const keys = Object.entries(analytics);
-      aList.innerHTML = keys.length ? keys.map(kv => `<li>${kv[0]}: ${kv[1]}</li>`).join('') : '<li>No interactions</li>';
-      aPanel.style.display = 'block';
-      aBtn.style.display = 'none';
-    };
-    window.toggleAnalytics = () => {
-      aPanel.style.display = 'none';
-      aBtn.style.display = 'block';
-    };
+    // Open modals for Understanding Grief & Coping links
+    document.querySelectorAll('section.card a[data-title]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        openModal(link.dataset.title, link.dataset.content);
+      });
+    });
+
+    // Memory Garden Tribute add
+    const memoryGarden = document.getElementById('memoryGarden');
+    const addTributeBtn = document.getElementById('addTributeBtn');
+
+    addTributeBtn.addEventListener('click', () => {
+      const tribute = prompt('Write a short tribute for your loved one:');
+      if (tribute && tribute.trim().length > 0) {
+        const tributeEl = document.createElement('p');
+        tributeEl.textContent = '🌸 ' + tribute.trim();
+        tributeEl.style.fontStyle = 'italic';
+        tributeEl.style.color = '#b54d5a';
+        memoryGarden.appendChild(tributeEl);
+      }
+    });
+
+    // Save Letter - stored locally
+    const saveLetterBtn = document.getElementById('saveLetterBtn');
+    const letterInput = document.getElementById('letterInput');
+    saveLetterBtn.addEventListener('click', () => {
+      if (letterInput.value.trim().length > 0) {
+        alert('Letter saved locally (not persisted). Keep writing or copy it somewhere safe.');
+      } else {
+        alert('Please write something before saving your letter.');
+      }
+    });
+
+    // Save Comfort Plan locally
+    const savePlanBtn = document.getElementById('savePlanBtn');
+    savePlanBtn.addEventListener('click', () => {
+      alert('Comfort plan saved locally (not persisted). Remember to keep a copy!');
+    });
+
+    // Save Journal Entry locally
+    const saveJournalBtn = document.getElementById('saveJournalBtn');
+    const journalInput = document.getElementById('journalInput');
+    saveJournalBtn.addEventListener('click', () => {
+      if (journalInput.value.trim().length > 0) {
+        alert('Journal entry saved locally (not persisted). Keep journaling!');
+      } else {
+        alert('Please write something before saving your journal entry.');
+      }
+    });
+
+    // Body Map grief spots
+    const bodyMap = document.getElementById('bodyMap');
+    const griefSpots = [
+      { top: '40%', left: '45%', label: 'Chest Tightness' },
+      { top: '55%', left: '48%', label: 'Stomach Ache' },
+      { top: '25%', left: '50%', label: 'Headache' },
+      { top: '75%', left: '48%', label: 'Leg Weakness' },
+    ];
+    griefSpots.forEach(({top, left, label}) => {
+      const spot = document.createElement('div');
+      spot.className = 'body-spot';
+      spot.style.top = top;
+      spot.style.left = left;
+      spot.title = label;
+      spot.setAttribute('tabindex', '0');
+      spot.setAttribute('aria-label', label + ' grief symptom');
+      spot.addEventListener('click', () => {
+        alert(label);
+      });
+      spot.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          alert(label);
+        }
+      });
+      bodyMap.appendChild(spot);
+    });
+
+    // Mood Tracker
+    const moodButtons = document.querySelectorAll('.mood-buttons button');
+    const moodProgress = document.getElementById('moodProgress');
+    const moodLabel = document.getElementById('moodLabel');
+    const moodsText = ['Very sad', 'Sad', 'Neutral', 'Happy', 'Very happy'];
+
+    moodButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        moodButtons.forEach(b => {
+          b.setAttribute('aria-checked', 'false');
+          b.style.transform = 'scale(1)';
+          b.style.background = '#ffd9df';
+          b.style.color = '#4a4a4a';
+        });
+        btn.setAttribute('aria-checked', 'true');
+        btn.style.background = '#cc3e59';
+        btn.style.color = '#fff';
+        btn.style.transform = 'scale(1.1)';
+        const moodValue = parseInt(btn.dataset.mood);
+        moodProgress.style.width = (moodValue / 5) * 100 + '%';
+        moodLabel.textContent = 'Current mood: ' + moodsText[moodValue - 1];
+      });
+    });
+
+    // Carousel for Myth Busters
+    const track = document.getElementById('mythTrack');
+    const prevBtn = document.getElementById('prevMythBtn');
+    const nextBtn = document.getElementById('nextMythBtn');
+    let currentIndex = 0;
+
+    function updateCarousel() {
+      const itemWidth = track.querySelector('.carousel-item').offsetWidth + 20; // 20 margin approx
+      track.style.transform = `translateX(${-currentIndex * itemWidth}px)`;
+    }
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + track.children.length) % track.children.length;
+      updateCarousel();
+    });
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % track.children.length;
+      updateCarousel();
+    });
+    window.addEventListener('resize', updateCarousel);
+    updateCarousel();
   </script>
+
 </body>
 </html>
