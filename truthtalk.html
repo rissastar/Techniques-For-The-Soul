@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Truth Talk Toolkit</title>
+<title>Truth Talk Tuesday — Teaching Toolkit</title>
 <style>
   /* Reset and base */
   * {
@@ -16,6 +16,7 @@
     margin: 0;
     padding: 0;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
   header {
     background: #34495e;
@@ -23,6 +24,9 @@
     text-align: center;
     padding: 2rem 1rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
   }
   header h1 {
     margin: 0;
@@ -34,27 +38,68 @@
     margin: 2rem auto 4rem;
     padding: 0 1rem;
   }
+  button#pdf-btn {
+    display: block;
+    margin: 0 auto 2rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(41,128,185,0.4);
+    transition: background-color 0.3s ease;
+  }
+  button#pdf-btn:hover {
+    background-color: #1f6391;
+  }
   section.post {
     background: #fff;
     border-radius: 10px;
-    margin-bottom: 2rem;
-    padding: 1.8rem 2rem;
+    margin-bottom: 1.5rem;
     box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-    transition: box-shadow 0.3s ease;
+    overflow: hidden;
   }
-  section.post:hover {
-    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
-  }
-  section.post h2 {
+  section.post summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 1.3rem 1.75rem;
+    font-size: 1.3rem;
+    font-weight: 700;
     color: #2980b9;
-    margin-top: 0;
-    font-size: 1.6rem;
+    user-select: none;
     border-bottom: 2px solid #2980b9;
-    padding-bottom: 0.25rem;
+    outline-offset: 4px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  section.post p {
-    margin-top: 0.8rem;
+  section.post summary:hover {
+    background-color: #ecf0f1;
+  }
+  section.post[open] summary {
+    background-color: #dff9fb;
+  }
+  /* Arrow style for details */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::after {
+    content: "▼";
+    font-size: 0.8rem;
+    color: #2980b9;
+    transition: transform 0.3s ease;
+  }
+  section.post[open] summary::after {
+    transform: rotate(-180deg);
+  }
+  section.post .content {
+    padding: 1rem 2rem 1.8rem;
     font-size: 1rem;
+    color: #2c3e50;
   }
   section.post .tip {
     background: #dff9fb;
@@ -63,6 +108,7 @@
     padding: 0.75rem 1rem;
     font-style: italic;
     color: #130f40;
+    border-radius: 4px;
   }
   section.post .example {
     background: #f6e58d;
@@ -72,6 +118,7 @@
     font-family: monospace;
     white-space: pre-wrap;
     color: #2d3436;
+    border-radius: 4px;
   }
   footer {
     text-align: center;
@@ -84,8 +131,9 @@
       margin: 1rem auto 3rem;
       padding: 0 0.75rem;
     }
-    section.post {
-      padding: 1.25rem 1.5rem;
+    section.post .content {
+      padding: 1rem 1rem 1.5rem;
+      font-size: 0.95rem;
     }
   }
 </style>
@@ -97,82 +145,162 @@
 </header>
 
 <main>
+  <button id="pdf-btn" aria-label="Save page as PDF">💾 Save as PDF</button>
 
-<section class="post" id="vulnerability">
-  <h2>1. Understanding Vulnerability</h2>
-  <p>Vulnerability is not weakness — it’s courage in action. When we allow ourselves to be seen fully, we open the door to authentic connection and personal growth.</p>
-  <div class="tip">Tip: Practice being vulnerable by sharing one honest feeling with a trusted friend or journaling it privately.</div>
-  <div class="example">Example: “Today I felt anxious about an upcoming change at work, but I shared it with my close friend instead of hiding it.”</div>
-</section>
+  <section class="post">
+    <details open>
+      <summary>1. Understanding Vulnerability</summary>
+      <div class="content">
+        <p>Vulnerability is not weakness — it’s courage in action. When we allow ourselves to be seen fully, we open the door to authentic connection and personal growth.</p>
+        <div class="tip">Tip: Practice being vulnerable by sharing one honest feeling with a trusted friend or journaling it privately.</div>
+        <div class="example">Example: “Today I felt anxious about an upcoming change at work, but I shared it with my close friend instead of hiding it.”</div>
+      </div>
+    </details>
+  </section>
 
-<section class="post" id="self-honesty">
-  <h2>2. The Power of Self-Honesty</h2>
-  <p>Being truthful with yourself is the foundation of all growth. It means acknowledging your fears, strengths, and weaknesses without judgment. Self-honesty helps you make decisions aligned with your true values.</p>
-  <div class="tip">Tip: Set aside 5 minutes daily to check in with yourself—ask, “What am I really feeling right now?” and write it down.</div>
-  <div class="example">Example: Realizing “I’m overwhelmed” instead of pretending “I’m fine” can help you seek support or adjust your workload.</div>
-</section>
+  <section class="post">
+    <details>
+      <summary>2. The Power of Self-Honesty</summary>
+      <div class="content">
+        <p>Being truthful with yourself is the foundation of all growth. It means acknowledging your fears, strengths, and weaknesses without judgment. Self-honesty helps you make decisions aligned with your true values.</p>
+        <div class="tip">Tip: Set aside 5 minutes daily to check in with yourself—ask, “What am I really feeling right now?” and write it down.</div>
+        <div class="example">Example: Realizing “I’m overwhelmed” instead of pretending “I’m fine” can help you seek support or adjust your workload.</div>
+      </div>
+    </details>
+  </section>
 
-<section class="post" id="limiting-beliefs">
-  <h2>3. Recognizing Limiting Beliefs</h2>
-  <p>Limiting beliefs are thoughts that hold you back from reaching your potential. Examples include "I’m not good enough" or "I don’t deserve happiness." Identifying these is the first step toward replacing them with empowering truths.</p>
-  <div class="tip">Tip: When you notice negative self-talk, pause and ask, “Is this thought 100% true?” Challenge it with evidence.</div>
-  <div class="example">Example: Changing “I always fail” to “Sometimes I fail, but I learn and improve” shifts your mindset.</div>
-</section>
+  <section class="post">
+    <details>
+      <summary>3. Recognizing Limiting Beliefs</summary>
+      <div class="content">
+        <p>Limiting beliefs are thoughts that hold you back from reaching your potential. Examples include "I’m not good enough" or "I don’t deserve happiness." Identifying these is the first step toward replacing them with empowering truths.</p>
+        <div class="tip">Tip: When you notice negative self-talk, pause and ask, “Is this thought 100% true?” Challenge it with evidence.</div>
+        <div class="example">Example: Changing “I always fail” to “Sometimes I fail, but I learn and improve” shifts your mindset.</div>
+      </div>
+    </details>
+  </section>
 
-<section class="post" id="facing-fears">
-  <h2>4. Why Facing Your Fears Matters</h2>
-  <p>Fear often protects us but can also trap us in comfort zones. Facing fears gradually builds resilience and expands possibilities.</p>
-  <div class="tip">Tip: Identify one fear and take a tiny step toward it this week. Celebrate even small progress.</div>
-  <div class="example">Example: If public speaking scares you, start by sharing your opinion in a small group.</div>
-</section>
+  <section class="post">
+    <details>
+      <summary>4. Why Facing Your Fears Matters</summary>
+      <div class="content">
+        <p>Fear often protects us but can also trap us in comfort zones. Facing fears gradually builds resilience and expands possibilities.</p>
+        <div class="tip">Tip: Identify one fear and take a tiny step toward it this week. Celebrate even small progress.</div>
+        <div class="example">Example: If public speaking scares you, start by sharing your opinion in a small group.</div>
+      </div>
+    </details>
+  </section>
 
-<section class="post" id="boundaries">
-  <h2>5. The Importance of Boundaries</h2>
-  <p>Saying “no” isn’t selfish; it’s necessary for your wellbeing. Healthy boundaries protect your energy and maintain respectful relationships.</p>
-  <div class="tip">Tip: Practice saying “no” to small requests first to build your confidence setting boundaries.</div>
-  <div class="example">Example: Politely declining extra work when you’re already busy protects your mental health.</div>
-</section>
+  <section class="post">
+    <details>
+      <summary>5. The Importance of Boundaries</summary>
+      <div class="content">
+        <p>Saying “no” isn’t selfish; it’s necessary for your wellbeing. Healthy boundaries protect your energy and maintain respectful relationships.</p>
+        <div class="tip">Tip: Practice saying “no” to small requests first to build your confidence setting boundaries.</div>
+        <div class="example">Example: Politely declining extra work when you’re already busy protects your mental health.</div>
+      </div>
+    </details>
+  </section>
 
-<section class="post" id="emotional-authenticity">
-  <h2>6. What is Emotional Authenticity?</h2>
-  <p>Emotional authenticity means expressing your true feelings honestly and respectfully. It builds trust and deepens relationships.</p>
-  <div class="tip">Tip: Start by noticing when you hide your feelings and try naming them quietly to yourself.</div>
-  <div class="example">Example: Instead of smiling through frustration, say “I’m feeling overwhelmed right now.”</div>
-</section>
+  <section class="post">
+    <details>
+      <summary>6. What is Emotional Authenticity?</summary>
+      <div class="content">
+        <p>Emotional authenticity means expressing your true feelings honestly and respectfully. It builds trust and deepens relationships.</p>
+        <div class="tip">Tip: Start by noticing when you hide your feelings and try naming them quietly to yourself.</div>
+        <div class="example">Example: Instead of smiling through frustration, say “I’m feeling overwhelmed right now.”</div>
+      </div>
+    </details>
+  </section>
 
-<section class="post" id="reflection">
-  <h2>7. The Role of Reflection in Personal Growth</h2>
-  <p>Reflecting on your thoughts and actions allows you to learn from experience and make conscious changes.</p>
-  <div class="tip">Tip: Use journaling or quiet meditation to ask yourself what you learned from recent challenges.</div>
-  <div class="example">Example: After a difficult conversation, reflect on what went well and what you want to do differently next time.</div>
-</section>
+  <section class="post">
+    <details>
+      <summary>7. The Role of Reflection in Personal Growth</summary>
+      <div class="content">
+        <p>Reflecting on your thoughts and actions allows you to learn from experience and make conscious changes.</p>
+        <div class="tip">Tip: Use journaling or quiet meditation to ask yourself what you learned from recent challenges.</div>
+        <div class="example">Example: After a difficult conversation, reflect on what went well and what you want to do differently next time.</div>
+      </div>
+    </details>
+  </section>
 
-<section class="post" id="facts-vs-interpretations">
-  <h2>8. Differentiating Facts from Interpretations</h2>
-  <p>Sometimes, what we believe is true is actually our interpretation or assumption. Distinguishing facts from thoughts reduces misunderstandings and stress.</p>
-  <div class="tip">Tip: When upset, write down the facts you know and the thoughts you are adding.</div>
-  <div class="example">Example: Fact: “They didn’t reply to my text.” Interpretation: “They don’t care about me.”</div>
-</section>
+  <section class="post">
+    <details>
+      <summary>8. Differentiating Facts from Interpretations</summary>
+      <div class="content">
+        <p>Sometimes, what we believe is true is actually our interpretation or assumption. Distinguishing facts from thoughts reduces misunderstandings and stress.</p>
+        <div class="tip">Tip: When upset, write down the facts you know and the thoughts you are adding.</div>
+        <div class="example">Example: Fact: “They didn’t reply to my text.” Interpretation: “They don’t care about me.”</div>
+      </div>
+    </details>
+  </section>
 
-<section class="post" id="radical-acceptance">
-  <h2>9. How to Practice Radical Acceptance</h2>
-  <p>Radical acceptance means fully accepting reality as it is, without resisting or denying it. This doesn’t mean giving up but freeing yourself from unnecessary suffering.</p>
-  <div class="tip">Tip: Practice saying to yourself, “This is what is happening right now,” and breathe deeply to release tension.</div>
-  <div class="example">Example: Accepting a difficult breakup allows you to grieve and heal instead of fighting denial.</div>
-</section>
+  <section class="post">
+    <details>
+      <summary>9. How to Practice Radical Acceptance</summary>
+      <div class="content">
+        <p>Radical acceptance means fully accepting reality as it is, without resisting or denying it. This doesn’t mean giving up but freeing yourself from unnecessary suffering.</p>
+        <div class="tip">Tip: Practice saying to yourself, “This is what is happening right now,” and breathe deeply to release tension.</div>
+        <div class="example">Example: Accepting a difficult breakup allows you to grieve and heal instead of fighting denial.</div>
+      </div>
+    </details>
+  </section>
 
-<section class="post" id="self-compassion">
-  <h2>10. The Connection Between Self-Compassion and Truth</h2>
-  <p>Being truthful with yourself also means being kind to yourself. Self-compassion creates a safe space to face difficult truths without shame.</p>
-  <div class="tip">Tip: When you notice self-criticism, pause and speak to yourself like a caring friend would.</div>
-  <div class="example">Example: Instead of “I failed again,” try “I’m learning, and it’s okay to make mistakes.”</div>
-</section>
-
+  <section class="post">
+    <details>
+      <summary>10. The Connection Between Self-Compassion and Truth</summary>
+      <div class="content">
+        <p>Being truthful with yourself also means being kind to yourself. Self-compassion creates a safe space to face difficult truths without shame.</p>
+        <div class="tip">Tip: When you notice self-criticism, pause and speak to yourself like a caring friend would.</div>
+        <div class="example">Example: Instead of “I failed again,” try “I’m learning, and it’s okay to make mistakes.”</div>
+      </div>
+    </details>
+  </section>
 </main>
 
 <footer>
   &copy; 2025 Truth Talk Tuesday Toolkit | Created by Larissa Wood
 </footer>
+
+<!-- jsPDF and html2canvas libraries for PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-IqIK5NXmQ6Uda7EmgtlBq5UcqR1EvN+1nJrSYDVWfVjI3A6WuRXJAmEmdV2qxDtykXVcpG+3npklChqpxTFvSA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5XqDw6Ewhs8PZzqM0M1NctHZdyBESnZgjuj35QU2gE8EeU8vhH3O7U5AXhI76nztyDWVGdSn9ecDXDZjpZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+  const { jsPDF } = window.jspdf;
+
+  document.getElementById('pdf-btn').addEventListener('click', () => {
+    const mainContent = document.querySelector('main');
+
+    // Temporarily open all details for full content in PDF
+    const detailsElems = document.querySelectorAll('details');
+    detailsElems.forEach(d => d.open = true);
+
+    // Give browser a moment to render all open content
+    setTimeout(() => {
+      html2canvas(mainContent, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
+        // Calculate the ratio to fit page width
+        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+        const imgScaledWidth = imgWidth * ratio;
+        const imgScaledHeight = imgHeight * ratio;
+
+        pdf.addImage(imgData, 'PNG', (pdfWidth - imgScaledWidth) / 2, 20, imgScaledWidth, imgScaledHeight);
+        pdf.save('Truth_Talk_Tuesday_Toolkit.pdf');
+
+        // Close details back to original state (all closed except first open)
+        detailsElems.forEach((d, i) => {
+          d.open = (i === 0);
+        });
+      });
+    }, 300);
+  });
+</script>
 
 </body>
 </html>
