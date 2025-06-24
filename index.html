@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
+    /* Base & body */
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
@@ -17,7 +18,7 @@
       color: #f5f5f5;
       overflow-x: hidden;
     }
-
+    /* Animated star background container */
     #background {
       position: fixed;
       top: 0; left: 0;
@@ -26,20 +27,19 @@
       background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
       overflow: hidden;
     }
-
     .star {
       position: absolute;
-      width: 2px; height: 2px;
       background: white;
       opacity: 0.5;
+      border-radius: 50%;
       animation: twinkle 2s infinite ease-in-out;
     }
-
     @keyframes twinkle {
       0%, 100% { opacity: 0.3; }
       50% { opacity: 1; }
     }
 
+    /* Header */
     header {
       background: url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
       height: 300px;
@@ -50,7 +50,6 @@
       color: #fff;
       box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.4);
     }
-
     header h1 {
       font-size: 3rem;
       font-weight: 700;
@@ -58,21 +57,41 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      margin: 0;
+    }
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
     }
 
+    /* Main container */
     .container {
       max-width: 960px;
       margin: 2rem auto;
       padding: 0 20px;
+      z-index: 1;
+      position: relative;
     }
 
+    /* Section base */
     section {
       margin: 2rem 0;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(255, 255, 255, 0.05);
+      position: relative;
     }
-
+    /* Section background overlay */
+    section::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* Section header */
     section h2 {
       margin: 0;
       padding: 1rem;
@@ -80,27 +99,39 @@
       background: linear-gradient(to right, #ff69b4, #ffd966);
       color: #0b0c27;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+      user-select: none;
     }
-
+    section h2 .toggle-icon {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+    section.open h2 .toggle-icon {
+      transform: rotate(90deg);
+    }
+    /* Section content */
     .section-content {
       padding: 1.5rem;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       display: none;
+      position: relative;
+      z-index: 1;
     }
-
     section.open .section-content {
       display: block;
     }
-
     .section-content ul {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
-
     .section-content li {
       margin: 0.5rem 0;
     }
-
     .section-content a {
       display: inline-block;
       background: #ffd966;
@@ -109,257 +140,296 @@
       border-radius: 6px;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.3s ease;
+      transition: background 0.3s ease, color 0.3s ease;
     }
-
     .section-content a:hover {
       background: #ffea91;
       color: #000;
     }
 
+    /* Footer */
     footer {
       background: #101123;
       padding: 2rem 1rem;
       text-align: center;
       font-size: 0.95rem;
       border-top: 2px solid #ffd966;
+      position: relative;
+      z-index: 1;
     }
-
     footer .icons a {
       margin: 0 10px;
       color: #ffd966;
       font-size: 1.6rem;
       transition: color 0.3s;
     }
-
     footer .icons a:hover {
       color: #ffea91;
     }
-
     footer .email {
       margin-top: 10px;
       font-size: 1.1rem;
       color: #fff;
     }
-
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 2.2rem;
-      }
-    }
   </style>
 </head>
+
 <body>
+  <!-- Animated star background -->
+  <div id="background"></div>
 
-<div id="background"></div>
+  <!-- Header -->
+  <header>
+    <h1>Speak Louder Love Harder</h1>
+  </header>
 
-<header>
-  <h1>Speak Louder Love Harder</h1>
-</header>
+  <!-- Main container -->
+  <div class="container">
 
-<div class="container">
+    <!-- Toolkit Resources Section -->
+    <section style="background: url('https://images.unsplash.com/photo-1528744598421-b7d2d59eae7d?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
+      <h2 aria-expanded="false">
+        🧰 Toolkit Resources
+        <span class="toggle-icon">▶</span>
+      </h2>
+      <div class="section-content" aria-hidden="true">
+        <ul>
+          <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/recoveryaffirmation.html" target="_blank" rel="noopener">Recovery Affirmation</a></li>
+          <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/truthtalk.html" target="_blank" rel="noopener">Truth Talk</a></li>
+          <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/mindfulness.html" target="_blank" rel="noopener">Mindfulness</a></li>
+          <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/speaklouder.html" target="_blank" rel="noopener">Speak Louder</a></li>
+          <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/selfcompassiontips.html" target="_blank" rel="noopener">Self Compassion Tips</a></li>
+          <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/safespaces.html" target="_blank" rel="noopener">Safe Spaces</a></li>
+          <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/bedtime-checklist.html" target="_blank" rel="noopener">Bedtime Checklist</a></li>
+          <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html" target="_blank" rel="noopener">Grounding Toolkit</a></li>
+          <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html" target="_blank" rel="noopener">Crisis Toolkit</a></li>
+          <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/selfcare-toolkit.html" target="_blank" rel="noopener">Self-Care Toolkit</a></li>
+        </ul>
+      </div>
+    </section>
 
-  <!-- Toolkit Section -->
-  <section style="background: url('https://images.unsplash.com/photo-1528744598421-b7d2d59eae7d?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
-    <h2 onclick="this.parentElement.classList.toggle('open')">🧰 Toolkit Resources</h2>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/recoveryaffirmation.html" target="_blank" rel="noopener">Recovery Affirmation</a></li>
-        <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/truthtalk.html" target="_blank" rel="noopener">Truth Talk</a></li>
-        <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/mindfulness.html" target="_blank" rel="noopener">Mindfulness</a></li>
-        <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/speaklouder.html" target="_blank" rel="noopener">Speak Louder</a></li>
-        <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/selfcompassiontips.html" target="_blank" rel="noopener">Self Compassion Tips</a></li>
-        <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/safespaces.html" target="_blank" rel="noopener">Safe Spaces</a></li>
-        <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/bedtime-checklist.html" target="_blank" rel="noopener">Bedtime Checklist</a></li>
-        <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html" target="_blank" rel="noopener">Grounding Toolkit</a></li>
-        <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html" target="_blank" rel="noopener">Crisis Toolkit</a></li>
-        <li><a href="https://rissastar.github.io/Techniques-For-The-Soul/selfcare-toolkit.html" target="_blank" rel="noopener">Self-Care Toolkit</a></li>
-      </ul>
+    <!-- Worksheets & Tools Section -->
+    <section style="background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
+      <h2 aria-expanded="false">
+        📝 Worksheets & Tools
+        <span class="toggle-icon">▶</span>
+      </h2>
+      <div class="section-content" aria-hidden="true">
+        <ul>
+          <li><a href="https://www.russellbrand.com/wp-content/uploads/2020/03/russell-brand-recovery-the-program.pdf" target="_blank" rel="noopener">Russell Brand Recovery Program</a></li>
+          <li><a href="https://drdfox.com/worksheets/" target="_blank" rel="noopener">Dr. D Fox Worksheets</a></li>
+          <li><a href="https://www.mcgill.ca/counselling/files/counselling/thought_record_sheet_0.pdf" target="_blank" rel="noopener">Thought Record Sheet (McGill)</a></li>
+          <li><a href="https://greybruce.cmha.ca/wp-content/uploads/2023/08/cbt-triangle.pdf" target="_blank" rel="noopener">CBT Triangle Worksheet</a></li>
+          <li><a href="https://uca.edu/bewell/files/2020/11/Feelings-Wheel-Learn-How-to-Label-Your-Feelings.pdf" target="_blank" rel="noopener">Feelings Wheel</a></li>
+          <li><a href="https://static1.squarespace.com/static/5d815a563a99ad774c04d207/t/677d8ce26f0f5f26f49cfde0/1736281316623/Window+of+Tolerance.pdf" target="_blank" rel="noopener">Window of Tolerance</a></li>
+          <li><a href="https://www.betweensessions.com/wp-content/uploads/2023/06/Reconnecting-with-Your-Inner-Child_060723.pdf" target="_blank" rel="noopener">Reconnecting with Your Inner Child</a></li>
+          <li><a href="https://www.betweensessions.com/wp-content/uploads/2023/06/Exploring-Your-Inner-Parts_An-Internal-Family-Systems-Worksheet_060823_ad-1.pdf" target="_blank" rel="noopener">Internal Family Systems Worksheet</a></li>
+          <li><a href="https://www.stress.org.uk/wp-content/uploads/2021/05/Self-care-Workbook.pdf" target="_blank" rel="noopener">Self-Care Workbook</a></li>
+          <li><a href="https://static1.squarespace.com/static/5256d0d0e4b086e2b627d35f/t/5eac34e7df99770838d5d05d/1588344040524/SELF+WORTH+WORKSHEET+2020.pdf" target="_blank" rel="noopener">Self Worth Worksheet</a></li>
+          <li><a href="https://mhanational.org/wp-content/uploads/2025/03/Building-Boundaries-Worksheet.pdf" target="_blank" rel="noopener">Building Boundaries Worksheet</a></li>
+          <li><a href="https://www.mcgill.ca/cansmart/files/cansmart/mood_sheet_online.pdf" target="_blank" rel="noopener">Mood Sheet (McGill)</a></li>
+          <li><a href="https://www.stjohnscollegecardiff.com/userfiles/sjccmvc/Wellbeing/Regulating%20Emotions/Self-esteem%20and%20confidence%20self-help%20workbook.pdf" target="_blank" rel="noopener">Self-Esteem & Confidence Workbook</a></li>
+          <li><a href="https://www.bgcmd.org/wp-content/uploads/2020/03/Grounding-Exercise.pdf" target="_blank" rel="noopener">Grounding Exercise</a></li>
+          <li><a href="https://www.maltbylearningtrust.com/attachments/download.asp?file=92&type=pdf" target="_blank" rel="noopener">Attachment Styles PDF</a></li>
+          <li><a href="https://www.betweensessions.com/wp-content/uploads/2022/11/Trauma-Recover-Workbook-F110222-1.pdf" target="_blank" rel="noopener">Trauma Recovery Workbook</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Mental Health Section -->
+    <section style="background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
+      <h2 aria-expanded="false">
+        🧠 Mental Health Resources
+        <span class="toggle-icon">▶</span>
+      </h2>
+      <div class="section-content" aria-hidden="true">
+        <ul>
+          <li><a href="https://mha.nshealth.ca/en" target="_blank" rel="noopener">Mental Health Association Nova Scotia</a></li>
+          <li><a href="https://cmha.ca" target="_blank" rel="noopener">Canadian Mental Health Association</a></li>
+          <li><a href="https://togetherall.com/en-ca/join/novascotia/?utm_source=Search&utm_medium=CNS&utm_campaign=Nova+Scotia&gad_source=1&gad_campaignid=20437031201&gbraid=0AAAAApzjX3g286NWxxT-x4NGAPgK3LmF0" target="_blank" rel="noopener">Togetherall Nova Scotia</a></li>
+          <li><a href="https://nolimitshelp.org.uk/wp-content/uploads/2019/11/101-Positive-Affirmations-and-top-10-worksheet.pdf" target="_blank" rel="noopener">101 Positive Affirmations Worksheet</a></li>
+          <li><a href="https://education.umd.edu/sites/default/files/uploads/Emotion%20and%20Stress%20Regulation%20Magic%20Tool%20Box.pdf" target="_blank" rel="noopener">Emotion & Stress Regulation Toolbox</a></li>
+          <li><a href="https://www.therapistaid.com" target="_blank" rel="noopener">Therapist Aid</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Addiction & Recovery Section -->
+    <section style="background: url('https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
+      <h2 aria-expanded="false">
+        💊 Addiction & Recovery
+        <span class="toggle-icon">▶</span>
+      </h2>
+      <div class="section-content" aria-hidden="true">
+        <ul>
+          <li><a href="https://na.org/meetingsearch" target="_blank" rel="noopener">Narcotics Anonymous World Services</a></li>
+          <li><a href="https://novascotia.ca/dhw/addictions" target="_blank" rel="noopener">Addiction Services Nova Scotia</a></li>
+          <li><a href="https://ccsa.ca/en" target="_blank" rel="noopener">Canadian Centre on Substance Use</a></li>
+          <li><a href="https://dhhr.wv.gov/BBH/DocumentSearch/MAT/OBMAT" target="_blank" rel="noopener">Relapse Prevention Plan Worksheets</a></li>
+          <li><a href="https://12stepworkbook.org/sites/default/files/2017-02/AlKohallek_12StepWorkbook.pdf" target="_blank" rel="noopener">Al Kohallek 12 Step Workbook</a></li>
+          <li><a href="https://nalouisville.net/uploads/4/7/4/3/47431107/justfortoday.pdf" target="_blank" rel="noopener">Daily Meditations for Recovering Addicts</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Sexual Assault Support Section -->
+    <section style="background: url('https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
+      <h2 aria-expanded="false">
+        🚨 Sexual Assault Support
+        <span class="toggle-icon">▶</span>
+      </h2>
+      <div class="section-content" aria-hidden="true">
+        <ul>
+          <li><a href="https://salalsvsc.ca/get-support" target="_blank" rel="noopener">Get Support - 24/7 Crisis Line</a></li>
+          <li><a href="https://avaloncentre.ca" target="_blank" rel="noopener">Sexual Assault Services Nova Scotia</a></li>
+          <li><a href="https://endingviolencecanada.org" target="_blank" rel="noopener">Ending Sexual Violence Canada</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Foster Care Resources Section -->
+    <section style="background: url('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
+      <h2 aria-expanded="false">
+        👶 Foster Care Resources
+        <span class="toggle-icon">▶</span>
+      </h2>
+      <div class="section-content" aria-hidden="true">
+        <ul>
+          <li><a href="https://novascotia.ca/coms/families/index.html" target="_blank" rel="noopener">Nova Scotia Child & Family Services</a></li>
+          <li><a href="https://cwrp.ca" target="_blank" rel="noopener">Canadian Child Welfare Research Portal</a></li>
+          <li><a href="https://youthincare.ca" target="_blank" rel="noopener">Youth in Care Canada</a></li>
+          <li><a href="https://cdn.sanity.io/files/k36pglgu/production/9f704515..." target="_blank" rel="noopener">IFAPA Lifebook Workbook</a></li>
+          <li><a href="https://biglifejournal.com/pages/freebies" target="_blank" rel="noopener">Big Life Journal for Teens - Free Printables</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Domestic Violence & Safe Spaces Section -->
+    <section style="background: url('https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
+      <h2 aria-expanded="false">
+        🛡️ Domestic Violence & Safe Spaces
+        <span class="toggle-icon">▶</span>
+      </h2>
+      <div class="section-content" aria-hidden="true">
+        <ul>
+          <li><a href="https://thehotline.org/get-help" target="_blank" rel="noopener">24/7 National DV Helpline</a></li>
+          <li><a href="https://thans.ca" target="_blank" rel="noopener">Nova Scotia Transition Houses</a></li>
+          <li><a href="https://sheltersafe.ca" target="_blank" rel="noopener">ShelterSafe - Find a Shelter</a></li>
+          <li><a href="https://novascotia.ca/just/victim_Services/_docs/VSPersonalSafetyPlan.pdf" target="_blank" rel="noopener">Safety Planning Worksheet</a></li>
+          <li><a href="https://metoomvmt.org/wp-content/uploads/2021/01/MyStoryMyTermsWorkbook.pdf" target="_blank" rel="noopener">"My Story, My Terms" Workbook</a></li>
+          <li><a href="https://loveisrespect.org/everyone-deserves-a-healthy-relationship" target="_blank" rel="noopener">Healthy Relationships</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Universal Laws Section -->
+    <section style="background: url('https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
+      <h2 aria-expanded="false">
+        🌌 Universal Laws
+        <span class="toggle-icon">▶</span>
+      </h2>
+      <div class="section-content" aria-hidden="true">
+        <ul>
+          <li><a href="https://youtu.be/KvJnbS9SKDM" target="_blank" rel="noopener">The 12 Universal Laws - Complete Guide (Documentary)</a></li>
+          <li><a href="https://blog.mindvalley.com/12-universal-laws" target="_blank" rel="noopener">12 Laws Of The Universe & How To Apply Them</a></li>
+          <li><a href="https://desarrolloconsciencia.org/eng/wp-content/uploads/2022/08/12-Laws-Of-The-Universe.pdf" target="_blank" rel="noopener">The Laws Of The Universe & Life (PDF)</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Grief & Support Section -->
+    <section style="background: url('https://images.unsplash.com/photo-1509099836639-18ba95b2c188?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
+      <h2 aria-expanded="false">
+        💔 Grief & Support
+        <span class="toggle-icon">▶</span>
+      </h2>
+      <div class="section-content" aria-hidden="true">
+        <ul>
+          <li><a href="https://canadiangriefalliance.ca" target="_blank" rel="noopener">Canadian Grief Alliance</a></li>
+          <li><a href="https://mygrief.ca" target="_blank" rel="noopener">MyGrief.ca</a></li>
+          <li><a href="https://www.griefshare.org/findagroup" target="_blank" rel="noopener">GriefShare Support Group Locator</a></li>
+          <li><a href="https://www.dougy.org" target="_blank" rel="noopener">Dougy Center (Children & Teens)</a></li>
+          <li><a href="https://whatsyourgrief.com" target="_blank" rel="noopener">What's Your Grief</a></li>
+          <li><a href="https://grief.com" target="_blank" rel="noopener">Grief.com</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Illness & Disability Section -->
+    <section style="background: url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
+      <h2 aria-expanded="false">
+        ♿ Illness & Disability
+        <span class="toggle-icon">▶</span>
+      </h2>
+      <div class="section-content" aria-hidden="true">
+        <ul>
+          <li><a href="https://www.cysticfibrosis.ca" target="_blank" rel="noopener">Cystic Fibrosis Canada</a></li>
+          <li><a href="https://canadiandisabilitybenefits.ca" target="_blank" rel="noopener">Canadian Disability Benefits</a></li>
+          <li><a href="https://cnib.ca" target="_blank" rel="noopener">CNIB Foundation</a></li>
+          <li><a href="https://muscle.ca" target="_blank" rel="noopener">Muscular Dystrophy Canada</a></li>
+          <li><a href="https://disabilityrightscoalition.ca" target="_blank" rel="noopener">Disability Rights Coalition</a></li>
+          <li><a href="https://mhtoolkit.ca" target="_blank" rel="noopener">Mental Health & Chronic Illness Toolkit</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </div> <!-- End .container -->
+
+  <!-- Footer -->
+  <footer>
+    <div class="icons">
+      <a href="https://www.facebook.com/share/19Kfzfxob2/?mibextid=wwXIfr" target="_blank" aria-label="Speak Louder Love Harder Facebook">
+        <i class="fab fa-facebook-square"></i>
+      </a>
+      <a href="https://www.facebook.com/share/1HvowbMsx8/?mibextid=wwXIfr" target="_blank" aria-label="Personal Facebook">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://www.instagram.com/speaklouderloveharder?igsh=M25zanVva3Z4cTNs&utm_source=qr" target="_blank" aria-label="Speak Louder Love Harder Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://www.instagram.com/speaklouderloveharder?igsh=M25zanVva3Z4cTNs&utm_source=qr" target="_blank" aria-label="Personal Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
     </div>
-  </section>
-
-  <!-- Worksheets Section -->
-  <section style="background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
-    <h2 onclick="this.parentElement.classList.toggle('open')">📝 Worksheets & Tools</h2>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://www.russellbrand.com/wp-content/uploads/2020/03/russell-brand-recovery-the-program.pdf" target="_blank" rel="noopener">Russell Brand Recovery Program</a></li>
-        <li><a href="https://drdfox.com/worksheets/" target="_blank" rel="noopener">Dr. D Fox Worksheets</a></li>
-        <li><a href="https://www.mcgill.ca/counselling/files/counselling/thought_record_sheet_0.pdf" target="_blank" rel="noopener">Thought Record Sheet</a></li>
-        <li><a href="https://greybruce.cmha.ca/wp-content/uploads/2023/08/cbt-triangle.pdf" target="_blank" rel="noopener">CBT Triangle Worksheet</a></li>
-        <li><a href="https://uca.edu/bewell/files/2020/11/Feelings-Wheel-Learn-How-to-Label-Your-Feelings.pdf" target="_blank" rel="noopener">Feelings Wheel</a></li>
-        <li><a href="https://static1.squarespace.com/static/5d815a563a99ad774c04d207/t/677d8ce26f0f5f26f49cfde0/1736281316623/Window+of+Tolerance.pdf" target="_blank" rel="noopener">Window of Tolerance</a></li>
-        <li><a href="https://www.betweensessions.com/wp-content/uploads/2023/06/Reconnecting-with-Your-Inner-Child_060723.pdf" target="_blank" rel="noopener">Inner Child Worksheet</a></li>
-        <li><a href="https://www.betweensessions.com/wp-content/uploads/2023/06/Exploring-Your-Inner-Parts_An-Internal-Family-Systems-Worksheet_060823_ad-1.pdf" target="_blank" rel="noopener">Internal Family Systems Worksheet</a></li>
-        <li><a href="https://www.stress.org.uk/wp-content/uploads/2021/05/Self-care-Workbook.pdf" target="_blank" rel="noopener">Self-care Workbook</a></li>
-        <li><a href="https://static1.squarespace.com/static/5256d0d0e4b086e2b627d35f/t/5eac34e7df99770838d5d05d/1588344040524/SELF+WORTH+WORKSHEET+2020.pdf" target="_blank" rel="noopener">Self Worth Worksheet</a></li>
-        <li><a href="https://mhanational.org/wp-content/uploads/2025/03/Building-Boundaries-Worksheet.pdf" target="_blank" rel="noopener">Building Boundaries Worksheet</a></li>
-        <li><a href="https://www.mcgill.ca/cansmart/files/cansmart/mood_sheet_online.pdf" target="_blank" rel="noopener">Mood Sheet</a></li>
-        <li><a href="https://www.stjohnscollegecardiff.com/userfiles/sjccmvc/Wellbeing/Regulating%20Emotions/Self-esteem%20and%20confidence%20self-help%20workbook.pdf" target="_blank" rel="noopener">Self-esteem and Confidence Workbook</a></li>
-        <li><a href="https://www.bgcmd.org/wp-content/uploads/2020/03/Grounding-Exercise.pdf" target="_blank" rel="noopener">Grounding Exercise</a></li>
-        <li><a href="https://www.maltbylearningtrust.com/attachments/download.asp?file=92&type=pdf" target="_blank" rel="noopener">Calm Down Workbook</a></li>
-        <li><a href="https://www.betweensessions.com/wp-content/uploads/2022/11/Trauma-Recover-Workbook-F110222-1.pdf" target="_blank" rel="noopener">Trauma Recovery Workbook</a></li>
-      </ul>
+    <div class="email">
+      Support me: <a href="mailto:larissawood0316@gmail.com" style="color:#ffd966; font-weight:700;">larissawood0316@gmail.com</a>
     </div>
-  </section>
+  </footer>
 
-  <!-- Mental Health Section -->
-  <section style="background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
-    <h2 onclick="this.parentElement.classList.toggle('open')">🧠 Mental Health Resources</h2>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://mha.nshealth.ca/en" target="_blank" rel="noopener">Mental Health Association Nova Scotia</a></li>
-        <li><a href="https://cmha.ca" target="_blank" rel="noopener">Canadian Mental Health Association</a></li>
-        <li><a href="https://togetherall.com/en-ca/join/novascotia/?utm_source=Search&utm_medium=CNS&utm_campaign=Nova+Scotia&gad_source=1&gad_campaignid=20437031201&gbraid=0AAAAApzjX3g286NWxxT-x4NGAPgK3LmF0" target="_blank" rel="noopener">Togetherall Nova Scotia</a></li>
-        <li><a href="https://nolimitshelp.org.uk/wp-content/uploads/2019/11/101-Positive-Affirmations-and-top-10-worksheet.pdf" target="_blank" rel="noopener">101 Positive Affirmations Worksheet</a></li>
-        <li><a href="https://education.umd.edu/sites/default/files/uploads/Emotion%20and%20Stress%20Regulation%20Magic%20Tool%20Box.pdf" target="_blank" rel="noopener">Emotion & Stress Regulation Toolbox</a></li>
-        <li><a href="https://www.therapistaid.com" target="_blank" rel="noopener">Therapist Aid Resources</a></li>
-      </ul>
-    </div>
-  </section>
+  <!-- Scripts -->
+  <script>
+    // Generate animated stars
+    (function() {
+      const background = document.getElementById('background');
+      const numStars = 150;
+      for (let i = 0; i < numStars; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        // random size 1-3px
+        const size = Math.random() * 2 + 1;
+        star.style.width = star.style.height = size + 'px';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        background.appendChild(star);
+      }
+    })();
 
-  <!-- Addiction & Recovery Section -->
-  <section style="background: url('https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
-    <h2 onclick="this.parentElement.classList.toggle('open')">💊 Addiction & Recovery</h2>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://na.org/meetingsearch" target="_blank" rel="noopener">Narcotics Anonymous World Services</a></li>
-        <li><a href="https://novascotia.ca/dhw/addictions" target="_blank" rel="noopener">Addiction Services Nova Scotia</a></li>
-        <li><a href="https://ccsa.ca/en" target="_blank" rel="noopener">Canadian Centre on Substance Use</a></li>
-        <li><a href="https://dhhr.wv.gov/BBH/DocumentSearch/MAT/OBMAT" target="_blank" rel="noopener">Relapse Prevention Plan Worksheets</a></li>
-        <li><a href="https://12stepworkbook.org/sites/default/files/2017-02/AlKohallek_12StepWorkbook.pdf" target="_blank" rel="noopener">Al Kohallek 12 Step Workbook</a></li>
-        <li><a href="https://nalouisville.net/uploads/4/7/4/3/47431107/justfortoday.pdf" target="_blank" rel="noopener">Daily Meditations for Recovering Addicts</a></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Sexual Assault Support Section -->
-  <section style="background: url('https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
-    <h2 onclick="this.parentElement.classList.toggle('open')">🚨 Sexual Assault Support</h2>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://salalsvsc.ca/get-support" target="_blank" rel="noopener">Get Support - 24/7 Crisis Line</a></li>
-        <li><a href="https://avaloncentre.ca" target="_blank" rel="noopener">Sexual Assault Services Nova Scotia</a></li>
-        <li><a href="https://endingviolencecanada.org" target="_blank" rel="noopener">Ending Sexual Violence Canada</a></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Foster Care Section -->
-  <section style="background: url('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
-    <h2 onclick="this.parentElement.classList.toggle('open')">👶 Foster Care Resources</h2>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://novascotia.ca/coms/families/index.html" target="_blank" rel="noopener">Nova Scotia Child & Family Services</a></li>
-        <li><a href="https://cwrp.ca" target="_blank" rel="noopener">Canadian Child Welfare Research Portal</a></li>
-        <li><a href="https://youthincare.ca" target="_blank" rel="noopener">Youth in Care Canada</a></li>
-        <li><a href="https://cdn.sanity.io/files/k36pglgu/production/9f704515..." target="_blank" rel="noopener">IFAPA Lifebook Workbook</a></li>
-        <li><a href="https://biglifejournal.com/pages/freebies" target="_blank" rel="noopener">Big Life Journal for Teens - Free Printables</a></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Domestic Violence Section -->
-  <section style="background: url('https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
-    <h2 onclick="this.parentElement.classList.toggle('open')">🛡️ Domestic Violence & Safe Spaces</h2>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://thehotline.org/get-help" target="_blank" rel="noopener">24/7 National DV Helpline</a></li>
-        <li><a href="https://thans.ca" target="_blank" rel="noopener">Nova Scotia Transition Houses</a></li>
-        <li><a href="https://sheltersafe.ca" target="_blank" rel="noopener">ShelterSafe - Find a Shelter</a></li>
-        <li><a href="https://novascotia.ca/just/victim_Services/_docs/VSPersonalSafetyPlan.pdf" target="_blank" rel="noopener">Safety Planning Worksheet</a></li>
-        <li><a href="https://metoomvmt.org/wp-content/uploads/2021/01/MyStoryMyTermsWorkbook.pdf" target="_blank" rel="noopener">"My Story, My Terms" Workbook</a></li>
-        <li><a href="https://loveisrespect.org/everyone-deserves-a-healthy-relationship" target="_blank" rel="noopener">Healthy Relationships</a></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Universal Laws Section -->
-  <section style="background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
-    <h2 onclick="this.parentElement.classList.toggle('open')">🌌 Universal Laws</h2>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://youtu.be/KvJnbS9SKDM" target="_blank" rel="noopener">The 12 Universal Laws - Complete Guide (Documentary)</a></li>
-        <li><a href="https://blog.mindvalley.com/12-universal-laws" target="_blank" rel="noopener">12 Laws Of The Universe & How To Apply Them</a></li>
-        <li><a href="https://desarrolloconsciencia.org/eng/wp-content/uploads/2022/08/12-Laws-Of-The-Universe.pdf" target="_blank" rel="noopener">The Laws Of The Universe & Life (PDF)</a></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Grief & Support Section -->
-  <section style="background: url('https://images.unsplash.com/photo-1509099836639-18ba95b2c188?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
-    <h2 onclick="this.parentElement.classList.toggle('open')">💔 Grief & Support</h2>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://canadiangriefalliance.ca" target="_blank" rel="noopener">Canadian Grief Alliance</a></li>
-        <li><a href="https://mygrief.ca" target="_blank" rel="noopener">MyGrief.ca</a></li>
-        <li><a href="https://www.griefshare.org/findagroup" target="_blank" rel="noopener">GriefShare Support Group Locator</a></li>
-        <li><a href="https://www.dougy.org" target="_blank" rel="noopener">Dougy Center (Children & Teens Grief)</a></li>
-        <li><a href="https://whatsyourgrief.com" target="_blank" rel="noopener">What's Your Grief</a></li>
-        <li><a href="https://grief.com" target="_blank" rel="noopener">Grief.com</a></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Illness & Disability Section -->
-  <section style="background: url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;">
-    <h2 onclick="this.parentElement.classList.toggle('open')">♿ Illness & Disability</h2>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://www.cysticfibrosis.ca" target="_blank" rel="noopener">Cystic Fibrosis Canada</a></li>
-        <li><a href="https://canadiandisabilitybenefits.ca" target="_blank" rel="noopener">Canadian Disability Benefits</a></li>
-        <li><a href="https://cnib.ca" target="_blank" rel="noopener">CNIB Foundation</a></li>
-        <li><a href="https://muscle.ca" target="_blank" rel="noopener">Muscular Dystrophy Canada</a></li>
-        <li><a href="https://disabilityrightscoalition.ca" target="_blank" rel="noopener">Disability Rights Coalition</a></li>
-        <li><a href="https://mhtoolkit.ca" target="_blank" rel="noopener">Mental Health & Chronic Illness Toolkit</a></li>
-      </ul>
-    </div>
-  </section>
-  
-  </div> <!-- End container -->
-
-<footer>
-  <div class="icons">
-    <a href="https://www.facebook.com/share/19Kfzfxob2/?mibextid=wwXIfr" target="_blank" aria-label="Speak Louder Love Harder Facebook">
-      <i class="fab fa-facebook-square"></i>
-    </a>
-    <a href="https://www.facebook.com/share/1HvowbMsx8/?mibextid=wwXIfr" target="_blank" aria-label="Personal Facebook">
-      <i class="fab fa-facebook"></i>
-    </a>
-    <a href="https://www.instagram.com/speaklouderloveharder?igsh=M25zanVva3Z4cTNs&utm_source=qr" target="_blank" aria-label="Speak Louder Love Harder Instagram">
-      <i class="fab fa-instagram"></i>
-    </a>
-    <a href="https://www.instagram.com/speaklouderloveharder?igsh=M25zanVva3Z4cTNs&utm_source=qr" target="_blank" aria-label="Personal Instagram">
-      <i class="fab fa-instagram"></i>
-    </a>
-  </div>
-  <div class="email">
-    Support me: <a href="mailto:larissawood0316@gmail.com" style="color:#ffd966; font-weight:700;">larissawood0316@gmail.com</a>
-  </div>
-</footer>
-
-<script>
-  // Animated stars background
-  const background = document.getElementById('background');
-  const numStars = 150;
-
-  for(let i=0; i < numStars; i++) {
-    let star = document.createElement('div');
-    star.className = 'star';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.left = Math.random() * 100 + '%';
-    star.style.width = star.style.height = (Math.random() * 2 + 1) + 'px';
-    star.style.animationDuration = (Math.random() * 3 + 2) + 's';
-    background.appendChild(star);
-  }
-
-  // Section toggle on header click
-  document.querySelectorAll('section h2').forEach(header => {
-    header.addEventListener('click', () => {
-      header.parentElement.classList.toggle('open');
+    // Toggle section open/close with aria updates
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('section h2').forEach(header => {
+        header.addEventListener('click', function() {
+          const section = this.parentElement;
+          const isOpen = section.classList.toggle('open');
+          // Update ARIA attributes
+          this.setAttribute('aria-expanded', isOpen);
+          const content = this.nextElementSibling;
+          if (content) {
+            content.setAttribute('aria-hidden', !isOpen);
+          }
+        });
+      });
     });
-  });
-</script>
-
+  </script>
 </body>
 </html>
