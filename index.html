@@ -1,276 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Speak Louder, Love Harder</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html, body {
-    height: 100%; background: #000010; color: #f0f0f5;
-    font-family: 'Segoe UI', Tahoma, sans-serif; overflow-x: hidden;
-  }
-
-  body::before {
-    content: ""; position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-    z-index: -3; opacity: 0.2;
-  }
-
-  /* Twinkling stars */
-  .twinkle {
-    animation: twinkle 2s infinite ease-in-out alternate;
-    opacity: 0.7;
-  }
-  @keyframes twinkle {
-    from { opacity: 0.4; }
-    to { opacity: 1; }
-  }
-
-  /* Floating astronaut */
-  #astronaut {
-    position: fixed;
-    bottom: -100px; left: 10%;
-    width: 120px; opacity: 0.8;
-    animation: floatAstronaut 20s infinite ease-in-out both;
-    z-index: -2;
-  }
-  @keyframes floatAstronaut {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    50% { transform: translate(20vw, -15vh) rotate(10deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
-  }
-
-  header {
-    text-align: center; padding: 2rem 1rem 1rem;
-    background-color: rgba(0, 0, 0, 0.6);
-  }
-  h1 {
-    font-size: 2.5rem; font-weight: 800;
-    color: #a4d4ff; text-shadow: 0 0 12px #7ebcff;
-  }
-  p { font-size: 1.1rem; font-weight: 500; }
-
-  .lang-toggle {
-    margin-top: 1rem;
-  }
-  .lang-toggle button {
-    background: #222; border: none; padding: 0.5rem 1.2rem;
-    color: #ccc; border-radius: 20px; cursor: pointer;
-    margin: 0 0.3rem; font-weight: 600;
-  }
-  .lang-toggle button.active {
-    background: #7ebcff; color: #002244;
-  }
-
-  main {
-    max-width: 900px; margin: auto;
-    padding: 2rem 1.5rem 4rem;
-  }
-  section {
-    background: rgba(0, 0, 20, 0.6);
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    border-radius: 15px;
-    box-shadow: 0 0 10px #3377ff44;
-  }
-  section h2 {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid #7ebcff;
-    padding-bottom: 0.3rem;
-  }
-  ul { list-style: none; padding-left: 0; }
-  li {
-    margin-bottom: 0.7rem; display: flex; align-items: center;
-  }
-  li svg { width: 24px; height: 24px; margin-right: 0.6rem;
-    fill: #7ebcff; }
-  li svg.star { animation: twinkle; }
-
-  a.toolkit-link { color: #7ebcff; font-weight: 600;
-    text-decoration: none; }
-  a.toolkit-link:hover { text-decoration: underline; }
-
-  #topics-list {
-    display: flex; flex-wrap: wrap; gap: 12px;
-  }
-  #topics-list button {
-    background: #144277; border: none;
-    padding: 0.75rem 1.2rem; border-radius: 25px;
-    color: #a4d4ff; font-weight: 600;
-    cursor: pointer; flex: 1 1 45%;
-    min-width: 140px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  #topics-list button svg {
-    width: 20px; height: 20px; margin-right: 0.4rem;
-    fill: #a4d4ff;
-  }
-  #topics-list button:hover {
-    background: #3377ff; color: #fff;
-  }
-  #topics-list button:hover svg { fill: #fff; }
-
-  #save-pdf-btn {
-    display: block; margin: 2rem auto 0;
-    padding: 12px 30px; font-weight: 700;
-    border-radius: 30px; border: none;
-    background: #7ebcff; color: #002244;
-    font-size: 1.1rem; box-shadow: 0 0 8px #7ebcffaa;
-  }
-  #save-pdf-btn:hover { background: #5599ff; }
-
-  footer {
-    text-align: center; padding: 2rem 1rem;
-    background: rgba(0, 0, 30, 0.75);
-    color: #a0c8ff; font-size: 0.9rem;
-  }
-  footer a {
-    color: #a4d4ff; margin: 0 0.5rem; font-weight: 600;
-    text-decoration: none;
-  }
-  footer a:hover { text-decoration: underline; }
-
-  @media (max-width: 600px) {
-    h1 { font-size: 2rem; }
-    section h2 { font-size: 1.3rem; }
-    #topics-list button { flex: 1 1 100%; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Speak Louder,Love Harder</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <div class="stars"></div>
+  <div class="flowers"></div>
 
-<img id="astronaut" src="https://i.imgur.com/J4yCPCt.png" alt="Floating astronaut">
+  <div class="container">
+    <img src="your-profile-photo.jpg" alt="Larissa Wood" class="profile-pic" />
 
-<header>
-  <h1 id="site-title">Speak Louder, Love Harder</h1>
-  <p id="site-subtitle">Your Mental Health & Wellness Toolkit</p>
-  <div class="lang-toggle">
-    <button id="btn-en" class="active">English</button>
-    <button id="btn-fr">Français</button>
+    <h1>Larissa Wood</h1>
+    <p class="bio">
+      Healing out loud through love, loss, and light 🌱 Founder of <strong>Speak Louder, Love Harder</strong>.
+    </p>
+
+    <div class="link-buttons">
+      <!-- Toolkit Links -->
+      <a href="https://rissastar.github.io/Techniques-For-The-Soul/selfcare-toolkit.html" target="_blank" rel="noopener">💚 Self-Care Toolkit</a>
+      <a href="https://rissastar.github.io/Techniques-For-The-Soul/recoveryaffirmation.html" target="_blank" rel="noopener">🌸 Recovery Affirmations</a>
+      <a href="https://rissastar.github.io/Techniques-For-The-Soul/truthtalk.html" target="_blank" rel="noopener">🗣️ Truth Talk</a>
+      <a href="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html" target="_blank" rel="noopener">🪷 Grounding Toolkit</a>
+      <a href="https://rissastar.github.io/Techniques-For-The-Soul/selfcompassiontips.html" target="_blank" rel="noopener">💞 Self-Compassion Tips</a>
+      <a href="https://rissastar.github.io/Techniques-For-The-Soul/mindfulness.html" target="_blank" rel="noopener">🧘 Mindfulness Tools</a>
+      <a href="https://rissastar.github.io/Techniques-For-The-Soul/speaklouder.html" target="_blank" rel="noopener">📢 Speak Louder Guide</a>
+      <a href="https://rissastar.github.io/Techniques-For-The-Soul/safespaces.html" target="_blank" rel="noopener">🏠 Safe Spaces Toolkit</a>
+      <a href="https://rissastar.github.io/Techniques-For-The-Soul/bedtime-checklist.html" target="_blank" rel="noopener">🌙 Bedtime Checklist</a>
+      <a href="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html" target="_blank" rel="noopener">🚨 Crisis Toolkit</a>
+
+      <!-- Support & Social -->
+      <a href="mailto:larissawood0316@gmail.com" target="_blank" rel="noopener">💌 Support Me – E-transfer</a>
+      <a href="https://www.facebook.com/share/19Kfzfxob2/?mibextid=wwXIfr" target="_blank" rel="noopener">💖 Facebook Page</a>
+      <a href="https://www.facebook.com/share/1HvowbMsx8/?mibextid=wwXIfr" target="_blank" rel="noopener">👤 Personal Facebook</a>
+      <a href="https://www.instagram.com/speaklouderloveharder?igsh=M25zanVva3Z4cTNs&utm_source=qr" target="_blank" rel="noopener">📸 Instagram Project</a>
+      <a href="https://www.instagram.com/speaklouderloveharder?igsh=M25zanVva3Z4cTNs&utm_source=qr" target="_blank" rel="noopener">📷 Personal Instagram</a>
+    </div>
+
+    <!-- Resource Sections -->
+
+    <section class="resource-section">
+      <h2>Mental Health</h2>
+      <ul>
+        <li><a href="https://cmha.ca/" target="_blank" rel="noopener">Canadian Mental Health Association</a></li>
+        <li><a href="https://www.nami.org/Home" target="_blank" rel="noopener">NAMI (US)</a></li>
+        <li><a href="https://mentalhealthhelpline.ca/" target="_blank" rel="noopener">Mental Health Helpline (Canada)</a></li>
+      </ul>
+    </section>
+
+    <section class="resource-section">
+      <h2>Addiction & Recovery</h2>
+      <ul>
+        <li><a href="https://ccsa.ca/" target="_blank" rel="noopener">Canadian Centre on Substance Use and Addiction</a></li>
+        <li><a href="https://www.samhsa.gov/" target="_blank" rel="noopener">SAMHSA (US)</a></li>
+        <li><a href="https://aa.org/" target="_blank" rel="noopener">Alcoholics Anonymous Canada</a></li>
+      </ul>
+    </section>
+
+    <section class="resource-section">
+      <h2>Grief & Support</h2>
+      <ul>
+        <li><a href="https://www.virtualhospice.ca/en_US/Main+Site+Navigation/Home.htm" target="_blank" rel="noopener">Canadian Virtual Hospice</a></li>
+        <li><a href="https://www.compassionatefriends.org/" target="_blank" rel="noopener">The Compassionate Friends (US)</a></li>
+      </ul>
+    </section>
+
+    <section class="resource-section">
+      <h2>Foster Care & Child Services</h2>
+      <ul>
+        <li><a href="https://www.childwelfare.gov/" target="_blank" rel="noopener">Canadian Child Welfare Portal</a></li>
+        <li><a href="https://www.childwelfare.gov/" target="_blank" rel="noopener">US Child Welfare Information Gateway</a></li>
+      </ul>
+    </section>
+
+    <section class="resource-section">
+      <h2>Abuse (Sexual, Physical, Mental)</h2>
+      <ul>
+        <li><a href="https://canadianwomen.org/" target="_blank" rel="noopener">Canadian Women’s Foundation</a></li>
+        <li><a href="https://www.rainn.org/" target="_blank" rel="noopener">RAINN (US)</a></li>
+      </ul>
+    </section>
+
+    <section class="resource-section">
+      <h2>LGBTQ+ Support</h2>
+      <ul>
+        <li><a href="https://www.the519.org/" target="_blank" rel="noopener">The 519 (Canada)</a></li>
+        <li><a href="https://www.thetrevorproject.org/" target="_blank" rel="noopener">The Trevor Project (US)</a></li>
+      </ul>
+    </section>
+
+    <section class="resource-section">
+      <h2>Veteran & Military Support</h2>
+      <ul>
+        <li><a href="https://www.veterans.gc.ca/" target="_blank" rel="noopener">Veterans Affairs Canada</a></li>
+        <li><a href="https://www.veteranscrisisline.net/" target="_blank" rel="noopener">Veterans Crisis Line (US)</a></li>
+      </ul>
+    </section>
+
+    <section class="resource-section">
+      <h2>Illness & Disability Support</h2>
+      <ul>
+        <li><a href="https://disabilityalliancebc.org/" target="_blank" rel="noopener">Disability Alliance BC (Canada)</a></li>
+        <li><a href="https://www.cdc.gov/ncbddd/disabilityandhealth/index.html" target="_blank" rel="noopener">CDC Disability Resources (US)</a></li>
+      </ul>
+    </section>
   </div>
-</header>
-
-<main>
-  <section>
-    <h2 id="toolkits-title">Toolkits</h2>
-    <ul>
-      <li>
-        <svg class="star" viewBox="0 0 24 24"><path d="M12 2l1.545 4.754H18l-3.964 2.88L15.09 15 12 11.968 8.909 15l.99-5.366L6 6.754h4.455z"/></svg>
-        <a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/bedtime-checklist.html" target="_blank">Bedtime Checklist</a>
-      </li>
-      <!-- Repeat star icons for other toolkits... -->
-      <li><svg class="star" viewBox="0 0 24 24"><path d="M12 2..."/></svg><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html" target="_blank">Crisis Toolkit</a></li>
-      <li><svg class="star" viewBox="0 0 24 24"><path d="M12 2..."/></svg><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html" target="_blank">Grounding Toolkit</a></li>
-      <li><svg class="star" viewBox="0 0 24 24"><path d="M12 2..."/></svg><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/emotional-expression-toolkit.html" target="_blank">Emotional Expression Toolkit</a></li>
-      <li><svg class="star" viewBox="0 0 24 24"><path d="M12 2..."/></svg><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/mood-tracker.html" target="_blank">Mood Tracker</a></li>
-      <li><svg class="star" viewBox="0 0 24 24"><path d="M12 2..."/></svg><a class="toolkit-link" href="https://rissastar.github.io/Techniques-For-The-Soul/selfcare-toolkit.html" target="_blank">Self-Care Toolkit</a></li>
-    </ul>
-  </section>
-
-  <section>
-    <h2 id="resources-title">Resources</h2>
-    <ul>
-      <li><svg class="star" viewBox="0 0 24 24"><path d="M12 2..."/></svg><a href="https://www.crisisservicescanada.ca/en/" target="_blank">Canada – Crisis Services</a></li>
-      <li><svg class="star" viewBox="0 0 24 24"><path d="M12 2..."/></svg><a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">USA – SAMHSA Helpline</a></li>
-    </ul>
-  </section>
-
-  <section>
-    <h2 id="informational-title">Informational Topics</h2>
-    <div id="topics-list"></div>
-  </section>
-
-  <button id="save-pdf-btn">Save Page as PDF</button>
-</main>
-
-<footer>
-  <p id="footer-text">Connect with us:</p>
-  <a href="https://www.facebook.com/share/g/...">Facebook Group</a> |
-  <a href="https://www.facebook.com/share/...">Facebook Page</a> |
-  <a href="https://linktr.ee/rissa.star" target="_blank">Linktree</a>
-</footer>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-  const { jsPDF } = window.jspdf;
-  const langContent = {
-    en: {
-      title: "Speak Louder, Love Harder",
-      subtitle: "Your Mental Health & Wellness Toolkit",
-      toolkits: "Toolkits",
-      resources: "Resources",
-      info: "Informational Topics",
-      topics: [
-        { icon: "🧠", label: "Mental Health Conditions" },
-        { icon: "🔗", label: "Addiction and Recovery" },
-        { icon: "🌙", label: "Trauma and Abuse" },
-        { icon: "👥", label: "Support for Specific Populations" },
-        { icon: "💔", label: "Grief and Loss" },
-        { icon: "♿", label: "Chronic Conditions & Disabilities" },
-        { icon: "✨", label: "Wellness & Coping Strategies" }
-      ],
-      connect: "Connect with us:"
-    },
-    fr: {
-      title: "Exprime‑toi Plus Fort, Aime Plus Fort",
-      subtitle: "Votre boîte à outils santé mentale",
-      toolkits: "Boîtes à outils",
-      resources: "Ressources",
-      info: "Sujets d’information",
-      topics: [
-        { icon: "🧠", label: "Troubles de santé mentale" },
-        { icon: "🔗", label: "Toxicomanie et rétablissement" },
-        { icon: "🌙", label: "Traumatismes et abus" },
-        { icon: "👥", label: "Soutien pour populations spécifiques" },
-        { icon: "💔", label: "Deuil et perte" },
-        { icon: "♿", label: "Maladies chroniques & handicaps" },
-        { icon: "✨", label: "Bien‑être & stratégies d’adaptation" }
-      ],
-      connect: "Connectez‑vous avec nous :"
-    }
-  };
-
-  function switchLang(lang) {
-    const c = langContent[lang];
-    document.querySelector('#site-title').textContent = c.title;
-    document.querySelector('#site-subtitle').textContent = c.subtitle;
-    document.querySelector('#toolkits-title').textContent = c.toolkits;
-    document.querySelector('#resources-title').textContent = c.resources;
-    document.querySelector('#informational-title').textContent = c.info;
-    document.querySelector('#footer-text').textContent = c.connect;
-
-    const topicsDiv = document.getElementById("topics-list");
-    topicsDiv.innerHTML = "";
-    c.topics.forEach(t => {
-      const btn = document.createElement("button");
-      btn.innerHTML = `<span>${t.icon}</span> ${t.label}`;
-      btn.onclick = () => alert((lang === "en" ? "Coming soon: " : "Page à venir : ") + t.label);
-      topicsDiv.appendChild(btn);
-    });
-
-    document.getElementById("btn-en").classList.toggle("active", lang === "en");
-    document.getElementById("btn-fr").classList.toggle("active", lang !== "en");
-  }
-
-  document.getElementById("btn-en").onclick = () => switchLang("en");
-  document.getElementById("btn-fr").onclick = () => switchLang("fr");
-  switchLang("en");
-
-  document.getElementById("save-pdf-btn").onclick = () => {
-    html2canvas(document.body, { scale: 2 }).then(canvas => {
-      const img = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "pt", "a4");
-      const w = pdf.internal.pageSize.getWidth();
-      const h = (canvas.height * w) / canvas.width;
-      pdf.addImage(img, "PNG", 0, 0, w, h);
-      pdf.save("Speak_Louder_Love_Harder.pdf");
-    });
-  };
-</script>
 </body>
 </html>
