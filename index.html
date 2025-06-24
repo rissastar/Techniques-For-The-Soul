@@ -4,8 +4,144 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Speak Louder Love Harder</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset & base */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body, html {
+      height: 100%;
+      background: #0b0033;
+      overflow-x: hidden;
+      color: #eee;
+      position: relative;
+    }
+    /* Canvas covers full viewport */
+    #starCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      background: radial-gradient(ellipse at center, #1e145d 0%, #0b0033 80%);
+    }
+    /* Container for content */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 3rem auto 4rem;
+      padding: 0 1rem 2rem;
+      background: rgba(15, 10, 35, 0.8);
+      border-radius: 20px;
+      box-shadow: 0 0 40px #9147ff99;
+    }
+    /* Neon glowing title */
+    .glow-title {
+      font-weight: 900;
+      font-size: 3.8rem;
+      text-align: center;
+      color: #d86fff;
+      text-shadow:
+        0 0 5px #f7a8ff,
+        0 0 10px #d86fff,
+        0 0 15px #ae52d4,
+        0 0 25px #a13fcf,
+        0 0 35px #7b30aa;
+      margin-bottom: 0.3rem;
+    }
+    /* Subtitle / bio */
+    .bio {
+      font-weight: 500;
+      font-size: 1.15rem;
+      text-align: center;
+      color: #d7c1e9dd;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+      line-height: 1.5;
+    }
+    /* Link buttons container */
+    .link-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 2rem;
+    }
+    /* Each link styled as a glowing pill button */
+    .link-buttons a {
+      flex: 1 1 45%;
+      max-width: 220px;
+      background: #6b32a8;
+      color: #f9f1ff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 14px 18px;
+      border-radius: 40px;
+      text-align: center;
+      box-shadow:
+        0 0 6px #b068e5,
+        0 0 12px #b068e5,
+        0 0 18px #9147ff;
+      transition: background 0.25s ease, box-shadow 0.25s ease;
+      user-select: none;
+    }
+    .link-buttons a:hover,
+    .link-buttons a:focus {
+      background: #b068e5;
+      box-shadow:
+        0 0 12px #d3a9ff,
+        0 0 25px #d3a9ff;
+      outline: none;
+    }
+    /* Resource sections */
+    .resource-section {
+      background: #1b0d3aaa;
+      border-radius: 15px;
+      padding: 1rem 1.3rem 1.5rem;
+      margin-bottom: 2.3rem;
+      box-shadow: 0 0 20px #6f42c1cc;
+    }
+    .resource-section h2 {
+      color: #d48dff;
+      font-weight: 700;
+      font-size: 1.7rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 6px #b063f9;
+      text-align: center;
+    }
+    .resource-section ul {
+      list-style: none;
+    }
+    .resource-section ul li {
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+      line-height: 1.3;
+      color: #ccc;
+      text-align: left;
+    }
+    .resource-section ul li a {
+      color: #caa7ff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .resource-section ul li a:hover,
+    .resource-section ul li a:focus {
+      color: #f5e0ff;
+      outline: none;
+      text-decoration: underline;
+    }
+    /* Responsive */
+    @media (max-width: 480px) {
+      .link-buttons a {
+        flex: 1 1 100%;
+        max-width: none;
+      }
+    }
+  </style>
 </head>
 <body>
   <canvas id="starCanvas"></canvas>
@@ -36,179 +172,147 @@
       <a href="https://www.instagram.com/speaklouderloveharder?igsh=M25zanVva3Z4cTNs&utm_source=qr">📸 Instagram (Project)</a>
       <a href="https://www.instagram.com/speaklouderloveharder?igsh=M25zanVva3Z4cTNs&utm_source=qr">📷 Instagram (Personal)</a>
     </div>
-    
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Speak Louder Love Harder</title>
-  <link rel="stylesheet" href="linktree-style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-</head>
-<body>
-  <canvas id="starCanvas"></canvas>
 
-  <div class="container">
-    <h1 class="glow-title">Speak Louder Love Harder</h1>
-    <p class="bio">
-      A toolkit for the soul — healing links, affirmations, printable workbooks, support systems, and mental health resources all in one place. 💜💚🌸
-    </p>
-
-    <div class="link-buttons">
-      <!-- Toolkits -->
-      <a href="https://rissastar.github.io/Techniques-For-The-Soul/selfcare-toolkit.html">💚 Self-Care Toolkit</a>
-      <a href="https://rissastar.github.io/Techniques-For-The-Soul/recoveryaffirmation.html">🌸 Recovery Affirmations</a>
-      <a href="https://rissastar.github.io/Techniques-For-The-Soul/truthtalk.html">🗣️ Truth Talk</a>
-      <a href="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html">🪷 Grounding Toolkit</a>
-      <a href="https://rissastar.github.io/Techniques-For-The-Soul/selfcompassiontips.html">💞 Self-Compassion Tips</a>
-      <a href="https://rissastar.github.io/Techniques-For-The-Soul/mindfulness.html">🧘 Mindfulness Tools</a>
-      <a href="https://rissastar.github.io/Techniques-For-The-Soul/speaklouder.html">📢 Speak Louder Guide</a>
-      <a href="https://rissastar.github.io/Techniques-For-The-Soul/safespaces.html">🏠 Safe Spaces Toolkit</a>
-      <a href="https://rissastar.github.io/Techniques-For-The-Soul/bedtime-checklist.html">🌙 Bedtime Checklist</a>
-      <a href="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html">🚨 Crisis Toolkit</a>
-
-      <!-- Social -->
-      <a href="mailto:larissawood0316@gmail.com">💌 Support Me (e-transfer)</a>
-      <a href="https://www.facebook.com/share/19Kfzfxob2/?mibextid=wwXIfr">💖 Facebook Page</a>
-      <a href="https://www.facebook.com/share/1HvowbMsx8/?mibextid=wwXIfr">👤 Personal Facebook</a>
-      <a href="https://www.instagram.com/speaklouderloveharder?igsh=M25zanVva3Z4cTNs&utm_source=qr">📸 Instagram (Project)</a>
-      <a href="https://www.instagram.com/speaklouderloveharder?igsh=M25zanVva3Z4cTNs&utm_source=qr">📷 Instagram (Personal)</a>
-    </div>
-    
-        <!-- Addiction & Recovery -->
     <section class="resource-section">
-      <h2>🌿 Addiction & Recovery</h2>
+      <h2>🧠 Mental Health</h2>
       <ul>
-        <li><a href="https://www.aa.org/" target="_blank">Alcoholics Anonymous (AA)</a> – Global 12-step support for alcohol recovery.</li>
-        <li><a href="https://na.org" target="_blank">Narcotics Anonymous (NA)</a> – For individuals recovering from substance use.</li>
-        <li><a href="https://www.al-anon.org/" target="_blank">Al-Anon Family Groups</a> – Support for families/friends of addicts.</li>
-        <li><a href="https://smartrecovery.org/" target="_blank">SMART Recovery</a> – Self-empowered recovery tools and groups.</li>
-        <li><a href="https://russellbrand.com/recovery/" target="_blank">Russell Brand’s Recovery</a> – A personal journey and guide to healing.</li>
+        <li><a href="https://mha.nshealth.ca/en" target="_blank" rel="noopener noreferrer">Nova Scotia Mental Health & Addictions (MHA)</a></li>
+        <li><a href="https://cmha.ca" target="_blank" rel="noopener noreferrer">Canadian Mental Health Association (CMHA)</a></li>
+        <li><a href="https://togetherall.com/en-ca/join/novascotia" target="_blank" rel="noopener noreferrer">TogetherAll NS</a></li>
+        <li><a href="https://www.therapistaid.com" target="_blank" rel="noopener noreferrer">Therapist Aid</a></li>
+        <li><a href="https://nolimitshelp.org.uk/wp-content/uploads/2019/11/101-Positive-Affirmations-and-top-10-worksheet.pdf" target="_blank" rel="noopener noreferrer">101 Affirmations + Worksheet</a></li>
+        <li><a href="https://education.umd.edu/sites/default/files/uploads/Emotion%20and%20Stress%20Regulation%20Magic%20Tool%20Box.pdf" target="_blank" rel="noopener noreferrer">Emotion Regulation Toolbox</a></li>
       </ul>
     </section>
 
-    <!-- Grief & Support -->
     <section class="resource-section">
-      <h2>🕊️ Grief & Loss</h2>
+      <h2>📒 Healing Worksheets</h2>
       <ul>
-        <li><a href="https://grief.com/" target="_blank">Grief.com</a> – Resources from grief expert David Kessler.</li>
-        <li><a href="https://www.mygrief.ca/" target="_blank">MyGrief.ca</a> – Canadian virtual grief support center.</li>
-        <li><a href="https://www.hospicenet.org/" target="_blank">Hospicenet.org</a> – Support around end-of-life and loss.</li>
-        <li><a href="https://www.whatsyourgrief.com/" target="_blank">What's Your Grief?</a> – Articles, tools, and courses for healing.</li>
+        <li><a href="https://www.russellbrand.com/wp-content/uploads/2020/03/russell-brand-recovery-the-program.pdf" target="_blank" rel="noopener noreferrer">Russell Brand Recovery Guide</a></li>
+        <li><a href="https://drdfox.com/worksheets/" target="_blank" rel="noopener noreferrer">Dr. Fox CBT Worksheets</a></li>
+        <li><a href="https://www.mcgill.ca/counselling/files/counselling/thought_record_sheet_0.pdf" target="_blank" rel="noopener noreferrer">Thought Record Sheet</a></li>
+        <li><a href="https://greybruce.cmha.ca/wp-content/uploads/2023/08/cbt-triangle.pdf" target="_blank" rel="noopener noreferrer">CBT Triangle</a></li>
+        <li><a href="https://uca.edu/bewell/files/2020/11/Feelings-Wheel-Learn-How-to-Label-Your-Feelings.pdf" target="_blank" rel="noopener noreferrer">Feelings Wheel</a></li>
+        <li><a href="https://static1.squarespace.com/static/5d815a563a99ad774c04d207/t/677d8ce26f0f5f26f49cfde0/1736281316623/Window+of+Tolerance.pdf" target="_blank" rel="noopener noreferrer">Window of Tolerance</a></li>
+        <li><a href="https://www.betweensessions.com/wp-content/uploads/2023/06/Reconnecting-with-Your-Inner-Child_060723.pdf" target="_blank" rel="noopener noreferrer">Inner Child Worksheet</a></li>
+        <li><a href="https://www.betweensessions.com/wp-content/uploads/2023/06/Exploring-Your-Inner-Parts_An-Internal-Family-Systems-Worksheet_060823_ad-1.pdf" target="_blank" rel="noopener noreferrer">Internal Family Systems Worksheet</a></li>
+        <li><a href="https://www.stress.org.uk/wp-content/uploads/2021/05/Self-care-Workbook.pdf" target="_blank" rel="noopener noreferrer">Self-Care Workbook</a></li>
+        <li><a href="https://static1.squarespace.com/static/5256d0d0e4b086e2b627d35f/t/5eac34e7df99770838d5d05d/1588344040524/SELF+WORTH+WORKSHEET+2020.pdf" target="_blank" rel="noopener noreferrer">Self-Worth Worksheet</a></li>
+        <li><a href="https://mhanational.org/wp-content/uploads/2025/03/Building-Boundaries-Worksheet.pdf" target="_blank" rel="noopener noreferrer">Boundaries Worksheet</a></li>
+        <li><a href="https://www.mcgill.ca/cansmart/files/cansmart/mood_sheet_online.pdf" target="_blank" rel="noopener noreferrer">Mood Tracker Sheet</a></li>
+        <li><a href="https://www.stjohnscollegecardiff.com/userfiles/sjccmvc/Wellbeing/Regulating%20Emotions/Self-esteem%20and%20confidence%20self-help%20workbook.pdf" target="_blank" rel="noopener noreferrer">Self-Esteem Workbook</a></li>
+        <li><a href="https://www.bgcmd.org/wp-content/uploads/2020/03/Grounding-Exercise.pdf" target="_blank" rel="noopener noreferrer">Grounding Exercise</a></li>
+        <li><a href="https://www.maltbylearningtrust.com/attachments/download.asp?file=92&type=pdf" target="_blank" rel="noopener noreferrer">Stress Management Worksheet</a></li>
+        <li><a href="https://www.betweensessions.com/wp-content/uploads/2022/11/Trauma-Recover-Workbook-F110222-1.pdf" target="_blank" rel="noopener noreferrer">Trauma Recovery Workbook</a></li>
       </ul>
     </section>
 
-    <!-- Abuse -->
     <section class="resource-section">
-      <h2>🚫 Abuse & Trauma</h2>
+      <h2>💊 Addiction & Recovery Resources</h2>
       <ul>
-        <li><a href="https://www.rainn.org/" target="_blank">RAINN (US)</a> – National sexual assault hotline and resources.</li>
-        <li><a href="https://endingviolencecanada.org/" target="_blank">Ending Violence Canada</a> – Canadian survivor support network.</li>
-        <li><a href="https://www.childhelp.org/hotline/" target="_blank">Childhelp</a> – Help for victims of child abuse (US/Canada).</li>
-        <li><a href="https://ywcacanada.ca/" target="_blank">YWCA Canada</a> – Programs for women, abuse survivors, and housing.</li>
+        <li><a href="https://na.org/meetingsearch" target="_blank" rel="noopener noreferrer">Narcotics Anonymous World Services</a></li>
+        <li><a href="https://novascotia.ca/dhw/addictions" target="_blank" rel="noopener noreferrer">Addiction Services NS</a></li>
+        <li><a href="https://ccsa.ca/en" target="_blank" rel="noopener noreferrer">Canadian Centre on Substance Use</a></li>
+        <li><a href="https://dhhr.wv.gov/BBH/DocumentSearch/MAT/OBMAT" target="_blank" rel="noopener noreferrer">Relapse Prevention Plan - Worksheets</a></li>
+        <li><a href="https://12stepworkbook.org/sites/default/files/2017-02/AlKohallek_12StepWorkbook.pdf" target="_blank" rel="noopener noreferrer">Al Kohallek Goes 12 Stepping - Workbook</a></li>
+        <li><a href="https://nalouisville.net/uploads/4/7/4/3/47431107/justfortoday.pdf" target="_blank" rel="noopener noreferrer">Daily Meditations for Recovering Addicts</a></li>
       </ul>
     </section>
 
-    <!-- LGBTQ+ Support -->
     <section class="resource-section">
-      <h2>🏳️‍🌈 LGBTQ+ Support</h2>
+      <h2>🚨 Sexual Assault Support and Reporting</h2>
       <ul>
-        <li><a href="https://egale.ca/" target="_blank">Egale Canada</a> – LGBTQ2S+ advocacy, education & resources.</li>
-        <li><a href="https://www.thetrevorproject.org/" target="_blank">The Trevor Project</a> – Crisis and suicide prevention for LGBTQ youth.</li>
-        <li><a href="https://pflagcanada.ca/" target="_blank">PFLAG Canada</a> – Peer support for LGBTQ+ individuals and families.</li>
-        <li><a href="https://www.glbthotline.org/" target="_blank">LGBT National Hotline (US)</a> – Confidential peer support line.</li>
-      </ul>
-    </section>
-    
-        <!-- Veterans & Military Support -->
-    <section class="resource-section">
-      <h2>🎖️ Veterans & Military</h2>
-      <ul>
-        <li><a href="https://www.veterans.gc.ca/eng/" target="_blank">Veterans Affairs Canada</a> – Mental health, benefits, and support services.</li>
-        <li><a href="https://www.legion.ca/" target="_blank">Royal Canadian Legion</a> – Veteran and family assistance in Canada.</li>
-        <li><a href="https://www.ptsd.va.gov/" target="_blank">US VA PTSD Resources</a> – Tools and therapy info for military PTSD.</li>
+        <li><a href="https://salalsvsc.ca/get-support" target="_blank" rel="noopener noreferrer">Get Support - 24/7 Crisis Line</a></li>
+        <li><a href="https://avaloncentre.ca" target="_blank" rel="noopener noreferrer">Sexual Assault Services NS</a></li>
+        <li><a href="https://endingviolencecanada.org" target="_blank" rel="noopener noreferrer">Ending Sexual Violence :: Association of Canada</a></li>
       </ul>
     </section>
 
-    <!-- Illness & Disability Support -->
     <section class="resource-section">
-      <h2>🩺 Illness & Disability</h2>
+      <h2>👶 Foster Care in Canada</h2>
       <ul>
-        <li><a href="https://www.cysticfibrosis.ca/" target="_blank">Cystic Fibrosis Canada</a> – CF info, care, and community.</li>
-        <li><a href="https://www.canada.ca/en/employment-social-development/programs/disability.html" target="_blank">Disability Programs (Canada)</a> – Support services and benefits.</li>
-        <li><a href="https://disabledworld.com/" target="_blank">Disabled World</a> – News, advocacy, rights and health topics.</li>
-        <li><a href="https://www.invisibledisabilities.org/" target="_blank">Invisible Disabilities Association</a> – Education and awareness.</li>
+        <li><a href="https://novascotia.ca/coms/families/index.html" target="_blank" rel="noopener noreferrer">Nova Scotia Child & Family Services</a></li>
+        <li><a href="https://cwrp.ca" target="_blank" rel="noopener noreferrer">Canadian Child Welfare Research Portal</a></li>
+        <li><a href="https://youthincare.ca" target="_blank" rel="noopener noreferrer">Youth in Care Canada</a></li>
+        <li><a href="https://cdn.sanity.io/files/k36pglgu/production/9f704515..." target="_blank" rel="noopener noreferrer">IFAPA Lifebook Workbook (update link)</a></li>
+        <li><a href="https://education.umd.edu/sites/default/files/uploads/Emotion%20and%20Stress%20Regulation%20Magic%20Tool%20Box.pdf" target="_blank" rel="noopener noreferrer">Emotion & Stress Regulation Toolbox</a></li>
+        <li><a href="https://biglifejournal.com/pages/freebies" target="_blank" rel="noopener noreferrer">Big Life Journal for Teens - Free Printable</a></li>
       </ul>
     </section>
 
-    <!-- Foster Care & Youth Services -->
     <section class="resource-section">
-      <h2>🧸 Foster Care & Youth</h2>
+      <h2>🏠 Domestic Violence and Safe Spaces</h2>
       <ul>
-        <li><a href="https://youthincare.ca/" target="_blank">Youth in Care Canada</a> – Advocacy for current and former foster youth.</li>
-        <li><a href="https://www.fosterparentscanada.com/" target="_blank">Foster Parents Society</a> – Support and training in Canada.</li>
-        <li><a href="https://www.childwelfare.gov/" target="_blank">US Child Welfare Info Gateway</a> – Resources for youth and caseworkers.</li>
-        <li><a href="https://www.kidshelpphone.ca/" target="_blank">Kids Help Phone</a> – 24/7 confidential mental health help for youth.</li>
+        <li><a href="https://thehotline.org/get-help" target="_blank" rel="noopener noreferrer">24/7 National DV Helpline - 1-800-799-7233</a></li>
+        <li><a href="https://thans.ca" target="_blank" rel="noopener noreferrer">Nova Scotia Transition Houses</a></li>
+        <li><a href="https://sheltersafe.ca" target="_blank" rel="noopener noreferrer">ShelterSafe - Find a Shelter</a></li>
+        <li><a href="https://novascotia.ca/just/victim_Services/_docs/VSPersonalSafetyPlan.pdf" target="_blank" rel="noopener noreferrer">Safety Planning Worksheet</a></li>
+        <li><a href="https://metoomvmt.org/wp-content/uploads/2021/01/My-Story-My-Terms-Workbook.pdf" target="_blank" rel="noopener noreferrer">"My Story, My Terms" Workbook</a></li>
+        <li><a href="https://www.loveisrespect.org/everyone-deserves-a-healthy-relationship/" target="_blank" rel="noopener noreferrer">Healthy Relationships</a></li>
       </ul>
     </section>
+
+    <section class="resource-section">
+      <h2>🌌 Universal Laws</h2>
+      <ul>
+        <li><a href="https://youtu.be/KvJnbS9SKDM" target="_blank" rel="noopener noreferrer">The 12 Universal Laws - Complete Guide (Documentary)</a></li>
+        <li><a href="https://blog.mindvalley.com/12-universal-laws" target="_blank" rel="noopener noreferrer">12 Laws Of The Universe & How To Apply Them</a></li>
+        <li><a href="https://desarrolloconsciencia.org/eng/wp-content/uploads/2021/01/12-laws-of-the-universe.pdf" target="_blank" rel="noopener noreferrer">The Laws Of The Universe & Life (PDF)</a></li>
+      </ul>
+    </section>
+
   </div>
 
   <script>
-    // Star animation on canvas background
+    // Simple star animation on canvas
     const canvas = document.getElementById('starCanvas');
     const ctx = canvas.getContext('2d');
-    let stars = [];
-    let width, height;
-
-    function init() {
-      resize();
-      createStars();
-      animate();
-    }
-
+    let w, h;
     function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Star class
+    class Star {
+      constructor() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.size = Math.random() * 1.2 + 0.3;
+        this.speed = Math.random() * 0.02 + 0.01;
+        this.alpha = Math.random() * 0.5 + 0.5;
+        this.alphaChange = Math.random() * 0.02 + 0.005;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha.toFixed(2)})`;
+        ctx.shadowColor = '#cfa8ff';
+        ctx.shadowBlur = 4;
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      update() {
+        this.alpha += this.alphaChange;
+        if (this.alpha <= 0.5 || this.alpha >= 1) this.alphaChange = -this.alphaChange;
+      }
     }
 
-    window.addEventListener('resize', () => {
-      resize();
-      stars = [];
-      createStars();
-    });
-
-    function createStars() {
-      const count = 150;
-      for (let i = 0; i < count; i++) {
-        stars.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          radius: Math.random() * 1.2 + 0.3,
-          alpha: Math.random(),
-          delta: Math.random() * 0.02 + 0.005
-        });
-      }
+    let stars = [];
+    for(let i=0; i<150; i++) {
+      stars.push(new Star());
     }
 
     function animate() {
-      ctx.clearRect(0, 0, width, height);
-      for (let star of stars) {
-        star.alpha += star.delta;
-        if (star.alpha <= 0 || star.alpha >= 1) star.delta = -star.delta;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-        ctx.shadowColor = 'white';
-        ctx.shadowBlur = 8;
-        ctx.fill();
+      ctx.clearRect(0, 0, w, h);
+      for(let star of stars) {
+        star.update();
+        star.draw();
       }
       requestAnimationFrame(animate);
     }
-
-    init();
+    animate();
   </script>
 </body>
 </html>
