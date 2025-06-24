@@ -109,5 +109,58 @@
       </ul>
     </section>
   </div>
+  <script>
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+
+let stars = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function createStars(count) {
+  stars = [];
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.5 + 0.5,
+      speed: Math.random() * 0.3 + 0.1,
+      opacity: Math.random(),
+      direction: Math.random() < 0.5 ? -1 : 1
+    });
+  }
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let star of stars) {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+    ctx.fill();
+  }
+}
+
+function animateStars() {
+  for (let star of stars) {
+    star.opacity += 0.01 * star.direction;
+    if (star.opacity <= 0 || star.opacity >= 1) {
+      star.direction *= -1;
+    }
+    star.y += star.speed;
+    if (star.y > canvas.height) star.y = 0;
+  }
+  drawStars();
+  requestAnimationFrame(animateStars);
+}
+
+createStars(120); // you can increase/decrease the star count here
+animateStars();
+</script>
 </body>
 </html>
