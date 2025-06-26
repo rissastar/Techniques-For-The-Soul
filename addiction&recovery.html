@@ -1,1267 +1,720 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Addiction & Recovery Toolkit</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Addiction & Recovery Toolkit</title>
+<style>
+  /* Basic Reset and styling */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    margin: 0; padding: 0;
+    color: #333;
+  }
+  h2, h3, h4 {
+    margin-top: 0;
+  }
+  .container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 20px;
+  }
+  .nav-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .nav-tab {
+    cursor: pointer;
+    padding: 12px 20px;
+    margin: 0 5px;
+    background: #3498db;
+    color: white;
+    border-radius: 8px 8px 0 0;
+    user-select: none;
+    transition: background 0.3s;
+  }
+  .nav-tab.active,
+  .nav-tab:focus {
+    background: #2980b9;
+    outline: 2px solid #1c5980;
+    outline-offset: 2px;
+  }
+  .tab-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .tab-content.active {
+    display: block;
+    opacity: 1;
+  }
+  .card {
+    background: #fafafa;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .form-group {
+    margin-bottom: 15px;
+  }
+  label.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  input.form-input,
+  textarea.form-input,
+  input[type="range"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  input[type="range"] {
+    height: 30px;
+  }
+  textarea.form-input {
+    resize: vertical;
+  }
+  button.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+    user-select: none;
+  }
+  button.btn:hover,
+  button.btn:focus {
+    transform: scale(1.05);
+    outline: none;
+  }
+  button.btn-success {
+    background: #2ecc71;
+    color: white;
+  }
+  button.btn-success:focus {
+    outline: 3px solid #27ae60;
+  }
+  button.btn-primary {
+    background: #3498db;
+    color: white;
+  }
+  button.btn-primary:focus {
+    outline: 3px solid #2980b9;
+  }
+  button.btn-danger {
+    background: #e74c3c;
+    color: white;
+  }
+  button.btn-danger:focus {
+    outline: 3px solid #c0392b;
+  }
+  button.btn-warning {
+    background: #f39c12;
+    color: white;
+  }
+  button.btn-warning:focus {
+    outline: 3px solid #d68910;
+  }
 
-```
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 20px;
-    }
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 15px;
+  }
+  .resource-card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    text-align: center;
+  }
 
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        backdrop-filter: blur(10px);
-    }
+  .achievements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .achievement {
+    flex: 1 1 130px;
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 12px;
+    color: #555;
+    user-select: none;
+  }
+  .achievement.locked {
+    filter: grayscale(80%);
+    opacity: 0.6;
+  }
+  .achievement.unlocked {
+    background: #2ecc71;
+    color: white;
+    box-shadow: 0 4px 15px rgba(46,204,113,0.6);
+  }
 
-    .header {
-        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-        color: white;
-        padding: 40px 30px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
+  /* Sobriety counter style */
+  #sobrietyCounter {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #27ae60;
+  }
+  #dailyQuote {
+    font-style: italic;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: #555;
+    min-height: 3em;
+  }
 
-    .header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-        animation: pulse 4s ease-in-out infinite;
-    }
+  /* Mood buttons */
+  .mood-btn {
+    cursor: pointer;
+    border: 2px solid #3498db;
+    background: white;
+    color: #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    line-height: 44px;
+    text-align: center;
+    user-select: none;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+  }
+  .mood-btn.selected {
+    background: #3498db;
+    color: white;
+  }
+  .mood-btn:focus {
+    outline: 3px solid #2980b9;
+    outline-offset: 2px;
+  }
 
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); opacity: 0.5; }
-        50% { transform: scale(1.1); opacity: 0.8; }
-    }
+  /* Accessibility: Skip link */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 10px;
+    background: #3498db;
+    color: white;
+    padding: 8px 12px;
+    z-index: 10000;
+    border-radius: 5px;
+    transition: top 0.3s ease;
+  }
+  .skip-link:focus {
+    top: 10px;
+  }
 
-    .header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
-        position: relative;
-        z-index: 2;
-    }
+  /* Emergency banner */
+  .emergency-banner {
+    background: #e74c3c;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
 
-    .header p {
-        font-size: 1.2rem;
-        opacity: 0.9;
-        position: relative;
-        z-index: 2;
-    }
+  /* Animations */
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
+  @keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes fadeOutModal {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
 
-    .nav-tabs {
-        display: flex;
-        background: #f8f9fa;
-        overflow-x: auto;
-        border-bottom: 3px solid #e9ecef;
-    }
-
-    .nav-tab {
-        padding: 20px 25px;
-        cursor: pointer;
-        background: none;
-        border: none;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #6c757d;
-        transition: all 0.3s ease;
-        white-space: nowrap;
-        position: relative;
-    }
-
-    .nav-tab:hover {
-        background: rgba(52, 152, 219, 0.1);
-        color: #3498db;
-        transform: translateY(-2px);
-    }
-
-    .nav-tab.active {
-        color: #3498db;
-        background: white;
-    }
-
-    .nav-tab.active::after {
-        content: '';
-        position: absolute;
-        bottom: -3px;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: #3498db;
-    }
-
-    .content {
-        padding: 40px 30px;
-    }
-
-    .tab-content {
-        display: none;
-        animation: fadeIn 0.5s ease-in;
-    }
-
-    .tab-content.active {
-        display: block;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .card {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        margin-bottom: 25px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e9ecef;
-        transition: all 0.3s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .card h3 {
-        color: #2c3e50;
-        margin-bottom: 20px;
-        font-size: 1.5rem;
-        border-bottom: 2px solid #3498db;
-        padding-bottom: 10px;
-    }
-
-    .progress-container {
-        margin: 20px 0;
-    }
-
-    .progress-bar {
-        width: 100%;
-        height: 15px;
-        background: #e9ecef;
-        border-radius: 10px;
-        overflow: hidden;
-        margin: 10px 0;
-    }
-
-    .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #2ecc71, #27ae60);
-        border-radius: 10px;
-        transition: width 0.3s ease;
-        position: relative;
-    }
-
-    .progress-fill::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-    }
-
-    .counter-display {
-        text-align: center;
-        font-size: 3rem;
-        font-weight: bold;
-        color: #2ecc71;
-        margin: 20px 0;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .counter-label {
-        font-size: 1.2rem;
-        color: #6c757d;
-        margin-bottom: 20px;
-    }
-
-    .btn {
-        padding: 12px 25px;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        font-size: 1rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-        margin: 5px;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        transition: all 0.3s ease;
-    }
-
-    .btn:hover::before {
-        width: 300px;
-        height: 300px;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #3498db, #2980b9);
-        color: white;
-    }
-
-    .btn-success {
-        background: linear-gradient(135deg, #2ecc71, #27ae60);
-        color: white;
-    }
-
-    .btn-warning {
-        background: linear-gradient(135deg, #f39c12, #e67e22);
-        color: white;
-    }
-
-    .btn-danger {
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
-        color: white;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #2c3e50;
-    }
-
-    .form-input {
-        width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e9ecef;
-        border-radius: 10px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-    }
-
-    .form-input:focus {
-        outline: none;
-        border-color: #3498db;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-    }
-
-    .resource-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
-    }
-
-    .resource-card {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        padding: 25px;
-        border-radius: 15px;
-        border-left: 5px solid #3498db;
-        transition: all 0.3s ease;
-    }
-
-    .resource-card:hover {
-        transform: translateX(10px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-
-    .resource-card h4 {
-        color: #2c3e50;
-        margin-bottom: 10px;
-    }
-
-    .emergency-banner {
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 25px;
-        text-align: center;
-        animation: emergencyPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes emergencyPulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-
-    .mood-tracker {
-        display: flex;
-        justify-content: space-around;
-        margin: 20px 0;
-    }
-
-    .mood-btn {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        border: 3px solid #e9ecef;
-        background: white;
-        cursor: pointer;
-        font-size: 2rem;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .mood-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .mood-btn.selected {
-        border-color: #3498db;
-        background: #3498db;
-        color: white;
-    }
-
-    .achievements {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-top: 20px;
-    }
-
-    .achievement {
-        background: linear-gradient(135deg, #f1c40f, #f39c12);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        transition: all 0.3s ease;
-    }
-
-    .achievement:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    .achievement.unlocked {
-        background: linear-gradient(135deg, #2ecc71, #27ae60);
-    }
-
-    .achievement.locked {
-        background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-        opacity: 0.7;
-    }
-
-    @media (max-width: 768px) {
-        .container {
-            margin: 10px;
-            border-radius: 15px;
-        }
-        
-        .header {
-            padding: 30px 20px;
-        }
-        
-        .header h1 {
-            font-size: 2rem;
-        }
-        
-        .content {
-            padding: 30px 20px;
-        }
-        
-        .nav-tabs {
-            flex-wrap: wrap;
-        }
-        
-        .nav-tab {
-            flex: 1;
-            min-width: 120px;
-        }
-    }
+  /* Modal base style */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeInModal 0.3s forwards;
+  }
+  .modal-content {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    outline: none;
+  }
+  .modal-content:focus {
+    outline: 3px solid #3498db;
+  }
 </style>
-```
-
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🌟 Recovery Journey</h1>
-            <p>Your comprehensive toolkit for addiction recovery and wellness</p>
+
+<a href="#mainContent" class="skip-link">Skip to main content</a>
+
+<div class="container" id="mainContent" tabindex="-1">
+
+  <h2>Addiction & Recovery Toolkit</h2>
+
+  <!-- Emergency banner for US & Canada -->
+  <div class="emergency-banner" role="alert" aria-live="assertive">
+    🚨 Need Immediate Help? <br />
+    <strong>US:</strong> Crisis Text Line: Text <code>HOME</code> to 741741 | Suicide Lifeline: <code>988</code><br />
+    <strong>Canada:</strong> Crisis Services Canada: 1-833-456-4566 | Text <code>45645</code>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <nav class="nav-tabs" role="tablist" aria-label="Main sections">
+    <button class="nav-tab active" role="tab" aria-selected="true" aria-controls="tracker" id="tab-tracker" tabindex="0" onclick="showTab('tracker', this)">Tracker</button>
+    <button class="nav-tab" role="tab" aria-selected="false" aria-controls="crisis" id="tab-crisis" tabindex="-1" onclick="showTab('crisis', this)">Crisis Planning</button>
+    <button class="nav-tab" role="tab" aria-selected="false" aria-controls="wellness" id="tab-wellness" tabindex="-1" onclick="showTab('wellness', this)">Wellness</button>
+    <button class="nav-tab" role="tab" aria-selected="false" aria-controls="achievements" id="tab-achievements" tabindex="-1" onclick="showTab('achievements', this)">Achievements</button>
+  </nav>
+
+  <div>
+    <!-- Tracker Tab -->
+    <section id="tracker" class="tab-content active" role="tabpanel" aria-labelledby="tab-tracker" tabindex="0">
+      <div class="card">
+        <h3>Recovery Tracker</h3>
+        <p>Days sober: <span id="sobrietyCounter" aria-live="polite" aria-atomic="true">0</span></p>
+        <button class="btn btn-primary" onclick="updateSobrietyDate()" aria-label="Set recovery start date">Set Recovery Start Date</button>
+        <button class="btn btn-danger" onclick="resetCounter()" aria-label="Reset recovery counter to today">Reset Counter</button>
+        <p id="dailyQuote" aria-live="polite" aria-atomic="true" style="margin-top:1em;"></p>
+      </div>
+
+      <div class="card" aria-label="Mood and reflection">
+        <h3>Daily Mood & Reflection</h3>
+        <div role="radiogroup" aria-labelledby="moodLabel" style="margin-bottom: 15px;">
+          <span id="moodLabel" style="font-weight: 600;">Select your mood:</span>
+          <button class="mood-btn" data-mood="happy" aria-pressed="false" aria-label="Happy mood" onclick="setMood('happy')">😊</button>
+          <button class="mood-btn" data-mood="neutral" aria-pressed="false" aria-label="Neutral mood" onclick="setMood('neutral')">😐</button>
+          <button class="mood-btn" data-mood="sad" aria-pressed="false" aria-label="Sad mood" onclick="setMood('sad')">😔</button>
+          <button class="mood-btn" data-mood="anxious" aria-pressed="false" aria-label="Anxious mood" onclick="setMood('anxious')">😰</button>
         </div>
+        <label for="reflectionInput" class="form-label">Write your reflection:</label>
+        <textarea id="reflectionInput" class="form-input" rows="4" aria-describedby="reflectionDesc" placeholder="How are you feeling today?"></textarea>
+        <small id="reflectionDesc" style="display:block; margin-bottom:10px;">Your daily thoughts and feelings help track your progress.</small>
+        <button class="btn btn-success" onclick="saveProgress()" aria-label="Save daily mood and reflection">Save Progress</button>
+      </div>
 
-```
-    <div class="nav-tabs">
-        <button class="nav-tab active" onclick="showTab('dashboard')">Dashboard</button>
-        <button class="nav-tab" onclick="showTab('tracker')">Progress Tracker</button>
-        <button class="nav-tab" onclick="showTab('resources')">Resources</button>
-        <button class="nav-tab" onclick="showTab('support')">Support</button>
-        <button class="nav-tab" onclick="showTab('wellness')">Wellness</button>
-        <button class="nav-tab" onclick="showTab('achievements')">Achievements</button>
-    </div>
+      <div class="card" aria-label="Export data">
+        <h3>Export Your Data</h3>
+        <button class="btn btn-primary" onclick="exportData()" aria-label="Download your recovery data as a JSON file">Download Recovery Data</button>
+      </div>
+    </section>
 
-    <div class="content">
-        <!-- Dashboard Tab -->
-        <div id="dashboard" class="tab-content active">
-            <div class="emergency-banner">
-                <h3>🚨 Need Immediate Help?</h3>
-                <p>Crisis Text Line: Text HOME to 741741 | National Suicide Prevention Lifeline: 988</p>
-            </div>
-
-            <div class="card">
-                <h3>Your Recovery Dashboard</h3>
-                <div class="counter-display" id="sobrietyCounter">0</div>
-                <div class="counter-label">Days of Recovery</div>
-                <button class="btn btn-success" onclick="updateSobrietyDate()">Set/Update Recovery Date</button>
-                <button class="btn btn-primary" onclick="resetCounter()">Reset Counter</button>
-            </div>
-
-            <div class="card">
-                <h3>Quick Actions</h3>
-                <button class="btn btn-primary" onclick="showTab('tracker')">Track Progress</button>
-                <button class="btn btn-warning" onclick="showTab('support')">Find Support</button>
-                <button class="btn btn-success" onclick="showTab('wellness')">Wellness Check</button>
-            </div>
-
-            <div class="card">
-                <h3>Daily Motivation</h3>
-                <p id="dailyQuote" style="font-style: italic; font-size: 1.1rem; color: #2c3e50; text-align: center; padding: 20px;">
-                    "Recovery is not a race. You don't have to feel guilty if it takes you longer than you thought it would."
-                </p>
-                <button class="btn btn-primary" onclick="generateQuote()">New Quote</button>
-            </div>
+    <!-- Crisis Planning Tab -->
+    <section id="crisis" class="tab-content" role="tabpanel" aria-labelledby="tab-crisis" tabindex="0">
+      <div class="card">
+        <h3>Crisis Planning</h3>
+        <div class="form-group">
+          <label for="emergencyContactName" class="form-label">Emergency Contact Name</label>
+          <input type="text" id="emergencyContactName" class="form-input" placeholder="Name of trusted person" aria-required="true" />
         </div>
-
-        <!-- Progress Tracker Tab -->
-        <div id="tracker" class="tab-content">
-            <div class="card">
-                <h3>Progress Tracking</h3>
-                <div class="form-group">
-                    <label class="form-label">How are you feeling today?</label>
-                    <div class="mood-tracker">
-                        <div class="mood-btn" onclick="setMood(1)" data-mood="1">😢</div>
-                        <div class="mood-btn" onclick="setMood(2)" data-mood="2">😔</div>
-                        <div class="mood-btn" onclick="setMood(3)" data-mood="3">😐</div>
-                        <div class="mood-btn" onclick="setMood(4)" data-mood="4">🙂</div>
-                        <div class="mood-btn" onclick="setMood(5)" data-mood="5">😊</div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Daily Reflection</label>
-                    <textarea class="form-input" rows="4" placeholder="Write about your day, challenges, victories, or thoughts..."></textarea>
-                </div>
-                
-                <button class="btn btn-success" onclick="saveProgress()">Save Today's Progress</button>
-            </div>
-
-            <div class="card">
-                <h3>Recovery Goals</h3>
-                <div class="progress-container">
-                    <div>30 Days Sober</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="goal30" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div>90 Days Sober</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="goal90" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div>1 Year Sober</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="goal365" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
+        <div class="form-group">
+          <label for="emergencyContactPhone" class="form-label">Emergency Contact Phone</label>
+          <input type="tel" id="emergencyContactPhone" class="form-input" placeholder="Phone number" aria-required="true" />
         </div>
-
-        <!-- Resources Tab -->
-        <div id="resources" class="tab-content">
-            <div class="card">
-                <h3>Recovery Resources</h3>
-                <div class="resource-grid">
-                    <div class="resource-card">
-                        <h4>📞 Hotlines</h4>
-                        <p><strong>SAMHSA National Helpline:</strong><br>1-800-662-HELP (4357)</p>
-                        <p><strong>Crisis Text Line:</strong><br>Text HOME to 741741</p>
-                    </div>
-                    <div class="resource-card">
-                        <h4>👥 Support Groups</h4>
-                        <p><strong>Alcoholics Anonymous:</strong> aa.org</p>
-                        <p><strong>Narcotics Anonymous:</strong> na.org</p>
-                        <p><strong>SMART Recovery:</strong> smartrecovery.org</p>
-                    </div>
-                    <div class="resource-card">
-                        <h4>🏥 Treatment Finder</h4>
-                        <p><strong>SAMHSA Treatment Locator:</strong><br>findtreatment.samhsa.gov</p>
-                        <p>Find local treatment facilities and support services</p>
-                    </div>
-                    <div class="resource-card">
-                        <h4>📱 Recovery Apps</h4>
-                        <p><strong>I Am Sober:</strong> Sobriety counter</p>
-                        <p><strong>Sober Grid:</strong> Recovery social network</p>
-                        <p><strong>Twenty-Four Hours a Day:</strong> Daily meditations</p>
-                    </div>
-                    <div class="resource-card">
-                        <h4>📚 Educational Resources</h4>
-                        <p><strong>NIDA:</strong> drugabuse.gov</p>
-                        <p><strong>SAMHSA:</strong> samhsa.gov</p>
-                        <p>Learn about addiction science and recovery</p>
-                    </div>
-                    <div class="resource-card">
-                        <h4>🧘‍♂️ Wellness Tools</h4>
-                        <p><strong>Headspace:</strong> Meditation and mindfulness</p>
-                        <p><strong>Calm:</strong> Sleep stories and relaxation</p>
-                        <p><strong>Insight Timer:</strong> Free meditation app</p>
-                    </div>
-                </div>
-            </div>
+        <div class="form-group">
+          <label for="personalTriggers" class="form-label">Personal Triggers to Avoid</label>
+          <textarea id="personalTriggers" class="form-input" rows="3" placeholder="List situations, places, or emotions that might trigger you..."></textarea>
         </div>
+        <button class="btn btn-success" aria-label="Save crisis plan">Save Crisis Plan</button>
+      </div>
+    </section>
 
-        <!-- Support Tab -->
-        <div id="support" class="tab-content">
-            <div class="emergency-banner">
-                <h3>🆘 Emergency Contacts</h3>
-                <p>If you're in crisis: Call 911 | Crisis Text Line: 741741 | Suicide Prevention: 988</p>
-            </div>
-
-            <div class="card">
-                <h3>Find Local Support</h3>
-                <div class="form-group">
-                    <label class="form-label">Enter Your Zip Code</label>
-                    <input type="text" class="form-input" placeholder="12345" maxlength="5">
-                </div>
-                <button class="btn btn-primary">Find Local Resources</button>
-            </div>
-
-            <div class="card">
-                <h3>Online Support Communities</h3>
-                <div class="resource-grid">
-                    <div class="resource-card">
-                        <h4>Reddit Communities</h4>
-                        <p>r/stopdrinking, r/REDDITORSINRECOVERY, r/OpiatesRecovery</p>
-                    </div>
-                    <div class="resource-card">
-                        <h4>In The Rooms</h4>
-                        <p>Online recovery meetings and community</p>
-                    </div>
-                    <div class="resource-card">
-                        <h4>LifeRing</h4>
-                        <p>Secular recovery support network</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Crisis Planning</h3>
-                <div class="form-group">
-                    <label class="form-label">Emergency Contact Name</label>
-                    <input type="text" class="form-input" placeholder="Name of trusted person">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Emergency Contact Phone</label>
-                    <input type="tel" class="form-input" placeholder="Phone number">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Personal Triggers to Avoid</label>
-                    <textarea class="form-input" rows="3" placeholder="List situations, places, or emotions that might trigger you..."></textarea>
-                </div>
-                <button class="btn btn-success">Save Crisis Plan</button>
-            </div>
+    <!-- Wellness Tab -->
+    <section id="wellness" class="tab-content" role="tabpanel" aria-labelledby="tab-wellness" tabindex="0">
+      <div class="card">
+        <h3>Daily Wellness Check</h3>
+        <div class="form-group">
+          <label for="sleepQuality" class="form-label">Sleep Quality (1-10)</label>
+          <input id="sleepQuality" type="range" min="1" max="10" value="7" class="form-input" />
         </div>
-
-        <!-- Wellness Tab -->
-        <div id="wellness" class="tab-content">
-            <div class="card">
-                <h3>Daily Wellness Check</h3>
-                <div class="form-group">
-                    <label class="form-label">Sleep Quality (1-10)</label>
-                    <input type="range" min="1" max="10" value="7" class="form-input" style="height: 30px;">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Energy Level (1-10)</label>
-                    <input type="range" min="1" max="10" value="7" class="form-input" style="height: 30px;">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Stress Level (1-10)</label>
-                    <input type="range" min="1" max="10" value="5" class="form-input" style="height: 30px;">
-                </div>
-                <button class="btn btn-success">Log Wellness Data</button>
-            </div>
-
-            <div class="card">
-                <h3>Coping Strategies</h3>
-                <div class="resource-grid">
-                    <div class="resource-card">
-                        <h4>🧘‍♀️ Mindfulness</h4>
-                        <p>Practice deep breathing, meditation, or grounding exercises</p>
-                        <button class="btn btn-primary">Start 5-min Meditation</button>
-                    </div>
-                    <div class="resource-card">
-                        <h4>🏃‍♂️ Physical Activity</h4>
-                        <p>Go for a walk, do yoga, or any form of exercise</p>
-                        <button class="btn btn-primary">Find Workout Videos</button>
-                    </div>
-                    <div class="resource-card">
-                        <h4>🎨 Creative Expression</h4>
-                        <p>Draw, write, play music, or engage in any creative activity</p>
-                        <button class="btn btn-primary">Art Therapy Ideas</button>
-                    </div>
-                    <div class="resource-card">
-                        <h4>📞 Reach Out</h4>
-                        <p>Call a friend, sponsor, or support group member</p>
-                        <button class="btn btn-primary">Contact List</button>
-                    </div>
-                </div>
-            </div>
+        <div class="form-group">
+          <label for="energyLevel" class="form-label">Energy Level (1-10)</label>
+          <input id="energyLevel" type="range" min="1" max="10" value="7" class="form-input" />
         </div>
-
-        <!-- Achievements Tab -->
-        <div id="achievements" class="tab-content">
-            <div class="card">
-                <h3>Recovery Milestones</h3>
-                <div class="achievements">
-                    <div class="achievement locked" id="day1">
-                        <h4>🌅 First Day</h4>
-                        <p>Complete your first day of recovery</p>
-                    </div>
-                    <div class="achievement locked" id="week1">
-                        <h4>📅 One Week</h4>
-                        <p>Seven days strong</p>
-                    </div>
-                    <div class="achievement locked" id="month1">
-                        <h4>🗓️ One Month</h4>
-                        <p>30 days of recovery</p>
-                    </div>
-                    <div class="achievement locked" id="month3">
-                        <h4>🌸 Three Months</h4>
-                        <p>90 days milestone</p>
-                    </div>
-                    <div class="achievement locked" id="month6">
-                        <h4>🌻 Six Months</h4>
-                        <p>Half a year of progress</p>
-                    </div>
-                    <div class="achievement locked" id="year1">
-                        <h4>🎉 One Year</h4>
-                        <p>365 days of recovery</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Personal Achievements</h3>
-                <div class="form-group">
-                    <label class="form-label">Add Personal Goal</label>
-                    <input type="text" class="form-input" placeholder="e.g., 'Attended first AA meeting' or 'Called my family'">
-                </div>
-                <button class="btn btn-success">Add Achievement</button>
-            </div>
+        <div class="form-group">
+          <label for="stressLevel" class="form-label">Stress Level (1-10)</label>
+          <input id="stressLevel" type="range" min="1" max="10" value="5" class="form-input" />
         </div>
-    </div>
+        <button class="btn btn-success" aria-label="Log wellness data">Log Wellness Data</button>
+      </div>
+
+      <div class="card">
+        <h3>Coping Strategies</h3>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <h4>🧘‍♀️ Mindfulness</h4>
+            <p>Practice deep breathing, meditation, or grounding exercises</p>
+            <button class="btn btn-primary" onclick="startBreathingExercise()" aria-label="Start 5-minute meditation">Start 5-min Meditation</button>
+          </div>
+          <div class="resource-card">
+            <h4>🏃‍♂️ Physical Activity</h4>
+            <p>Go for a walk, do yoga, or any form of exercise</p>
+            <button class="btn btn-primary" onclick="alert('Check out online workout videos!')" aria-label="Find workout videos">Find Workout Videos</button>
+          </div>
+          <div class="resource-card">
+            <h4>🎨 Creative Expression</h4>
+            <p>Draw, write, play music, or engage in any creative activity</p>
+            <button class="btn btn-primary" onclick="alert('Try art therapy ideas!')" aria-label="Get art therapy ideas">Art Therapy Ideas</button>
+          </div>
+          <div class="resource-card">
+            <h4>📞 Reach Out</h4>
+            <p>Call a friend, sponsor, or support group member</p>
+            <button class="btn btn-primary" onclick="alert('Open your contact list')" aria-label="Open contact list">Contact List</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crisis Management Tools appended dynamically by JS -->
+    </section>
+
+    <!-- Achievements Tab -->
+    <section id="achievements" class="tab-content" role="tabpanel" aria-labelledby="tab-achievements" tabindex="0">
+      <div class="card">
+        <h3>Recovery Milestones</h3>
+        <div class="achievements" aria-live="polite" aria-atomic="true" aria-label="Recovery milestones">
+          <div class="achievement locked" id="day1" tabindex="0">
+            <h4>🌅 First Day</h4>
+            <p>Complete your first day of recovery</p>
+          </div>
+          <div class="achievement locked" id="week1" tabindex="0">
+            <h4>📅 One Week</h4>
+            <p>Seven days strong</p>
+          </div>
+          <div class="achievement locked" id="month1" tabindex="0">
+            <h4>🗓️ One Month</h4>
+            <p>30 days of recovery</p>
+          </div>
+          <div class="achievement locked" id="month3" tabindex="0">
+            <h4>🌸 Three Months</h4>
+            <p>90 days milestone</p>
+          </div>
+          <div class="achievement locked" id="month6" tabindex="0">
+            <h4>🌻 Six Months</h4>
+            <p>Half a year sober</p>
+          </div>
+          <div class="achievement locked" id="year1" tabindex="0">
+            <h4>🎉 One Year</h4>
+            <p>365 days sober</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
 
+<!-- Modal Container -->
+<div id="modalContainer" aria-live="polite"></div>
+
 <script>
-    // Initialize variables
-    let sobrietyStartDate = null;
-    let currentMood = null;
-
-    // Motivational quotes
-    const quotes = [
-        "Recovery is not a race. You don't have to feel guilty if it takes you longer than you thought it would.",
-        "The only person you are destined to become is the person you decide to be.",
-        "Every day is a new beginning. Take a deep breath, smile, and start again.",
-        "You are stronger than your addiction. You are worth more than your worst day.",
-        "Progress, not perfection. Every step forward counts.",
-        "Recovery is about being grateful for the chance to live life fully.",
-        "One day at a time. One moment at a time. You've got this.",
-        "Your current situation is not your final destination.",
-        "The comeback is always stronger than the setback.",
-        "You didn't come this far to only come this far."
-    ];
-
-    // Tab functionality
-    function showTab(tabName) {
-        // Hide all tab contents
-        const contents = document.querySelectorAll('.tab-content');
-        contents.forEach(content => content.classList.remove('active'));
-        
-        // Remove active class from all tabs
-        const tabs = document.querySelectorAll('.nav-tab');
-        tabs.forEach(tab => tab.classList.remove('active'));
-        
-        // Show selected tab content
-        document.getElementById(tabName).classList.add('active');
-        
-        // Add active class to clicked tab
-        event.target.classList.add('active');
-    }
-
-    // Update sobriety counter
-    function updateSobrietyDate() {
-        const date = prompt("Enter your recovery start date (YYYY-MM-DD):");
-        if (date) {
-            sobrietyStartDate = new Date(date);
-            updateCounter();
-            updateProgressBars();
-            checkAchievements();
-        }
-    }
-
-    function updateCounter() {
-        if (sobrietyStartDate) {
-            const today = new Date();
-            const timeDiff = today.getTime() - sobrietyStartDate.getTime();
-            const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
-            document.getElementById('sobrietyCounter').textContent = daysDiff;
-        }
-    }
-
-    function resetCounter() {
-        if (confirm("Are you sure you want to reset your counter? This will set your recovery date to today.")) {
-            sobrietyStartDate = new Date();
-            updateCounter();
-            updateProgressBars();
-            checkAchievements();
-        }
-    }
-
-    // Update progress bars
-    function updateProgressBars() {
-        if (sobrietyStartDate) {
-            const today = new Date();
-            const timeDiff = today.getTime() - sobrietyStartDate.getTime();
-            const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
-            
-            // Update 30-day goal
-            const progress30 = Math.min((daysDiff / 30) * 100, 100);
-            document.getElementById('goal30').style.width = progress30 + '%';
-            
-            // Update 90-day goal
-            const progress90 = Math.min((daysDiff / 90) * 100, 100);
-            document.getElementById('goal90').style.width = progress90 + '%';
-            
-            // Update 1-year goal
-            const progress365 = Math.min((daysDiff / 365) * 100, 100);
-            document.getElementById('goal365').style.width = progress365 + '%';
-        }
-    }
-
-    // Check and unlock achievements
-    function checkAchievements() {
-        if (sobrietyStartDate) {
-            const today = new Date();
-            const timeDiff = today.getTime() - sobrietyStartDate.getTime();
-            const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
-            
-            if (daysDiff >= 1) unlockAchievement('day1');
-            if (daysDiff >= 7) unlockAchievement('week1');
-            if (daysDiff >= 30) unlockAchievement('month1');
-            if (daysDiff >= 90) unlockAchievement('month3');
-            if (daysDiff >= 180) unlockAchievement('month6');
-            if (daysDiff >= 365) unlockAchievement('year1');
-        }
-    }
-
-    function unlockAchievement(achievementId) {
-        const achievement = document.getElementById(achievementId);
-        if (achievement && achievement.classList.contains('locked')) {
-            achievement.classList.remove('locked');
-            achievement.classList.add('unlocked');
-            showAchievementNotification(achievement.querySelector('h4').textContent);
-        }
-    }
-
-    function showAchievementNotification(title) {
-        const notification = document.createElement('div');
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #2ecc71, #27ae60);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            animation: slideIn 0.5s ease-out;
-        `;
-        notification.innerHTML = `
-            <h4 style="margin: 0 0 5px 0;">🎉 Achievement Unlocked!</h4>
-            <p style="margin: 0;">${title}</p>
-        `;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.animation = 'slideOut 0.5s ease-in';
-            setTimeout(() => notification.remove(), 500);
-        }, 3000);
-    }
-
-    // Mood tracking
-    function setMood(mood) {
-        currentMood = mood;
-        // Reset all mood buttons
-        document.querySelectorAll('.mood-btn').forEach(btn => {
-            btn.classList.remove('selected');
-        });
-        // Select current mood
-        document.querySelector(`[data-mood="${mood}"]`).classList.add('selected');
-    }
-
-    // Save progress
-    function saveProgress() {
-        const reflection = document.querySelector('#tracker textarea').value;
-        if (currentMood && reflection.trim()) {
-            alert('Progress saved! Keep up the great work!');
-            // Clear the form
-            document.querySelector('#tracker textarea').value = '';
-            document.querySelectorAll('.mood-btn').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            currentMood = null;
-        } else {
-            alert('Please select your mood and write a reflection before saving.');
-        }
-    }
-
-    // Generate motivational quote
-    function generateQuote() {
-        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        document.getElementById('dailyQuote').textContent = `"${randomQuote}"`;
-    }
-
-    // Breathing exercise
-    function startBreathingExercise() {
-        const modal = document.createElement('div');
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        `;
-        
-        const exerciseContent = document.createElement('div');
-        exerciseContent.style.cssText = `
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        `;
-        
-        exerciseContent.innerHTML = `
-            <h3>🧘‍♀️ Breathing Exercise</h3>
-            <div id="breathingCircle" style="
-                width: 150px;
-                height: 150px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #3498db, #2980b9);
-                margin: 20px auto;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 1.2rem;
-                font-weight: bold;
-                transition: transform 4s ease-in-out;
-            ">Breathe</div>
-            <p id="breathingText">Follow the circle to breathe deeply</p>
-            <button onclick="document.body.removeChild(this.closest('div').parentElement)" 
-                style="margin-top: 20px; padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                Close
-            </button>
-        `;
-        
-        modal.appendChild(exerciseContent);
-        document.body.appendChild(modal);
-        
-        // Start breathing animation
-        let phase = 'inhale';
-        const circle = document.getElementById('breathingCircle');
-        const text = document.getElementById('breathingText');
-        
-        function breathingCycle() {
-            if (phase === 'inhale') {
-                circle.style.transform = 'scale(1.3)';
-                text.textContent = 'Breathe in... (4 seconds)';
-                phase = 'hold1';
-                setTimeout(breathingCycle, 4000);
-            } else if (phase === 'hold1') {
-                text.textContent = 'Hold... (4 seconds)';
-                phase = 'exhale';
-                setTimeout(breathingCycle, 4000);
-            } else if (phase === 'exhale') {
-                circle.style.transform = 'scale(1)';
-                text.textContent = 'Breathe out... (4 seconds)';
-                phase = 'hold2';
-                setTimeout(breathingCycle, 4000);
-            } else {
-                text.textContent = 'Hold... (4 seconds)';
-                phase = 'inhale';
-                setTimeout(breathingCycle, 4000);
-            }
-        }
-        
-        setTimeout(breathingCycle, 1000);
-    }
-
-    // Panic attack helper
-    function panicAttackHelper() {
-        const modal = document.createElement('div');
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        `;
-        
-        const helperContent = document.createElement('div');
-        helperContent.style.cssText = `
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        `;
-        
-        helperContent.innerHTML = `
-            <h2 style="color: #e74c3c; margin-bottom: 20px;">🆘 Panic Attack Helper</h2>
-            <div style="text-align: left;">
-                <h3>Right Now:</h3>
-                <ul style="margin: 10px 0; padding-left: 20px;">
-                    <li>You are safe</li>
-                    <li>This feeling will pass</li>
-                    <li>You are not in danger</li>
-                    <li>You have survived this before</li>
-                </ul>
-                
-                <h3>5-4-3-2-1 Grounding Technique:</h3>
-                <ul style="margin: 10px 0; padding-left: 20px;">
-                    <li><strong>5 things you can see</strong> - Look around and name them</li>
-                    <li><strong>4 things you can touch</strong> - Feel different textures</li>
-                    <li><strong>3 things you can hear</strong> - Listen carefully</li>
-                    <li><strong>2 things you can smell</strong> - Take a gentle sniff</li>
-                    <li><strong>1 thing you can taste</strong> - Notice any taste</li>
-                </ul>
-                
-                <h3>Breathing:</h3>
-                <p>Breathe in for 4 counts, hold for 4, breathe out for 6</p>
-            </div>
-            
-            <div style="margin-top: 20px;">
-                <button onclick="startBreathingExercise(); document.body.removeChild(this.closest('div').parentElement)" 
-                    style="margin: 5px; padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Start Breathing Exercise
-                </button>
-                <button onclick="document.body.removeChild(this.closest('div').parentElement)" 
-                    style="margin: 5px; padding: 10px 20px; background: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    I'm Feeling Better
-                </button>
-            </div>
-            
-            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
-                <p><strong>If you need immediate help:</strong></p>
-                <p>Call 911 or go to the nearest emergency room</p>
-                <p>Crisis Text Line: Text HOME to 741741</p>
-            </div>
-        `;
-        
-        modal.appendChild(helperContent);
-        document.body.appendChild(modal);
-    }
-
-    // Craving management
-    function cravingHelper() {
-        const modal = document.createElement('div');
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        `;
-        
-        const cravingContent = document.createElement('div');
-        cravingContent.style.cssText = `
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        `;
-        
-        cravingContent.innerHTML = `
-            <h2 style="color: #f39c12; margin-bottom: 20px;">⚡ Craving Support</h2>
-            <div style="text-align: left;">
-                <h3>Remember:</h3>
-                <ul style="margin: 10px 0; padding-left: 20px;">
-                    <li>Cravings are temporary - they will pass</li>
-                    <li>You are stronger than this feeling</li>
-                    <li>Each craving you resist makes you stronger</li>
-                    <li>You've overcome cravings before</li>
-                </ul>
-                
-                <h3>Immediate Actions:</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
-                    <button onclick="startBreathingExercise()" style="padding: 10px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        🧘‍♀️ Breathe
-                    </button>
-                    <button onclick="alert('Call your sponsor, trusted friend, or support person right now!')" style="padding: 10px; background: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        📞 Call Someone
-                    </button>
-                    <button onclick="alert('Go for a walk, do jumping jacks, or any physical activity!')" style="padding: 10px; background: #e67e22; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        🏃‍♂️ Move Your Body
-                    </button>
-                    <button onclick="alert('Take a cold shower or splash cold water on your face!')" style="padding: 10px; background: #9b59b6; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        🚿 Cold Water
-                    </button>
-                </div>
-                
-                <h3>Play the Tape Forward:</h3>
-                <p>Think about how you'll feel:</p>
-                <ul style="margin: 10px 0; padding-left: 20px;">
-                    <li>In 1 hour after using</li>
-                    <li>Tomorrow morning</li>
-                    <li>How it affects your goals</li>
-                    <li>How it affects people you care about</li>
-                </ul>
-            </div>
-            
-            <div style="margin-top: 20px;">
-                <button onclick="document.body.removeChild(this.closest('div').parentElement)" 
-                    style="margin: 5px; padding: 10px 20px; background: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Craving is Passing
-                </button>
-                <button onclick="document.body.removeChild(this.closest('div').parentElement)" 
-                    style="margin: 5px; padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Still Need Help
-                </button>
-            </div>
-        `;
-        
-        modal.appendChild(cravingContent);
-        document.body.appendChild(modal);
-    }
-
-    // Gratitude journal
-    function openGratitudeJournal() {
-        const modal = document.createElement('div');
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        `;
-        
-        const journalContent = document.createElement('div');
-        journalContent.style.cssText = `
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        `;
-        
-        journalContent.innerHTML = `
-            <h2 style="color: #2ecc71; margin-bottom: 20px; text-align: center;">🙏 Gratitude Journal</h2>
-            <p style="margin-bottom: 20px;">Write down 3 things you're grateful for today:</p>
-            
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: bold;">1. I'm grateful for:</label>
-                <input type="text" style="width: 100%; padding: 10px; border: 2px solid #e9ecef; border-radius: 5px;" placeholder="Something you appreciate today...">
-            </div>
-            
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: bold;">2. I'm grateful for:</label>
-                <input type="text" style="width: 100%; padding: 10px; border: 2px solid #e9ecef; border-radius: 5px;" placeholder="A person who helped you...">
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: bold;">3. I'm grateful for:</label>
-                <input type="text" style="width: 100%; padding: 10px; border: 2px solid #e9ecef; border-radius: 5px;" placeholder="A small moment of joy...">
-            </div>
-            
-            <div style="text-align: center;">
-                <button onclick="alert('Gratitude saved! Taking time to appreciate the good things helps strengthen recovery.'); document.body.removeChild(this.closest('div').parentElement)" 
-                    style="margin: 5px; padding: 10px 20px; background: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Save Gratitude
-                </button>
-                <button onclick="document.body.removeChild(this.closest('div').parentElement)" 
-                    style="margin: 5px; padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Close
-                </button>
-            </div>
-        `;
-        
-        modal.appendChild(journalContent);
-        document.body.appendChild(modal);
-    }
-
-    // Add CSS animations
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Initialize the app
-    function initializeApp() {
-        // Set initial sobriety date if not set
-        const savedDate = localStorage.getItem('sobrietyDate');
-        if (savedDate) {
-            sobrietyStartDate = new Date(savedDate);
-            updateCounter();
-            updateProgressBars();
-            checkAchievements();
-        }
-        
-        // Generate initial quote
-        generateQuote();
-        
-        // Update counter every hour
-        setInterval(() => {
-            if (sobrietyStartDate) {
-                updateCounter();
-                updateProgressBars();
-                checkAchievements();
-            }
-        }, 3600000); // 1 hour
-    }
-
-    // Save data to localStorage (when available)
-    function saveData() {
-        if (sobrietyStartDate) {
-            localStorage.setItem('sobrietyDate', sobrietyStartDate.toISOString());
-        }
-    }
-
-    // Override functions to save data
-    const originalUpdateSobrietyDate = updateSobrietyDate;
-    updateSobrietyDate = function() {
-        originalUpdateSobrietyDate();
-        saveData();
-    };
-
-    const originalResetCounter = resetCounter;
-    resetCounter = function() {
-        originalResetCounter();
-        saveData();
-    };
-
-    // Start the app
-    window.addEventListener('load', initializeApp);
-</script>
-
-<!-- Add new sections to existing tabs -->
-<script>
-    // Add crisis management tools to the wellness tab
-    document.addEventListener('DOMContentLoaded', function() {
-        const wellnessTab = document.getElementById('wellness');
-        const crisisCard = document.createElement('div');
-        crisisCard.className = 'card';
-        crisisCard.innerHTML = `
-            <h3>🆘 Crisis Management Tools</h3>
-            <div class="resource-grid">
-                <div class="resource-card">
-                    <h4>🚨 Panic Attack</h4>
-                    <p>Immediate help for panic attacks with grounding techniques</p>
-                    <button class="btn btn-danger" onclick="panicAttackHelper()">Help Now</button>
-                </div>
-                <div class="resource-card">
-                    <h4>⚡ Craving Support</h4>
-                    <p>Tools and techniques to manage cravings</p>
-                    <button class="btn btn-warning" onclick="cravingHelper()">Get Support</button>
-                </div>
-                <div class="resource-card">
-                    <h4>🧘‍♀️ Breathing Exercise</h4>
-                    <p>Guided breathing to reduce stress and anxiety</p>
-                    <button class="btn btn-primary" onclick="startBreathingExercise()">Start Breathing</button>
-                </div>
-                <div class="resource-card">
-                    <h4>🙏 Gratitude Journal</h4>
-                    <p>Focus on positive aspects to improve mood</p>
-                    <button class="btn btn-success" onclick="openGratitudeJournal()">Write Gratitude</button>
-                </div>
-            </div>
-        `;
-        wellnessTab.appendChild(crisisCard);
+  // --- Tab Navigation with ARIA ---
+  function showTab(tabId, tabBtn) {
+    // Hide all tab contents and update tab buttons
+    const tabs = document.querySelectorAll('.tab-content');
+    const tabButtons = document.querySelectorAll('.nav-tab');
+    tabs.forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('tabindex', '-1');
     });
+    tabButtons.forEach(btn => {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-selected', 'false');
+      btn.setAttribute('tabindex', '-1');
+    });
+
+    // Show selected tab content
+    const selectedTab = document.getElementById(tabId);
+    selectedTab.classList.add('active');
+    selectedTab.setAttribute('tabindex', '0');
+    selectedTab.focus();
+
+    // Activate clicked tab button
+    tabBtn.classList.add('active');
+    tabBtn.setAttribute('aria-selected', 'true');
+    tabBtn.setAttribute('tabindex', '0');
+  }
+
+  // --- Sobriety Counter ---
+  let sobrietyStartDate = localStorage.getItem('sobrietyDate') ? new Date(localStorage.getItem('sobrietyDate')) : null;
+
+  function updateSobrietyDate() {
+    const input = prompt('Enter your recovery start date (YYYY-MM-DD):', sobrietyStartDate ? sobrietyStartDate.toISOString().slice(0,10) : '');
+    if (input) {
+      const d = new Date(input);
+      if (!isNaN(d.getTime())) {
+        sobrietyStartDate = d;
+        localStorage.setItem('sobrietyDate', sobrietyStartDate.toISOString());
+        updateCounterDisplay();
+        checkAchievements();
+      } else {
+        alert('Invalid date format. Please use YYYY-MM-DD');
+      }
+    }
+  }
+  function resetCounter() {
+    if (confirm('Are you sure you want to reset your recovery start date to today? This cannot be undone.')) {
+      sobrietyStartDate = new Date();
+      localStorage.setItem('sobrietyDate', sobrietyStartDate.toISOString());
+      updateCounterDisplay();
+      checkAchievements();
+    }
+  }
+  function updateCounterDisplay() {
+    const counterElem = document.getElementById('sobrietyCounter');
+    if (!sobrietyStartDate) {
+      counterElem.textContent = '0';
+      return;
+    }
+    const now = new Date();
+    const diff = now - sobrietyStartDate;
+    const days = Math.floor(diff / (1000*60*60*24));
+    counterElem.textContent = days >= 0 ? days : 0;
+    // Daily quote
+    const quotes = [
+      "One day at a time.",
+      "Progress, not perfection.",
+      "Strength grows in the moments you think you can’t go on but you keep going anyway.",
+      "Healing is a journey, not a destination.",
+      "You are stronger than your struggles.",
+      "Keep pushing forward."
+    ];
+    const quoteElem = document.getElementById('dailyQuote');
+    quoteElem.textContent = quotes[days % quotes.length];
+  }
+
+  // --- Mood & Reflection ---
+  let currentMood = null;
+
+  function setMood(mood) {
+    currentMood = mood;
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.mood === mood);
+      btn.setAttribute('aria-pressed', btn.dataset.mood === mood ? 'true' : 'false');
+    });
+  }
+
+  function saveProgress() {
+    if (!currentMood) {
+      alert('Please select a mood before saving.');
+      return;
+    }
+    const reflection = document.getElementById('reflectionInput').value.trim();
+    const today = new Date().toISOString().slice(0,10);
+
+    // Load existing mood reflections from localStorage
+    let moodReflections = JSON.parse(localStorage.getItem('moodReflections') || '{}');
+
+    moodReflections[today] = {
+      mood: currentMood,
+      reflection: reflection
+    };
+    localStorage.setItem('moodReflections', JSON.stringify(moodReflections));
+    alert('Progress saved for ' + today);
+    checkAchievements();
+  }
+
+  // --- Export Data ---
+  function exportData() {
+    const moodReflections = JSON.parse(localStorage.getItem('moodReflections') || '{}');
+    const sobrietyDateStr = sobrietyStartDate ? sobrietyStartDate.toISOString() : null;
+
+    // Achievements unlocked
+    const achievements = [];
+    document.querySelectorAll('.achievement.unlocked').forEach(a => {
+      achievements.push(a.querySelector('h4').textContent);
+    });
+
+    const data = {
+      sobrietyDate: sobrietyDateStr,
+      moodReflections: moodReflections,
+      achievements: achievements
+    };
+
+    const dataStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'recovery_data.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // --- Achievements ---
+  const achievementMilestones = {
+    day1: 1,
+    week1: 7,
+    month1: 30,
+    month3: 90,
+    month6: 180,
+    year1: 365
+  };
+
+  function checkAchievements() {
+    if (!sobrietyStartDate) return;
+
+    const now = new Date();
+    const diffDays = Math.floor((now - sobrietyStartDate) / (1000*60*60*24));
+    Object.entries(achievementMilestones).forEach(([id, daysNeeded]) => {
+      const elem = document.getElementById(id);
+      if (!elem) return;
+      if (diffDays >= daysNeeded) {
+        if (!elem.classList.contains('unlocked')) {
+          elem.classList.remove('locked');
+          elem.classList.add('unlocked');
+          // Optionally announce for screen readers
+          elem.setAttribute('aria-live', 'polite');
+        }
+      } else {
+        elem.classList.add('locked');
+        elem.classList.remove('unlocked');
+      }
+    });
+  }
+
+  // --- Simple breathing exercise modal ---
+  function startBreathingExercise() {
+    const modalContainer = document.getElementById('modalContainer');
+    if (modalContainer.children.length > 0) return; // Prevent multiple modals
+
+    const modal = document.createElement('div');
+    modal.classList.add('modal-overlay');
+    modal.tabIndex = -1;
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'breathTitle');
+    modal.setAttribute('aria-describedby', 'breathDesc');
+
+    modal.innerHTML = `
+      <div class="modal-content" tabindex="0">
+        <h3 id="breathTitle">5-Minute Breathing Exercise</h3>
+        <p id="breathDesc">Follow the prompts: inhale deeply, hold, exhale slowly. Repeat.</p>
+        <div id="breathTimer" aria-live="assertive" style="font-size:2rem; font-weight:bold; margin: 20px 0; text-align:center;">Ready?</div>
+        <button class="btn btn-warning" id="closeModalBtn" aria-label="Close breathing exercise">Close</button>
+      </div>
+    `;
+    modalContainer.appendChild(modal);
+
+    const content = modal.querySelector('.modal-content');
+    const timerDisplay = modal.querySelector('#breathTimer');
+    const closeBtn = modal.querySelector('#closeModalBtn');
+
+    content.focus();
+
+    // Accessibility: trap focus inside modal
+    trapFocus(content);
+
+    closeBtn.onclick = () => closeModal();
+
+    // Breathing cycle steps (seconds)
+    const steps = [
+      {text: 'Inhale...', duration: 4000},
+      {text: 'Hold...', duration: 7000},
+      {text: 'Exhale...', duration: 8000},
+      {text: 'Hold...', duration: 4000}
+    ];
+    let stepIndex = 0;
+    let cycles = 0;
+    const maxCycles = 5;
+
+    function runCycle() {
+      if (cycles >= maxCycles) {
+        timerDisplay.textContent = 'Done! Great job.';
+        closeBtn.focus();
+        return;
+      }
+      const step = steps[stepIndex];
+      timerDisplay.textContent = step.text;
+      setTimeout(() => {
+        stepIndex = (stepIndex + 1) % steps.length;
+        if (stepIndex === 0) cycles++;
+        runCycle();
+      }, step.duration);
+    }
+    setTimeout(runCycle, 1000);
+
+    function closeModal() {
+      // Animate fade out
+      modal.style.animation = 'fadeOutModal 0.3s forwards';
+      setTimeout(() => {
+        modal.remove();
+      }, 300);
+    }
+
+    // Close modal on Esc key
+    modal.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+  }
+
+  // --- Accessibility: Trap focus inside modal content ---
+  function trapFocus(element) {
+    const focusableSelectors = 'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])';
+    const focusableEls = element.querySelectorAll(focusableSelectors);
+    if (focusableEls.length === 0) return;
+
+    let firstFocusable = focusableEls[0];
+    let lastFocusable = focusableEls[focusableEls.length -1];
+
+    element.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusable) {
+            e.preventDefault();
+            lastFocusable.focus();
+          }
+        } else {
+          if (document.activeElement === lastFocusable) {
+            e.preventDefault();
+            firstFocusable.focus();
+          }
+        }
+      }
+      if (e.key === 'Escape') {
+        // This is handled separately in modal creation
+      }
+    });
+  }
+
+  // --- Initialize ---
+  document.addEventListener('DOMContentLoaded', () => {
+    updateCounterDisplay();
+    checkAchievements();
+  });
 </script>
-```
 
 </body>
 </html>
