@@ -2,666 +2,671 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Recovery Toolkit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Addiction & Recovery Toolkit</title>
   <style>
-    :root {
-      --primary: #3498db;
-      --accent: #2ecc71;
-      --danger: #e74c3c;
-      --warning: #f39c12;
-      --dark: #2c3e50;
-      --light: #ecf0f1;
-      --font-main: 'Segoe UI', sans-serif;
-    }
-
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: var(--font-main);
-      margin: 0;
-      background: linear-gradient(to bottom right, #f0f9ff, #c2f0ff);
-      color: #333;
-      overflow-x: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #80deea);
+      color: #222;
+      display: flex; flex-direction: column;
+      min-height: 100vh;
     }
+    a { color: #0277bd; text-decoration: none; }
+    a:hover, a:focus { text-decoration: underline; }
 
+    /* Header */
     header {
-      background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?fit=crop&w=1350&q=80') center/cover no-repeat;
-      color: white;
-      padding: 50px 20px;
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: bold;
-      text-shadow: 1px 1px 5px #000;
+      background: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1350&q=80')
+        no-repeat center/cover;
+      color: white; text-align: center;
+      padding: 40px 20px;
+      font-weight: 900; font-size: 2.8rem;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+    header small {
+      display: block; font-weight: 400; font-size: 1.2rem;
+      margin-top: 8px; opacity: 0.85;
     }
 
-    nav {
-      display: flex;
-      justify-content: space-around;
-      background: var(--dark);
-      color: white;
-      padding: 10px 0;
-      font-size: 0.9rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .nav-tab {
+    /* Container */
+    .container {
       flex: 1;
-      text-align: center;
-      padding: 10px 0;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .nav-tab:hover, .nav-tab.active {
-      background: var(--primary);
-    }
-
-    .tab-content {
-      display: none;
-      padding: 20px;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .card {
+      max-width: 900px;
+      margin: 20px auto 40px;
       background: white;
-      padding: 20px;
-      margin-bottom: 20px;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      overflow: hidden;
     }
 
-    .form-group {
-      margin-bottom: 15px;
+    /* Tabs */
+    nav {
+      display: flex; overflow-x: auto;
+      background: #0277bd;  
+    }
+    nav button {
+      flex: 1 1 auto;
+      padding: 12px; border: none;
+      background: transparent; color: white;
+      font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: background 0.3s;
+      white-space: nowrap;
+    }
+    nav button:hover, nav button:focus {
+      background: rgba(255,255,255,0.2); outline: none;
+    }
+    nav button.active {
+      background: white; color: #0277bd;
+      border-bottom: 3px solid #0277bd;
     }
 
-    .form-label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
+    /* Tab Content */
+    .tab-content { display: none; padding: 20px; }
+    .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .form-input, textarea, input[type="text"], input[type="tel"] {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
+    /* Cards */
+    .card {
+      background: #e0f2f1;
+      border-radius: 10px;
+      padding: 20px; margin-bottom: 25px;
+      box-shadow: inset 0 0 15px #b2dfdb;
     }
+    .card h3 { color: #004d40; margin-bottom: 15px; }
 
+    /* Forms */
+    .form-group { margin-bottom: 15px; }
+    .form-label { display: block; margin-bottom: 6px; font-weight: 600; color: #00695c; }
+    .form-input, textarea, input[type=range] {
+      width: 100%; padding: 10px 12px;
+      border: 2px solid #80cbc4; border-radius: 6px;
+      font-size: 1rem; transition: border-color 0.3s;
+    }
+    .form-input:focus, textarea:focus {
+      border-color: #004d40; outline: none;
+    }
+    textarea { resize: vertical; min-height: 70px; }
+    input[type=range] { height: 30px; cursor: pointer; }
+
+    /* Buttons */
     .btn {
-      display: inline-block;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 6px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
+      display: inline-block; font-weight: 700;
+      padding: 10px 18px; border: none; border-radius: 6px;
+      font-size: 1rem; cursor: pointer; transition: background 0.3s;
+      user-select: none; margin-top: 10px;
     }
+    .btn-success { background: #2e7d32; color: white; }
+    .btn-success:hover { background: #1b5e20; }
+    .btn-primary { background: #0277bd; color: white; }
+    .btn-primary:hover { background: #015f9c; }
+    .btn-warning { background: #f9a825; color: white; }
+    .btn-warning:hover { background: #c17900; }
+    .btn-danger { background: #c62828; color: white; }
+    .btn-danger:hover { background: #8e1e1e; }
 
-    .btn-success { background: var(--accent); }
-    .btn-primary { background: var(--primary); }
-    .btn-danger { background: var(--danger); }
-    .btn-warning { background: var(--warning); }
-
+    /* Resource Grid */
     .resource-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      display: grid; gap: 15px;
+      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
     }
-
     .resource-card {
-      padding: 10px;
-      background: var(--light);
-      border-radius: 8px;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      background: #004d40; color: white;
+      border-radius: 12px; padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      display: flex; flex-direction: column;
+      justify-content: space-between;
+    }
+    .resource-card h4 { margin-bottom: 8px; }
+    .resource-card p { flex: 1; font-size: 0.95rem; margin-bottom: 12px; }
+
+    /* Achievements */
+    .achievements {
+      display: flex; flex-wrap: wrap; gap: 12px;
+    }
+    .achievement {
+      flex: 1 1 45%; background: #b2dfdb;
+      border-radius: 10px; padding: 15px;
+      box-shadow: inset 0 0 12px #004d40;
+      transition: transform 0.3s; cursor: default;
+    }
+    .achievement.locked { opacity: 0.5; }
+    .achievement.unlocked {
+      background: #26a69a; color: white;
+      box-shadow: 0 0 10px #004d40; transform: scale(1.05);
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0%,100% { box-shadow: 0 0 10px #26a69a; }
+      50%  { box-shadow: 0 0 20px #26a69a; }
+    }
+    .achievement h4 { margin-bottom: 6px; }
+
+    /* Mood Tracker */
+    #moodTracker { display: flex; gap: 10px; margin-bottom: 15px; }
+    .mood-btn {
+      width: 48px; height: 48px; border: 2px solid #004d40;
+      background: #b2dfdb; border-radius: 50%;
+      font-size: 24px; display: flex;
+      align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.3s,border 0.3s;
+      user-select: none;
+    }
+    .mood-btn.selected {
+      background: #004d40; color: #b2dfdb;
+    }
+    .mood-btn:focus { outline: 3px solid #80cbc4; }
+
+    /* Tooltip */
+    [data-tooltip] {
+      position: relative; cursor: help;
+    }
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus::after {
+      content: attr(data-tooltip);
+      position: absolute; bottom: 125%; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,77,64,0.9); color: white;
+      padding: 6px 10px; border-radius: 6px;
+      white-space: nowrap; font-size: 0.85rem;
+      z-index: 999; opacity: 1; pointer-events: none;
     }
 
-    .resource-card h4 {
-      margin-top: 0;
+    /* Mini Pages */
+    iframe.mini-page {
+      width: 100%; height: 360px;
+      border: none; border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
     }
 
-    @media (max-width: 600px) {
-      .resource-grid {
-        grid-template-columns: 1fr;
-      }
+    /* Responsive */
+    @media (max-width: 640px) {
+      nav button { font-size: 0.85rem; padding: 10px; }
+      .achievement { flex: 1 1 100%; }
+      iframe.mini-page { height: 280px; }
+      header { font-size: 2rem; padding: 28px 12px; }
+    }
 
-      nav {
-        flex-direction: column;
-      }
+    /* Animations */
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+    /* Progress Bars */
+    .progress-bar-container {
+      background: #b2dfdb; border-radius: 10px;
+      height: 16px; margin: 8px 0 18px;
+      box-shadow: inset 0 0 5px #004d40;
+    }
+    .progress-bar {
+      height: 100%; border-radius: 10px;
+      background: linear-gradient(135deg,#004d40,#26a69a);
+      width: 0; transition: width 1s ease;
     }
   </style>
 </head>
 <body>
+
   <header>
     Addiction & Recovery Toolkit
+    <small>Your companion for healing & growth</small>
   </header>
-  <nav>
-    <div class="nav-tab active" onclick="showTab('tracker')">Tracker</div>
-    <div class="nav-tab" onclick="showTab('goals')">Goals</div>
-    <div class="nav-tab" onclick="showTab('wellness')">Wellness</div>
-    <div class="nav-tab" onclick="showTab('achievements')">Milestones</div>
-    <div class="nav-tab" onclick="showTab('minipages')">Mini Pages</div>
-  </nav>
-  <div class="container">
-  
-      <!-- Tracker Tab -->
-    <div id="tracker" class="tab-content active">
-      <div class="card">
-        <h3>Sobriety Tracker</h3>
-        <p>You’ve been sober for <strong><span id="sobrietyCounter">0</span> days</strong>.</p>
-        <div style="margin-bottom: 10px;">
-          <button class="btn btn-primary" onclick="updateSobrietyDate()">Set Start Date</button>
-          <button class="btn btn-warning" onclick="resetCounter()">Reset</button>
-        </div>
-        <div>
-          <label>30 Day Goal</label>
-          <div style="background: #eee; border-radius: 10px;">
-            <div id="goal30" style="height: 10px; background: var(--primary); width: 0%; border-radius: 10px;"></div>
-          </div>
-          <label>90 Day Goal</label>
-          <div style="background: #eee; border-radius: 10px;">
-            <div id="goal90" style="height: 10px; background: var(--accent); width: 0%; border-radius: 10px;"></div>
-          </div>
-          <label>1 Year Goal</label>
-          <div style="background: #eee; border-radius: 10px;">
-            <div id="goal365" style="height: 10px; background: var(--danger); width: 0%; border-radius: 10px;"></div>
-          </div>
-        </div>
-      </div>
 
-      <div class="card">
-        <h3>How Are You Feeling?</h3>
-        <div style="display: flex; justify-content: space-around;">
-          <button class="btn mood-btn" data-mood="😊" onclick="setMood('😊')">😊</button>
-          <button class="btn mood-btn" data-mood="😐" onclick="setMood('😐')">😐</button>
-          <button class="btn mood-btn" data-mood="😢" onclick="setMood('😢')">😢</button>
-          <button class="btn mood-btn" data-mood="😠" onclick="setMood('😠')">😠</button>
-        </div>
-        <div style="margin-top: 10px;">
-          <label class="form-label">Reflection</label>
-          <textarea rows="3" class="form-input" placeholder="What’s going on today? How are you coping?"></textarea>
-        </div>
-        <button class="btn btn-success" onclick="saveProgress()">Save Mood Check</button>
-      </div>
+  <div class="container" role="main" aria-label="Addiction and recovery toolkit">
 
-      <div class="card">
-        <h3>🌟 Daily Motivation</h3>
-        <p id="dailyQuote" style="font-style: italic;"></p>
-        <button class="btn btn-primary" onclick="generateQuote()">New Quote</button>
-      </div>
-    </div>
-
-    <!-- Goals Tab -->
-    <div id="goals" class="tab-content">
-      <div class="card">
-        <h3>Recovery Goals</h3>
-        <p>Set SMART (Specific, Measurable, Achievable, Relevant, Time-bound) goals in key areas of your healing journey.</p>
-
-        <div class="form-group">
-          <label class="form-label">Mental Health Goal</label>
-          <input type="text" class="form-input" placeholder="e.g. Attend therapy weekly, manage anxiety...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Emotional Goal</label>
-          <input type="text" class="form-input" placeholder="e.g. Journal daily, express my feelings more...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Physical Goal</label>
-          <input type="text" class="form-input" placeholder="e.g. Exercise 3x/week, sleep 8hrs/night...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Social Goal</label>
-          <input type="text" class="form-input" placeholder="e.g. Join a support group, reconnect with family...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Addiction Recovery Goal</label>
-          <input type="text" class="form-input" placeholder="e.g. Stay sober for 30 days, attend NA/AA...">
-        </div>
-        <button class="btn btn-success">Save My Goals</button>
-      </div>
-
-      <div class="card">
-        <h3>✨ Goal Suggestions</h3>
-        <ul>
-          <li>Build a daily gratitude habit</li>
-          <li>Stick to a bedtime routine</li>
-          <li>Reach out for support weekly</li>
-          <li>Practice mindfulness daily</li>
-          <li>Forgive myself for the past</li>
-        </ul>
-      </div>
-    </div>
+    <nav role="tablist" aria-label="Main Navigation Tabs">
+      <button class="nav-tab active" role="tab" aria-selected="true" aria-controls="crisis" onclick="showTab('crisis', event)">Crisis</button>
+      <button class="nav-tab" role="tab" aria-selected="false" aria-controls="wellness" onclick="showTab('wellness', event)">Wellness</button>
+      <button class="nav-tab" role="tab" aria-selected="false" aria-controls="achievements" onclick="showTab('achievements', event)">Achievements</button>
+      <button class="nav-tab" role="tab" aria-selected="false" aria-controls="goals" onclick="showTab('goals', event)">Goals</button>
+      <button class="nav-tab" role="tab" aria-selected="false" aria-controls="minipages" onclick="showTab('minipages', event)">Mini Pages</button>
+    </nav>
 
     <!-- Crisis Planning Tab -->
-    <div id="crisis" class="tab-content">
+    <section id="crisis" class="tab-content active" role="tabpanel">
       <div class="card">
         <h3>Crisis Planning</h3>
-        <div class="form-group">
-          <label class="form-label">Emergency Contact Name</label>
-          <input type="text" class="form-input" placeholder="Name of trusted person">
+        <div class="form-group" data-tooltip="Trusted contact to call in crisis">
+          <label class="form-label" for="emergencyName">Emergency Contact Name</label>
+          <input id="emergencyName" class="form-input" placeholder="Name" />
         </div>
-        <div class="form-group">
-          <label class="form-label">Emergency Contact Phone</label>
-          <input type="tel" class="form-input" placeholder="Phone number">
+        <div class="form-group" data-tooltip="Phone # including area code">
+          <label class="form-label" for="emergencyPhone">Emergency Contact Phone</label>
+          <input id="emergencyPhone" class="form-input" placeholder="Phone #" />
         </div>
-        <div class="form-group">
-          <label class="form-label">Triggers to Avoid</label>
-          <textarea class="form-input" rows="3" placeholder="Places, people, emotions to avoid..."></textarea>
+        <div class="form-group" data-tooltip="List places, people, emotions to avoid">
+          <label class="form-label" for="personalTriggers">Personal Triggers to Avoid</label>
+          <textarea id="personalTriggers" class="form-input" placeholder="Triggers..."></textarea>
         </div>
-        <button class="btn btn-success">Save Crisis Plan</button>
+        <button class="btn btn-success" onclick="saveCrisisPlan()">Save Plan</button>
+        <button class="btn btn-primary" onclick="loadCrisisPlan()">Load Plan</button>
       </div>
-    </div>
-    
+    </section>
+
     <!-- Wellness Tab -->
-<div id="wellness" class="tab-content">
-  <div class="card">
-    <h3>Daily Wellness Check</h3>
-    <div class="form-group">
-      <label class="form-label">Sleep Quality (1-10)</label>
-      <input type="range" min="1" max="10" value="7" class="form-input" style="height: 30px;">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Energy Level (1-10)</label>
-      <input type="range" min="1" max="10" value="7" class="form-input" style="height: 30px;">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Stress Level (1-10)</label>
-      <input type="range" min="1" max="10" value="5" class="form-input" style="height: 30px;">
-    </div>
-    <button class="btn btn-success">Log Wellness Data</button>
+    <section id="wellness" class="tab-content" role="tabpanel">
+      <div class="card">
+        <h3>Daily Wellness Check</h3>
+        <div class="form-group" data-tooltip="1=poor sleep…10=excellent sleep">
+          <label class="form-label" for="sleepQuality">Sleep Quality (1–10)</label>
+          <input id="sleepQuality" type="range" min="1" max="10" value="7" />
+        </div>
+        <div class="form-group" data-tooltip="1=low energy…10=high energy">
+          <label class="form-label" for="energyLevel">Energy Level (1–10)</label>
+          <input id="energyLevel" type="range" min="1" max="10" value="7" />
+        </div>
+        <div class="form-group" data-tooltip="1=low stress…10=high stress">
+          <label class="form-label" for="stressLevel">Stress Level (1–10)</label>
+          <input id="stressLevel" type="range" min="1" max="10" value="5" />
+        </div>
+        <button class="btn btn-success" onclick="saveWellnessData()">Log Wellness</button>
+        <button class="btn btn-primary" onclick="loadWellnessData()">Load Wellness</button>
+      </div>
+
+      <div class="card">
+        <h3>Coping Strategies</h3>
+        <div class="resource-grid">
+          <div class="resource-card" data-tooltip="Focus on breath, body, senses">
+            <h4>🧘 Mindfulness</h4>
+            <p>Practice deep breathing or grounding (5-4-3-2-1). E.g., breathe 4s in, hold 4s, out 4s.</p>
+            <button class="btn btn-primary" onclick="startBreathingExercise()">Start Breathing</button>
+          </div>
+          <div class="resource-card" data-tooltip="Boost mood & reduce cravings">
+            <h4>🏃 Physical Activity</h4>
+            <p>Walk, stretch, or dance for 10 minutes to shift your energy.</p>
+            <button class="btn btn-primary" onclick="alert('Try a quick walk or follow a stretching video!')">Find Videos</button>
+          </div>
+          <div class="resource-card" data-tooltip="Express feelings through art">
+            <h4>🎨 Creative Expression</h4>
+            <p>Journal, draw, or play music to process emotions constructively.</p>
+            <button class="btn btn-primary" onclick="alert('Grab a journal or sketch pad!')">Get Ideas</button>
+          </div>
+          <div class="resource-card" data-tooltip="Reach out for support">
+            <h4>📞 Reach Out</h4>
+            <p>Call a friend, sponsor, or support group member when in need.</p>
+            <button class="btn btn-primary" onclick="alert('Who will you call now?')">Contact</button>
+          </div>
+          <div class="resource-card" data-tooltip="Stay present and calm">
+            <h4>🌿 Grounding</h4>
+            <p>Name 5 things you see, 4 you touch, 3 you hear, 2 you smell, 1 you taste.</p>
+            <button class="btn btn-primary" onclick="alert('Begin your 5-4-3-2-1 now!')">Start Grounding</button>
+          </div>
+          <div class="resource-card" data-tooltip="Focus on gratitude">
+            <h4>💛 Gratitude Journal</h4>
+            <p>Write 3 things you’re grateful for today to shift mindset positively.</p>
+            <button class="btn btn-primary" onclick="alert('What are you grateful for?')">Open Journal</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements Tab -->
+    <section id="achievements" class="tab-content" role="tabpanel">
+      <div class="card">
+        <h3>Recovery Milestones</h3>
+        <div class="achievements" id="achievementsList"></div>
+      </div>
+    </section>
+
+    <!-- Goals Tab -->
+    <section id="goals" class="tab-content" role="tabpanel">
+      <div class="card">
+        <h3>Set SMART Goals</h3>
+        <form id="goalForm">
+          <div class="form-group">
+            <label class="form-label" for="goalTitle">Goal Title</label>
+            <input id="goalTitle" class="form-input" required placeholder="e.g. Attend meeting weekly" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="goalCategory">Category</label>
+            <select id="goalCategory" class="form-input" required>
+              <option value="">Select</option>
+              <option>Emotional</option>
+              <option>Mental</option>
+              <option>Physical</option>
+              <option>Social</option>
+              <option>Recovery</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="goalDescription">Description</label>
+            <textarea id="goalDescription" class="form-input" required placeholder="Describe your goal"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="goalDeadline">Deadline</label>
+            <input id="goalDeadline" type="date" class="form-input" required />
+          </div>
+          <button type="submit" class="btn btn-success">Add Goal</button>
+        </form>
+        <div id="goalsList"></div>
+      </div>
+    </section>
+
+    <!-- Mini Pages Tab -->
+    <section id="minipages" class="tab-content" role="tabpanel">
+      <div class="card">
+        <h3>Mini Crisis Toolkit</h3>
+        <iframe class="mini-page" src="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html"></iframe>
+      </div>
+      <div class="card">
+        <h3>Mini Stories & Reflections</h3>
+        <iframe class="mini-page" src="https://rissastar.github.io/Techniques-For-The-Soul/stories.html"></iframe>
+      </div>
+    </section>
+
   </div>
 
-  <div class="card">
-    <h3>Coping Strategies</h3>
-    <div class="resource-grid">
-      <div class="resource-card">
-        <h4>🧘‍♀️ Mindfulness</h4>
-        <p>Practice deep breathing or grounding.</p>
-        <ul>
-          <li>5-4-3-2-1 Senses</li>
-          <li>Box Breathing</li>
-        </ul>
-        <button class="btn btn-primary">Try Meditation</button>
-      </div>
-      <div class="resource-card">
-        <h4>🏃‍♂️ Physical Movement</h4>
-        <p>Move your body to shift energy.</p>
-        <ul>
-          <li>Walk or jog</li>
-          <li>Stretch or do yoga</li>
-        </ul>
-        <button class="btn btn-primary">Watch Exercise</button>
-      </div>
-      <div class="resource-card">
-        <h4>🎨 Creative Expression</h4>
-        <p>Express emotions through art or music.</p>
-        <ul>
-          <li>Write a poem</li>
-          <li>Paint or sketch your feelings</li>
-        </ul>
-        <button class="btn btn-primary">Art Ideas</button>
-      </div>
-      <div class="resource-card">
-        <h4>📞 Connection</h4>
-        <p>Reach out and speak up.</p>
-        <ul>
-          <li>Call a friend or sponsor</li>
-          <li>Join an online support group</li>
-        </ul>
-        <button class="btn btn-primary">Call Now</button>
-      </div>
-    </div>
-  </div>
+  <!-- Achievement Notification -->
+  <div id="achievementNotification" style="display:none; position:fixed; top:20px; right:20px; background:linear-gradient(135deg,#26a69a,#2ecc71); color:white; padding:15px 20px; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:2000; animation:slideIn 0.5s ease-out;"></div>
 
-  <div class="card">
-    <h3>🆘 Crisis Management Tools</h3>
-    <div class="resource-grid">
-      <div class="resource-card">
-        <h4>🚨 Panic Attack Help</h4>
-        <p>Use grounding and reminders.</p>
-        <button class="btn btn-danger" onclick="panicAttackHelper()">Help Me</button>
-      </div>
-      <div class="resource-card">
-        <h4>⚡ Craving Help</h4>
-        <p>Pause and play the tape forward.</p>
-        <button class="btn btn-warning" onclick="cravingHelper()">Manage Craving</button>
-      </div>
-      <div class="resource-card">
-        <h4>🧘 Breathing</h4>
-        <p>Use deep breaths to recenter.</p>
-        <button class="btn btn-primary" onclick="startBreathingExercise()">Breathe</button>
-      </div>
-      <div class="resource-card">
-        <h4>🙏 Gratitude Journal</h4>
-        <p>Write 3 things you’re thankful for.</p>
-        <button class="btn btn-success" onclick="openGratitudeJournal()">Open Journal</button>
-      </div>
-    </div>
-  </div>
-</div>
+  <script>
+    /* ========== JavaScript Logic ========== */
 
-<!-- Achievements Tab -->
-<div id="achievements" class="tab-content">
-  <div class="card">
-    <h3>Recovery Milestones</h3>
-    <div class="achievements">
-      <div class="achievement locked" id="day1">
-        <h4>🌅 First Day</h4>
-        <p>You started. That’s huge.</p>
-      </div>
-      <div class="achievement locked" id="week1">
-        <h4>📅 1 Week</h4>
-        <p>7 days strong!</p>
-      </div>
-      <div class="achievement locked" id="month1">
-        <h4>🗓️ 1 Month</h4>
-        <p>30 days sober</p>
-      </div>
-      <div class="achievement locked" id="month3">
-        <h4>🌸 3 Months</h4>
-        <p>90 days and thriving</p>
-      </div>
-      <div class="achievement locked" id="month6">
-        <h4>🌻 6 Months</h4>
-        <p>Half a year!</p>
-      </div>
-      <div class="achievement locked" id="year1">
-        <h4>🎉 1 Year</h4>
-        <p>You did it — one whole year!</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Add Personal Wins</h3>
-    <div class="form-group">
-      <label class="form-label">Achievement</label>
-      <input type="text" class="form-input" placeholder="e.g. Attended a support meeting">
-    </div>
-    <button class="btn btn-success">Save Achievement</button>
-  </div>
-</div>
-
-<!-- Mini Pages (your original content) -->
-<div id="mini-pages" class="tab-content">
-  <div class="card">
-    <h3>📚 Crisis Toolkit</h3>
-    <iframe src="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html" style="width: 100%; height: 400px; border: none; border-radius: 10px;"></iframe>
-  </div>
-
-  <div class="card">
-    <h3>📝 Stories & Reflections</h3>
-    <iframe src="https://rissastar.github.io/Techniques-For-The-Soul/stories.html" style="width: 100%; height: 400px; border: none; border-radius: 10px;"></iframe>
-  </div>
-</div>
-
-<script>
-// Variables
-let sobrietyStartDate = null;
-let currentMood = null;
-
-// Motivational quotes
-const quotes = [
-  "Recovery is not a race. You don't have to feel guilty if it takes you longer than you thought it would.",
-  "The only person you are destined to become is the person you decide to be.",
-  "Every day is a new beginning. Take a deep breath, smile, and start again.",
-  "You are stronger than your addiction. You are worth more than your worst day.",
-  "Progress, not perfection. Every step forward counts.",
-  "Recovery is about being grateful for the chance to live life fully.",
-  "One day at a time. One moment at a time. You've got this.",
-  "Your current situation is not your final destination.",
-  "The comeback is always stronger than the setback.",
-  "You didn't come this far to only come this far."
-];
-
-// Show tab content and activate tab button
-function showTab(tabName, evt) {
-  const contents = document.querySelectorAll('.tab-content');
-  contents.forEach(c => c.classList.remove('active'));
-
-  const tabs = document.querySelectorAll('.nav-tab');
-  tabs.forEach(t => t.classList.remove('active'));
-
-  document.getElementById(tabName).classList.add('active');
-  if (evt) evt.currentTarget.classList.add('active');
-}
-
-// Update sobriety date prompt & calculations
-function updateSobrietyDate() {
-  const date = prompt("Enter your recovery start date (YYYY-MM-DD):");
-  if (date && !isNaN(Date.parse(date))) {
-    sobrietyStartDate = new Date(date);
-    saveData();
-    updateCounter();
-    updateProgressBars();
-    checkAchievements();
-  } else {
-    alert('Please enter a valid date in format YYYY-MM-DD');
-  }
-}
-
-// Update sobriety days counter UI
-function updateCounter() {
-  if (!sobrietyStartDate) return;
-  const today = new Date();
-  const diff = today.getTime() - sobrietyStartDate.getTime();
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  document.getElementById('sobrietyCounter').textContent = days;
-}
-
-// Reset counter to today
-function resetCounter() {
-  if (confirm('Are you sure you want to reset your recovery date to today?')) {
-    sobrietyStartDate = new Date();
-    saveData();
-    updateCounter();
-    updateProgressBars();
-    checkAchievements();
-  }
-}
-
-// Update progress bars for goals
-function updateProgressBars() {
-  if (!sobrietyStartDate) return;
-  const today = new Date();
-  const diff = today.getTime() - sobrietyStartDate.getTime();
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-  const bars = [
-    { id: 'goal30', daysGoal: 30 },
-    { id: 'goal90', daysGoal: 90 },
-    { id: 'goal365', daysGoal: 365 }
-  ];
-
-  bars.forEach(bar => {
-    const progress = Math.min((days / bar.daysGoal) * 100, 100);
-    const el = document.getElementById(bar.id);
-    if (el) el.style.width = progress + '%';
-  });
-}
-
-// Unlock achievements based on sobriety days
-function checkAchievements() {
-  if (!sobrietyStartDate) return;
-  const today = new Date();
-  const diff = today.getTime() - sobrietyStartDate.getTime();
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-  const milestones = [
-    { id: 'day1', minDays: 1 },
-    { id: 'week1', minDays: 7 },
-    { id: 'month1', minDays: 30 },
-    { id: 'month3', minDays: 90 },
-    { id: 'month6', minDays: 180 },
-    { id: 'year1', minDays: 365 }
-  ];
-
-  milestones.forEach(m => {
-    if (days >= m.minDays) unlockAchievement(m.id);
-  });
-}
-
-function unlockAchievement(id) {
-  const el = document.getElementById(id);
-  if (el && el.classList.contains('locked')) {
-    el.classList.remove('locked');
-    el.classList.add('unlocked');
-    showAchievementNotification(el.querySelector('h4').textContent);
-  }
-}
-
-// Show achievement notification
-function showAchievementNotification(title) {
-  const notification = document.createElement('div');
-  notification.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    z-index: 10000;
-    animation: slideIn 0.5s ease-out;
-  `;
-  notification.innerHTML = `
-    <h4 style="margin:0 0 5px 0;">🎉 Achievement Unlocked!</h4>
-    <p style="margin:0;">${title}</p>
-  `;
-  document.body.appendChild(notification);
-  setTimeout(() => {
-    notification.style.animation = 'slideOut 0.5s ease-in';
-    setTimeout(() => notification.remove(), 500);
-  }, 3000);
-}
-
-// Mood selection and save
-function setMood(mood) {
-  currentMood = mood;
-  document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
-  const selectedBtn = document.querySelector(`.mood-btn[data-mood="${mood}"]`);
-  if (selectedBtn) selectedBtn.classList.add('selected');
-}
-
-function saveProgress() {
-  const reflection = document.querySelector('#tracker textarea').value.trim();
-  if (!currentMood || !reflection) {
-    alert('Please select your mood and write a reflection before saving.');
-    return;
-  }
-  alert('Progress saved! Keep up the great work!');
-  // Clear form after save
-  document.querySelector('#tracker textarea').value = '';
-  document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
-  currentMood = null;
-}
-
-// Generate and display motivational quote
-function generateQuote() {
-  const q = quotes[Math.floor(Math.random() * quotes.length)];
-  document.getElementById('dailyQuote').textContent = `"${q}"`;
-}
-
-// Breathing exercise modal & cycle
-function startBreathingExercise() {
-  const modal = createModal(`
-    <h3>🧘‍♀️ Breathing Exercise</h3>
-    <div id="breathingCircle" style="
-      width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #3498db, #2980b9);
-      margin: 20px auto; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;
-      font-weight: bold; transition: transform 4s ease-in-out;
-    ">Breathe</div>
-    <p id="breathingText">Follow the circle to breathe deeply</p>
-    <button id="closeBreathing" class="btn btn-danger" style="margin-top:20px;">Close</button>
-  `);
-
-  let phase = 'inhale';
-  const circle = modal.querySelector('#breathingCircle');
-  const text = modal.querySelector('#breathingText');
-  const closeBtn = modal.querySelector('#closeBreathing');
-
-  closeBtn.onclick = () => {
-    document.body.removeChild(modal);
-  };
-
-  function breathingCycle() {
-    if (!document.body.contains(modal)) return; // stop if closed
-    if (phase === 'inhale') {
-      circle.style.transform = 'scale(1.3)';
-      text.textContent = 'Breathe in... (4 seconds)';
-      phase = 'hold1';
-      setTimeout(breathingCycle, 4000);
-    } else if (phase === 'hold1') {
-      text.textContent = 'Hold... (4 seconds)';
-      phase = 'exhale';
-      setTimeout(breathingCycle, 4000);
-    } else if (phase === 'exhale') {
-      circle.style.transform = 'scale(1)';
-      text.textContent = 'Breathe out... (4 seconds)';
-      phase = 'hold2';
-      setTimeout(breathingCycle, 4000);
-    } else {
-      text.textContent = 'Hold... (4 seconds)';
-      phase = 'inhale';
-      setTimeout(breathingCycle, 4000);
+    // Tabs
+    const tabs = document.querySelectorAll('nav button.nav-tab'),
+          contents = document.querySelectorAll('.tab-content');
+    function showTab(id, evt) {
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+      contents.forEach(c => c.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      if(evt) { evt.currentTarget.classList.add('active'); evt.currentTarget.setAttribute('aria-selected','true'); }
     }
-  }
-  setTimeout(breathingCycle, 100);
-}
 
-// Utility: create modal overlay with content
-function createModal(innerHTML) {
-  const modal = document.createElement('div');
-  modal.style.cssText = `
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
-    z-index: 10000; padding: 1rem;
-  `;
-  const content = document.createElement('div');
-  content.style.cssText = `
-    background: white; padding: 1.5rem; border-radius: 12px; max-width: 320px; width: 100%;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3); text-align: center;
-  `;
-  content.innerHTML = innerHTML;
-  modal.appendChild(content);
-  document.body.appendChild(modal);
-  return content;
-}
+    // LocalStorage Helpers
+    function saveData(key,obj){ localStorage.setItem(key,JSON.stringify(obj)); }
+    function loadData(key){ try{return JSON.parse(localStorage.getItem(key))||null;}catch{return null;} }
 
-// Saving and loading to localStorage
-function saveData() {
-  const data = {
-    sobrietyStartDate: sobrietyStartDate ? sobrietyStartDate.toISOString() : null,
-  };
-  localStorage.setItem('addictionToolkitData', JSON.stringify(data));
-}
+    /* -------- Crisis Plan -------- */
+    const en = document.getElementById('emergencyName'),
+          ep = document.getElementById('emergencyPhone'),
+          pt = document.getElementById('personalTriggers');
+    function saveCrisisPlan(){
+      if(!en.value||!ep.value||!pt.value){ alert('Fill all fields'); return; }
+      saveData('crisisPlan',{en:en.value, ep:ep.value, pt:pt.value});
+      alert('Crisis plan saved!');
+    }
+    function loadCrisisPlan(){
+      const d=loadData('crisisPlan');
+      if(d){ en.value=d.en; ep.value=d.ep; pt.value=d.pt; alert('Crisis plan loaded'); }
+      else alert('No plan found');
+    }
+    loadCrisisPlan();
 
-function loadData() {
-  const saved = localStorage.getItem('addictionToolkitData');
-  if (!saved) return;
-  try {
-    const data = JSON.parse(saved);
-    sobrietyStartDate = data.sobrietyStartDate ? new Date(data.sobrietyStartDate) : null;
-  } catch {
-    sobrietyStartDate = null;
-  }
-}
+    /* -------- Wellness -------- */
+    const sleepIn = document.getElementById('sleepQuality'),
+          energyIn= document.getElementById('energyLevel'),
+          stressIn= document.getElementById('stressLevel');
+    function saveWellnessData(){
+      saveData('wellness',{sleep:+sleepIn.value,energy:+energyIn.value,stress:+stressIn.value});
+      alert('Wellness data logged!');
+    }
+    function loadWellnessData(){
+      const d=loadData('wellness');
+      if(d){ sleepIn.value=d.sleep; energyIn.value=d.energy; stressIn.value=d.stress; alert('Wellness data loaded'); }
+      else alert('No wellness data found');
+    }
+    loadWellnessData();
 
-// Initialization
-window.onload = () => {
-  loadData();
-  showTab('crisis');
-  updateCounter();
-  updateProgressBars();
-  checkAchievements();
-  generateQuote();
-};
-</script>
+    /* -------- Achievements -------- */
+    const achievementsList = document.getElementById('achievementsList');
+    const achievementsData = [
+      {id:'day1', title:'First Day Sober', desc:'You started your journey!'},
+      {id:'week1', title:'One Week Clean', desc:'7 days of progress!'},
+      {id:'month1', title:'One Month Sober', desc:'30 days strong!'},
+      {id:'month3', title:'Three Months', desc:'90 days of resilience!'},
+      {id:'month6', title:'Six Months', desc:'Half-year achievement!'},
+      {id:'year1', title:'One Year Sober', desc:'365 days of sobriety!'}
+    ];
+    function renderAchievements(){
+      const unlocked = loadData('unlockedAch')||[];
+      achievementsList.innerHTML='';
+      achievementsData.forEach(a=>{
+        const div=document.createElement('div');
+        div.className='achievement '+(unlocked.includes(a.id)?'unlocked':'locked');
+        div.innerHTML=`<h4>${a.title}</h4><p>${a.desc}</p>`;
+        achievementsList.appendChild(div);
+      });
+    }
+    function unlockAchievement(id){
+      let arr=loadData('unlockedAch')||[];
+      if(!arr.includes(id)){ arr.push(id); saveData('unlockedAch',arr); showNotification('Unlocked: '+achievementsData.find(a=>a.id===id).title); renderAchievements(); }
+    }
+    function showNotification(msg){
+      const n = document.getElementById('achievementNotification');
+      n.textContent = msg;
+      n.style.display = 'block';
+      setTimeout(()=>{ n.style.animation='slideOut 0.5s ease-in'; setTimeout(()=>n.style.display='none',500); },3000);
+    }
+    renderAchievements();
+
+    /* -------- Goals -------- */
+    const goalForm = document.getElementById('goalForm'),
+          goalsList = document.getElementById('goalsList');
+    function renderGoals(){
+      const goals = loadData('goals')||[];
+      goalsList.innerHTML='';
+      goals.forEach((g,i)=>{
+        const card=document.createElement('div');
+        card.className='card';
+        card.innerHTML = `<h4>${g.title} <small>(${g.category})</small></h4>
+          <p>${g.description}</p><p><strong>Due:</strong> ${g.deadline}</p>
+          <button class="btn btn-danger" onclick="deleteGoal(${i})">Delete</button>`;
+        goalsList.appendChild(card);
+      });
+    }
+    function deleteGoal(i){
+      let arr=loadData('goals')||[];
+      arr.splice(i,1); saveData('goals',arr); renderGoals();
+    }
+    goalForm.addEventListener('submit',e=>{
+      e.preventDefault();
+      const g={ title:goalForm.goalTitle.value.trim(),
+                category:goalForm.goalCategory.value,
+                description:goalForm.goalDescription.value.trim(),
+                deadline:goalForm.goalDeadline.value };
+      if(!g.title||!g.category||!g.description||!g.deadline){ alert('All fields required'); return; }
+      let arr=loadData('goals')||[];
+      arr.push(g); saveData('goals',arr); goalForm.reset(); renderGoals(); unlockAchievement('day1');
+    });
+    renderGoals();
+
+    /* -------- Mood & Reflection -------- */
+    let selectedMood=null;
+    document.querySelectorAll('.mood-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        selectedMood=btn.textContent;
+        document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+
+    function saveProgress(){
+      const ref = document.querySelector('#tracker textarea').value.trim();
+      if(!selectedMood||!ref){ alert('Select mood and write reflection.'); return; }
+      const key='moodRef_'+new Date().toISOString().slice(0,10);
+      saveData(key,{mood:selectedMood,ref,ts:new Date().toISOString()});
+      alert('Reflection saved!'); document.querySelector('#tracker textarea').value='';
+      document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+      selectedMood=null; unlockAchievement('day1');
+    }
+
+    // Add Tracker section dynamically
+    document.getElementById('wellness').insertAdjacentHTML('afterend',`
+      <section id="tracker" class="tab-content" role="tabpanel">
+        <div class="card">
+          <h3>Mood & Reflection</h3>
+          <div id="moodTracker">
+            <button class="mood-btn">😊</button>
+            <button class="mood-btn">😐</button>
+            <button class="mood-btn">😢</button>
+            <button class="mood-btn">😠</button>
+          </div>
+          <textarea placeholder="Reflect on your day..."></textarea>
+          <button class="btn btn-success" onclick="saveProgress()">Save Reflection</button>
+        </div>
+      </section>
+    `);
+
+    /* -------- Motivational Quotes -------- */
+    const quotes = [
+      "Recovery is not a race. You don't have to feel guilty if it takes you longer than you thought it would.",
+      "One day at a time.",
+      "Progress, not perfection.",
+      "You are stronger than your worst day.",
+      "The comeback is always stronger than the setback."
+    ];
+    function loadQuote(){
+      const q=quotes[new Date().getDate()%quotes.length];
+      let el=document.getElementById('dailyQuote');
+      if(!el){
+        document.getElementById('tracker').insertAdjacentHTML('beforeend',`
+          <div class="card"><h3>🌟 Daily Quote</h3><p id="dailyQuote"></p><button class="btn btn-primary" onclick="newQuote()">New Quote</button></div>
+        `);
+        el=document.getElementById('dailyQuote');
+      }
+      el.textContent = `"${q}"`;
+    }
+    function newQuote(){
+      const q=quotes[Math.floor(Math.random()*quotes.length)];
+      document.getElementById('dailyQuote').textContent = `"${q}"`;
+    }
+    loadQuote();
+
+    /* -------- Breathing Exercise -------- */
+    function startBreathingExercise(){
+      const phases=["Breathe in...","Hold...","Breathe out...","Hold..."];
+      let step=0;
+      const modal = document.createElement('div');
+      modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:10000;';
+      const box = document.createElement('div');
+      box.style.cssText='background:white;padding:20px;border-radius:10px;text-align:center;max-width:300px;';
+      box.innerHTML=`<div id="bText" style="font-size:1.2rem;margin-bottom:15px;">${phases[0]}</div><button class="btn btn-danger">Close</button>`;
+      modal.appendChild(box); document.body.appendChild(modal);
+      box.querySelector('button').onclick = ()=>document.body.removeChild(modal);
+      const interval = setInterval(()=>{
+        step=(step+1)%phases.length;
+        box.querySelector('#bText').textContent=phases[step];
+      },4000);
+    }
+
+    /* -------- Grounding Technique -------- */
+    function cravingHelper(){
+      startGroundingHelper('Craving Support');
+    }
+    function panicAttackHelper(){
+      startGroundingHelper('Panic Attack Help');
+    }
+    function startGroundingHelper(title){
+      const steps=[
+        'Name 5 things you see.',
+        'Name 4 things you can touch.',
+        'Name 3 things you hear.',
+        'Name 2 things you smell.',
+        'Name 1 thing you taste.'
+      ];
+      let idx=0;
+      const modal=document.createElement('div');
+      modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:10000;';
+      const box=document.createElement('div');
+      box.style.cssText='background:white;padding:20px;border-radius:10px;max-width:320px;';
+      box.innerHTML=`<h3 style="margin-bottom:10px;">${title}</h3><p id="gStep">${steps[0]}</p><button class="btn btn-secondary">Close</button>`;
+      box.querySelector('button').onclick=()=>document.body.removeChild(modal);
+      modal.appendChild(box); document.body.appendChild(modal);
+      const interval=setInterval(()=>{
+        idx++;
+        if(idx>=steps.length){ clearInterval(interval); box.querySelector('#gStep').textContent='You are grounded!'; return; }
+        box.querySelector('#gStep').textContent=steps[idx];
+      },5000);
+    }
+
+    /* -------- Gratitude Journal -------- */
+    const ge=document.createElement('div');
+    ge.innerHTML=`
+      <section id="gratitude" class="tab-content" role="tabpanel">
+        <div class="card">
+          <h3>Gratitude Journal</h3>
+          <textarea id="gratitudeEntry" placeholder="What are you grateful for today?"></textarea>
+          <button class="btn btn-success" id="saveGrat">Save Gratitude</button>
+          <p id="gratsMsg" style="color:green;display:none;margin-top:10px;">Saved!</p>
+        </div>
+      </section>`;
+    document.querySelector('nav').appendChild(
+      (function(btn){
+        btn = document.createElement('button');
+        btn.className='nav-tab'; btn.textContent='Gratitude';
+        btn.onclick = e=>showTab('gratitude',e);
+        return btn;
+      })()
+    );
+    document.querySelector('.container').appendChild(ge);
+    document.getElementById('saveGrat').onclick = ()=>{
+      const txt=document.getElementById('gratitudeEntry').value.trim();
+      if(!txt){alert('Write something!');return;}
+      saveData('gratitude',txt);
+      const msg=document.getElementById('gratsMsg');
+      msg.style.display='block'; setTimeout(()=>msg.style.display='none',2000);
+    };
+    document.getElementById('gratitudeEntry').value = loadData('gratitude')||'';
+
+    /* -------- Sobriety Tracker -------- */
+    document.querySelector('nav').appendChild(
+      (function(btn){
+        btn=document.createElement('button');
+        btn.className='nav-tab'; btn.textContent='Sobriety';
+        btn.onclick=e=>showTab('sobriety',e); return btn;
+      })()
+    );
+    const sobDiv=document.createElement('section');
+    sobDiv.id='sobriety'; sobDiv.className='tab-content'; sobDiv.role='tabpanel';
+    sobDiv.innerHTML=`
+      <div class="card">
+        <h3>Sobriety Counter</h3>
+        <p>Days sober: <strong id="sobrietyCounter">0</strong></p>
+        <button class="btn btn-primary" onclick="updateSobrietyDate()">Set/Update Date</button>
+        <button class="btn btn-warning" onclick="resetCounter()">Reset to Today</button>
+      </div>`;
+    document.querySelector('.container').appendChild(sobDiv);
+
+    let sobrietyStartDate=null;
+    function loadSob(){ const d=loadData('sobrietyDate'); if(d) sobrietyStartDate=new Date(d); }
+    function saveSob(){ if(sobrietyStartDate) saveData('sobrietyDate',sobrietyStartDate.toISOString()); }
+    function updateSobrietyDate(){
+      const dt=prompt('Enter start date YYYY-MM-DD:'); if(!dt||isNaN(Date.parse(dt))){alert('Invalid');return;}
+      sobrietyStartDate=new Date(dt); saveSob(); updateCounter(); updateProgress(); checkAchievements();
+    }
+    function updateCounter(){
+      if(!sobrietyStartDate) return;
+      const days=Math.floor((Date.now()-sobrietyStartDate.getTime())/(1000*60*60*24));
+      document.getElementById('sobrietyCounter').textContent=days;
+    }
+    function resetCounter(){
+      if(confirm('Reset to today?')){ sobrietyStartDate=new Date(); saveSob(); updateCounter(); updateProgress(); checkAchievements(); }
+    }
+    function updateProgress(){
+      ['30','90','365'].forEach(n=>{
+        let pct=0;
+        if(sobrietyStartDate){
+          const days=Math.floor((Date.now()-sobrietyStartDate.getTime())/(1000*60*60*24));
+          pct=Math.min((days/ +n)*100,100);
+        }
+        const bar=document.getElementById('goal'+n);
+        if(bar) bar.style.width=pct+'%';
+      });
+    }
+
+    /* Initialization */
+    window.addEventListener('load',()=>{
+      loadCrisisPlan(); loadWellnessData();
+      loadSob(); updateCounter(); updateProgress();
+      checkAchievements(); loadQuote();
+      showTab('crisis');
+    });
+  </script>
+</body>
 </html>
