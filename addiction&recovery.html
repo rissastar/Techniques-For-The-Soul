@@ -1,894 +1,642 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Recovery Toolkit</title>
-<style>
-  /* Reset and base */
-  * {
-    box-sizing: border-box;
-  }
-  html, body {
-    margin: 0; padding: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(145deg, #ff6ec4, #7873f5);
-    color: #fff;
-    height: 100%;
-    -webkit-tap-highlight-color: transparent;
-    overflow-x: hidden;
-  }
-  header {
-    padding: 1.5rem 1rem;
-    background: #fff;
-    color: #111;
-    text-align: center;
-    border-bottom: 4px solid #ff6ec4;
-  }
-  header h1 {
-    font-size: 1.8rem;
-    margin: 0;
-    font-weight: bold;
-  }
-  header p {
-    margin-top: 0.3rem;
-    font-size: 1rem;
-    font-style: italic;
-  }
-  nav {
-    display: flex;
-    overflow-x: auto;
-    background: #111;
-  }
-  nav button {
-    flex: 1;
-    padding: 0.8rem;
-    background: transparent;
-    color: #fff;
-    border: none;
-    font-size: 0.95rem;
-    white-space: nowrap;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: 0.3s ease;
-  }
-  nav button.active {
-    border-bottom: 3px solid #ff6ec4;
-    background: #222;
-  }
-  .tab-content {
-    padding: 1rem;
-    display: none;
-  }
-  .tab-content.active {
-    display: block;
-  }
-  .tool-card {
-    background: #fff;
-    color: #222;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  }
-  .tool-header {
-    padding: 1rem;
-    font-weight: bold;
-    font-size: 1rem;
-    background: #ff6ec4;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-  }
-  .tool-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s ease;
-    background: #f9f9f9;
-    color: #333;
-    padding: 0 1rem;
-  }
-  .tool-body.open {
-    max-height: 700px;
-    padding: 1rem;
-  }
-  .tool-body p {
-    margin: 0 0 1rem;
-    line-height: 1.5;
-  }
-  .notes label {
-    font-weight: bold;
-    display: block;
-    margin: 0.5rem 0 0.2rem;
-  }
-  .notes textarea {
-    width: 100%;
-    padding: 0.6rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    resize: vertical;
-    font-size: 1rem;
-    font-family: inherit;
-  }
-  #sober-counter {
-    background: #ff6ec4;
-    color: #fff;
-    padding: 1rem;
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-align: center;
-    border-radius: 10px;
-    margin: 1rem 1rem 0 1rem;
-  }
-  #sober-counter input[type="date"] {
-    margin-top: 0.5rem;
-    padding: 0.4rem;
-    border-radius: 6px;
-    border: none;
-    font-size: 1rem;
-  }
-  #sober-counter button {
-    margin-left: 0.6rem;
-    background: #fff;
-    color: #ff6ec4;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s ease;
-  }
-  #sober-counter button:hover {
-    background: #ffe1f4;
-  }
-  #achievements {
-    background: #fff;
-    color: #222;
-    padding: 1rem;
-    border-radius: 10px;
-    margin: 0 1rem 1rem 1rem;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-  }
-  #achievements h2 {
-    margin-top: 0;
-    color: #ff6ec4;
-    font-weight: bold;
-  }
-  .achievement {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.7rem;
-    font-weight: 600;
-    font-size: 1rem;
-  }
-  .achievement.locked {
-    color: #bbb;
-  }
-  .achievement span.icon {
-    font-size: 1.4rem;
-    margin-right: 0.6rem;
-  }
-  #daily-quote {
-    background: #fff;
-    color: #222;
-    margin: 1rem 1rem 1rem 1rem;
-    padding: 1rem;
-    border-radius: 10px;
-    font-style: italic;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    user-select: none;
-  }
-  #daily-quote button {
-    margin-top: 0.6rem;
-    background: #ff6ec4;
-    color: #fff;
-    border: none;
-    padding: 0.4rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  #daily-quote button:hover {
-    background: #d647b0;
-  }
-  iframe {
-    width: 100%;
-    height: 400px;
-    border: none;
-    border-radius: 10px;
-    margin-top: 0.5rem;
-  }
-  @media (min-width: 700px) {
-    body {
-      max-width: 480px;
-      margin: 0 auto;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Recovery Toolkit</title>
+  <style>
+    * {
+      box-sizing: border-box;
     }
-  }
-</style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(145deg, #ff6ec4, #7873f5);
+      color: #fff;
+      height: 100%;
+      overflow-x: hidden;
+    }
+    header {
+      padding: 1.5rem 1rem;
+      background: #fff;
+      color: #111;
+      text-align: center;
+      border-bottom: 4px solid #ff6ec4;
+    }
+    header h1 {
+      font-size: 1.8rem;
+      margin: 0;
+      font-weight: bold;
+    }
+    header p {
+      margin-top: 0.3rem;
+      font-size: 1rem;
+      font-style: italic;
+    }
+    nav {
+      display: flex;
+      overflow-x: auto;
+      background: #111;
+    }
+    nav button {
+      flex: 1;
+      padding: 0.8rem;
+      background: transparent;
+      color: #fff;
+      border: none;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: 0.3s ease;
+    }
+    nav button.active {
+      border-bottom: 3px solid #ff6ec4;
+      background: #222;
+    }
+    .tab-content {
+      padding: 1rem;
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .tool-card {
+      background: #fff;
+      color: #222;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .tool-header {
+      padding: 1rem;
+      font-weight: bold;
+      font-size: 1rem;
+      background: #ff6ec4;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .tool-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      background: #f9f9f9;
+      color: #333;
+      padding: 0 1rem;
+    }
+    .tool-body.open {
+      max-height: 700px;
+      padding: 1rem;
+    }
+    .tool-body p {
+      margin: 0 0 1rem;
+      line-height: 1.5;
+    }
+    .notes label {
+      font-weight: bold;
+      display: block;
+      margin: 0.5rem 0 0.2rem;
+    }
+    .notes textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    #sober-counter {
+      background: #ff6ec4;
+      color: #fff;
+      padding: 1rem;
+      font-weight: bold;
+      font-size: 1.2rem;
+      text-align: center;
+      border-radius: 10px;
+      margin: 1rem 1rem 0 1rem;
+    }
+    #sober-counter input[type="date"] {
+      margin-top: 0.5rem;
+      padding: 0.4rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+    #sober-counter button {
+      margin-left: 0.6rem;
+      background: #fff;
+      color: #ff6ec4;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    #sober-counter button:hover {
+      background: #ffe1f4;
+    }
+    #achievements {
+      background: #fff;
+      color: #222;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 0 1rem 1rem 1rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+    #achievements h2 {
+      margin-top: 0;
+      color: #ff6ec4;
+      font-weight: bold;
+    }
+    .achievement {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.7rem;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .achievement.locked {
+      color: #bbb;
+    }
+    .achievement span.icon {
+      font-size: 1.4rem;
+      margin-right: 0.6rem;
+    }
+    #daily-quote {
+      background: #fff;
+      color: #222;
+      margin: 1rem 1rem 1rem 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+      font-style: italic;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+    #daily-quote button {
+      margin-top: 0.6rem;
+      background: #ff6ec4;
+      color: #fff;
+      border: none;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #daily-quote button:hover {
+      background: #d647b0;
+    }
+    iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 0.5rem;
+    }
+    @media (min-width: 700px) {
+      body {
+        max-width: 480px;
+        margin: 0 auto;
+      }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h1>🛠 Recovery Toolkit</h1>
-  <p>Your portable pocket guide for healing</p>
-</header>
+  <header>
+    <h1>🛠 Recovery Toolkit</h1>
+    <p>Your portable pocket guide for healing</p>
+  </header>
 
-<div id="sober-counter">
-  Sober Days: <span id="sober-days">0</span><br/>
-  <label for="start-date">Select your sober start date:</label><br/>
-  <input type="date" id="start-date" /><button id="reset-sober">Reset</button>
-</div>
-
-<div id="achievements">
-  <h2>🏅 Achievements</h2>
-  <div id="achievement-list">
-    <!-- Achievements will appear here -->
+  <div id="sober-counter">
+    Sober Days: <span id="sober-days">0</span><br />
+    <label for="start-date">Select your sober start date:</label><br />
+    <input type="date" id="start-date" />
+    <button id="reset-sober">Reset</button>
   </div>
-</div>
 
-<nav>
-  <button class="active" data-tab="crisis">🚨 Crisis</button>
-  <button data-tab="mental">🧠 Mental</button>
-  <button data-tab="trauma">❤️ Trauma</button>
-  <button data-tab="boundaries">💬 Boundaries</button>
-  <button data-tab="identity">✨ Identity</button>
-  <button data-tab="wellness">🌿 Wellness</button>
-  <button data-tab="growth">🏆 Growth</button>
-  <button data-tab="minipages">📂 Mini Pages</button>
-  <button data-tab="twelvesteps">📜 12 Steps</button>
-</nav>
-
-<div id="tabs">
-
-  <!-- Crisis Tab -->
-  <div class="tab-content active" id="crisis">
-    <div class="tool-card">
-      <div class="tool-header">🌊 Urge Surfing Practice</div>
-      <div class="tool-body">
-        <p><strong>Description:</strong> Observe urges rise and fall like waves. Don’t act — just witness.</p>
-        <p><strong>Example:</strong> When craving hits, sit quietly and watch the sensation pass like a wave.</p>
-        <p><strong>Prompt:</strong> What did you notice about your urge today? How long did it last?</p>
-        <div class="notes">
-          <label for="note-crisis-1">Your Notes</label>
-          <textarea id="note-crisis-1"></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-header">⏳ 15-Minute Delay</div>
-      <div class="tool-body">
-        <p><strong>Description:</strong> Delay acting on the urge. Distract, breathe, or walk. Re-evaluate after 15 mins.</p>
-        <p><strong>Example:</strong> Use a timer on your phone and focus on deep breathing until it ends.</p>
-        <p><strong>Prompt:</strong> Did the urge change after the delay? What helped distract you?</p>
-        <div class="notes">
-          <label for="note-crisis-2">Your Notes</label>
-          <textarea id="note-crisis-2"></textarea>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- 12 Steps Tab -->
-<div class="tab-content" id="twelvesteps">
-  <p style="padding:0 1rem; font-style: italic; color: #ddd; font-size: 0.9rem; margin-bottom: 1rem;">
-    Explore each of the 12 Steps with guidance, reflection, and space for your own thoughts.
-  </p>
-  <div id="twelve-steps-container"></div>
-</div>
-
-  <!-- Mental Tab -->
-  <div class="tab-content" id="mental">
-    <div class="tool-card">
-      <div class="tool-header">🎭 Name the Feeling</div>
-      <div class="tool-body">
-        <p><strong>Description:</strong> Say what you feel: “I feel anxious.” Naming emotions gives power over them.</p>
-        <p><strong>Example:</strong> Pause and say, “Right now, I’m feeling stressed.”</p>
-        <p><strong>Prompt:</strong> What emotions came up for you today?</p>
-        <div class="notes">
-          <label for="note-mental-1">Your Notes</label>
-          <textarea id="note-mental-1"></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-header">🔄 Thought Reframing</div>
-      <div class="tool-body">
-        <p><strong>Description:</strong> Challenge and reframe negative thoughts into helpful ones.</p>
-        <p><strong>Example:</strong> Change “I always fail” to “I’m learning and improving every day.”</p>
-        <p><strong>Prompt:</strong> Which negative thought can you reframe today?</p>
-        <div class="notes">
-          <label for="note-mental-2">Your Notes</label>
-          <textarea id="note-mental-2"></textarea>
-        </div>
-      </div>
+  <div id="achievements">
+    <h2>🏅 Achievements</h2>
+    <div id="achievement-list">
+      <!-- Achievements will appear here -->
     </div>
   </div>
 
-  <!-- Trauma Tab -->
-  <div class="tab-content" id="trauma">
-    <div class="tool-card">
-      <div class="tool-header">🧘‍♂️ Grounding & Body Scan</div>
-      <div class="tool-body">
-        <p><strong>Description:</strong> Use your 5 senses or scan your body to feel present. Anchors you in the now.</p>
-        <p><strong>Example:</strong> Notice 5 things you see, 4 things you touch, 3 things you hear, etc.</p>
-        <p><strong>Prompt:</strong> How did grounding affect your feelings?</p>
-        <div class="notes">
-          <label for="note-trauma-1">Your Notes</label>
-          <textarea id="note-trauma-1"></textarea>
+  <nav>
+    <button class="active" data-tab="crisis">🚨 Crisis</button>
+    <button data-tab="mental">🧠 Mental</button>
+    <button data-tab="trauma">❤️ Trauma</button>
+    <button data-tab="boundaries">💬 Boundaries</button>
+    <button data-tab="identity">✨ Identity</button>
+    <button data-tab="wellness">🌿 Wellness</button>
+    <button data-tab="growth">🏆 Growth</button>
+    <button data-tab="minipages">📂 Mini Pages</button>
+  </nav>
+
+  <div id="tabs">
+      <!-- Crisis Tab -->
+    <div class="tab-content active" id="crisis">
+      <div class="tool-card">
+        <div class="tool-header">🌊 Urge Surfing Practice</div>
+        <div class="tool-body">
+          <p><strong>Description:</strong> Observe urges rise and fall like waves. Don’t act — just witness.</p>
+          <p><strong>Example:</strong> When craving hits, sit quietly and watch the sensation pass like a wave.</p>
+          <p><strong>Prompt:</strong> What did you notice about your urge today? How long did it last?</p>
+          <div class="notes">
+            <label for="note-crisis-1">Your Notes</label>
+            <textarea id="note-crisis-1"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header">⏳ 15-Minute Delay</div>
+        <div class="tool-body">
+          <p><strong>Description:</strong> Delay acting on the urge. Distract, breathe, or walk. Re-evaluate after 15 mins.</p>
+          <p><strong>Example:</strong> Use a timer on your phone and focus on deep breathing until it ends.</p>
+          <p><strong>Prompt:</strong> Did the urge change after the delay? What helped distract you?</p>
+          <div class="notes">
+            <label for="note-crisis-2">Your Notes</label>
+            <textarea id="note-crisis-2"></textarea>
+          </div>
         </div>
       </div>
     </div>
-    <div class="tool-card">
-      <div class="tool-header">⏪ Flashback Management</div>
-      <div class="tool-body">
-        <p><strong>Description:</strong> Use grounding objects, cold water, or calming breath when overwhelmed by past memories.</p>
-        <p><strong>Example:</strong> Hold a comforting object or splash cold water on your face.</p>
-        <p><strong>Prompt:</strong> What grounding technique worked best for you?</p>
-        <div class="notes">
-          <label for="note-trauma-2">Your Notes</label>
-          <textarea id="note-trauma-2"></textarea>
+
+    <!-- Mental Tab -->
+    <div class="tab-content" id="mental">
+      <div class="tool-card">
+        <div class="tool-header">🎭 Name the Feeling</div>
+        <div class="tool-body">
+          <p><strong>Description:</strong> Say what you feel: “I feel anxious.” Naming emotions gives power over them.</p>
+          <p><strong>Example:</strong> Pause and say, “Right now, I’m feeling stressed.”</p>
+          <p><strong>Prompt:</strong> What emotions came up for you today?</p>
+          <div class="notes">
+            <label for="note-mental-1">Your Notes</label>
+            <textarea id="note-mental-1"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header">🔄 Thought Reframing</div>
+        <div class="tool-body">
+          <p><strong>Description:</strong> Challenge and reframe negative thoughts into helpful ones.</p>
+          <p><strong>Example:</strong> Change “I always fail” to “I’m learning and improving every day.”</p>
+          <p><strong>Prompt:</strong> Which negative thought can you reframe today?</p>
+          <div class="notes">
+            <label for="note-mental-2">Your Notes</label>
+            <textarea id="note-mental-2"></textarea>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Boundaries Tab -->
-  <div class="tab-content" id="boundaries">
-    <div class="tool-card">
-      <div class="tool-header">🗣️ Assertive Scripts</div>
-      <div class="tool-body">
-        <p><strong>Description:</strong> Practice clear, kind boundaries like “I’m not available right now.”</p>
-        <p><strong>Example:</strong> Say, “I need some time alone.” or “That doesn’t work for me.”</p>
-        <p><strong>Prompt:</strong> What boundary can you practice today?</p>
-        <div class="notes">
-          <label for="note-boundaries-1">Your Notes</label>
-          <textarea id="note-boundaries-1"></textarea>
+    <!-- Trauma Tab -->
+    <div class="tab-content" id="trauma">
+      <div class="tool-card">
+        <div class="tool-header">🧘‍♂️ Grounding & Body Scan</div>
+        <div class="tool-body">
+          <p><strong>Description:</strong> Use your 5 senses or scan your body to feel present. Anchors you in the now.</p>
+          <p><strong>Example:</strong> Notice 5 things you see, 4 things you touch, 3 things you hear, etc.</p>
+          <p><strong>Prompt:</strong> How did grounding affect your feelings?</p>
+          <div class="notes">
+            <label for="note-trauma-1">Your Notes</label>
+            <textarea id="note-trauma-1"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header">⏪ Flashback Management</div>
+        <div class="tool-body">
+          <p><strong>Description:</strong> Use grounding objects, cold water, or calming breath when overwhelmed by past memories.</p>
+          <p><strong>Example:</strong> Hold a comforting object or splash cold water on your face.</p>
+          <p><strong>Prompt:</strong> What grounding technique worked best for you?</p>
+          <div class="notes">
+            <label for="note-trauma-2">Your Notes</label>
+            <textarea id="note-trauma-2"></textarea>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Identity Tab -->
-  <div class="tab-content" id="identity">
-    <div class="tool-card">
-      <div class="tool-header">🔍 Who Am I Without Trauma?</div>
-      <div class="tool-body">
-        <p><strong>Description:</strong> List what brings you joy and your values. Explore your true self.</p>
-        <p><strong>Example:</strong> Write a list of hobbies or things that make you smile.</p>
-        <p><strong>Prompt:</strong> What is one thing you love about yourself?</p>
-        <div class="notes">
-          <label for="note-identity-1">Your Notes</label>
-          <textarea id="note-identity-1"></textarea>
+    <!-- Boundaries Tab -->
+    <div class="tab-content" id="boundaries">
+      <div class="tool-card">
+        <div class="tool-header">🗣️ Assertive Scripts</div>
+        <div class="tool-body">
+          <p><strong>Description:</strong> Practice clear, kind boundaries like “I’m not available right now.”</p>
+          <p><strong>Example:</strong> Say, “I need some time alone.” or “That doesn’t work for me.”</p>
+          <p><strong>Prompt:</strong> What boundary can you practice today?</p>
+          <div class="notes">
+            <label for="note-boundaries-1">Your Notes</label>
+            <textarea id="note-boundaries-1"></textarea>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Wellness Tab -->
-  <div class="tab-content" id="wellness">
-    <div class="tool-card">
-      <div class="tool-header">🛏️ Sleep Hygiene</div>
-      <div class="tool-body">
-        <p><strong>Description:</strong> Wind-down routine, phone off, lights low. Try calming breath before bed.</p>
-        <p><strong>Example:</strong> Turn off screens 30 mins before bedtime and practice deep breathing.</p>
-        <p><strong>Prompt:</strong> How can you improve your sleep tonight?</p>
-        <div class="notes">
-          <label for="note-wellness-1">Your Notes</label>
-          <textarea id="note-wellness-1"></textarea>
+    <!-- Identity Tab -->
+    <div class="tab-content" id="identity">
+      <div class="tool-card">
+        <div class="tool-header">🔍 Who Am I Without Trauma?</div>
+        <div class="tool-body">
+          <p><strong>Description:</strong> List what brings you joy and your values. Explore your true self.</p>
+          <p><strong>Example:</strong> Write a list of hobbies or things that make you smile.</p>
+          <p><strong>Prompt:</strong> What is one thing you love about yourself?</p>
+          <div class="notes">
+            <label for="note-identity-1">Your Notes</label>
+            <textarea id="note-identity-1"></textarea>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Growth Tab -->
-  <div class="tab-content" id="growth">
-    <div class="tool-card">
-      <div class="tool-header">✅ What Worked Today?</div>
-      <div class="tool-body">
-        <p><strong>Description:</strong> Reflect on one thing you did well. Acknowledge progress, no matter how small.</p>
-        <p><strong>Example:</strong> “I asked for help when I needed it.”</p>
-        <p><strong>Prompt:</strong> What is one win you want to remember?</p>
-        <div class="notes">
-          <label for="note-growth-1">Your Notes</label>
-          <textarea id="note-growth-1"></textarea>
+    <!-- Wellness Tab -->
+    <div class="tab-content" id="wellness">
+      <div class="tool-card">
+        <div class="tool-header">🛏️ Sleep Hygiene</div>
+        <div class="tool-body">
+          <p><strong>Description:</strong> Wind-down routine, phone off, lights low. Try calming breath before bed.</p>
+          <p><strong>Example:</strong> Turn off screens 30 mins before bedtime and practice deep breathing.</p>
+          <p><strong>Prompt:</strong> How can you improve your sleep tonight?</p>
+          <div class="notes">
+            <label for="note-wellness-1">Your Notes</label>
+            <textarea id="note-wellness-1"></textarea>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Mini Pages Tab -->
-  <div class="tab-content" id="minipages">
-    <p style="padding:0 1rem; font-style: italic; color: #ddd; font-size: 0.9rem; margin-bottom: 1rem;">
-      Explore original tools and stories that inspired this app. These embedded pages come straight from the heart.
-    </p>
-    <div class="tool-card">
-      <div class="tool-header">📛 Crisis Toolkit</div>
-      <div class="tool-body">
-        <iframe src="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html" loading="lazy"></iframe>
+    <!-- Growth Tab -->
+    <div class="tab-content" id="growth">
+      <div class="tool-card">
+        <div class="tool-header">✅ What Worked Today?</div>
+        <div class="tool-body">
+          <p><strong>Description:</strong> Reflect on one thing you did well. Acknowledge progress, no matter how small.</p>
+          <p><strong>Example:</strong> “I asked for help when I needed it.”</p>
+          <p><strong>Prompt:</strong> What is one win you want to remember?</p>
+          <div class="notes">
+            <label for="note-growth-1">Your Notes</label>
+            <textarea id="note-growth-1"></textarea>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="tool-card">
-      <div class="tool-header">🎡 Recovery Affirmation Wheel</div>
-      <div class="tool-body">
-        <iframe src="https://rissastar.github.io/Techniques-For-The-Soul/recoveryaffirmation.html" loading="lazy"></iframe>
-      </div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-header">🌍 Grounding Tools</div>
-      <div class="tool-body">
-        <iframe src="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html" loading="lazy"></iframe>
-      </div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-header">📖 Tell Your Story or Read Others</div>
-      <div class="tool-body">
-        <iframe src="https://rissastar.github.io/Techniques-For-The-Soul/stories.html" loading="lazy"></iframe>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div id="daily-quote" aria-live="polite" aria-atomic="true">
-  <div id="quote-text">Loading daily inspiration…</div>
-  <button id="refresh-quote" aria-label="Show another quote">New Quote</button>
-</div>
-
-  <script>
-  // Tab switching
+    <!-- Mini Pages Tab -->
+    <div class="tab-content" id="minipages">
+      <p style="padding:0 1rem; font-style: italic; color: #ddd; font-size: 0.9rem; margin-bottom: 1rem;">
+        Explore original tools and stories that inspired this app. These embedded pages come straight from the heart.
+      </p>
+      <div class="tool-card">
+        <div class="tool-header">📛 Crisis Toolkit</div>
+        <div class="tool-body">
+          <iframe src="https://rissastar.github.io/Techniques-For-The-Soul/crisis-toolkit.html" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header">🎡 Recovery Affirmation Wheel</div>
+        <div class="tool-body">
+          <iframe src="https://rissastar.github.io/Techniques-For-The-Soul/recoveryaffirmation.html" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header">🌍 Grounding Tools</div>
+        <div class="tool-body">
+          <iframe src="https://rissastar.github.io/Techniques-For-The-Soul/grounding-toolkit.html" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-header">📖 Tell Your Story or Read Others</div>
+        <div class="tool-body">
+          <iframe src="https://rissastar.github.io/Techniques-For-The-Soul/stories.html" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+  // Tab switching logic
   const tabButtons = document.querySelectorAll("nav button");
   const tabContents = document.querySelectorAll(".tab-content");
 
   tabButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const tab = btn.getAttribute("data-tab");
+
+      // Remove active class from all buttons and contents
       tabButtons.forEach(b => b.classList.remove("active"));
+      tabContents.forEach(content => content.classList.remove("active"));
+
+      // Add active to clicked button and matching content
       btn.classList.add("active");
-      tabContents.forEach(content => {
-        content.classList.remove("active");
-        if(content.id === tab) content.classList.add("active");
-      });
+      const activeContent = document.getElementById(tab);
+      if(activeContent) activeContent.classList.add("active");
+
       // Scroll top on tab change
       window.scrollTo(0, 0);
     });
   });
-document.addEventListener("DOMContentLoaded", function () {
-  const tabButtons = document.querySelectorAll("nav button");
-  const tabContents = document.querySelectorAll(".tab-content");
 
-  tabButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      const selectedTab = button.getAttribute("data-tab");
-
-      // Remove 'active' class from all buttons
-      tabButtons.forEach(btn => btn.classList.remove("active"));
-      button.classList.add("active");
-
-      // Hide all tabs and show selected
-      tabContents.forEach(tab => {
-        tab.classList.remove("active");
-        if (tab.id === selectedTab) {
-          tab.classList.add("active");
-        }
-      });
-
-      // Scroll to top
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  // Expand/collapse tool bodies on header click
+  document.querySelectorAll(".tool-header").forEach(header => {
+    header.addEventListener("click", () => {
+      const body = header.nextElementSibling;
+      if(body) {
+        body.classList.toggle("open");
+      }
     });
   });
-});
 
-    // Expand/collapse tools
-    document.querySelectorAll(".tool-header").forEach(header => {
-      header.addEventListener("click", () => {
-        const body = header.nextElementSibling;
-        body.classList.toggle("open");
-      });
+  // Load/save notes with localStorage and check achievements
+  document.querySelectorAll("textarea").forEach(textarea => {
+    const id = textarea.id;
+    const saved = localStorage.getItem(id);
+    if(saved) textarea.value = saved;
+
+    textarea.addEventListener("input", () => {
+      localStorage.setItem(id, textarea.value);
+      checkAchievements();
     });
+  });
 
-    // Load/save notes
-    document.querySelectorAll("textarea").forEach(textarea => {
-      const id = textarea.id;
-      const saved = localStorage.getItem(id);
-      if (saved) textarea.value = saved;
-      textarea.addEventListener("input", () => {
-        localStorage.setItem(id, textarea.value);
-        checkAchievements();
-      });
-    });
+  // Sober Day Counter logic
+  const soberDaysEl = document.getElementById("sober-days");
+  const startDateInput = document.getElementById("start-date");
+  const resetButton = document.getElementById("reset-sober");
 
-    // Sober day counter
-    const soberDaysEl = document.getElementById("sober-days");
-    const startDateInput = document.getElementById("start-date");
-    const resetButton = document.getElementById("reset-sober");
-    function calculateSoberDays(start) {
-      const today = new Date();
-      const startDate = new Date(start);
-      const diff = today - startDate;
-      return diff > 0 ? Math.floor(diff / (1000*60*60*24)) + 1 : 0;
+  function calculateSoberDays(start) {
+    const today = new Date();
+    const startDate = new Date(start);
+    const diff = today - startDate;
+    return diff >= 0 ? Math.floor(diff / (1000*60*60*24)) + 1 : 0;
+  }
+
+  function updateSoberDays() {
+    const stored = localStorage.getItem("soberStartDate");
+    if(stored) {
+      startDateInput.value = stored;
+      const days = calculateSoberDays(stored);
+      soberDaysEl.textContent = days;
+    } else {
+      soberDaysEl.textContent = "0";
     }
-    function updateSoberDays() {
-      const stored = localStorage.getItem("soberStartDate");
-      if (stored) {
-        startDateInput.value = stored;
-        soberDaysEl.textContent = calculateSoberDays(stored);
-      } else {
-        soberDaysEl.textContent = "0";
-      }
-    }
-    startDateInput.addEventListener("change", () => {
+  }
+
+  startDateInput.addEventListener("change", () => {
+    if(startDateInput.value) {
       localStorage.setItem("soberStartDate", startDateInput.value);
       updateSoberDays();
       checkAchievements();
-    });
-    resetButton.addEventListener("click", () => {
-      localStorage.removeItem("soberStartDate");
-      startDateInput.value = "";
-      soberDaysEl.textContent = "0";
-      checkAchievements();
-    });
-    updateSoberDays();
+    }
+  });
 
-    // Achievements
-    const achievementListEl = document.getElementById("achievement-list");
-    const achievements = [
-      {
-        id: "7days", title: "1 Week Sober", description: "You’ve reached 7 days sober! Keep going!", icon: "🎉",
-        condition: () => {
-          const d = localStorage.getItem("soberStartDate");
-          return d && calculateSoberDays(d) >= 7;
-        }
-      },
-      {
-        id: "30days", title: "1 Month Sober", description: "30 days sober! Amazing commitment!", icon: "🏆",
-        condition: () => {
-          const d = localStorage.getItem("soberStartDate");
-          return d && calculateSoberDays(d) >= 30;
-        }
-      },
-      {
-        id: "toolNotes", title: "Tools in Use", description: "You’ve added notes in all tool categories. Way to engage!", icon: "📝",
-        condition: () => {
-          const ids = [
-            "note-crisis-1", "note-crisis-2", "note-mental-1", "note-mental-2",
-            "note-trauma-1", "note-trauma-2", "note-boundaries-1",
-            "note-identity-1", "note-wellness-1", "note-growth-1"
-          ];
-          return ids.every(id => {
-            const val = localStorage.getItem(id);
-            return val && val.trim().length > 0;
-          });
-        }
-      },
-      {
-        id: "returnUser", title: "Welcome Back", description: "You’ve opened the toolkit multiple times. Keep returning!", icon: "👋",
-        condition: () => {
-          const count = parseInt(localStorage.getItem("returnCount") || "0", 10);
-          return count >= 5;
-        }
-      }
-    ];
-    function renderAchievements() {
-      achievementListEl.innerHTML = "";
-      achievements.forEach(a => {
-        const unlocked = a.condition();
-        const div = document.createElement("div");
-        div.className = "achievement" + (unlocked ? "" : " locked");
-        div.innerHTML = `<span class="icon">${unlocked ? a.icon : "🔒"}</span><div><strong>${a.title}</strong><br/><small>${a.description}</small></div>`;
-        achievementListEl.appendChild(div);
-      });
-    }
-    function checkAchievements() {
-      renderAchievements();
-    }
-    function trackReturnCount() {
-      let count = parseInt(localStorage.getItem("returnCount") || "0", 10);
-      count++;
-      localStorage.setItem("returnCount", count.toString());
-    }
-    trackReturnCount();
+  resetButton.addEventListener("click", () => {
+    localStorage.removeItem("soberStartDate");
+    startDateInput.value = "";
+    soberDaysEl.textContent = "0";
     checkAchievements();
-    
-    const achievements = [
-  // Existing achievements...
+  });
 
-  {
-    id: "3days",
-    title: "3 Days Sober",
-    description: "You’ve made it through 3 days! Keep building momentum.",
-    icon: "🌟",
-    condition: () => {
-      const d = localStorage.getItem("soberStartDate");
-      if (!d) return false;
-      return calculateSoberDays(d) >= 3;
-    }
-  },
-  {
-    id: "90days",
-    title: "3 Months Sober",
-    description: "90 days of strength and commitment. Incredible!",
-    icon: "🎖️",
-    condition: () => {
-      const d = localStorage.getItem("soberStartDate");
-      if (!d) return false;
-      return calculateSoberDays(d) >= 90;
-    }
-  },
-  {
-    id: "180days",
-    title: "6 Months Sober",
-    description: "Half a year sober — you’re doing amazing!",
-    icon: "🏅",
-    condition: () => {
-      const d = localStorage.getItem("soberStartDate");
-      if (!d) return false;
-      return calculateSoberDays(d) >= 180;
-    }
-  },
-  {
-    id: "1year",
-    title: "1 Year Sober",
-    description: "One full year of recovery! Celebrate this huge milestone!",
-    icon: "🥳",
-    condition: () => {
-      const d = localStorage.getItem("soberStartDate");
-      if (!d) return false;
-      return calculateSoberDays(d) >= 365;
-    }
+  updateSoberDays();
+
+  // Achievements System
+  const achievementListEl = document.getElementById("achievement-list");
+
+  const achievements = [
     {
-  id: "twelveSteps",
-  title: "12 Step Explorer",
-  description: "You've written reflections on all 12 Steps.",
-  icon: "📜",
-  condition: () => {
-    return twelveSteps.every((_, i) => {
-      const val = localStorage.getItem(`step-note-${i}`);
-      return val && val.trim().length > 0;
-    });
-  }
-}
-  },
-  {
-    id: "dailyJournaling",
-    title: "Daily Journaling",
-    description: "You’ve written notes in every tool for 7 consecutive days. Great habit!",
-    icon: "🖊️",
-    condition: () => {
-      // Check last 7 days notes (simplified example)
-      // In practice, you’d track daily timestamps per note, but here just checks all notes have content.
-      const noteIds = [
-        "note-crisis-1", "note-crisis-2",
-        "note-mental-1", "note-mental-2",
-        "note-trauma-1", "note-trauma-2",
-        "note-boundaries-1",
-        "note-identity-1",
-        "note-wellness-1",
-        "note-growth-1"
-      ];
-      return noteIds.every(id => {
-        const val = localStorage.getItem(id);
-        return val && val.trim().length > 0;
-      });
-    }
-  },
-  {
-    id: "goalSetter",
-    title: "Goal Setter",
-    description: "You’ve created your first SMART goal. Way to plan ahead!",
-    icon: "🎯",
-    condition: () => {
-      const goals = JSON.parse(localStorage.getItem("recoveryGoals") || "[]");
-      return goals.length > 0;
-    }
-  },
-  {
-    id: "quoteReader",
-    title: "Daily Inspiration Reader",
-    description: "You’ve refreshed the daily quote 5 times. Staying motivated!",
-    icon: "📖",
-    condition: () => {
-      const count = parseInt(localStorage.getItem("quoteRefreshCount") || "0", 10);
-      return count >= 5;
-    }
-  },
-  {
-    id: "toolExplorer",
-    title: "Explorer",
-    description: "Opened every tab at least once. Broadening your toolkit.",
-    icon: "🧭",
-    condition: () => {
-      // Check tabs visited stored in localStorage
-      const tabsVisited = JSON.parse(localStorage.getItem("tabsVisited") || "{}");
-      const requiredTabs = ["crisis","mental","trauma","boundaries","identity","wellness","growth","minipages","goals"];
-      return requiredTabs.every(t => tabsVisited[t]);
-    }
-  }
-];
-
-// Track quote refresh count
-const refreshQuoteBtn = document.getElementById("refresh-quote");
-refreshQuoteBtn.addEventListener("click", () => {
-  let count = parseInt(localStorage.getItem("quoteRefreshCount") || "0", 10);
-  count++;
-  localStorage.setItem("quoteRefreshCount", count.toString());
-});
-
-// Track tabs visited
-const tabButtons = document.querySelectorAll("nav button");
-tabButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    const tab = btn.getAttribute("data-tab");
-    const visited = JSON.parse(localStorage.getItem("tabsVisited") || "{}");
-    visited[tab] = true;
-    localStorage.setItem("tabsVisited", JSON.stringify(visited));
-  });
-});
-
-    // Daily quotes
-    const quotes = [
-      "Recovery is a journey, not a race.",
-      "One day at a time is enough.",
-      "You are stronger than your struggles.",
-      "Small progress is still progress.",
-      "Healing begins with self-compassion.",
-      "Your story is still being written.",
-      "Courage doesn’t always roar.",
-      "Keep going; your future self thanks you.",
-      "Every step forward counts.",
-      "You are not alone on this path."
-    ];
-    const quoteTextEl = document.getElementById("quote-text");
-    const refreshQuoteBtn = document.getElementById("refresh-quote");
-
-    function showQuote(index) {
-      quoteTextEl.textContent = quotes[index];
-    }
-    function getTodayIndex() {
-      const today = new Date();
-      return today.getDate() % quotes.length;
-    }
-    function initQuote() {
-      const savedIndex = localStorage.getItem("dailyQuoteIndex");
-      const todayIndex = getTodayIndex();
-      if (savedIndex == null || parseInt(savedIndex) !== todayIndex) {
-        localStorage.setItem("dailyQuoteIndex", todayIndex);
-        showQuote(todayIndex);
-      } else {
-        showQuote(parseInt(savedIndex));
+      id: "7days",
+      title: "1 Week Sober",
+      description: "You’ve reached 7 days sober! Keep going!",
+      icon: "🎉",
+      condition: () => {
+        const d = localStorage.getItem("soberStartDate");
+        if(!d) return false;
+        return calculateSoberDays(d) >= 7;
+      }
+    },
+    {
+      id: "30days",
+      title: "1 Month Sober",
+      description: "30 days sober! Amazing commitment!",
+      icon: "🏆",
+      condition: () => {
+        const d = localStorage.getItem("soberStartDate");
+        if(!d) return false;
+        return calculateSoberDays(d) >= 30;
+      }
+    },
+    {
+      id: "toolNotes",
+      title: "Tools in Use",
+      description: "You’ve added notes in all tool categories. Way to engage!",
+      icon: "📝",
+      condition: () => {
+        // Check if all note textareas have some content
+        const noteIds = [
+          "note-crisis-1", "note-crisis-2",
+          "note-mental-1", "note-mental-2",
+          "note-trauma-1", "note-trauma-2",
+          "note-boundaries-1",
+          "note-identity-1",
+          "note-wellness-1",
+          "note-growth-1"
+        ];
+        return noteIds.every(id => {
+          const val = localStorage.getItem(id);
+          return val && val.trim().length > 0;
+        });
+      }
+    },
+    {
+      id: "returnUser",
+      title: "Welcome Back",
+      description: "You’ve opened the toolkit multiple times. Keep returning!",
+      icon: "👋",
+      condition: () => {
+        const count = parseInt(localStorage.getItem("returnCount") || "0", 10);
+        return count >= 5;
       }
     }
-    refreshQuoteBtn.addEventListener("click", () => {
-      let currentIndex = parseInt(localStorage.getItem("dailyQuoteIndex") || "0", 10);
-      let newIndex;
-      do {
-        newIndex = Math.floor(Math.random() * quotes.length);
-      } while (newIndex === currentIndex);
-      localStorage.setItem("dailyQuoteIndex", newIndex);
-      showQuote(newIndex);
+  ];
+
+  function renderAchievements() {
+    achievementListEl.innerHTML = "";
+    achievements.forEach(a => {
+      const unlocked = a.condition();
+      const div = document.createElement("div");
+      div.className = "achievement" + (unlocked ? "" : " locked");
+      div.innerHTML = `<span class="icon">${unlocked ? a.icon : "🔒"}</span><div><strong>${a.title}</strong><br/><small>${a.description}</small></div>`;
+      achievementListEl.appendChild(div);
     });
-    initQuote();
-    
-    // 12 Steps Data
-const twelveSteps = [
-  {
-    step: "Step 1",
-    title: "Admit Powerlessness",
-    desc: "We admitted we were powerless over our addiction—that our lives had become unmanageable.",
-    example: "I can’t control my drinking or drug use when I start.",
-    prompt: "Where do you feel most out of control? What have you tried to fix on your own?"
-  },
-  {
-    step: "Step 2",
-    title: "Find Hope",
-    desc: "Came to believe that a Power greater than ourselves could restore us to sanity.",
-    example: "Believing recovery is possible even when I don’t have all the answers.",
-    prompt: "What gives you hope today? Where do you find strength beyond yourself?"
-  },
-  {
-    step: "Step 3",
-    title: "Surrender",
-    desc: "Made a decision to turn our will and our lives over to the care of God as we understood Him.",
-    example: "Letting go of needing to control everything.",
-    prompt: "What would surrender look like for you today?"
-  },
-  {
-    step: "Step 4",
-    title: "Self-Inventory",
-    desc: "Made a searching and fearless moral inventory of ourselves.",
-    example: "I listed my resentments, fears, harms, and patterns.",
-    prompt: "What parts of your past or character feel worth exploring honestly?"
-  },
-  {
-    step: "Step 5",
-    title: "Confession",
-    desc: "Admitted to God, to ourselves, and to another human being the exact nature of our wrongs.",
-    example: "Telling a trusted friend about my secret shame.",
-    prompt: "Who might you trust to share your truth with safely?"
-  },
-  {
-    step: "Step 6",
-    title: "Readiness",
-    desc: "Were entirely ready to have God remove all these defects of character.",
-    example: "I’m willing to grow even if it’s uncomfortable.",
-    prompt: "What are you ready to let go of today?"
-  },
-  {
-    step: "Step 7",
-    title: "Humility",
-    desc: "Humbly asked Him to remove our shortcomings.",
-    example: "Asking for help with impatience or self-judgment.",
-    prompt: "What would asking for help look like for you?"
-  },
-  {
-    step: "Step 8",
-    title: "Amends List",
-    desc: "Made a list of all persons we had harmed, and became willing to make amends to them all.",
-    example: "Listing people I’ve hurt in addiction.",
-    prompt: "Who might belong on your list, even if you're not ready to reach out yet?"
-  },
-  {
-    step: "Step 9",
-    title: "Make Amends",
-    desc: "Made direct amends to such people wherever possible, except when to do so would injure them or others.",
-    example: "Apologizing sincerely without expectations.",
-    prompt: "What would true amends mean to you?"
-  },
-  {
-    step: "Step 10",
-    title: "Ongoing Inventory",
-    desc: "Continued to take personal inventory and when we were wrong promptly admitted it.",
-    example: "Checking in with myself nightly for mistakes and gratitude.",
-    prompt: "What are your daily practices of self-honesty?"
-  },
-  {
-    step: "Step 11",
-    title: "Spiritual Growth",
-    desc: "Sought through prayer and meditation to improve our conscious contact with God as we understood Him.",
-    example: "Meditation, journaling, walks in nature, silent prayer.",
-    prompt: "What helps you feel connected spiritually?"
-  },
-  {
-    step: "Step 12",
-    title: "Service and Awakening",
-    desc: "Having had a spiritual awakening as the result of these steps, we tried to carry this message to others, and to practice these principles in all our affairs.",
-    example: "Sharing my story or helping someone new in recovery.",
-    prompt: "How can you be of service today?"
   }
-];
 
-// Render 12 Steps to container
-const stepsContainer = document.getElementById("twelve-steps-container");
+  function checkAchievements() {
+    renderAchievements();
+  }
 
-twelveSteps.forEach((stepObj, index) => {
-  const card = document.createElement("div");
-  card.className = "tool-card";
+  // Track number of visits
+  function trackReturnCount() {
+    let count = parseInt(localStorage.getItem("returnCount") || "0", 10);
+    count++;
+    localStorage.setItem("returnCount", count.toString());
+  }
+  trackReturnCount();
 
-  card.innerHTML = `
-    <div class="tool-header">${stepObj.step}: ${stepObj.title}</div>
-    <div class="tool-body">
-      <p><strong>Description:</strong> ${stepObj.desc}</p>
-      <p><strong>Example:</strong> ${stepObj.example}</p>
-      <p><strong>Prompt:</strong> ${stepObj.prompt}</p>
-      <div class="notes">
-        <label for="step-note-${index}">Your Notes</label>
-        <textarea id="step-note-${index}" rows="4"></textarea>
-      </div>
-    </div>
-  `;
-  stepsContainer.appendChild(card);
-});
+  checkAchievements();
 
-// Enable saving notes for 12 steps
-twelveSteps.forEach((_, index) => {
-  const id = `step-note-${index}`;
-  const textarea = document.getElementById(id);
-  const saved = localStorage.getItem(id);
-  if (saved) textarea.value = saved;
-  textarea.addEventListener("input", () => {
-    localStorage.setItem(id, textarea.value);
-    checkAchievements();
+  // Daily Motivational Quotes
+  const quotes = [
+    "Recovery is a journey, not a race.",
+    "One day at a time is enough.",
+    "You are stronger than your struggles.",
+    "Small progress is still progress.",
+    "Healing begins with self-compassion.",
+    "Your story is still being written.",
+    "Courage doesn’t always roar.",
+    "Keep going; your future self thanks you.",
+    "Every step forward counts.",
+    "You are not alone on this path."
+  ];
+
+  const quoteTextEl = document.getElementById("quote-text");
+  const refreshQuoteBtn = document.getElementById("refresh-quote");
+
+  function showQuote(index) {
+    quoteTextEl.textContent = quotes[index];
+  }
+
+  function getTodayIndex() {
+    const today = new Date();
+    return today.getDate() % quotes.length;
+  }
+
+  function initQuote() {
+    const savedIndex = localStorage.getItem("dailyQuoteIndex");
+    const todayIndex = getTodayIndex();
+
+    if(savedIndex == null || parseInt(savedIndex) !== todayIndex) {
+      localStorage.setItem("dailyQuoteIndex", todayIndex);
+      showQuote(todayIndex);
+    } else {
+      showQuote(parseInt(savedIndex));
+    }
+  }
+
+  refreshQuoteBtn.addEventListener("click", () => {
+    let currentIndex = parseInt(localStorage.getItem("dailyQuoteIndex") || "0", 10);
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * quotes.length);
+    } while(newIndex === currentIndex);
+    localStorage.setItem("dailyQuoteIndex", newIndex);
+    showQuote(newIndex);
   });
-});
-  </script>
+
+  initQuote();
+</script>
 </body>
 </html>
