@@ -84,6 +84,11 @@
   <div class="quote" id="quoteOfDay"></div>
 
   <div id="steps"></div>
+  
+  <div style="text-align:center; margin-top: 2rem;">
+  <button onclick="exportReflections()">📄 Export Reflections</button>
+  <button onclick="window.print()">🖨️ Print Workbook</button>
+</div>
 
   <script>
     const steps = [
@@ -271,6 +276,24 @@
     createStepCards();
     updateSoberCounter();
     showQuoteOfDay();
+    
+    function exportReflections() {
+  let text = "My 12-Step Recovery Reflections:\n\n";
+  steps.forEach((step, i) => {
+    const reflection = localStorage.getItem(`step${i}`) || "[No reflection saved]";
+    text += `${step.title}\n${reflection}\n\n`;
+  });
+  
+  const blob = new Blob([text], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "12-Step-Reflections.txt";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
   </script>
 </body>
 </html>
