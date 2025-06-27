@@ -206,6 +206,38 @@
       margin: 0 auto;
     }
   }
+  #goals label {
+  display: block;
+  font-weight: bold;
+  margin-top: 0.8rem;
+}
+#goals input[type="text"],
+#goals input[type="date"],
+#goals select,
+#goals textarea {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.2rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+}
+#goals button[type="submit"] {
+  margin-top: 1rem;
+  background: #ff6ec4;
+  border: none;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+#goals button[type="submit"]:hover {
+  background: #d647b0;
+}
 </style>
 </head>
 <body>
@@ -236,7 +268,8 @@
   <button data-tab="wellness">🌿 Wellness</button>
   <button data-tab="growth">🏆 Growth</button>
   <button data-tab="minipages">📂 Mini Pages</button>
-</nav>
+  <button data-tab="goals">🎯 SMART Goals</button>
+  </nav>
 
 <div id="tabs">
 
@@ -387,6 +420,56 @@
       </div>
     </div>
   </div>
+  
+  <div class="tab-content" id="goals">
+  <div class="tool-card">
+    <div class="tool-header">🎯 What Are SMART Goals?</div>
+    <div class="tool-body open" style="max-height:none;">
+      <p>SMART goals are <strong>Specific</strong>, <strong>Measurable</strong>, <strong>Achievable</strong>, <strong>Relevant</strong>, and <strong>Time-bound</strong>. They help you create clear steps for your recovery journey.</p>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-header">📋 Create a New Goal</div>
+    <div class="tool-body open" style="max-height:none;">
+      <form id="goal-form">
+        <label for="goal-category">Category:</label>
+        <select id="goal-category" required>
+          <option value="">Select a category</option>
+          <option value="Emotional">Emotional</option>
+          <option value="Physical">Physical</option>
+          <option value="Social">Social</option>
+          <option value="Recovery">Recovery</option>
+          <option value="Mental">Mental</option>
+        </select>
+
+        <label for="goal-specific">Specific Goal:</label>
+        <textarea id="goal-specific" placeholder="Describe your goal specifically" required></textarea>
+
+        <label for="goal-measurable">How will you measure progress?</label>
+        <input type="text" id="goal-measurable" placeholder="e.g., journal daily, count days sober" required />
+
+        <label for="goal-achievable">Is this achievable?</label>
+        <textarea id="goal-achievable" placeholder="What steps will you take?" required></textarea>
+
+        <label for="goal-relevant">Why is this important to you?</label>
+        <textarea id="goal-relevant" placeholder="Connect to your recovery" required></textarea>
+
+        <label for="goal-timebound">Timeframe (by when?):</label>
+        <input type="date" id="goal-timebound" required />
+
+        <button type="submit">Add Goal</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-header">📊 Your Goals</div>
+    <div class="tool-body open" style="max-height:none;">
+      <div id="goals-list"></div>
+    </div>
+  </div>
+</div>
 
   <!-- Mini Pages Tab -->
   <div class="tab-content" id="minipages">
@@ -596,6 +679,80 @@
       showQuote(newIndex);
     });
     initQuote();
+    
+    // SMART Goals logic
+
+const goalForm = document.getElementById("goal-form");
+const goalsListEl = document.getElementById("goals-list");
+
+function loadGoals() {
+  const saved = localStorage.getItem("recoveryGoals");
+  return saved ? JSON.parse(saved) : [];
+}
+
+function saveGoals(goals) {
+  localStorage.setItem("recoveryGoals", JSON.stringify(goals));
+}
+
+function renderGoals() {
+  const goals = loadGoals();
+  if (goals.length === 0) {
+    goalsListEl.innerHTML = "<p>No goals set yet. Start by adding one above!</p>";
+    return;
+  }
+  goalsListEl.innerHTML = "";
+  goals.forEach((goal, index) => {
+    const div = document.createElement("div");
+    div.className = "goal-item";
+    div.style = "border:1px solid #ff6ec4; padding:0.7rem; margin-bottom:0.8rem; border-radius:8px; background:#fff; color:#222;";
+    div.innerHTML = `
+      <strong>Category:</strong> ${goal.category} <br/>
+      <strong>Goal:</strong> ${goal.specific} <br/>
+      <strong>Measure:</strong> ${goal.measurable} <br/>
+      <strong>Achievable Steps:</strong> ${goal.achievable} <br/>
+      <strong>Why Important:</strong> ${goal.relevant} <br/>
+      <strong>Deadline:</strong> ${goal.timebound} <br/>
+      <button data-index="${index}" class="delete-goal" style="background:#ff6ec4; border:none; padding:0.3rem 0.6rem; color:#fff; border-radius:5px; cursor:pointer;">Delete</button>
+    `;
+    goalsListEl.appendChild(div);
+  });
+
+  document.querySelectorAll(".delete-goal").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const idx = e.target.getAttribute("data-index");
+      const goals = loadGoals();
+      goals.splice(idx, 1);
+      saveGoals(goals);
+      renderGoals();
+    });
+  });
+}
+
+goalForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const newGoal = {
+    category: goalForm["goal-category"].value,
+    specific: goalForm["goal-specific"].value.trim(),
+    measurable: goalForm["goal-measurable"].value.trim(),
+    achievable: goalForm["goal-achievable"].value.trim(),
+    relevant: goalForm["goal-relevant"].value.trim(),
+    timebound: goalForm["goal-timebound"].value,
+  };
+  if (
+    !newGoal.category || !newGoal.specific || !newGoal.measurable ||
+    !newGoal.achievable || !newGoal.relevant || !newGoal.timebound
+  ) {
+    alert("Please fill all fields to add a goal.");
+    return;
+  }
+  const goals = loadGoals();
+  goals.push(newGoal);
+  saveGoals(goals);
+  goalForm.reset();
+  renderGoals();
+});
+
+renderGoals();
   </script>
 </body>
 </html>
