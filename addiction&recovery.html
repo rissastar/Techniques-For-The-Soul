@@ -1,577 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Recovery Toolkit</title>
-<style>
-  /* Reset and base */
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #8e2de2, #4a00e0);
-    color: #fff;
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-  }
-  header {
-    background: linear-gradient(90deg, #f7971e, #ffd200);
-    padding: 2rem 1rem;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    color: #2c1f00;
-  }
-  header h1 {
-    margin: 0;
-    font-size: 2.8rem;
-    font-weight: 900;
-    letter-spacing: 0.05em;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.15);
-  }
-  header p {
-    margin-top: 0.4rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-    font-style: italic;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Recovery Toolkit</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(145deg, #ff6ec4, #7873f5);
+      color: #fff;
+      height: 100%;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
 
-  main {
-    flex-grow: 1;
-    max-width: 960px;
-    margin: 1rem auto 3rem auto;
-    background: rgba(255 255 255 / 0.08);
-    border-radius: 16px;
-    box-shadow: 0 0 40px 5px rgba(255 255 255 / 0.15);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* Tabs */
-  nav {
-    display: flex;
-    background: linear-gradient(90deg, #f7971e, #ffd200);
-    border-radius: 16px 16px 0 0;
-    user-select: none;
-    overflow-x: auto;
-  }
-  nav button {
-    flex-grow: 1;
-    background: transparent;
-    border: none;
-    color: #2c1f00;
-    font-weight: 700;
-    font-size: 1rem;
-    padding: 1rem 0;
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease;
-    letter-spacing: 0.03em;
-  }
-  nav button:hover,
-  nav button:focus {
-    background: #fff3b0;
-    outline: none;
-  }
-  nav button.active {
-    background: #2c1f00;
-    color: #ffd200;
-    box-shadow: inset 0 -4px 10px #f7a91a;
-  }
-
-  section.tab-content {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 1rem 1.5rem 2rem 1.5rem;
-  }
-
-  /* Tool Card */
-  .tool-card {
-    background: #fff;
-    color: #333;
-    border-radius: 12px;
-    margin-bottom: 1rem;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
-    overflow: hidden;
-    transition: box-shadow 0.3s ease;
-  }
-  .tool-card:hover {
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  }
-  .tool-header {
-    background: linear-gradient(90deg, #f7971e, #ffd200);
-    color: #2c1f00;
-    padding: 1rem 1.25rem;
-    font-weight: 700;
-    font-size: 1.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-    letter-spacing: 0.02em;
-  }
-  .tool-header .icon {
-    font-size: 1.5rem;
-  }
-  .tool-header .toggle-icon {
-    font-size: 1.8rem;
-    transition: transform 0.3s ease;
-  }
-  .tool-header.open .toggle-icon {
-    transform: rotate(180deg);
-  }
-  .tool-body {
-    padding: 0 1.25rem 1rem 1.25rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s ease, padding 0.35s ease;
-    color: #222;
-  }
-  .tool-body.open {
-    max-height: 1200px; /* big enough */
-    padding-top: 1rem;
-  }
-  .tool-body p {
-    margin: 0 0 1rem 0;
-  }
-  .notes {
-    margin-top: 0.5rem;
-  }
-  .notes label {
-    font-weight: 600;
-    display: block;
-    margin-bottom: 0.3rem;
-    color: #555;
-  }
-  .notes textarea {
-    width: 100%;
-    min-height: 70px;
-    border-radius: 8px;
-    border: 1.5px solid #ddd;
-    padding: 0.7rem;
-    font-size: 1rem;
-    font-family: inherit;
-    resize: vertical;
-    transition: border-color 0.3s ease;
-  }
-  .notes textarea:focus {
-    border-color: #f7971e;
-    outline: none;
-    box-shadow: 0 0 5px #f7971e;
-  }
-
-  /* Scrollbar styling */
-  section.tab-content::-webkit-scrollbar {
-    width: 8px;
-  }
-  section.tab-content::-webkit-scrollbar-thumb {
-    background: #f7971e;
-    border-radius: 4px;
-  }
-  section.tab-content::-webkit-scrollbar-track {
-    background: rgba(255 255 255 / 0.1);
-  }
-
-  /* Responsive */
-  @media (max-width: 700px) {
+    header {
+      padding: 1.5rem 1rem;
+      background: #fff;
+      color: #111;
+      text-align: center;
+      border-bottom: 4px solid #ff6ec4;
+    }
     header h1 {
-      font-size: 2rem;
+      font-size: 1.8rem;
+      margin: 0;
+      font-weight: bold;
+    }
+    header p {
+      margin-top: 0.3rem;
+      font-size: 1rem;
+      font-style: italic;
+    }
+
+    nav {
+      display: flex;
+      overflow-x: auto;
+      background: #111;
     }
     nav button {
-      font-size: 0.9rem;
-      padding: 0.8rem 0;
+      flex: 1;
+      padding: 0.8rem;
+      background: transparent;
+      color: #fff;
+      border: none;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: 0.3s ease;
     }
+    nav button.active {
+      border-bottom: 3px solid #ff6ec4;
+      background: #222;
+    }
+
+    .tab-content {
+      padding: 1rem;
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    .tool-card {
+      background: #fff;
+      color: #222;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
     .tool-header {
-      font-size: 1.1rem;
-      padding: 0.85rem 1rem;
+      padding: 1rem;
+      font-weight: bold;
+      font-size: 1rem;
+      background: #ff6ec4;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
     }
-  }
-</style>
+
+    .tool-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: #f9f9f9;
+      color: #333;
+      padding: 0 1rem;
+    }
+
+    .tool-body.open {
+      max-height: 500px;
+      padding: 1rem;
+    }
+
+    .tool-body p {
+      margin: 0 0 1rem;
+      line-height: 1.5;
+    }
+
+    .notes label {
+      font-weight: bold;
+      display: block;
+      margin: 0.5rem 0 0.2rem;
+    }
+    .notes textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    @media (min-width: 700px) {
+      body {
+        max-width: 480px;
+        margin: 0 auto;
+      }
+    }
+  </style>
 </head>
 <body>
-
 <header>
   <h1>🛠 Recovery Toolkit</h1>
-  <p>Comprehensive tools to support your healing journey</p>
+  <p>Your portable pocket guide for healing</p>
 </header>
+<nav>
+  <button class="active" data-tab="crisis">🚨 Crisis</button>
+  <button data-tab="mental">🧠 Mental</button>
+  <button data-tab="trauma">❤️ Trauma</button>
+  <button data-tab="boundaries">💬 Boundaries</button>
+  <button data-tab="identity">✨ Identity</button>
+  <button data-tab="wellness">🌿 Wellness</button>
+  <button data-tab="growth">🏆 Growth</button>
+</nav>
+<div id="tabs">
 
-<main>
-  <nav role="tablist" aria-label="Recovery Toolkit Sections">
-    <button class="active" role="tab" aria-selected="true" aria-controls="tab-crisis" id="tab-crisis-btn" tabindex="0">🚨 Crisis & Urge</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-mental" id="tab-mental-btn" tabindex="-1">🧠 Mental & Emotional</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-trauma" id="tab-trauma-btn" tabindex="-1">❤️ Trauma & Healing</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-boundaries" id="tab-boundaries-btn" tabindex="-1">💬 Boundaries & Communication</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-identity" id="tab-identity-btn" tabindex="-1">✨ Identity & Self-Worth</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-wellness" id="tab-wellness-btn" tabindex="-1">🌿 Wellness & Self-Care</button>
-    <button role="tab" aria-selected="false" aria-controls="tab-growth" id="tab-growth-btn" tabindex="-1">🏆 Progress & Growth</button>
-  </nav>
+  <div class="tab-content active" id="crisis">
+    <div class="tool-card">
+      <div class="tool-header">🌊 Urge Surfing Practice</div>
+      <div class="tool-body">
+        <p>Observe urges rise and fall like waves. Don't act — just witness.</p>
+        <div class="notes">
+          <label for="note-crisis-1">Your Notes</label>
+          <textarea id="note-crisis-1"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-header">⏳ 15-Minute Delay</div>
+      <div class="tool-body">
+        <p>Delay acting on the urge. Distract, breathe, or walk. Re-evaluate after 15 mins.</p>
+        <div class="notes">
+          <label for="note-crisis-2">Your Notes</label>
+          <textarea id="note-crisis-2"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <section id="tab-crisis" class="tab-content" role="tabpanel" aria-labelledby="tab-crisis-btn">
-    <!-- Crisis & Urge Tools -->
-  </section>
-  <section id="tab-mental" class="tab-content" role="tabpanel" aria-labelledby="tab-mental-btn" hidden>
-    <!-- Mental & Emotional Recovery Tools -->
-  </section>
-  <section id="tab-trauma" class="tab-content" role="tabpanel" aria-labelledby="tab-trauma-btn" hidden>
-    <!-- Trauma & Inner Healing -->
-  </section>
-  <section id="tab-boundaries" class="tab-content" role="tabpanel" aria-labelledby="tab-boundaries-btn" hidden>
-    <!-- Communication & Boundaries -->
-  </section>
-  <section id="tab-identity" class="tab-content" role="tabpanel" aria-labelledby="tab-identity-btn" hidden>
-    <!-- Identity & Self-Worth -->
-  </section>
-  <section id="tab-wellness" class="tab-content" role="tabpanel" aria-labelledby="tab-wellness-btn" hidden>
-    <!-- Wellness & Self-Care -->
-  </section>
-  <section id="tab-growth" class="tab-content" role="tabpanel" aria-labelledby="tab-growth-btn" hidden>
-    <!-- Progress & Growth -->
-  </section>
-</main>
+  <div class="tab-content" id="mental">
+    <div class="tool-card">
+      <div class="tool-header">🎭 Name the Feeling</div>
+      <div class="tool-body">
+        <p>Say what you feel: "I feel anxious." Naming emotions gives power over them.</p>
+        <div class="notes">
+          <label for="note-mental-1">Your Notes</label>
+          <textarea id="note-mental-1"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-header">🔄 Thought Reframing</div>
+      <div class="tool-body">
+        <p>Challenge and reframe negative thoughts into helpful ones.</p>
+        <div class="notes">
+          <label for="note-mental-2">Your Notes</label>
+          <textarea id="note-mental-2"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="trauma">
+    <div class="tool-card">
+      <div class="tool-header">🧘‍♂️ Grounding & Body Scan</div>
+      <div class="tool-body">
+        <p>Use 5 senses or scan your body to feel present. Anchors you in now.</p>
+        <div class="notes">
+          <label for="note-trauma-1">Your Notes</label>
+          <textarea id="note-trauma-1"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-header">⏪ Flashback Management</div>
+      <div class="tool-body">
+        <p>Use grounding objects, cold water, or calming breath when overwhelmed by past memories.</p>
+        <div class="notes">
+          <label for="note-trauma-2">Your Notes</label>
+          <textarea id="note-trauma-2"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="boundaries">
+    <div class="tool-card">
+      <div class="tool-header">🗣️ Assertive Scripts</div>
+      <div class="tool-body">
+        <p>Practice: "I’m not available right now." or "That doesn't work for me."</p>
+        <div class="notes">
+          <label for="note-boundaries-1">Your Notes</label>
+          <textarea id="note-boundaries-1"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="identity">
+    <div class="tool-card">
+      <div class="tool-header">🔍 Who Am I Without Trauma?</div>
+      <div class="tool-body">
+        <p>List what brings you joy. List your values. Explore your true self.</p>
+        <div class="notes">
+          <label for="note-identity-1">Your Notes</label>
+          <textarea id="note-identity-1"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="wellness">
+    <div class="tool-card">
+      <div class="tool-header">🛏️ Sleep Hygiene</div>
+      <div class="tool-body">
+        <p>Wind-down routine, phone off, lights low. Try calming breath before bed.</p>
+        <div class="notes">
+          <label for="note-wellness-1">Your Notes</label>
+          <textarea id="note-wellness-1"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="growth">
+    <div class="tool-card">
+      <div class="tool-header">✅ What Worked Today?</div>
+      <div class="tool-body">
+        <p>Reflect on one thing you did well. Acknowledge progress, no matter how small.</p>
+        <div class="notes">
+          <label for="note-growth-1">Your Notes</label>
+          <textarea id="note-growth-1"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  </div> <!-- end of #tabs -->
 
 <script>
-  // Tab switching logic
-  const tabs = document.querySelectorAll('nav button');
-  const tabContents = document.querySelectorAll('section.tab-content');
+  // Tab switching
+  const tabButtons = document.querySelectorAll("nav button");
+  const tabContents = document.querySelectorAll(".tab-content");
 
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      // Set active state
-      tabs.forEach(t => {
-        t.classList.remove('active');
-        t.setAttribute('aria-selected', 'false');
-        t.setAttribute('tabindex', '-1');
-      });
-      tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
-      tab.setAttribute('tabindex', '0');
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.getAttribute("data-tab");
+
+      // Toggle active button
+      tabButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
 
       // Show/hide content
-      const targetId = tab.getAttribute('aria-controls');
-      tabContents.forEach(section => {
-        if (section.id === targetId) {
-          section.hidden = false;
-          section.focus?.();
-        } else {
-          section.hidden = true;
-        }
+      tabContents.forEach(content => {
+        content.classList.remove("active");
+        if (content.id === tab) content.classList.add("active");
       });
     });
   });
 
-  // Tool Data per category
-  const toolkitData = {
-    crisis: [
-      {
-        title: "Urge Surfing Practice",
-        icon: "🌊",
-        content: "Sit with your urges without acting on them. Observe their rise and fall like waves, reminding yourself they pass."
-      },
-      {
-        title: "15-Minute Delay Strategy",
-        icon: "⏳",
-        content: "When cravings hit, delay acting on them by 15 minutes. Use distraction or breathing exercises during the wait."
-      },
-      {
-        title: "Play the Tape Forward",
-        icon: "🎞️",
-        content: "Visualize what happens if you give in to urges, including negative consequences. Remind yourself why you choose recovery."
-      },
-      {
-        title: "SOS Toolkit",
-        icon: "🆘",
-        content: "Keep 3 favorite grounding or calming tools ready (e.g., music, deep breathing, phone a friend) for quick access in crises."
-      },
-      {
-        title: "Emergency Contact Card",
-        icon: "📇",
-        content: "Prepare a list of trusted contacts to reach out to in moments of need or crisis."
-      },
-      {
-        title: "Crisis Plan Generator",
-        icon: "📝",
-        content: "Create a step-by-step plan to follow when feeling overwhelmed or at risk."
-      },
-      {
-        title: "Why I Stay List",
-        icon: "💖",
-        content: "Write down reasons you want to continue recovery—keep it handy for tough moments."
-      }
-    ],
-    mental: [
-      {
-        title: "Emotional Regulation & Naming Feelings",
-        icon: "🎭",
-        content: "Practice identifying and naming your emotions to gain control over them."
-      },
-      {
-        title: "Reframing Negative Thoughts",
-        icon: "🔄",
-        content: "Challenge and change negative or unhelpful thoughts into balanced, positive perspectives."
-      },
-      {
-        title: "Inner Child Work",
-        icon: "👶",
-        content: "Connect with your younger self through journaling or meditation to heal past wounds."
-      },
-      {
-        title: "Grounding Techniques",
-        icon: "🌳",
-        content: "Use 5-4-3-2-1 sensory exercises to stay present and reduce anxiety."
-      },
-      {
-        title: "Managing Panic & Anxiety Attacks",
-        icon: "😰",
-        content: "Learn breathing exercises and calming strategies to manage panic in the moment."
-      },
-      {
-        title: "Self-Forgiveness & Guilt Release",
-        icon: "💫",
-        content: "Practice forgiving yourself and letting go of shame or guilt."
-      },
-      {
-        title: "Distress Tolerance Tools",
-        icon: "🛡️",
-        content: "Use DBT-based skills like distraction, self-soothing, and mindfulness to tolerate distress."
-      }
-    ],
-    trauma: [
-      {
-        title: "Trauma Triggers & Safety Planning",
-        icon: "⚠️",
-        content: "Identify triggers and create plans to keep yourself safe and grounded."
-      },
-      {
-        title: "Somatic Release Techniques",
-        icon: "💆‍♂️",
-        content: "Use body-based exercises to release tension and trauma stored in the body."
-      },
-      {
-        title: "Reconnecting with the Body",
-        icon: "🧘‍♂️",
-        content: "Practice body scans and breath awareness to regain control and presence."
-      },
-      {
-        title: "Flashback Management",
-        icon: "⏪",
-        content: "Use grounding and safe place visualization to manage flashbacks."
-      },
-      {
-        title: "Healing from Shame",
-        icon: "🦋",
-        content: "Use compassion and journaling to overcome shame."
-      },
-      {
-        title: "Self-Parenting Practice",
-        icon: "🤱",
-        content: "Provide the care and love to yourself that you needed as a child."
-      },
-      {
-        title: "Spirituality & Soul Work",
-        icon: "✨",
-        content: "Connect with your spiritual beliefs or inner peace practices."
-      },
-      {
-        title: "Timeline Healing",
-        icon: "📅",
-        content: "Create a healing timeline journaling exercise to track progress and milestones."
-      }
-    ],
-    boundaries: [
-      {
-        title: "Assertive Communication Practice",
-        icon: "🗣️",
-        content: "Learn to speak up clearly and respectfully for your needs."
-      },
-      {
-        title: "Saying “No” Without Guilt",
-        icon: "🚫",
-        content: "Practice boundaries and saying no firmly but kindly."
-      },
-      {
-        title: "Conflict De-escalation Scripts",
-        icon: "⚖️",
-        content: "Use phrases and techniques to reduce conflict and maintain peace."
-      },
-      {
-        title: "Boundary Scripts",
-        icon: "🛑",
-        content: "Prepare what to say when setting boundaries with others."
-      },
-      {
-        title: "Relationship Red Flags",
-        icon: "🚩",
-        content: "Recognize unhealthy patterns and protect yourself."
-      }
-    ],
-    identity: [
-      {
-        title: "Affirmation Builder",
-        icon: "📝",
-        content: "Create positive affirmations to boost self-worth and confidence."
-      },
-      {
-        title: "Who Am I Without the Trauma/Addiction?",
-        icon: "🔍",
-        content: "Explore your authentic self separate from your struggles."
-      },
-      {
-        title: "Mask & Role Deconstruction",
-        icon: "🎭",
-        content: "Identify and release false roles you've played to please others."
-      },
-      {
-        title: "Reclaiming Your Voice",
-        icon: "📣",
-        content: "Practice speaking your truth in safe ways."
-      },
-      {
-        title: "Empowerment Journal Prompts",
-        icon: "📒",
-        content: "Use guided questions to build confidence and self-trust."
-      },
-      {
-        title: "Vision Board Tool",
-        icon: "🖼️",
-        content: "Create visual goals and dreams to inspire your path forward."
-      }
-    ],
-    wellness: [
-      {
-        title: "Daily Wellness Tracker",
-        icon: "📊",
-        content: "Monitor sleep, mood, nutrition, and exercise daily."
-      },
-      {
-        title: "Self-Care Menu Generator",
-        icon: "🥗",
-        content: "Build a list of preferred self-care activities to choose from."
-      },
-      {
-        title: "Nutrition & Mood",
-        icon: "🍎",
-        content: "Understand how food impacts your emotions and energy."
-      },
-      {
-        title: "Movement for Recovery",
-        icon: "🏃‍♀️",
-        content: "Incorporate gentle yoga, walking, or dance to support healing."
-      },
-      {
-        title: "Sleep Hygiene & Wind-down Routine",
-        icon: "🛏️",
-        content: "Create habits that improve sleep quality."
-      },
-      {
-        title: "Safe Coping List Builder",
-        icon: "🛡️",
-        content: "Compile healthy coping mechanisms to rely on during stress."
-      }
-    ],
-    growth: [
-      {
-        title: "Milestone Tracker",
-        icon: "🎯",
-        content: "Record your recovery milestones and celebrate progress."
-      },
-      {
-        title: "SMART Goals Builder",
-        icon: "📅",
-        content: "Set Specific, Measurable, Achievable, Relevant, Time-bound goals."
-      },
-      {
-        title: "Morning & Evening Check-ins",
-        icon: "☀️🌙",
-        content: "Reflect on your mindset and mood to maintain awareness."
-      },
-      {
-        title: "Gratitude Practice",
-        icon: "🙏",
-        content: "Write down things you’re grateful for every day."
-      },
-      {
-        title: "What Worked Today Reflection",
-        icon: "✅",
-        content: "Focus on positive actions and choices you made daily."
-      },
-      {
-        title: "Progress Timeline Chart",
-        icon: "📈",
-        content: "Visualize your growth and progress over time."
-      },
-      {
-        title: "Visual Motivation Wall",
-        icon: "🖼️",
-        content: "Collect quotes, images, and memories that inspire you."
-      }
-    ]
-  };
+  // Toggle tool body open/close
+  document.querySelectorAll(".tool-header").forEach(header => {
+    header.addEventListener("click", () => {
+      const body = header.nextElementSibling;
+      body.classList.toggle("open");
+    });
+  });
 
-  // Helper: Save/load notes to localStorage
-  function saveNote(category, index, value) {
-    const key = `recoveryToolkitNote_${category}_${index}`;
-    localStorage.setItem(key, value);
-  }
-  function loadNote(category, index) {
-    const key = `recoveryToolkitNote_${category}_${index}`;
-    return localStorage.getItem(key) || '';
-  }
+  // LocalStorage save/load for all textareas
+  document.querySelectorAll("textarea").forEach(textarea => {
+    const id = textarea.id;
+    // Load saved note
+    const saved = localStorage.getItem(id);
+    if (saved) textarea.value = saved;
 
-  // Render tools in each tab
-  Object.entries(toolkitData).forEach(([category, tools]) => {
-    const container = document.getElementById(`tab-${category}`);
-    tools.forEach((tool, i) => {
-      const card = document.createElement('article');
-      card.className = 'tool-card';
-
-      const header = document.createElement('header');
-      header.className = 'tool-header';
-      header.tabIndex = 0;
-      header.setAttribute('role', 'button');
-      header.setAttribute('aria-expanded', 'false');
-      header.setAttribute('aria-controls', `${category}-toolbody-${i}`);
-      header.innerHTML = `<span class="icon" aria-hidden="true">${tool.icon}</span> ${tool.title} <span class="toggle-icon" aria-hidden="true">▼</span>`;
-
-      const body = document.createElement('div');
-      body.className = 'tool-body';
-      body.id = `${category}-toolbody-${i}`;
-      body.setAttribute('aria-hidden', 'true');
-      body.innerHTML = `
-        <p>${tool.content}</p>
-        <div class="notes">
-          <label for="note-${category}-${i}">Your Notes:</label>
-          <textarea id="note-${category}-${i}" placeholder="Write your thoughts or reflections...">${loadNote(category, i)}</textarea>
-        </div>
-      `;
-
-      // Toggle open/close on click or keyboard
-      function toggleOpen() {
-        const isOpen = body.classList.toggle('open');
-        header.classList.toggle('open', isOpen);
-        header.setAttribute('aria-expanded', isOpen);
-        body.setAttribute('aria-hidden', !isOpen);
-      }
-      header.addEventListener('click', toggleOpen);
-      header.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          toggleOpen();
-        }
-      });
-
-      // Save notes on input
-      const textarea = body.querySelector('textarea');
-      textarea.addEventListener('input', e => {
-        saveNote(category, i, e.target.value);
-      });
-
-      card.appendChild(header);
-      card.appendChild(body);
-      container.appendChild(card);
+    // Save on input
+    textarea.addEventListener("input", () => {
+      localStorage.setItem(id, textarea.value);
     });
   });
 </script>
