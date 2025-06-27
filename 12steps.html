@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+  <title>12-Step Recovery Workbook</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #d0f0e0, #f6fff9);
+      color: #333;
+      padding: 1rem;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=800&q=60') no-repeat center center;
+      background-size: cover;
+      color: white;
+      font-weight: bold;
+    }
+    h1 {
+      font-size: 2rem;
+      background: rgba(0,0,0,0.5);
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+    .counter, .quote {
+      text-align: center;
+      margin: 1rem 0;
+    }
+    .step {
+      background: white;
+      border-radius: 8px;
+      margin: 1rem 0;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .step h2 {
+      margin: 0 0 0.5rem;
+      color: #00695c;
+    }
+    textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    button {
+      margin-top: 0.5rem;
+      background: #00695c;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #004d40;
+    }
+    .prompt {
+      font-style: italic;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>12-Step Recovery Workbook</h1>
+  </header>
+
+  <div class="counter">
+    <strong>Sober Since:</strong> <input type="date" id="soberDate" />
+    <p id="soberDays"></p>
+  </div>
+
+  <div class="quote" id="quoteOfDay"></div>
+
+  <div id="steps"></div>
+
+  <script>
+    const steps = [
+      {
+        title: "Step 1: Honesty",
+        text: "We admitted we were powerless over our addiction—that our lives had become unmanageable.",
+        explain: "This step is about facing the truth. It means recognizing that willpower alone cannot conquer addiction. Admitting powerlessness is not weakness—it’s the beginning of healing.",
+        prompts: [
+          "What does powerlessness mean to you?",
+          "How has your life become unmanageable?",
+          "What fears come up when thinking about surrendering control?"
+        ]
+      },
+      {
+        title: "Step 2: Hope",
+        text: "Came to believe that a Power greater than ourselves could restore us to sanity.",
+        explain: "This step is about believing that recovery is possible. Whether you believe in God, the universe, community, or inner strength, Step 2 invites you to open your heart to the possibility of healing.",
+        prompts: [
+          "What does 'a Power greater than yourself' mean to you?",
+          "What has helped you feel hope in dark times?",
+          "How would your life look if you were restored to sanity?"
+        ]
+      },
+      {
+        title: "Step 3: Surrender",
+        text: "Made a decision to turn our will and our lives over to the care of God as we understood Him.",
+        explain: "This step is not about blind faith. It’s about letting go of self-will and trusting a process bigger than us. It invites peace and humility.",
+        prompts: [
+          "What parts of your life are hardest to surrender?",
+          "What does trust look like for you?",
+          "How do you feel when you let go of control?"
+        ]
+      },
+      {
+        title: "Step 4: Courage",
+        text: "Made a searching and fearless moral inventory of ourselves.",
+        explain: "This step asks us to look inward honestly. It's a deep dive into behaviors, resentments, fears, and harm done. It can be hard—but it’s powerful.",
+        prompts: [
+          "What patterns in your life cause pain?",
+          "What fears drive your actions?",
+          "What truths are you ready to face?"
+        ]
+      },
+      {
+        title: "Step 5: Integrity",
+        text: "Admitted to God, to ourselves, and to another human being the exact nature of our wrongs.",
+        explain: "This step is about accountability and connection. Speaking your truth out loud is freeing. You are not alone.",
+        prompts: [
+          "What’s it like to speak your truth?",
+          "Who do you trust with your story?",
+          "What do you most need to admit?"
+        ]
+      },
+      {
+        title: "Step 6: Willingness",
+        text: "Were entirely ready to have God remove all these defects of character.",
+        explain: "This step focuses on readiness for change—not perfection. It's a spiritual willingness to let go of old patterns, and open the door to transformation.",
+        prompts: [
+          "What behaviors are you willing to release?",
+          "What still gives you comfort, even if it harms you?",
+          "How ready are you to be free?"
+        ]
+      },
+      {
+        title: "Step 7: Humility",
+        text: "Humbly asked Him to remove our shortcomings.",
+        explain: "This step is about letting go of pride and ego. It’s about opening yourself up to growth and change with a humble heart.",
+        prompts: [
+          "What does humility mean to you?",
+          "What gets in the way of asking for help?",
+          "How do you experience grace?"
+        ]
+      },
+      {
+        title: "Step 8: Forgiveness",
+        text: "Made a list of all persons we had harmed and became willing to make amends to them all.",
+        explain: "This step is about recognizing the impact of our actions. It’s not about guilt—it’s about owning our part and being willing to heal relationships.",
+        prompts: [
+          "Who have you hurt through your addiction?",
+          "What would healing those relationships look like?",
+          "What does forgiveness (for others and yourself) mean?"
+        ]
+      },
+      {
+        title: "Step 9: Justice",
+        text: "Made direct amends to such people wherever possible, except when to do so would injure them or others.",
+        explain: "Amends are more than apologies—they’re about taking responsibility and repairing trust. This step must be done with care and courage.",
+        prompts: [
+          "What amends are you ready to make?",
+          "How can you show you've changed?",
+          "How can you practice justice gently?"
+        ]
+      },
+      {
+        title: "Step 10: Perseverance",
+        text: "Continued to take personal inventory and when we were wrong promptly admitted it.",
+        explain: "This step invites daily self-awareness. It’s a practice of checking in, correcting course, and growing in integrity over time.",
+        prompts: [
+          "How do you practice daily reflection?",
+          "What helps you admit when you're wrong?",
+          "How can you make self-inventory a habit?"
+        ]
+      },
+      {
+        title: "Step 11: Awareness",
+        text: "Sought through prayer and meditation to improve our conscious contact with God as we understood Him.",
+        explain: "This step is about spiritual connection. It's a chance to deepen your inner life and stay grounded in peace, love, and purpose.",
+        prompts: [
+          "What does conscious contact mean to you?",
+          "How do you connect spiritually or mindfully?",
+          "What does your inner voice sound like?"
+        ]
+      },
+      {
+        title: "Step 12: Service",
+        text: "Having had a spiritual awakening as the result of these steps, we tried to carry this message to others and to practice these principles in all our affairs.",
+        explain: "This step is about giving back and living the program. It’s about being of service, living your truth, and helping others on their journey.",
+        prompts: [
+          "How has your spirit changed during this process?",
+          "Who can you support in their healing?",
+          "What does recovery mean to you now?"
+        ]
+      }
+    ];
+
+    function createStepCards() {
+      const container = document.getElementById("steps");
+      steps.forEach((step, i) => {
+        const saved = localStorage.getItem(`step${i}`) || '';
+        container.innerHTML += `
+          <div class="step">
+            <h2>${step.title}</h2>
+            <p><strong>${step.text}</strong></p>
+            <p>${step.explain}</p>
+            <div class="prompt">${step.prompts.map(p => "• " + p).join("<br>")}</div>
+            <textarea id="note${i}" placeholder="Write your reflections...">${saved}</textarea>
+            <button onclick="saveNote(${i})">Save Reflection</button>
+          </div>
+        `;
+      });
+    }
+
+    function saveNote(i) {
+      const val = document.getElementById(`note${i}`).value;
+      localStorage.setItem(`step${i}`, val);
+      alert("Reflection saved.");
+    }
+
+    function updateSoberCounter() {
+      const input = document.getElementById("soberDate");
+      const days = document.getElementById("soberDays");
+      const savedDate = localStorage.getItem("soberDate");
+      if (savedDate) {
+        input.value = savedDate;
+        const count = getDaysSince(savedDate);
+        days.textContent = `You've been sober for ${count} day(s).`;
+      }
+      input.addEventListener("change", () => {
+        localStorage.setItem("soberDate", input.value);
+        days.textContent = `You've been sober for ${getDaysSince(input.value)} day(s).`;
+      });
+    }
+
+    function getDaysSince(dateStr) {
+      const then = new Date(dateStr);
+      const now = new Date();
+      const diff = now - then;
+      return Math.floor(diff / (1000 * 60 * 60 * 24));
+    }
+
+    function showQuoteOfDay() {
+      const quotes = [
+        "One day at a time.",
+        "Progress, not perfection.",
+        "You are stronger than your strongest urge.",
+        "Recovery is not a straight line.",
+        "You didn’t come this far to only come this far.",
+        "Healing happens when you show up for yourself.",
+        "You are worthy of peace and freedom."
+      ];
+      const quote = quotes[new Date().getDate() % quotes.length];
+      document.getElementById("quoteOfDay").textContent = `"${quote}"`;
+    }
+
+    createStepCards();
+    updateSoberCounter();
+    showQuoteOfDay();
+  </script>
+</body>
+</html>
