@@ -3,100 +3,191 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Important Things in Recovery</title>
+<title>Recovery Toolkit</title>
 <style>
-  /* Reset & base */
+  /* Reset and base */
   *, *::before, *::after {
     box-sizing: border-box;
   }
   body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #a8edea, #fed6e3);
-    color: #333;
-    line-height: 1.6;
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #8e2de2, #4a00e0);
+    color: #fff;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
   }
   header {
-    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') no-repeat center/cover;
-    padding: 3rem 1rem;
-    color: white;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    padding: 2rem 1rem;
     text-align: center;
-    box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    color: #2c1f00;
   }
   header h1 {
     margin: 0;
-    font-size: 2.75rem;
-    font-weight: 700;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.15);
   }
   header p {
-    margin-top: 0.5rem;
+    margin-top: 0.4rem;
     font-size: 1.2rem;
-    font-weight: 300;
+    font-weight: 600;
     font-style: italic;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
   }
 
   main {
-    max-width: 800px;
-    margin: 2rem auto 3rem auto;
-    padding: 0 1rem;
     flex-grow: 1;
+    max-width: 960px;
+    margin: 1rem auto 3rem auto;
+    background: rgba(255 255 255 / 0.08);
+    border-radius: 16px;
+    box-shadow: 0 0 40px 5px rgba(255 255 255 / 0.15);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
-  .accordion {
-    border-radius: 8px;
-    background: rgba(255 255 255 / 0.85);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  /* Tabs */
+  nav {
+    display: flex;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    border-radius: 16px 16px 0 0;
+    user-select: none;
+    overflow-x: auto;
+  }
+  nav button {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: #2c1f00;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 1rem 0;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+    letter-spacing: 0.03em;
+  }
+  nav button:hover,
+  nav button:focus {
+    background: #fff3b0;
+    outline: none;
+  }
+  nav button.active {
+    background: #2c1f00;
+    color: #ffd200;
+    box-shadow: inset 0 -4px 10px #f7a91a;
+  }
+
+  section.tab-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem 1.5rem 2rem 1.5rem;
+  }
+
+  /* Tool Card */
+  .tool-card {
+    background: #fff;
+    color: #333;
+    border-radius: 12px;
     margin-bottom: 1rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
     overflow: hidden;
     transition: box-shadow 0.3s ease;
   }
-  .accordion:hover {
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  .tool-card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   }
-  .accordion summary {
+  .tool-header {
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    color: #2c1f00;
+    padding: 1rem 1.25rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     cursor: pointer;
-    padding: 1.25rem 1.5rem;
-    font-weight: 600;
-    font-size: 1.2rem;
-    list-style: none;
     user-select: none;
-    position: relative;
+    letter-spacing: 0.02em;
   }
-  .accordion summary::-webkit-details-marker {
-    display: none;
-  }
-  .accordion summary::after {
-    content: '+';
-    position: absolute;
-    right: 1.5rem;
+  .tool-header .icon {
     font-size: 1.5rem;
+  }
+  .tool-header .toggle-icon {
+    font-size: 1.8rem;
     transition: transform 0.3s ease;
   }
-  .accordion[open] summary::after {
-    content: '−';
+  .tool-header.open .toggle-icon {
     transform: rotate(180deg);
   }
-  .accordion div.content {
-    padding: 0 1.5rem 1.5rem 1.5rem;
+  .tool-body {
+    padding: 0 1.25rem 1rem 1.25rem;
     font-size: 1rem;
-    color: #444;
+    line-height: 1.5;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    color: #222;
+  }
+  .tool-body.open {
+    max-height: 1200px; /* big enough */
+    padding-top: 1rem;
+  }
+  .tool-body p {
+    margin: 0 0 1rem 0;
+  }
+  .notes {
+    margin-top: 0.5rem;
+  }
+  .notes label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #555;
+  }
+  .notes textarea {
+    width: 100%;
+    min-height: 70px;
+    border-radius: 8px;
+    border: 1.5px solid #ddd;
+    padding: 0.7rem;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+  }
+  .notes textarea:focus {
+    border-color: #f7971e;
+    outline: none;
+    box-shadow: 0 0 5px #f7971e;
+  }
+
+  /* Scrollbar styling */
+  section.tab-content::-webkit-scrollbar {
+    width: 8px;
+  }
+  section.tab-content::-webkit-scrollbar-thumb {
+    background: #f7971e;
+    border-radius: 4px;
+  }
+  section.tab-content::-webkit-scrollbar-track {
+    background: rgba(255 255 255 / 0.1);
   }
 
   /* Responsive */
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     header h1 {
       font-size: 2rem;
     }
-    header p {
-      font-size: 1rem;
+    nav button {
+      font-size: 0.9rem;
+      padding: 0.8rem 0;
     }
-    main {
-      margin: 1rem;
+    .tool-header {
+      font-size: 1.1rem;
+      padding: 0.85rem 1rem;
     }
   }
 </style>
@@ -104,110 +195,383 @@
 <body>
 
 <header>
-  <h1>Important Things in Recovery</h1>
-  <p>A comprehensive guide for healing from addiction, trauma, and mental health challenges</p>
+  <h1>🛠 Recovery Toolkit</h1>
+  <p>Comprehensive tools to support your healing journey</p>
 </header>
 
 <main>
-  <details class="accordion" open>
-    <summary>1. Commitment to Healing</summary>
-    <div class="content">
-      <p>Recovery starts with a sincere decision to heal and improve your life. It requires ongoing willingness to face challenges, even when it’s uncomfortable.</p>
-    </div>
-  </details>
+  <nav role="tablist" aria-label="Recovery Toolkit Sections">
+    <button class="active" role="tab" aria-selected="true" aria-controls="tab-crisis" id="tab-crisis-btn" tabindex="0">🚨 Crisis & Urge</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-mental" id="tab-mental-btn" tabindex="-1">🧠 Mental & Emotional</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-trauma" id="tab-trauma-btn" tabindex="-1">❤️ Trauma & Healing</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-boundaries" id="tab-boundaries-btn" tabindex="-1">💬 Boundaries & Communication</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-identity" id="tab-identity-btn" tabindex="-1">✨ Identity & Self-Worth</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-wellness" id="tab-wellness-btn" tabindex="-1">🌿 Wellness & Self-Care</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-growth" id="tab-growth-btn" tabindex="-1">🏆 Progress & Growth</button>
+  </nav>
 
-  <details class="accordion">
-    <summary>2. Building a Strong Support Network</summary>
-    <div class="content">
-      <p>Surround yourself with people who understand, support, and respect your journey. This can include family, friends, therapists, support groups (like AA, NA, or mental health peer groups), and community resources. Connection combats isolation, which is a big risk factor for relapse or setbacks.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>3. Seeking Professional Guidance</summary>
-    <div class="content">
-      <p>Access to therapists, counselors, medical professionals, or addiction specialists. Sometimes includes medication or specialized treatment (e.g., trauma therapy, medication-assisted treatment for addiction). Professional care helps navigate complex emotions and physical symptoms safely.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>4. Understanding Yourself and Your Triggers</summary>
-    <div class="content">
-      <p>Learn about what leads to relapse or emotional overwhelm. Reflect on your thoughts, feelings, and behaviors — through journaling, therapy, or mindfulness. Recognize your personal patterns and early warning signs.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>5. Developing Healthy Coping Skills</summary>
-    <div class="content">
-      <p>Replace harmful behaviors with positive strategies: meditation, breathing exercises, creative arts, exercise, or grounding techniques. Practice self-soothing and stress reduction regularly. Learn to tolerate discomfort without turning to old habits.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>6. Creating Stability Through Routine</summary>
-    <div class="content">
-      <p>Structure your day with healthy habits and routines — sleep schedule, meal times, work, and relaxation. Goal setting (short and long term) keeps focus and builds confidence. Having predictable anchors in your day reduces chaos and uncertainty.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>7. Practicing Self-Compassion</summary>
-    <div class="content">
-      <p>Accept that recovery is a process with progress and setbacks. Don’t judge yourself harshly for mistakes or relapses — treat yourself as you would a friend. Patience with yourself creates a safe internal environment for growth.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>8. Continuing Education and Personal Growth</summary>
-    <div class="content">
-      <p>Learn about addiction, trauma, mental health conditions, and recovery science. Work on building emotional intelligence, communication skills, and resilience. Seek out workshops, books, podcasts, or online resources.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>9. Finding Purpose and Meaning</summary>
-    <div class="content">
-      <p>Connect to your values, spirituality, or passions. Engage in activities that inspire you or make you feel useful. Helping others or volunteering can create a sense of belonging and contribution.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>10. Taking Care of Your Body</summary>
-    <div class="content">
-      <p>Prioritize adequate sleep, nutritious food, and regular physical activity. Address any medical needs or chronic conditions. Physical wellness supports mental and emotional health.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>11. Managing Mental Health Holistically</summary>
-    <div class="content">
-      <p>Address co-occurring issues like anxiety, depression, PTSD, or bipolar disorder. Use therapy, medication, lifestyle changes, and support tailored to your needs. Monitor mood and seek help early when symptoms arise.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>12. Setting Boundaries</summary>
-    <div class="content">
-      <p>Learn to say no to toxic people, unhealthy environments, or situations that threaten your recovery. Protect your energy and focus by surrounding yourself with positive influences.</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>13. Using Tools and Resources</summary>
-    <div class="content">
-      <p>Keep recovery toolkits handy — crisis plans, grounding exercises, motivational quotes. Use apps, journals, or community programs to support daily progress. Celebrate milestones, no matter how small.</p>
-    </div>
-  </details>
+  <section id="tab-crisis" class="tab-content" role="tabpanel" aria-labelledby="tab-crisis-btn">
+    <!-- Crisis & Urge Tools -->
+  </section>
+  <section id="tab-mental" class="tab-content" role="tabpanel" aria-labelledby="tab-mental-btn" hidden>
+    <!-- Mental & Emotional Recovery Tools -->
+  </section>
+  <section id="tab-trauma" class="tab-content" role="tabpanel" aria-labelledby="tab-trauma-btn" hidden>
+    <!-- Trauma & Inner Healing -->
+  </section>
+  <section id="tab-boundaries" class="tab-content" role="tabpanel" aria-labelledby="tab-boundaries-btn" hidden>
+    <!-- Communication & Boundaries -->
+  </section>
+  <section id="tab-identity" class="tab-content" role="tabpanel" aria-labelledby="tab-identity-btn" hidden>
+    <!-- Identity & Self-Worth -->
+  </section>
+  <section id="tab-wellness" class="tab-content" role="tabpanel" aria-labelledby="tab-wellness-btn" hidden>
+    <!-- Wellness & Self-Care -->
+  </section>
+  <section id="tab-growth" class="tab-content" role="tabpanel" aria-labelledby="tab-growth-btn" hidden>
+    <!-- Progress & Growth -->
+  </section>
 </main>
 
 <script>
-  // Optional: Smooth scroll to open details on click
-  document.querySelectorAll('details').forEach((detail) => {
-    detail.addEventListener('toggle', (e) => {
-      if(detail.open){
-        detail.scrollIntoView({behavior: 'smooth', block: 'start'});
+  // Tab switching logic
+  const tabs = document.querySelectorAll('nav button');
+  const tabContents = document.querySelectorAll('section.tab-content');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      // Set active state
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      tab.setAttribute('tabindex', '0');
+
+      // Show/hide content
+      const targetId = tab.getAttribute('aria-controls');
+      tabContents.forEach(section => {
+        if (section.id === targetId) {
+          section.hidden = false;
+          section.focus?.();
+        } else {
+          section.hidden = true;
+        }
+      });
+    });
+  });
+
+  // Tool Data per category
+  const toolkitData = {
+    crisis: [
+      {
+        title: "Urge Surfing Practice",
+        icon: "🌊",
+        content: "Sit with your urges without acting on them. Observe their rise and fall like waves, reminding yourself they pass."
+      },
+      {
+        title: "15-Minute Delay Strategy",
+        icon: "⏳",
+        content: "When cravings hit, delay acting on them by 15 minutes. Use distraction or breathing exercises during the wait."
+      },
+      {
+        title: "Play the Tape Forward",
+        icon: "🎞️",
+        content: "Visualize what happens if you give in to urges, including negative consequences. Remind yourself why you choose recovery."
+      },
+      {
+        title: "SOS Toolkit",
+        icon: "🆘",
+        content: "Keep 3 favorite grounding or calming tools ready (e.g., music, deep breathing, phone a friend) for quick access in crises."
+      },
+      {
+        title: "Emergency Contact Card",
+        icon: "📇",
+        content: "Prepare a list of trusted contacts to reach out to in moments of need or crisis."
+      },
+      {
+        title: "Crisis Plan Generator",
+        icon: "📝",
+        content: "Create a step-by-step plan to follow when feeling overwhelmed or at risk."
+      },
+      {
+        title: "Why I Stay List",
+        icon: "💖",
+        content: "Write down reasons you want to continue recovery—keep it handy for tough moments."
       }
+    ],
+    mental: [
+      {
+        title: "Emotional Regulation & Naming Feelings",
+        icon: "🎭",
+        content: "Practice identifying and naming your emotions to gain control over them."
+      },
+      {
+        title: "Reframing Negative Thoughts",
+        icon: "🔄",
+        content: "Challenge and change negative or unhelpful thoughts into balanced, positive perspectives."
+      },
+      {
+        title: "Inner Child Work",
+        icon: "👶",
+        content: "Connect with your younger self through journaling or meditation to heal past wounds."
+      },
+      {
+        title: "Grounding Techniques",
+        icon: "🌳",
+        content: "Use 5-4-3-2-1 sensory exercises to stay present and reduce anxiety."
+      },
+      {
+        title: "Managing Panic & Anxiety Attacks",
+        icon: "😰",
+        content: "Learn breathing exercises and calming strategies to manage panic in the moment."
+      },
+      {
+        title: "Self-Forgiveness & Guilt Release",
+        icon: "💫",
+        content: "Practice forgiving yourself and letting go of shame or guilt."
+      },
+      {
+        title: "Distress Tolerance Tools",
+        icon: "🛡️",
+        content: "Use DBT-based skills like distraction, self-soothing, and mindfulness to tolerate distress."
+      }
+    ],
+    trauma: [
+      {
+        title: "Trauma Triggers & Safety Planning",
+        icon: "⚠️",
+        content: "Identify triggers and create plans to keep yourself safe and grounded."
+      },
+      {
+        title: "Somatic Release Techniques",
+        icon: "💆‍♂️",
+        content: "Use body-based exercises to release tension and trauma stored in the body."
+      },
+      {
+        title: "Reconnecting with the Body",
+        icon: "🧘‍♂️",
+        content: "Practice body scans and breath awareness to regain control and presence."
+      },
+      {
+        title: "Flashback Management",
+        icon: "⏪",
+        content: "Use grounding and safe place visualization to manage flashbacks."
+      },
+      {
+        title: "Healing from Shame",
+        icon: "🦋",
+        content: "Use compassion and journaling to overcome shame."
+      },
+      {
+        title: "Self-Parenting Practice",
+        icon: "🤱",
+        content: "Provide the care and love to yourself that you needed as a child."
+      },
+      {
+        title: "Spirituality & Soul Work",
+        icon: "✨",
+        content: "Connect with your spiritual beliefs or inner peace practices."
+      },
+      {
+        title: "Timeline Healing",
+        icon: "📅",
+        content: "Create a healing timeline journaling exercise to track progress and milestones."
+      }
+    ],
+    boundaries: [
+      {
+        title: "Assertive Communication Practice",
+        icon: "🗣️",
+        content: "Learn to speak up clearly and respectfully for your needs."
+      },
+      {
+        title: "Saying “No” Without Guilt",
+        icon: "🚫",
+        content: "Practice boundaries and saying no firmly but kindly."
+      },
+      {
+        title: "Conflict De-escalation Scripts",
+        icon: "⚖️",
+        content: "Use phrases and techniques to reduce conflict and maintain peace."
+      },
+      {
+        title: "Boundary Scripts",
+        icon: "🛑",
+        content: "Prepare what to say when setting boundaries with others."
+      },
+      {
+        title: "Relationship Red Flags",
+        icon: "🚩",
+        content: "Recognize unhealthy patterns and protect yourself."
+      }
+    ],
+    identity: [
+      {
+        title: "Affirmation Builder",
+        icon: "📝",
+        content: "Create positive affirmations to boost self-worth and confidence."
+      },
+      {
+        title: "Who Am I Without the Trauma/Addiction?",
+        icon: "🔍",
+        content: "Explore your authentic self separate from your struggles."
+      },
+      {
+        title: "Mask & Role Deconstruction",
+        icon: "🎭",
+        content: "Identify and release false roles you've played to please others."
+      },
+      {
+        title: "Reclaiming Your Voice",
+        icon: "📣",
+        content: "Practice speaking your truth in safe ways."
+      },
+      {
+        title: "Empowerment Journal Prompts",
+        icon: "📒",
+        content: "Use guided questions to build confidence and self-trust."
+      },
+      {
+        title: "Vision Board Tool",
+        icon: "🖼️",
+        content: "Create visual goals and dreams to inspire your path forward."
+      }
+    ],
+    wellness: [
+      {
+        title: "Daily Wellness Tracker",
+        icon: "📊",
+        content: "Monitor sleep, mood, nutrition, and exercise daily."
+      },
+      {
+        title: "Self-Care Menu Generator",
+        icon: "🥗",
+        content: "Build a list of preferred self-care activities to choose from."
+      },
+      {
+        title: "Nutrition & Mood",
+        icon: "🍎",
+        content: "Understand how food impacts your emotions and energy."
+      },
+      {
+        title: "Movement for Recovery",
+        icon: "🏃‍♀️",
+        content: "Incorporate gentle yoga, walking, or dance to support healing."
+      },
+      {
+        title: "Sleep Hygiene & Wind-down Routine",
+        icon: "🛏️",
+        content: "Create habits that improve sleep quality."
+      },
+      {
+        title: "Safe Coping List Builder",
+        icon: "🛡️",
+        content: "Compile healthy coping mechanisms to rely on during stress."
+      }
+    ],
+    growth: [
+      {
+        title: "Milestone Tracker",
+        icon: "🎯",
+        content: "Record your recovery milestones and celebrate progress."
+      },
+      {
+        title: "SMART Goals Builder",
+        icon: "📅",
+        content: "Set Specific, Measurable, Achievable, Relevant, Time-bound goals."
+      },
+      {
+        title: "Morning & Evening Check-ins",
+        icon: "☀️🌙",
+        content: "Reflect on your mindset and mood to maintain awareness."
+      },
+      {
+        title: "Gratitude Practice",
+        icon: "🙏",
+        content: "Write down things you’re grateful for every day."
+      },
+      {
+        title: "What Worked Today Reflection",
+        icon: "✅",
+        content: "Focus on positive actions and choices you made daily."
+      },
+      {
+        title: "Progress Timeline Chart",
+        icon: "📈",
+        content: "Visualize your growth and progress over time."
+      },
+      {
+        title: "Visual Motivation Wall",
+        icon: "🖼️",
+        content: "Collect quotes, images, and memories that inspire you."
+      }
+    ]
+  };
+
+  // Helper: Save/load notes to localStorage
+  function saveNote(category, index, value) {
+    const key = `recoveryToolkitNote_${category}_${index}`;
+    localStorage.setItem(key, value);
+  }
+  function loadNote(category, index) {
+    const key = `recoveryToolkitNote_${category}_${index}`;
+    return localStorage.getItem(key) || '';
+  }
+
+  // Render tools in each tab
+  Object.entries(toolkitData).forEach(([category, tools]) => {
+    const container = document.getElementById(`tab-${category}`);
+    tools.forEach((tool, i) => {
+      const card = document.createElement('article');
+      card.className = 'tool-card';
+
+      const header = document.createElement('header');
+      header.className = 'tool-header';
+      header.tabIndex = 0;
+      header.setAttribute('role', 'button');
+      header.setAttribute('aria-expanded', 'false');
+      header.setAttribute('aria-controls', `${category}-toolbody-${i}`);
+      header.innerHTML = `<span class="icon" aria-hidden="true">${tool.icon}</span> ${tool.title} <span class="toggle-icon" aria-hidden="true">▼</span>`;
+
+      const body = document.createElement('div');
+      body.className = 'tool-body';
+      body.id = `${category}-toolbody-${i}`;
+      body.setAttribute('aria-hidden', 'true');
+      body.innerHTML = `
+        <p>${tool.content}</p>
+        <div class="notes">
+          <label for="note-${category}-${i}">Your Notes:</label>
+          <textarea id="note-${category}-${i}" placeholder="Write your thoughts or reflections...">${loadNote(category, i)}</textarea>
+        </div>
+      `;
+
+      // Toggle open/close on click or keyboard
+      function toggleOpen() {
+        const isOpen = body.classList.toggle('open');
+        header.classList.toggle('open', isOpen);
+        header.setAttribute('aria-expanded', isOpen);
+        body.setAttribute('aria-hidden', !isOpen);
+      }
+      header.addEventListener('click', toggleOpen);
+      header.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleOpen();
+        }
+      });
+
+      // Save notes on input
+      const textarea = body.querySelector('textarea');
+      textarea.addEventListener('input', e => {
+        saveNote(category, i, e.target.value);
+      });
+
+      card.appendChild(header);
+      card.appendChild(body);
+      container.appendChild(card);
     });
   });
 </script>
