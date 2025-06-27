@@ -435,21 +435,48 @@
 </div>
 
   <script>
-    // Tab switching
-    const tabButtons = document.querySelectorAll("nav button");
-    const tabContents = document.querySelectorAll(".tab-content");
-    tabButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const tab = btn.getAttribute("data-tab");
-        tabButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        tabContents.forEach(content => {
-          content.classList.remove("active");
-          if (content.id === tab) content.classList.add("active");
-        });
-        window.scrollTo(0, 0);
+  // Tab switching
+  const tabButtons = document.querySelectorAll("nav button");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.getAttribute("data-tab");
+      tabButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      tabContents.forEach(content => {
+        content.classList.remove("active");
+        if(content.id === tab) content.classList.add("active");
       });
+      // Scroll top on tab change
+      window.scrollTo(0, 0);
     });
+  });
+document.addEventListener("DOMContentLoaded", function () {
+  const tabButtons = document.querySelectorAll("nav button");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  tabButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const selectedTab = button.getAttribute("data-tab");
+
+      // Remove 'active' class from all buttons
+      tabButtons.forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      // Hide all tabs and show selected
+      tabContents.forEach(tab => {
+        tab.classList.remove("active");
+        if (tab.id === selectedTab) {
+          tab.classList.add("active");
+        }
+      });
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+});
 
     // Expand/collapse tools
     document.querySelectorAll(".tool-header").forEach(header => {
