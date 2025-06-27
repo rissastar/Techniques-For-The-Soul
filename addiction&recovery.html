@@ -206,38 +206,6 @@
       margin: 0 auto;
     }
   }
-  #goals label {
-  display: block;
-  font-weight: bold;
-  margin-top: 0.8rem;
-}
-#goals input[type="text"],
-#goals input[type="date"],
-#goals select,
-#goals textarea {
-  width: 100%;
-  padding: 0.6rem;
-  margin-top: 0.2rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-family: inherit;
-  font-size: 1rem;
-  resize: vertical;
-}
-#goals button[type="submit"] {
-  margin-top: 1rem;
-  background: #ff6ec4;
-  border: none;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-#goals button[type="submit"]:hover {
-  background: #d647b0;
-}
 </style>
 </head>
 <body>
@@ -268,8 +236,8 @@
   <button data-tab="wellness">🌿 Wellness</button>
   <button data-tab="growth">🏆 Growth</button>
   <button data-tab="minipages">📂 Mini Pages</button>
-  <button data-tab="goals">🎯 SMART Goals</button>
-  </nav>
+  <button data-tab="twelvesteps">📜 12 Steps</button>
+</nav>
 
 <div id="tabs">
 
@@ -300,6 +268,14 @@
       </div>
     </div>
   </div>
+  
+  <!-- 12 Steps Tab -->
+<div class="tab-content" id="twelvesteps">
+  <p style="padding:0 1rem; font-style: italic; color: #ddd; font-size: 0.9rem; margin-bottom: 1rem;">
+    Explore each of the 12 Steps with guidance, reflection, and space for your own thoughts.
+  </p>
+  <div id="twelve-steps-container"></div>
+</div>
 
   <!-- Mental Tab -->
   <div class="tab-content" id="mental">
@@ -420,56 +396,6 @@
       </div>
     </div>
   </div>
-  
-  <div class="tab-content" id="goals">
-  <div class="tool-card">
-    <div class="tool-header">🎯 What Are SMART Goals?</div>
-    <div class="tool-body open" style="max-height:none;">
-      <p>SMART goals are <strong>Specific</strong>, <strong>Measurable</strong>, <strong>Achievable</strong>, <strong>Relevant</strong>, and <strong>Time-bound</strong>. They help you create clear steps for your recovery journey.</p>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <div class="tool-header">📋 Create a New Goal</div>
-    <div class="tool-body open" style="max-height:none;">
-      <form id="goal-form">
-        <label for="goal-category">Category:</label>
-        <select id="goal-category" required>
-          <option value="">Select a category</option>
-          <option value="Emotional">Emotional</option>
-          <option value="Physical">Physical</option>
-          <option value="Social">Social</option>
-          <option value="Recovery">Recovery</option>
-          <option value="Mental">Mental</option>
-        </select>
-
-        <label for="goal-specific">Specific Goal:</label>
-        <textarea id="goal-specific" placeholder="Describe your goal specifically" required></textarea>
-
-        <label for="goal-measurable">How will you measure progress?</label>
-        <input type="text" id="goal-measurable" placeholder="e.g., journal daily, count days sober" required />
-
-        <label for="goal-achievable">Is this achievable?</label>
-        <textarea id="goal-achievable" placeholder="What steps will you take?" required></textarea>
-
-        <label for="goal-relevant">Why is this important to you?</label>
-        <textarea id="goal-relevant" placeholder="Connect to your recovery" required></textarea>
-
-        <label for="goal-timebound">Timeframe (by when?):</label>
-        <input type="date" id="goal-timebound" required />
-
-        <button type="submit">Add Goal</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <div class="tool-header">📊 Your Goals</div>
-    <div class="tool-body open" style="max-height:none;">
-      <div id="goals-list"></div>
-    </div>
-  </div>
-</div>
 
   <!-- Mini Pages Tab -->
   <div class="tab-content" id="minipages">
@@ -635,6 +561,141 @@
     }
     trackReturnCount();
     checkAchievements();
+    
+    const achievements = [
+  // Existing achievements...
+
+  {
+    id: "3days",
+    title: "3 Days Sober",
+    description: "You’ve made it through 3 days! Keep building momentum.",
+    icon: "🌟",
+    condition: () => {
+      const d = localStorage.getItem("soberStartDate");
+      if (!d) return false;
+      return calculateSoberDays(d) >= 3;
+    }
+  },
+  {
+    id: "90days",
+    title: "3 Months Sober",
+    description: "90 days of strength and commitment. Incredible!",
+    icon: "🎖️",
+    condition: () => {
+      const d = localStorage.getItem("soberStartDate");
+      if (!d) return false;
+      return calculateSoberDays(d) >= 90;
+    }
+  },
+  {
+    id: "180days",
+    title: "6 Months Sober",
+    description: "Half a year sober — you’re doing amazing!",
+    icon: "🏅",
+    condition: () => {
+      const d = localStorage.getItem("soberStartDate");
+      if (!d) return false;
+      return calculateSoberDays(d) >= 180;
+    }
+  },
+  {
+    id: "1year",
+    title: "1 Year Sober",
+    description: "One full year of recovery! Celebrate this huge milestone!",
+    icon: "🥳",
+    condition: () => {
+      const d = localStorage.getItem("soberStartDate");
+      if (!d) return false;
+      return calculateSoberDays(d) >= 365;
+    }
+    {
+  id: "twelveSteps",
+  title: "12 Step Explorer",
+  description: "You've written reflections on all 12 Steps.",
+  icon: "📜",
+  condition: () => {
+    return twelveSteps.every((_, i) => {
+      const val = localStorage.getItem(`step-note-${i}`);
+      return val && val.trim().length > 0;
+    });
+  }
+}
+  },
+  {
+    id: "dailyJournaling",
+    title: "Daily Journaling",
+    description: "You’ve written notes in every tool for 7 consecutive days. Great habit!",
+    icon: "🖊️",
+    condition: () => {
+      // Check last 7 days notes (simplified example)
+      // In practice, you’d track daily timestamps per note, but here just checks all notes have content.
+      const noteIds = [
+        "note-crisis-1", "note-crisis-2",
+        "note-mental-1", "note-mental-2",
+        "note-trauma-1", "note-trauma-2",
+        "note-boundaries-1",
+        "note-identity-1",
+        "note-wellness-1",
+        "note-growth-1"
+      ];
+      return noteIds.every(id => {
+        const val = localStorage.getItem(id);
+        return val && val.trim().length > 0;
+      });
+    }
+  },
+  {
+    id: "goalSetter",
+    title: "Goal Setter",
+    description: "You’ve created your first SMART goal. Way to plan ahead!",
+    icon: "🎯",
+    condition: () => {
+      const goals = JSON.parse(localStorage.getItem("recoveryGoals") || "[]");
+      return goals.length > 0;
+    }
+  },
+  {
+    id: "quoteReader",
+    title: "Daily Inspiration Reader",
+    description: "You’ve refreshed the daily quote 5 times. Staying motivated!",
+    icon: "📖",
+    condition: () => {
+      const count = parseInt(localStorage.getItem("quoteRefreshCount") || "0", 10);
+      return count >= 5;
+    }
+  },
+  {
+    id: "toolExplorer",
+    title: "Explorer",
+    description: "Opened every tab at least once. Broadening your toolkit.",
+    icon: "🧭",
+    condition: () => {
+      // Check tabs visited stored in localStorage
+      const tabsVisited = JSON.parse(localStorage.getItem("tabsVisited") || "{}");
+      const requiredTabs = ["crisis","mental","trauma","boundaries","identity","wellness","growth","minipages","goals"];
+      return requiredTabs.every(t => tabsVisited[t]);
+    }
+  }
+];
+
+// Track quote refresh count
+const refreshQuoteBtn = document.getElementById("refresh-quote");
+refreshQuoteBtn.addEventListener("click", () => {
+  let count = parseInt(localStorage.getItem("quoteRefreshCount") || "0", 10);
+  count++;
+  localStorage.setItem("quoteRefreshCount", count.toString());
+});
+
+// Track tabs visited
+const tabButtons = document.querySelectorAll("nav button");
+tabButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const tab = btn.getAttribute("data-tab");
+    const visited = JSON.parse(localStorage.getItem("tabsVisited") || "{}");
+    visited[tab] = true;
+    localStorage.setItem("tabsVisited", JSON.stringify(visited));
+  });
+});
 
     // Daily quotes
     const quotes = [
@@ -680,79 +741,127 @@
     });
     initQuote();
     
-    // SMART Goals logic
-
-const goalForm = document.getElementById("goal-form");
-const goalsListEl = document.getElementById("goals-list");
-
-function loadGoals() {
-  const saved = localStorage.getItem("recoveryGoals");
-  return saved ? JSON.parse(saved) : [];
-}
-
-function saveGoals(goals) {
-  localStorage.setItem("recoveryGoals", JSON.stringify(goals));
-}
-
-function renderGoals() {
-  const goals = loadGoals();
-  if (goals.length === 0) {
-    goalsListEl.innerHTML = "<p>No goals set yet. Start by adding one above!</p>";
-    return;
+    // 12 Steps Data
+const twelveSteps = [
+  {
+    step: "Step 1",
+    title: "Admit Powerlessness",
+    desc: "We admitted we were powerless over our addiction—that our lives had become unmanageable.",
+    example: "I can’t control my drinking or drug use when I start.",
+    prompt: "Where do you feel most out of control? What have you tried to fix on your own?"
+  },
+  {
+    step: "Step 2",
+    title: "Find Hope",
+    desc: "Came to believe that a Power greater than ourselves could restore us to sanity.",
+    example: "Believing recovery is possible even when I don’t have all the answers.",
+    prompt: "What gives you hope today? Where do you find strength beyond yourself?"
+  },
+  {
+    step: "Step 3",
+    title: "Surrender",
+    desc: "Made a decision to turn our will and our lives over to the care of God as we understood Him.",
+    example: "Letting go of needing to control everything.",
+    prompt: "What would surrender look like for you today?"
+  },
+  {
+    step: "Step 4",
+    title: "Self-Inventory",
+    desc: "Made a searching and fearless moral inventory of ourselves.",
+    example: "I listed my resentments, fears, harms, and patterns.",
+    prompt: "What parts of your past or character feel worth exploring honestly?"
+  },
+  {
+    step: "Step 5",
+    title: "Confession",
+    desc: "Admitted to God, to ourselves, and to another human being the exact nature of our wrongs.",
+    example: "Telling a trusted friend about my secret shame.",
+    prompt: "Who might you trust to share your truth with safely?"
+  },
+  {
+    step: "Step 6",
+    title: "Readiness",
+    desc: "Were entirely ready to have God remove all these defects of character.",
+    example: "I’m willing to grow even if it’s uncomfortable.",
+    prompt: "What are you ready to let go of today?"
+  },
+  {
+    step: "Step 7",
+    title: "Humility",
+    desc: "Humbly asked Him to remove our shortcomings.",
+    example: "Asking for help with impatience or self-judgment.",
+    prompt: "What would asking for help look like for you?"
+  },
+  {
+    step: "Step 8",
+    title: "Amends List",
+    desc: "Made a list of all persons we had harmed, and became willing to make amends to them all.",
+    example: "Listing people I’ve hurt in addiction.",
+    prompt: "Who might belong on your list, even if you're not ready to reach out yet?"
+  },
+  {
+    step: "Step 9",
+    title: "Make Amends",
+    desc: "Made direct amends to such people wherever possible, except when to do so would injure them or others.",
+    example: "Apologizing sincerely without expectations.",
+    prompt: "What would true amends mean to you?"
+  },
+  {
+    step: "Step 10",
+    title: "Ongoing Inventory",
+    desc: "Continued to take personal inventory and when we were wrong promptly admitted it.",
+    example: "Checking in with myself nightly for mistakes and gratitude.",
+    prompt: "What are your daily practices of self-honesty?"
+  },
+  {
+    step: "Step 11",
+    title: "Spiritual Growth",
+    desc: "Sought through prayer and meditation to improve our conscious contact with God as we understood Him.",
+    example: "Meditation, journaling, walks in nature, silent prayer.",
+    prompt: "What helps you feel connected spiritually?"
+  },
+  {
+    step: "Step 12",
+    title: "Service and Awakening",
+    desc: "Having had a spiritual awakening as the result of these steps, we tried to carry this message to others, and to practice these principles in all our affairs.",
+    example: "Sharing my story or helping someone new in recovery.",
+    prompt: "How can you be of service today?"
   }
-  goalsListEl.innerHTML = "";
-  goals.forEach((goal, index) => {
-    const div = document.createElement("div");
-    div.className = "goal-item";
-    div.style = "border:1px solid #ff6ec4; padding:0.7rem; margin-bottom:0.8rem; border-radius:8px; background:#fff; color:#222;";
-    div.innerHTML = `
-      <strong>Category:</strong> ${goal.category} <br/>
-      <strong>Goal:</strong> ${goal.specific} <br/>
-      <strong>Measure:</strong> ${goal.measurable} <br/>
-      <strong>Achievable Steps:</strong> ${goal.achievable} <br/>
-      <strong>Why Important:</strong> ${goal.relevant} <br/>
-      <strong>Deadline:</strong> ${goal.timebound} <br/>
-      <button data-index="${index}" class="delete-goal" style="background:#ff6ec4; border:none; padding:0.3rem 0.6rem; color:#fff; border-radius:5px; cursor:pointer;">Delete</button>
-    `;
-    goalsListEl.appendChild(div);
-  });
+];
 
-  document.querySelectorAll(".delete-goal").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const idx = e.target.getAttribute("data-index");
-      const goals = loadGoals();
-      goals.splice(idx, 1);
-      saveGoals(goals);
-      renderGoals();
-    });
-  });
-}
+// Render 12 Steps to container
+const stepsContainer = document.getElementById("twelve-steps-container");
 
-goalForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const newGoal = {
-    category: goalForm["goal-category"].value,
-    specific: goalForm["goal-specific"].value.trim(),
-    measurable: goalForm["goal-measurable"].value.trim(),
-    achievable: goalForm["goal-achievable"].value.trim(),
-    relevant: goalForm["goal-relevant"].value.trim(),
-    timebound: goalForm["goal-timebound"].value,
-  };
-  if (
-    !newGoal.category || !newGoal.specific || !newGoal.measurable ||
-    !newGoal.achievable || !newGoal.relevant || !newGoal.timebound
-  ) {
-    alert("Please fill all fields to add a goal.");
-    return;
-  }
-  const goals = loadGoals();
-  goals.push(newGoal);
-  saveGoals(goals);
-  goalForm.reset();
-  renderGoals();
+twelveSteps.forEach((stepObj, index) => {
+  const card = document.createElement("div");
+  card.className = "tool-card";
+
+  card.innerHTML = `
+    <div class="tool-header">${stepObj.step}: ${stepObj.title}</div>
+    <div class="tool-body">
+      <p><strong>Description:</strong> ${stepObj.desc}</p>
+      <p><strong>Example:</strong> ${stepObj.example}</p>
+      <p><strong>Prompt:</strong> ${stepObj.prompt}</p>
+      <div class="notes">
+        <label for="step-note-${index}">Your Notes</label>
+        <textarea id="step-note-${index}" rows="4"></textarea>
+      </div>
+    </div>
+  `;
+  stepsContainer.appendChild(card);
 });
 
-renderGoals();
+// Enable saving notes for 12 steps
+twelveSteps.forEach((_, index) => {
+  const id = `step-note-${index}`;
+  const textarea = document.getElementById(id);
+  const saved = localStorage.getItem(id);
+  if (saved) textarea.value = saved;
+  textarea.addEventListener("input", () => {
+    localStorage.setItem(id, textarea.value);
+    checkAchievements();
+  });
+});
   </script>
 </body>
 </html>
