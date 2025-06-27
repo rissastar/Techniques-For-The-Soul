@@ -426,6 +426,48 @@
 </div>
 
 <script>
+</div> <!-- end of #tabs -->
+
+  // Tab switching
+  const tabButtons = document.querySelectorAll("nav button");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.getAttribute("data-tab");
+
+      // Toggle active button
+      tabButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      // Show/hide content
+      tabContents.forEach(content => {
+        content.classList.remove("active");
+        if (content.id === tab) content.classList.add("active");
+      });
+    });
+  });
+
+  // Toggle tool body open/close
+  document.querySelectorAll(".tool-header").forEach(header => {
+    header.addEventListener("click", () => {
+      const body = header.nextElementSibling;
+      body.classList.toggle("open");
+    });
+  });
+
+  // LocalStorage save/load for all textareas
+  document.querySelectorAll("textarea").forEach(textarea => {
+    const id = textarea.id;
+    // Load saved note
+    const saved = localStorage.getItem(id);
+    if (saved) textarea.value = saved;
+
+    // Save on input
+    textarea.addEventListener("input", () => {
+      localStorage.setItem(id, textarea.value);
+    });
+  });
   // Tab switching
   const tabButtons = document.querySelectorAll("nav button");
   const tabContents = document.querySelectorAll(".tab-content");
