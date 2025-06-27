@@ -69,6 +69,61 @@
       font-size: 0.95rem;
       margin-top: 0.5rem;
     }
+    
+    @media screen {
+  #printableWorkbook {
+    display: none;
+  }
+}
+
+@media print {
+  body > *:not(#printableWorkbook) {
+    display: none !important;
+  }
+
+  #printableWorkbook {
+    display: block;
+    font-size: 12pt;
+    color: black;
+    padding: 1in;
+  }
+
+  #printableWorkbook div {
+    page-break-after: always;
+  }
+
+  #printableWorkbook h2, #printableWorkbook h3 {
+    color: black;
+    page-break-after: avoid;
+  }
+
+@media screen {
+  #printableWorkbook {
+    display: none;
+  }
+}
+
+@media print {
+  body > *:not(#printableWorkbook) {
+    display: none !important;
+  }
+
+  #printableWorkbook {
+    display: block;
+    font-size: 12pt;
+    color: black;
+    padding: 1in;
+  }
+
+  #printableWorkbook div {
+    page-break-after: always;
+  }
+
+  #printableWorkbook h2, #printableWorkbook h3 {
+    color: black;
+    page-break-after: avoid;
+  }
+}
   </style>
 </head>
 <body>
@@ -85,12 +140,400 @@
 
   <div id="steps"></div>
   
-  <div style="text-align:center; margin-top: 2rem;">
-  <button onclick="exportReflections()">📄 Export Reflections</button>
-  <button onclick="window.print()">🖨️ Print Workbook</button>
+  <div id="printableWorkbook">
+  <h2 style="text-align:center;">12-Step Recovery Workbook<br><span style="font-size:14px;">#SpeakLouderLoveHarder</span></h2>
+
+  <div style="padding:1rem; font-family: serif;">
+    <!-- Start of Steps -->
+    <!-- Each step is its own section with space to write -->
+
+    <!-- STEP TEMPLATE -->
+    <div>
+      <h3>Step 1: Honesty</h3>
+      <p><strong>We admitted we were powerless over our addiction - that our lives had become unmanageable.</strong></p>
+      <p>This step is about facing the truth. It means recognizing that willpower alone cannot conquer addiction. Admitting powerlessness is not weakness—it's the beginning of healing.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>What does powerlessness mean to you?</li>
+        <li>How has your life become unmanageable?</li>
+        <li>What fears come up when thinking about surrendering control?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 2: Hope</h3>
+      <p><strong>Came to believe that a Power greater than ourselves could restore us to sanity.</strong></p>
+      <p>This step is about believing that recovery is possible. Whether you believe in God, the universe, community, or inner strength, Step 2 invites you to open your heart to the possibility of healing.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>What does “a Power greater than yourself” mean to you?</li>
+        <li>What has helped you feel hope in dark times?</li>
+        <li>How would your life look if you were restored to sanity?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 3: Surrender</h3>
+      <p><strong>Made a decision to turn our will and our lives over to the care of God as we understood Him.</strong></p>
+      <p>This step is not about blind faith. It’s about letting go of self-will and trusting a process bigger than us. It invites peace and humility.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>What parts of your life are hardest to surrender?</li>
+        <li>What does trust look like for you?</li>
+        <li>How do you feel when you let go of control?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 4: Courage</h3>
+      <p><strong>Made a searching and fearless moral inventory of ourselves.</strong></p>
+      <p>This step asks us to look inward honestly. It's a deep dive into behaviors, resentments, fears, and harm done. It can be hard—but it’s powerful.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>What patterns in your life cause pain?</li>
+        <li>What fears drive your actions?</li>
+        <li>What truths are you ready to face?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 5: Integrity</h3>
+      <p><strong>Admitted to God, to ourselves, and to another human being the exact nature of our wrongs.</strong></p>
+      <p>This step is about accountability and connection. Speaking your truth out loud is freeing. You are not alone.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>What’s it like to speak your truth?</li>
+        <li>Who do you trust with your story?</li>
+        <li>What do you most need to admit?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 6: Willingness</h3>
+      <p><strong>Were entirely ready to have God remove all these defects of character.</strong></p>
+      <p>This step focuses on readiness for change—not perfection. It's a spiritual willingness to let go of old patterns, and open the door to transformation.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>What behaviors are you willing to release?</li>
+        <li>What still gives you comfort, even if it harms you?</li>
+        <li>How ready are you to be free?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 7: Humility</h3>
+      <p><strong>Humbly asked Him to remove our shortcomings.</strong></p>
+      <p>This step is about letting go of pride and ego. It’s about opening yourself up to growth and change with a humble heart.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>What does humility mean to you?</li>
+        <li>What gets in the way of asking for help?</li>
+        <li>How do you experience grace?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 8: Forgiveness</h3>
+      <p><strong>Made a list of all persons we had harmed and became willing to make amends to them all.</strong></p>
+      <p>This step is about recognizing the impact of our actions. It’s not about guilt—it’s about owning our part and being willing to heal relationships.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>Who have you hurt through your addiction?</li>
+        <li>What would healing those relationships look like?</li>
+        <li>What does forgiveness (for others and yourself) mean?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 9: Justice</h3>
+      <p><strong>Made direct amends to such people wherever possible, except when to do so would injure them or others.</strong></p>
+      <p>Amends are more than apologies—they’re about taking responsibility and repairing trust. This step must be done with care and courage.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>What amends are you ready to make?</li>
+        <li>How can you show you've changed?</li>
+        <li>How can you practice justice gently?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 10: Perseverance</h3>
+      <p><strong>Continued to take personal inventory and when we were wrong promptly admitted it.</strong></p>
+      <p>This step invites daily self-awareness. It’s a practice of checking in, correcting course, and growing in integrity over time.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>How do you practice daily reflection?</li>
+        <li>What helps you admit when you're wrong?</li>
+        <li>How can you make self-inventory a habit?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 11: Awareness</h3>
+      <p><strong>Sought through prayer and meditation to improve our conscious contact with God as we understood Him.</strong></p>
+      <p>This step is about spiritual connection. It's a chance to deepen your inner life and stay grounded in peace, love, and purpose.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>What does conscious contact mean to you?</li>
+        <li>How do you connect spiritually or mindfully?</li>
+        <li>What does your inner voice sound like?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+
+    <div>
+      <h3>Step 12: Service</h3>
+      <p><strong>Having had a spiritual awakening as the result of these steps, we tried to carry this message to others and to practice these principles in all our affairs.</strong></p>
+      <p>This step is about giving back and living the program. It’s about being of service, living your truth, and helping others on their journey.</p>
+      <p><em>Reflection Prompts:</em></p>
+      <ul>
+        <li>How has your spirit changed during this process?</li>
+        <li>Who can you support in their healing?</li>
+        <li>What does recovery mean to you now?</li>
+      </ul>
+      <p><strong>Notes:</strong></p>
+      <p style="min-height:120px; border:1px dashed #aaa; padding:10px;"></p>
+    </div>
+  </div>
 </div>
 
+<div style="text-align:center; margin:1rem 0;">
+  <button id="downloadPdfBtn" style="padding:0.5rem 1rem; font-size:1rem; cursor:pointer;">
+    📥 Download 12-Step Workbook PDF
+  </button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
+  document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const margin = 40;
+    let y = margin;
+
+    doc.setFontSize(18);
+    doc.text("12-Step Recovery Workbook", 210, y, null, null, "center");
+    y += 30;
+    doc.setFontSize(12);
+    doc.text("#SpeakLouderLoveHarder", 210, y, null, null, "center");
+    y += 40;
+
+    // The steps data (same as your workbook content)
+    const steps = [
+      {
+        title: "Step 1: Honesty",
+        text: "We admitted we were powerless over our addiction - that our lives had become unmanageable.",
+        explain: "This step is about facing the truth. It means recognizing that willpower alone cannot conquer addiction. Admitting powerlessness is not weakness—it’s the beginning of healing.",
+        prompts: [
+          "What does powerlessness mean to you?",
+          "How has your life become unmanageable?",
+          "What fears come up when thinking about surrendering control?"
+        ]
+      },
+      {
+        title: "Step 2: Hope",
+        text: "Came to believe that a Power greater than ourselves could restore us to sanity.",
+        explain: "This step is about believing that recovery is possible. Whether you believe in God, the universe, community, or inner strength, Step 2 invites you to open your heart to the possibility of healing.",
+        prompts: [
+          "What does “a Power greater than yourself” mean to you?",
+          "What has helped you feel hope in dark times?",
+          "How would your life look if you were restored to sanity?"
+        ]
+      },
+      {
+        title: "Step 3: Surrender",
+        text: "Made a decision to turn our will and our lives over to the care of God as we understood Him.",
+        explain: "This step is not about blind faith. It’s about letting go of self-will and trusting a process bigger than us. It invites peace and humility.",
+        prompts: [
+          "What parts of your life are hardest to surrender?",
+          "What does trust look like for you?",
+          "How do you feel when you let go of control?"
+        ]
+      },
+      {
+        title: "Step 4: Courage",
+        text: "Made a searching and fearless moral inventory of ourselves.",
+        explain: "This step asks us to look inward honestly. It's a deep dive into behaviors, resentments, fears, and harm done. It can be hard—but it’s powerful.",
+        prompts: [
+          "What patterns in your life cause pain?",
+          "What fears drive your actions?",
+          "What truths are you ready to face?"
+        ]
+      },
+      {
+        title: "Step 5: Integrity",
+        text: "Admitted to God, to ourselves, and to another human being the exact nature of our wrongs.",
+        explain: "This step is about accountability and connection. Speaking your truth out loud is freeing. You are not alone.",
+        prompts: [
+          "What’s it like to speak your truth?",
+          "Who do you trust with your story?",
+          "What do you most need to admit?"
+        ]
+      },
+      {
+        title: "Step 6: Willingness",
+        text: "Were entirely ready to have God remove all these defects of character.",
+        explain: "This step focuses on readiness for change—not perfection. It's a spiritual willingness to let go of old patterns, and open the door to transformation.",
+        prompts: [
+          "What behaviors are you willing to release?",
+          "What still gives you comfort, even if it harms you?",
+          "How ready are you to be free?"
+        ]
+      },
+      {
+        title: "Step 7: Humility",
+        text: "Humbly asked Him to remove our shortcomings.",
+        explain: "This step is about letting go of pride and ego. It’s about opening yourself up to growth and change with a humble heart.",
+        prompts: [
+          "What does humility mean to you?",
+          "What gets in the way of asking for help?",
+          "How do you experience grace?"
+        ]
+      },
+      {
+        title: "Step 8: Forgiveness",
+        text: "Made a list of all persons we had harmed and became willing to make amends to them all.",
+        explain: "This step is about recognizing the impact of our actions. It’s not about guilt—it’s about owning our part and being willing to heal relationships.",
+        prompts: [
+          "Who have you hurt through your addiction?",
+          "What would healing those relationships look like?",
+          "What does forgiveness (for others and yourself) mean?"
+        ]
+      },
+      {
+        title: "Step 9: Justice",
+        text: "Made direct amends to such people wherever possible, except when to do so would injure them or others.",
+        explain: "Amends are more than apologies—they’re about taking responsibility and repairing trust. This step must be done with care and courage.",
+        prompts: [
+          "What amends are you ready to make?",
+          "How can you show you've changed?",
+          "How can you practice justice gently?"
+        ]
+      },
+      {
+        title: "Step 10: Perseverance",
+        text: "Continued to take personal inventory and when we were wrong promptly admitted it.",
+        explain: "This step invites daily self-awareness. It’s a practice of checking in, correcting course, and growing in integrity over time.",
+        prompts: [
+          "How do you practice daily reflection?",
+          "What helps you admit when you're wrong?",
+          "How can you make self-inventory a habit?"
+        ]
+      },
+      {
+        title: "Step 11: Awareness",
+        text: "Sought through prayer and meditation to improve our conscious contact with God as we understood Him.",
+        explain: "This step is about spiritual connection. It's a chance to deepen your inner life and stay grounded in peace, love, and purpose.",
+        prompts: [
+          "What does conscious contact mean to you?",
+          "How do you connect spiritually or mindfully?",
+          "What does your inner voice sound like?"
+        ]
+      },
+      {
+        title: "Step 12: Service",
+        text: "Having had a spiritual awakening as the result of these steps, we tried to carry this message to others and to practice these principles in all our affairs.",
+        explain: "This step is about giving back and living the program. It’s about being of service, living your truth, and helping others on their journey.",
+        prompts: [
+          "How has your spirit changed during this process?",
+          "Who can you support in their healing?",
+          "What does recovery mean to you now?"
+        ]
+      }
+    ];
+
+    const pageHeight = doc.internal.pageSize.height;
+
+    steps.forEach((step, idx) => {
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      if (y + 30 > pageHeight - 40) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(step.title, 40, y);
+      y += 18;
+
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "italic");
+      if (y + 25 > pageHeight - 40) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(step.text, 40, y);
+      y += 20;
+
+      doc.setFont("helvetica", "normal");
+      let splitExplain = doc.splitTextToSize(step.explain, 520);
+      if (y + splitExplain.length * 14 > pageHeight - 40) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(splitExplain, 40, y);
+      y += splitExplain.length * 14 + 10;
+
+      doc.setFont("helvetica", "bold");
+      doc.text("Reflection Prompts:", 40, y);
+      y += 18;
+
+      doc.setFont("helvetica", "normal");
+      step.prompts.forEach(prompt => {
+        let splitPrompt = doc.splitTextToSize("• " + prompt, 520);
+        if (y + splitPrompt.length * 14 > pageHeight - 40) {
+          doc.addPage();
+          y = margin;
+        }
+        doc.text(splitPrompt, 50, y);
+        y += splitPrompt.length * 14 + 6;
+      });
+
+      y += 20;
+      if (y + 80 > pageHeight - 40) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.setDrawColor(150);
+      doc.setLineWidth(0.5);
+      doc.line(40, y, 550, y);
+      y += 6;
+      doc.line(40, y, 550, y);
+      y += 6;
+      doc.line(40, y, 550, y);
+      y += 60;
+
+      if (idx !== steps.length - 1) {
+        if (y > pageHeight - 80) {
+          doc.addPage();
+          y = margin;
+        } else {
+          y += 10;
+        }
+      }
+    });
+
+    doc.save("12-Step-Recovery-Workbook_SpeakLouderLoveHarder.pdf");
+  });
     const steps = [
       {
         title: "Step 1: Honesty",
@@ -276,24 +719,6 @@
     createStepCards();
     updateSoberCounter();
     showQuoteOfDay();
-    
-    function exportReflections() {
-  let text = "My 12-Step Recovery Reflections:\n\n";
-  steps.forEach((step, i) => {
-    const reflection = localStorage.getItem(`step${i}`) || "[No reflection saved]";
-    text += `${step.title}\n${reflection}\n\n`;
-  });
-  
-  const blob = new Blob([text], { type: "text/plain" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "12-Step-Reflections.txt";
-  a.click();
-
-  URL.revokeObjectURL(url);
-}
   </script>
 </body>
 </html>
