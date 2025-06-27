@@ -425,285 +425,177 @@
   <button id="refresh-quote" aria-label="Show another quote">New Quote</button>
 </div>
 
-<script>
-</div> <!-- end of #tabs -->
-
-  // Tab switching
-  const tabButtons = document.querySelectorAll("nav button");
-  const tabContents = document.querySelectorAll(".tab-content");
-
-  tabButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const tab = btn.getAttribute("data-tab");
-
-      // Toggle active button
-      tabButtons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      // Show/hide content
-      tabContents.forEach(content => {
-        content.classList.remove("active");
-        if (content.id === tab) content.classList.add("active");
-      });
-    });
-  });
-
-  // Toggle tool body open/close
-  document.querySelectorAll(".tool-header").forEach(header => {
-    header.addEventListener("click", () => {
-      const body = header.nextElementSibling;
-      body.classList.toggle("open");
-    });
-  });
-
-  // LocalStorage save/load for all textareas
-  document.querySelectorAll("textarea").forEach(textarea => {
-    const id = textarea.id;
-    // Load saved note
-    const saved = localStorage.getItem(id);
-    if (saved) textarea.value = saved;
-
-    // Save on input
-    textarea.addEventListener("input", () => {
-      localStorage.setItem(id, textarea.value);
-    });
-  });
-  // Tab switching
-  const tabButtons = document.querySelectorAll("nav button");
-  const tabContents = document.querySelectorAll(".tab-content");
-
-  tabButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const tab = btn.getAttribute("data-tab");
-      tabButtons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      tabContents.forEach(content => {
-        content.classList.remove("active");
-        if(content.id === tab) content.classList.add("active");
-      });
-      // Scroll top on tab change
-      window.scrollTo(0, 0);
-    });
-  });
-
-  // Expand/collapse tool bodies
-  document.querySelectorAll(".tool-header").forEach(header => {
-    header.addEventListener("click", () => {
-      const body = header.nextElementSibling;
-      body.classList.toggle("open");
-    });
-  });
-
-  // LocalStorage save/load for all textareas
-  document.querySelectorAll("textarea").forEach(textarea => {
-    const id = textarea.id;
-    const saved = localStorage.getItem(id);
-    if(saved) textarea.value = saved;
-    textarea.addEventListener("input", () => {
-      localStorage.setItem(id, textarea.value);
-      checkAchievements();
-    });
-  });
-
-  // Sober Day Counter Logic
-  const soberDaysEl = document.getElementById("sober-days");
-  const startDateInput = document.getElementById("start-date");
-  const resetButton = document.getElementById("reset-sober");
-
-  function calculateSoberDays(start) {
-    const today = new Date();
-    const startDate = new Date(start);
-    const diff = today - startDate;
-    return diff > 0 ? Math.floor(diff / (1000*60*60*24)) + 1 : 0;
-  }
-
-  function updateSoberDays() {
-    const stored = localStorage.getItem("soberStartDate");
-    if(stored) {
-      startDateInput.value = stored;
-      const days = calculateSoberDays(stored);
-      soberDaysEl.textContent = days;
-    } else {
-      soberDaysEl.textContent = "0";
-    }
-  }
-
-  startDateInput.addEventListener("change", () => {
-    if(startDateInput.value) {
-      localStorage.setItem("soberStartDate", startDateInput.value);
-      updateSoberDays();
-      checkAchievements();
-    }
-  });
-
-  resetButton.addEventListener("click", () => {
-    localStorage.removeItem("soberStartDate");
-    startDateInput.value = "";
-    soberDaysEl.textContent = "0";
-    checkAchievements();
-  });
-
-  updateSoberDays();
-
-  // Achievements System
-  const achievementListEl = document.getElementById("achievement-list");
-
-  const achievements = [
-    {
-      id: "7days",
-      title: "1 Week Sober",
-      description: "You’ve reached 7 days sober! Keep going!",
-      icon: "🎉",
-      condition: () => {
-        const d = localStorage.getItem("soberStartDate");
-        if(!d) return false;
-        return calculateSoberDays(d) >= 7;
-      }
-    },
-    {
-      id: "30days",
-      title: "1 Month Sober",
-      description: "30 days sober! Amazing commitment!",
-      icon: "🏆",
-      condition: () => {
-        const d = localStorage.getItem("soberStartDate");
-        if(!d) return false;
-        return calculateSoberDays(d) >= 30;
-      }
-    },
-    {
-      id: "toolNotes",
-      title: "Tools in Use",
-      description: "You’ve added notes in all tool categories. Way to engage!",
-      icon: "📝",
-      condition: () => {
-        // Check if all note textareas have some content
-        const noteIds = [
-          "note-crisis-1", "note-crisis-2",
-          "note-mental-1", "note-mental-2",
-          "note-trauma-1", "note-trauma-2",
-          "note-boundaries-1",
-          "note-identity-1",
-          "note-wellness-1",
-          "note-growth-1"
-        ];
-        return noteIds.every(id => {
-          const val = localStorage.getItem(id);
-          return val && val.trim().length > 0;
+  <script>
+    // Tab switching
+    const tabButtons = document.querySelectorAll("nav button");
+    const tabContents = document.querySelectorAll(".tab-content");
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tab = btn.getAttribute("data-tab");
+        tabButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        tabContents.forEach(content => {
+          content.classList.remove("active");
+          if (content.id === tab) content.classList.add("active");
         });
-      }
-    },
-    {
-      id: "returnUser",
-      title: "Welcome Back",
-      description: "You’ve opened the toolkit multiple times. Keep returning!",
-      icon: "👋",
-      condition: () => {
-        const count = parseInt(localStorage.getItem("returnCount") || "0", 10);
-        return count >= 5;
-      }
-    }
-  ];
-
-  function renderAchievements() {
-    achievementListEl.innerHTML = "";
-    achievements.forEach(a => {
-      const unlocked = a.condition();
-      const div = document.createElement("div");
-      div.className = "achievement" + (unlocked ? "" : " locked");
-      div.innerHTML = `<span class="icon">${unlocked ? a.icon : "🔒"}</span><div><strong>${a.title}</strong><br/><small>${a.description}</small></div>`;
-      achievementListEl.appendChild(div);
+        window.scrollTo(0, 0);
+      });
     });
-  }
 
-  function checkAchievements() {
-    renderAchievements();
-  }
-
-  // Track number of visits
-  function trackReturnCount() {
-    let count = parseInt(localStorage.getItem("returnCount") || "0", 10);
-    count++;
-    localStorage.setItem("returnCount", count.toString());
-  }
-  trackReturnCount();
-
-  checkAchievements();
-
-  // Daily Motivational Quotes
-  const quotes = [
-    "Recovery is a journey, not a race.",
-    "One day at a time is enough.",
-    "You are stronger than your struggles.",
-    "Small progress is still progress.",
-    "Healing begins with self-compassion.",
-    "Your story is still being written.",
-    "Courage doesn’t always roar.",
-    "Keep going; your future self thanks you.",
-    "Every step forward counts.",
-    "You are not alone on this path."
-  ];
-
-  const quoteTextEl = document.getElementById("quote-text");
-  const refreshQuoteBtn = document.getElementById("refresh-quote");
-
-  function showQuote(index) {
-    quoteTextEl.textContent = quotes[index];
-  }
-
-  function getTodayIndex() {
-    const today = new Date();
-    // Cycle through quotes by date mod length
-    return today.getDate() % quotes.length;
-  }
-
-  function initQuote() {
-    const savedIndex = localStorage.getItem("dailyQuoteIndex");
-    const todayIndex = getTodayIndex();
-
-    if(savedIndex == null || parseInt(savedIndex) !== todayIndex) {
-      localStorage.setItem("dailyQuoteIndex", todayIndex);
-      showQuote(todayIndex);
-    } else {
-      showQuote(parseInt(savedIndex));
-    }
-  }
-
-  refreshQuoteBtn.addEventListener("click", () => {
-    // Show random quote different from current
-    let currentIndex = parseInt(localStorage.getItem("dailyQuoteIndex") || "0", 10);
-    let newIndex;
-    do {
-      newIndex = Math.floor(Math.random() * quotes.length);
-    } while(newIndex === currentIndex);
-    localStorage.setItem("dailyQuoteIndex", newIndex);
-    showQuote(newIndex);
-  });
-
-  initQuote();
-</script>
-
-<script>
-  // Open/close embedded iframe tool bodies on header click
-  document.querySelectorAll("#minipages .tool-header").forEach(header => {
-    header.addEventListener("click", () => {
-      const body = header.nextElementSibling;
-      body.classList.toggle("open");
-    });
-  });
-</script>
-
-<script>
-  // Also enable expand/collapse for mini pages on load
-  window.addEventListener("load", () => {
+    // Expand/collapse tools
     document.querySelectorAll(".tool-header").forEach(header => {
       header.addEventListener("click", () => {
         const body = header.nextElementSibling;
         body.classList.toggle("open");
       });
     });
-  });
-</script>
 
+    // Load/save notes
+    document.querySelectorAll("textarea").forEach(textarea => {
+      const id = textarea.id;
+      const saved = localStorage.getItem(id);
+      if (saved) textarea.value = saved;
+      textarea.addEventListener("input", () => {
+        localStorage.setItem(id, textarea.value);
+        checkAchievements();
+      });
+    });
+
+    // Sober day counter
+    const soberDaysEl = document.getElementById("sober-days");
+    const startDateInput = document.getElementById("start-date");
+    const resetButton = document.getElementById("reset-sober");
+    function calculateSoberDays(start) {
+      const today = new Date();
+      const startDate = new Date(start);
+      const diff = today - startDate;
+      return diff > 0 ? Math.floor(diff / (1000*60*60*24)) + 1 : 0;
+    }
+    function updateSoberDays() {
+      const stored = localStorage.getItem("soberStartDate");
+      if (stored) {
+        startDateInput.value = stored;
+        soberDaysEl.textContent = calculateSoberDays(stored);
+      } else {
+        soberDaysEl.textContent = "0";
+      }
+    }
+    startDateInput.addEventListener("change", () => {
+      localStorage.setItem("soberStartDate", startDateInput.value);
+      updateSoberDays();
+      checkAchievements();
+    });
+    resetButton.addEventListener("click", () => {
+      localStorage.removeItem("soberStartDate");
+      startDateInput.value = "";
+      soberDaysEl.textContent = "0";
+      checkAchievements();
+    });
+    updateSoberDays();
+
+    // Achievements
+    const achievementListEl = document.getElementById("achievement-list");
+    const achievements = [
+      {
+        id: "7days", title: "1 Week Sober", description: "You’ve reached 7 days sober! Keep going!", icon: "🎉",
+        condition: () => {
+          const d = localStorage.getItem("soberStartDate");
+          return d && calculateSoberDays(d) >= 7;
+        }
+      },
+      {
+        id: "30days", title: "1 Month Sober", description: "30 days sober! Amazing commitment!", icon: "🏆",
+        condition: () => {
+          const d = localStorage.getItem("soberStartDate");
+          return d && calculateSoberDays(d) >= 30;
+        }
+      },
+      {
+        id: "toolNotes", title: "Tools in Use", description: "You’ve added notes in all tool categories. Way to engage!", icon: "📝",
+        condition: () => {
+          const ids = [
+            "note-crisis-1", "note-crisis-2", "note-mental-1", "note-mental-2",
+            "note-trauma-1", "note-trauma-2", "note-boundaries-1",
+            "note-identity-1", "note-wellness-1", "note-growth-1"
+          ];
+          return ids.every(id => {
+            const val = localStorage.getItem(id);
+            return val && val.trim().length > 0;
+          });
+        }
+      },
+      {
+        id: "returnUser", title: "Welcome Back", description: "You’ve opened the toolkit multiple times. Keep returning!", icon: "👋",
+        condition: () => {
+          const count = parseInt(localStorage.getItem("returnCount") || "0", 10);
+          return count >= 5;
+        }
+      }
+    ];
+    function renderAchievements() {
+      achievementListEl.innerHTML = "";
+      achievements.forEach(a => {
+        const unlocked = a.condition();
+        const div = document.createElement("div");
+        div.className = "achievement" + (unlocked ? "" : " locked");
+        div.innerHTML = `<span class="icon">${unlocked ? a.icon : "🔒"}</span><div><strong>${a.title}</strong><br/><small>${a.description}</small></div>`;
+        achievementListEl.appendChild(div);
+      });
+    }
+    function checkAchievements() {
+      renderAchievements();
+    }
+    function trackReturnCount() {
+      let count = parseInt(localStorage.getItem("returnCount") || "0", 10);
+      count++;
+      localStorage.setItem("returnCount", count.toString());
+    }
+    trackReturnCount();
+    checkAchievements();
+
+    // Daily quotes
+    const quotes = [
+      "Recovery is a journey, not a race.",
+      "One day at a time is enough.",
+      "You are stronger than your struggles.",
+      "Small progress is still progress.",
+      "Healing begins with self-compassion.",
+      "Your story is still being written.",
+      "Courage doesn’t always roar.",
+      "Keep going; your future self thanks you.",
+      "Every step forward counts.",
+      "You are not alone on this path."
+    ];
+    const quoteTextEl = document.getElementById("quote-text");
+    const refreshQuoteBtn = document.getElementById("refresh-quote");
+
+    function showQuote(index) {
+      quoteTextEl.textContent = quotes[index];
+    }
+    function getTodayIndex() {
+      const today = new Date();
+      return today.getDate() % quotes.length;
+    }
+    function initQuote() {
+      const savedIndex = localStorage.getItem("dailyQuoteIndex");
+      const todayIndex = getTodayIndex();
+      if (savedIndex == null || parseInt(savedIndex) !== todayIndex) {
+        localStorage.setItem("dailyQuoteIndex", todayIndex);
+        showQuote(todayIndex);
+      } else {
+        showQuote(parseInt(savedIndex));
+      }
+    }
+    refreshQuoteBtn.addEventListener("click", () => {
+      let currentIndex = parseInt(localStorage.getItem("dailyQuoteIndex") || "0", 10);
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * quotes.length);
+      } while (newIndex === currentIndex);
+      localStorage.setItem("dailyQuoteIndex", newIndex);
+      showQuote(newIndex);
+    });
+    initQuote();
+  </script>
 </body>
 </html>
