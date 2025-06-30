@@ -158,32 +158,35 @@
       list-style: disc;
     }
       .collapsible {
-      background-color: #2e6da4;
-      color: #fff;
-      cursor: pointer;
-      padding: 16px 20px;
-      width: 100%;
-      border: none;
-      text-align: left;
-      outline: none;
-      font-size: 18px;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
+  background-color: #8b5cf6; /* Purple background */
+  color: white;
+  cursor: pointer;
+  padding: 14px 20px;
+  width: 100%;
+  border: none;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-    .collapsible:hover {
-      background-color: #204d74;
-    }
+.collapsible:hover {
+  background-color: #7c3aed;
+  transform: translateY(-1px);
+}
 
-    .collapsible:after {
-      content: '\25BC';
-      float: right;
-    }
+.collapsible:after {
+  content: '\25BC';
+  float: right;
+  margin-left: 10px;
+  font-size: 14px;
+}
 
-    .collapsible.active:after {
-      content: "\25B2";
-    }
-
+.collapsible.active:after {
+  content: "\25B2";
+}
     .content-wrapper {
       max-height: 0;
       overflow: hidden;
@@ -458,9 +461,11 @@ By Larissa Wood</p>
 </div>
   
     
-    <section class="story-grid" id="storyGrid">
-    <div class="story" data-tags="addiction">
-    <h2>“Crack Took My Peace, But I Took It Back"</h2><h3>— Anonymous </h3>
+    <button class="collapsible">“Crack Took My Peace, But I Took It Back"</button>
+<div class="content-wrapper">
+  <div class="story" data-tags="addiction">
+    <div class="content">
+    <h3>— Anonymous </h3>
 <p>I’ve struggled with alcohol since I was old enough to drink. But the thing that really took over — the thing that nearly destroyed me — was crack. It started on New Year’s Eve, 2024. I was 25 years old, under a lot of stress, angry and overwhelmed. My girlfriend at the time used crack, and so did her friend. They offered me a hit. I said no at first. But eventually… I gave in.
 
 That one hit opened a door that was already cracked open — a door I knew from childhood. My dad used crack, too. I watched it take him. I watched it change who he was. And later, as an adult… I smoked it with him. I never imagined I’d get to that point, but when the trauma runs that deep, sometimes you normalize what once broke you.
@@ -486,12 +491,16 @@ I’ve tried before — relapsed a few times — but this time, something clicke
   <div class="tags">
         <span class="tag">Addiction</span>
       </div>
-      </section>
+    </div>
+  </div>
+</div>
       
   
-    <section class="story-grid" id="storyGrid">
-    <div class="story" data-tags="addiction foster-care">
-    <h2>“ I Was Becoming Who I Thought I Had to Be"</h2><h3>— Larissa </h3>
+   <button class="collapsible">“I Was Becoming Who I Thought I Had to Be"</button>
+<div class="content-wrapper">
+  <div class="story" data-tags="addiction">
+    <div class="content">
+    <h3>— Larissa </h3>
     <p> I was called a drug addict before I was ever even a drug addict. People looked at me and saw my parents — both of them struggled with addiction — and they just assumed I would, too. I hadn’t even started yet, but the label was already stuck to me. And eventually… I gave in to it.
 
 By 15, I had started using cocaine. It wasn’t constant at first. Just every now and then with friends, or with my boyfriend. We’d party, pass it around. It didn’t feel dangerous yet — it felt like a way to feel something different. Like a shortcut to confidence, freedom, or at least some peace.
@@ -526,12 +535,15 @@ I still don’t have it all figured out. But I know this: I’m not who they sai
   <div class="tags">
         <span class="tag">Addiction</span>
       </div>
-    </section>
+    </div>
+  </div>
+</div>
     
-    
- <section class="story-grid" id="storyGrid">
-    <div class="story" data-tags="grief">
-     <h2>“In Memory Of Jake"</h2> <h3>— Larissa </h3>
+ <button class="collapsible">In Memory Of Jake</button>
+<div class="content-wrapper">
+  <div class="story" data-tags="grief">
+    <div class="content">
+       <h3>— Larissa </h3>
 <p> Jake wasn’t just my ex — he was my friend.
 We had a history, yes. But even after we broke up, we stayed close. The bond never really went away. We didn’t get to see each other often, but when we did talk, it meant something. Deep conversations. Real understanding. It was one of those rare connections that never really fades.
 
@@ -571,9 +583,10 @@ You’re not alone. Your grief is valid. And your love still matters — even af
   <div class="tags">
         <span class="tag">Grief</span>
       </div>
-    </section>
+    </div>
+  </div>
+</div>
     
-⸻
 
   <!-- VIDEO STORIES SECTION -->
   <section id="video-stories">
