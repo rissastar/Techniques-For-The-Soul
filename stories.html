@@ -157,45 +157,82 @@
       font-size: 0.9rem;
       list-style: disc;
     }
-     .collapsible {
-      background-color: #4A90E2;
-      color: white;
+      .collapsible {
+      background-color: #2e6da4;
+      color: #fff;
       cursor: pointer;
-      padding: 15px 20px;
+      padding: 16px 20px;
       width: 100%;
       border: none;
-      outline: none;
       text-align: left;
+      outline: none;
       font-size: 18px;
-      transition: background-color 0.3s;
       border-radius: 5px;
-      margin-top: 10px;
+      transition: background-color 0.3s ease;
     }
 
     .collapsible:hover {
-      background-color: #357ABD;
+      background-color: #204d74;
     }
 
     .collapsible:after {
-      content: '\25BC'; /* Down arrow */
+      content: '\25BC';
       float: right;
     }
 
     .collapsible.active:after {
-      content: "\25B2"; /* Up arrow */
+      content: "\25B2";
     }
 
-    .content {
-      padding: 0 20px;
+    .content-wrapper {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.4s ease-out;
-      background-color: #f1f1f1;
+      transition: max-height 0.5s ease-out;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      border-top: none;
       border-radius: 0 0 5px 5px;
+      margin-bottom: 20px;
     }
 
-    .content p {
-      margin: 15px 0;
+    .story {
+      padding: 20px;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #2e6da4;
+    }
+
+    h3 {
+      font-weight: normal;
+      margin-top: -10px;
+      margin-bottom: 20px;
+      color: #666;
+    }
+
+    .tags {
+      margin-top: 20px;
+    }
+
+    .tag {
+      display: inline-block;
+      background-color: #e0e0e0;
+      color: #333;
+      padding: 6px 12px;
+      margin-right: 10px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      .collapsible {
+        font-size: 16px;
     }
   </style>
 </head>
@@ -245,10 +282,11 @@
   </div>
 
   <!-- STORY GRID -->
-  <h2>"Still her Daughter" - Spoken Word Poem</h2>
-<button class="collapsible">Click to Expand</button>
+
+<button class="collapsible">"Still her Daughter" - Spoken Word Poem</button>
+<div class="content-wrapper">
   <div class="story" data-tags="addiction foster-care">
-<div class="content">
+    <div class="content">
       <h3>— Larissa Wood</h3>
 <p>By blood, by love, by fire and fight — we are still standing.
 ⸻
@@ -411,10 +449,13 @@ And proud of how we rise, not fall.
 
 By Larissa Wood</p>
 
-      <div class="tags">
+        <div class="tags">
         <span class="tag">Addiction</span>
         <span class="tag">Foster Care</span>
       </div>
+    </div>
+  </div>
+</div>
   
     
     <section class="story-grid" id="storyGrid">
@@ -614,17 +655,16 @@ You’re not alone. Your grief is valid. And your love still matters — even af
         promptList.appendChild(li);
       });
     }
-    const collapsibles = document.querySelectorAll(".collapsible");
-  collapsibles.forEach(btn => {
-    btn.addEventListener("click", function () {
-      this.classList.toggle("active");
-      const content = this.nextElementSibling;
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-      }
-    });
+      const btn = document.querySelector('.collapsible');
+  const content = document.querySelector('.content-wrapper');
+
+  btn.addEventListener('click', function () {
+    this.classList.toggle('active');
+    if (content.style.maxHeight) {
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
   });
   </script>
 
