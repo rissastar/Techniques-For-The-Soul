@@ -157,6 +157,46 @@
       font-size: 0.9rem;
       list-style: disc;
     }
+     .collapsible {
+      background-color: #4A90E2;
+      color: white;
+      cursor: pointer;
+      padding: 15px 20px;
+      width: 100%;
+      border: none;
+      outline: none;
+      text-align: left;
+      font-size: 18px;
+      transition: background-color 0.3s;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .collapsible:hover {
+      background-color: #357ABD;
+    }
+
+    .collapsible:after {
+      content: '\25BC'; /* Down arrow */
+      float: right;
+    }
+
+    .collapsible.active:after {
+      content: "\25B2"; /* Up arrow */
+    }
+
+    .content {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out;
+      background-color: #f1f1f1;
+      border-radius: 0 0 5px 5px;
+    }
+
+    .content p {
+      margin: 15px 0;
+    }
   </style>
 </head>
 <body>
@@ -190,7 +230,7 @@
       <h4 style="margin-bottom: 10px; color: var(--accent);">Need help starting your story?</h4>
       <ul id="dynamic-prompts"></ul>
     </div>
-  </section>
+    </section>
 
   <!-- FILTER BUTTONS -->
   <div class="filters">
@@ -205,9 +245,11 @@
   </div>
 
   <!-- STORY GRID -->
-   <section class="story-grid" id="storyGrid">
-    <div class="story" data-tags="addiction foster-care">
-      <h2>“Still Her Daughter - Spoken Word Poem”</h2> <h3>— Larissa Wood</h3>
+  <h2>"Still her Daughter" - Spoken Word Poem</h2>
+<button class="collapsible">Click to Expand</button>
+  <div class="story" data-tags="addiction foster-care">
+<div class="content">
+      <h3>— Larissa Wood</h3>
 <p>By blood, by love, by fire and fight — we are still standing.
 ⸻
 It started small — a silent crack,
@@ -373,7 +415,6 @@ By Larissa Wood</p>
         <span class="tag">Addiction</span>
         <span class="tag">Foster Care</span>
       </div>
-      </section>
   
     
     <section class="story-grid" id="storyGrid">
@@ -573,6 +614,18 @@ You’re not alone. Your grief is valid. And your love still matters — even af
         promptList.appendChild(li);
       });
     }
+    const collapsibles = document.querySelectorAll(".collapsible");
+  collapsibles.forEach(btn => {
+    btn.addEventListener("click", function () {
+      this.classList.toggle("active");
+      const content = this.nextElementSibling;
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  });
   </script>
 
 </body>
