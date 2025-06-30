@@ -157,6 +157,33 @@
       font-size: 0.9rem;
       list-style: disc;
     }
+    
+     .collapsible-header {
+      cursor: pointer;
+      padding: 10px;
+      background-color: #333;
+      color: white;
+      border: none;
+      font-size: 16px;
+      text-align: left;
+    }
+
+    .collapsible-content {
+      display: none;
+      overflow: hidden;
+    }
+
+    .story-grid {
+      display: grid;
+      gap: 10px;
+      padding: 10px;
+      background-color: #f0f0f0;
+    }
+
+    .story {
+      background: white;
+      padding: 10px;
+      border: 1px solid #ccc;
   </style>
 </head>
 <body>
@@ -205,9 +232,11 @@
   </div>
 
   <!-- STORY GRID -->
+  <button class="collapsible-header" onclick="toggleCollapsible()">Show Stories ▼</button>
+<div class="collapsible-content" id="collapsibleContent">
   <section class="story-grid" id="storyGrid">
      <div class="story" data-tags="addiction foster-care">
-      <h2>“Still Her Daughter - Spoken Word Poem”</h2> <h3>— Larissa Wood</h3>
+      <h2>“Still Her Daughter - Spoken Word Poem”</h2> h3>— Larissa Wood</h3>
 <p>By blood, by love, by fire and fight — we are still standing.
 ⸻
 It started small — a silent crack,
@@ -380,6 +409,7 @@ And proud of how we rise, not fall.”</p>
       </div>
       </section>
   
+   <body>
     
     <section class="story-grid" id="storyGrid">
     <div class="story" data-tags="addiction">
@@ -580,6 +610,15 @@ You’re not alone. Your grief is valid. And your love still matters — even af
         promptList.appendChild(li);
       });
     }
+    
+     function toggleCollapsible() {
+    const content = document.getElementById("collapsibleContent");
+    const button = document.querySelector(".collapsible-header");
+    const isVisible = content.style.display === "block";
+
+    content.style.display = isVisible ? "none" : "block";
+    button.textContent = isVisible ? "Show Stories ▼" : "Hide Stories ▲";
+  }
   </script>
 
 </body>
