@@ -609,27 +609,31 @@ You’re not alone. Your grief is valid. And your love still matters — even af
   </footer>
 
   <script>
-    // Filter stories by tag
-    const buttons = document.querySelectorAll('.filter-btn');
-    const stories = document.querySelectorAll('.story');
+      // FILTER TAGS
+  const buttons = document.querySelectorAll('.filter-btn');
 
-    buttons.forEach(button => {
-      button.addEventListener('click', () => {
-        document.querySelector('.filter-btn.active').classList.remove('active');
-        button.classList.add('active');
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Update active button
+      document.querySelector('.filter-btn.active').classList.remove('active');
+      button.classList.add('active');
 
-        const filter = button.getAttribute('data-filter');
+      const filter = button.getAttribute('data-filter');
 
-        stories.forEach(story => {
-          const tags = story.getAttribute('data-tags');
-          if (filter === 'all' || tags.includes(filter)) {
-            story.style.display = 'block';
-          } else {
-            story.style.display = 'none';
-          }
-        });
+      wrappers.forEach((wrapper, i) => {
+        const story = wrapper.querySelector('.story');
+        const tags = story.getAttribute('data-tags');
+
+        if (filter === 'all' || tags.includes(filter)) {
+          wrapper.style.display = 'block';
+          collapsibles[i].style.display = 'block';
+        } else {
+          wrapper.style.display = 'none';
+          collapsibles[i].style.display = 'none';
+        }
       });
     });
+  });
 
     // Show 5 random prompts on page load
     const allPrompts = [
@@ -668,23 +672,18 @@ You’re not alone. Your grief is valid. And your love still matters — even af
         promptList.appendChild(li);
       });
     }
-      const collapsibles = document.querySelectorAll('.collapsible');
-  const contents = document.querySelectorAll('.content-wrapper');
+      const btn = document.querySelector('.collapsible');
+  const content = document.querySelector('.content-wrapper');
 
-  collapsibles.forEach((btn, index) => {
-    btn.addEventListener('click', function () {
-      this.classList.toggle('active');
-
-      const content = contents[index];
-
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-      }
-    });
+  btn.addEventListener('click', function () {
+    this.classList.toggle('active');
+    if (content.style.maxHeight) {
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
   });
-</script>
+  </script>
 
 </body>
 </html>
