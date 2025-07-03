@@ -668,18 +668,23 @@ You’re not alone. Your grief is valid. And your love still matters — even af
         promptList.appendChild(li);
       });
     }
-      const btn = document.querySelector('.collapsible');
-  const content = document.querySelector('.content-wrapper');
+      const collapsibles = document.querySelectorAll('.collapsible');
+  const contents = document.querySelectorAll('.content-wrapper');
 
-  btn.addEventListener('click', function () {
-    this.classList.toggle('active');
-    if (content.style.maxHeight) {
-      content.style.maxHeight = null;
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-    }
+  collapsibles.forEach((btn, index) => {
+    btn.addEventListener('click', function () {
+      this.classList.toggle('active');
+
+      const content = contents[index];
+
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
   });
-  </script>
+</script>
 
 </body>
 </html>
