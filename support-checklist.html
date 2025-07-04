@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rissa’s 2-Week Support Checklist</title>
+<style>
+  body {
+    background: #121212;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
+    padding: 1rem;
+    max-width: 600px;
+    margin: auto;
+  }
+  h1 {
+    color: #ff6ec4;
+    text-align: center;
+  }
+  h2 {
+    color: #ff9d00;
+  }
+  label {
+    display: block;
+    padding: 0.5rem 0;
+    cursor: pointer;
+  }
+  input[type="checkbox"] {
+    transform: scale(1.4);
+    margin-right: 1rem;
+    vertical-align: middle;
+  }
+  button {
+    background: #ff6ec4;
+    border: none;
+    padding: 1rem 2rem;
+    color: #121212;
+    font-weight: bold;
+    border-radius: 8px;
+    width: 100%;
+    margin-top: 1rem;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #ff3cac;
+  }
+  footer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #888;
+  }
+</style>
+</head>
+<body>
+<h1>Rissa’s 2-Week Support Checklist</h1>
+
+<div>
+  <h2>July 4, 2025 (Thu)</h2>
+  <label><input type="checkbox" id="task1" /> Start Special Needs request</label>
+  <label><input type="checkbox" id="task2" /> Use template to request AC, phone, hygiene, transport</label>
+</div>
+
+<div>
+  <h2>July 5, 2025 (Fri)</h2>
+  <label><input type="checkbox" id="task3" /> Give DTC Helper Letter to doctor</label>
+  <label><input type="checkbox" id="task4" /> Ask doctor to start T2201 Disability Tax Credit form</label>
+</div>
+
+<div>
+  <h2>July 6, 2025 (Sat)</h2>
+  <label><input type="checkbox" id="task5" /> Rest or journal wins</label>
+  <label><input type="checkbox" id="task6" /> Celebrate your start; check energy levels</label>
+</div>
+
+<div>
+  <h2>July 7, 2025 (Sun)</h2>
+  <label><input type="checkbox" id="task7" /> Open RESP via SmartSAVER</label>
+  <label><input type="checkbox" id="task8" /> Get $2,000 Canada Learning Bond; quick 5-min form</label>
+</div>
+
+<div>
+  <h2>July 8, 2025 (Mon)</h2>
+  <label><input type="checkbox" id="task9" /> Call Aftercare Support (1-833-333-0222)</label>
+  <label><input type="checkbox" id="task10" /> Say you're a former youth in care with disabilities</label>
+</div>
+
+<div>
+  <h2>July 9, 2025 (Tue)</h2>
+  <label><input type="checkbox" id="task11" /> Prepare housing application</label>
+  <label><input type="checkbox" id="task12" /> Start rent supplement or public housing application</label>
+</div>
+
+<div>
+  <h2>July 10, 2025 (Wed)</h2>
+  <label><input type="checkbox" id="task13" /> Call 211 Nova Scotia</label>
+  <label><input type="checkbox" id="task14" /> Ask about supports, grants, or class actions you are eligible for</label>
+</div>
+
+<div>
+  <h2>July 11, 2025 (Thu)</h2>
+  <label><input type="checkbox" id="task15" /> Check in with doctor about DTC form</label>
+  <label><input type="checkbox" id="task16" /> Follow up if doctor has completed the form</label>
+</div>
+
+<div>
+  <h2>July 12, 2025 (Fri)</h2>
+  <label><input type="checkbox" id="task17" /> Send housing application</label>
+  <label><input type="checkbox" id="task18" /> Include care/disability info; mention CF and mental health</label>
+</div>
+
+<div>
+  <h2>July 14, 2025 (Sun)</h2>
+  <label><input type="checkbox" id="task19" /> Contact NS Legal Aid</label>
+  <label><input type="checkbox" id="task20" /> Email or call to inquire about settlements or abuse claims</label>
+</div>
+
+<div>
+  <h2>July 15, 2025 (Mon)</h2>
+  <label><input type="checkbox" id="task21" /> Follow up with Aftercare</label>
+  <label><input type="checkbox" id="task22" /> Ask about furniture, food, rent assistance</label>
+</div>
+
+<div>
+  <h2>July 16, 2025 (Tue)</h2>
+  <label><input type="checkbox" id="task23" /> Request medical transportation form</label>
+  <label><input type="checkbox" id="task24" /> From ESIA or Disability worker for travel costs</label>
+</div>
+
+<button onclick="saveProgress()">Save Progress</button>
+
+<footer>
+  Progress saves automatically in your browser. Use the Save button to be sure.
+</footer>
+
+<script>
+  function saveProgress() {
+    for(let i=1; i<=24; i++) {
+      const checkbox = document.getElementById('task'+i);
+      localStorage.setItem('task'+i, checkbox.checked);
+    }
+    alert('Progress saved!');
+  }
+  function loadProgress() {
+    for(let i=1; i<=24; i++) {
+      const saved = localStorage.getItem('task'+i);
+      if(saved === 'true') {
+        document.getElementById('task'+i).checked = true;
+      }
+    }
+  }
+  window.onload = loadProgress;
+</script>
+</body>
+</html>
