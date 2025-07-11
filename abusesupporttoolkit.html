@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ Abuse Awareness & Support Toolkit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 40px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        color: #2c3e50;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+        margin-bottom: 10px;
+    }
+
+    .description {
+        font-size: 1rem;
+        color: #34495e;
+        font-style: italic;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        border-color: #667eea;
+    }
+
+    .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    .card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        color: #2c3e50;
+    }
+
+    .card p {
+        color: #7f8c8d;
+        font-size: 0.95rem;
+    }
+
+    .emergency-section {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .emergency-section h2 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+
+    .emergency-section p {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+
+    .emergency-btn {
+        background: white;
+        color: #e74c3c;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        margin: 0 10px;
+    }
+
+    .emergency-btn:hover {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+        background: white;
+        margin: 2% auto;
+        padding: 30px;
+        border-radius: 15px;
+        max-width: 800px;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #ecf0f1;
+    }
+
+    .modal-title {
+        font-size: 1.8rem;
+        color: #2c3e50;
+    }
+
+    .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .close:hover {
+        color: #e74c3c;
+    }
+
+    .modal-body {
+        color: #34495e;
+        line-height: 1.7;
+    }
+
+    .modal-body h4 {
+        color: #2c3e50;
+        margin: 20px 0 10px 0;
+        font-size: 1.2rem;
+    }
+
+    .modal-body ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+
+    .modal-body li {
+        margin: 8px 0;
+    }
+
+    .highlight {
+        background: linear-gradient(120deg, #ffeaa7 0%, #fab1a0 100%);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 15px 0;
+        border-left: 4px solid #e17055;
+    }
+
+    .resources-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .resource-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+    }
+
+    .resource-card h5 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .resource-card p {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+    }
+
+    .phone-number {
+        font-weight: bold;
+        color: #e74c3c;
+        font-size: 1.1rem;
+    }
+
+    .affirmation {
+        font-style: italic;
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(135deg, #74b9ff, #0984e3);
+        color: white;
+        border-radius: 10px;
+        margin: 15px 0;
+    }
+
+    .safety-tip {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px 0;
+        border-left: 4px solid #28a745;
+    }
+
+    @media (max-width: 768px) {
+        .header h1 {
+            font-size: 2rem;
+        }
+        
+        .modal-content {
+            margin: 5% auto;
+            padding: 20px;
+            max-width: 95%;
+        }
+        
+        .card {
+            padding: 20px;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ Abuse Awareness & Support Toolkit</h1>
+            <p class="subtitle">Understanding, Identifying, and Healing from Abuse</p>
+            <p class="description">For survivors, supporters, educators, and advocates</p>
+        </div>
+
+```
+    <div class="emergency-section">
+        <h2>🚨 Need Help Right Now?</h2>
+        <p>If you're in immediate danger, don't hesitate to reach out</p>
+        <a href="tel:911" class="emergency-btn">📞 Call 911</a>
+        <a href="tel:18007997233" class="emergency-btn">📞 US: 1-800-799-7233</a>
+        <a href="tel:18006686868" class="emergency-btn">📞 Canada: 1-800-668-6868</a>
+    </div>
+
+    <div class="grid">
+        <div class="card" onclick="openModal('what-is-abuse')">
+            <span class="card-icon">🔍</span>
+            <h3>What is Abuse?</h3>
+            <p>Understanding the fundamental nature of abuse and its patterns</p>
+        </div>
+
+        <div class="card" onclick="openModal('emotional-abuse')">
+            <span class="card-icon">💔</span>
+            <h3>Emotional/Psychological Abuse</h3>
+            <p>Often invisible but deeply damaging forms of control</p>
+        </div>
+
+        <div class="card" onclick="openModal('physical-abuse')">
+            <span class="card-icon">💪</span>
+            <h3>Physical Abuse</h3>
+            <p>Recognizing all forms of physical harm and control</p>
+        </div>
+
+        <div class="card" onclick="openModal('financial-abuse')">
+            <span class="card-icon">💸</span>
+            <h3>Financial/Economic Abuse</h3>
+            <p>Using money and resources as tools of control</p>
+        </div>
+
+        <div class="card" onclick="openModal('sexual-abuse')">
+            <span class="card-icon">💔</span>
+            <h3>Sexual Abuse/Assault</h3>
+            <p>Understanding consent and recognizing violations</p>
+        </div>
+
+        <div class="card" onclick="openModal('digital-abuse')">
+            <span class="card-icon">🌐</span>
+            <h3>Digital/Technological Abuse</h3>
+            <p>Modern forms of surveillance and control</p>
+        </div>
+
+        <div class="card" onclick="openModal('neglect')">
+            <span class="card-icon">👤</span>
+            <h3>Neglect</h3>
+            <p>When care is intentionally withheld</p>
+        </div>
+
+        <div class="card" onclick="openModal('red-flags')">
+            <span class="card-icon">🚩</span>
+            <h3>Red Flags</h3>
+            <p>Warning signs that are often missed or dismissed</p>
+        </div>
+
+        <div class="card" onclick="openModal('trauma-cycles')">
+            <span class="card-icon">🧠</span>
+            <h3>Trauma & Abuse Cycles</h3>
+            <p>Understanding patterns and trauma bonding</p>
+        </div>
+
+        <div class="card" onclick="openModal('survivor-truths')">
+            <span class="card-icon">💬</span>
+            <h3>Survivor Truths</h3>
+            <p>Important reminders for those who have experienced abuse</p>
+        </div>
+
+        <div class="card" onclick="openModal('helping-others')">
+            <span class="card-icon">🧭</span>
+            <h3>How to Help Others</h3>
+            <p>Supporting loved ones who may be experiencing abuse</p>
+        </div>
+
+        <div class="card" onclick="openModal('resources')">
+            <span class="card-icon">🛠️</span>
+            <h3>Resources & Support</h3>
+            <p>Comprehensive support lines and safety planning</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div id="what-is-abuse" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">🔍 What is Abuse?</h2>
+            <span class="close" onclick="closeModal('what-is-abuse')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="highlight">
+                <strong>Abuse is a pattern of behaviour used to gain and maintain control over another person.</strong>
+            </div>
+            <p>It doesn't always leave bruises. It doesn't always happen loudly. But its effects can be devastating — emotionally, physically, and psychologically.</p>
+            
+            <h4>Abuse can be:</h4>
+            <ul>
+                <li>Chronic or one-time</li>
+                <li>Subtle or obvious</li>
+                <li>Overt or hidden in "jokes," silence, or control</li>
+            </ul>
+            
+            <div class="highlight">
+                <p>People often suffer in silence out of fear, shame, love, trauma bonds, or lack of safe support.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="emotional-abuse" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">💔 Emotional/Psychological Abuse</h2>
+            <span class="close" onclick="closeModal('emotional-abuse')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="highlight">
+                <strong>Often overlooked because there are no physical marks — but emotional abuse is deeply damaging.</strong>
+            </div>
+            
+            <h4>What it looks like:</h4>
+            <ul>
+                <li>Gaslighting ("That never happened" / "You're too sensitive")</li>
+                <li>Guilt-tripping or emotional blackmail</li>
+                <li>Withholding affection as punishment</li>
+                <li>Intimidating stares, slamming doors</li>
+                <li>Threats of self-harm to manipulate</li>
+            </ul>
+            
+            <h4>Long-term effects:</h4>
+            <ul>
+                <li>Anxiety, self-doubt, panic attacks</li>
+                <li>Difficulty trusting others</li>
+                <li>People-pleasing or avoiding conflict</li>
+                <li>Trouble identifying your own feelings</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="physical-abuse" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">💪 Physical Abuse</h2>
+            <span class="close" onclick="closeModal('physical-abuse')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="highlight">
+                <strong>The most recognized form of abuse, but not the only one.</strong>
+            </div>
+            
+            <h4>What it looks like:</h4>
+            <ul>
+                <li>Grabbing, shaking, punching, slapping</li>
+                <li>Forcefully restraining or dragging</li>
+                <li>Blocking someone from leaving a room</li>
+                <li>Hurting pets or destroying objects</li>
+            </ul>
+            
+            <h4>It's not just bruises — also includes:</h4>
+            <ul>
+                <li>Being denied medical care</li>
+                <li>Sleep deprivation</li>
+                <li>Forced substance use</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="financial-abuse" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">💸 Financial/Economic Abuse</h2>
+            <span class="close" onclick="closeModal('financial-abuse')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="highlight">
+                <strong>Designed to make someone dependent, unable to leave.</strong>
+            </div>
+            
+            <h4>What it looks like:</h4>
+            <ul>
+                <li>Monitoring or controlling your bank accounts</li>
+                <li>"Giving" money as manipulation or control</li>
+                <li>Forcing financial decisions without consent</li>
+                <li>Refusing to pay child support or bills intentionally</li>
+            </ul>
+            
+            <div class="highlight">
+                <strong>Why it matters:</strong><br>
+                Many survivors stay because they simply can't afford to leave.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="sexual-abuse" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">💔 Sexual Abuse/Assault</h2>
+            <span class="close" onclick="closeModal('sexual-abuse')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="highlight">
+                <strong>Sexual abuse can happen inside or outside relationships. Consent must be ongoing, enthusiastic, and mutual.</strong>
+            </div>
+            
+            <h4>What it looks like:</h4>
+            <ul>
+                <li>Being touched without consent</li>
+                <li>Being pressured or guilted into sex</li>
+                <li>Tampering with birth control ("stealthing")</li>
+                <li>Sexual humiliation or criticism</li>
+            </ul>
+            
+            <div class="highlight">
+                <strong>Important:</strong><br>
+                Sexual abuse can happen even in marriage or relationships. "No" is always valid.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="digital-abuse" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">🌐 Digital/Technological Abuse</h2>
+            <span class="close" onclick="closeModal('digital-abuse')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="highlight">
+                <strong>As technology evolves, so do abusive tactics.</strong>
+            </div>
+            
+            <h4>What it looks like:</h4>
+            <ul>
+                <li>Demanding access to passwords</li>
+                <li>Monitoring calls/texts/socials</li>
+                <li>Using GPS tracking without consent</li>
+                <li>Sextortion — threatening to leak explicit content</li>
+                <li>Impersonating you online</li>
+            </ul>
+            
+            <h4>Hidden signs:</h4>
+            <ul>
+                <li>Always needing to reply immediately</li>
+                <li>Being punished for what you post or like</li>
+                <li>Having apps deleted or accounts "snooped on"</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="neglect" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">👤 Neglect</h2>
+            <span class="close" onclick="closeModal('neglect')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="highlight">
+                <strong>Especially common in child, elder, and disability abuse — it's when care is intentionally withheld.</strong>
+            </div>
+            
+            <h4>What it looks like:</h4>
+            <ul>
+                <li>Not feeding, cleaning, or giving water/medication</li>
+                <li>Leaving vulnerable people alone for long periods</li>
+                <li>Failing to meet emotional needs (love, attention)</li>
+            </ul>
+            
+            <div class="highlight">
+                <strong>Neglect is abuse, even if it's not violent.</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="red-flags" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">🚩 Red Flags People Miss</h2>
+            <span class="close" onclick="closeModal('red-flags')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="highlight">
+                <strong>Sometimes abuse is masked as:</strong>
+            </div>
+            
+            <ul>
+                <li>"Protectiveness" that isolates you</li>
+                <li>"Jealousy" that restricts you</li>
+                <li>"Helping" with finances that becomes control</li>
+                <li>Sarcasm that becomes public humiliation</li>
+                <li>"Tough love" that's actually emotional abuse</li>
+            </ul>
+            
+            <div class="safety-tip">
+                <strong>Trust your instincts:</strong> If something feels wrong, it probably is. Your feelings are valid.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="trauma-cycles" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">🧠 Understanding Trauma & Abuse Cycles</h2>
+            <span class="close" onclick="closeModal('trauma-cycles')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="highlight">
+                <strong>Abuse often follows a cycle:</strong>
+            </div>
+            
+            <ol>
+                <li><strong>Tension Building:</strong> walking on eggshells</li>
+                <li><strong>Incident:</strong> outburst or harm</li>
+                <li><strong>Reconciliation:</strong> apologies, love bombing</li>
+                <li><strong>Calm:</strong> "honeymoon" phase</li>
+            </ol>
+            
+            <p>This can make victims hopeful things will change — but often, the cycle repeats.</p>
+            
+            <div class="highlight">
+                <strong>Trauma bonding is real. It's not your fault if you stayed. It's not your fault at all.</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="survivor-truths" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">💬 Survivor Truths</h2>
+            <span class="close" onclick="closeModal('survivor-truths')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <ul>
+                <li><strong>Abuse is never your fault</strong></li>
+                <li><strong>You do not need bruises to prove pain</strong></li>
+                <li><strong>Leaving is often the most dangerous time</strong> — safety planning is key</li>
+                <li><strong>Healing is not linear</strong> — some days are harder than others</li>
+                <li><strong>You are not "too broken" to heal</strong> — you're brave for surviving</li>
+            </ul>
+            
+            <div class="affirmation">
+                <p>"I survived because the fire inside me burned brighter than the fire around me."</p>
+                <small>— Joshua Graham</small>
+            </div>
+            
+            <div class="affirmation">
+                <p>"My worth is not measured by someone else's inability to see it."</p>
+            </div>
+            
+            <div class="affirmation">
+                <p>"I am allowed to take up space. I am allowed to say no. I am allowed to leave."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="helping-others" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">🧭 How to Help a Loved One</h2>
+            <span class="close" onclick="closeModal('helping-others')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <ul>
+                <li><strong>Listen without judgment or interruption</strong></li>
+                <li><strong>Avoid saying "Why don't you just leave?"</strong> (It's more complicated than that)</li>
+                <li><strong>Offer to go with them</strong> to appointments, court, or therapy</li>
+                <li><strong>Help them create a safety plan</strong></li>
+                <li><strong>Let them make their own choices</strong> — reclaiming power is part of healing</li>
+            </ul>
+            
+            <div class="safety-tip">
+                <strong>Remember:</strong> Your role is to support, not to rescue. Empowerment comes from within.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="resources" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">🛠️ Resources & Support</h2>
+            <span class="close" onclick="closeModal('resources')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <h4>🇨🇦 Canada Support Lines</h4>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <h5>Kids Help Phone</h5>
+                    <p class="phone-number">1-800-668-6868</p>
+                    <p>Text CONNECT to 686868<br>Available 24/7, phone, text, and Facebook Messenger</p>
+                </div>
+                <div class="resource-card">
+                    <h5>ShelterSafe.ca</h5>
+                    <p>Find women's shelters by postal code</p>
+                    <p>https://sheltersafe.ca</p>
+                </div>
+                <div class="resource-card">
+                    <h5>Talk4Healing</h5>
+                    <p class="phone-number">1-855-554-4325</p>
+                    <p>For Indigenous women, available in 14 languages</p>
+                </div>
+                <div class="resource-card">
+                    <h5>211 Canada</h5>
+                    <p class="phone-number">Call 2-1-1</p>
+                    <p>Visit https://211.ca to find nearby help</p>
+                </div>
+            </div>
+            
+            <h4>🇺🇸 USA Support Lines</h4>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <h5>National Domestic Violence Hotline</h5>
+                    <p class="phone-number">1-800-799-7233</p>
+                    <p>Text "START" to 88788<br>Available in 200+ languages</p>
+                </div>
+                <div class="resource-card">
+                    <h5>RAINN</h5>
+                    <p class="phone-number">1-800-656-4673</p>
+                    <p>Rape, Abuse & Incest National Network</p>
+                </div>
+                <div class="resource-card">
+                    <h5>Love is Respect</h5>
+                    <p class="phone-number">1-866-331-9474</p>
+                    <p>Text LOVEIS to 22522<br>Especially for youth/dating relationships</p>
+                </div>
+                <div class="resource-card">
+                    <h5>StrongHearts Native Helpline</h5>
+                    <p class="phone-number">1-844-762-8483</p>
+                    <p>https://strongheartshelpline.org</p>
+                </div>
+            </div>
+            
+            <h4>🔐 Safety Planning</h4>
+            <div class="highlight">
+                <strong>If you're planning to leave or escape:</strong>
+            </div>
+            <ul>
+                <li>Pack an emergency bag (ID, keys, money, meds, copies of important documents)</li>
+                <li>Use incognito mode on browsers, delete history</li>
+                <li>Tell a trusted friend your plan and check-in times</li>
+                <li>Know where you'll go: shelter, friend's house, or even a safe public place</li>
+                <li>Avoid confrontation when leaving if possible — safety first</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+    });
+</script>
+```
+
+</body>
+</html>
