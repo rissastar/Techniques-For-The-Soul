@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unhinged Affirmations</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background: linear-gradient(145deg, #fde2ff, #c2f0fc);
+      color: #2b2b2b;
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+    }
+
+    #affirmation {
+      font-size: 1.2em;
+      background: #ffffffee;
+      padding: 25px 20px;
+      border-radius: 18px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+      line-height: 1.7;
+      margin-bottom: 30px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    button {
+      background-color: #f47cb6;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 25px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #d64590;
+    }
+
+    @media (min-width: 600px) {
+      body {
+        display: none; /* Hide on desktop */
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🩶 Unhinged Affirmations 🩶</h1>
+  <div id="affirmation">Click below to receive today's poetic nonsense download.</div>
+  <button onclick="generateAffirmation()">Summon the Weird</button>
+
+  <script>
+    const intros = [
+      "I realigned my aura with a raccoon’s moonlight prayer",
+      "I woke up in the void and decided to wear glitter",
+      "My trauma replied at 3:33am with a selfie",
+      "I kissed a ghost and it whispered financial advice",
+      "I sipped my sadness from a teacup made of delusion",
+      "I danced with my shame and she wore sequins",
+      "My anxiety and I made friendship bracelets in the rain",
+      "I forgave the sky for all its loud silences"
+    ];
+
+    const metaphors = [
+      "like a frog in a thrift store baptism",
+      "like my inner child on a caffeine bender",
+      "like a cloud with commitment issues",
+      "like a disco ball made of past lives",
+      "like a cursed sandwich with abandonment fears",
+      "like a raccoon whispering secrets to the void",
+      "like a Victorian ghost learning how to scream in emojis",
+      "like a glitter storm inside a therapy journal"
+    ];
+
+    const powerLines = [
+      "I am soft, haunted, and legally unstoppable.",
+      "I radiate questionable wisdom and excellent vibes.",
+      "I’m the glitch in the system and the patch note.",
+      "I’m held together by whimsy, spite, and dollar-store tape.",
+      "I am unwell in ways that make me deeply beloved.",
+      "I am the prophecy and the plot twist.",
+      "I speak fluent delusion and radical tenderness.",
+      "I am the shrine and the shattered mirror."
+    ];
+
+    const endings = [
+      "Now excuse me, I must go cry into a peach.",
+      "May the algorithm bless my chaos.",
+      "I’ll be under the table, healing loudly.",
+      "And that’s showbiz, baby possum.",
+      "Witness me, or don’t. I’m still glowing.",
+      "Love me like the moon forgives the tide.",
+      "Send me a frog and tell me it’s going to be okay.",
+      "See you in the dream where I’m a chandelier."
+    ];
+
+    function generateAffirmation() {
+      const intro = intros[Math.floor(Math.random() * intros.length)];
+      const metaphor = metaphors[Math.floor(Math.random() * metaphors.length)];
+      const power = powerLines[Math.floor(Math.random() * powerLines.length)];
+      const ending = endings[Math.floor(Math.random() * endings.length)];
+
+      document.getElementById("affirmation").innerText =
+        `"${intro} ${metaphor}, and honestly? ${power} ${ending}"`;
+    }
+  </script>
+</body>
+</html>
